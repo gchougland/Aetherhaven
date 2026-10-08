@@ -77,8 +77,6 @@ class DruidProductionTest {
         assertEquals(1,state.field().heldQuantity());
         assertEquals(1,state.field().deliver(state,state.field().cargo().id(),25));
         assertEquals(1,state.getAmount(crop.item()));
-        assertFalse(NativeHerdService.collect(null,town,plot,new PlotProductionState(),"Mosshorn",UUID.randomUUID(),
-            RanchProducts.product("Mosshorn","Ingredient_Hide_Heavy")));
     }
 
     @Test void retiredCultivationIsRemovedWhenSavedTownLoads() {

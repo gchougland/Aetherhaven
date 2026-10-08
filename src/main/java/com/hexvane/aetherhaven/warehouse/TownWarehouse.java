@@ -35,8 +35,8 @@ public final class TownWarehouse {
     private transient Map<UUID,Boolean> outputRoomCache=new HashMap<>();
     private transient long outputRoomRevision=-1;
     private List<WarehouseBatch> batches = new ArrayList<>();
-    public static final int BASE_GENERAL_SLOTS = 36, UPGRADE_SLOTS = 18, MAX_UPGRADES = 8;
-    public static final int OUTPUT_SLOTS = 36;
+    public static final int BASE_GENERAL_SLOTS = 40, UPGRADE_SLOTS = 20, MAX_UPGRADES = 8;
+    public static final int OUTPUT_SLOTS = 40;
     /** Natural growth can overlap; seed delivery and attended planting remain serial. */
     public static final int CULTIVATION_BEDS = 6;
 
@@ -73,6 +73,13 @@ public final class TownWarehouse {
         for(var page:Page.values())for(short slot=0;slot<slots(page);slot++)
             slots.add(new CraftingSlot(page,slot,stack(page,slot),reserved(page,slot)));
         return new CraftingStock(revision,slots);
+    }
+    /** Native bench adapter: consume only the unreserved portion, retaining original metadata. */
+    public boolean consumeForCrafting(Page page, short slot, ItemStack expected, int count) {
+        var current=stack(page,slot);
+        if(count<=0||ItemStack.isEmpty(current)||!current.equals(expected)||count>current.getQuantity()-reserved(page,slot))return false;
+        inventory(page).setItemStackForSlot(slot,count==current.getQuantity()?null:current.withQuantity(current.getQuantity()-count),false);
+        changed();return true;
     }
     /** Worker eligibility needs one available item, without allocating a full inventory snapshot. */
     public boolean hasUnreservedStock(String item) {
@@ -177,6 +184,13 @@ public final class TownWarehouse {
         changed(); return true;
     }
     public void markProductionWithdrawal() { revision++; }
+    /** Patrol guards deliver only after physically reaching a town storage desk. */
+    public boolean acceptGuardSpoils(ItemStack stack) {
+        if(ItemStack.isEmpty(stack))return false;
+        var next=WarehouseBatch.copy(inventory(Page.GENERAL));
+        if(!next.addItemStack(stack,true,false,true).succeeded())return false;
+        general=next;changed();return true;
+    }
     /** Only exchanges validated, single item equipment. This is not a general output deposit path. */
     public String equipProfessionKit(Page page, short slot, ItemStack expected, long seenRevision,
             com.hexvane.aetherhaven.townsfolk.TownsfolkProgress progress,
@@ -282,10 +296,11 @@ public final class TownWarehouse {
         return reserve(workplace,order,recipe,withFuel,results,production,fuelItem,fuelQuantity);
     }
     /** A physical supply trip, with no recipe output or phantom reservation in the finished goods inventory. */
-    public WarehouseBatch reserveHerdFeed(UUID plot,WarehouseBatch.Point destination,int quantity,List<ProductionStock> sources) {
+    public WarehouseBatch reserveHerdFeed(UUID plot,WarehouseBatch.Point destination,String food,int quantity,List<ProductionStock> sources) {
         if(destination==null||quantity<1||quantity>com.hexvane.aetherhaven.production.HerdProductionState.FEED_CAPACITY)return null;
-        var batch=reserve(plot,plot,"aetherhaven:barn_feed",List.of(new MaterialQuantity(
-            com.hexvane.aetherhaven.production.HerdProductionState.FEED,null,null,quantity,null)),List.of(),sources,null,0,false,true);
+        if(!com.hexvane.aetherhaven.production.BarnAnimalCatalog.food(food))return null;
+        var batch=reserve(plot,plot,"aetherhaven:barn_feed/"+food,List.of(new MaterialQuantity(
+            food,null,null,quantity,null)),List.of(),sources,null,0,false,true);
         if(batch!=null){batch.markHerdFeed();batch.destination(destination);batch.save();changed();}
         return batch;
     }
@@ -452,10 +467,11 @@ public final class TownWarehouse {
         var batch=batch(id);
         if(batch==null||!batch.herdFeed()||batch.cancelled()||herd==null||reached==null||!reached.equals(batch.destination())
             ||courier==null||!courier.equals(batch.courierId())||batch.cargoItems().isEmpty())return false;
-        String wheat=com.hexvane.aetherhaven.production.HerdProductionState.FEED;
-        if(batch.cargoItems().stream().anyMatch(s->!wheat.equals(s.getItemId())))return false;
+        String food=com.hexvane.aetherhaven.warehouse.HerdFeedSupplyPlanner.food(batch);
+        if(food==null)return cancel(id);
+        if(batch.cargoItems().stream().anyMatch(s->!food.equals(s.getItemId())))return false;
         int quantity=batch.cargoItems().stream().mapToInt(ItemStack::getQuantity).sum();
-        int accepted=Math.min(quantity,herd.courierFeedNeeded());
+        int accepted=Math.min(quantity,herd.courierFeedNeeded(food));
         if(accepted==0)return cancel(id);
         var remainder=WarehouseBatch.copy(batch.cargo());int left=accepted;
         for(short slot=0;slot<remainder.getCapacity()&&left>0;slot++) {
@@ -463,9 +479,9 @@ public final class TownWarehouse {
             int take=Math.min(left,stack.getQuantity());
             remainder.setItemStackForSlot(slot,stack.withQuantity(stack.getQuantity()-take),false);left-=take;
         }
-        if(left!=0||!herd.receiveCourierFeed(accepted))return false;
+        if(left!=0||!herd.receiveCourierFeed(food,accepted))return false;
         batch.cargo(remainder,remainder.isEmpty()?null:courier);
-        if(herd.courierFeedNeeded()==0){batch.cancel();removeReturned(batch);}
+        if(herd.courierFeedNeeded(food)==0){batch.cancel();removeReturned(batch);}
         else if(batch.pendingItems().isEmpty()&&batch.cargoItems().isEmpty())batches.remove(batch);
         batch.save();changed();return true;
     }
@@ -608,7 +624,8 @@ public final class TownWarehouse {
         if(data==null||data.isBlank()) return new SimpleItemContainer((short)capacity);
         // Fail closed on corrupt saves rather than replacing stored belongings with an empty bag.
         var inv=SimpleItemContainer.CODEC.decode(BsonDocument.parse(data),new ExtraInfo());
-        if(inv==null||inv.getCapacity()!=capacity) throw new IllegalStateException("Warehouse inventory capacity does not match its saved upgrade level");
+        if(inv==null||inv.getCapacity()>capacity) throw new IllegalStateException("Warehouse inventory capacity does not match its saved upgrade level");
+        if(inv.getCapacity()<capacity){var expanded=new SimpleItemContainer((short)capacity);for(short i=0;i<inv.getCapacity();i++)expanded.setItemStackForSlot(i,inv.getItemStack(i),false);return expanded;}
         return inv;
     }
 }

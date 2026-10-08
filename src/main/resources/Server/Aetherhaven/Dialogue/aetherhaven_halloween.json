@@ -308,6 +308,126 @@
           "next": "main_hub"
         }
       ]
+    },
+    "game_unavailable": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.unavailable",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "game_already_playing": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.already_playing",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "game_busy": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.busy",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "game_tomorrow": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.tomorrow",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "game_cleanup_pending": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.cleanup_pending",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "game_no_spot": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.no_spot",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "game_started": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.started",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "game_not_found": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.not_found",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "game_return_inventory": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.return_inventory",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "game_rewarded": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.rewarded",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "game_not_playing": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.not_playing",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "game_cancelled": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.game.cancelled",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.continue",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.hunter;
 
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.*;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
@@ -16,7 +18,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.*;
 
-/** Run dashboard, creature collection and permanent training. Treasury transactions remain server authoritative. */
+/** Run dashboard, creature collection and permanent training. Payments remain server authoritative. */
 public final class HuntPage extends AetherhavenInteractiveCustomUIPage<HuntPage.Data> {
     private final UUID townId;private final Ref<EntityStore> hunter;
     private boolean appended,refreshing,contentBuilt;private long seenRevision,seenWarehouseRevision;
@@ -28,7 +30,7 @@ public final class HuntPage extends AetherhavenInteractiveCustomUIPage<HuntPage.
     static {
         TRAINING.put("vitality",new String[]{"Vitality","60 more maximum health per level.","Potion_Health_Lesser"});
         TRAINING.put("power",new String[]{"Weapon mastery","20% more damage per level.","Weapon_Sword_Iron"});
-        TRAINING.put("dressing",new String[]{"Field dressing","Recover 4 health after each wave per level.","Ingredient_Fabric_Scrap_Linen"});
+        TRAINING.put("dressing",new String[]{"Field dressing","Recover 5 health after each wave per level.","Ingredient_Fabric_Scrap_Linen"});
         TRAINING.put("second_wind",new String[]{"Second Wind","Survive one knockout per run with 30% health.","Potion_Health_Greater"});
         TRAINING.put("storage",new String[]{"Spoils racks","Double the room for each kind of spoils.","Furniture_Village_Crate"});
     }
@@ -46,9 +48,12 @@ public final class HuntPage extends AetherhavenInteractiveCustomUIPage<HuntPage.
         }
         HuntService.holdForPlanning(townId,hunter,store);
         var state=town.getHunts();boolean rebuild=!contentBuilt||seenRevision!=state.revision()||seenWarehouseRevision!=town.getWarehouse().revision()||!tab.equals(renderedTab);seenRevision=state.revision();seenWarehouseRevision=town.getWarehouse().revision();
+        var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);
+        long available=inventory==null?0:GoldCoinPayment.totalAvailable(town,inventory,town.playerCanSpendTreasuryGold(playerRef.getUuid()));
         String preparationIssue=state.run()==null?HuntService.preparationIssue(town,hunter,store):null;
+        if(preparationIssue==null&&state.run()==null&&(inventory==null||available<TownHunts.ENTRY_GOLD))preparationIssue="You need "+TownHunts.ENTRY_GOLD+" gold in your inventory or treasury.";
         c.set("#Status.Text",preparationIssue==null?HuntService.status(store,townId):preparationIssue);c.set("#Hint.Text",preparationIssue==null?hint:preparationIssue);
-        c.set("#Gold.Text",town.getTreasuryGoldCoinCount()+" treasury gold");
+        c.set("#Gold.Text",available+" available gold");
         c.set("#Record.Text","BEST RUN   "+state.best()+(state.best()==1?" wave":" waves"));
         c.set("#Wave.Text",state.run()!=null?"WAVE "+(state.defeated()+1):preparationIssue==null?"READY FOR A RUN":"RUN NOT READY");
         c.set("#RunInfo.Text",state.run()==null?"Last run: "+state.lastResult().replace(" Ready for another run.","")
@@ -67,7 +72,7 @@ public final class HuntPage extends AetherhavenInteractiveCustomUIPage<HuntPage.
         for(String name:List.of("Run","Creatures","Training","Spoils")) {
             c.set("#"+name+"Panel.Visible",tab.equals(name));e.addEventBinding(CustomUIEventBindingType.Activating,"#Tab"+name,event("Tab",name),false);
         }
-        c.set("#RunDetails.Text","One portal. One monster at a time.\n\nUnlocked creatures take turns entering the arena. Each wave gains 15% health and 12% damage.\n\nThe Hunter collects spoils between fights. Defeat closes the portal and immediately restores him at the arena. There is no resurrection fee.\n\nRuns cost "+TownHunts.ENTRY_GOLD+" treasury gold to start. No automatic restarts.");
+        c.set("#RunDetails.Text","One portal. One monster at a time.\n\nUnlocked creatures take turns entering the arena. Each wave gains 15% health and 15% damage.\n\nThe Hunter collects spoils between fights. Defeat closes the portal and immediately restores him at the arena. There is no resurrection fee.\n\nRuns cost "+TownHunts.ENTRY_GOLD+" gold from inventory or treasury to start. No automatic restarts.");
         c.clear("#CreatureCards");
         var families=HuntFamily.all();
         int pageCount=Math.max(1,(families.size()+CREATURES_PER_PAGE-1)/CREATURES_PER_PAGE);
@@ -83,7 +88,7 @@ public final class HuntPage extends AetherhavenInteractiveCustomUIPage<HuntPage.
             c.set(p+" #LockedShade.Visible",!state.unlocked(family.id()));c.set(p+" #Lock.Visible",!state.unlocked(family.id()));
             c.set(p+" #Detail.Text",state.unlocked(family.id())?"Unlocked for future runs":family.unlockGold()+" gold + "+family.unlockItems()+" "+itemName(family.icon()));
             c.set(p+" #Choose.Text",state.unlocked(family.id())?"Unlocked":"Unlock");c.set(p+" #Choose.Disabled",state.unlocked(family.id())||state.run()!=null);
-            c.set(p+" #Choose.TooltipText",state.unlocked(family.id())?"This creature appears during runs.":"Carry the listed drops and pay from the town treasury to unlock this creature.");
+            c.set(p+" #Choose.TooltipText",state.unlocked(family.id())?"This creature appears during runs.":"Carry the listed drops and pay with gold from your inventory or treasury to unlock this creature.");
             e.addEventBinding(CustomUIEventBindingType.Activating,p+" #Choose",event("Unlock",family.id()),false);
         }
         c.clear("#TrainingCards");index=0;
@@ -96,18 +101,28 @@ public final class HuntPage extends AetherhavenInteractiveCustomUIPage<HuntPage.
         c.clear("#SpoilsCards");index=0;
         for(var entry:state.stock().entrySet()) {
             c.append("#SpoilsCards","Aetherhaven/HuntTraining.ui");String p="#SpoilsCards["+index+++"]";
-            long available=com.hexvane.aetherhaven.warehouse.ProductionStockSources.availableSpoils(town,plugin,entry.getKey());
-            long reserved=entry.getValue()-available;
+            long spoilsAvailable=com.hexvane.aetherhaven.warehouse.ProductionStockSources.availableSpoils(town,plugin,entry.getKey());
+            long reserved=entry.getValue()-spoilsAvailable;
             c.set(p+" #Icon.ItemId",entry.getKey());c.set(p+" #Name.Text",itemName(entry.getKey()));
             c.set(p+" #Description.Text",entry.getValue()+" / "+state.capacity()+" stored at the lodge"+(reserved>0?"\n"+reserved+" reserved for workplaces":""));
-            c.set(p+" #Choose.Text","Collect");c.set(p+" #Choose.Disabled",available==0||!town.playerCanOpenContainers(playerRef.getUuid()));
+            c.set(p+" #Choose.Text","Collect");c.set(p+" #Choose.Disabled",spoilsAvailable==0||!town.playerCanOpenContainers(playerRef.getUuid()));
             e.addEventBinding(CustomUIEventBindingType.Activating,p+" #Choose",event("Collect",entry.getKey()),false);
         }
         c.set("#SpoilsEmpty.Visible",state.stock().isEmpty());
         e.addEventBinding(CustomUIEventBindingType.Activating,"#Start",event("Start",""),false);
         contentBuilt=true;renderedTab=tab;
         }
+        int card=0;
+        var displayed=HuntFamily.all();
+        for(var family:displayed.subList(creaturePage*CREATURES_PER_PAGE,Math.min(displayed.size(),(creaturePage+1)*CREATURES_PER_PAGE))) {
+            c.set("#CreatureCards["+card+++ "] #Choose.Disabled",state.unlocked(family.id())||state.run()!=null
+                || inventory==null || available<family.unlockGold() || InventoryMaterials.count(inventory,family.icon())<family.unlockItems());
+        }
+        card=0;
+        for(String id:TRAINING.keySet())c.set("#TrainingCards["+card+++ "] #Choose.Disabled",state.run()!=null
+            ||state.level(id)>=TownHunts.maxLevel(id)||inventory==null||available<state.upgradeCost(id));
     }
+
     private String itemName(String id) {
         var item=com.hypixel.hytale.server.core.asset.type.item.config.Item.getAssetMap().getAsset(id);
         var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
@@ -146,22 +161,17 @@ public final class HuntPage extends AetherhavenInteractiveCustomUIPage<HuntPage.
                 count=Math.min(count,Math.max(1,item.getMaxStack()));
                 if(inv.addItemStack(new ItemStack(data.key,count),true,false,true).succeeded()){state.withdraw(data.key,count);manager.updateTown(town);hint="Spoils collected.";}else hint="Make room in your inventory.";
             }
-        } else if(!town.playerCanSpendTreasuryGold(playerRef.getUuid()))hint="You need permission to spend treasury gold.";
-        else if("Start".equals(data.action)) {
-            if(state.run()!=null)HuntService.retire(town,store);else {var error=HuntService.start(town,hunter,store);hint=error==null?"Run started. Watch from outside the arena floor.":error;}
+        } else if("Start".equals(data.action)) {
+            if(state.run()!=null)HuntService.retire(town,store);else {var error=HuntService.start(town,hunter,store,playerRef.getUuid(),InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING));hint=error==null?"Run started. Watch from outside the arena floor.":error;}
         } else if(state.run()!=null)hint="Finish this run before changing creatures or training.";
         else if("Unlock".equals(data.action)) {
-            var family=HuntFamily.get(data.key);var inv=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);
-            if(family!=null&&!state.unlocked(data.key)) {
-                if(town.getTreasuryGoldCoinCount()<family.unlockGold())hint="The treasury needs more gold.";
-                else if(inv==null||!inv.removeItemStack(new ItemStack(family.icon(),family.unlockItems()),true,true).succeeded())hint="Carry "+family.unlockItems()+" of this creature's drops.";
-                else if(state.unlock(family.id())) {town.addTreasuryGoldCoins(-family.unlockGold());manager.updateTown(town);hint="Creature unlocked for future runs.";}
-            }
+            String error=HuntPurchases.unlock(town,playerRef.getUuid(),InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING),data.key);
+            if(error==null){manager.updateTown(town);hint="Creature unlocked for future runs.";}else hint=error;
         } else if("Upgrade".equals(data.action)&&TRAINING.containsKey(data.key)) {
-            int cost=state.upgradeCost(data.key);
-            if(town.getTreasuryGoldCoinCount()<cost)hint="The treasury needs more gold.";
-            else if(state.upgrade(data.key)){town.addTreasuryGoldCoins(-cost);manager.updateTown(town);hint="Training complete. Your next run will use the improvement.";}
+            String error=HuntPurchases.upgrade(town,playerRef.getUuid(),InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING),data.key);
+            if(error==null){manager.updateTown(town);hint="Training complete. Your next run will use the improvement.";}else hint=error;
         }
+
         var c=new UICommandBuilder();var e=new UIEventBuilder();build(ref,c,e,store);sendUpdate(c,e,false);
     }
     public static final class Data {

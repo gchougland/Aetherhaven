@@ -57,7 +57,7 @@ public final class WorkplacePage extends AetherhavenInteractiveCustomUIPage<Work
         c.set("#Save.Disabled", selected == null || !sites.unlocked(selected));
         c.set("#Tasks.Visible", editing != null);
         var saved = editing == null ? null : sites.find(editing);
-        c.set("#Tasks.Text", saved != null && WorkplaceFood.supports(saved.type()) ? "Food support and tending" : "Tasks for saved workplace");
+        c.set("#Tasks.Text", saved!=null&&saved.type()==TownsfolkWorkType.MINING?"Open mineshaft planner":saved != null && WorkplaceFood.supports(saved.type()) ? "Food support and tending" : "Tasks for saved workplace");
         e.addEventBinding(CustomUIEventBindingType.Activating, "#Tasks", EventData.of("Action", "Tasks"), false);
         e.addEventBinding(CustomUIEventBindingType.Activating, "#Save", new EventData().append("Action", "Save").append("@Name", "#Name.Value"), false);
         e.addEventBinding(CustomUIEventBindingType.Activating, "#Cancel", EventData.of("Action", "Cancel"), false);
@@ -74,7 +74,7 @@ public final class WorkplacePage extends AetherhavenInteractiveCustomUIPage<Work
         if ("Tasks".equals(data.action) && editing != null && town.getApprenticeWorkplaces().find(editing) != null) {
             var player = store.getComponent(ref, com.hypixel.hytale.server.core.entity.entities.Player.getComponentType());
             if(town.getApprenticeWorkplaces().find(editing).type()==TownsfolkWorkType.BUILDING){player.getPageManager().openCustomPage(ref,store,new BuildingProjectsPage(playerRef,townId,editing,null));return;}
-            if(town.getApprenticeWorkplaces().find(editing).type()==TownsfolkWorkType.MINING){player.getPageManager().openCustomPage(ref,store,new ExcavationPage(playerRef,townId,editing,null));return;}
+            if(town.getApprenticeWorkplaces().find(editing).type()==TownsfolkWorkType.MINING){player.getPageManager().openCustomPage(ref,store,new MineshaftPlannerPage(playerRef,townId,editing));return;}
             if (WorkplaceFood.supports(town.getApprenticeWorkplaces().find(editing).type())) {
                 player.getPageManager().openCustomPage(ref,store,new FoodSitePage(playerRef,townId,editing)); return;
             }
@@ -100,6 +100,10 @@ public final class WorkplacePage extends AetherhavenInteractiveCustomUIPage<Work
             if (error == null) {
                 manager.updateTown(town);
                 var state = WorkplaceToolState.obtain(ref, store); state.clearSelection(); state.hint = "Workplace saved. Use Select mode to reopen it.";
+                if(selected==TownsfolkWorkType.MINING){
+                    var saved=editing==null?town.getApprenticeWorkplaces().sites().stream().filter(s->s.area().equals(area)&&s.type()==selected).findFirst().orElse(null):town.getApprenticeWorkplaces().find(editing);
+                    if(saved!=null){store.getComponent(ref,com.hypixel.hytale.server.core.entity.entities.Player.getComponentType()).getPageManager().openCustomPage(ref,store,new MineshaftPlannerPage(playerRef,townId,saved.id()));return;}
+                }
                 close(); return;
             }
             hint = error;

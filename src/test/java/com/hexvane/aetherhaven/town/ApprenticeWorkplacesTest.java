@@ -11,6 +11,8 @@ import static com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.*;
 
 @Tag("town")
 class ApprenticeWorkplacesTest {
+    private final com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer inventory =
+        new com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer(new com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer((short) 1));
     @Test void removalWaitsForExcavatedCargoAndKeepsItsDeliveryRoute() {
         var town=town();var sites=town.getApprenticeWorkplaces();
         assertNull(sites.save(town,null,SMELTING,area(0,0),"Cargo fixture"));
@@ -107,12 +109,12 @@ class ApprenticeWorkplacesTest {
     }
     @Test void purchasesEnforcePermissionsLevelFundsAndRejectRepeatedStaleClicks() {
         var town=town();var sites=town.getApprenticeWorkplaces();town.setTreasuryGoldCoinCount(1000);
-        assertNotNull(sites.buySlot(town,town.getOwnerUuid(),"blacksmith",0));
+        assertNotNull(sites.buySlot(town,town.getOwnerUuid(),"blacksmith",0, inventory));
         for(int i=0;i<3;i++)town.getResidentNpcRecords().add(new ResidentNpcRecord("Core"+i,"core"+i,null,UUID.randomUUID()));
-        assertNotNull(sites.buySlot(town,UUID.randomUUID(),"blacksmith",0));
-        assertNull(sites.buySlot(town,town.getOwnerUuid(),"blacksmith",0));
+        assertNotNull(sites.buySlot(town,UUID.randomUUID(),"blacksmith",0, inventory));
+        assertNull(sites.buySlot(town,town.getOwnerUuid(),"blacksmith",0, inventory));
         assertEquals(900,town.getTreasuryGoldCoinCount());assertEquals(3,sites.slots("blacksmith"));
-        assertNotNull(sites.buySlot(town,town.getOwnerUuid(),"blacksmith",0));
+        assertNotNull(sites.buySlot(town,town.getOwnerUuid(),"blacksmith",0, inventory));
         assertEquals(900,town.getTreasuryGoldCoinCount());
     }
     @Test void saveReloadKeepsGeometryNameUnlocksAndSharedCapacity() {

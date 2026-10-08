@@ -20,6 +20,13 @@ Group { LayoutMode: Top; FlexWeight: 1;
       Label #BillsEmployees { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true); }
     }
   }
+  Group { LayoutMode: Left; Anchor: (Height: 62, Bottom: 10); Background: $T.@Card; Padding: (Full: 12);
+    Group { LayoutMode: Top; FlexWeight: 1;
+      Label { Text: "Tomorrow's taxes (estimate)"; Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #e3ce99); }
+      Label { Text: "Based on current residents, needs and tax bonuses."; Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b4c5d5); }
+    }
+    Label #BillsTax { Anchor: (Width: 170); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true, TextColor: #96d4b4, HorizontalAlignment: End, VerticalAlignment: Center); }
+  }
   Label #BillsHelp { Anchor: (Height: 70, Bottom: 12); Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #b4c5d5); }
   Group { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle;
     Label #BillsEmpty { Style: (...$C.@DefaultLabelStyle, Wrap: true); }

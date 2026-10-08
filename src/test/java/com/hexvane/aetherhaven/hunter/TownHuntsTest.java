@@ -39,10 +39,10 @@ class TownHuntsTest {
     }
     @Test void fullStoragePausesWaveWithoutConsumingKillOrSpilling() {
         var s=new TownHunts();s.unlock("bone");var id=s.begin();var f=s.next();
-        for(int i=0;i<16;i++)assertTrue(s.collect(id,i,f));
-        assertFalse(s.collect(id,16,f));assertEquals(16,s.defeated());assertEquals(32,s.amount(f.icon()));
-        assertFalse(s.withdraw(f.icon(),33));assertFalse(s.withdraw(f.icon(),-1));assertTrue(s.withdraw(f.icon(),2));assertTrue(s.withdraw("Ingredient_Fabric_Scrap_Linen",2));
-        assertTrue(s.collect(id,16,f));assertEquals(32,s.amount(f.icon()));
+        for(int i=0;i<17;i++)assertTrue(s.collect(id,i,f));
+        assertFalse(s.collect(id,17,f));assertEquals(17,s.defeated());assertEquals(34,s.amount(f.icon()));
+        assertFalse(s.withdraw(f.icon(),35));assertFalse(s.withdraw(f.icon(),-1));assertTrue(s.withdraw(f.icon(),2));assertTrue(s.withdraw("Ingredient_Fabric_Scrap_Linen",2));
+        assertTrue(s.collect(id,17,f));assertEquals(34,s.amount(f.icon()));
     }
     @Test void rolledSpoilsAreCollectedExactlyOnceAndAnEmptyRollStillCompletesTheWave() {
         var s=new TownHunts();s.unlock("bone");var run=s.begin();var family=s.next();
@@ -69,13 +69,13 @@ class TownHuntsTest {
     @Test void saveRoundTripPreservesRunIdentityButDoesNotInventKills() {
         var s=new TownHunts();s.unlock("swarm");s.upgrade("dressing");var id=s.begin();s.collect(id,0,s.next());
         var copy=new Gson().fromJson(new Gson().toJson(s),TownHunts.class);
-        assertEquals(id,copy.run());assertEquals(1,copy.defeated());assertEquals(4,copy.recoveryPerWave());
+        assertEquals(id,copy.run());assertEquals(1,copy.defeated());assertEquals(5,copy.recoveryPerWave());
         copy.end("Restarted");assertNull(copy.run());assertEquals(1,copy.amount("Ingredient_Chitin_Sturdy"));
         assertFalse(copy.collect(id,1,HuntFamily.get("swarm")));
     }
     @Test void scalingIsMonotonicBoundedAndUsesCompletedWaves() {
         assertEquals(1,TownHunts.enemyHealthScale(0));assertEquals(1.15,TownHunts.enemyHealthScale(1),.001);
-        assertEquals(1.12,TownHunts.enemyDamageScale(1),.001);assertEquals(1,TownHunts.enemyDamageScale(-1));
+        assertEquals(1.15,TownHunts.enemyDamageScale(1),.001);assertEquals(1,TownHunts.enemyDamageScale(-1));
         assertEquals(20,TownHunts.enemyHealthScale(Integer.MAX_VALUE));assertEquals(20,TownHunts.enemyDamageScale(Integer.MAX_VALUE));
     }
     @Test void integrationRejectsInvalidOrDuplicateFamilies() {

@@ -19,6 +19,12 @@ public final class HiredGuardRecord {
     @SerializedName("citizen")
     private boolean citizen;
 
+    private boolean collectMobDrops;
+    private java.util.List<String> spoils = new java.util.ArrayList<>();
+    public boolean collectsMobDrops(){return collectMobDrops;}
+    public void setCollectMobDrops(boolean enabled){collectMobDrops=enabled;}
+    public java.util.List<String> spoils(){if(spoils==null)spoils=new java.util.ArrayList<>();return spoils;}
+
     public HiredGuardRecord() {}
 
     public HiredGuardRecord(

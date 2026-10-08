@@ -26,7 +26,7 @@ class CoreFriendshipRewardsTest {
         return GSON.fromJson(Files.readString(ROOT.resolve("Server/Aetherhaven/WorkplaceRecipes/craft_"+kind+"_kit.json")),WorkplaceRecipe.class);
     }
 
-    @Test void existingVillagersHaveThreeClaimableRewardsWithoutReplacingOldMilestones() throws Exception {
+    @Test void villagersHaveDistinctClaimableRewardsWithoutReplacingReleasedMilestones() throws Exception {
         Map<String,Set<String>> legacy=Map.ofEntries(
             Map.entry("Chef",Set.of("rep_chef_50")),Map.entry("Merchant",Set.of("rep_merchant_50","rep_merchant_100")),
             Map.entry("Rancher",Set.of("rep_rancher_50","rep_rancher_100")),Map.entry("Blacksmith",Set.of("rep_blacksmith_25","rep_blacksmith_50")),
@@ -43,7 +43,9 @@ class CoreFriendshipRewardsTest {
             var villager=read("Server/Aetherhaven/Villagers/Aetherhaven_"+role+".json");
             var nodes=read("Server/Aetherhaven/Dialogue/"+villager.get("residentTreeId").getAsString()+".json").getAsJsonObject("nodes");
             var rewards=villager.getAsJsonArray("reputationMilestones");
-            assertEquals(3,rewards.size(),role);
+            assertEquals(Set.of("Chef","Crafter","Leatherworker").contains(role)?2:3,rewards.size(),role);
+            Set<String> recipes=new HashSet<>();
+            for(var value:rewards){var learn=value.getAsJsonObject().get("learnRecipeItemId");if(learn!=null&&!learn.isJsonNull()&&!learn.getAsString().isBlank())assertTrue(recipes.add(learn.getAsString()),"Do not repeat recipe rewards for "+role);}
             Set<String> own=new HashSet<>();
             int previous=0;
             for(var entry:rewards) {
@@ -123,7 +125,7 @@ class CoreFriendshipRewardsTest {
         assertEquals("jewelry",ring.workplace());assertEquals("Aetherhaven_Jewelry_Crafting_Bench",ring.bench());
         assertEquals(5,ring.skillLevel());assertEquals(1,ring.outputCount());
         assertEquals("crafting",fireworks.workplace());assertEquals("Workbench",fireworks.bench());
-        assertEquals(4,fireworks.skillLevel());assertEquals(4,fireworks.outputCount());
+        assertEquals(4,fireworks.skillLevel());assertEquals(5,fireworks.outputCount());
         for(int selected=0;selected<plans.size();selected++) {
             var town=new TownRecord();assertTrue(plans.stream().noneMatch(p->p.unlocked(town)));
             assertTrue(WorkplaceRecipeUnlocks.grant(town,plans,plans.get(selected).output()));

@@ -10,19 +10,19 @@
   "inputs": [
     {
       "itemId": "Wood_Beech_Trunk",
-      "count": 16
+      "count": 20
     },
     {
       "itemId": "Ingredient_Crystal_Green",
-      "count": 8
+      "count": 10
     },
     {
       "itemId": "Ingredient_Bone_Fragment",
-      "count": 6
+      "count": 10
     },
     {
       "itemId": "Ingredient_Bar_Iron",
-      "count": 4
+      "count": 5
     }
   ],
   "output": "Aetherhaven_Prop_Spooky_Terrarium",

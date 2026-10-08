@@ -332,6 +332,7 @@ final class AetherhavenLogisticsTestCommand extends AbstractPlayerCommand {
                 for(var site:town.getApprenticeWorkplaces().sites()) {
                     if(!town.getWarehouse().canPrepare(site.id(),site.type()==TownsfolkWorkType.SMELTING,site.type()==TownsfolkWorkType.CULTIVATION))continue;
                     var equipment=WorkplaceEquipment.scan(world,site.area());
+                    if(site.excavation().id()!=null)report(ctx,"Mine "+site.name()+" "+site.excavation().completed()+"/"+site.excavation().total()+" next="+site.excavation().next()+" work="+site.excavation().work()+" cargo="+site.excavation().cargo()+" carrier="+site.excavation().carrier()+" issue="+NativeExcavation.workIssue(world,town,site,plugin,10));
                     for(var order:site.orders().list()) {
                         var recipe=plugin.getApprenticeRecipes().find(order.recipeId());
                         if(!site.orders().canComplete(order.id(),order.recipeId())||recipe==null||!recipe.unlocked(town)||recipe.source()==null||recipe.equipmentIssue(site,equipment)!=null)continue;
@@ -367,6 +368,7 @@ final class AetherhavenLogisticsTestCommand extends AbstractPlayerCommand {
                 report(ctx,"Loaded desks: "+WarehouseDeskBlock.loaded(world,manager,town)+" | production stores: "+sources(world,town,plugin).stream().map(s->s.plot()+" at "+s.pickup()).toList());
                 for(var site:town.getApprenticeWorkplaces().sites()) {
                     var equipment=WorkplaceEquipment.scan(world,site.area());
+                    if(site.excavation().id()!=null)report(ctx,"Mine "+site.name()+" "+site.excavation().completed()+"/"+site.excavation().total()+" next="+site.excavation().next()+" work="+site.excavation().work()+" cargo="+site.excavation().cargo()+" carrier="+site.excavation().carrier()+" issue="+NativeExcavation.workIssue(world,town,site,plugin,10));
                     report(ctx,"Workplace "+site.name()+" | simulated="+equipment.fullySimulated()
                         +" | benches="+equipment.benches()+" | furnishings="+equipment.furnishingSummary(site.type())
                         +" | furnishing multiplier="+equipment.workMultiplier(site.type()));
@@ -376,7 +378,7 @@ final class AetherhavenLogisticsTestCommand extends AbstractPlayerCommand {
                     if(ref==null||!ref.isValid()){report(ctx,worker.name()+" is not loaded.");continue;}
                     var route=store.getComponent(ref,CourierTravelState.getComponentType());var pos=store.getComponent(ref,TransformComponent.getComponentType());
                     var work=store.getComponent(ref,ApprenticeWorkState.getComponentType());
-                    report(ctx,worker.name()+" | apprentice="+(work==null?"none":work.active+" working="+work.working+" batch="+work.batch+" foodSite="+work.foodSite+" approach="+work.approach));
+                    report(ctx,worker.name()+" | apprentice="+(work==null?"none":work.active+" working="+work.working+" batch="+work.batch+" foodSite="+work.foodSite+" excavation="+work.excavationSite+" target="+work.excavationTarget+" approach="+work.approach));
                     var needs=store.getComponent(ref,VillagerNeeds.getComponentType());
                     report(ctx,worker.name()+" at "+(pos==null?"unknown":pos.getPosition())+" | route="+(route==null?"none":route.active+" "+route.action+" "+route.endpoint+" approach="+route.approach)+" | needs="+(needs==null?"missing":needs.getHunger()+"/"+needs.getEnergy()));
                     var npc=store.getComponent(ref,com.hypixel.hytale.server.npc.entities.NPCEntity.getComponentType());

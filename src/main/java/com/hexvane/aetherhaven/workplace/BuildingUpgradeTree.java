@@ -7,7 +7,7 @@ import java.util.*;
 /** Stable purchase identities and prerequisite edges, shared by rendering and purchase validation. */
 public final class BuildingUpgradeTree {
     private BuildingUpgradeTree() {}
-    public enum Kind { FOUNDATION, WORKPLACE, SLOT, SMELTING, PRODUCTION, RESTAURANT, ALCHEMY, WAREHOUSE }
+    public enum Kind { FOUNDATION, WORKPLACE, SLOT, SMELTING, PRODUCTION, RESTAURANT, ALCHEMY, WAREHOUSE, INN }
     public record Node(String id, String title, String description, String icon, String item,
                        Kind kind, String branch, int tier, int level, int x, int y, List<String> parents) {}
     public static int bandTop(int level) { return level == 1 ? 0 : 350 + (level - 2) * 170; }
@@ -27,7 +27,7 @@ public final class BuildingUpgradeTree {
             nodes.add(node("work:"+t.id,WorkplaceRules.label(t),WorkplaceRules.description(t),bench==null?t.skill.icon:null,bench,
                 Kind.WORKPLACE,t.id,1,1,types.size()==1?233:32+i*201,208,"home"));
         }
-        for(int tier=1;tier<=32;tier++) {
+        for(int tier=1;tier<=35;tier++) {
             int level=Math.min(6,tier+1), offset=Math.max(0,tier-5), row=offset/2;
             int col=offset%2; if(row%2==1)col=1-col;
             int x=tier<5?32:32+col*201;
@@ -45,15 +45,18 @@ public final class BuildingUpgradeTree {
         return List.copyOf(nodes);
     }
     public static List<Node> production() {
+        return production(false);
+    }
+    public static List<Node> production(boolean barn) {
         var nodes=new ArrayList<Node>();
-        nodes.add(node("IRON:1","Second output","Adds a second production output slot.",null,"Ingredient_Bar_Iron",Kind.PRODUCTION,"IRON",1,1,233,48));
+        nodes.add(node("IRON:1",barn?"Second animal pen":"Second output",barn?"Keeps a second owned animal active in the barn.":"Adds a second production output slot.",null,"Ingredient_Bar_Iron",Kind.PRODUCTION,"IRON",1,1,233,48));
         for(int tier=1;tier<=3;tier++) {
             int level=tier+1, y=bandTop(level,true)+42;
-            nodes.add(node("THORIUM:"+tier,"Production speed "+tier,"Adds 20% production speed.",null,"Ingredient_Bar_Thorium",Kind.PRODUCTION,"THORIUM",tier,level,32,y,tier==1?"IRON:1":"THORIUM:"+(tier-1)));
-            nodes.add(node("COBALT:"+tier,"Output slot "+(tier+2),"Adds one production output slot.",null,"Ingredient_Bar_Cobalt",Kind.PRODUCTION,"COBALT",tier,level,434,y,tier==1?"IRON:1":"COBALT:"+(tier-1)));
-            var parents=new ArrayList<>(List.of("THORIUM:"+tier,"COBALT:"+tier));
+            if(!barn)nodes.add(node("THORIUM:"+tier,"Production speed "+tier,"Adds 20% production speed.",null,"Ingredient_Bar_Thorium",Kind.PRODUCTION,"THORIUM",tier,level,32,y,tier==1?"IRON:1":"THORIUM:"+(tier-1)));
+            nodes.add(node("COBALT:"+tier,(barn?"Animal pen ":"Output slot ")+(tier+2),barn?"Keeps one more owned animal active in the barn.":"Adds one production output slot.",null,"Ingredient_Bar_Cobalt",Kind.PRODUCTION,"COBALT",tier,level,434,y,tier==1?"IRON:1":"COBALT:"+(tier-1)));
+            var parents=new ArrayList<>(barn?List.of("COBALT:"+tier):List.of("THORIUM:"+tier,"COBALT:"+tier));
             if(tier>1)parents.add("ADAMANTITE:"+(tier-1));
-            nodes.add(node("ADAMANTITE:"+tier,"Resource storage "+tier,"Adds 100% of the original storage capacity for each production output.",null,"Ingredient_Bar_Adamantite",Kind.PRODUCTION,"ADAMANTITE",tier,level+1,233,bandTop(level+1,true)+42,parents.toArray(String[]::new)));
+            nodes.add(node("ADAMANTITE:"+tier,"Resource storage "+tier,barn?"Adds room for 10 more of every animal resource.":"Adds 100% of the original storage capacity for each production output.",null,"Ingredient_Bar_Adamantite",Kind.PRODUCTION,"ADAMANTITE",tier,level+1,233,bandTop(level+1,true)+42,parents.toArray(String[]::new)));
         }
         return List.copyOf(nodes);
     }
@@ -77,12 +80,18 @@ public final class BuildingUpgradeTree {
             node("alchemy:2","Third ingredient","Combine up to three ingredient properties in one flask. Requires Alchemist Mastery 6.",null,"Plant_Crop_Mushroom_Boomshroom_Small",Kind.ALCHEMY,"",2,3,233,bandTop(3,true)+42,"alchemy:1")
         );
     }
+    public static List<Node> inn() {
+        return List.of(
+            node("home","Town Inn","A welcoming place for visiting villagers.","house_icon_256.png",null,Kind.FOUNDATION,"",0,1,233,48),
+            node("outreach","Guest book","Choose an available guest to visit the Inn. Each invitation costs 50 gold from your inventory or treasury.","open-book.png",null,Kind.INN,"",1,3,233,bandTop(3,true)+42,"home")
+        );
+    }
     public static List<Node> warehouse() {
         var nodes=new ArrayList<Node>();
         nodes.add(node("home","Town warehouse","Shared storage for your town's supplies and crafted goods.","crate.png",null,Kind.FOUNDATION,"",0,1,233,48));
         for(int tier=1;tier<=com.hexvane.aetherhaven.warehouse.TownWarehouse.MAX_UPGRADES;tier++) {
             int level=Math.min(6,tier+1);
-            nodes.add(node("warehouse:"+tier,"General storage "+tier,"Adds 18 general storage slots. Crafted goods and production buildings keep their own limits.",
+            nodes.add(node("warehouse:"+tier,"General storage "+tier,"Adds 20 general storage slots. Crafted goods and production buildings keep their own limits.",
                 "crate.png",null,Kind.WAREHOUSE,"",tier,level,233,bandTop(level,true)+42+Math.max(0,tier-5)*150,
                 tier==1?"home":"warehouse:"+(tier-1)));
         }

@@ -10,19 +10,19 @@
   "inputs": [
     {
       "itemId": "Wood_Beech_Trunk",
-      "count": 24
+      "count": 25
     },
     {
       "itemId": "Plant_Flower_Common_Pink",
-      "count": 6
+      "count": 10
     },
     {
       "itemId": "Plant_Flower_Common_White",
-      "count": 6
+      "count": 10
     },
     {
       "itemId": "Ingredient_Fabric_Scrap_Linen",
-      "count": 4
+      "count": 5
     }
   ],
   "output": "Aetherhaven_Prop_Plant_Arch",

@@ -243,13 +243,11 @@ tasks.named<Jar>("sourcesJar") {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:removal", "-Xlint:unchecked"))
+    options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:removal", "-Xlint:unchecked", "-Werror"))
 }
 
 tasks.test {
-    useJUnitPlatform {
-        includeTags("wall-placement", "floating-gift", "map-marker", "autonomy", "schedule", "tourist", "entity", "town", "crossmod", "worldnpc", "raid", "questboard", "construction", "quest", "bard", "prop")
-    }
+    useJUnitPlatform()
     systemProperty(
         "java.util.logging.manager",
         "com.hypixel.hytale.logger.backend.HytaleLogManager"
@@ -260,6 +258,21 @@ tasks.test {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
 }
+
+// UI files are parsed as one client library. A malformed, unopened page can
+// prevent the HUD from loading, so focused gameplay tests must not bypass this.
+val customUiValidation = tasks.register<Test>("customUiValidation") {
+    group = "verification"
+    description = "Checks Custom UI contracts before packaging or staging the development plugin."
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+    useJUnitPlatform()
+    filter { includeTestsMatching("com.hexvane.aetherhaven.ui.CustomUiTemplateContractTest") }
+    inputs.files(fileTree("src/main/resources/Common/UI"), fileTree("subplugin-assets"), fileTree("src/main/java"))
+    testLogging { events("failed", "skipped") }
+}
+tasks.named("verifyReleaseJar") { dependsOn(customUiValidation) }
+tasks.matching { it.name == "stageDevPlugin" }.configureEach { dependsOn(customUiValidation) }
 
 /** Wall wand directional tests; writes build/wall-placement-test-report.txt */
 tasks.register<Test>("wallPlacementTests") {

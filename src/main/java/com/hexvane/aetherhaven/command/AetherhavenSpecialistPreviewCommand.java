@@ -86,6 +86,14 @@ final class AetherhavenSpecialistPreviewCommand extends AbstractPlayerCommand {
         var plugin=AetherhavenPlugin.get();if(!AetherhavenDebugUtil.requireDebug(plugin,player))return;
         var session=SESSIONS.get(player.getUuid());
         switch(ctx.get(action)) {
+            case "minediagnose" -> {
+                var town=AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin).findTownForOwnerInWorld(player.getUuid());
+                if(town==null){say(player,"No owned town here.");return;}
+                for(var site:town.getApprenticeWorkplaces().sites())if(site.existingExcavation()!=null&&site.excavation().id()!=null){
+                    var plan=site.excavation();
+                    say(player,site.name()+" "+site.id()+" "+plan.completed()+"/"+plan.total()+" next "+(plan.next()==null?"none":plan.next().point())+" issue "+com.hexvane.aetherhaven.workplace.NativeExcavation.workIssue(world,town,site,plugin,10)+" crew "+SpecialistExcavationPreview.crewStatus(world,site));
+                }
+            }
             case "start" -> {
                 if(session!=null){say(player,"A preview is already active. Use visit, status or finish.");return;}
                 var transform=store.getComponent(ref,TransformComponent.getComponentType());if(transform==null)return;
@@ -292,12 +300,25 @@ final class AetherhavenSpecialistPreviewCommand extends AbstractPlayerCommand {
                     say(player,session.work.status(world,player.getUuid()));
                 } catch(RuntimeException error) {say(player,"Work preview: "+error.getMessage());}
             }
-            case "minework", "mineenclosed", "minereview" -> {
+            case "mineplanner", "minenetworkstatus", "minebuffer", "minebufferroom", "minebufferempty" -> {
+                if(session==null||!session.ready||session.returning.get()||world!=session.world||PersistentWorldSupport.shouldPersistWorldData(world)){say(player,"Enter a ready unsaved specialist preview first.");return;}
+                try{
+                    if(session.excavation==null)session.excavation=SpecialistExcavationPreview.network(world,player.getUuid(),session.visits.get("plot_crafter"));
+                    var town=AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin).findTownForOwnerInWorld(player.getUuid());
+                    if("minebuffer".equals(ctx.get(action)))session.excavation.prepareBufferCheck(world,player.getUuid());
+                    if("minebufferroom".equals(ctx.get(action)))session.excavation.bufferRoom(world,player.getUuid(),3);
+                    if("minebufferempty".equals(ctx.get(action)))session.excavation.bufferRoom(world,player.getUuid(),1000000);
+                    if("mineplanner".equals(ctx.get(action))||"minebuffer".equals(ctx.get(action)))store.getComponent(ref,com.hypixel.hytale.server.core.entity.entities.Player.getComponentType()).getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.MineshaftPlannerPage(player,town.getTownId(),session.excavation.siteId()));
+                    say(player,session.excavation.networkStatus(world,player.getUuid()));
+                }catch(RuntimeException error){say(player,"Mine planner preview: "+error.getMessage());}
+            }
+            case "minework", "mineenclosed", "minereview", "minerails", "minecrew" -> {
                 if(session==null||!session.ready||session.returning.get()||world!=session.world){say(player,"Enter a ready specialist preview first.");return;}
                 try {
                     if(session.excavation==null)session.excavation=SpecialistExcavationPreview.create(world,player.getUuid(),session.visits.get("plot_crafter"),
                         ctx.provided(layout)?com.hexvane.aetherhaven.workplace.ExcavationPlan.Layout.valueOf(ctx.get(layout).toUpperCase(Locale.ROOT)):com.hexvane.aetherhaven.workplace.ExcavationPlan.Layout.STAIRS_UP,
-                        ctx.provided(fittings)?com.hexvane.aetherhaven.workplace.ExcavationFittings.Mode.valueOf(ctx.get(fittings).toUpperCase(Locale.ROOT)):com.hexvane.aetherhaven.workplace.ExcavationFittings.Mode.NONE,"mineenclosed".equals(ctx.get(action)),!"minereview".equals(ctx.get(action)));
+                        ctx.provided(fittings)?com.hexvane.aetherhaven.workplace.ExcavationFittings.Mode.valueOf(ctx.get(fittings).toUpperCase(Locale.ROOT)):com.hexvane.aetherhaven.workplace.ExcavationFittings.Mode.NONE,
+                        "mineenclosed".equals(ctx.get(action))||"minerails".equals(ctx.get(action))||"minecrew".equals(ctx.get(action)),!"minereview".equals(ctx.get(action)),"minerails".equals(ctx.get(action))||"minecrew".equals(ctx.get(action)),"minecrew".equals(ctx.get(action)));
                     if("minereview".equals(ctx.get(action))) {
                         var town=AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin).findTownForOwnerInWorld(player.getUuid());
                         var site=town.getApprenticeWorkplaces().find(session.excavation.siteId());var area=site.area();
@@ -342,16 +363,16 @@ final class AetherhavenSpecialistPreviewCommand extends AbstractPlayerCommand {
                     say(player,"Review-only mineshaft fixture. No core mine or worker was added, so starting excavation stays unavailable.");
                 }catch(RuntimeException error){say(player,"Mineshaft preview: "+error.getMessage());}
             }
-            case "herdcheck", "herdage", "herdpage" -> {
+            case "herdcheck", "herdage", "herdpage", "herdshop" -> {
                 if(session==null||!session.ready||session.returning.get()||world!=session.world
                     ||PersistentWorldSupport.shouldPersistWorldData(world)){say(player,"Enter a ready unsaved specialist preview first.");return;}
                 try {
                     if(session.herd==null)session.herd=SpecialistHerdPreview.create(world,player.getUuid());
                     if("herdage".equals(ctx.get(action)))session.herd.advance(world,player.getUuid());
-                    if("herdpage".equals(ctx.get(action))) {
+                    if("herdpage".equals(ctx.get(action))||"herdshop".equals(ctx.get(action))) {
                         var town=AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin).findTownForOwnerInWorld(player.getUuid());
                         store.getComponent(ref,com.hypixel.hytale.server.core.entity.entities.Player.getComponentType()).getPageManager()
-                            .openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.RancherHerdPage(player,town.getTownId(),session.herd.plotId()));
+                            .openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.RancherHerdPage(player,town.getTownId(),session.herd.plotId(),"herdshop".equals(ctx.get(action))));
                     }
                     say(player,session.herd.status(world,player.getUuid()));
                 }catch(RuntimeException error){say(player,"Herd preview: "+error.getMessage());}

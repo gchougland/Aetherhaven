@@ -73,7 +73,7 @@ public final class DialogueChoiceItemRequirements {
         if (icon != null && "move_in_item".equalsIgnoreCase(icon.trim())) {
             return true;
         }
-        if (choice.hasAction("deliver_tourist_move_in_items")) {
+        if (choice.hasAction("deliver_tourist_move_in_items") || choice.hasAction("invite_guild_resident")) {
             return true;
         }
         for (JsonObject action : choice.getActions()) {

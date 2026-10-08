@@ -37,7 +37,7 @@ class PlotCreatorStaffBoundsSwapTest {
             var saved=ItemStack.CODEC.encode(bounds,new com.hypixel.hytale.codec.ExtraInfo());
             var loaded=ItemStack.CODEC.decode(saved,new com.hypixel.hytale.codec.ExtraInfo());
             assertEquals(original,PlotCreatorStaffBoundsSwap.fromBoundsStaff(loaded));
-            assertEquals(original.getMetadata(),PlotCreatorStaffBoundsSwap.fromBoundsStaff(loaded).getMetadata());
+            assertEquals(com.hexvane.aetherhaven.inventory.ItemStackData.metadata(original),com.hexvane.aetherhaven.inventory.ItemStackData.metadata(PlotCreatorStaffBoundsSwap.fromBoundsStaff(loaded)));
         }
     }
     @Test void oldBoundsStaffStillRestoresCreatorAndUnrelatedItemsAreRejected() {

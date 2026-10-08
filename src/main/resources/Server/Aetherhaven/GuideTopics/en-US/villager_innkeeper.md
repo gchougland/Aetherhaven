@@ -9,6 +9,12 @@ npcRoleId: Aetherhaven_Innkeeper
 
 **Corin Mosscup** is usually found at **the inn** when they are on shift.
 
+### Guest Book
+
+At Town Level 3, ask Corin about **Building Upgrades** to unlock the Guest Book for **100 gold** from the treasury. The Guest Book dialogue option appears after this upgrade.
+
+The book shows available guests in Town Level order. Each invitation costs **50 gold** from the treasury and requests the next free morning guest spot. Only one invitation can wait at a time. Cancelling an invitation does not refund its fee.
+
 ### Quests
 
 #### A Place To Breathe

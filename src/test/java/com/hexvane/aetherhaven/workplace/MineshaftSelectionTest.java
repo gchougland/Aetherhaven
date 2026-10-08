@@ -32,7 +32,7 @@ class MineshaftSelectionTest {
         for (var direction : MineshaftSelection.Direction.values()) {
             int dx = switch (direction) { case EAST -> 1; case WEST -> -1; default -> 0; };
             int dz = switch (direction) { case SOUTH -> 1; case NORTH -> -1; default -> 0; };
-            for (var layout : ExcavationPlan.Layout.values()) {
+            for (var layout : new ExcavationPlan.Layout[]{ExcavationPlan.Layout.STRAIGHT,ExcavationPlan.Layout.BRANCHES,ExcavationPlan.Layout.STAIRS_UP,ExcavationPlan.Layout.STAIRS_DOWN}) {
                 for (int length = 3; length <= MineshaftSelection.maximumLength(layout); length++) {
                     var area = MineshaftSelection.area(x, groundY, z, direction, length, layout);
                     var entrance = MineshaftSelection.entrance(direction);
@@ -40,13 +40,15 @@ class MineshaftSelectionTest {
                     assertEquals(new Point(x, groundY, z), MineshaftSelection.ground(area, entrance, layout));
                     var cells = ExcavationPlan.tunnel(area, entrance, layout);
                     assertTrue(area.valid());
-                    assertEquals(length * 9 + (layout == ExcavationPlan.Layout.BRANCHES ? 36 : 0), cells.size());
+                    int faceSize = 3 * ExcavationPlan.passageHeight(area, layout);
+                    assertEquals(length * faceSize + (layout == ExcavationPlan.Layout.BRANCHES ? 36 : 0) - (faceSize==12?6:0), cells.size());
                     assertEquals(cells.size(), new HashSet<>(cells).size());
                     assertTrue(cells.stream().allMatch(p -> area.contains(p.x(), p.y(), p.z())));
                     // The original tunnel order contains all main faces before its branch arms.
                     for (int row = 1; row <= length; row++) {
-                        int first = (row - 1) * 9;
-                        for (var cell : cells.subList(first, first + 9)) {
+                        int first = (row - 1) * faceSize - (faceSize==12?3*Math.min(row-1,2):0);
+                        int rowSize = faceSize==12&&row<=2?9:faceSize;
+                        for (var cell : cells.subList(first, first + rowSize)) {
                             assertEquals(row, (cell.x() - x) * dx + (cell.z() - z) * dz);
                             assertTrue(Math.abs((cell.x() - x) * dz - (cell.z() - z) * dx) <= 1);
                         }
@@ -73,9 +75,10 @@ class MineshaftSelectionTest {
             for (int row = 1; row <= 12; row++) {
                 int rise = Math.min(2, (row - 1) / 4);
                 int floor = 100 + (layout == ExcavationPlan.Layout.STAIRS_DOWN ? -rise : rise);
-                int first = (row - 1) * 9;
-                assertEquals(floor, cells.subList(first, first + 9).stream().mapToInt(Point::y).min().orElseThrow());
-                assertEquals(floor + 2, cells.subList(first, first + 9).stream().mapToInt(Point::y).max().orElseThrow());
+                int first = (row - 1) * 12 - 3*Math.min(row-1,2);
+                int rowSize = row<=2?9:12;
+                assertEquals(floor, cells.subList(first, first + rowSize).stream().mapToInt(Point::y).min().orElseThrow());
+                assertEquals(floor + (row<=2?2:3), cells.subList(first, first + rowSize).stream().mapToInt(Point::y).max().orElseThrow());
             }
         }
     }
@@ -121,8 +124,8 @@ class MineshaftSelectionTest {
     @Test
     void worldHeightBandRejectsOverflowAndKeepsBothStairExtremesInsideTheWorld() {
         for (var layout : ExcavationPlan.Layout.values()) {
-            int low = layout == ExcavationPlan.Layout.STAIRS_DOWN ? 1 : 0;
-            int high = layout == ExcavationPlan.Layout.STAIRS_DOWN ? 316 : 314;
+            int low = layout == ExcavationPlan.Layout.DEEP_STAIRS_DOWN ? 6 : layout == ExcavationPlan.Layout.STAIRS_DOWN ? 1 : 0;
+            int high = layout == ExcavationPlan.Layout.DEEP_STAIRS_DOWN ? 315 : layout == ExcavationPlan.Layout.DEEP_STAIRS_UP ? 308 : layout == ExcavationPlan.Layout.STAIRS_DOWN ? 315 : layout == ExcavationPlan.Layout.STAIRS_UP ? 313 : 314;
             for (int y : new int[]{low, high}) {
                 var area = MineshaftSelection.area(0, y, 0, MineshaftSelection.Direction.SOUTH, 12, layout);
                 assertTrue(area.valid());

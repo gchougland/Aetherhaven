@@ -3,8 +3,8 @@
   "id": "q_halloween_shelter",
   "category": "town",
   "grantPlotTokenConstructionId": "plot_halloween",
-  "title": "Jack's Pumpkin Shelter",
-  "description": "Build a simple shelter so Jack Hollow can settle in town.",
+  "title": "Jack's Spook House",
+  "description": "Build a Spook House so Jack Hollow can settle in town.",
   "prerequisites": {
     "completedQuestIds": [],
     "anyCompletedQuestIds": []
@@ -13,13 +13,13 @@
     {
       "id": "token",
       "kind": "plot_token_received",
-      "text": "Take Jack's Pumpkin Shelter token."
+      "text": "Take Jack's Spook House token."
     },
     {
       "id": "build",
       "kind": "construction_built",
       "constructionId": "plot_halloween",
-      "text": "Build the Pumpkin Shelter."
+      "text": "Build the Spook House."
     },
     {
       "id": "talk",

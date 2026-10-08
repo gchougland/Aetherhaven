@@ -334,7 +334,7 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
     private boolean available(Ref<EntityStore> ref, Store<EntityStore> store, boolean social) {
         if (ref == null || !ref.isValid()) return false;
         if (MiningWorkService.active(ref)) return false;
-        if (TimberWorkService.active(ref) || FieldWorkService.active(ref) || HerdWorkService.active(ref)) return false;
+        if (TimberWorkService.active(ref) || FieldWorkService.active(ref)) return false;
         if (ClinicVisitService.active(ref)) return false;
         if (com.hexvane.aetherhaven.hunter.HuntService.owns(ref,store)) return false;
         var clerk=store.getComponent(ref,com.hexvane.aetherhaven.shopspot.ShopClerkState.getComponentType());
@@ -342,7 +342,7 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
         var courier=store.getComponent(ref,com.hexvane.aetherhaven.warehouse.CourierTravelState.getComponentType());
         if(courier!=null&&courier.active)return false;
         var work=store.getComponent(ref,com.hexvane.aetherhaven.workplace.ApprenticeWorkState.getComponentType());
-        if(work!=null&&work.active)return false;
+        if(work!=null&&(work.active||work.excavationSite!=null))return false;
         if (store.getComponent(ref, VillagerSeatExit.getComponentType()) != null) return false;
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
         TownVillagerBinding binding = store.getComponent(ref, TownVillagerBinding.getComponentType());

@@ -395,7 +395,6 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (MiningWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
         if (TimberWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
         if (FieldWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
-        if (HerdWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         PoiEntry previousTarget = autonomy.getTargetPoiUuid() != null ? reg.get(autonomy.getTargetPoiUuid()) : null;
         if (previousTarget != null
@@ -437,7 +436,6 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         MiningWorkService.interrupt(ref, store, npc, buffer);
         TimberWorkService.interrupt(ref, store, npc, buffer);
         FieldWorkService.interrupt(ref, store, npc, buffer);
-        HerdWorkService.interrupt(ref, store, npc, buffer);
         ShopClerkWorkService.interrupt(ref, store, npc, buffer);
         ApprenticeWorkService.interrupt(ref, store, npc, buffer);
         CourierWorkService.interrupt(ref, store, npc, buffer);

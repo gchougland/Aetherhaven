@@ -36,6 +36,12 @@ public final class VillagerEquipmentService {
         @Nonnull EquipmentProfileCatalog catalog,
         @Nonnull String profileId
     ) {
+        // Old Halloween plots saved the bard profile on Jack's leisure spot.
+        var binding=store.getComponent(npcRef,com.hexvane.aetherhaven.villager.TownVillagerBinding.getComponentType());
+        if ("work_bard".equals(profileId)&&binding!=null&&"halloween".equals(binding.getKind())) {
+            clearHotbar(npcRef,store,commandBuffer);
+            return;
+        }
         EquipmentProfileDefinition def = catalog.byId(profileId);
         if (def == null) {
             LOGGER.atWarning().log("Unknown equipment profile %s", profileId);

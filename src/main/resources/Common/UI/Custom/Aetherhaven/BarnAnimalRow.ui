@@ -1,0 +1,24 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Left; Anchor: (Height: 76, Bottom: 4); Padding: (Full: 8); Background: $T.@BarnCard;
+ Group #AnimalPicture { Anchor: (Width: 56, Height: 56, Right: 10);
+  AssetImage #Portrait { Anchor: (Full: 0); }
+  ItemIcon #FoodIcon { Anchor: (Width: 18, Height: 18, Top: 0, Right: 0); Visible: false; }
+ }
+ ItemIcon #Item { Anchor: (Width: 48, Height: 48, Right: 10); Visible: false; }
+ AssetImage #Lock { AssetPath: "UI/Custom/padlock.png"; Anchor: (Width: 22, Height: 22, Right: 6); Visible: false; }
+ Group { LayoutMode: Top; FlexWeight: 1;
+  Group { LayoutMode: Left; Anchor: (Height: 22);
+   Label #Title { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 15, RenderBold: true, TextColor: #dec68d); }
+  }
+  Label #Detail { Anchor: (Height: 19); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
+  Label #Info { Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #b7c9bb); }
+ }
+ Group #Hearts { LayoutMode: Left; Anchor: (Width: 120, Height: 22, Top: 17, Right: 18, Left: 8); Visible: false; }
+ Group #RenameGroup { LayoutMode: Left; Anchor: (Width: 235, Height: 32, Top: 12);
+  $C.@TextField #Rename { Anchor: (Width: 152, Right: 6); MaxLength: 24; }
+  $C.@SmallSecondaryTextButton #RenameButton { Text: "Name"; Anchor: (Width: 77); }
+ }
+ $C.@SmallSecondaryTextButton #Primary { Anchor: (Width: 165, Height: 34, Top: 12, Left: 8); Text: "Buy"; }
+ $C.@SmallSecondaryTextButton #Secondary { Anchor: (Width: 110, Height: 34, Top: 12, Left: 8); Text: "Take one"; Visible: false; }
+}

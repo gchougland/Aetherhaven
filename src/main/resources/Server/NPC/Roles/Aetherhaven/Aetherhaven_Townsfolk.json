@@ -119,6 +119,21 @@
     {
       "Instructions": [
         {
+          "Sensor": { "Type": "State", "State": "AetherhavenAutonomy.Fitting", "IgnoreMissingSetState": true },
+          "Instructions": [
+            {
+              "Sensor": { "Type": "Leash", "Range": 0.1 },
+              "BodyMotion": {
+                "Type": "Seek", "StopDistance": 0.05, "SlowDownDistance": 1,
+                "AbortDistance": 256, "UsePathfinder": true, "UseSteering": true,
+                "RelativeSpeed": 0.85, "ThrottleDelayRange": [0.5, 1.5],
+                "ThrottleIgnoreCount": 2, "MaxPathLength": 400, "MaxTotalNodes": 1200
+              }
+            },
+            { "Sensor": { "Type": "Any" }, "BodyMotion": { "Type": "Nothing" } }
+          ]
+        },
+        {
           "Sensor": { "Type": "State", "State": "AetherhavenAutonomy", "IgnoreMissingSetState": true },
           "Instructions": [{ "Reference": "Component_Instruction_Aetherhaven_Autonomy_Poi_Travel" }]
         },

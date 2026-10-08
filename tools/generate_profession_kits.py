@@ -286,7 +286,7 @@ if __name__=='__main__':
     for kind,skill,speed,stacks in [('Courier','logistics',0,1),('Smith','blacksmithing',.15,0)]:
         name='Courier satchel' if kind=='Courier' else "Smith's tool roll"
         (definitions/f'{kind.lower()}.json').write_text(json.dumps(dict(itemId=f'Aetherhaven_{kind}_Kit',name=name,skill=skill,workSpeedBonus=speed,extraCarryingStacks=stacks),indent=2)+'\n')
-        ingredients=[dict(itemId='Ingredient_Leather_Light',count=6),dict(itemId='Ingredient_Bar_Copper',count=2),dict(itemId='Ingredient_Fibre',count=4)] if kind=='Courier' else [dict(itemId='Ingredient_Bar_Iron',count=4),dict(itemId='Ingredient_Leather_Light',count=4),dict(resourceType='Wood_Trunk',count=4)]
+        ingredients=[dict(itemId='Ingredient_Leather_Light',count=10),dict(itemId='Ingredient_Bar_Copper',count=5),dict(itemId='Ingredient_Fibre',count=5)] if kind=='Courier' else [dict(itemId='Ingredient_Bar_Iron',count=5),dict(itemId='Ingredient_Leather_Light',count=5),dict(resourceType='Wood_Trunk',count=5)]
         rule=dict(id=f'craft_{kind.lower()}_kit',name=name,workplace='leatherworking' if kind=='Courier' else 'blacksmithing',sourceRecipe=f'workplace:{kind.lower()}_kit',bench='Tannery' if kind=='Courier' else 'Weapon_Bench',benchTier=1,skillLevel=3,inputs=ingredients,output=f'Aetherhaven_{kind}_Kit',outputCount=1,workSeconds=20)
         (SERVER/f'Aetherhaven/WorkplaceRecipes/craft_{kind.lower()}_kit.json').write_text(json.dumps(rule,indent=2)+'\n')
     lang=SERVER/'Languages/en-US/aetherhaven_profession_kits.lang'
@@ -297,14 +297,14 @@ if __name__=='__main__':
         f.write('courierpack.name = Quartermaster Pack\ncourierpack.description = A reinforced pack with room for two additional stacks per delivery. Replaces the equipped profession kit. Its crafting recipe is a reward from Mara Finch.\nfieldledger.name = Field Ledger\nfieldledger.description = Right click inside your town to open warehouse storage. Requires a resident Warehouse Manager and storage permission. A reputation reward from Mara Finch.\n')
     (definitions/'courier_pack.json').write_text(json.dumps(dict(itemId='Aetherhaven_CourierPack_Kit',name='Quartermaster pack',skill='logistics',workSpeedBonus=0,extraCarryingStacks=2),indent=2)+'\n')
     rule=dict(id='craft_quartermaster_pack',name='Quartermaster pack',workplace='leatherworking',sourceRecipe='workplace:quartermaster_pack',bench='Tannery',benchTier=1,skillLevel=5,requiresKnowledge=True,
-              inputs=[dict(itemId='Ingredient_Leather_Light',count=12),dict(itemId='Ingredient_Bar_Iron',count=4),dict(itemId='Ingredient_Fibre',count=8)],output='Aetherhaven_CourierPack_Kit',outputCount=1,workSeconds=30)
+              inputs=[dict(itemId='Ingredient_Leather_Light',count=15),dict(itemId='Ingredient_Bar_Iron',count=5),dict(itemId='Ingredient_Fibre',count=10)],output='Aetherhaven_CourierPack_Kit',outputCount=1,workSeconds=30)
     (SERVER/'Aetherhaven/WorkplaceRecipes/craft_quartermaster_pack.json').write_text(json.dumps(rule,indent=2)+'\n')
 
     for kind,name,skill,workplace,bench,inputs in [
         ('Botanist',"Botanist's Tool Roll",'farming','blacksmithing','Weapon_Bench',
-         [dict(itemId='Ingredient_Bar_Iron',count=3),dict(itemId='Ingredient_Leather_Light',count=4),dict(itemId='Ingredient_Fibre',count=8)]),
+         [dict(itemId='Ingredient_Bar_Iron',count=5),dict(itemId='Ingredient_Leather_Light',count=5),dict(itemId='Ingredient_Fibre',count=10)]),
         ('Alchemist',"Brewer's Case",'alchemy','alchemy','Alchemybench',
-         [dict(itemId='Ingredient_Bar_Copper',count=3),dict(itemId='Ingredient_Leather_Light',count=4),dict(itemId='Potion_Empty_Small',count=3)])]:
+         [dict(itemId='Ingredient_Bar_Copper',count=5),dict(itemId='Ingredient_Leather_Light',count=5),dict(itemId='Potion_Empty_Small',count=5)])]:
         (definitions/f'{kind.lower()}.json').write_text(json.dumps(dict(itemId=f'Aetherhaven_{kind}_Kit',name=name,skill=skill,workSpeedBonus=.15,extraCarryingStacks=0),indent=2)+'\n')
         rule=dict(id=f'craft_{kind.lower()}_kit',name=name,workplace=workplace,sourceRecipe=f'workplace:{kind.lower()}_kit',bench=bench,
             benchTier=1,skillLevel=3,requiresKnowledge=True,inputs=inputs,output=f'Aetherhaven_{kind}_Kit',outputCount=1,workSeconds=25)

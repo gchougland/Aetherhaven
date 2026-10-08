@@ -44,19 +44,19 @@ public final class ExcavationPage extends AetherhavenInteractiveCustomUIPage<Exc
         if(!appended){b.append("Aetherhaven/ExcavationPage.ui");appended=true;for(String action:List.of("Entrance","Layout","Fittings","Start","Pause","Refresh","Station","SetStart"))e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,EventData.of("Action",action),false);}
         var world=store.getExternalData().getWorld();var plan=c.site().excavation();revision=plan.revision();reviewed=NativeExcavation.review(world,c.town(),c.site(),entrance,layout);
         var mine=NativeExcavation.mine(c.town(),AetherhavenPlugin.get());
-        b.set("#TitleText.Text",c.site().name()+" | MINESHAFT");b.set("#Entrance.Text","Direction and length");
-        b.set("#Layout.Text",layout.label);b.set("#LayoutDescription.Text","Digging "+MineshaftSelection.direction(entrance).name().toLowerCase(Locale.ROOT)+". "+layout.description+" Keep the approach clear and place a Workbench beside the walking path.");
+        b.set("#SiteName.Text",c.site().name());b.set("#Entrance.Text","Direction and length");
+        b.set("#Layout.Text",layout.label);b.set("#LayoutDescription.Text","Digging "+MineshaftSelection.direction(entrance).name().toLowerCase(Locale.ROOT)+". "+layout.description+" Keep the approach clear. This tunnel is the Mining workplace. No bench is needed.");
         b.set("#Blocks.Text",Integer.toString(reviewed.cells().size()));b.set("#Skill.Text","Mining skill "+reviewed.cells().stream().mapToInt(ExcavationPlan.Cell::skill).max().orElse(1)+" for the hardest block");
         b.set("#Progress.Text",plan.id()==null?"NO ACTIVE TUNNEL":plan.completed()+" / "+plan.total()+" blocks"+(plan.fittingsTotal()>0?" | Fittings "+plan.fitted()+" / "+plan.fittingsTotal():" excavated"));
         var plannedFittings=ExcavationFittings.plan(c.site().area(),entrance,layout,fittings);
         long beams=plannedFittings.stream().filter(f->ExcavationFittings.BEAM.equals(f.item())).count(),torches=plannedFittings.size()-beams;
         b.set("#Fittings.Text",fittings.label);
         b.set("#FittingsCost.Text",fittings==ExcavationFittings.Mode.NONE?"Optional supports and lights are added by the worker after digging.":beams+" Softwood Beams, "+torches+" Crude Torches from town storage. Used only as each piece is placed.");
-        b.set("#Cargo.Text",plan.cargo().isEmpty()?"Drops are carried to the core mine's storage.":plan.cargo().values().stream().mapToInt(Integer::intValue).sum()+" items awaiting delivery to the mine.");
-        b.set("#Start.Text",plan.id()==null?"Start reviewed tunnel":"Replace with this review");b.set("#Start.Disabled",!reviewed.ready()||plan.held()||mine==null||!canFit(c.town()));
+        b.set("#Cargo.Text",plan.cargo().isEmpty()?"Drops are stored at this workplace. Collect them here or through the warehouse.":plan.cargo().values().stream().mapToInt(Integer::intValue).sum()+" items being carried to workplace storage.");
+        b.set("#Start.Text",plan.id()==null?"Start reviewed tunnel":"Replace with this review");b.set("#Start.Disabled",!reviewed.ready()||plan.held()||!canFit(c.town()));
         b.set("#Pause.Text",plan.paused()?"Resume saved tunnel":"Pause saved tunnel");b.set("#Pause.Disabled",plan.id()==null||plan.edited()||plan.next()==null&&plan.nextFitting()==null);
-        b.set("#Station.Visible",station!=null);
-        b.set("#Status.Text",hint!=null?hint:mine==null?"Build the core mine before starting excavation.":!canFit(c.town())?"Fittings need building and town storage permission.":plan.id()!=null&&plan.next()==null?Objects.requireNonNullElse(NativeExcavation.issue(world,c.town(),c.site(),10),"Ready to add fittings."):reviewed.issue()!=null?reviewed.issue():plan.held()?"Collected material must be delivered before replacing the plan.":plan.id()==null?"Review the rock, then start digging when you are ready.":Objects.requireNonNullElse(NativeExcavation.issue(world,c.town(),c.site(),10),"Ready for an Apprentice with Mining enabled in the journal."));
+        b.set("#Station.Visible",false); // Bench tiers do not affect excavation.
+        b.set("#Status.Text",hint!=null?hint:!canFit(c.town())?"Fittings need building and town storage permission.":plan.id()!=null?workerStatus(world,c):reviewed.issue()!=null?reviewed.issue():"Review the rock, then choose Start reviewed tunnel. Saving its shape alone does not start digging.");
         b.clear("#Map");var points=ExcavationPlan.tunnel(c.site().area(),entrance,layout);int index=0;
         var columns=new LinkedHashMap<String,com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point>();for(var point:points)columns.putIfAbsent(point.x()+"/"+point.z(),point);
         double scale=Math.min(350.0/Math.max(1,c.site().area().maxX()-c.site().area().minX()),140.0/Math.max(1,c.site().area().maxZ()-c.site().area().minZ()));
@@ -94,12 +94,18 @@ public final class ExcavationPage extends AetherhavenInteractiveCustomUIPage<Exc
         else if("Start".equals(data.action)) {
             var fresh=NativeExcavation.review(world,c.town(),c.site(),entrance,layout);var mine=NativeExcavation.mine(c.town(),AetherhavenPlugin.get());
             if(reviewed==null||!fresh.ready()||!fresh.cells().equals(reviewed.cells()))hint="The rock changed. Review it again before starting.";
-            else if(mine==null)hint="Build the core mine first.";
             else if(!canFit(c.town()))hint="Fittings need building and town storage permission.";
-            else {hint=plan.start(revision,playerRef.getUuid(),mine.getPlotId(),c.site().area(),entrance,layout,fresh.cells(),fittings);if(hint==null){c.manager().updateTown(c.town());hint="Tunnel planned. Enable Mining for an Apprentice in the town journal.";}}
+            else {hint=plan.start(revision,playerRef.getUuid(),c.town().getApprenticeWorkplaces().mineBase(c.site()).id(),c.site().area(),entrance,layout,fresh.cells(),fittings);if(hint==null){c.manager().updateTown(c.town());hint="Tunnel planned. Enable Mining for an Apprentice in the town journal.";}}
         }else return;
         var b=new UICommandBuilder();var e=new UIEventBuilder();build(ref,b,e,store);sendUpdate(b,e,false);
     }
     private boolean canFit(TownRecord town){return fittings==ExcavationFittings.Mode.NONE||town.playerCanPlaceBlocks(playerRef.getUuid())&&town.playerCanOpenContainers(playerRef.getUuid());}
+    private String workerStatus(com.hypixel.hytale.server.core.universe.world.World world,Context context){
+        int skill=context.town().getTownsfolkProgress().entrySet().stream()
+            .filter(e->e.getValue().canPerform(TownsfolkWorkType.MINING,false,context.town().getPayroll().overdue(e.getKey()),true))
+            .mapToInt(e->e.getValue().skill(TownsfolkWorkType.MINING.skill)).max().orElse(0);
+        if(skill==0)return "Employ a townsfolk with Mining skill and enable Mining in work priorities. Keep their wages paid.";
+        return Objects.requireNonNullElse(NativeExcavation.workIssue(world,context.town(),context.site(),AetherhavenPlugin.get(),skill),"Ready for a Mining worker. Keep the entrance and route to workplace storage clear.");
+    }
     public static final class Data {public static final BuilderCodec<Data> CODEC=BuilderCodec.builder(Data.class,Data::new).append(new KeyedCodec<>("Action",Codec.STRING),(d,v)->d.action=v,d->d.action).add().build();String action;}
 }

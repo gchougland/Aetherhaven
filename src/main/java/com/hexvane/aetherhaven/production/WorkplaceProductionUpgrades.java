@@ -38,7 +38,7 @@ public final class WorkplaceProductionUpgrades {
 
     public static double speedMultiplier(@Nonnull PlotProductionState state) {
         state.migrateIfNeeded();
-        return 1.0 + 0.2 * state.getThoriumLevel();
+        return state.usesPhysicalHerd()?1.0:1.0 + 0.2 * state.getThoriumLevel();
     }
 
     public static double capacityMultiplier(@Nonnull PlotProductionState state) {
@@ -46,9 +46,15 @@ public final class WorkplaceProductionUpgrades {
         return 1.0 + 1.0 * state.getAdamantineLevel();
     }
 
+    public static long barnCapacity(@Nonnull PlotProductionState state) {
+        state.migrateIfNeeded();
+        return 10L * (1 + state.getAdamantineLevel());
+    }
+
     public static long effectiveMaxStorage(@Nonnull PlotProductionState state, @Nonnull ProductionCatalog.Entry entry, @Nonnull String itemId) {
+        if(state.usesPhysicalHerd())return barnCapacity(state);
         double mul = capacityMultiplier(state);
-        long base = entry.maxStorageForItem(itemId);
+        long base = state.usesPhysicalHerd() && BarnAnimalCatalog.output(itemId) ? 10 : entry.maxStorageForItem(itemId);
         // Matching saplings are harvested without buying a separate output unlock.
         if (state.usesPhysicalTimber() && !entry.containsItemId(itemId)
                 && NativeTimberProducts.automatic(itemId) && !NativeTimberProducts.BYPRODUCTS.contains(itemId)) base = 10;
@@ -86,16 +92,18 @@ public final class WorkplaceProductionUpgrades {
     }
 
     public static boolean prerequisitesMet(@Nonnull PlotProductionState state, @Nonnull Branch branch) {
+        return prerequisitesMet(state,branch,state.usesPhysicalHerd());
+    }
+
+    public static boolean prerequisitesMet(PlotProductionState state,Branch branch,boolean barn) {
         state.migrateIfNeeded();
-        int tier = nextTier(state, branch);
-        if (tier <= 0) {
-            return false;
-        }
+        int tier=nextTier(state,branch);
+        if(tier<=0||(barn&&branch==Branch.THORIUM))return false;
         return switch (branch) {
             case IRON -> true;
             case THORIUM, COBALT -> state.getIronUpgrade() >= 1;
             case ADAMANTITE -> state.getIronUpgrade() >= 1
-                && state.getThoriumLevel() >= tier
+                && (barn || state.getThoriumLevel() >= tier)
                 && state.getCobaltLevel() >= tier;
         };
     }
@@ -203,12 +211,17 @@ public final class WorkplaceProductionUpgrades {
         @Nonnull CombinedItemContainer inv,
         boolean allowTreasuryGold
     ) {
+        return tryPurchase(state,branch,town,inv,allowTreasuryGold,state.usesPhysicalHerd());
+    }
+
+    public static PurchaseResult tryPurchase(PlotProductionState state,Branch branch,TownRecord town,
+            CombinedItemContainer inv,boolean allowTreasuryGold,boolean barn) {
         state.migrateIfNeeded();
         int tier = nextTier(state, branch);
         if (tier <= 0) {
             return PurchaseResult.MAXED;
         }
-        if (!prerequisitesMet(state, branch)) {
+        if (!prerequisitesMet(state, branch, barn)) {
             return PurchaseResult.PREREQUISITES;
         }
         String ingot = ingotItemId(branch);

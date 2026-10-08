@@ -366,7 +366,9 @@ public final class AetherhavenTestCommand extends AbstractCommandCollection {
                 if(!com.hexvane.aetherhaven.workplace.WorkplaceUpgradesPage.supports(kind)) {ctx.sendMessage(Message.raw("No upgrade tree for that villager."));return;}
                 player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.WorkplaceUpgradesPage(pr,town.getTownId(),kind));
             }
-            else if ("create".equals(mode)) {
+            else if ("charter".equals(mode)) {
+                player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.ui.CharterAmendmentsPage(pr));
+            } else if ("create".equals(mode)) {
                 var pos = store.getComponent(ref,TransformComponent.getComponentType()).getPosition();
                 var area = com.hexvane.aetherhaven.workplace.WorkplaceArea.corners((int)Math.floor(pos.x), (int)Math.floor(pos.y)-1, (int)Math.floor(pos.z), (int)Math.floor(pos.x)+4, (int)Math.floor(pos.z)+4);
                 player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.WorkplacePage(pr,town.getTownId(),null,area));
@@ -529,7 +531,7 @@ public final class AetherhavenTestCommand extends AbstractCommandCollection {
                     float before=health.get();
                     var damage=new com.hypixel.hytale.server.core.modules.entity.damage.Damage(
                         new com.hypixel.hytale.server.core.modules.entity.damage.Damage.EnvironmentSource("Aetherhaven guard test"),
-                        com.hypixel.hytale.server.core.modules.entity.damage.DamageCause.PHYSICAL,20);
+                        com.hypixel.hytale.server.core.modules.entity.damage.DamageCause.getAssetMap().getIndex("Physical"),20);
                     var knockback=new com.hypixel.hytale.server.core.entity.knockback.KnockbackComponent();
                     knockback.setVelocity(new Vector3d(0,.1,.1));
                     damage.putMetaObject(com.hypixel.hytale.server.core.modules.entity.damage.Damage.KNOCKBACK_COMPONENT,knockback);

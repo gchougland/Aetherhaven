@@ -657,20 +657,8 @@ public final class AetherhavenConstants {
 
     public static final String FOUNDER_MONUMENT_BLOCK_TYPE_ID = "Aetherhaven_Founder_Monument";
 
-    /** Dedicated model identity and stone fallback for dynamically assembled founder statues. */
+    /** Legacy model identity retained so existing saved statues remain loadable. */
     public static final String FOUNDER_MONUMENT_STATUE_MODEL_ID = "Founder_Monument_Statue";
-
-    /** Cobblestone source image tiled into UV-canvas-matched runtime textures. */
-    public static final String FOUNDER_MONUMENT_STATUE_TEXTURE =
-        "Characters/Aetherhaven/Founder_Monument_Statue_Stone.png";
-
-    /** Static model-registered 256x128 body texture; dynamic base textures are rejected by the client entity atlas. */
-    public static final String FOUNDER_MONUMENT_STATUE_BASE_TEXTURE =
-        "Characters/Aetherhaven/Founder_Monument_Stone_Base_256x128.png";
-
-    /** Dedicated copy avoids the client's special player-skin handling for {@code Characters/Player.blockymodel}. */
-    public static final String FOUNDER_MONUMENT_STATUE_BODY_MODEL =
-        "Characters/Aetherhaven/Founder_Monument_Player_Body.blockymodel";
 
     /** Gold coins to fully restore an item from 0 durability at the blacksmith (scaled down for partial wear). */
     public static final int BLACKSMITH_REPAIR_COST_FULL = 10;

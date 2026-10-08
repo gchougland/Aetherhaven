@@ -32,11 +32,11 @@ The Laboratory, Clinic, Conservatory, Hunter's Lodge and Warehouse are also avai
 
 ## Mark an area
 
-For a mineshaft, use **Plan mineshaft** as explained below. For other workplaces, hold the Building Staff and choose **Create workplace** from its mode menu. Click two opposite ground corners inside your town. Both ground blocks are included. Choose a workplace name and type, then save.
+To create a workplace, hold the Building Staff and choose **Create workplace** from its mode menu. Click two opposite ground corners inside your town. Both ground blocks are included. Choose a workplace name and type, then save.
 
 The first corner sets the floor. The site reaches five blocks above that floor. You do not select a ceiling. Sites may touch at their borders. Sites on different floors may share a footprint when their height bands are separate.
 
-Use **Manage workplace** to open a saved workplace. Use **Resize workplace**, select a workplace, then choose its new corners. Mining sites instead ask for entrance ground, direction and length. The original area stays unchanged until you save. Cancel clears the selection.
+Use **Manage workplace** to open a saved workplace. Use **Resize workplace**, select a workplace, then choose its new corners. A Mining base uses the same corners. Plan its tunnels through the Workbench map. The original area stays unchanged until you save. Cancel clears the selection.
 
 Use the tool's mode key to cycle modes, or middle click to open the mode menu. The overlay shows your configured keys. Choose **Build structures** to return to construction. Switching modes clears unfinished corner selections but keeps saved workplaces.
 
@@ -56,12 +56,12 @@ Crafting workplaces discover recipes from their matching benches: Workbench, Bla
 
 ## Plan a mineshaft
 
-Hold the **Building Staff**, middle click to open its mode menu and choose **Plan mineshaft**. Left click the ground just in front of the rock. Choose the digging direction, length and layout, then **Save and review**. The tunnel starts one block ahead of the clicked ground. Its far end can be inside solid rock; you never need to mark a second corner.
+Create a **Mining** base workplace around a regular **Workbench**. Use that bench to open the **Mineshaft planner**. The staff's **Manage mineshafts** mode reopens existing bases.
 
-Length counts the main passage only. Choose 3 to 32 blocks, or up to 16 for Branches. The entrance includes the clicked row and two rows behind it. Keep this approach clear and put an ordinary **Workbench** beside the walking path within the workplace. The workplace width is set for you. Passages are three blocks wide and three high.
+Each map square covers three blocks. Click a blue base cell or green passage, choose a direction, then set a length in three block steps. Choose a level tunnel, stairs or a 9 by 9 room with five blocks of height. New stairs span seven blocks vertically and need at least nine blocks of length. Use the floor buttons to inspect stairs and connected branches. Review terrain before adding an order. Adding an order authorizes permanent excavation.
 
-Review the rock that will be removed, then choose **Start reviewed tunnel**. The plan keeps floors and excludes building plots and furnishings. To change an existing site, open its workbench and choose **Direction and length**. To move its entrance, hold the Building Staff and choose **Choose new start**, or use **Resize workplace**. Saved excavation and collected material remain until you explicitly save or replace a plan.
+Choose beams, wall torches and ceiling lanterns separately. Workers take their materials from town storage. Employed townsfolk need Mining enabled, sufficient skill and paid wages. Higher skilled available workers get first choice. Miners carry 25 items at Mining 1 and 10 more per additional level before returning to their base. Short finished orders can continue into another ready tunnel at the same base without emptying a partial bag.
 
-## Remove a workplace
+Choose **Open output storage** in the planner or use **Building Outputs** in the Warehouse to collect mined resources. Couriers collect supplies directly from the base. No core mine is required. Keep routes and entrances clear. Only the base shows border particles. Pause or remove saved orders in the planner. Stored output stays at the base. Removing an order does not restore excavated terrain.
 
-Select the workplace with the Building Staff and choose **Remove workplace**, then confirm. Its benches and blocks remain. Work stops immediately. If an Apprentice or Courier is carrying materials, let them deliver or return the supplies, then remove the workplace again.
+The mineshaft planner remembers direction, length, passage type and fitting choices for each base. New stairs have four blocks of headroom. Finished digging opens connected orders even when beams or lights still need supplies. Removing a tunnel order keeps its stored output at the base and leaves excavated terrain as it is. Remove connected branches first and let miners deposit carried materials.

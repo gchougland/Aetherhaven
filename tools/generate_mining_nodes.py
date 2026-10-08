@@ -1,57 +1,11 @@
-"""Generate non-harvestable mine cells using the corresponding native rock/ore appearance.
-
-Nodes have no recipe or player drops. An integration can supply
-Aetherhaven_Mining_Node_<output item id> for additional mine outputs.
-"""
+"""Generate only the entity overlay used to mark mining locations in the editor."""
 import json
 import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NATIVE = ROOT.parent / "HytaleSourceCode/hytale-shared-source/HytaleAssets/Server/Item/Items"
-OUT = ROOT / "src/main/resources/Server/Item/Items/Aetherhaven/Mining_Nodes"
-INDEX = {p.stem: p for p in NATIVE.rglob("*.json")}
-
-def merged(name):
-    data = json.loads(INDEX[name].read_text(encoding="utf-8-sig"))
-    if "Parent" not in data:
-        return data
-    base = merged(data.pop("Parent"))
-    def overlay(a, b):
-        for key, value in b.items():
-            if isinstance(value, dict) and isinstance(a.get(key), dict):
-                overlay(a[key], value)
-            else:
-                a[key] = value
-        return a
-    return overlay(base, data)
-
 def main():
-    catalog = json.loads((ROOT / "src/main/resources/Server/Aetherhaven/Production/production_catalog.json").read_text())
-    unlocks = json.loads((ROOT / "src/main/resources/Server/Aetherhaven/Production/workplace_unlocks.json").read_text())
-    items = {row["itemId"] for row in catalog["entries"]["plot_miners_hut"]["outputs"]}
-    items.update(row["itemId"] for row in unlocks["unlocks"] if row["workplace"] == "plot_miners_hut")
-    variants = {"Ore_Thorium": "Ore_Thorium_Sandstone", "Ore_Cobalt": "Ore_Cobalt_Slate", "Ore_Adamantite": "Ore_Adamantite_Magma"}
-    visuals = ("DrawType", "Textures", "CustomModel", "CustomModelTexture", "RandomRotation",
-               "BlockParticleSetId", "BlockSoundSetId", "ParticleColor", "PhysicalMaterialId", "TextureComputedColor")
-    OUT.mkdir(parents=True, exist_ok=True)
-    sources = {item: variants.get(item, item + "_Stone" if item.startswith("Ore_") else item) for item in items}
-    sources["Depleted"] = "Rock_Stone"
-    for item, source in sorted(sources.items()):
-        native = merged(source if source in INDEX else item)
-        native_block = native.get("BlockType")
-        if native_block is None:
-            native_block = merged("Rock_Stone")["BlockType"]
-            native_block.update(DrawType="CubeWithModel", CustomModel=native["Model"],
-                                CustomModelTexture=[{"Texture": native["Texture"], "Weight": 1}])
-        block = {k: v for k, v in native_block.items() if k in visuals}
-        block.update(Material="Solid", Gathering={"Breaking": {"GatherType": "Unbreakable"}},
-                     Flags={}, Support={})
-        node = {"TranslationProperties": native["TranslationProperties"], "Icon": native["Icon"],
-                "BlockType": block, "PlayerAnimationsId": "Block", "MaxStack": 1,
-                "ItemSoundSetId": "ISS_Blocks_Stone"}
-        (OUT / f"Aetherhaven_Mining_Node_{item}.json").write_text(json.dumps(node, indent=2) + "\n", encoding="utf-8")
-    print(f"Generated {len(sources)} managed mining node appearances.")
     # An entity-only authoring overlay. A slightly larger cube prevents coplanar faces
     # against the original rock; nothing is placed into the author's prefab.
     preview_dir = ROOT / "src/main/resources/Common/Items/Aetherhaven/Mining_Node_Preview"

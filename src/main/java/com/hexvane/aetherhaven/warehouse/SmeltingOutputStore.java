@@ -10,7 +10,7 @@ import org.bson.BsonDocument;
 /** Shared per-resource limits, with each collected stack still owned by its physical furnace location. */
 public final class SmeltingOutputStore {
     public static final int BASE_LIMIT=100, UPGRADE_LIMIT=100, MAX_UPGRADES=8;
-    private static final short SLOTS=36;
+    private static final short SLOTS=40;
     private int upgrades;
     private long revision;
     private Map<UUID,Origin> origins=new LinkedHashMap<>();
@@ -92,6 +92,14 @@ public final class SmeltingOutputStore {
         var rest=inventory.getItemStack(slot);int moved=before-(ItemStack.isEmpty(rest)?0:rest.getQuantity());
         if(moved>0){origin.save();revision++;}return moved;
     }
+    public boolean consumeForCrafting(UUID originId,short slot,ItemStack expected,int count,int reserved) {
+        var origin=origins.get(originId);
+        if(origin==null||slot<0||slot>=origin.slots()||count<=0)return false;
+        var current=origin.stack(slot);
+        if(ItemStack.isEmpty(current)||!current.equals(expected)||count>current.getQuantity()-reserved)return false;
+        origin.inventory().setItemStackForSlot(slot,count==current.getQuantity()?null:current.withQuantity(current.getQuantity()-count),false);
+        origin.save();revision++;return true;
+    }
     public static final class Origin {
         private UUID id;
         private WarehouseBatch.Point location;
@@ -106,7 +114,8 @@ public final class SmeltingOutputStore {
         private SimpleItemContainer inventory() {
             if(inventory==null) {
                 inventory=data==null?new SimpleItemContainer(SLOTS):SimpleItemContainer.CODEC.decode(BsonDocument.parse(data),new ExtraInfo());
-                if(inventory==null||inventory.getCapacity()!=SLOTS)throw new IllegalStateException("Invalid smelting output inventory");
+                if(inventory==null||inventory.getCapacity()>SLOTS)throw new IllegalStateException("Invalid smelting output inventory");
+                if(inventory.getCapacity()<SLOTS){var expanded=new SimpleItemContainer(SLOTS);for(short i=0;i<inventory.getCapacity();i++)expanded.setItemStackForSlot(i,inventory.getItemStack(i),false);inventory=expanded;}
             }
             return inventory;
         }

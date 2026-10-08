@@ -10,7 +10,7 @@
           "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire",
           "visibilityCondition": { "type": "npc_is_guild_hall_adventurer" },
           "whenFalse": "disabled",
-          "actions": [{ "type": "invite_guild_resident" }]
+          "next": "hire_confirm"
         },
         {
           "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave",
@@ -25,7 +25,11 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes",
+          "icon": "move_in_item",
+          "visibilityCondition": { "type": "npc_is_guild_hall_adventurer" },
+          "condition": { "type": "player_has_tourist_move_in_items" },
           "whenFalse": "disabled",
+          "disabledReason": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_give_missing",
           "actions": [{ "type": "invite_guild_resident" }]
         },
         {

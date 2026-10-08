@@ -21,4 +21,4 @@ Each staff grants extra max mana while you hold it. Placing blocks with secondar
 
 ## Plan a mineshaft
 
-Middle click to open the staff's mode menu and choose **Plan mineshaft**. Click the ground just in front of the rock, then choose a direction and length. The tunnel starts one block ahead of that ground, so you can plan into undug rock without reaching its far end. Save and review the terrain before starting excavation. See **Apprentice workplaces** for worker and Workbench requirements.
+Use **Create workplace** to mark a Mining base around a regular **Workbench**. Use that bench to open the map and plan tunnels, rooms and stairs into undug ground. The staff's **Manage mineshafts** mode reopens existing mine planners. Review each route before adding it. See **Apprentice workplaces** for worker, fitting and output storage details.

@@ -21,6 +21,7 @@ public final class ApprenticeWorkState implements Component<EntityStore> {
     public UUID excavationSite,excavationPlan;
     public com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point excavationTarget;
     public boolean excavationDelivery,excavationCarrying,excavationPickup;
+    public long excavationGeneration;
     public Vector3d approach;
     public boolean active,working,foodHarvest;
     public long nextDecision,beganAt,retryAt,nextVisual,nextSave;
@@ -34,6 +35,7 @@ public final class ApprenticeWorkState implements Component<EntityStore> {
         copy.excavationSite=excavationSite;copy.excavationPlan=excavationPlan;copy.excavationTarget=excavationTarget;copy.excavationPickup=excavationPickup;copy.excavationDelivery=excavationDelivery;copy.excavationCarrying=excavationCarrying;copy.buildingSite=buildingSite;copy.buildingTarget=buildingTarget;copy.foodSite=foodSite;copy.foodHarvest=foodHarvest;
         copy.active=active;copy.working=working;copy.nextDecision=nextDecision;copy.beganAt=beganAt;
         copy.retryAt=retryAt;copy.nextVisual=nextVisual;copy.nextSave=nextSave;
+        copy.excavationGeneration=excavationGeneration;
         copy.routeRetries=routeRetries.copy();
         copy.furnishingSite=furnishingSite;copy.furnishingArea=furnishingArea;
         copy.nextFurnishingCheck=nextFurnishingCheck;copy.furnishingEquipment=furnishingEquipment;return copy;

@@ -1,0 +1,2981 @@
+{
+  "meta": {
+    "format_version": "5.0",
+    "model_format": "hytale_prop",
+    "box_uv": false
+  },
+  "name": "Simple Backpack",
+  "visible_box": [
+    1,
+    1,
+    0
+  ],
+  "variable_placeholders": "",
+  "multi_file_ruleset": "",
+  "variable_placeholder_buttons": [],
+  "timeline_setups": [],
+  "unhandled_root_fields": {},
+  "resolution": {
+    "width": 64,
+    "height": 32
+  },
+  "elements": [
+    {
+      "name": "Backpack",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -7,
+        3,
+        -3
+      ],
+      "to": [
+        7,
+        18,
+        4
+      ],
+      "autouv": 1,
+      "color": 8,
+      "origin": [
+        0,
+        10.5,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            14,
+            15
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            14,
+            0,
+            21,
+            15
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            14,
+            15
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            14,
+            0,
+            21,
+            15
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            34,
+            0,
+            48,
+            7
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            34,
+            0,
+            48,
+            7
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "faceec69-4b94-3eab-1460-b4150d0dc2c7"
+    },
+    {
+      "name": "Shaped upper shoulder",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -6,
+        18,
+        -3
+      ],
+      "to": [
+        6,
+        20,
+        3
+      ],
+      "autouv": 1,
+      "color": 6,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            25,
+            12,
+            27
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            21,
+            25,
+            27,
+            27
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            25,
+            12,
+            27
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            21,
+            25,
+            27,
+            27
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            16,
+            15,
+            28,
+            21
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            16,
+            15,
+            28,
+            21
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "f395e9ed-a42e-5148-470d-c3a0ea1a679c"
+    },
+    {
+      "name": "Overhanging folded flap",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -7.5,
+        15,
+        -4
+      ],
+      "to": [
+        7.5,
+        19,
+        -3
+      ],
+      "autouv": 1,
+      "color": 3,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            21,
+            15,
+            25
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            27,
+            21,
+            28,
+            25
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            21,
+            15,
+            25
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            27,
+            21,
+            28,
+            25
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            39,
+            25,
+            54,
+            26
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            39,
+            25,
+            54,
+            26
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "279549d5-0703-647e-daa9-b08b07b58749"
+    },
+    {
+      "name": "Front pocket",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -4.5,
+        4,
+        -5.5
+      ],
+      "to": [
+        4.5,
+        10,
+        -3
+      ],
+      "autouv": 1,
+      "color": 0,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            28,
+            15,
+            37,
+            21
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            37,
+            15,
+            39.5,
+            21
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            28,
+            15,
+            37,
+            21
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            37,
+            15,
+            39.5,
+            21
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            44,
+            21,
+            53,
+            23.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            44,
+            21,
+            53,
+            23.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "4996bcc4-c5e7-d839-5b2d-96a7ec35a7d2"
+    },
+    {
+      "name": "Pocket lip",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -4.5,
+        9,
+        -6
+      ],
+      "to": [
+        4.5,
+        11,
+        -5
+      ],
+      "autouv": 1,
+      "color": 6,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            25,
+            21,
+            27
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            37,
+            25,
+            38,
+            27
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            12,
+            25,
+            21,
+            27
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            37,
+            25,
+            38,
+            27
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            15,
+            27,
+            24,
+            28
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            15,
+            27,
+            24,
+            28
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "6fd300eb-21dc-8686-d558-41febe6e64aa"
+    },
+    {
+      "name": "Closure strap -1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -5.75,
+        10,
+        -4.6
+      ],
+      "to": [
+        -4.25,
+        18,
+        -4
+      ],
+      "autouv": 1,
+      "color": 3,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            31,
+            0,
+            32.5,
+            8
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            33,
+            0,
+            33.6,
+            8
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            31,
+            0,
+            32.5,
+            8
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            33,
+            0,
+            33.6,
+            8
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            32,
+            27,
+            33.5,
+            27.6
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            27,
+            33.5,
+            27.6
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "966b7ce2-b854-beb7-e753-4d7f22ef9fb7"
+    },
+    {
+      "name": "Buckle left -1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -6.25,
+        11,
+        -5
+      ],
+      "to": [
+        -5.75,
+        13.5,
+        -4.5
+      ],
+      "autouv": 1,
+      "color": 4,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "7dbcd024-382c-5214-5794-a1b4f8f233d1"
+    },
+    {
+      "name": "Buckle right -1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -4.25,
+        11,
+        -5
+      ],
+      "to": [
+        -3.75,
+        13.5,
+        -4.5
+      ],
+      "autouv": 1,
+      "color": 8,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "1bbed623-914a-8102-527e-26d361244718"
+    },
+    {
+      "name": "Buckle top -1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -5.75,
+        13,
+        -5
+      ],
+      "to": [
+        -4.25,
+        13.5,
+        -4.5
+      ],
+      "autouv": 1,
+      "color": 9,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "1daa0bb1-7e23-7ace-ab74-34756ec371dd"
+    },
+    {
+      "name": "Buckle base -1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -5.75,
+        11,
+        -5
+      ],
+      "to": [
+        -4.25,
+        11.5,
+        -4.5
+      ],
+      "autouv": 1,
+      "color": 1,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "dff02c64-9e51-c40f-1813-af87f6288e71"
+    },
+    {
+      "name": "Buckle pin -1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -5.25,
+        11.5,
+        -5.1
+      ],
+      "to": [
+        -4.75,
+        13,
+        -4.799999999999999
+      ],
+      "autouv": 1,
+      "color": 9,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            38,
+            25,
+            38.5,
+            26.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            38,
+            25,
+            38.3,
+            26.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            38,
+            25,
+            38.5,
+            26.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            38,
+            25,
+            38.3,
+            26.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.299999999999997
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.299999999999997
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "21e8a699-37cd-0795-924f-872e54dfeb3b"
+    },
+    {
+      "name": "Side pouch -1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -9.5,
+        5,
+        -1
+      ],
+      "to": [
+        -6.5,
+        13,
+        3
+      ],
+      "autouv": 1,
+      "color": 8,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            28,
+            0,
+            31,
+            8
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            24,
+            0,
+            28,
+            8
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            28,
+            0,
+            31,
+            8
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            24,
+            0,
+            28,
+            8
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            22,
+            21,
+            25,
+            25
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            22,
+            21,
+            25,
+            25
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "626fbeae-49c1-ae8a-5080-9d85b5f22390"
+    },
+    {
+      "name": "Side pouch cap -1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -9.5,
+        12,
+        -1.4
+      ],
+      "to": [
+        -6.5,
+        14,
+        3.0000000000000004
+      ],
+      "autouv": 1,
+      "color": 1,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            32,
+            25,
+            35,
+            27
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            27,
+            25,
+            31.4,
+            27
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            32,
+            25,
+            35,
+            27
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            27,
+            25,
+            31.4,
+            27
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            55,
+            15,
+            58,
+            19.4
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            55,
+            15,
+            58,
+            19.4
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "c4c45cc7-dd3a-5e3e-2b6f-ad0fe961ee67"
+    },
+    {
+      "name": "Lower metal guard -1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -7,
+        2.5,
+        -3.5
+      ],
+      "to": [
+        -5,
+        5,
+        -2.5
+      ],
+      "autouv": 1,
+      "color": 6,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            59,
+            21,
+            61,
+            23.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            61,
+            21,
+            62,
+            23.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            59,
+            21,
+            61,
+            23.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            61,
+            21,
+            62,
+            23.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            34,
+            27,
+            36,
+            28
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            34,
+            27,
+            36,
+            28
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "fdc92f37-0269-edaa-8fdd-15017e269b9f"
+    },
+    {
+      "name": "Shoulder harness -1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -5,
+        5,
+        4
+      ],
+      "to": [
+        -3,
+        18,
+        5
+      ],
+      "autouv": 1,
+      "color": 0,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            21,
+            0,
+            23,
+            13
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            23,
+            0,
+            24,
+            13
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            21,
+            0,
+            23,
+            13
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            23,
+            0,
+            24,
+            13
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            32,
+            27,
+            34,
+            28
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            27,
+            34,
+            28
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "d2acf387-1b86-edc1-100b-6c9362f7f1c1"
+    },
+    {
+      "name": "Bedroll tie -1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -4.6,
+        0,
+        -4
+      ],
+      "to": [
+        -3.4000000000000004,
+        4,
+        2.5
+      ],
+      "autouv": 1,
+      "color": 2,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            25,
+            21,
+            26.2,
+            25
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            15,
+            21,
+            21.5,
+            25
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            25,
+            21,
+            26.2,
+            25
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            15,
+            21,
+            21.5,
+            25
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            0,
+            49.2,
+            6.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            0,
+            49.2,
+            6.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "e3720cce-a1c5-bc73-9bd4-3369559f1596"
+    },
+    {
+      "name": "Closure strap 1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        4.25,
+        10,
+        -4.6
+      ],
+      "to": [
+        5.75,
+        18,
+        -4
+      ],
+      "autouv": 1,
+      "color": 3,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            31,
+            0,
+            32.5,
+            8
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            33,
+            0,
+            33.6,
+            8
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            31,
+            0,
+            32.5,
+            8
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            33,
+            0,
+            33.6,
+            8
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            32,
+            27,
+            33.5,
+            27.6
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            27,
+            33.5,
+            27.6
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "e7bb907d-37eb-436a-e491-e0e23f516d80"
+    },
+    {
+      "name": "Buckle left 1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        3.75,
+        11,
+        -5
+      ],
+      "to": [
+        4.25,
+        13.5,
+        -4.5
+      ],
+      "autouv": 1,
+      "color": 4,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "70c5b004-cbc1-29ca-e24f-4971f93a27fc"
+    },
+    {
+      "name": "Buckle right 1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        5.75,
+        11,
+        -5
+      ],
+      "to": [
+        6.25,
+        13.5,
+        -4.5
+      ],
+      "autouv": 1,
+      "color": 6,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            61,
+            21,
+            61.5,
+            23.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "b7b1a897-588a-64c2-e765-e4c79cacd23f"
+    },
+    {
+      "name": "Buckle top 1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        4.25,
+        13,
+        -5
+      ],
+      "to": [
+        5.75,
+        13.5,
+        -4.5
+      ],
+      "autouv": 1,
+      "color": 4,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "60ff6d58-fff7-c2dd-2d7a-37fc8d98cd41"
+    },
+    {
+      "name": "Buckle base 1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        4.25,
+        11,
+        -5
+      ],
+      "to": [
+        5.75,
+        11.5,
+        -4.5
+      ],
+      "autouv": 1,
+      "color": 1,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "8df7cc83-c52e-1846-f079-5e08eedf238e"
+    },
+    {
+      "name": "Buckle pin 1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        4.75,
+        11.5,
+        -5.1
+      ],
+      "to": [
+        5.25,
+        13,
+        -4.799999999999999
+      ],
+      "autouv": 1,
+      "color": 5,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            38,
+            25,
+            38.5,
+            26.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            38,
+            25,
+            38.3,
+            26.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            38,
+            25,
+            38.5,
+            26.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            38,
+            25,
+            38.3,
+            26.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.299999999999997
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            36,
+            27,
+            36.5,
+            27.299999999999997
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "37888e3c-d052-8cb2-aa75-fd18a7152ead"
+    },
+    {
+      "name": "Side pouch 1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        6.5,
+        5,
+        -1
+      ],
+      "to": [
+        9.5,
+        13,
+        3
+      ],
+      "autouv": 1,
+      "color": 8,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            28,
+            0,
+            31,
+            8
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            24,
+            0,
+            28,
+            8
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            28,
+            0,
+            31,
+            8
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            24,
+            0,
+            28,
+            8
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            22,
+            21,
+            25,
+            25
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            22,
+            21,
+            25,
+            25
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "5646fd08-faf2-2f02-7858-e418a12cd82a"
+    },
+    {
+      "name": "Side pouch cap 1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        6.5,
+        12,
+        -1.4
+      ],
+      "to": [
+        9.5,
+        14,
+        3.0000000000000004
+      ],
+      "autouv": 1,
+      "color": 2,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            32,
+            25,
+            35,
+            27
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            27,
+            25,
+            31.4,
+            27
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            32,
+            25,
+            35,
+            27
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            27,
+            25,
+            31.4,
+            27
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            55,
+            15,
+            58,
+            19.4
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            55,
+            15,
+            58,
+            19.4
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "4d8e0aa8-160f-e749-b2d4-0387954b1048"
+    },
+    {
+      "name": "Lower metal guard 1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        5,
+        2.5,
+        -3.5
+      ],
+      "to": [
+        7,
+        5,
+        -2.5
+      ],
+      "autouv": 1,
+      "color": 2,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            59,
+            21,
+            61,
+            23.5
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            61,
+            21,
+            62,
+            23.5
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            59,
+            21,
+            61,
+            23.5
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            61,
+            21,
+            62,
+            23.5
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            34,
+            27,
+            36,
+            28
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            34,
+            27,
+            36,
+            28
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "93b61e1b-bf59-ae39-3f64-013e50dcd2d5"
+    },
+    {
+      "name": "Shoulder harness 1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        3,
+        5,
+        4
+      ],
+      "to": [
+        5,
+        18,
+        5
+      ],
+      "autouv": 1,
+      "color": 5,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            21,
+            0,
+            23,
+            13
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            23,
+            0,
+            24,
+            13
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            21,
+            0,
+            23,
+            13
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            23,
+            0,
+            24,
+            13
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            32,
+            27,
+            34,
+            28
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            32,
+            27,
+            34,
+            28
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "30d55776-f5ef-68d3-c86f-6ff945ac95e5"
+    },
+    {
+      "name": "Bedroll tie 1",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        3.4000000000000004,
+        0,
+        -4
+      ],
+      "to": [
+        4.6,
+        4,
+        2.5
+      ],
+      "autouv": 1,
+      "color": 0,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            25,
+            21,
+            26.2,
+            25
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            15,
+            21,
+            21.5,
+            25
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            25,
+            21,
+            26.2,
+            25
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            15,
+            21,
+            21.5,
+            25
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            48,
+            0,
+            49.2,
+            6.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            48,
+            0,
+            49.2,
+            6.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "bfe8b893-5a66-9c2e-e8ad-d40e540fc63d"
+    },
+    {
+      "name": "Rolled travel blanket",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -8,
+        0.5,
+        -3.5
+      ],
+      "to": [
+        8,
+        3.5,
+        2
+      ],
+      "autouv": 1,
+      "color": 7,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            28,
+            21,
+            44,
+            24
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            53,
+            21,
+            58.5,
+            24
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            28,
+            21,
+            44,
+            24
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            53,
+            21,
+            58.5,
+            24
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            15,
+            16,
+            20.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            15,
+            16,
+            20.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "2a64f8bc-3e9d-be50-85a6-24143c436daf"
+    },
+    {
+      "name": "Rolled blanket upper fold",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -7.5,
+        3,
+        -3
+      ],
+      "to": [
+        7.5,
+        4,
+        1.5
+      ],
+      "autouv": 1,
+      "color": 0,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            27,
+            15,
+            28
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            24,
+            27,
+            28.5,
+            28
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            27,
+            15,
+            28
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            24,
+            27,
+            28.5,
+            28
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            40,
+            15,
+            55,
+            19.5
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            40,
+            15,
+            55,
+            19.5
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "e9064769-9324-af16-a52a-616bac65dbd8"
+    },
+    {
+      "name": "Carry handle left",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -2.5,
+        19,
+        0
+      ],
+      "to": [
+        -1.5,
+        22,
+        1
+      ],
+      "autouv": 1,
+      "color": 5,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            62,
+            21,
+            63,
+            24
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            62,
+            21,
+            63,
+            24
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            62,
+            21,
+            63,
+            24
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            62,
+            21,
+            63,
+            24
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            37,
+            27,
+            38,
+            28
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            37,
+            27,
+            38,
+            28
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "f3bed6a3-c3fd-99aa-2f54-d26ee77b56df"
+    },
+    {
+      "name": "Carry handle right",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        1.5,
+        19,
+        0
+      ],
+      "to": [
+        2.5,
+        22,
+        1
+      ],
+      "autouv": 1,
+      "color": 6,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            62,
+            21,
+            63,
+            24
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            62,
+            21,
+            63,
+            24
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            62,
+            21,
+            63,
+            24
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            62,
+            21,
+            63,
+            24
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            37,
+            27,
+            38,
+            28
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            37,
+            27,
+            38,
+            28
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "88b839d6-d431-8fca-f7e7-245a91a2cac9"
+    },
+    {
+      "name": "Carry handle top",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -1.5,
+        21,
+        0
+      ],
+      "to": [
+        1.5,
+        22,
+        1
+      ],
+      "autouv": 1,
+      "color": 6,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            29,
+            27,
+            32,
+            28
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            37,
+            27,
+            38,
+            28
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            29,
+            27,
+            32,
+            28
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            37,
+            27,
+            38,
+            28
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            29,
+            27,
+            32,
+            28
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            29,
+            27,
+            32,
+            28
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "bd553576-f347-cb4a-b005-6a3db44b1af4"
+    },
+    {
+      "name": "Pocket clasp",
+      "box_uv": false,
+      "render_order": "default",
+      "locked": false,
+      "export": true,
+      "scope": 0,
+      "allow_mirror_modeling": true,
+      "shading_mode": "flat",
+      "double_sided": false,
+      "from": [
+        -0.75,
+        8.5,
+        -6.4
+      ],
+      "to": [
+        0.75,
+        10.5,
+        -5.5
+      ],
+      "autouv": 1,
+      "color": 7,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            35,
+            25,
+            36.5,
+            27
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            38,
+            25,
+            38.9,
+            27
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            35,
+            25,
+            36.5,
+            27
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            38,
+            25,
+            38.9,
+            27
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.9
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            34,
+            27,
+            35.5,
+            27.9
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "3c86ce75-92f6-e7ca-6951-d98d2a12dc23"
+    }
+  ],
+  "groups": [
+    {
+      "name": "Backpack",
+      "uuid": "14a0e37a-b227-abae-7cc4-5d91309ed8a2",
+      "export": true,
+      "locked": false,
+      "scope": 0,
+      "selected": false,
+      "visibility": true,
+      "_static": {
+        "properties": {},
+        "temp_data": {}
+      },
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        180,
+        0,
+        180
+      ],
+      "color": 8,
+      "is_piece": false,
+      "original_position": [
+        0,
+        0,
+        0
+      ],
+      "original_offset": [
+        0,
+        10.5,
+        0.5
+      ],
+      "children": [],
+      "reset": false,
+      "shade": true,
+      "mirror_uv": false,
+      "autouv": 1,
+      "isOpen": false,
+      "primary_selected": false
+    }
+  ],
+  "outliner": [
+    {
+      "uuid": "14a0e37a-b227-abae-7cc4-5d91309ed8a2",
+      "isOpen": false,
+      "children": [
+        "faceec69-4b94-3eab-1460-b4150d0dc2c7",
+        "f395e9ed-a42e-5148-470d-c3a0ea1a679c",
+        "279549d5-0703-647e-daa9-b08b07b58749",
+        "4996bcc4-c5e7-d839-5b2d-96a7ec35a7d2",
+        "6fd300eb-21dc-8686-d558-41febe6e64aa",
+        "966b7ce2-b854-beb7-e753-4d7f22ef9fb7",
+        "7dbcd024-382c-5214-5794-a1b4f8f233d1",
+        "1bbed623-914a-8102-527e-26d361244718",
+        "1daa0bb1-7e23-7ace-ab74-34756ec371dd",
+        "dff02c64-9e51-c40f-1813-af87f6288e71",
+        "21e8a699-37cd-0795-924f-872e54dfeb3b",
+        "626fbeae-49c1-ae8a-5080-9d85b5f22390",
+        "c4c45cc7-dd3a-5e3e-2b6f-ad0fe961ee67",
+        "fdc92f37-0269-edaa-8fdd-15017e269b9f",
+        "d2acf387-1b86-edc1-100b-6c9362f7f1c1",
+        "e3720cce-a1c5-bc73-9bd4-3369559f1596",
+        "e7bb907d-37eb-436a-e491-e0e23f516d80",
+        "70c5b004-cbc1-29ca-e24f-4971f93a27fc",
+        "b7b1a897-588a-64c2-e765-e4c79cacd23f",
+        "60ff6d58-fff7-c2dd-2d7a-37fc8d98cd41",
+        "8df7cc83-c52e-1846-f079-5e08eedf238e",
+        "37888e3c-d052-8cb2-aa75-fd18a7152ead",
+        "5646fd08-faf2-2f02-7858-e418a12cd82a",
+        "4d8e0aa8-160f-e749-b2d4-0387954b1048",
+        "93b61e1b-bf59-ae39-3f64-013e50dcd2d5",
+        "30d55776-f5ef-68d3-c86f-6ff945ac95e5",
+        "bfe8b893-5a66-9c2e-e8ad-d40e540fc63d",
+        "2a64f8bc-3e9d-be50-85a6-24143c436daf",
+        "e9064769-9324-af16-a52a-616bac65dbd8",
+        "f3bed6a3-c3fd-99aa-2f54-d26ee77b56df",
+        "88b839d6-d431-8fca-f7e7-245a91a2cac9",
+        "bd553576-f347-cb4a-b005-6a3db44b1af4",
+        "3c86ce75-92f6-e7ca-6951-d98d2a12dc23"
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "name": "Simple.png",
+      "path": "",
+      "folder": "",
+      "namespace": "",
+      "id": "0",
+      "group": "",
+      "scope": 0,
+      "width": 64,
+      "height": 32,
+      "uv_width": 64,
+      "uv_height": 32,
+      "particle": false,
+      "use_as_default": false,
+      "layers_enabled": false,
+      "sync_to_project": "",
+      "file_format": "png",
+      "render_mode": "default",
+      "render_sides": "auto",
+      "wrap_mode": "clamp",
+      "pbr_channel": "color",
+      "fps": 7,
+      "frame_time": 1,
+      "frame_order_type": "loop",
+      "frame_order": "",
+      "frame_interpolate": false,
+      "visible": true,
+      "internal": true,
+      "saved": false,
+      "uuid": "a0c7c2a7-f3dd-9d25-1e4b-4f00f6801fa6",
+      "source": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAYAAACinX6EAAAEfUlEQVR4Ae3BzYvcBwHH4c9MPgcNLVQILRUq7EWhAensbFdmJ129zE6yXnoRKtTciuKt+Se8FSooC4KHKDSIBy/7Mjsq7G5ml32ZGRNobzFQiaFRiBDooTvfHXcOP1hqwCGZpAnJ85Qu1qeGTNjtu5+jMhgMuPDdb6KSBJXDw0NUkrBy7RYqg8GAV79xmgdx++7nqKxev1XiAcixmakzJGF+cZat1X1Uao0KG8u7qNSbVbbXeyThrQtv8uFSi5GZqTMkYX5xlq3VfVT2btzhQc1MnSEJ84uzbK3uo1JrVNhY3kWl3qyyvd4jCW9deJMPl1o8rDInbK/3KFxdO6CwubJHYafd58u213tM0vZ6j8LVtQMKmyt7FHbafSahzLF6s8q4ao0KhXqzykm1RoWHUW9WGVetUWESyhzrtLqMa6fdp9BpdTlpp93nYXRaXca10+4zCWWeQHML0xTOnZ+hML84S6HWqDAJcqzerLK5ssc4ao0KezdajNSbVTZX9ijUGhX2brR4UAc3/81If6lFYe9Gi8LBUotCb6nFJMixTqvLuHbafQqdVpeTdtp9HtTlzs0SXwF5xC5d6Zd4gpU5Vm9WGVetUaFQb1Y5qdao8LQpc6zT6jKunXafQqfV5aSddp+nTZlnXJlj9WaVcdUaFQr1ZpWTao0KTxs51ml1GZlbmGZrdZ+Rc+dn2FjeZWR+cZbt9R5f1ml1GZlbmGZrdZ+ddp+R9ieflXhKlC7Wp4ZM2OXOzRJPidLb7707VEmCShJUkpAElSSoJEElCUlQOX19g0l747WXUEnCxguvo5IElSSoJCEJKklQSYJKEpIwf+9jVJLw/ke9EvchEzAzdYYkzC/OsrW6j0qtUWFjeReVerPK9nqP/b//i5GZqTMkYX5xlq3VfVRqjQoby7v87R//4XEqM0Hb6z0KV9cOKGyu7HE/2+s9ClfXDvgqlJmAerPK/zO3ME2h3qxyP9//4fd43MpMQKfVZWRuYZrCufMzFOYXZ9le71HotLqMzC1MUzh3foaN5V0et9Lb7707VEmCShJUkpAElSSoJEElCUlQOX19g0l747WXUEnC+x/1SjxCpQ/eqQxVkqCSBJUkJEElCSpJUElCElav/xOVJKgkQSUJC2dfQSUJK9duodJ4/WU2XzyLShJUkqCShCSoJEElCSpJSILK3N1rqCRBJQkqSUiCyl+//h1UkqCSBJVf/+gVCj/++W9pf/JZqcwz5s7tTzmpzDNOHrM//eb3JR7CHxnHPvfzh1/xP0ofvFMZqiRBJQkqSUiCShJUknB0dIRKElSSoJKEJKgMBgNUkqCSBJUvvvgClSSoJOHo6AiVJPzkp01GLi+tcfFn57m8tIZKElSSoJKEJKgkQSUJKklIwqUr/RJjkCfMndufUrh0pV/iEXPzxbOoJEElCSpJSIJKElSSoJKEJMzf+xiVw8NDVIbDIeVymVOnTjEYDFD5y9e+jUoSfEGScG+rhUoShsMhKr/75UVGXn71W6xe/zOXfvCLEs8999xzj9h/AcfKVJuBA9q9AAAAAElFTkSuQmCC"
+    }
+  ]
+}

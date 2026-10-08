@@ -9,6 +9,29 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("town")
 class ExcavationPlanTest {
+    @Test void BlocksWithoutDropsCanBeMinedOnceAndSurviveReload(){
+        var p=plan();assertTrue(p.prepare(Map.of()));assertFalse(p.prepare(Map.of("unexpected",1)));
+        p=new Gson().fromJson(new Gson().toJson(p),ExcavationPlan.class);
+        assertTrue(p.dropsPrepared());for(int i=0;i<12;i++)p.attend(.5,true,1);
+        assertTrue(p.begin(p.id(),6,new Point(10,100,10),()->true));assertTrue(p.settle(p.id(),true));
+        assertEquals(1,p.completed());assertTrue(p.cargo().isEmpty());assertFalse(p.dropsPrepared());
+        assertFalse(p.settle(p.id(),true));
+    }
+    @Test void TallStairsHaveShortEntranceAndFloorsOutsideTheExcavation(){
+        for(var side:ExcavationPlan.Entrance.values())for(var layout:List.of(ExcavationPlan.Layout.DEEP_STAIRS_UP,ExcavationPlan.Layout.DEEP_STAIRS_DOWN)){
+            var area=new WorkplaceArea(0,80,0,15,15,11);
+            var cells=ExcavationPlan.tunnel(area,side,layout);
+            for(var p:cells){
+                int depth=switch(side){case NORTH->p.z();case SOUTH->14-p.z();case WEST->p.x();case EAST->14-p.x();};
+                int floor=ExcavationPlan.floorAt(area,side,layout,p);
+                assertTrue(p.y()<floor+(depth<5?3:4));
+            }
+            for(var p:ExcavationPlan.floors(area,side,layout)){
+                assertFalse(cells.contains(p));assertTrue(cells.contains(new Point(p.x(),p.y()+1,p.z())));
+            }
+            assertEquals(138,cells.size());
+        }
+    }
     private final WorkplaceArea area=new WorkplaceArea(8,100,8,15,14);
     private final ExcavationPlan.Cell cell=new ExcavationPlan.Cell(new Point(11,102,11),"Rock_Stone",0,1);
     private ExcavationPlan plan(){var p=new ExcavationPlan();assertNull(p.start(0,UUID.randomUUID(),UUID.randomUUID(),area,ExcavationPlan.Entrance.NORTH,List.of(cell)));return p;}
@@ -66,28 +89,29 @@ class ExcavationPlanTest {
         assertTrue(copy.pickup(copy.id(),"replacement",new Point(25,100,21)));assertEquals("replacement",copy.carrier());
         assertTrue(copy.delivered(copy.id(),()->true));assertNull(copy.cargoPoint());assertNull(copy.carrier());
     }
-    @Test void NativeMaterialsDoNotTreatBuiltStoneOrBenchesAsTerrain() {
+    @Test void OrdinaryBlocksDoNotNeedAMaterialWhitelist() {
         assertEquals(1,NativeExcavation.skill("Rock_Stone"));assertEquals(9,NativeExcavation.skill("Ore_Adamantite_Magma"));
-        assertEquals(0,NativeExcavation.skill("Rock_Stone_Brick"));assertEquals(0,NativeExcavation.skill("Bench_Workbench"));
+        assertEquals(1,NativeExcavation.skill("Rock_Stone_Brick"));assertEquals(1,NativeExcavation.skill("Wood_Oak_Trunk"));
         assertTrue(WorkplaceBenchAccess.matches(com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.MINING,"Workbench","Bench_Workbench"));
     }
     @Test void EveryLayoutLeavesConnectedWalkableFloorsInsideItsBounds() {
         for(var side:ExcavationPlan.Entrance.values())for(var layout:ExcavationPlan.Layout.values())
-            for(var a:List.of(new WorkplaceArea(-21,80,-41,-6,-13),new WorkplaceArea(0,80,0,64,64),
+            for(var original:List.of(new WorkplaceArea(-21,80,-41,-6,-13),new WorkplaceArea(0,80,0,64,64),
                 new WorkplaceArea(Integer.MAX_VALUE-16,80,Integer.MIN_VALUE,Integer.MAX_VALUE,Integer.MIN_VALUE+16))) {
+                var a=new WorkplaceArea(original.minX(),original.floorY(),original.minZ(),original.maxX(),original.maxZ(),10);
                 var points=ExcavationPlan.tunnel(a,side,layout);var unique=new HashSet<>(points);
-                assertFalse(points.isEmpty());assertEquals(points.size(),unique.size());assertTrue(points.size()<=288);
+                assertFalse(points.isEmpty());assertEquals(points.size(),unique.size());assertTrue(points.size()<=900);
                 var floors=new LinkedHashSet<Point>();
                 for(var point:points) {
                     assertTrue(a.contains(point.x(),point.y(),point.z()));
                     int floor=ExcavationPlan.floorAt(a,side,layout,point);
-                    assertTrue(floor>=a.floorY()&&floor<=a.floorY()+2);
-                    assertTrue(point.y()>=floor&&point.y()<floor+3);
+                    assertTrue(floor>=a.floorY()&&floor<=a.floorY()+7);
+                    assertTrue(point.y()>=floor&&point.y()<floor+ExcavationPlan.passageHeight(a,layout));
                     assertFalse(unique.contains(new Point(point.x(),floor-1,point.z())),"Supporting floor must survive");
                     floors.add(new Point(point.x(),floor,point.z()));
                 }
                 // Each passage has full three block headroom, with no isolated branch or step.
-                assertEquals(floors.size()*3,points.size());
+                assertEquals(floors.size()*ExcavationPlan.passageHeight(a,layout)-(ExcavationPlan.passageHeight(a,layout)==4?6:0),points.size());
                 var reached=new HashSet<Point>();var queue=new ArrayDeque<Point>();queue.add(floors.iterator().next());
                 while(!queue.isEmpty()) {
                     var from=queue.remove();if(!reached.add(from))continue;

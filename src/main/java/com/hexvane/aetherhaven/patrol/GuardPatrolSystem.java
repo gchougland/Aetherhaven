@@ -85,9 +85,11 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         }
         Ref<EntityStore> ref = chunk.getReferenceTo(index);
         if (chunk.getComponent(index, GuardRtsCommandState.getComponentType()) != null) {
+            GuardSpoilsService.interrupt(ref,store);
             return;
         }
         if (GuardFollowPlayerSystem.shouldSkipPatrol(chunk.getComponent(index, GuardFollowPlayerState.getComponentType()))) {
+            GuardSpoilsService.interrupt(ref,store);
             return;
         }
         World world = store.getExternalData().getWorld();
@@ -95,6 +97,7 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         List<PatrolRouteRecord> assigned = reg.routesForGuard(uc.getUuid());
         String stateName = NpcSupportUtil.stateName(store, ref);
         if (stateName.contains("Combat") && !assigned.isEmpty()) {
+            GuardSpoilsService.interrupt(ref,store);
             GuardPatrolState combatPatrol = chunk.getComponent(index, GuardPatrolState.getComponentType());
             TransformComponent tcCombat = store.getComponent(ref, TransformComponent.getComponentType());
             if (tcCombat != null) {
@@ -108,9 +111,11 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
         if (stateName.contains("Combat") || stateName.contains("Interaction")) {
+            GuardSpoilsService.interrupt(ref,store);
             return;
         }
         if (assigned.isEmpty()) {
+            GuardSpoilsService.interrupt(ref,store);
             if (stateName.contains("Patrol")) {
                 NpcSupportUtil.setState(ref, "Idle", null, commandBuffer);
                 commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
@@ -127,6 +132,7 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         if (route == null || route.nodes == null || route.nodes.size() < 2) {
             return;
         }
+        if(GuardSpoilsService.tick(ref,npc,store,commandBuffer))return;
         UUID routeId = route.getIdUuid();
         if (routeId != null && !routeId.equals(patrol.getActiveRouteId())) {
             patrol.setActiveRouteId(routeId);

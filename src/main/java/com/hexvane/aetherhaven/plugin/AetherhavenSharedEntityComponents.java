@@ -47,6 +47,7 @@ public final class AetherhavenSharedEntityComponents {
         ClownCheerAssistState.register(registry);
         // Villagers (NPC model resync excludes statues) and Construction (monument) both need this.
         FounderMonumentStatueSkin.register(registry);
+        com.hexvane.aetherhaven.production.BarnAnimalBinding.register(registry);
         // Registered on core so /plugin unload of ReputationUnlocks does not unregister while players still have it.
         PurificationPowderPlayerComponent.register(registry);
     }

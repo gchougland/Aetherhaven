@@ -48,6 +48,15 @@ final class DialogueChoiceItemRequirementsTest {
                 DialogueChoiceDefinition.class
             );
         assertTrue(DialogueChoiceItemRequirements.isTouristMoveInChoice(byAction));
+
+        DialogueChoiceDefinition guildInvitation =
+            gson.fromJson(
+                """
+                {"text":"Invite","actions":[{"type":"invite_guild_resident"}]}
+                """,
+                DialogueChoiceDefinition.class
+            );
+        assertTrue(DialogueChoiceItemRequirements.isTouristMoveInChoice(guildInvitation));
     }
 
     @Test

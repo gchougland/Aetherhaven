@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.monument;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -9,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import com.hypixel.hytale.server.core.asset.type.model.config.ModelAttachment;
+import com.hypixel.hytale.protocol.PlayerSkin;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Tag;
@@ -19,55 +21,46 @@ import org.junit.jupiter.api.Test;
 class FounderMonumentSpawnServiceTest {
 
     @Test
-    void dedicatedModelAssetIsAnAttachmentFreeStoneFallback() throws Exception {
-        try (
-            var stream = getClass()
-                .getResourceAsStream("/Server/Models/Aetherhaven/Founder_Monument_Statue.json")
-        ) {
-            assertTrue(stream != null, "founder statue model asset must be packaged");
+    void legacyModelInheritsNormalPlayerAppearanceWithoutOverrides() throws Exception {
+        try (var stream = getClass().getResourceAsStream("/Server/Models/Aetherhaven/Founder_Monument_Statue.json")) {
+            assertNotNull(stream);
             JsonObject model = JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject();
-
             assertEquals("Player", model.get("Parent").getAsString());
-            assertEquals("Characters/Player.blockymodel", model.get("Model").getAsString());
-            assertEquals(AetherhavenConstants.FOUNDER_MONUMENT_STATUE_BASE_TEXTURE, model.get("Texture").getAsString());
-            assertNull(model.get("GradientSet"));
-            assertNull(model.get("GradientId"));
-            assertTrue(model.getAsJsonArray("DefaultAttachments").isEmpty());
+            for (String override : new String[] { "Model", "Texture", "GradientSet", "GradientId", "DefaultAttachments" }) {
+                assertFalse(model.has(override), "Legacy saves must inherit native Player appearance: " + override);
+            }
         }
     }
 
     @Test
-    void stonePrepareUsesOnlyPackagedTextures() {
-        ModelAttachment[] source = {
-            new ModelAttachment(
-                "Characters/Clothes/Example.blockymodel",
-                "Characters/Clothes/Example.png",
-                null,
-                null,
-                1.0
-            )
-        };
-        FounderMonumentStoneTextures.Prepared prepared =
-            FounderMonumentStoneTextures.prepare("Characters/Some/Skin.png", source);
-        assertEquals(AetherhavenConstants.FOUNDER_MONUMENT_STATUE_TEXTURE, prepared.baseTexture());
-        assertEquals(1, prepared.attachments().length);
-        assertEquals("Characters/Clothes/Example.blockymodel", prepared.attachments()[0].getModel());
-        assertEquals(AetherhavenConstants.FOUNDER_MONUMENT_STATUE_TEXTURE, prepared.attachments()[0].getTexture());
+    void nativeSkinRetainsEveryCosmeticThroughSaveAndRestore() throws Exception {
+        PlayerSkin original = new PlayerSkin();
+        // Include every protocol appearance slot, including future String slots, without resolving or replacing any.
+        for (var field : PlayerSkin.class.getFields()) {
+            if (field.getType() == String.class && !java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                field.set(original, field.getName() + ".original.variant");
+            }
+        }
+        var stored = FounderMonumentStatueSkin.fromProtocol(original);
+        PlayerSkin restored = stored.tryToProtocol();
+        assertNotNull(restored);
+        var nativeSkin = FounderMonumentSpawnService.createStatueSkin(restored);
+        assertEquals(new Gson().toJson(original), new Gson().toJson(nativeSkin.getPlayerSkin()));
+        assertNotSame(restored, nativeSkin.getPlayerSkin());
+        restored.haircut = "Changed after placement";
+        assertEquals(original.haircut, nativeSkin.getPlayerSkin().haircut);
+        assertTrue(nativeSkin.consumeNetworkOutdated(), "Native tracker must send the skin to viewers");
+        assertFalse(nativeSkin.consumeNetworkOutdated());
+        assertTrue(FounderMonumentStatueRestoreSystem.hasAppliedStatueCosmetics(nativeSkin));
     }
 
     @Test
-    void dedicatedBodyIntegratesTheOtherwiseDetachedFaceQuad() throws Exception {
-        try (
-            var stream = getClass()
-                .getResourceAsStream("/Common/Characters/Aetherhaven/Founder_Monument_Player_Body.blockymodel")
-        ) {
-            assertNotNull(stream);
-            JsonObject root = JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
-                .getAsJsonObject();
-            JsonObject face = findNode(root.getAsJsonArray("nodes"), "Founder-Face");
-            assertNotNull(face, "statue body must fill the player head's intentionally missing front face");
-            assertEquals("quad", face.getAsJsonObject("shape").get("type").getAsString());
-            assertEquals("+Z", face.getAsJsonObject("shape").getAsJsonObject("settings").get("normal").getAsString());
+    void stoneAssetsAreNotPackaged() {
+        for (String asset : new String[] {
+            "Founder_Monument_Statue_Stone.png", "Founder_Monument_Stone_Base_256x128.png",
+            "Founder_Monument_Player_Body.blockymodel"
+        }) {
+            assertNull(getClass().getResource("/Common/Characters/Aetherhaven/" + asset));
         }
     }
 
@@ -97,7 +90,7 @@ class FounderMonumentSpawnServiceTest {
 
     @Test
     void playerBodyIsNotTreatedAsAFinishedStatue() {
-        assertTrue(!FounderMonumentStatueRestoreSystem.isStoneStatueMesh(null));
+        assertTrue(!FounderMonumentStatueRestoreSystem.hasAppliedStatueCosmetics(null));
         assertTrue(!FounderMonumentStatueRestoreSystem.isClientVisibleStatue(null, null));
     }
 
@@ -154,17 +147,4 @@ class FounderMonumentSpawnServiceTest {
         );
     }
 
-    private static JsonObject findNode(com.google.gson.JsonArray nodes, String name) {
-        for (var element : nodes) {
-            JsonObject node = element.getAsJsonObject();
-            if (name.equals(node.get("name").getAsString())) {
-                return node;
-            }
-            JsonObject child = findNode(node.getAsJsonArray("children"), name);
-            if (child != null) {
-                return child;
-            }
-        }
-        return null;
-    }
 }

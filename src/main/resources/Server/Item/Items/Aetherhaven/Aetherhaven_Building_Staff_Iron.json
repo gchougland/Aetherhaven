@@ -12,11 +12,11 @@
       },
       {
         "ItemId": "Ingredient_Leather_Light",
-        "Quantity": 2
+        "Quantity": 5
       },
       {
         "ItemId": "Ingredient_Fabric_Scrap_Linen",
-        "Quantity": 2
+        "Quantity": 5
       }
     ],
     "BenchRequirement": [

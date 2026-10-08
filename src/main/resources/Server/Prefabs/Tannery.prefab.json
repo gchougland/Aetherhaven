@@ -9,7 +9,7 @@
       "x": 1,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 1,
@@ -64,7 +64,7 @@
       "x": 1,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 1,
@@ -121,7 +121,7 @@
       "x": 1,
       "y": -1,
       "z": 4,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 1,
@@ -176,7 +176,7 @@
       "x": 1,
       "y": -1,
       "z": 5,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 1,
@@ -231,7 +231,7 @@
       "x": 1,
       "y": -1,
       "z": 6,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 1,
@@ -286,7 +286,7 @@
       "x": 1,
       "y": -1,
       "z": 7,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 1,
@@ -341,7 +341,7 @@
       "x": 1,
       "y": -1,
       "z": 8,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 1,
@@ -396,7 +396,7 @@
       "x": 1,
       "y": -1,
       "z": 9,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 1,
@@ -451,7 +451,7 @@
       "x": 1,
       "y": -1,
       "z": 10,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 1,
@@ -508,7 +508,7 @@
       "x": 1,
       "y": -1,
       "z": 11,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 1,
@@ -563,7 +563,7 @@
       "x": 1,
       "y": -1,
       "z": 12,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 1,
@@ -618,7 +618,7 @@
       "x": 1,
       "y": -1,
       "z": 13,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 1,
@@ -673,7 +673,7 @@
       "x": 1,
       "y": -1,
       "z": 14,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 1,
@@ -728,7 +728,7 @@
       "x": 1,
       "y": -1,
       "z": 15,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 1,
@@ -783,7 +783,7 @@
       "x": 1,
       "y": -1,
       "z": 16,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 1,
@@ -838,7 +838,7 @@
       "x": 1,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 1,
@@ -895,7 +895,7 @@
       "x": 1,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 1,
@@ -950,7 +950,7 @@
       "x": 2,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 2,
@@ -1007,7 +1007,7 @@
       "x": 2,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
@@ -1066,7 +1066,7 @@
       "x": 2,
       "y": -1,
       "z": 4,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
@@ -1123,7 +1123,7 @@
       "x": 2,
       "y": -1,
       "z": 5,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
@@ -1180,7 +1180,7 @@
       "x": 2,
       "y": -1,
       "z": 6,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 2,
@@ -1239,7 +1239,7 @@
       "x": 2,
       "y": -1,
       "z": 7,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
@@ -1298,7 +1298,7 @@
       "x": 2,
       "y": -1,
       "z": 8,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
@@ -1357,7 +1357,7 @@
       "x": 2,
       "y": -1,
       "z": 9,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
@@ -1414,7 +1414,7 @@
       "x": 2,
       "y": -1,
       "z": 10,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
@@ -1474,7 +1474,7 @@
       "x": 2,
       "y": -1,
       "z": 11,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 2,
@@ -1531,7 +1531,7 @@
       "x": 2,
       "y": -1,
       "z": 12,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
@@ -1590,7 +1590,7 @@
       "x": 2,
       "y": -1,
       "z": 13,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
@@ -1649,7 +1649,7 @@
       "x": 2,
       "y": -1,
       "z": 14,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
@@ -1708,7 +1708,7 @@
       "x": 2,
       "y": -1,
       "z": 15,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 2,
@@ -1765,7 +1765,7 @@
       "x": 2,
       "y": -1,
       "z": 16,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
@@ -1822,7 +1822,7 @@
       "x": 2,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 2,
@@ -1881,7 +1881,7 @@
       "x": 2,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 2,
@@ -1937,7 +1937,7 @@
       "x": 3,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 3,
@@ -1993,7 +1993,7 @@
       "x": 3,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 3,
@@ -2825,7 +2825,7 @@
       "x": 3,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 3,
@@ -2882,7 +2882,7 @@
       "x": 3,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 3,
@@ -2938,7 +2938,7 @@
       "x": 4,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 4,
@@ -2994,7 +2994,7 @@
       "x": 4,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 4,
@@ -3822,7 +3822,7 @@
       "x": 4,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 4,
@@ -3879,7 +3879,7 @@
       "x": 4,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 4,
@@ -3935,7 +3935,7 @@
       "x": 5,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 5,
@@ -3991,7 +3991,7 @@
       "x": 5,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 5,
@@ -4819,7 +4819,7 @@
       "x": 5,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 5,
@@ -4876,7 +4876,7 @@
       "x": 5,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 5,
@@ -4932,7 +4932,7 @@
       "x": 6,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 6,
@@ -4988,7 +4988,7 @@
       "x": 6,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 6,
@@ -5774,7 +5774,7 @@
       "x": 6,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 6,
@@ -5831,7 +5831,7 @@
       "x": 6,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 6,
@@ -5887,7 +5887,7 @@
       "x": 7,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 7,
@@ -5944,7 +5944,7 @@
       "x": 7,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 7,
@@ -6745,7 +6745,7 @@
       "x": 7,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 7,
@@ -6803,7 +6803,7 @@
       "x": 7,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 7,
@@ -6859,7 +6859,7 @@
       "x": 8,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 8,
@@ -6914,7 +6914,7 @@
       "x": 8,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 8,
@@ -6971,7 +6971,7 @@
       "x": 8,
       "y": -1,
       "z": 4,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 8,
@@ -7026,7 +7026,7 @@
       "x": 8,
       "y": -1,
       "z": 5,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 8,
@@ -7081,7 +7081,7 @@
       "x": 8,
       "y": -1,
       "z": 6,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 8,
@@ -7136,7 +7136,7 @@
       "x": 8,
       "y": -1,
       "z": 7,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 8,
@@ -7191,7 +7191,7 @@
       "x": 8,
       "y": -1,
       "z": 8,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 8,
@@ -7246,7 +7246,7 @@
       "x": 8,
       "y": -1,
       "z": 9,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 8,
@@ -7301,7 +7301,7 @@
       "x": 8,
       "y": -1,
       "z": 10,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 8,
@@ -7356,7 +7356,7 @@
       "x": 8,
       "y": -1,
       "z": 11,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 8,
@@ -7697,7 +7697,7 @@
       "x": 8,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 8,
@@ -7753,7 +7753,7 @@
       "x": 8,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 8,
@@ -7807,7 +7807,7 @@
       "x": 9,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
@@ -7861,7 +7861,7 @@
       "x": 9,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
@@ -7915,7 +7915,7 @@
       "x": 9,
       "y": -1,
       "z": 4,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
@@ -7969,7 +7969,7 @@
       "x": 9,
       "y": -1,
       "z": 5,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
@@ -8023,7 +8023,7 @@
       "x": 9,
       "y": -1,
       "z": 6,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
@@ -8077,7 +8077,7 @@
       "x": 9,
       "y": -1,
       "z": 7,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 9,
@@ -8131,7 +8131,7 @@
       "x": 9,
       "y": -1,
       "z": 8,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
@@ -8185,7 +8185,7 @@
       "x": 9,
       "y": -1,
       "z": 9,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
@@ -8239,7 +8239,7 @@
       "x": 9,
       "y": -1,
       "z": 10,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
@@ -8293,7 +8293,7 @@
       "x": 9,
       "y": -1,
       "z": 11,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
@@ -8644,7 +8644,7 @@
       "x": 9,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
@@ -8700,7 +8700,7 @@
       "x": 9,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
@@ -8754,7 +8754,7 @@
       "x": 10,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 10,
@@ -8808,7 +8808,7 @@
       "x": 10,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 10,
@@ -8862,7 +8862,7 @@
       "x": 10,
       "y": -1,
       "z": 4,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 10,
@@ -8916,7 +8916,7 @@
       "x": 10,
       "y": -1,
       "z": 5,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 10,
@@ -8970,7 +8970,7 @@
       "x": 10,
       "y": -1,
       "z": 6,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 10,
@@ -9024,7 +9024,7 @@
       "x": 10,
       "y": -1,
       "z": 7,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 10,
@@ -9078,7 +9078,7 @@
       "x": 10,
       "y": -1,
       "z": 8,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 10,
@@ -9132,7 +9132,7 @@
       "x": 10,
       "y": -1,
       "z": 9,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 10,
@@ -9186,7 +9186,7 @@
       "x": 10,
       "y": -1,
       "z": 10,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 10,
@@ -9240,7 +9240,7 @@
       "x": 10,
       "y": -1,
       "z": 11,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 10,
@@ -9578,7 +9578,7 @@
       "x": 10,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 10,
@@ -9634,7 +9634,7 @@
       "x": 10,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 10,
@@ -9688,7 +9688,7 @@
       "x": 11,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 11,
@@ -9743,7 +9743,7 @@
       "x": 11,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 11,
@@ -9800,7 +9800,7 @@
       "x": 11,
       "y": -1,
       "z": 4,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 11,
@@ -9855,7 +9855,7 @@
       "x": 11,
       "y": -1,
       "z": 5,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 11,
@@ -9910,7 +9910,7 @@
       "x": 11,
       "y": -1,
       "z": 6,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 11,
@@ -9965,7 +9965,7 @@
       "x": 11,
       "y": -1,
       "z": 7,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 11,
@@ -10020,7 +10020,7 @@
       "x": 11,
       "y": -1,
       "z": 8,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 11,
@@ -10075,7 +10075,7 @@
       "x": 11,
       "y": -1,
       "z": 9,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 11,
@@ -10130,7 +10130,7 @@
       "x": 11,
       "y": -1,
       "z": 10,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 11,
@@ -10185,7 +10185,7 @@
       "x": 11,
       "y": -1,
       "z": 11,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 11,
@@ -10540,7 +10540,7 @@
       "x": 11,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 11,
@@ -10596,7 +10596,7 @@
       "x": 11,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 11,
@@ -10651,7 +10651,7 @@
       "x": 12,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 12,
@@ -10708,7 +10708,7 @@
       "x": 12,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 12,
@@ -11509,7 +11509,7 @@
       "x": 12,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 12,
@@ -11568,7 +11568,7 @@
       "x": 12,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 12,
@@ -11624,7 +11624,7 @@
       "x": 13,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 13,
@@ -11680,7 +11680,7 @@
       "x": 13,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 13,
@@ -12467,7 +12467,7 @@
       "x": 13,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 13,
@@ -12524,7 +12524,7 @@
       "x": 13,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 13,
@@ -12580,7 +12580,7 @@
       "x": 14,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 14,
@@ -12636,7 +12636,7 @@
       "x": 14,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 14,
@@ -13464,7 +13464,7 @@
       "x": 14,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 14,
@@ -13521,7 +13521,7 @@
       "x": 14,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 14,
@@ -13577,7 +13577,7 @@
       "x": 15,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 15,
@@ -13633,7 +13633,7 @@
       "x": 15,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 15,
@@ -14461,7 +14461,7 @@
       "x": 15,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 15,
@@ -14518,7 +14518,7 @@
       "x": 15,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 15,
@@ -14574,7 +14574,7 @@
       "x": 16,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 16,
@@ -14630,7 +14630,7 @@
       "x": 16,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 16,
@@ -15462,7 +15462,7 @@
       "x": 16,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 16,
@@ -15519,7 +15519,7 @@
       "x": 16,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 16,
@@ -15575,7 +15575,7 @@
       "x": 17,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 17,
@@ -15632,7 +15632,7 @@
       "x": 17,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 17,
@@ -15691,7 +15691,7 @@
       "x": 17,
       "y": -1,
       "z": 4,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 17,
@@ -15748,7 +15748,7 @@
       "x": 17,
       "y": -1,
       "z": 5,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 17,
@@ -15805,7 +15805,7 @@
       "x": 17,
       "y": -1,
       "z": 6,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 17,
@@ -15864,7 +15864,7 @@
       "x": 17,
       "y": -1,
       "z": 7,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 17,
@@ -15923,7 +15923,7 @@
       "x": 17,
       "y": -1,
       "z": 8,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 17,
@@ -15982,7 +15982,7 @@
       "x": 17,
       "y": -1,
       "z": 9,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 17,
@@ -16039,7 +16039,7 @@
       "x": 17,
       "y": -1,
       "z": 10,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 17,
@@ -16099,7 +16099,7 @@
       "x": 17,
       "y": -1,
       "z": 11,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 17,
@@ -16156,7 +16156,7 @@
       "x": 17,
       "y": -1,
       "z": 12,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 17,
@@ -16215,7 +16215,7 @@
       "x": 17,
       "y": -1,
       "z": 13,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 17,
@@ -16274,7 +16274,7 @@
       "x": 17,
       "y": -1,
       "z": 14,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 17,
@@ -16333,7 +16333,7 @@
       "x": 17,
       "y": -1,
       "z": 15,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 17,
@@ -16390,7 +16390,7 @@
       "x": 17,
       "y": -1,
       "z": 16,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 17,
@@ -16447,7 +16447,7 @@
       "x": 17,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 17,
@@ -16506,7 +16506,7 @@
       "x": 17,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 17,
@@ -16562,7 +16562,7 @@
       "x": 18,
       "y": -1,
       "z": 2,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 18,
@@ -16617,7 +16617,7 @@
       "x": 18,
       "y": -1,
       "z": 3,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 18,
@@ -16635,393 +16635,6 @@
       "x": 18,
       "y": 2,
       "z": 3,
-      "name": "Wood_Beech_Branch_Corner",
-      "support": 15,
-      "rotation": 1
-    },
-    {
-      "x": 18,
-      "y": 3,
-      "z": 3,
-      "name": "Wood_Softwood_Roof",
-      "rotation": 1
-    },
-    {
-      "x": 18,
-      "y": 4,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 5,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 7,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": -1,
-      "z": 4,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
-    },
-    {
-      "x": 18,
-      "y": 0,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 1,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 2,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 3,
-      "z": 4,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 1
-    },
-    {
-      "x": 18,
-      "y": 4,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 5,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 7,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": -1,
-      "z": 5,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
-    },
-    {
-      "x": 18,
-      "y": 0,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 1,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 2,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 3,
-      "z": 5,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 1
-    },
-    {
-      "x": 18,
-      "y": 4,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 5,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 7,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": -1,
-      "z": 6,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
-    },
-    {
-      "x": 18,
-      "y": 0,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 1,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 2,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 3,
-      "z": 6,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 1
-    },
-    {
-      "x": 18,
-      "y": 4,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 5,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 6,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 7,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": -1,
-      "z": 7,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
-    },
-    {
-      "x": 18,
-      "y": 0,
-      "z": 7,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 1,
-      "z": 7,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 2,
-      "z": 7,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 3,
-      "z": 7,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 1
-    },
-    {
-      "x": 18,
-      "y": 4,
-      "z": 7,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 5,
-      "z": 7,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 6,
-      "z": 7,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 7,
-      "z": 7,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": -1,
-      "z": 8,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
-    },
-    {
-      "x": 18,
-      "y": 0,
-      "z": 8,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 1,
-      "z": 8,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 2,
-      "z": 8,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 3,
-      "z": 8,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 1
-    },
-    {
-      "x": 18,
-      "y": 4,
-      "z": 8,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 5,
-      "z": 8,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 6,
-      "z": 8,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 7,
-      "z": 8,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": -1,
-      "z": 9,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
-    },
-    {
-      "x": 18,
-      "y": 0,
-      "z": 9,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 1,
-      "z": 9,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 2,
-      "z": 9,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 3,
-      "z": 9,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 1
-    },
-    {
-      "x": 18,
-      "y": 4,
-      "z": 9,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 5,
-      "z": 9,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 6,
-      "z": 9,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 7,
-      "z": 9,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": -1,
-      "z": 10,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
-    },
-    {
-      "x": 18,
-      "y": 0,
-      "z": 10,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 1,
-      "z": 10,
-      "name": "Empty"
-    },
-    {
-      "x": 18,
-      "y": 2,
-      "z": 10,
       "name": "Wood_Beech_Branch_Corner",
       "support": 15,
       "rotation": 1
@@ -17029,6 +16642,393 @@
     {
       "x": 18,
       "y": 3,
+      "z": 3,
+      "name": "Wood_Softwood_Roof",
+      "rotation": 1
+    },
+    {
+      "x": 18,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone_Cobble_Mossy"
+    },
+    {
+      "x": 18,
+      "y": 0,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 1,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 2,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 3,
+      "z": 4,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
+    },
+    {
+      "x": 18,
+      "y": 4,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 18,
+      "y": 0,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 1,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 2,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 3,
+      "z": 5,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
+    },
+    {
+      "x": 18,
+      "y": 4,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 5,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": -1,
+      "z": 6,
+      "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 18,
+      "y": 0,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 1,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 3,
+      "z": 6,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
+    },
+    {
+      "x": 18,
+      "y": 4,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 5,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 6,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 7,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": -1,
+      "z": 7,
+      "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 18,
+      "y": 0,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 1,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 3,
+      "z": 7,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
+    },
+    {
+      "x": 18,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": -1,
+      "z": 8,
+      "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 18,
+      "y": 0,
+      "z": 8,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 1,
+      "z": 8,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 2,
+      "z": 8,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 3,
+      "z": 8,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
+    },
+    {
+      "x": 18,
+      "y": 4,
+      "z": 8,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 5,
+      "z": 8,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 6,
+      "z": 8,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 7,
+      "z": 8,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": -1,
+      "z": 9,
+      "name": "Rock_Stone_Cobble_Mossy"
+    },
+    {
+      "x": 18,
+      "y": 0,
+      "z": 9,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 1,
+      "z": 9,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 2,
+      "z": 9,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 3,
+      "z": 9,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
+    },
+    {
+      "x": 18,
+      "y": 4,
+      "z": 9,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 5,
+      "z": 9,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 6,
+      "z": 9,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 7,
+      "z": 9,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": -1,
+      "z": 10,
+      "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 18,
+      "y": 0,
+      "z": 10,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 1,
+      "z": 10,
+      "name": "Empty"
+    },
+    {
+      "x": 18,
+      "y": 2,
+      "z": 10,
+      "name": "Wood_Beech_Branch_Corner",
+      "support": 15,
+      "rotation": 1
+    },
+    {
+      "x": 18,
+      "y": 3,
       "z": 10,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
@@ -17061,7 +17061,7 @@
       "x": 18,
       "y": -1,
       "z": 11,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 18,
@@ -17116,7 +17116,7 @@
       "x": 18,
       "y": -1,
       "z": 12,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 18,
@@ -17171,7 +17171,7 @@
       "x": 18,
       "y": -1,
       "z": 13,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 18,
@@ -17226,7 +17226,7 @@
       "x": 18,
       "y": -1,
       "z": 14,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 18,
@@ -17281,7 +17281,7 @@
       "x": 18,
       "y": -1,
       "z": 15,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble"
+      "name": "Rock_Stone_Cobble"
     },
     {
       "x": 18,
@@ -17336,7 +17336,7 @@
       "x": 18,
       "y": -1,
       "z": 16,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 18,
@@ -17391,7 +17391,7 @@
       "x": 18,
       "y": -1,
       "z": 17,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 18,
@@ -17448,7 +17448,7 @@
       "x": 18,
       "y": -1,
       "z": 18,
-      "name": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy"
+      "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 18,

@@ -75,24 +75,19 @@ public final class WorkplaceToolInteraction extends SimpleInstantInteraction {
             boolean selecting = type == InteractionType.Use || state.mode == WorkplaceToolState.Mode.SELECT
                 || (state.mode == WorkplaceToolState.Mode.RESIZE && state.editing == null);
             if (state.mode == WorkplaceToolState.Mode.MINESHAFT && type == InteractionType.Primary) {
-                if (state.editing != null && !town.getTownId().equals(state.townId)) { state.hint = "Keep the workplace in its own town."; return; }
-                var page = new MineshaftSetupPage(pr, town.getTownId(), state.editing, target);
+                var site=town.getApprenticeWorkplaces().atGroundOrBlock(target.x,target.y,target.z);
+                if(site==null||site.type()!=com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.MINING){state.hint="Create a Mining workplace around a Workbench using Create workplace mode. Use its bench to plan tunnels.";return;}
+                var page = new MineshaftPlannerPage(pr, town.getTownId(), site.id());
                 world.execute(() -> { if (ref.isValid()) player.getPageManager().openCustomPage(ref, store, page); });
             } else if (selecting) {
                 var site = town.getApprenticeWorkplaces().atGroundOrBlock(target.x, target.y, target.z);
                 if (site == null) { state.hint = "Look at ground or equipment inside a workplace on this floor."; return; }
                 if (state.mode == WorkplaceToolState.Mode.RESIZE && type != InteractionType.Use) {
-                    if (site.type() == com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.MINING) {
-                        state.choose(WorkplaceToolState.Mode.MINESHAFT, ref, store);
-                        state.editing = site.id(); state.townId = town.getTownId();
-                        state.hint = "Choose the entrance ground for " + site.name() + ". Then set its direction and length.";
-                        return;
-                    }
                     state.editing = site.id(); state.townId = town.getTownId(); state.first = null;
                     state.hint = "Resizing " + site.name() + ". Choose the first new corner.";
                 } else {
-                    var page = new WorkplacePage(pr, town.getTownId(), site.id(), site.area());
-                    world.execute(() -> { if (ref.isValid()) player.getPageManager().openCustomPage(ref, store, page); });
+                    world.execute(() -> { if (ref.isValid()) player.getPageManager().openCustomPage(ref, store,
+                        site.type()==com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.MINING?new MineshaftPlannerPage(pr,town.getTownId(),site.id()):new WorkplacePage(pr,town.getTownId(),site.id(),site.area())); });
                 }
             } else if (state.first == null) {
                 if (state.editing != null && !town.getTownId().equals(state.townId)) { state.hint = "Keep the workplace in its own town."; return; }

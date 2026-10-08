@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Iron",
-      "count": 8
+      "count": 10
     },
     {
       "itemId": "Ingredient_Bar_Cobalt",
-      "count": 2
+      "count": 5
     },
     {
       "itemId": "Ingredient_Leather_Medium",
-      "count": 6
+      "count": 10
     }
   ],
   "output": "Aetherhaven_MasterSmith_Kit",

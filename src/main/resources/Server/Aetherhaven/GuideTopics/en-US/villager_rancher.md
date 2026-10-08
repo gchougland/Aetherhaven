@@ -9,25 +9,52 @@ npcRoleId: Aetherhaven_Rancher
 
 **Thalen Meadowrun** is usually found at **the barn** when they are on shift.
 
-### Herd work preview
+### Owned barn animals
 
-Open barn storage and choose **Review herd**. Keep a pair of matching cows, sheep, goats, pigs, chickens, Mosshorns, Skrills, Tetrabirds or Bluebirds near a feeding trough inside the barn. Each family can use a separate trough. Use Previous and Next to browse the herd cards. Give them room to move and raise their young. The Core barn needs a trough placed by the player.
+Choose **Animal shop** when speaking to Thalen to open his separate shop. Common animals cost 100 gold at Rancher Mastery 1, uncommon animals cost 250 gold at Mastery 4, and rare animals cost 500 gold at Mastery 7. Ask Thalen about **Building upgrades** to unlock more pens and improve the barn.
 
-Bluebirds need an enclosed pen with a roof about three blocks above the trough so the birds stay within reach. Keep the trough, breeding pair and raised bird close together. Their young use a smaller version of the native model until they mature.
+Food is shown as a small corner badge on each animal portrait. Resource storage starts at 10 per resource and gains 10 with each storage upgrade. Existing excess stock stays available to collect.
 
-Use a normal **Capture Crate** to bring wild Tetrabirds and Bluebirds to the barn. Release two matching birds inside their pen, then review the herd. Town raised offspring cannot be captured because they belong to an active herd. If you move a breeding bird with a crate, review the breeding pairs again after releasing it.
+Your barn starts with one active pen. Building upgrades unlock up to five pens. Choose **Choose** on a pen to open a grid of animal cards showing their picture, name, hearts and preferred food. Select a card to assign that animal. Choosing an animal already in another pen swaps the two animals. **Rest** empties a pen without losing its animal. Animals keep their names and hearts while resting. Rename them from **My animals**.
 
-Select the products you want in barn storage, supply wheat in the feed bin, then choose **Start herd work**. This replaces the barn's old automatic output. Your saved stock and upgrades stay. Opening the preview or supplying wheat alone does not change production.
+Animals stay at their marked pen and cannot be killed or captured. You do not need to bring wild animals, find a breeding pair or raise offspring. Building authors mark five animal pens in the building editor by clicking the floor where each animal should stand. Face the direction it should look. Right click a marker to remove it.
 
-Choose **Courier feed** in herd review to keep 8, 16, 32 or 64 wheat in the bin, or turn it off for manual supply. You need the Warehouse Manager and employed townsfolk with Logistics enabled. Couriers collect wheat from real farm storage or the Ledger Desk for general storage, then bring it to barn storage. Spare carried wheat returns to general storage if the order is stopped or the bin fills.
+### Daily food and hearts
 
-Thalen feeds each family and raises one offspring at a time. Your breeding pair stays safe. The raised animal provides milk, wool, eggs, feathers or manure without being removed. Mosshorns provide heavy hides, Skrills provide red feathers, Tetrabirds provide dark feathers and Bluebirds provide blue feathers. Feather collection keeps the raised bird alive. Meat and hides use the raised animal. Each visit gathers one selected product. Other native animal drops are not added as bonus products.
+Each active animal eats one serving of its own food each day, beginning at dawn. Choose **Supply all** in the **Food bin** to transfer as much of that food as fits, up to 64 servings per type. Couriers can also supply it from farm output and town storage. Automatic deliveries keep eight of each active food by default. Choose a different target or turn deliveries off using the courier button. You need a Warehouse Manager and a townsfolk worker with Logistics enabled.
 
-Thalen carries each product to barn storage before it becomes available. Full storage pauses work. Leave room for the entire next product batch. Scaled, soft, dark, storm and prismic hides still need a supported source. Existing amounts remain available through **Collect all** and the Warehouse.
+Common animals eat early crops:
 
-One wheat feeds a family for six hours. Four feeding visits prepare a birth. Young animals need a day of tended growth before Thalen matures them, then another day before their first product. Keep feeding them. A full day without care pauses growth. Unavailable animals and towns without an online member also pause this growth. These timings are still being balanced.
+* Chicken: Corn, Farming Bench tier 2
+* Pig: Turnip, tier 3
+* Rabbit: Carrot, tier 2
+* Sheep: Lettuce, tier 1
+* Goat: Cauliflower, tier 3
 
-After moving breeding animals or troughs, use **Refresh** and **Update breeding pairs**. Keep raised animals inside their barn and near the correct floor. Core herds stay separate from Apprentice ranches, which provide food support only and never item output.
+Uncommon animals eat later crops:
+
+* Cow and Deer: Pumpkin, tier 4
+* Boar and Camel: Aubergine, tier 4
+* Tetrabird: Tomato, tier 5
+* Skrill: Chilli, tier 5
+
+Rare animals need the latest vegetables or meat:
+
+* Bear: Raw wildmeat
+* Mosshorn: Onion, tier 7
+* Moose and Armadillo: Potato, tier 7
+
+These tiers refer to the ordinary seed recipe at the Farming Bench. Wheat is not animal food.
+
+Feeding gives 20 affection. Use the interaction prompt on an animal to pet it for another 5 affection, once each day. Each 100 affection earns a heart, up to five hearts. Each heart adds 20% to resource yields over time. Naming, resting or moving an animal does not reset its daily care.
+
+### Animal resources
+
+Active, fed animals produce all their resources every six hours of loaded game time. Production speed upgrades shorten this interval. Hearts increase yields. Chickens and Skrills give eggs. Cows give beef, medium hide and milk. Sheep give wildmeat, light hide and wool. Tetrabirds give wildmeat and dark feathers. Armadillos give wildmeat and sturdy chitin. Other animals give their normal meat and hide. All animals slowly produce poop.
+
+Open **Resources** to see each product's stored amount and capacity, including products that are still empty, and collect supplies. Bring an empty bucket for each milk bucket you collect. Full storage pauses the next resource bundle until there is enough room for every item. Animals that are resting, waiting for food or outside loaded chunks do not produce. Animal products never consume or kill an owned animal.
+
+Apprentice ranch workplaces remain separate from the core Barn.
 
 ### Quests
 
@@ -50,7 +77,7 @@ Thalen wants a house for boots and sleep, not just straw and feed buckets by the
 
 Visit them after your friendship reaches each level to pick up the reward through dialogue.
 
-- **Friendship 25:** a **Rancher Kit**
+- **Friendship 25:** teaches your town the **Ranchhand's Bag** recipe.
 - **Friendship 50:** teaches you to craft **Growth Serum**
 - **Friendship 100:** teaches you to craft **Hunting Knife**
 
@@ -117,8 +144,3 @@ Times are in world hours. Most days follow the same rhythm; Sunday can include a
 - **16:30** — the town park
 - **18:00** — the barn
 - **20:00** — home
-
-
-### Shearing and fleece
-
-The Rancher shears only sheep raised by the town. Shearing removes their fleece and gathers wool for barn storage. Continued care lets the fleece grow back. Growth pauses when the herd is not simulated and stops after neglect. Returning fleece does not create extra wool; the Rancher must visit and shear again. Breeding sheep are kept safe.

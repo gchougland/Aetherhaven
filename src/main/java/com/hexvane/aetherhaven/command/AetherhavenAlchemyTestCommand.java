@@ -99,7 +99,7 @@ final class AetherhavenAlchemyTestCommand extends AbstractAsyncCommand {
         }
         var projectile=new Damage(new Damage.ProjectileSource(f.ref,f.ref),DamageCause.getAssetMap().getAsset("Environment"),10);
         DamageSystems.executeDamage(f.ref,store,projectile);require(projectile.isCancelled(),"Projectile blast ward failed");
-        var ordinary=new Damage(new Damage.EnvironmentSource("alchemy_fixture"),DamageCause.PHYSICAL,1);
+        var ordinary=new Damage(new Damage.EnvironmentSource("alchemy_fixture"),DamageCause.getAssetMap().getIndex("Physical"),1);
         DamageSystems.executeDamage(f.ref,store,ordinary);require(!ordinary.isCancelled(),"Ward incorrectly grants ordinary damage immunity");
         f.effects.addEffect(f.ref,EntityEffect.getAssetMap().getAsset("Poison_T3"),store);
         put(f.bag,1,List.of("Plant_Crop_Mushroom_Cap_Red","Plant_Crop_Mushroom_Glowing_Blue"));

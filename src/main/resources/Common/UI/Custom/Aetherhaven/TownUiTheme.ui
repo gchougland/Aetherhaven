@@ -6,6 +6,10 @@ $C = "../Common.ui";
 @Panel = PatchStyle(TexturePath: "../Common/ContainerFullPatch.png", Border: 16);
 @Inset = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 12);
 @Card = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 12);
+@CardLocked = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 12, Color: #888888);
 @CardHovered = PatchStyle(TexturePath: "../Common/InputBoxHovered.png", Border: 12);
 @CardPressed = PatchStyle(TexturePath: "../Common/InputBoxSelected.png", Border: 12);
 @Slot = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 8);
+
+@BarnCard = PatchStyle(TexturePath: "BarnPanel.png", Border: 8, Color: #253648);
+@BarnCardLocked = PatchStyle(TexturePath: "BarnPanel.png", Border: 8, Color: #30353d);

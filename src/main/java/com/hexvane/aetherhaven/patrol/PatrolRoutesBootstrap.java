@@ -50,6 +50,9 @@ public final class PatrolRoutesBootstrap {
         GuardNpcAttackerMemory.register(plugin.getEntityStoreRegistry());
         PatrolWandPlayerComponent.register(plugin.getEntityStoreRegistry());
         GuardPatrolState.register(plugin.getEntityStoreRegistry());
+        GuardSpoilsState.register(plugin.getEntityStoreRegistry());
+        GuardKillClaim.register(plugin.getEntityStoreRegistry());
+        plugin.getEntityStoreRegistry().registerSystem(new GuardSpoilsDrops());
         plugin.getEntityStoreRegistry().registerSystem(new PatrolWandPreviewSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new GuardPatrolSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new GuardFollowPlayerSystem(core));

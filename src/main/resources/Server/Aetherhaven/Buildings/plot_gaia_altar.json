@@ -8,14 +8,14 @@
   "selfBuildGameDays": 1.0,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Gaia_Altar",
   "plotAnchorOffset": [
-    5,
     0,
-    5
+    1,
+    0
   ],
   "managementBlockLocalPos": [
-    2,
-    1,
-    3
+    7,
+    0,
+    8
   ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1.0,
@@ -34,36 +34,36 @@
   ],
   "pois": [
     {
-      "localX": -3,
-      "localY": 0,
-      "localZ": -2,
-      "tags": [
-        "FUN",
-        "SIT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Temple_Emerald_Stool",
-      "interactionKind": "SIT"
-    },
-    {
-      "localX": 3,
-      "localY": 0,
-      "localZ": 2,
-      "tags": [
-        "FUN",
-        "SIT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Temple_Emerald_Stool",
-      "interactionKind": "SIT"
-    },
-    {
-      "localX": 0,
+      "localX": 2,
       "localY": -1,
-      "localZ": 2,
+      "localZ": 3,
       "tags": [
-        "WORK",
-        "workActivity:read"
+        "FUN",
+        "SIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Temple_Emerald_Stool",
+      "interactionKind": "SIT"
+    },
+    {
+      "localX": 8,
+      "localY": -1,
+      "localZ": 7,
+      "tags": [
+        "FUN",
+        "SIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Temple_Emerald_Stool",
+      "interactionKind": "SIT"
+    },
+    {
+      "localX": 5,
+      "localY": -2,
+      "localZ": 7,
+      "tags": [
+        "workActivity:read",
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Soil_Pathway",
@@ -72,9 +72,9 @@
       "interactionTargetYawDegrees": 1.5697932
     },
     {
-      "localX": -1,
-      "localY": -1,
-      "localZ": -2,
+      "localX": 4,
+      "localY": -2,
+      "localZ": 3,
       "tags": [
         "TOURIST_VISIT"
       ],
@@ -84,9 +84,9 @@
       "interactionTargetYawDegrees": -117.23249
     },
     {
-      "localX": -2,
-      "localY": -1,
-      "localZ": 2,
+      "localX": 3,
+      "localY": -2,
+      "localZ": 7,
       "tags": [
         "TOURIST_VISIT"
       ],
@@ -96,9 +96,9 @@
       "interactionTargetYawDegrees": -65.61196
     },
     {
-      "localX": 2,
-      "localY": -1,
-      "localZ": 0,
+      "localX": 7,
+      "localY": -2,
+      "localZ": 5,
       "tags": [
         "TOURIST_VISIT"
       ],
@@ -108,9 +108,9 @@
       "interactionTargetYawDegrees": 124.2118
     },
     {
-      "localX": 0,
-      "localY": 1,
-      "localZ": 0,
+      "localX": 5,
+      "localY": 0,
+      "localZ": 5,
       "tags": [],
       "capacity": 1,
       "blockTypeId": "Aetherhaven_Statue_Of_Gaia",
@@ -118,5 +118,22 @@
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_gaia_altar.displayName",
-  "styleId": "core"
+  "styleId": "core",
+  "frontFacing": "North",
+  "tags": [
+    "amenity",
+    "fun"
+  ],
+  "boundsLocal": {
+    "min": [
+      0,
+      -2,
+      0
+    ],
+    "max": [
+      10,
+      5,
+      10
+    ]
+  }
 }

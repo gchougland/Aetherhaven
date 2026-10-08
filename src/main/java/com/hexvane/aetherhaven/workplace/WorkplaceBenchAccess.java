@@ -70,7 +70,7 @@ public final class WorkplaceBenchAccess {
         entity.getPageManager().openCustomPage(ref,store,target.site().type()==TownsfolkWorkType.BUILDING
             ?new BuildingProjectsPage(player,target.town().getTownId(),target.site().id(),target.pos())
             :target.site().type()==TownsfolkWorkType.MINING
-            ?new ExcavationPage(player,target.town().getTownId(),target.site().id(),target.pos())
+            ?new MineshaftPlannerPage(player,target.town().getTownId(),target.site().id())
             :WorkplaceFood.supports(target.site().type())
             ?new FoodSitePage(player,target.town().getTownId(),target.site().id(),target.pos())
             :new WorkplaceOrdersPage(player,target.town().getTownId(),target.site().id(),target.pos()));

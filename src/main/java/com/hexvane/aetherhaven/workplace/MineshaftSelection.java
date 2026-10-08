@@ -55,7 +55,7 @@ public final class MineshaftSelection {
             case SOUTH -> z = (long) area.maxZ() - 3;
             case WEST -> x = (long) area.minX() + 2;
         }
-        int groundY = area.floorY() - 1 + (layout == ExcavationPlan.Layout.STAIRS_DOWN ? 2 : 0);
+        int groundY = area.floorY() - 1 + (layout == ExcavationPlan.Layout.DEEP_STAIRS_DOWN ? 7 : layout == ExcavationPlan.Layout.STAIRS_DOWN ? 2 : 0);
         return new Point(coordinate(x), groundY, coordinate(z));
     }
 
@@ -71,14 +71,16 @@ public final class MineshaftSelection {
             ExcavationPlan.Layout layout) {
         entrance(travel);
         int maximum = maximumLength(layout);
-        if (length < MINIMUM_LENGTH || length > maximum) {
+        boolean deep=layout==ExcavationPlan.Layout.DEEP_STAIRS_UP||layout==ExcavationPlan.Layout.DEEP_STAIRS_DOWN;
+        if(layout==ExcavationPlan.Layout.ROOM&&length>=MINIMUM_LENGTH&&length<=maximum)length=9;
+        if (length < (deep?9:MINIMUM_LENGTH) || length > maximum) {
             throw new IllegalArgumentException("Choose a tunnel length from " + MINIMUM_LENGTH + " to " + maximum + " blocks.");
         }
-        long floor = (long) groundY + 1 - (layout == ExcavationPlan.Layout.STAIRS_DOWN ? 2 : 0);
-        if (groundY < 0 || groundY >= 320 || floor < 0 || floor > 320 - WorkplaceArea.HEIGHT) {
+        long floor = (long) groundY + 1 - (layout == ExcavationPlan.Layout.DEEP_STAIRS_DOWN ? 7 : layout == ExcavationPlan.Layout.STAIRS_DOWN ? 2 : 0);
+        if (groundY < 0 || groundY >= 320 || floor < 0 || floor > 320 - (deep?11:layout==ExcavationPlan.Layout.STAIRS_UP||layout==ExcavationPlan.Layout.STAIRS_DOWN?6:WorkplaceArea.HEIGHT)) {
             throw new IllegalArgumentException("This tunnel is too high or too low in the world.");
         }
-        int halfWidth = layout == ExcavationPlan.Layout.BRANCHES ? 4 : 2;
+        int halfWidth = layout == ExcavationPlan.Layout.BRANCHES || layout == ExcavationPlan.Layout.ROOM ? 4 : 2;
         long minX = (long) x - halfWidth, maxX = (long) x + halfWidth + 1;
         long minZ = (long) z - halfWidth, maxZ = (long) z + halfWidth + 1;
         switch (travel) {
@@ -88,7 +90,7 @@ public final class MineshaftSelection {
             case WEST -> { minX = (long) x - length; maxX = (long) x + 3; }
         }
         return new WorkplaceArea(coordinate(minX), (int) floor, coordinate(minZ),
-            coordinate(maxX), coordinate(maxZ));
+            coordinate(maxX), coordinate(maxZ),deep?11:layout==ExcavationPlan.Layout.STAIRS_UP||layout==ExcavationPlan.Layout.STAIRS_DOWN?6:5);
     }
 
     private static int coordinate(long value) {

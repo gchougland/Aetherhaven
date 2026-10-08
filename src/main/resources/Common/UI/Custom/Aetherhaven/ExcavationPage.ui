@@ -2,9 +2,9 @@ $C = "../Common.ui";
 $T = "TownUiTheme.ui";
 $C.@PageOverlay { LayoutMode: Middle;
  $C.@DecoratedContainer { Anchor: (Width: 920, Height: 820);
-  #Title { Label #TitleText { Style: (...$C.@TitleStyle); } }
+  #Title { Label { Text: "MINESHAFT"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
   #Content { LayoutMode: Top; Padding: (Full: 24);
-   Label { Text: "PLAN A REAL MINESHAFT"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 19, RenderBold: true, TextColor: #dec68d); }
+   Label #SiteName { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 19, RenderBold: true, TextColor: #dec68d); }
    Label { Text: "Use the Building Staff's Plan mineshaft mode to choose ground just in front of the rock. Set the direction and length, then review the tunnel here. Digging starts one block ahead of that ground. You can plan through solid rock without reaching the far end."; Anchor: (Height: 72, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb); }
    Label #LayoutDescription { Anchor: (Height: 44, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
    Group { LayoutMode: Left; Anchor: (Height: 200, Bottom: 12);

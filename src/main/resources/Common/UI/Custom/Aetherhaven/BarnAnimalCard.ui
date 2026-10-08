@@ -1,0 +1,16 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; Anchor: (Width: 245, Height: 230); Padding: (Full: 14); Background: $T.@BarnCard;
+ Label #Title { Anchor: (Height: 23); Style: (...$C.@DefaultLabelStyle, FontSize: 16, RenderBold: true, HorizontalAlignment: Center, TextColor: #dec68d); }
+ Group { LayoutMode: Center; Anchor: (Height: 65);
+  Group { Anchor: (Width: 62, Height: 62);
+   AssetImage #Portrait { Anchor: (Full: 0); }
+   ItemIcon #FoodIcon { Anchor: (Width: 20, Height: 20, Top: 0, Right: 0); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+  }
+  AssetImage #Lock { AssetPath: "UI/Custom/padlock.png"; Anchor: (Width: 24, Height: 24, Left: 8); Visible: false; }
+ }
+ Group #Hearts { LayoutMode: Center; Anchor: (Height: 23); Visible: false; }
+ Label #Detail { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, HorizontalAlignment: Center, TextColor: #b7c9bb); }
+ Label #Info { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, HorizontalAlignment: Center, TextColor: #dec68d); }
+ $C.@SmallSecondaryTextButton #Primary { Anchor: (Height: 30); Text: "Choose"; }
+}

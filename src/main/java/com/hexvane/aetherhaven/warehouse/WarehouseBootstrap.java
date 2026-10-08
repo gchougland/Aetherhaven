@@ -11,6 +11,7 @@ public final class WarehouseBootstrap {
 
     public static void register(AetherhavenPlugin plugin) {
         WarehouseDeskBlock.register(plugin.getChunkStoreRegistry());
+        WarehouseSupplyLinkBlock.register(plugin.getChunkStoreRegistry());
         CourierTravelState.register(plugin.getEntityStoreRegistry());
         com.hexvane.aetherhaven.shopspot.ShopClerkState.register(plugin.getEntityStoreRegistry());
         com.hexvane.aetherhaven.workplace.ApprenticeWorkState.register(plugin.getEntityStoreRegistry());
@@ -29,11 +30,11 @@ public final class WarehouseBootstrap {
                 if (target == null) return null;
                 var world = ref.getStore().getExternalData().getWorld();
                 var block = ChunkSectionBlockUtil.blockType(world, target.x, target.y, target.z);
-                if (block == null || !WarehouseAccess.DESK_ITEM.equals(block.getId())) return null;
+                if (block == null || !(WarehouseAccess.DESK_ITEM.equals(block.getId())||WarehouseSupplyLink.ITEM.equals(block.getId()))) return null;
                 var manager = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
                 var town = manager.findTownContainingBlock(world.getName(), target.x, target.z);
                 if (town == null) {
-                    player.sendMessage(Message.raw("Place this desk inside your town's borders."));
+                    player.sendMessage(Message.raw("Place this block inside your town's borders."));
                     return null;
                 }
                 if (!WarehouseAccess.canBrowse(town, player.getUuid())) {

@@ -18,7 +18,7 @@ import java.util.UUID;
 public final class GuildResidentInvitation {
     private GuildResidentInvitation() {}
     public static Message invite(Store<EntityStore> store,TownRecord town,TownManager manager,AetherhavenPlugin plugin,
-            UUID player,Ref<EntityStore> ref) {
+            UUID player,Ref<EntityStore> playerRef,Ref<EntityStore> ref) {
         if(!town.hasMemberOrOwner(player)||!town.playerCanManageConstructions(player))return Message.raw("You cannot invite residents to this town.");
         var id=store.getComponent(ref,UUIDComponent.getComponentType());
         var identity=store.getComponent(ref,TownsfolkCharacterBinding.getComponentType());
@@ -30,6 +30,10 @@ public final class GuildResidentInvitation {
         var world=store.getExternalData().getWorld();
         var checkout=TownsfolkExistenceService.checkoutForCharacter(world,plugin,town.getTownId(),identity.getCharacterId());
         if(checkout==null)return Message.raw("This visitor's town record needs repair.");
+        var requirements=TouristMoveInRequirements.forNpc(plugin,store,ref);
+        if(requirements.isEmpty())return Message.raw("This visitor's move in requirements are unavailable.");
+        if(!TouristMoveInRequirements.removeAll(playerRef,store,requirements))
+            return Message.raw("Bring ").insert(TouristMoveInRequirements.itemsLabelMessage(requirements)).insert(Message.raw(" to invite this resident."));
         admit(town,id.getUuid(),identity.getCharacterId());
         checkout.setAssignmentKind(TownsfolkAssignmentKinds.TOURIST);
         TownsfolkPoolPersistence.save(world,plugin,TownsfolkPoolPersistence.getOrLoad(world,plugin));

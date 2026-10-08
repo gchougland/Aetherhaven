@@ -205,7 +205,7 @@ public final class CourierWorkService {
     private static boolean deskExists(World world,WarehouseBatch.Point point) {
         var type=ChunkSectionBlockUtil.blockType(world,point.x(),point.y(),point.z());return type!=null&&WarehouseAccess.DESK_ITEM.equals(type.getId());
     }
-    static Vector3d approach(World world,WarehouseBatch.Point point,Vector3d from,int attempt) {
+    public static Vector3d approach(World world,WarehouseBatch.Point point,Vector3d from,int attempt) {
         return approach(world,point,from,attempt,-1,0);
     }
     static Vector3d approach(World world,WarehouseBatch.Point point,Vector3d from,int attempt,int minDy,int maxDy) {

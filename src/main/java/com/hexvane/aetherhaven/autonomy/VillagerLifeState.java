@@ -21,6 +21,12 @@ public final class VillagerLifeState implements Component<EntityStore> {
     long visualUntilMs;
     long nextAmbientVoiceMs;
     long nextContextThoughtMs;
+    long bubbleUntilMs;
+    boolean beginBubble(long now) {
+        if (now < bubbleUntilMs) return false;
+        bubbleUntilMs = now + 3000;
+        return true;
+    }
     boolean readingLoop;
     String activeLoopGesture;
     long nextPonderVoiceMs;
@@ -56,6 +62,7 @@ public final class VillagerLifeState implements Component<EntityStore> {
         copy.visualUntilMs = visualUntilMs;
         copy.nextAmbientVoiceMs = nextAmbientVoiceMs;
         copy.nextContextThoughtMs = nextContextThoughtMs;
+        copy.bubbleUntilMs = bubbleUntilMs;
         copy.readingLoop = readingLoop;
         copy.activeLoopGesture = activeLoopGesture;
         copy.nextPonderVoiceMs = nextPonderVoiceMs;

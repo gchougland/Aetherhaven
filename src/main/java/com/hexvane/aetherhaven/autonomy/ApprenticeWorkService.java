@@ -62,7 +62,8 @@ public final class ApprenticeWorkService {
                         .thenComparingInt(b->orderPriority(town,b))
                         .thenComparingInt(b->b.cultivation()&&b.cropPlanted()?0:1)
                         .thenComparingDouble(b->position.distanceSquared(b.destination().x(),b.destination().y(),b.destination().z())))
-                    .filter(b->CourierWorkService.destinationReady(world,town,plugin,b)).findFirst().orElse(null);
+                    .filter(b->CourierWorkService.destinationReady(world,town,plugin,b))
+                    .filter(b->!preferSkilledWorker(store,town,b.nativeLoaded()?TownsfolkWorkType.SMELTING:plugin.getApprenticeRecipes().find(b.recipeId()).type(),id,progress,now,b.workplaceId())).findFirst().orElse(null);
             }
             if (!state.active) {
                 var food = town.getApprenticeWorkplaces().sites().stream()
@@ -70,15 +71,18 @@ public final class ApprenticeWorkService {
                     .filter(s -> retries.canTry(s.id(),now))
                     .filter(s -> { var claim=claims.get(s.id()); return claim==null || claim.until()<now || id.equals(claim.worker()); })
                     .filter(s -> FoodSiteService.inspect(world,s).ready())
+                    .filter(s -> !preferSkilledWorker(store,town,s.type(),id,progress,now,s.id()))
                     .min(FoodWorkSelection.order(progress,position.x,position.y,position.z)).orElse(null);
                 int batchPriority = batch==null ? Integer.MAX_VALUE : progress.priority(batch.nativeLoaded()?TownsfolkWorkType.SMELTING:plugin.getApprenticeRecipes().find(batch.recipeId()).type());
                 var excavation=town.getApprenticeWorkplaces().sites().stream()
                     .filter(s->retries.canTry(s.id(),now)&&excavationUsable(world,town,s,plugin,progress))
                     .filter(s->{var claim=claims.get(s.id());return claim==null||claim.until()<now||id.equals(claim.worker());})
+                    .filter(s->!preferSkilledWorker(store,town,s.type(),id,progress,now,s.id()))
                     .min(Comparator.comparingDouble(s->position.distanceSquared(s.area().minX(),s.area().floorY(),s.area().minZ()))).orElse(null);
                 var building=town.getApprenticeWorkplaces().sites().stream()
                     .filter(s->retries.canTry(s.id(),now)&&buildingUsable(world,town,s,progress))
                     .filter(s->{var claim=claims.get(s.id());return claim==null||claim.until()<now||id.equals(claim.worker());})
+                    .filter(s->!preferSkilledWorker(store,town,s.type(),id,progress,now,s.id()))
                     .min(Comparator.comparingDouble(s->position.distanceSquared(s.area().minX(),s.area().floorY(),s.area().minZ()))).orElse(null);
                 if(building!=null&&progress.priority(TownsfolkWorkType.BUILDING)<=batchPriority
                     &&(food==null||progress.priority(TownsfolkWorkType.BUILDING)<progress.priority(food.type()))
@@ -206,6 +210,28 @@ public final class ApprenticeWorkService {
         return current!=null&&current.canPerform(type,TownVillagerBinding.KIND_GUARD.equals(binding.getKind()),
             town.getPayroll().overdue(worker),store.getComponent(ref,DeathComponent.getComponentType())==null);
     }
+    private static boolean preferSkilledWorker(Store<EntityStore> store,TownRecord town,TownsfolkWorkType type,String worker,TownsfolkProgress current,long now,UUID workplace) {
+        // Do not preempt an attended job or transfer a miner's unfinished load to a smaller bag.
+        var site=town.getApprenticeWorkplaces().find(workplace);
+        if(site!=null&&site.existingExcavation()!=null&&!site.excavation().cargo().isEmpty())return false;
+        for(var row:town.getResidentNpcRecords()){
+            var identity=row.getTownsfolkIdentity();if(identity==null||row.getLastEntityUuid()==null||!TownAdmission.isMember(town,row.getLastEntityUuid()))continue;
+            String id=identity.getCharacterId();if(id.equalsIgnoreCase(worker))continue;
+            var progress=town.getTownsfolkProgress().get(id.toLowerCase(Locale.ROOT));
+            if(progress==null||progress.skill(type.skill)<=current.skill(type.skill)||!progress.canPerform(type,TownVillagerBinding.KIND_GUARD.equals(row.getKind()),town.getPayroll().overdue(id),!row.isPendingDawnRevival()))continue;
+            var ref=store.getExternalData().getRefFromUUID(row.getLastEntityUuid());if(ref==null||!ref.isValid()||store.getComponent(ref,DeathComponent.getComponentType())!=null)continue;
+            if(VillagerFollowPlayerSystem.shouldSkipAutonomy(store.getComponent(ref,VillagerFollowPlayerState.getComponentType()))
+                ||NpcSupportUtil.stateName(store,ref).contains("Interaction")||VillagerLifeSystem.ownsActivity(ref,store)
+                ||store.getComponent(ref,VillagerSeatExit.getComponentType())!=null)continue;
+            var courier=store.getComponent(ref,CourierTravelState.getComponentType());if(courier!=null&&courier.active)continue;
+            var work=store.getComponent(ref,ApprenticeWorkState.getComponentType());
+            if(work!=null&&(work.active||work.batch!=null||work.foodSite!=null||work.buildingSite!=null||work.excavationSite!=null||now<work.retryAt||!work.routeRetries.canTry(workplace,now)))continue;
+            var needs=store.getComponent(ref,VillagerNeeds.getComponentType());var autonomy=store.getComponent(ref,VillagerAutonomyState.getComponentType());
+            if(needs==null||needs.getHunger()<20||needs.getEnergy()<20||autonomy==null||autonomy.isFillingHunger()||autonomy.isFillingEnergy())continue;
+            return true;
+        }
+        return false;
+    }
     private static int orderPriority(TownRecord town,WarehouseBatch batch) {
         var site=town.getApprenticeWorkplaces().find(batch.workplaceId());
         if(site==null)return Integer.MAX_VALUE;
@@ -302,11 +328,7 @@ public final class ApprenticeWorkService {
     }
     private static boolean excavationUsable(World world,TownRecord town,ApprenticeWorkplace site,AetherhavenPlugin plugin,TownsfolkProgress progress) {
         if(site.type()!=TownsfolkWorkType.MINING||!progress.canPerform(TownsfolkWorkType.MINING,false,false,true)||site.excavation().id()==null)return false;
-        var plan=site.excavation();if(plan.pending())return true;
-        var plot=town.findPlotById(plan.mine());if(plot==null||ProductionStorageLocator.find(world,plot,System.currentTimeMillis())==null)return false;
-        if(!plan.cargo().isEmpty())return NativeExcavation.room(town,plugin,plan,plan.cargo());
-        return NativeExcavation.issue(world,town,site,progress.skill(TownsfolkSkill.MINING))==null
-            &&(plan.drops().isEmpty()||NativeExcavation.room(town,plugin,plan,plan.drops()));
+        return NativeExcavation.workIssue(world,town,site,plugin,progress.skill(TownsfolkSkill.MINING))==null;
     }
     private static boolean tickExcavation(float dt,Ref<EntityStore> ref,Store<EntityStore> store,CommandBuffer<EntityStore> buffer,
         NPCEntity npc,VillagerNeeds needs,VillagerAutonomyState autonomy,TownRecord town,TownManager manager,AetherhavenPlugin plugin,
@@ -317,26 +339,47 @@ public final class ApprenticeWorkService {
         var plan=site.excavation();
         if(plan.pending()) {buffer.run(st->{if(NativeExcavation.settle(world,site))manager.updateTown(town);});return true;}
         var currentPosition=store.getComponent(ref,TransformComponent.getComponentType()).getPosition();
-        var feet=new WarehouseBatch.Point((int)Math.floor(currentPosition.x),(int)Math.floor(currentPosition.y),(int)Math.floor(currentPosition.z));
-        boolean hasCargo=!plan.cargo().isEmpty(),delivery=hasCargo&&worker.equals(plan.carrier())
-            &&(state.active&&state.excavationCarrying||ExcavationPlan.withinPickupReach(feet,plan.cargoPoint())),pickup=hasCargo&&!delivery;
-        boolean fitting=!hasCargo&&plan.next()==null&&plan.nextFitting()!=null;
-        var target=pickup?plan.cargoPoint():delivery?ProductionStorageLocator.find(world,town.findPlotById(plan.mine()),now):fitting?plan.nextFitting().point():plan.next().point();
-        if(target==null){stop(ref,npc,buffer,state);return false;}
-        if(!hasCargo) {
-            if(state.furnishingEquipment==null||!site.id().equals(state.furnishingSite)||!site.area().equals(state.furnishingArea)||now>=state.nextFurnishingCheck) {
-                state.furnishingEquipment=WorkplaceEquipment.scan(world,site.area());state.furnishingSite=site.id();state.furnishingArea=site.area();state.nextFurnishingCheck=now+1000;
+        var feet=ExcavationApproach.feet(currentPosition);
+        int miningSkill=progress.skill(TownsfolkSkill.MINING);plan.carryLevel(miningSkill);plan.returnLegacyDelivery();
+        if(plan.next()==null&&plan.nextFitting()==null&&!plan.cargo().isEmpty()&&worker.equals(plan.carrier())){
+            var base=town.getApprenticeWorkplaces().mineBase(site);
+            for(var next:town.getApprenticeWorkplaces().tunnels(base.id())) {
+                var nextClaim=claims.get(next.id());
+                if(next==site||nextClaim!=null&&nextClaim.until()>now&&!worker.equals(nextClaim.worker()))continue;
+                if(next.minePrerequisiteId()!=null&&!next.minePrerequisiteId().equals(site.id())&&NativeExcavation.workIssue(world,town,next,plugin,miningSkill)!=null)continue;
+                if(NativeExcavation.issue(world,town,next,miningSkill)==null&&plan.continueLoad(next.excavation(),worker)){
+                    claims.remove(site.id());claims.put(next.id(),new Claim(worker,now+2000));stop(ref,npc,buffer,state);state.excavationSite=next.id();manager.updateTown(town);return true;
+                }
             }
-            if(state.furnishingEquipment.requirement("Workbench",1)!=null){stop(ref,npc,buffer,state);state.retryAt=now+2000;return false;}
-            if(!fitting&&plan.drops().isEmpty()) {if(!plan.prepare(NativeExcavation.drops(plan.next()))){stop(ref,npc,buffer,state);state.retryAt=now+2000;return false;}manager.updateTown(town);}
-            if(!fitting&&!NativeExcavation.room(town,plugin,plan,plan.drops())){stop(ref,npc,buffer,state);return false;}
+        }
+        boolean hasCargo=!plan.cargo().isEmpty();
+        boolean ownsCargo=hasCargo&&worker.equals(plan.carrier())&&(state.active&&state.excavationCarrying||ExcavationPlan.withinPickupReach(feet,plan.cargoPoint()));
+        String digIssue=NativeExcavation.issue(world,town,site,miningSkill);
+        if((!hasCargo||ownsCargo)&&!plan.loadReady()&&plan.next()!=null&&digIssue==null&&!plan.dropsPrepared()){
+            if(!plan.prepareNext(()->NativeExcavation.drops(plan.next()))){stop(ref,npc,buffer,state);state.retryAt=now+2000;return false;}
+            manager.updateTown(town);
+        }
+        boolean delivery=ownsCargo&&(plan.loadReady()||digIssue!=null);
+        boolean pickup=hasCargo&&!ownsCargo;
+        boolean movingCargo=pickup||delivery;
+        boolean fitting=!movingCargo&&plan.next()==null&&plan.nextFitting()!=null;
+        var target=pickup?plan.cargoPoint()
+            :delivery?NativeExcavation.bufferPoint(town,site)
+            :fitting?plan.nextFitting().point():plan.next()==null?null:plan.next().point();
+        if(target==null){
+            stop(ref,npc,buffer,state);return false;
         }
         var position=store.getComponent(ref,TransformComponent.getComponentType()).getPosition();
-        if(state.active&&(!Objects.equals(state.excavationPlan,plan.id())||state.excavationDelivery!=delivery||state.excavationPickup!=pickup||!target.equals(state.excavationTarget))) {stop(ref,npc,buffer,state);return true;}
+        if(state.active&&(!Objects.equals(state.excavationPlan,plan.id())||state.excavationDelivery!=delivery||state.excavationPickup!=pickup||!target.equals(state.excavationTarget))) {stop(ref,npc,buffer,state);state.excavationSite=site.id();return true;}
         if(!state.active) {
+            if(!movingCargo)NativeExcavation.repairFloors(world,town,site,feet);
             // Reach the reviewed floor, including the preceding higher step when digging down.
-            var feetTarget=hasCargo?target:new WarehouseBatch.Point(target.x(),plan.floorAt(target),target.z());
-            var approach=CourierWorkService.approach(world,feetTarget,position,state.routeRetries.approachAttempt(site.id(),now),-1,hasCargo?0:1);
+            var feetTarget=movingCargo?target:new WarehouseBatch.Point(target.x(),plan.floorAt(target),target.z());
+            var approach=delivery?CourierWorkService.approach(world,feetTarget,position,state.routeRetries.approachAttempt(site.id(),now),-1,0)
+                :ExcavationApproach.choose(plan,target,position,state.routeRetries.approachAttempt(site.id(),now),cell->{
+                    if(!CourierWorkService.loaded(world,cell)||!VillagerBlockUtil.isNpcStandColumn(world,cell.x(),cell.y(),cell.z()))return null;
+                    return new Vector3d(cell.x()+.5,VillagerBlockUtil.resolveFeetYForStandCell(world,cell.x(),cell.y(),cell.z()),cell.z()+.5);
+                },candidate->NativeExcavation.clearReach(world,candidate,target)&&(!pickup||ExcavationPlan.withinPickupReach(ExcavationApproach.feet(candidate),target))&&(!fitting||!ExcavationFittings.RAIL.equals(plan.nextFitting().item())||ExcavationApproach.besideRail(target,candidate)));
             if(approach==null){state.routeRetries.failed(site.id(),now);stop(ref,npc,buffer,state);state.retryAt=now+1000;return false;}
             CourierWorkService.interrupt(ref,store,npc,buffer);
             var registry=AetherhavenWorldRegistries.getOrCreatePoiRegistry(world,plugin);
@@ -346,16 +389,25 @@ public final class ApprenticeWorkService {
             state.excavationPlan=plan.id();state.excavationTarget=target;state.excavationDelivery=delivery;state.excavationPickup=pickup;
             if(delivery){state.excavationCarrying=true;String item=plan.cargo().keySet().iterator().next();buffer.run(st->{if(ref.isValid())VillagerLifeProps.carry(ref,item,st);});}
         }
-        claims.put(site.id(),new Claim(worker,now+1500));
-        if(delivery){plan.trackCarrier(worker,new WarehouseBatch.Point((int)Math.floor(position.x),(int)Math.floor(position.y),(int)Math.floor(position.z)));if(now>=state.nextSave){manager.updateTown(town);state.nextSave=now+2000;}}
-        if(!CourierWorkService.clearApproach(world,state.approach)||now-state.beganAt>30000&&!state.working) {claims.remove(site.id());state.routeRetries.failed(site.id(),now);stop(ref,npc,buffer,state);state.retryAt=now+1000;return false;}
+        claims.put(site.id(),new Claim(worker,now+10000));
+        if(ownsCargo){plan.trackCarrier(worker,new WarehouseBatch.Point((int)Math.floor(position.x),(int)Math.floor(position.y),(int)Math.floor(position.z)));if(now>=state.nextSave){manager.updateTown(town);state.nextSave=now+2000;}}
+        if(!CourierWorkService.clearApproach(world,state.approach)||now-state.beganAt>30000&&!state.working) {
+            state.routeRetries.failed(site.id(),now);stop(ref,npc,buffer,state);
+            // Try another reachable stand with the same miner before handing the job away.
+            if(state.routeRetries.approachAttempt(site.id(),now)<4){state.excavationSite=site.id();state.retryAt=0;return true;}
+            claims.remove(site.id());state.retryAt=now+1000;return false;
+        }
         if(store.getComponent(ref,com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType())!=null)return true;
-        if(!CourierWorkService.arrived(position,state.approach)) {
+        boolean rail=fitting&&ExcavationFittings.RAIL.equals(plan.nextFitting().item());
+        if(!(movingCargo?CourierWorkService.arrived(position,state.approach):ExcavationApproach.arrived(plan,target,position,state.approach)
+            &&(!rail||ExcavationApproach.besideRail(target,position))&&NativeExcavation.clearReach(world,position,target))) {
             if(state.working)stopVisual(ref,buffer,state);
-            npc.setLeashPoint(new Vector3d(state.approach));VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
+            npc.setLeashPoint(new Vector3d(state.approach));
+            if(rail||plan.layout()==ExcavationPlan.Layout.ROOM)NpcSupportUtil.setState(ref,com.hexvane.aetherhaven.AetherhavenConstants.NPC_STATE_AUTONOMY_POI,"Fitting",buffer);
+            else VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
             VillagerDoorUtil.tryOpenDoorsTowardLeash(world,position,state.approach,null);buffer.putComponent(ref,NPCEntity.getComponentType(),npc);return true;
         }
-        if(!state.working){state.beganAt=now;state.routeRetries.succeeded(site.id());}
+        if(!state.working)state.beganAt=now;
         state.working=true;NpcStandStill.hold(ref,store,npc,state.approach,buffer);
         PoiAutonomyVisuals.applyBodyYaw(ref,store,buffer,(float)(Math.atan2(target.x()+.5-position.x,target.z()+.5-position.z)+Math.PI));
         if(!pickup&&now>=state.nextVisual) {
@@ -367,32 +419,49 @@ public final class ApprenticeWorkService {
                 VillagerWorkVisuals.tickHit(ref,store,buffer,npc,visual,TownVillagerBinding.KIND_MINER,now,0);
             }
         }
-        if(!hasCargo)plan.attend(dt,true,com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,TownsfolkSkill.MINING,plugin.getProfessionKits()));
-        boolean complete=hasCargo?now-state.beganAt>=1000:plan.work()>=(fitting?3:NativeExcavation.duration(plan.next()));
+        if(!movingCargo)plan.attend(dt,true,com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,TownsfolkSkill.MINING,plugin.getProfessionKits()));
+        boolean complete=movingCargo?now-state.beganAt>=1000:plan.work()>=(fitting?3:NativeExcavation.duration(plan.next()));
         if(complete) {
             var planId=plan.id();var standing=new Vector3d(state.approach);
+            stop(ref,npc,buffer,state);
+            if(!delivery){state.excavationSite=site.id();state.retryAt=0;}
+            else state.retryAt=now+500;
+            long generation=state.excavationGeneration;
             buffer.run(st->{
+                var owner=claims.get(site.id());
+                if(owner==null||!worker.equals(owner.worker())||state.excavationGeneration!=generation)return;
                 var identity=ref.isValid()?st.getComponent(ref,TownsfolkCharacterBinding.getComponentType()):null;
                 var current=identity==null?null:town.getTownsfolkProgress().get(identity.getCharacterId().toLowerCase(Locale.ROOT));
                 var binding=ref.isValid()?st.getComponent(ref,TownVillagerBinding.getComponentType()):null;
                 var actual=ref.isValid()?st.getComponent(ref,TransformComponent.getComponentType()):null;
                 if(actual==null||binding==null||current==null||TownVillagerBinding.KIND_GUARD.equals(binding.getKind())||town.getPayroll().overdue(worker)
                     ||st.getComponent(ref,DeathComponent.getComponentType())!=null||!current.canPerform(TownsfolkWorkType.MINING,false,false,true)
-                    ||town.getApprenticeWorkplaces().find(site.id())!=site||!planId.equals(plan.id())||!CourierWorkService.arrived(actual.getPosition(),standing)
+                    ||town.getApprenticeWorkplaces().find(site.id())!=site||!planId.equals(plan.id())
+                    ||!(movingCargo?CourierWorkService.arrived(actual.getPosition(),standing):ExcavationApproach.arrived(plan,target,actual.getPosition(),standing))
                     ||!TownEconomyPresence.hasMemberHere(store,town))return;
-                boolean changed=pickup?plan.pickup(planId,worker,new WarehouseBatch.Point((int)Math.floor(actual.getPosition().x),(int)Math.floor(actual.getPosition().y),(int)Math.floor(actual.getPosition().z)))
-                    :delivery?worker.equals(plan.carrier())&&NativeExcavation.deliver(world,town,plugin,site,target)
-                    :fitting?plan.nextFitting()!=null&&target.equals(plan.nextFitting().point())&&WorkplaceEquipment.scan(world,site.area()).requirement("Workbench",1)==null&&NativeExcavation.placeFitting(world,town,site,actual.getPosition())
-                    :NativeExcavation.room(town,plugin,plan,plan.drops())&&WorkplaceEquipment.scan(world,site.area()).requirement("Workbench",1)==null
-                        &&NativeExcavation.excavate(world,town,site,current.skill(TownsfolkSkill.MINING),new WarehouseBatch.Point((int)Math.floor(actual.getPosition().x),(int)Math.floor(actual.getPosition().y),(int)Math.floor(actual.getPosition().z)),()->manager.updateTown(town));
+                if(!movingCargo&&(!NativeExcavation.clearReach(world,actual.getPosition(),target)
+                    ||!fitting&&(plan.next()==null||!target.equals(plan.next().point()))))return;
+                var actualFeet=ExcavationApproach.feet(actual.getPosition());
+                var body=st.getComponent(ref,com.hypixel.hytale.server.core.modules.entity.component.BoundingBox.getComponentType());
+                int completedBlocks=delivery&&!plan.haulingOutput()?plan.cargoWork():0;
+                boolean changed=pickup?plan.pickup(planId,worker,actualFeet)
+                    :delivery?worker.equals(plan.carrier())&&plan.deposit(planId)
+                    :fitting?plan.nextFitting()!=null&&target.equals(plan.nextFitting().point())&&NativeExcavation.placeFitting(world,town,site,actual.getPosition())
+                    :NativeExcavation.excavate(world,town,site,current.skill(TownsfolkSkill.MINING),actual.getPosition(),body==null?null:body.getBoundingBox(),()->manager.updateTown(town));
                 if(changed) {
-                    // Delivery requires confirmed excavation and consumes that block's saved cargo once.
-                    TownsfolkMastery.completed(current,TownsfolkMastery.Work.MINING_DELIVERY,delivery);
+                    state.routeRetries.succeeded(site.id());
+                    // Award each confirmed block once on base deposit, never again on core delivery.
+                    if(completedBlocks>0)current.earnMasteryXp((long)completedBlocks*TownsfolkMastery.Work.MINING_DELIVERY.xp);
+                    if(delivery)town.getWarehouse().markProductionWithdrawal();
                     manager.updateTown(town);
+                }else if(!movingCargo)state.routeRetries.failed(site.id(),now);
+                if(delivery) {
+                    if(changed&&NativeExcavation.workIssue(world,town,site,plugin,current.skill(TownsfolkSkill.MINING))==null) {
+                        state.excavationSite=site.id();state.retryAt=0;
+                        claims.put(site.id(),new Claim(worker,now+10000));
+                    }else claims.remove(site.id(),owner);
                 }
             });
-            if(delivery)claims.remove(site.id());else claims.put(site.id(),new Claim(worker,now+2000));
-            stop(ref,npc,buffer,state);state.retryAt=now+500;
         }else if(now>=state.nextSave){manager.updateTown(town);state.nextSave=now+2000;}
         return true;
     }
@@ -524,6 +593,7 @@ public final class ApprenticeWorkService {
     }
     private static void stop(Ref<EntityStore> ref,NPCEntity npc,CommandBuffer<EntityStore> buffer,ApprenticeWorkState state) {
         if(state==null)return;
+        state.excavationGeneration++;
         state.foodSite=null;state.excavationSite=null;state.buildingSite=null;state.buildingTarget=null;
         if(!state.active)return;
         if(state.working||state.excavationCarrying)stopVisual(ref,buffer,state);

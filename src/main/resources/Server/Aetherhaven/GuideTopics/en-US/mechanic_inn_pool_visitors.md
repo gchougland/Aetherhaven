@@ -22,6 +22,10 @@ The inn also includes a **town records shelf** for needs, invites, and gift hist
 
 A villager with a finished **workplace** plot assigned on the management block counts as a resident for taxes and schedules. Visitors at the inn are guests until you build their job plot and assign them.
 
+## Guest Book
+
+At Town Level 3, buy the Guest Book through Corin's **Building Upgrades** for **100 treasury gold**. Its dialogue option appears after unlocking it. The book shows only available villagers, ordered by required Town Level. Each invitation costs **50 treasury gold** and requests the next free morning guest spot.
+
 ## Debugging
 
 If the inn's visitors do not appear or look wrong, try running **`/ah villager fixinn`** (see **Commands** under Mechanics).

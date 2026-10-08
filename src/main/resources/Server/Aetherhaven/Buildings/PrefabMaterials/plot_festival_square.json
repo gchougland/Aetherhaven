@@ -3,10 +3,6 @@
   "prefabPath": "Festivals/Festival_Square.prefab.json",
   "materials": [
     {
-      "resourceTypeId": "Soils",
-      "count": 4500
-    },
-    {
       "itemId": "Rock_Stone_Cobble",
       "count": 410
     },

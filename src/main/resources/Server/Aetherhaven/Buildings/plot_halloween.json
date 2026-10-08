@@ -1,12 +1,12 @@
 {
   "id": "plot_halloween",
-  "displayName": "Pumpkin Shelter",
-  "description": "A simple shelter for Jack Hollow and his curious games.",
-  "prefabPath": "Halloween_Shelter.prefab.json",
+  "displayName": "Spook House",
+  "description": "A crooked house for Jack Hollow and his curious games.",
+  "prefabPath": "Spook_House.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [
     0,
-    1,
+    0,
     0
   ],
   "rotationYaw": "None",
@@ -14,27 +14,31 @@
   "styleId": "core",
   "boundsLocal": {
     "min": [
-      -3,
-      -1,
-      -3
+      -10,
+      0,
+      -5
     ],
     "max": [
-      3,
-      4,
-      3
+      10,
+      13,
+      5
     ]
   },
   "managementBlockLocalPos": [
-    -2,
+    2,
     1,
-    2
+    3
   ],
   "selfBuildGameDays": 1.0,
   "treasuryGoldCoinCost": 25,
   "materials": [
     {
       "resourceTypeId": "Wood_All",
-      "count": 80
+      "count": 750
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 110
     }
   ],
   "tags": [
@@ -42,18 +46,17 @@
   ],
   "pois": [
     {
-      "localX": 0,
-      "localY": 0,
+      "localX": -5,
+      "localY": 1,
       "localZ": 0,
       "tags": [
         "WORK",
-        "workActivity:leisure"
+        "workActivity:read"
       ],
       "capacity": 1,
-      "blockTypeId": "Wood_Hardwood_Beam",
+      "blockTypeId": "Wood_Deadwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetYawDegrees": 180,
-      "equipmentProfileId": "work_bard",
+      "interactionTargetYawDegrees": 90,
       "workResidentKind": "halloween"
     }
   ]

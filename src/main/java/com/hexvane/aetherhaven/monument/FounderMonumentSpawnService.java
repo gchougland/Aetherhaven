@@ -2,28 +2,24 @@ package com.hexvane.aetherhaven.monument;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.cosmetics.PlayerSkinModelExporter;
 import com.hexvane.aetherhaven.plot.FounderMonumentBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
-import com.hypixel.hytale.server.core.asset.type.model.config.ModelAttachment;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.shape.Box;
-import com.hypixel.hytale.logger.HytaleLogger;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.PlayerSkin;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
-import com.hypixel.hytale.server.core.cosmetics.CosmeticsModule;
 import com.hypixel.hytale.server.core.entity.Frozen;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.ActiveAnimationComponent;
@@ -35,27 +31,21 @@ import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
+import com.hypixel.hytale.server.core.modules.entity.player.PlayerSkinComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Spawns a frozen decorative statue whose mesh matches the placer's cosmetics. Not an NPC, so boot never rebuilds
- * an Elder role for it. {@link CosmeticsModule#createModel(PlayerSkin)} only validates the skin and loads the base
- * {@code Player} asset — it does not attach clothing; {@link PlayerSkinModelExporter} resolves the full attachment
- * list from the registry. Stone uses only the two packaged statue textures so join never has to send generated
- * Common files.
+ * Spawns a frozen decorative entity using Hytale's native player skin rendering. The normal Player model
+ * supplies the bounds; PlayerSkinComponent sends the saved appearance directly to the client, exactly as for players.
+ * No cosmetic meshes or textures are generated, substituted or assembled by Aetherhaven.
  */
 public final class FounderMonumentSpawnService {
-    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final String DETACHED_FACE_MODEL =
-        "Characters/Body_Attachments/Faces/Player_Face_Detached.blockymodel";
-
     private FounderMonumentSpawnService() {}
 
     /**
@@ -69,10 +59,10 @@ public final class FounderMonumentSpawnService {
         return scale;
     }
 
-    /** Stone player-body fallback used before dynamic cosmetics are restored, or when persisted skin data is invalid. */
+    /** Normal Player model for bounds and for the fallback when saved appearance data is missing. */
     @Nullable
     public static Model buildFallbackModel() {
-        ModelAsset asset = ModelAsset.getAssetMap().getAsset(AetherhavenConstants.FOUNDER_MONUMENT_STATUE_MODEL_ID);
+        ModelAsset asset = ModelAsset.getAssetMap().getAsset("Player");
         return asset != null ? toStaticModel(Model.createScaledModel(asset, 1.0f, null, null, true)) : null;
     }
 
@@ -102,125 +92,16 @@ public final class FounderMonumentSpawnService {
         );
     }
 
-    /**
-     * Rebuilds the monument model from a skin (full cosmetics from registry + stone texture). Used when spawning and
-     * when restoring after chunk load.
-     *
-     * @return null if the skin is invalid or attachments cannot be resolved
-     */
-    @Nullable
-    public static Model buildMonumentModel(@Nonnull PlayerSkin skin) {
-        CosmeticsModule cos = CosmeticsModule.get();
-        try {
-            cos.validateSkin(skin);
-        } catch (CosmeticsModule.InvalidSkinException e) {
-            LOGGER.atWarning().withCause(e).log("Founder monument: invalid player skin");
-            return null;
-        } catch (RuntimeException e) {
-            // CosmeticsModule.isValidTexture NPEs when a registry part has a null textures map (seen after Update 6
-            // for some persisted founder skins). Treat that as unusable cosmetics and let the caller use the stone
-            // fallback instead of killing the world task queue.
-            LOGGER.atWarning().withCause(e).log("Founder monument: cosmetics validation failed");
-            return null;
-        }
-        ModelAttachment[] skinAttachments;
-        try {
-            skinAttachments = PlayerSkinModelExporter.toModelAttachments(skin, cos.getRegistry());
-        } catch (RuntimeException e) {
-            LOGGER.atWarning().withCause(e).log("Founder monument: failed to resolve skin attachments");
-            return null;
-        }
-        if (skinAttachments.length == 0) {
-            LOGGER.atWarning().log("Founder monument: skin resolved to no attachments");
-            return null;
-        }
-        return buildStoneAttachmentModel(skinAttachments);
+    /** Copies the appearance without NPC export rules, texture changes or cosmetic substitutions. */
+    @Nonnull
+    public static PlayerSkinComponent createStatueSkin(@Nonnull PlayerSkin skin) {
+        return new PlayerSkinComponent(new PlayerSkin(skin));
     }
 
-    /**
-     * Builds a transient stone preview from a configured villager model asset. The base player mesh is supplied by the
-     * dedicated statue model, so duplicate Player.blockymodel attachments are omitted.
-     */
-    @Nullable
-    public static Model buildStonePreviewModel(@Nonnull ModelAsset appearanceAsset) {
-        ModelAttachment[] attachments = appearanceAsset.getDefaultAttachments();
-        if (attachments == null) {
-            attachments = new ModelAttachment[0];
-        } else {
-            attachments = Arrays.stream(attachments)
-                .filter(attachment -> !"Characters/Player.blockymodel".equals(attachment.getModel()))
-                .toArray(ModelAttachment[]::new);
-        }
-        if (!"Characters/Player.blockymodel".equals(appearanceAsset.getModel())) {
-            return buildStoneModel(
-                appearanceAsset,
-                appearanceAsset.getModel(),
-                appearanceAsset.getTexture(),
-                attachments
-            );
-        }
-        return buildStoneAttachmentModel(attachments);
-    }
-
-    @Nullable
-    private static Model buildStoneAttachmentModel(@Nonnull ModelAttachment[] attachments) {
-        ModelAsset statueAsset = ModelAsset.getAssetMap().getAsset(AetherhavenConstants.FOUNDER_MONUMENT_STATUE_MODEL_ID);
-        if (statueAsset == null) {
-            LOGGER.atWarning()
-                .log("Founder monument: missing model asset %s", AetherhavenConstants.FOUNDER_MONUMENT_STATUE_MODEL_ID);
-            return null;
-        }
-        ModelAttachment[] withoutIntegratedFace = Arrays.stream(attachments)
-            .filter(attachment -> !DETACHED_FACE_MODEL.equals(attachment.getModel()))
-            .toArray(ModelAttachment[]::new);
-        return buildStoneModel(
-            statueAsset,
-            AetherhavenConstants.FOUNDER_MONUMENT_STATUE_BODY_MODEL,
-            statueAsset.getTexture(),
-            withoutIntegratedFace
-        );
-    }
-
-    @Nullable
-    private static Model buildStoneModel(
-        @Nonnull ModelAsset templateAsset,
-        @Nonnull String modelPath,
-        @Nonnull String baseTexture,
-        @Nonnull ModelAttachment[] attachments
-    ) {
-        Model template = Model.createScaledModel(templateAsset, 1.0f, null, null, true);
-        FounderMonumentStoneTextures.Prepared stone;
-        try {
-            stone = FounderMonumentStoneTextures.prepare(baseTexture, attachments);
-        } catch (RuntimeException e) {
-            LOGGER.atWarning().withCause(e).log("Founder monument: failed to prepare packaged stone textures");
-            return null;
-        }
-        Model merged = new Model(
-            template.getModelAssetId(),
-            safePersistScale(template.getScale()),
-            template.getRandomAttachmentIds(),
-            stone.attachments(),
-            template.getBoundingBox(),
-            modelPath,
-            stone.baseTexture(),
-            null,
-            null,
-            template.getEyeHeight(),
-            template.getCrouchOffset(),
-            template.getSittingOffset(),
-            template.getSleepingOffset(),
-            null,
-            template.getCamera(),
-            template.getLight(),
-            template.getParticles(),
-            template.getTrails(),
-            template.getPhysicsValues(),
-            template.getDetailBoxes(),
-            template.getPhobia(),
-            template.getPhobiaModelAssetId()
-        );
-        return toStaticModel(merged);
+    /** Builds a transient preview using the configured villager's unchanged appearance. */
+    @Nonnull
+    public static Model buildStatuePreviewModel(@Nonnull ModelAsset appearanceAsset) {
+        return toStaticModel(Model.createScaledModel(appearanceAsset, 1.0f, null, null, true));
     }
 
     /**
@@ -239,14 +120,14 @@ public final class FounderMonumentSpawnService {
         @Nonnull String displayNameForLabel,
         @Nonnull Rotation3f rotation
     ) {
-        Model monumentModel = buildMonumentModel(skin);
+        Model monumentModel = buildFallbackModel();
         if (monumentModel == null) {
             return null;
         }
         return spawnFounderStatue(
             world,
             store,
-            new Vector3d(blockX + 0.5, blockY + 1.05, blockZ + 0.5),
+            new Vector3d(blockX + 0.5, blockY + 1.0, blockZ + 0.5),
             rotation,
             skin,
             displayNameForLabel,
@@ -255,8 +136,8 @@ public final class FounderMonumentSpawnService {
     }
 
     /**
-     * Same spawn as placing a monument. Uses the player's saved clothing when the skin is valid, otherwise the stone
-     * body so a statue still appears.
+     * Same spawn as placing a monument. Restores the saved native player skin, or the normal Player fallback
+     * if appearance data is missing.
      */
     @Nullable
     public static UUID spawnStatueLikePlace(
@@ -283,7 +164,7 @@ public final class FounderMonumentSpawnService {
         return spawnFounderStatue(
             world,
             store,
-            new Vector3d(blockX + 0.5, blockY + 1.05, blockZ + 0.5),
+            new Vector3d(blockX + 0.5, blockY + 1.0, blockZ + 0.5),
             rotation,
             skin,
             displayNameForLabel,
@@ -292,7 +173,7 @@ public final class FounderMonumentSpawnService {
     }
 
     /**
-     * Spawns a statue at an exact world position using a model built off the world thread. Saved
+     * Spawns a statue at an exact world position using the normal player model and native skin component. Saved
      * {@link PersistentModel} stays {@code Player} so the next boot does not compile a second mesh.
      */
     @Nullable
@@ -311,6 +192,9 @@ public final class FounderMonumentSpawnService {
         holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(pos, rotation));
         holder.addComponent(HeadRotation.getComponentType(), new HeadRotation(rotation));
         holder.addComponent(ModelComponent.getComponentType(), new ModelComponent(monumentModel));
+        if (skin != null) {
+            holder.addComponent(PlayerSkinComponent.getComponentType(), createStatueSkin(skin));
+        }
         holder.addComponent(PersistentModel.getComponentType(), toPersistentModel(monumentModel));
         holder.ensureComponent(ActiveAnimationComponent.getComponentType());
         holder.addComponent(FounderMonumentStatueSkin.getComponentType(), storedSkin);
@@ -360,10 +244,10 @@ public final class FounderMonumentSpawnService {
         );
     }
 
-    /** Pedestal block under a statue spawned at {@code (block + 0.5, blockY + 1.05, block + 0.5)}. */
+    /** Pedestal block under a statue spawned at {@code (block + 0.5, blockY + 1.0, block + 0.5)}. */
     @Nonnull
     public static Vector3i pedestalBlockFromStatuePosition(double x, double y, double z) {
-        return new Vector3i((int) Math.floor(x), (int) Math.round(y - 1.05), (int) Math.floor(z));
+        return new Vector3i((int) Math.floor(x), (int) Math.round(y - 1.0), (int) Math.floor(z));
     }
 
     @Nullable

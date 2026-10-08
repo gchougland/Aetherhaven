@@ -16,7 +16,7 @@ public final class BuildingOrders {
     public String add(long expected,UUID plot,UUID author) {
         if(expected!=revision)return "The project queue changed. Review it again.";
         if(plot==null||author==null)return "Choose a construction project.";
-        if(orders.size()>=32)return "This yard already has 32 queued projects.";
+        if(orders.size()>=35)return "This yard already has 35 queued projects.";
         if(orders.stream().anyMatch(o->o.plot().equals(plot)))return "This project is already queued here.";
         orders.add(new Order(UUID.randomUUID(),plot,author));revision++;return null;
     }

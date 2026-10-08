@@ -33,6 +33,7 @@ Once the restaurant is running, Pepper still wants a quiet house of her own.
 
 Visit her after your friendship reaches each level to pick up the reward through dialogue.
 
+- **Friendship 25:** teaches your town the **Chef's Utensil Roll** recipe.
 - **Friendship 50:** teaches you to craft a **Cooking Bench**
 
 ### Restaurant upgrades

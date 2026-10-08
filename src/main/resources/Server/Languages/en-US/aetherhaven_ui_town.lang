@@ -188,7 +188,7 @@ aetherhaven.reputation.giftRepChange={amount} reputation (gift)
 
 # === UI: charter amendments (tithe & town focus) ===
 aetherhaven.ui.charter.title=Charter amendments
-aetherhaven.ui.charter.popHint=Residents (non-visitors): {count}. Tier 1 unlocks at 3; tier 2 at 5.
+aetherhaven.ui.charter.popHint=Town Level {count}. Tax policies unlock at Town Level 3; specializations at Town Level 5.
 aetherhaven.ui.charter.tierMark1=I
 aetherhaven.ui.charter.tierMark2=II
 aetherhaven.ui.charter.tier1=Tier 1: Tithe style

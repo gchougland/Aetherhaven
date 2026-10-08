@@ -154,7 +154,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
                 false
             );
         } else if (treasuryTab == 2) {
-            TownBillsUi.build(commandBuilder, eventBuilder, town, plugin, uc.getUuid());
+            TownBillsUi.build(commandBuilder, eventBuilder, town, plugin, uc.getUuid(), store, InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING));
         } else {
             buildTaxTab(store, commandBuilder, town, plugin);
         }
@@ -364,7 +364,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         }
 
         if (action.equals("PayBill")) {
-            com.hexvane.aetherhaven.economy.TownPayrollService.pay(town, tm, uc.getUuid(), data.billId);
+            com.hexvane.aetherhaven.economy.TownPayrollService.pay(town, tm, uc.getUuid(), data.billId, InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING));
             refresh(ref, store);
             return;
         }

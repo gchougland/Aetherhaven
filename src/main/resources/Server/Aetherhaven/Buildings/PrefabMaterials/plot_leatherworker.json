@@ -23,15 +23,15 @@
       "count": 112
     },
     {
-      "itemId": "Aetherhaven_Mining_Node_Rock_Stone_Cobble",
-      "count": 108
+      "itemId": "Rock_Stone_Cobble",
+      "count": 122
     },
     {
       "itemId": "Wood_Softwood_Roof_Flat",
       "count": 84
     },
     {
-      "itemId": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy",
+      "itemId": "Rock_Stone_Cobble_Mossy",
       "count": 48
     },
     {
@@ -45,10 +45,6 @@
     {
       "itemId": "Rock_Stone_Brick_Mossy",
       "count": 23
-    },
-    {
-      "itemId": "Rock_Stone_Cobble",
-      "count": 14
     },
     {
       "itemId": "Deco_Lantern",

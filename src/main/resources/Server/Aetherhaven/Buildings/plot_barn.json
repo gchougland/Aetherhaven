@@ -108,6 +108,56 @@
       "blockTypeId": "Wood_Hardwood_Fence_Gate",
       "interactionKind": "WORK_SURFACE",
       "workResidentKind": "rancher"
+    },
+    {
+      "localX": 3,
+      "localY": 0,
+      "localZ": 4,
+      "tags": [
+        "BARN_PEN"
+      ],
+      "capacity": 1,
+      "interactionTargetYawDegrees": -90
+    },
+    {
+      "localX": 9,
+      "localY": 0,
+      "localZ": 4,
+      "tags": [
+        "BARN_PEN"
+      ],
+      "capacity": 1,
+      "interactionTargetYawDegrees": 90
+    },
+    {
+      "localX": 3,
+      "localY": 0,
+      "localZ": 12,
+      "tags": [
+        "BARN_PEN"
+      ],
+      "capacity": 1,
+      "interactionTargetYawDegrees": -90
+    },
+    {
+      "localX": 9,
+      "localY": 0,
+      "localZ": 12,
+      "tags": [
+        "BARN_PEN"
+      ],
+      "capacity": 1,
+      "interactionTargetYawDegrees": 90
+    },
+    {
+      "localX": 9,
+      "localY": 0,
+      "localZ": 14,
+      "tags": [
+        "BARN_PEN"
+      ],
+      "capacity": 1,
+      "interactionTargetYawDegrees": 90
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_barn.displayName",

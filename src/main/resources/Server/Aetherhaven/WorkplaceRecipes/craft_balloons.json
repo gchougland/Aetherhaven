@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 6
+      "count": 10
     },
     {
       "itemId": "Ingredient_Fabric_Scrap_Linen",
-      "count": 4
+      "count": 5
     },
     {
       "itemId": "Ingredient_Life_Essence",
-      "count": 2
+      "count": 5
     }
   ],
   "output": "Aetherhaven_Prop_Balloons",

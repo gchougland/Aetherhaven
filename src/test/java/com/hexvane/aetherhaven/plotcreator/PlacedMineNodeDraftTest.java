@@ -44,8 +44,8 @@ class PlacedMineNodeDraftTest {
         assertNotNull(draft.add(plot,new Vector3i(0,0,0),"Rock_Stone"));
         var first=new Vector3i(51,31,151);assertNull(draft.add(plot,first,"Rock_Stone"));
         assertNotNull(draft.add(plot,first,"Rock_Marble"));assertEquals("Rock_Stone",draft.snapshot().nodes().getFirst().expectedBlockId());
-        for(int i=1;i<64;i++)assertNull(draft.add(plot,new Vector3i(51+i,31,151),"Rock_Stone"));
-        assertNotNull(draft.add(plot,new Vector3i(120,31,151),"Rock_Stone"));assertEquals(64,draft.snapshot().nodes().size());
+        for(int i=1;i<75;i++)assertNull(draft.add(plot,new Vector3i(51+i,31,151),"Rock_Stone"));
+        assertNotNull(draft.add(plot,new Vector3i(130,31,151),"Rock_Stone"));assertEquals(75,draft.snapshot().nodes().size());
         assertTrue(plot.getProductionLayout().legacy());
     }
     @Test void changedOrAlreadyConvertedMineInvalidatesTheDraftAndMalformedSeedsStartEmpty() {

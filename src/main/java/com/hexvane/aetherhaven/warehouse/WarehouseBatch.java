@@ -13,7 +13,7 @@ public final class WarehouseBatch {
         public Source(TownWarehouse.Page page,short slot,short batchSlot) { this(page,slot,batchSlot,null,null); }
     }
     public record Point(int x,int y,int z) {}
-    public static final short BUFFER_SLOTS = 36, CARGO_SLOTS = 8;
+    public static final short BUFFER_SLOTS = 40, CARGO_SLOTS = 10;
     private UUID id = UUID.randomUUID();
     private UUID workplaceId, orderId;
     private String recipeId, courierId;
@@ -82,7 +82,7 @@ public final class WarehouseBatch {
             if (cargoData == null) cargo = new SimpleItemContainer(CARGO_SLOTS);
             else {
                 var saved = SimpleItemContainer.CODEC.decode(BsonDocument.parse(cargoData), new ExtraInfo());
-                if (saved == null || saved.getCapacity() != 5 && saved.getCapacity() != CARGO_SLOTS)
+                if (saved == null || saved.getCapacity() != 5 && saved.getCapacity() != 8 && saved.getCapacity() != CARGO_SLOTS)
                     throw new IllegalStateException("Invalid saved delivery cargo");
                 cargo = new SimpleItemContainer(CARGO_SLOTS);
                 for (short i=0;i<saved.getCapacity();i++) cargo.setItemStackForSlot(i,saved.getItemStack(i),false);
@@ -117,7 +117,8 @@ public final class WarehouseBatch {
     private static SimpleItemContainer decode(String data, short capacity) {
         if (data == null) return new SimpleItemContainer(capacity);
         var inventory = SimpleItemContainer.CODEC.decode(BsonDocument.parse(data), new ExtraInfo());
-        if (inventory == null || inventory.getCapacity() != capacity) throw new IllegalStateException("Invalid saved delivery inventory");
+        if (inventory == null || inventory.getCapacity() > capacity) throw new IllegalStateException("Invalid saved delivery inventory");
+        if(inventory.getCapacity()<capacity){var expanded=new SimpleItemContainer(capacity);for(short i=0;i<inventory.getCapacity();i++)expanded.setItemStackForSlot(i,inventory.getItemStack(i),false);return expanded;}
         return inventory;
     }
 }

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.economy;
 
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.*;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -68,12 +69,18 @@ public final class TownPayrollService {
         return new Budget(employees, Math.multiplyExact((long) employees, TownPayroll.WEEKLY_WAGE), unpaid, overdue);
     }
 
-    public static boolean pay(TownRecord town, TownManager manager, UUID player, String billId) {
-        if (!town.hasMemberOrOwner(player) || !town.playerCanSpendTreasuryGold(player)) return false;
-        long debit = town.getPayroll().settle(billId, town.getTreasuryGoldCoinCount());
-        if (debit < 0) return false;
-        town.addTreasuryGoldCoins(-debit);
+    public static boolean pay(TownRecord town, TownManager manager, UUID player, String billId, CombinedItemContainer inventory) {
+        if (!pay(town, player, billId, inventory)) return false;
         manager.updateTown(town);
+        return true;
+    }
+
+    /** Validates the invoice before spending; duplicate clicks never charge twice. */
+    public static boolean pay(TownRecord town, UUID player, String billId, CombinedItemContainer inventory) {
+        if (!town.hasMemberOrOwner(player) || inventory == null) return false;
+        var bill = town.getPayroll().bills().stream().filter(b -> b.id().equals(billId) && !b.paid()).findFirst().orElse(null);
+        if (bill == null || !GoldCoinPayment.trySpend(town, inventory, bill.amount(), town.playerCanSpendTreasuryGold(player))) return false;
+        town.getPayroll().settle(bill.id(), bill.amount());
         return true;
     }
 }

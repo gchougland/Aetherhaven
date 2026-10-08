@@ -9,10 +9,10 @@
   "inputs": [
     {
       "itemId": "Ingredient_Life_Essence",
-      "count": 24
+      "count": 25
     }
   ],
   "output": "Plant_Seeds_Mana2",
   "outputCount": 1,
-  "workSeconds": 16
+  "workSeconds": 20
 }

@@ -25,7 +25,7 @@ class BuildingUpgradeTreeTest {
                 for(var other:tree)if(other!=n)assertFalse(n.x()<other.x()+174&&other.x()<n.x()+174&&n.y()<other.y()+112&&other.y()<n.y()+112,n.id()+" overlaps "+other.id());
             }
         }
-        assertEquals(32,BuildingUpgradeTree.workplaces("blacksmith").stream().filter(n -> n.kind()==BuildingUpgradeTree.Kind.SLOT).count());
+        assertEquals(35,BuildingUpgradeTree.workplaces("blacksmith").stream().filter(n -> n.kind()==BuildingUpgradeTree.Kind.SLOT).count());
         assertEquals(8,BuildingUpgradeTree.workplaces("blacksmith").stream().filter(n -> n.kind()==BuildingUpgradeTree.Kind.SMELTING).count());
     }
     @Test void productionConnectionsPreserveBothPrerequisitesForEveryStorageTier() {

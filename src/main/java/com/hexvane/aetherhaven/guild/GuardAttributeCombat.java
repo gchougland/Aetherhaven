@@ -99,7 +99,8 @@ public final class GuardAttributeCombat {
                 var attacking=resolve(source.getRef(),store);
                 if(attacking!=null)damage.setAmount(damage.getAmount()*attacking.damageMultiplier());
             }
-            if(!damage.getCause().doesBypassResistances()) {
+            var cause = com.hypixel.hytale.server.core.modules.entity.damage.DamageCause.getAssetMap().getAsset(damage.getDamageCauseIndex());
+            if(cause != null && !cause.doesBypassResistances()) {
                 var defending=resolve(chunk.getReferenceTo(index),store);
                 if(defending!=null)damage.setAmount(damage.getAmount()*(1-defending.damageReduction()));
             }

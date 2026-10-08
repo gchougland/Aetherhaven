@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Wood_Beech_Trunk",
-      "count": 12
+      "count": 15
     },
     {
       "itemId": "Ingredient_Fabric_Scrap_Linen",
-      "count": 8
+      "count": 10
     },
     {
       "itemId": "Ingredient_Bar_Iron",
-      "count": 2
+      "count": 5
     }
   ],
   "output": "Aetherhaven_Prop_Festival_Flag",

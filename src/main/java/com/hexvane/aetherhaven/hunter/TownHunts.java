@@ -28,8 +28,8 @@ public final class TownHunts implements com.hexvane.aetherhaven.warehouse.Produc
     public boolean upgrade(String upgrade) {if(run!=null||level(upgrade)>=maxLevel(upgrade))return false;upgrades.put(upgrade,level(upgrade)+1);revision++;return true;}
     public int maxHealth() {return 260+60*level("vitality");}
     public double damageMultiplier() {return 1+.2*level("power");}
-    public int recoveryPerWave() {return 4*level("dressing");}
-    public int capacity() {return 32<<level("storage");}
+    public int recoveryPerWave() {return 5*level("dressing");}
+    public int capacity() {return 35<<level("storage");}
     public Map<String,Integer> stock() {return Collections.unmodifiableMap(stock);}
     public int amount(String item) {return Math.max(0,stock.getOrDefault(item,0));}
     @Override public long getAmount(String item) {return amount(item);}
@@ -68,5 +68,5 @@ public final class TownHunts implements com.hexvane.aetherhaven.warehouse.Produc
         revision++;return true;
     }
     public static double enemyHealthScale(int wave) {return Math.min(20,1+Math.max(0,wave)*.15);}
-    public static double enemyDamageScale(int wave) {return Math.min(20,1+Math.max(0,wave)*.12);}
+    public static double enemyDamageScale(int wave) {return Math.min(20,1+Math.max(0,wave)*.15);}
 }

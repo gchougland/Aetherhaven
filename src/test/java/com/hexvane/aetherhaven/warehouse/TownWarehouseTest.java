@@ -47,7 +47,7 @@ class TownWarehouseTest {
         var town=new TownWarehouse();var stack=new ItemStack("wood",3,12.0,40.0,BsonDocument.parse("{custom: {name:'Saved'}}"));supply(town,stack);
         assertTrue(town.placeFromStock("wood",()->true));
         assertEquals(stack.withQuantity(2),reload(town).stack(TownWarehouse.Page.GENERAL,(short)0));
-        var batch=town.reserve(UUID.randomUUID(),UUID.randomUUID(),"recipe",List.of(new MaterialQuantity("wood",null,null,2,stack.getMetadata())),List.of(stock("kit",1)));
+        var batch=town.reserve(UUID.randomUUID(),UUID.randomUUID(),"recipe",List.of(new MaterialQuantity("wood",null,null,2,com.hexvane.aetherhaven.inventory.ItemStackData.metadata(stack))),List.of(stock("kit",1)));
         assertNotNull(batch);assertEquals(2,town.reserved(TownWarehouse.Page.GENERAL,(short)0));
         assertFalse(town.hasUnreservedStock("wood"));
         assertFalse(town.placeFromStock("wood",()->fail("Reserved stock")));
@@ -69,9 +69,87 @@ class TownWarehouseTest {
         var position=new com.hexvane.aetherhaven.production.TimberHarvestPlan.Position(3,100,4);
         assertFalse(com.hexvane.aetherhaven.production.TimberCharring.process(p,entry,stock,plot,wood,position));
         assertEquals(5,p.getAmount(wood));assertNull(p.timber().cargo());
-        p.addAmount(wood,1,100);
+        p.addAmount(wood,4,100);
         assertTrue(com.hexvane.aetherhaven.production.TimberCharring.process(p,entry,stock,plot,wood,position));
         assertEquals(4,p.getAmount(wood));assertEquals(4,stock.reservedProduction(plot,wood));
+    }
+
+    private static WarehouseCraftingContainer craftingView(TownWarehouse stock,java.util.function.BooleanSupplier allowed,TownWarehouse.ProductionStock... production) {
+        var slots=new ArrayList<WarehouseCraftingContainer.Slot>();WarehouseCraftingContainer.addStorage(slots,stock);
+        for(var source:production)WarehouseCraftingContainer.addProduction(slots,stock,source.plot(),source.state(),()->true);
+        return new WarehouseCraftingContainer(slots,allowed,()->{});
+    }
+    @Test void nativeCraftingConsumesAcrossPlayerGeneralCraftedAndProductionWithoutCopyingStock() {
+        var warehouse=new TownWarehouse();supply(warehouse,stock("ore",5));warehouse.acceptCompletedOutput(stock("ore",5));
+        var production=production("ore",5,10);var player=bag(2);put(player,0,stock("ore",5));
+        var view=craftingView(warehouse,()->true,production);assertFalse(view.isEmpty());
+        var combined=new com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer(player,view);
+        assertTrue(combined.removeMaterials(List.of(ingredient("ore",18))).succeeded());
+        assertTrue(player.isEmpty());assertEquals(0,warehouse.count(TownWarehouse.Page.GENERAL,"ore"));
+        assertEquals(0,warehouse.count(TownWarehouse.Page.OUTPUT,"ore"));assertEquals(2,production.state().getAmount("ore"));
+        assertEquals(0,reload(warehouse).count(TownWarehouse.Page.OUTPUT,"ore"));
+    }
+    @Test void nativeCraftingInsufficientMixedMaterialsDoesNotPartiallyConsumeAnything() {
+        var warehouse=new TownWarehouse();supply(warehouse,stock("ore",5));var player=bag(2);put(player,0,stock("wood",3));
+        var combined=new com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer(player,craftingView(warehouse,()->true));
+        assertFalse(combined.removeMaterials(List.of(ingredient("wood",3),ingredient("ore",6))).succeeded());
+        assertEquals(3,player.getItemStack((short)0).getQuantity());assertEquals(5,warehouse.count(TownWarehouse.Page.GENERAL,"ore"));
+    }
+    @Test void nativeCraftingLeavesCourierReservationsInGeneralAndProduction() {
+        var warehouse=new TownWarehouse();supply(warehouse,stock("ore",5));var production=production("ore",10,10);
+        assertNotNull(warehouse.reserve(UUID.randomUUID(),UUID.randomUUID(),"general",List.of(ingredient("ore",3)),List.of(stock("kit",1))));
+        var batch=warehouse.reserve(UUID.randomUUID(),UUID.randomUUID(),"production",List.of(ingredient("ore",7)),List.of(stock("kit",1)),List.of(production));assertNotNull(batch);
+        var view=craftingView(warehouse,()->true,production);
+        assertFalse(view.removeMaterials(List.of(ingredient("ore",6))).succeeded());
+        assertTrue(view.removeMaterials(List.of(ingredient("ore",5))).succeeded());
+        assertEquals(3,warehouse.count(TownWarehouse.Page.GENERAL,"ore"));assertEquals(7,production.state().getAmount("ore"));
+        assertTrue(view.isEmpty());
+    }
+    @Test void twoOpenCraftingViewsObserveTheSameLiveStockAndCannotDoubleSpend() {
+        var warehouse=new TownWarehouse();supply(warehouse,stock("ore",5));
+        var first=craftingView(warehouse,()->true);var second=craftingView(warehouse,()->true);
+        assertTrue(first.removeMaterials(List.of(ingredient("ore",4))).succeeded());
+        assertFalse(second.removeMaterials(List.of(ingredient("ore",2))).succeeded());
+        assertTrue(second.removeMaterials(List.of(ingredient("ore",1))).succeeded());assertTrue(first.isEmpty());
+    }
+    @Test void revokedAccessOrRemovedLinkPreventsQueuedCraftConsumption() {
+        var allowed=new java.util.concurrent.atomic.AtomicBoolean(true);var warehouse=new TownWarehouse();supply(warehouse,stock("ore",5));
+        var view=craftingView(warehouse,allowed::get);assertTrue(view.canRemoveMaterials(List.of(ingredient("ore",5))));
+        allowed.set(false);assertTrue(view.isEmpty());assertFalse(view.removeMaterials(List.of(ingredient("ore",5))).succeeded());
+        assertEquals(5,warehouse.count(TownWarehouse.Page.GENERAL,"ore"));
+    }
+    @Test void nativeCraftingViewsAreOutputOnlyAndPreserveMetadata() {
+        var warehouse=new TownWarehouse();var item=new ItemStack("ore",5,BsonDocument.parse("{special:true}"));supply(warehouse,item);
+        var view=craftingView(warehouse,()->true);
+        assertFalse(view.removeMaterials(List.of(ingredient("ore",1))).succeeded());
+        assertTrue(view.removeItemStack(item.withQuantity(2)).succeeded());
+        assertEquals(item.withQuantity(3),reload(warehouse).stack(TownWarehouse.Page.GENERAL,(short)0));
+        assertFalse(view.addItemStack(stock("wood",1)).succeeded());assertFalse(view.clear().succeeded());
+        assertEquals(3,warehouse.count(TownWarehouse.Page.GENERAL,"ore"));
+    }
+    @Test void rawBarnMilkCannotCreateFreeBucketsThroughNativeCrafting() {
+        var warehouse=new TownWarehouse();String milk=com.hexvane.aetherhaven.production.ProductionWithdrawal.MILK_BUCKET_ITEM_ID;
+        var view=craftingView(warehouse,()->true,production(milk,5,10));
+        assertTrue(view.isEmpty());assertFalse(view.canRemoveMaterials(List.of(ingredient(milk,1))));
+        warehouse.acceptCompletedOutput(stock(milk,1));assertTrue(view.removeMaterials(List.of(ingredient(milk,1))).succeeded());
+    }
+    @Test void nativeCraftingConsumesOnlyUnreservedFurnaceOutputAndPersistsIt() {
+        var town=new TownWarehouse();var smelt=town.smelting();var origin=UUID.randomUUID();var job=UUID.randomUUID();
+        var furnace=bag(2);put(furnace,0,stock("ore",10));assertTrue(smelt.reserve(job,List.of(stock("ore",10))));
+        assertEquals(10,smelt.collect(job,origin,new WarehouseBatch.Point(10,100,10),furnace));smelt.release(job);
+        var batch=reserve(town,5);assertNotNull(batch);
+        var view=craftingView(town,()->true);
+        assertFalse(view.removeMaterials(List.of(ingredient("ore",6))).succeeded());
+        assertTrue(view.removeMaterials(List.of(ingredient("ore",5))).succeeded());
+        assertEquals(5,reload(town).smelting().count("ore"));assertEquals(5,town.reservedSmelting(origin,(short)0));
+    }
+    @Test void removedProductionBuildingCannotBeConsumedByAnOldCraftingQueue() {
+        var town=new TownWarehouse();var production=production("ore",5,10);var present=new java.util.concurrent.atomic.AtomicBoolean(true);
+        var slots=new ArrayList<WarehouseCraftingContainer.Slot>();
+        WarehouseCraftingContainer.addProduction(slots,town,production.plot(),production.state(),present::get);
+        var view=new WarehouseCraftingContainer(slots,()->true,()->{});
+        assertTrue(view.canRemoveMaterials(List.of(ingredient("ore",5))));present.set(false);
+        assertFalse(view.removeMaterials(List.of(ingredient("ore",5))).succeeded());assertEquals(5,production.state().getAmount("ore"));
     }
 
     private static ItemStack alchemyFlask(int capacity) {
@@ -223,102 +301,102 @@ class TownWarehouseTest {
         assertEquals(15, reloaded.getTownsfolkProgress().get("worker").masteryXp());
         assertEquals(1, reloaded.getWarehouse().count(TownWarehouse.Page.OUTPUT, "kit"));
     }
-    private static final String WHEAT=com.hexvane.aetherhaven.production.HerdProductionState.FEED;
+    private static final String CARROT="Plant_Crop_Carrot_Item";
     private static com.hexvane.aetherhaven.production.HerdProductionState feedHerd(int target) {
         var herd=new com.hexvane.aetherhaven.production.HerdProductionState();
-        assertNull(herd.adopt(0,List.of(new com.hexvane.aetherhaven.production.HerdProductionState.Pair("Cow",
-            List.of(UUID.randomUUID(),UUID.randomUUID()),new WarehouseBatch.Point(20,100,20)))));
-        assertTrue(herd.configureCourierFeed(0,target));return herd;
+        assertNull(herd.buy(0,"Rabbit",1,()->true));
+        assertTrue(herd.assign(herd.revision(),0,herd.animals().getFirst().id(),1));
+        if(target!=herd.courierFeedTarget())assertTrue(herd.configureCourierFeed(0,target));return herd;
     }
 
     @Test void feedReservationsStayAtTheFarmUntilTheCorrectPhysicalPickupAndDelivery() {
-        var stock=new TownWarehouse();var herd=feedHerd(16);
-        var farm=new com.hexvane.aetherhaven.production.PlotProductionState();farm.addAmount(WHEAT,6,100);
+        var stock=new TownWarehouse();var herd=feedHerd(25);
+        var farm=new com.hexvane.aetherhaven.production.PlotProductionState();farm.addAmount(CARROT,6,100);
         var pickup=new WarehouseBatch.Point(0,100,0);var destination=new WarehouseBatch.Point(20,100,20);
         var source=new TownWarehouse.ProductionStock(UUID.randomUUID(),pickup,farm);
-        assertEquals(6,HerdFeedSupplyPlanner.availableWheat(stock,List.of(source,source)));
-        var batch=stock.reserveHerdFeed(UUID.randomUUID(),destination,6,List.of(source));assertNotNull(batch);
-        assertTrue(batch.herdFeed());assertEquals(6,farm.getAmount(WHEAT));assertEquals(0,herd.feed());
-        assertTrue(batch.outputItems().isEmpty());assertEquals(0,stock.incoming(WHEAT));assertFalse(stock.hasOutputRoom(batch.id()));
-        assertEquals(0,HerdFeedSupplyPlanner.availableWheat(stock,List.of(source)));
+        assertEquals(6,HerdFeedSupplyPlanner.availableFood(stock,List.of(source,source),CARROT));
+        var batch=stock.reserveHerdFeed(UUID.randomUUID(),destination,CARROT,6,List.of(source));assertNotNull(batch);
+        assertTrue(batch.herdFeed());assertEquals(6,farm.getAmount(CARROT));assertEquals(0,herd.feed(CARROT));
+        assertTrue(batch.outputItems().isEmpty());assertEquals(0,stock.incoming(CARROT));assertFalse(stock.hasOutputRoom(batch.id()));
+        assertEquals(0,HerdFeedSupplyPlanner.availableFood(stock,List.of(source),CARROT));
         assertEquals(0,stock.pickup(batch.id(),"courier",1));
         assertEquals(0,stock.pickupAt(batch.id(),"courier",1,source,destination));
-        assertEquals(6,stock.pickupAt(batch.id(),"courier",1,source,pickup));assertEquals(0,farm.getAmount(WHEAT));
+        assertEquals(6,stock.pickupAt(batch.id(),"courier",1,source,pickup));assertEquals(0,farm.getAmount(CARROT));
         stock=reload(stock);batch=stock.batch(batch.id());assertTrue(batch.herdFeed());
         assertFalse(stock.deliver(batch.id(),"courier"));assertFalse(stock.finish(batch.id()));
         assertFalse(stock.deliverHerdFeed(batch.id(),"other",herd,destination));
-        assertFalse(stock.deliverHerdFeed(batch.id(),"courier",herd,pickup));assertEquals(0,herd.feed());
-        assertTrue(stock.deliverHerdFeed(batch.id(),"courier",herd,destination));assertEquals(6,herd.feed());
+        assertFalse(stock.deliverHerdFeed(batch.id(),"courier",herd,pickup));assertEquals(0,herd.feed(CARROT));
+        assertTrue(stock.deliverHerdFeed(batch.id(),"courier",herd,destination));assertEquals(6,herd.feed(CARROT));
         assertFalse(stock.deliverHerdFeed(batch.id(),"courier",herd,destination));assertTrue(stock.batches().isEmpty());
-        assertEquals(0,stock.count(TownWarehouse.Page.OUTPUT,WHEAT));
+        assertEquals(0,stock.count(TownWarehouse.Page.OUTPUT,CARROT));
     }
 
     @Test void mixedFeedSourcesRequireSeparateTripsAndDoNotReserveASecondBatchForTheBarn() {
-        var stock=new TownWarehouse();var herd=feedHerd(16);var barn=UUID.randomUUID();
-        var farm=new com.hexvane.aetherhaven.production.PlotProductionState();farm.addAmount(WHEAT,5,100);
+        var stock=new TownWarehouse();var herd=feedHerd(25);var barn=UUID.randomUUID();
+        var farm=new com.hexvane.aetherhaven.production.PlotProductionState();farm.addAmount(CARROT,5,100);
         var point=new WarehouseBatch.Point(0,100,0);var destination=new WarehouseBatch.Point(20,100,20);
         var source=new TownWarehouse.ProductionStock(UUID.randomUUID(),point,farm);
-        supply(stock,stock(WHEAT,7));
-        assertEquals(12,HerdFeedSupplyPlanner.availableWheat(stock,List.of(source)));
-        var batch=stock.reserveHerdFeed(barn,destination,12,List.of(source));assertNotNull(batch);
-        assertNull(stock.reserveHerdFeed(barn,destination,1,List.of(source)));
+        supply(stock,stock(CARROT,7));
+        assertEquals(12,HerdFeedSupplyPlanner.availableFood(stock,List.of(source),CARROT));
+        var batch=stock.reserveHerdFeed(barn,destination,CARROT,12,List.of(source));assertNotNull(batch);
+        assertNull(stock.reserveHerdFeed(barn,destination,CARROT,1,List.of(source)));
         assertEquals(5,stock.pickupAt(batch.id(),"courier",1,source,point));
-        assertTrue(stock.deliverHerdFeed(batch.id(),"courier",herd,destination));assertEquals(5,herd.feed());
-        assertNotNull(stock.batch(batch.id()));assertEquals(7,stock.count(TownWarehouse.Page.GENERAL,WHEAT));
+        assertTrue(stock.deliverHerdFeed(batch.id(),"courier",herd,destination));assertEquals(5,herd.feed(CARROT));
+        assertNotNull(stock.batch(batch.id()));assertEquals(7,stock.count(TownWarehouse.Page.GENERAL,CARROT));
         assertEquals(7,stock.pickup(batch.id(),"courier",1));assertTrue(stock.deliverHerdFeed(batch.id(),"courier",herd,destination));
-        assertEquals(12,herd.feed());assertTrue(stock.batches().isEmpty());
+        assertEquals(12,herd.feed(CARROT));assertTrue(stock.batches().isEmpty());
     }
 
     @Test void manualFeedDuringTransportCapsDeliveryAndReturnsExcessWithoutLoss() {
-        var stock=new TownWarehouse();var herd=feedHerd(16);var destination=new WarehouseBatch.Point(20,100,20);
-        var wheat=stock(WHEAT,16);supply(stock,wheat);
-        var batch=stock.reserveHerdFeed(UUID.randomUUID(),destination,16,List.of());assertNotNull(batch);
-        assertEquals(16,stock.pickup(batch.id(),"courier",1));
-        for(int i=0;i<10;i++)assertTrue(herd.supply(()->true));
+        var stock=new TownWarehouse();var herd=feedHerd(25);var destination=new WarehouseBatch.Point(20,100,20);
+        var wheat=stock(CARROT,25);supply(stock,wheat);
+        var batch=stock.reserveHerdFeed(UUID.randomUUID(),destination,CARROT,25,List.of());assertNotNull(batch);
+        assertEquals(25,stock.pickup(batch.id(),"courier",1));
+        for(int i=0;i<10;i++)assertTrue(herd.supply(CARROT,()->true));
         assertTrue(stock.deliverHerdFeed(batch.id(),"courier",herd,destination));
-        assertEquals(16,herd.feed());assertTrue(batch.cancelled());assertEquals(10,batch.cargoItems().getFirst().getQuantity());
+        assertEquals(25,herd.feed(CARROT));assertTrue(batch.cancelled());assertEquals(10,batch.cargoItems().getFirst().getQuantity());
         assertEquals(wheat.withQuantity(10),batch.cargoItems().getFirst());
         for(int i=0;i<TownWarehouse.BASE_GENERAL_SLOTS;i++)supply(stock,stock("full_"+i,1));
         stock=reload(stock);assertFalse(stock.returnCargo(batch.id(),"courier"));
         assertEquals(10,stock.batch(batch.id()).cargoItems().getFirst().getQuantity());
         var player=bag(1);var held=stock.stack(TownWarehouse.Page.GENERAL,(short)0);
         assertEquals(1,stock.withdraw(TownWarehouse.Page.GENERAL,player,(short)0,held,TownWarehouse.Amount.STACK,stock.revision()).moved());
-        assertTrue(stock.returnCargo(batch.id(),"courier"));assertEquals(10,stock.count(TownWarehouse.Page.GENERAL,WHEAT));
-        assertEquals(16,herd.feed());assertTrue(stock.batches().isEmpty());
+        assertTrue(stock.returnCargo(batch.id(),"courier"));assertEquals(10,stock.count(TownWarehouse.Page.GENERAL,CARROT));
+        assertEquals(25,herd.feed(CARROT));assertTrue(stock.batches().isEmpty());
     }
 
     @Test void cancellingFeedReleasesUnpickedStockAndKeepsCarriedStockForReturn() {
-        var stock=new TownWarehouse();var destination=new WarehouseBatch.Point(20,100,20);supply(stock,stock(WHEAT,16));
-        var batch=stock.reserveHerdFeed(UUID.randomUUID(),destination,8,List.of());assertNotNull(batch);
-        assertEquals(8,HerdFeedSupplyPlanner.availableWheat(stock,List.of()));assertTrue(stock.cancel(batch.id()));
-        assertEquals(16,HerdFeedSupplyPlanner.availableWheat(stock,List.of()));
-        batch=stock.reserveHerdFeed(UUID.randomUUID(),destination,8,List.of());stock.pickup(batch.id(),"courier",1);
-        var herd=feedHerd(8);assertTrue(herd.configureCourierFeed(1,0));
+        var stock=new TownWarehouse();var destination=new WarehouseBatch.Point(20,100,20);supply(stock,stock(CARROT,16));
+        var batch=stock.reserveHerdFeed(UUID.randomUUID(),destination,CARROT,8,List.of());assertNotNull(batch);
+        assertEquals(8,HerdFeedSupplyPlanner.availableFood(stock,List.of(),CARROT));assertTrue(stock.cancel(batch.id()));
+        assertEquals(16,HerdFeedSupplyPlanner.availableFood(stock,List.of(),CARROT));
+        batch=stock.reserveHerdFeed(UUID.randomUUID(),destination,CARROT,8,List.of());stock.pickup(batch.id(),"courier",1);
+        var herd=feedHerd(10);assertTrue(herd.configureCourierFeed(herd.feedOrderRevision(),0));
         assertTrue(stock.deliverHerdFeed(batch.id(),"courier",herd,destination));
-        assertEquals(0,herd.feed());assertTrue(batch.cancelled());assertTrue(stock.returnCargo(batch.id(),"courier"));
-        assertEquals(16,stock.count(TownWarehouse.Page.GENERAL,WHEAT));
+        assertEquals(0,herd.feed(CARROT));assertTrue(batch.cancelled());assertTrue(stock.returnCargo(batch.id(),"courier"));
+        assertEquals(16,stock.count(TownWarehouse.Page.GENERAL,CARROT));
     }
 
-    @Test void fullCraftedGoodsDoNotBlockFeedAndOldSavesNeverEnableSupplyAutomatically() {
+    @Test void fullCraftedGoodsDoNotBlockFeedAndEmptyBarnsRequestNoFoods() {
         var stock=new TownWarehouse();
         for(int i=0;i<TownWarehouse.OUTPUT_SLOTS;i++)assertTrue(stock.acceptCompletedOutput(stock("output_"+i,1)));
-        supply(stock,stock(WHEAT,8));assertNotNull(stock.reserveHerdFeed(UUID.randomUUID(),new WarehouseBatch.Point(2,100,2),8,List.of()));
+        supply(stock,stock(CARROT,8));assertNotNull(stock.reserveHerdFeed(UUID.randomUUID(),new WarehouseBatch.Point(2,100,2),CARROT,8,List.of()));
         var type=com.hexvane.aetherhaven.production.HerdProductionState.class;
-        var old=new Gson().fromJson("{}",type);assertEquals(0,old.courierFeedTarget());
-        assertTrue(old.configureCourierFeed(0,16));assertEquals(0,old.courierFeedNeeded(),"Unadopted barns cannot request feed");
-        var herd=feedHerd(32);assertFalse(herd.configureCourierFeed(0,64));assertFalse(herd.configureCourierFeed(1,999));
-        assertEquals(32,new Gson().fromJson(new Gson().toJson(herd),type).courierFeedTarget());
-        assertFalse(herd.receiveCourierFeed(33));assertFalse(herd.receiveCourierFeed(-1));
+        var old=new Gson().fromJson("{}",type);assertEquals(10,old.courierFeedTarget());
+        assertTrue(old.configureCourierFeed(0,25));assertTrue(old.requestedFoods(5).isEmpty(),"Empty barns cannot request food");
+        var herd=feedHerd(50);assertFalse(herd.configureCourierFeed(0,75));assertFalse(herd.configureCourierFeed(1,999));
+        assertEquals(50,new Gson().fromJson(new Gson().toJson(herd),type).courierFeedTarget());
+        assertFalse(herd.receiveCourierFeed(CARROT,51));assertFalse(herd.receiveCourierFeed(CARROT,-1));
     }
 
-    @Test void specialWheatDoesNotBlockTheAvailableOrdinaryFeedDelivery() {
+    @Test void specialCarrotsDoesNotBlockTheAvailableOrdinaryFeedDelivery() {
         var stock=new TownWarehouse();
-        supply(stock,new ItemStack(WHEAT,16,BsonDocument.parse("{customName:'Saved seeds'}")),stock(WHEAT,3));
-        assertEquals(3,HerdFeedSupplyPlanner.availableWheat(stock,List.of()));
-        var batch=stock.reserveHerdFeed(UUID.randomUUID(),new WarehouseBatch.Point(2,100,2),3,List.of());assertNotNull(batch);
+        supply(stock,new ItemStack(CARROT,16,BsonDocument.parse("{customName:'Saved seeds'}")),stock(CARROT,3));
+        assertEquals(3,HerdFeedSupplyPlanner.availableFood(stock,List.of(),CARROT));
+        var batch=stock.reserveHerdFeed(UUID.randomUUID(),new WarehouseBatch.Point(2,100,2),CARROT,3,List.of());assertNotNull(batch);
         assertEquals(3,stock.pickup(batch.id(),"courier",1));
-        assertEquals(16,stock.count(TownWarehouse.Page.GENERAL,WHEAT));
-        assertEquals(0,HerdFeedSupplyPlanner.availableWheat(stock,List.of()));
+        assertEquals(16,stock.count(TownWarehouse.Page.GENERAL,CARROT));
+        assertEquals(0,HerdFeedSupplyPlanner.availableFood(stock,List.of(),CARROT));
     }
 
     @Test void retiringGardensReturnsReservedDeliveredAndCarriedSeedsWithoutDuplication() {
@@ -689,9 +767,22 @@ class TownWarehouseTest {
         town.acceptCompletedOutput(stock("result",5));long rev=town.revision();
         assertTrue(town.upgrade(rev));assertFalse(town.upgrade(rev));
         var restored=new Gson().fromJson(new Gson().toJson(town),TownWarehouse.class);
-        assertEquals(54,restored.capacity());assertEquals(40,restored.count(TownWarehouse.Page.GENERAL,"test"));assertEquals(5,restored.count(TownWarehouse.Page.OUTPUT,"result"));
+        assertEquals(60,restored.capacity());assertEquals(40,restored.count(TownWarehouse.Page.GENERAL,"test"));assertEquals(5,restored.count(TownWarehouse.Page.OUTPUT,"result"));
         for(int i=1;i<TownWarehouse.MAX_UPGRADES;i++) assertTrue(restored.upgrade(restored.revision()));
         assertFalse(restored.upgrade(restored.revision()));
+    }
+    @Test void previousDevelopmentCapacityExpandsWithoutMovingReservedSlotsOrLosingMetadata() {
+        var legacy=bag(54);
+        var special=new ItemStack("test",7,BsonDocument.parse("{engraved:'Mertie'}"));
+        put(legacy,53,special);
+        var saved=new com.google.gson.JsonObject();saved.addProperty("storageUpgrades",1);
+        saved.addProperty("generalData",SimpleItemContainer.CODEC.encode((SimpleItemContainer)legacy,new com.hypixel.hytale.codec.ExtraInfo()).asDocument().toJson());
+        var town=new Gson().fromJson(saved,TownWarehouse.class);
+        assertEquals(60,town.slots(TownWarehouse.Page.GENERAL));
+        assertEquals(special,town.stack(TownWarehouse.Page.GENERAL,(short)53));
+        assertEquals(1,town.used(TownWarehouse.Page.GENERAL));
+        assertTrue(town.upgrade(town.revision()));
+        assertEquals(special,reload(town).stack(TownWarehouse.Page.GENERAL,(short)53));
     }
     @Test void fullGeneralStorageRejectsDepositWithoutDiscardingItems() {
         var town=new TownWarehouse();var bag=bag(1);
@@ -778,7 +869,7 @@ class TownWarehouseTest {
         var json=new Gson().toJsonTree(batch).getAsJsonObject();
         json.addProperty("cargoData",SimpleItemContainer.CODEC.encode(legacy,new com.hypixel.hytale.codec.ExtraInfo()).asDocument().toJson());
         var migrated=new Gson().fromJson(json,WarehouseBatch.class);
-        assertEquals(8,migrated.cargo().getCapacity());
+        assertEquals(10,migrated.cargo().getCapacity());
         assertEquals(legacy.getItemStack((short)4),migrated.cargoItems().getFirst());
         assertEquals(batch.courierId(),migrated.courierId());
     }
@@ -1185,5 +1276,22 @@ class TownWarehouseTest {
             }
         }
         assertTrue(crafted>0,"Exercise real completions as well as cancellation");
+    }
+
+    @Test void courierReservesAndCollectsStandaloneMineshaftOutput(){
+        var t=new com.hexvane.aetherhaven.town.TownRecord(UUID.randomUUID(),UUID.randomUUID(),"mine",16,100,16,1,1,0);
+        t.getResidentNpcRecords().add(new com.hexvane.aetherhaven.town.ResidentNpcRecord("Aetherhaven_Miner","miner",null,UUID.randomUUID()));
+        var sites=t.getApprenticeWorkplaces();assertNull(sites.unlock(t,com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.MINING));
+        var area=new com.hexvane.aetherhaven.workplace.WorkplaceArea(8,100,8,14,14);assertNull(sites.save(t,null,com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.MINING,area,"Mine"));
+        var base=sites.sites().getFirst();var plan=base.excavation();var at=new WarehouseBatch.Point(11,100,11);
+        assertNull(plan.start(0,t.getOwnerUuid(),base.id(),area,com.hexvane.aetherhaven.workplace.ExcavationPlan.Entrance.NORTH,List.of(new com.hexvane.aetherhaven.workplace.ExcavationPlan.Cell(at,"Rock_Stone",0,1))));
+        assertTrue(plan.prepare(Map.of("ore",6)));for(int n=0;n<12;n++)plan.attend(.5,true,1);assertTrue(plan.begin(plan.id(),6,at,()->true));assertTrue(plan.settle(plan.id(),true));assertTrue(plan.deposit(plan.id()));
+        var inventory=com.hexvane.aetherhaven.workplace.MineshaftOutput.find(t,base.id());var source=new TownWarehouse.ProductionStock(base.id(),at,inventory);var warehouse=t.getWarehouse();
+        var batch=warehouse.reserve(UUID.randomUUID(),UUID.randomUUID(),"mine-test",List.of(ingredient("ore",4)),List.of(stock("kit",1)),List.of(source));
+        assertNotNull(batch);assertEquals(4,warehouse.reservedProduction(base.id(),"ore"));
+        assertNull(warehouse.reserve(UUID.randomUUID(),UUID.randomUUID(),"overbook",List.of(ingredient("ore",3)),List.of(stock("kit",1)),List.of(source)));
+        assertEquals(0,warehouse.pickupAt(batch.id(),"courier",1,source,new WarehouseBatch.Point(0,0,0)));
+        assertEquals(4,warehouse.pickupAt(batch.id(),"courier",1,source,at));assertEquals(2,inventory.getAmount("ore"));
+        assertEquals(0,warehouse.pickupAt(batch.id(),"courier",1,source,at));
     }
 }

@@ -15,10 +15,18 @@
         {
           "text": "aetherhaven_inn_outreach.open",
           "condition": {
-            "type": "not",
-            "condition": {
-              "type": "npc_binding_is_visitor"
-            }
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "inn_outreach_unlocked"
+              }
+            ]
           },
           "whenFalse": "hide",
           "actions": [

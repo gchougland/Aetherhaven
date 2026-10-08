@@ -109,6 +109,7 @@ public final class AetherhavenCoreBootstrap {
             com.hexvane.aetherhaven.alchemy.AlchemyFlaskConsumeInteraction.class,
             com.hexvane.aetherhaven.alchemy.AlchemyFlaskConsumeInteraction.CODEC);
         com.hexvane.aetherhaven.warehouse.WarehouseBootstrap.register(plugin);
+        com.hexvane.aetherhaven.backpack.BackpackBootstrap.register(plugin);
         plugin.getCodecRegistry(Interaction.CODEC).register("AetherhavenWorkplaceTool",
             com.hexvane.aetherhaven.workplace.WorkplaceToolInteraction.class, com.hexvane.aetherhaven.workplace.WorkplaceToolInteraction.CODEC);
         com.hexvane.aetherhaven.workplace.WorkplaceToolState.register(plugin.getEntityStoreRegistry());
@@ -154,6 +155,8 @@ public final class AetherhavenCoreBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new ConstructionFavoritesPlayerInitSystem());
         TerritoryProtectionBootstrap.register(plugin);
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.workplace.WorkplaceBenchUseSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.warehouse.WarehouseBenchUseSystem(plugin));
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.warehouse.WarehouseBenchRefreshSystem());
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyBlastWardSystem());
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyPoisonWardSystem());
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyFlaskInventoryNormalizeSystem());

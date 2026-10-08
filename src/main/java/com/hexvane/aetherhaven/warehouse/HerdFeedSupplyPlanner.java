@@ -13,6 +13,11 @@ import java.util.*;
 /** The barn's opt-in feed target uses ordinary source reservations and physically carried cargo. */
 public final class HerdFeedSupplyPlanner {
     private HerdFeedSupplyPlanner() {}
+    public static String food(WarehouseBatch batch) {
+        String prefix="aetherhaven:barn_feed/";
+        String id=batch.recipeId()!=null&&batch.recipeId().startsWith(prefix)?batch.recipeId().substring(prefix.length()):null;
+        return com.hexvane.aetherhaven.production.BarnAnimalCatalog.food(id)?id:null;
+    }
 
     private static HerdProductionState herd(TownRecord town,AetherhavenPlugin plugin,UUID plotId) {
         var plot=town.findPlotById(plotId);
@@ -26,7 +31,9 @@ public final class HerdFeedSupplyPlanner {
     public static boolean invalid(World world,TownRecord town,AetherhavenPlugin plugin,WarehouseBatch batch) {
         if(!batch.herdFeed())return false;
         var herd=herd(town,plugin,batch.workplaceId());var point=batch.destination();
-        if(herd==null||herd.courierFeedTarget()==0||point==null)return true;
+        if(herd==null||herd.courierFeedTarget()==0||point==null||food(batch)==null)return true;
+        var state=town.peekPlotProduction(batch.workplaceId());
+        if(!herd.requestedFoods(com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades.slotCount(state)).contains(food(batch)))return true;
         var plot=town.findPlotById(batch.workplaceId());
         if(!plot.containsWorldBlock(point.x(),point.y(),point.z())
             ||!TownTerritoryClaims.contains(town,ChunkUtil.chunkCoordinate(point.x()),ChunkUtil.chunkCoordinate(point.z())))return true;
@@ -49,25 +56,27 @@ public final class HerdFeedSupplyPlanner {
         boolean changed=false;var stock=town.getWarehouse();
         for(var plot:town.getPlotInstances()) {
             var herd=herd(town,plugin,plot.getPlotId());
-            if(herd==null||herd.courierFeedNeeded()==0||stock.workplaceBatch(plot.getPlotId())!=null)continue;
+            if(herd==null||stock.workplaceBatch(plot.getPlotId())!=null)continue;
             var destination=ProductionStorageLocator.find(world,plot,now);
             if(destination==null||!TownTerritoryClaims.contains(town,ChunkUtil.chunkCoordinate(destination.x()),ChunkUtil.chunkCoordinate(destination.z())))continue;
-            int quantity=Math.min(herd.courierFeedNeeded(),availableWheat(stock,sources));
-            if(quantity>0&&stock.reserveHerdFeed(plot.getPlotId(),destination,quantity,sources)!=null)changed=true;
+            for(String food:herd.requestedFoods(com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades.slotCount(town.peekPlotProduction(plot.getPlotId())))) {
+                int quantity=Math.min(herd.courierFeedNeeded(food),availableFood(stock,sources,food));
+                if(quantity>0&&stock.reserveHerdFeed(plot.getPlotId(),destination,food,quantity,sources)!=null){changed=true;break;}
+            }
         }
         return changed;
     }
 
     /** Partial stock is useful now; never wait for an entire target quantity to exist. */
-    public static int availableWheat(TownWarehouse stock,List<TownWarehouse.ProductionStock> sources) {
+    public static int availableFood(TownWarehouse stock,List<TownWarehouse.ProductionStock> sources,String food) {
         long available=0;var seen=new HashSet<UUID>();
         for(var source:sources)if(source.plot()!=null&&source.pickup()!=null&&source.state()!=null&&seen.add(source.plot())) {
-            available+=Math.min(HerdProductionState.FEED_CAPACITY,Math.max(0,source.state().getAmount(HerdProductionState.FEED)-stock.reservedProduction(source.plot(),HerdProductionState.FEED)));
+            available+=Math.min(HerdProductionState.FEED_CAPACITY,Math.max(0,source.state().getAmount(food)-stock.reservedProduction(source.plot(),food)));
             if(available>=HerdProductionState.FEED_CAPACITY)return HerdProductionState.FEED_CAPACITY;
         }
         for(short slot=0;slot<stock.slots(TownWarehouse.Page.GENERAL);slot++) {
             var stack=stock.stack(TownWarehouse.Page.GENERAL,slot);
-            if(!ItemStack.isEmpty(stack)&&stack.getMetadata()==null&&HerdProductionState.FEED.equals(stack.getItemId()))
+            if(!ItemStack.isEmpty(stack)&&stack.isEquivalentType(new ItemStack(food,1)))
                 available+=Math.max(0,stack.getQuantity()-stock.reserved(TownWarehouse.Page.GENERAL,slot));
             if(available>=HerdProductionState.FEED_CAPACITY)return HerdProductionState.FEED_CAPACITY;
         }

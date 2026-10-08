@@ -13,10 +13,10 @@ $T = "TownUiTheme.ui";
   Disabled: (Background: $C.@TertiaryActiveButtonBackground, LabelStyle: (FontSize: 13, TextColor: #82b79e, HorizontalAlignment: Center, VerticalAlignment: Center))
 );
 $C.@PageOverlay { LayoutMode: Middle;
-  $C.@DecoratedContainer { Anchor: (Width: 1120, Height: 790);
+  $C.@DecoratedContainer { Anchor: (Width: 1120, Height: 980);
     #Title { Label #TitleText { Text: "TOWN WAREHOUSE"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
     #Content { LayoutMode: Top; Padding: (Full: 22);
-      Group { LayoutMode: Left; Anchor: (Height: 64, Bottom: 16);
+      Group { LayoutMode: Left; Anchor: (Height: 48, Bottom: 8);
         Group { LayoutMode: Top; FlexWeight: 1;
           Label #TownName { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 22, TextColor: #e1c992, RenderBold: true); }
           Label { Text: "One ledger. Every store in town."; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #9db6ae); }
@@ -28,8 +28,8 @@ $C.@PageOverlay { LayoutMode: Middle;
           }
         }
       }
-      Group { LayoutMode: Left; FlexWeight: 1;
-        Group { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 18);
+      Group { LayoutMode: Top; FlexWeight: 1;
+        Group { LayoutMode: Top; FlexWeight: 1;
           Group { LayoutMode: Left; Anchor: (Height: 44, Bottom: 12);
             TextButton #GENERAL { Text: "GENERAL STORAGE"; Style: @TabControl; FlexWeight: 1; Anchor: (Right: 6); }
             TextButton #OUTPUT { Text: "CRAFTED GOODS"; Style: @TabControl; FlexWeight: 1; Anchor: (Right: 6); }
@@ -41,7 +41,7 @@ $C.@PageOverlay { LayoutMode: Middle;
             TextButton #Sort { Text: "Sort: name"; Style: @Control; Anchor: (Width: 115, Right: 6); }
             TextButton #View { Text: "List view"; Style: @Control; Anchor: (Width: 88); }
           }
-          Label #Description { Anchor: (Height: 42, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #9cb1b8, Wrap: true); }
+          Label #Description { Anchor: (Height: 30, Bottom: 4); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #9cb1b8, Wrap: true); }
           Group { FlexWeight: 1; Background: $T.@Panel; Padding: (Full: 10);
             Group #Grid { LayoutMode: Top; Anchor: (Full: 0); }
             Group #List { LayoutMode: Top; Anchor: (Full: 0); Visible: false; }
@@ -60,18 +60,25 @@ $C.@PageOverlay { LayoutMode: Middle;
             TextButton #Refresh { Text: "Refresh"; Style: @Control; Anchor: (Width: 85); }
           }
         }
-        Group { LayoutMode: Top; Anchor: (Width: 324); Background: $T.@Panel; Padding: (Full: 12);
-          Label { Text: "YOUR INVENTORY"; Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #d9c48f, RenderBold: true); }
-          Label #InventoryHint { Text: "Click to deposit into General storage."; Anchor: (Height: 42, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #98b6ac, Wrap: true); }
-          Group { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle;
-            Group #PlayerItems { LayoutMode: LeftCenterWrap; }
+      }
+      Group { Anchor: (Height: 375, Top: 12); Background: $T.@Inset; Padding: (Full: 10); LayoutMode: Top;
+        Label { Text: "YOUR INVENTORY"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, RenderBold: true, HorizontalAlignment: Center); }
+        Label #InventoryHint { Text: "Left click moves a stack. Right click moves one item."; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12, HorizontalAlignment: Center); }
+        Group { FlexWeight: 1; LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle;
+          Group { LayoutMode: Center;
+            Group { LayoutMode: Left;
+              Group #PlayerItems { Anchor: (Width: 522); LayoutMode: Top; }
+              Group #NativeBackpackPanel { Anchor: (Width: 210, Height: 300, Left: 20); LayoutMode: Top; Background: $T.@Panel; Padding: (Full: 10);
+                Label { Text: "BACKPACK"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #e8c984, HorizontalAlignment: Center); }
+                Group { FlexWeight: 1; LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; Group #NativeBackpackItems { LayoutMode: Top; } }
+              }
+            }
           }
-          Label { Text: "Left click: a stack"; Anchor: (Height: 22, Top: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #a8bfbd); }
-          Label { Text: "Right click: one item"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #a8bfbd); }
         }
       }
-      Group { LayoutMode: Left; Anchor: (Height: 40, Top: 16);
+      Group { LayoutMode: Left; Anchor: (Height: 36, Top: 8);
         Label #Hint { FlexWeight: 1; Anchor: (Right: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #b9cbbf, Wrap: true); }
+        TextButton #Return { Text: "Back to mine planner"; Style: @Control; Anchor: (Width: 260, Right: 8); Visible: false; }
         TextButton #Upgrade { Text: "Expand storage"; Style: @Control; Anchor: (Width: 360); }
       }
     }

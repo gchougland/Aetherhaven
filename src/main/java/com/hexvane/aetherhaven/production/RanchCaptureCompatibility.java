@@ -66,6 +66,7 @@ public final class RanchCaptureCompatibility {
             ? append(original.getIncludedTagSets(), List.of(BIRD_GROUP)) : copy(original.getIncludedTagSets());
         var excludes = new LinkedHashSet<>(managedRoles);
         excludes.add("Aetherhaven_Ranch_*");
+        excludes.add("Aetherhaven_Barn_*");
         result.put(CAPTURE_GROUP, new GroupView(original.getId(), includes, copy(original.getExcludedTagSets()),
             copy(original.getIncludedTags()), append(original.getExcludedTags(), excludes)));
         return result;

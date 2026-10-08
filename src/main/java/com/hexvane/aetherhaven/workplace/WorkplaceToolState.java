@@ -24,7 +24,7 @@ public final class WorkplaceToolState implements Component<EntityStore> {
         hint = switch(next) {
             case BUILD -> "Guide or assemble buildings. Choose a mode to manage workplaces.";
             case CREATE -> "Choose the first ground corner.";
-            case MINESHAFT -> "Choose the ground just in front of the rock. Then set the direction and length.";
+            case MINESHAFT -> "Select an existing Mining workplace to open its map. Create a new base around a Workbench using Create workplace mode.";
             case SELECT, RESIZE -> "Choose an existing workplace.";
         };
         var channelType = com.hexvane.aetherhaven.construction.assembly.BuildingStaffAssemblyChannelComponent.getComponentType();

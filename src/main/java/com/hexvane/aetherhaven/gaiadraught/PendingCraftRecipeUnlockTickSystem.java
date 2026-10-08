@@ -54,7 +54,13 @@ public final class PendingCraftRecipeUnlockTickSystem extends EntityTickingSyste
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = TownPlayerResolution.resolveActiveTown(world, store, playerRef, tm);
-        if (town == null || !town.hasPendingCraftRecipeUnlocks(uc.getUuid())) {
+        if (town == null) return;
+        if (com.hexvane.aetherhaven.reputation.ReputationRecipeMigration.repairWorkplaceRecipes(town, uc.getUuid(), plugin.getApprenticeRecipes().all())) tm.updateTown(town);
+        String supplyLink = com.hexvane.aetherhaven.warehouse.WarehouseSupplyLink.ITEM;
+        if (com.hexvane.aetherhaven.reputation.VillagerReputationService.hasPlayerClaimedRewardId(town, uc.getUuid(), "rep_warehouse_25")
+            && !store.getComponent(playerRef, Player.getComponentType()).getPlayerConfigData().getKnownRecipes().contains(supplyLink))
+            com.hypixel.hytale.builtin.crafting.CraftingPlugin.learnRecipe(playerRef, supplyLink, store);
+        if (!town.hasPendingCraftRecipeUnlocks(uc.getUuid())) {
             return;
         }
         TownSharedRecipeUnlockService.tryFlushPendingCraftRecipes(store, playerRef, town, tm, uc.getUuid());

@@ -9,7 +9,7 @@
   "inputs": [
     {
       "itemId": "Ingredient_Life_Essence",
-      "count": 2
+      "count": 5
     }
   ],
   "output": "Plant_Seeds_Lettuce",

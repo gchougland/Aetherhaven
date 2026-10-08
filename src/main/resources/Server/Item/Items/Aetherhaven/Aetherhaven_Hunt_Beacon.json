@@ -37,11 +37,11 @@
     "Input": [
       {
         "ResourceTypeId": "Rock",
-        "Quantity": 8
+        "Quantity": 10
       },
       {
         "ItemId": "Ingredient_Bar_Copper",
-        "Quantity": 4
+        "Quantity": 5
       }
     ],
     "BenchRequirement": [

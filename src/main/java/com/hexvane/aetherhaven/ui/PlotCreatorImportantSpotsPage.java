@@ -239,6 +239,7 @@ public final class PlotCreatorImportantSpotsPage
             if (type == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
                 continue;
             }
+            if(type==PlotCreatorSubstepType.BARN_PEN&&!PlotCreatorProductionRules.requiresBarnPens(session.getDraft(),AetherhavenPlugin.get()))continue;
             if (type == PlotCreatorSubstepType.MINING_NODE && !PlotCreatorProductionRules.requiresMiningNodes(
                     session.getDraft(),AetherhavenPlugin.get())) continue;
             if (type == PlotCreatorSubstepType.WORK_POI) {
@@ -286,6 +287,7 @@ public final class PlotCreatorImportantSpotsPage
     }
 
     private int resolveMinCount(@Nonnull PlotCreatorSpotEntry spot) {
+        if (spot.type()==PlotCreatorSubstepType.BARN_PEN) return 5;
         for (PlotCreatorSpotEntry existing : working) {
             if (existing.equals(spot)) {
                 return existing.minCount();
@@ -342,6 +344,8 @@ public final class PlotCreatorImportantSpotsPage
     }
 
     private boolean isLockedSpot(@Nonnull PlotCreatorSpotEntry spot) {
+        if (spot.type()==PlotCreatorSubstepType.BARN_PEN && PlotCreatorProductionRules.requiresBarnPens(
+            session.getDraft(),AetherhavenPlugin.get())) return true;
         if (spot.type()==PlotCreatorSubstepType.MINING_NODE && PlotCreatorProductionRules.requiresMiningNodes(
             session.getDraft(),AetherhavenPlugin.get())) return true;
         if (session.getDraft().isFestivalMode()) {

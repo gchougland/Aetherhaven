@@ -1,0 +1,77 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer { Anchor: (Width: 1210, Height: 850);
+  #Title { Label { Text: "MINESHAFT PLANNER"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 22);
+   Label #Name { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 19, RenderBold: true, TextColor: #dec68d); }
+   Label { Text: "Choose a floor, then a passage or the empty square beyond its end. Choose a direction and shape, review, then add it. Reopen this planner at a Workbench inside the base."; Anchor: (Height: 44, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+   Group { LayoutMode: Left; Anchor: (Height: 555);
+    Group { LayoutMode: Top; Anchor: (Width: 498, Right: 18); Padding: (Full: 12); Background: $T.@Panel;
+     Group { LayoutMode: Left; Anchor: (Height: 32, Bottom: 8);
+      $C.@SmallSecondaryTextButton #Down { Text: "Floor down"; Anchor: (Width: 125); }
+      Label #Floor { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center, VerticalAlignment: Center); }
+      $C.@SmallSecondaryTextButton #Up { Text: "Floor up"; Anchor: (Width: 125); }
+     }
+     Group #Map { Anchor: (Width: 462, Height: 462); Background: $T.@Inset; }
+     Label { Text: "3 blocks per square. Blue: base. Green: passage. Gold: draft."; Anchor: (Height: 25); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
+    }
+    Group { LayoutMode: Top; FlexWeight: 1; Padding: (Full: 16); Background: $T.@Panel;
+     Label #StartPoint { Anchor: (Height: 25); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #dec68d); }
+     Group { LayoutMode: Left; Anchor: (Height: 34, Bottom: 8);
+      $C.@SmallSecondaryTextButton #North { Text: "North"; FlexWeight: 1; Anchor: (Right: 4); }
+      $C.@SmallSecondaryTextButton #East { Text: "East"; FlexWeight: 1; Anchor: (Right: 4); }
+      $C.@SmallSecondaryTextButton #South { Text: "South"; FlexWeight: 1; Anchor: (Right: 4); }
+      $C.@SmallSecondaryTextButton #West { Text: "West"; FlexWeight: 1; }
+     }
+     Group { LayoutMode: Left; Anchor: (Height: 34, Bottom: 8);
+      $C.@SmallSecondaryTextButton #Shorter { Text: "3 shorter"; Anchor: (Width: 105); }
+      Label #Length { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center, VerticalAlignment: Center); }
+      $C.@SmallSecondaryTextButton #Longer { Text: "3 longer"; Anchor: (Width: 105); }
+     }
+     Group { LayoutMode: Left; Anchor: (Height: 34, Bottom: 8);
+      $C.@SmallSecondaryTextButton #Straight { Text: "Level tunnel"; FlexWeight: 1; Anchor: (Right: 4); }
+      $C.@SmallSecondaryTextButton #StairsUp { Text: "Stairs up"; FlexWeight: 1; Anchor: (Right: 4); }
+      $C.@SmallSecondaryTextButton #StairsDown { Text: "Stairs down"; FlexWeight: 1; Anchor: (Right: 4); }
+     }
+     $C.@SmallSecondaryTextButton #Room { Text: "Room 9 x 9 x 5"; Anchor: (Height: 28, Bottom: 4); }
+     Label #Shape { Anchor: (Height: 40, Bottom: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb); }
+     Group { LayoutMode: Left; Anchor: (Height: 32, Bottom: 8);
+      $C.@SmallSecondaryTextButton #Beams { Text: "Beams: Off"; FlexWeight: 1; Anchor: (Right: 4); }
+      $C.@SmallSecondaryTextButton #Torches { Text: "Torches: Off"; FlexWeight: 1; Anchor: (Right: 4); }
+      $C.@SmallSecondaryTextButton #Lanterns { Text: "Lanterns: Off"; FlexWeight: 1; Anchor: (Right: 4); }
+      $C.@SmallSecondaryTextButton #Rails { Text: "Rails: Off"; FlexWeight: 1; }
+     }
+     Label #Review { Anchor: (Height: 45, Bottom: 4); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #dec68d); }
+     Group { LayoutMode: Left; Anchor: (Height: 34, Bottom: 12);
+      $C.@SmallSecondaryTextButton #Refresh { Text: "Review terrain"; FlexWeight: 1; Anchor: (Right: 8); }
+      $C.@SmallSecondaryTextButton #Add { Text: "Add reviewed tunnel"; FlexWeight: 1; }
+     }
+     Label #Tunnel { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+     Group { LayoutMode: Left; Anchor: (Height: 32, Bottom: 8);
+      $C.@SmallSecondaryTextButton #Previous { Text: "Previous tunnel"; FlexWeight: 1; Anchor: (Right: 8); }
+      $C.@SmallSecondaryTextButton #Next { Text: "Next tunnel"; FlexWeight: 1; }
+     }
+     Group { LayoutMode: Left; Anchor: (Height: 32, Bottom: 8);
+      $C.@SmallSecondaryTextButton #Pause { Text: "Pause tunnel"; FlexWeight: 1; Anchor: (Right: 8); }
+      $C.@SmallSecondaryTextButton #Remove { Text: "Remove tunnel"; FlexWeight: 1; }
+     }
+     Label #Activity { Anchor: (Height: 39); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb); }
+     Label #Buffer { Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #dec68d); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+    }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 32, Top: 8, Bottom: 8);
+    Label { Text: "Move map"; Anchor: (Width: 95); Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center); }
+    $C.@SmallSecondaryTextButton #MapNorth { Text: "North"; Anchor: (Width: 80, Right: 5); }
+    $C.@SmallSecondaryTextButton #MapEast { Text: "East"; Anchor: (Width: 80, Right: 5); }
+    $C.@SmallSecondaryTextButton #MapSouth { Text: "South"; Anchor: (Width: 80, Right: 5); }
+    $C.@SmallSecondaryTextButton #MapWest { Text: "West"; Anchor: (Width: 80, Right: 10); }
+    $C.@SmallSecondaryTextButton #Home { Text: "Base floor"; Anchor: (Width: 125, Right: 12); }
+    $C.@SmallSecondaryTextButton #Settings { Text: "Base settings"; Anchor: (Width: 135, Right: 10); }
+    $C.@SmallSecondaryTextButton #Storage { Text: "Open output storage"; FlexWeight: 1; }
+   }
+   Label #Status { Anchor: (Height: 50); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #dec68d); }
+  }
+ }
+}
+$C.@BackButton {}

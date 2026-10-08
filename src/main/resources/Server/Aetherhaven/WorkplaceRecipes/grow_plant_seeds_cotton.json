@@ -9,7 +9,7 @@
   "inputs": [
     {
       "itemId": "Ingredient_Life_Essence",
-      "count": 8
+      "count": 10
     }
   ],
   "output": "Plant_Seeds_Cotton",

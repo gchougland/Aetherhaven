@@ -41,6 +41,16 @@ final class TownsfolkActivityUi {
         var progress = character == null ? null : town.getTownsfolkProgress().get(character.toLowerCase(Locale.ROOT));
         if (progress == null || !progress.isEmployed()) return Message.raw("Relaxing");
         if (town.getPayroll().overdue(character)) return Message.raw("Waiting for wages");
+        if(progress.priority(TownsfolkWorkType.MINING)>0){
+            var plugin=com.hexvane.aetherhaven.AetherhavenPlugin.get();
+            String miningIssue=null;boolean ready=false;
+            for(var site:town.getApprenticeWorkplaces().sites())if(site.type()==TownsfolkWorkType.MINING){
+                if(site.mineBaseId()==null&&(site.existingExcavation()==null||site.existingExcavation().id()==null)&&!town.getApprenticeWorkplaces().tunnels(site.id()).isEmpty())continue;
+                String issue=com.hexvane.aetherhaven.workplace.NativeExcavation.workIssue(store.getExternalData().getWorld(),town,site,plugin,progress.skill(TownsfolkWorkType.MINING.skill));
+                if(issue==null){ready=true;break;}if(miningIssue==null)miningIssue=issue;
+            }
+            if(!ready&&miningIssue!=null)return Message.raw("Mining: "+miningIssue);
+        }
         boolean enabled = java.util.Arrays.stream(TownsfolkWorkType.values()).anyMatch(type -> type.availableForNewWork() && progress.priority(type) > 0 && progress.skill(type.skill) > 0);
         return Message.raw(enabled ? "Waiting for work" : "No work enabled");
     }

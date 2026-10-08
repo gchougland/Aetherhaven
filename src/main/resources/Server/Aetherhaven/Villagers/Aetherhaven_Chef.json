@@ -15,10 +15,10 @@
     {
       "rewardId": "rep_chef_25",
       "minReputation": 25,
-      "itemId": "Aetherhaven_Cook_Kit",
-      "itemCount": 1,
+      "itemId": "",
+      "itemCount": 0,
       "dialogueNodeId": "rep_reward_25",
-      "learnRecipeItemId": null
+      "learnRecipeItemId": "Aetherhaven_Cook_Kit"
     },
     {
       "rewardId": "rep_chef_50",
@@ -27,14 +27,6 @@
       "itemCount": 0,
       "dialogueNodeId": "rep_reward_50",
       "learnRecipeItemId": "Bench_Cooking"
-    },
-    {
-      "rewardId": "rep_chef_75",
-      "minReputation": 75,
-      "itemId": "",
-      "itemCount": 0,
-      "dialogueNodeId": "rep_reward_75",
-      "learnRecipeItemId": "Aetherhaven_Cook_Kit"
     }
   ],
   "giftLoves": [

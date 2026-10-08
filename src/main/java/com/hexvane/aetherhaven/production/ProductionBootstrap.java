@@ -32,6 +32,8 @@ public final class ProductionBootstrap {
     private ProductionBootstrap() {}
 
     public static void registerAssetCodecs(@Nonnull AetherhavenPlugin core) {
+        core.getCodecRegistry(com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction.CODEC)
+            .register("AetherhavenBarnPet",BarnPetInteraction.class,BarnPetInteraction.CODEC);
         OpenCustomUIInteraction.registerCustomPageSupplier(
             core,
             ProductionStoragePage.class,
@@ -85,6 +87,7 @@ public final class ProductionBootstrap {
                     return null;
                 }
                 if (!AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION)) return null;
+                if(NativeHerdService.barn(p,plot))return new com.hexvane.aetherhaven.workplace.RancherHerdPage(playerRef,town.getTownId(),plot.getPlotId());
                 return new ProductionStoragePage(
                     playerRef,
                     town.getTownId(),
@@ -104,6 +107,7 @@ public final class ProductionBootstrap {
     }
 
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
+        plugin.getChunkStoreRegistry().registerSystem(new MiningNodeLegacyBlocks());
         RanchCaptureCompatibility.register(plugin);
         ProductionCargoDisplays.register(plugin.getEntityStoreRegistry(),core);
         plugin.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(core));

@@ -11,17 +11,10 @@ $C.@PageOverlay { LayoutMode: Middle;
   #Title { Label { Text: "INN GUEST BOOK"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
   #Content { LayoutMode: Top; Padding: (Full: 22);
    Label #Summary { Anchor: (Height: 28, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #dec78d); }
-   Group #Upgrade { LayoutMode: Left; Anchor: (Height: 68, Bottom: 10); Padding: (Full: 12); Background: $T.@Panel;
-    Group { LayoutMode: Top; FlexWeight: 1;
-     Label { Text: "INN UPGRADE: OUTREACH"; Anchor: (Height: 21); Style: (...$C.@DefaultLabelStyle, FontSize: 15, RenderBold: true, TextColor: #dec78d); }
-     Label { Text: "Choose who visits next. Requires Town Level 3."; Anchor: (Height: 21); Style: (...$C.@DefaultLabelStyle, FontSize: 13); }
-    }
-    TextButton #Unlock { Text: "Unlock for 100 gold"; Anchor: (Width: 205, Height: 36); Style: @Action; }
-   }
    Group { LayoutMode: Left; Anchor: (Height: 390);
     Group { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 14); Padding: (Full: 10); Background: $T.@Inset;
      Group #Guests { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
-     Label #Empty { Text: "All known guests have already joined your town."; Anchor: (Height: 50); Style: (...$C.@DefaultLabelStyle, Wrap: true); }
+     Label #Empty { Text: "No guests are available to invite right now."; Anchor: (Height: 50); Style: (...$C.@DefaultLabelStyle, Wrap: true); }
     }
     Group #Details { LayoutMode: Top; Anchor: (Width: 300); Padding: (Full: 18); Background: $T.@Panel;
      Group { Anchor: (Height: 116); AssetImage #SelectedPortrait { Anchor: (Left: 76, Top: 0, Width: 112, Height: 112); } }

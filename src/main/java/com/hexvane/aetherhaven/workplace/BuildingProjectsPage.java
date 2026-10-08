@@ -39,7 +39,7 @@ public final class BuildingProjectsPage extends AetherhavenInteractiveCustomUIPa
         var c=current(ref,store);if(c==null){close();return;}
         if(!appended){b.append("Aetherhaven/BuildingProjectsPage.ui");appended=true;for(String action:List.of("Pause","Refresh","Station"))e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,EventData.of("Action",action),false);}
         var world=store.getExternalData().getWorld();var plan=c.site().building();revision=plan.revision();actions.clear();
-        b.set("#TitleText.Text",c.site().name()+" | PROJECT BOARD");b.set("#Count.Text",plan.list().size()+" / 32 projects");
+        b.set("#TitleText.Text",c.site().name()+" | PROJECT BOARD");b.set("#Count.Text",plan.list().size()+" / 35 projects");
         b.set("#Contribution.Text",plan.contributions()+" pieces placed by this yard");
         b.set("#Pause.Text",plan.paused()?"Resume yard":"Pause yard");b.set("#Station.Visible",station!=null);
         var equipment=WorkplaceEquipment.scan(world,c.site().area());
@@ -57,7 +57,7 @@ public final class BuildingProjectsPage extends AetherhavenInteractiveCustomUIPa
         for(var plot:c.town().getPlotInstances()) {
             if(plot.getState()!=PlotInstanceState.ASSEMBLING||plan.list().stream().anyMatch(o->o.plot().equals(plot.getPlotId())))continue;
             String path="#Available["+(available++)+"]";b.append("#Available","Aetherhaven/BuildingProjectCard.ui");draw(b,path,plot,0,store);
-            b.set(path+" #Status.Text","Construction already started");b.set(path+" #Ordering.Visible",false);b.set(path+" #Add.Disabled",plan.list().size()>=32);
+            b.set(path+" #Status.Text","Construction already started");b.set(path+" #Ordering.Visible",false);b.set(path+" #Add.Disabled",plan.list().size()>=35);
             bind(e,path+" #Add","Add",plot.getPlotId(),()->{
                 if(plot.getState()!=PlotInstanceState.ASSEMBLING||c.town().findPlotById(plot.getPlotId())!=plot)hint="This construction project changed. Review it again.";
                 else hint=plan.add(revision,plot.getPlotId(),playerRef.getUuid());

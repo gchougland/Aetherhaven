@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.workplace;
 
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.town.*;
@@ -36,11 +37,12 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
         if(!hasWorkplaces(supervisor))tab="Production";
         if("alchemist".equals(supervisor))tab="Alchemy";
         if("warehouse_manager".equals(supervisor))tab="Storage";
+        if("innkeeper".equals(supervisor))tab="Inn";
     }
     private static boolean hasWorkplaces(String kind) {
         return Arrays.stream(TownsfolkWorkType.values()).anyMatch(t -> t.requiresWorkplace() && t.availableForNewWork() && WorkplaceRules.supervisor(t).equals(kind));
     }
-    public static boolean supports(String kind) { return hasWorkplaces(kind) || "warehouse_manager".equals(kind) || "logger".equals(kind) || "druid".equals(kind); }
+    public static boolean supports(String kind) { return "innkeeper".equals(kind) || hasWorkplaces(kind) || "warehouse_manager".equals(kind) || "logger".equals(kind) || "druid".equals(kind); }
     private List<PlotInstance> plots(TownRecord town) {
         var catalog=AetherhavenPlugin.get().getConstructionCatalog();
         return town.getPlotInstances().stream().filter(p -> p.getState()==PlotInstanceState.COMPLETE
@@ -57,16 +59,18 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
     }
     private List<Node> nodes(PlotInstance p) {
         return switch(tab) {
+            case "Inn" -> "innkeeper".equals(supervisor)?BuildingUpgradeTree.inn():List.of();
             case "Storage" -> "warehouse_manager".equals(supervisor)?BuildingUpgradeTree.warehouse():List.of();
             case "Alchemy" -> "alchemist".equals(supervisor)?BuildingUpgradeTree.alchemy():List.of();
-            case "Production" -> production(p)?BuildingUpgradeTree.production():List.of();
+            case "Production" -> production(p)?BuildingUpgradeTree.production("rancher".equals(supervisor)):List.of();
             case "Restaurant" -> restaurant(p)?BuildingUpgradeTree.restaurant():List.of();
             default -> hasWorkplaces(supervisor)?BuildingUpgradeTree.workplaces(supervisor):List.of();
         };
     }
     private boolean owned(TownRecord town,PlotInstance plot,Node n) {
         return switch(n.kind()) {
-            case FOUNDATION -> TownWorkplaces.hasSupervisor(town,supervisor);
+            case FOUNDATION -> "innkeeper".equals(supervisor)?town.isInnActive():TownWorkplaces.hasSupervisor(town,supervisor);
+            case INN -> town.getOutreach().unlocked();
             case WORKPLACE -> town.getApprenticeWorkplaces().unlocked(TownsfolkWorkType.byId(n.branch()));
             case SLOT -> town.getApprenticeWorkplaces().extraSlots(supervisor)>=n.tier();
             case WAREHOUSE -> town.getWarehouse().upgrades()>=n.tier();
@@ -79,15 +83,16 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
     private String blocked(TownRecord town,PlotInstance plot,Node n,List<Node> all) {
         if(owned(town,plot,n))return "Already unlocked";
         if(!town.playerCanManageConstructions(playerRef.getUuid()))return "Building permission required";
-        if(!TownWorkplaces.hasSupervisor(town,supervisor))return "Invite this villager first";
+        if("innkeeper".equals(supervisor)?!town.isInnActive():!TownWorkplaces.hasSupervisor(town,supervisor))return "Invite this villager first";
         if(TownPopulation.levelFor(TownPopulation.count(town))<n.level())return "Requires Town Level "+n.level();
         if(n.kind()==Kind.ALCHEMY&&com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService.level(town,"alchemist")<n.tier()*3)return "Requires Alchemist Mastery "+n.tier()*3;
         for(String parent:n.parents())if(all.stream().filter(p -> p.id().equals(parent)).noneMatch(p -> owned(town,plot,p)))return "Unlock the connected nodes first";
-        if((n.kind()==Kind.SLOT||n.kind()==Kind.SMELTING||n.kind()==Kind.ALCHEMY||n.kind()==Kind.WAREHOUSE)&&!town.playerCanSpendTreasuryGold(playerRef.getUuid()))return "Treasury permission required";
         return null;
     }
     private long gold(TownRecord town,Node n) {
         return switch(n.kind()) {
+            case WORKPLACE -> TownWorkplaces.TYPE_UNLOCK_COST;
+            case INN -> com.hexvane.aetherhaven.inn.InnOutreach.UNLOCK_COST;
             case WAREHOUSE -> n.tier()*150L;
             case SLOT -> n.tier()*100L;
             case SMELTING -> n.tier()*150L;
@@ -117,17 +122,19 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
         var plugin=AetherhavenPlugin.get();if(plugin==null)return;
         var town=AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(),plugin).getTown(townId);
         if(town==null||!town.hasMemberOrOwner(playerRef.getUuid())){close();return;}
+        var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);
+        long available=inventory==null?0:GoldCoinPayment.totalAvailable(town,inventory,town.playerCanSpendTreasuryGold(playerRef.getUuid()));
         var p=plot(town);var all=nodes(p);int level=TownPopulation.levelFor(TownPopulation.count(town));
         if(all.stream().noneMatch(n -> n.id().equals(selected)))selected=all.isEmpty()?"":all.getFirst().id();
         var sites=town.getApprenticeWorkplaces();String name=supervisor.replace('_',' ');
-        c.set("#Summary.Text",Character.toUpperCase(name.charAt(0))+name.substring(1)+"  |  Town Level "+level+("warehouse_manager".equals(supervisor)?"  |  "+town.getWarehouse().capacity()+" general storage slots":"  |  "+sites.used(supervisor)+"/"+sites.slots(supervisor)+" workplaces")+"  |  Treasury: "+town.getTreasuryGoldCoinCount()+" gold");
-        for(String t:List.of("Workplaces","Production","Restaurant","Alchemy","Storage")) {
-            c.set("#"+t+".Visible",t.equals("Storage")?"warehouse_manager".equals(supervisor):t.equals("Alchemy")?"alchemist".equals(supervisor):t.equals("Workplaces")?hasWorkplaces(supervisor):t.equals("Production")?production(p):restaurant(p));
+        c.set("#Summary.Text",Character.toUpperCase(name.charAt(0))+name.substring(1)+"  |  Town Level "+level+("innkeeper".equals(supervisor)?"": "warehouse_manager".equals(supervisor)?"  |  "+town.getWarehouse().capacity()+" general storage slots":"  |  "+sites.used(supervisor)+"/"+sites.slots(supervisor)+" workplaces")+"  |  Available: "+available+" gold");
+        for(String t:List.of("Workplaces","Production","Restaurant","Alchemy","Storage","Inn")) {
+            c.set("#"+t+".Visible",t.equals("Inn")?"innkeeper".equals(supervisor):t.equals("Storage")?"warehouse_manager".equals(supervisor):t.equals("Alchemy")?"alchemist".equals(supervisor):t.equals("Workplaces")?hasWorkplaces(supervisor):t.equals("Production")?production(p):restaurant(p));
             c.set("#"+t+".Disabled",tab.equals(t));
             e.addEventBinding(CustomUIEventBindingType.Activating,"#"+t,new EventData().append("Action","Tab").append("Type",t),false);
         }
-        int total=plots(town).size();boolean plotControls=total>1&&!tab.equals("Workplaces")&&!tab.equals("Alchemy")&&!tab.equals("Storage");
-        c.set("#Previous.Visible",plotControls);c.set("#Next.Visible",plotControls);c.set("#Plot.Visible",!tab.equals("Workplaces")&&!tab.equals("Alchemy")&&!tab.equals("Storage"));
+        int total=plots(town).size();boolean plotControls=total>1&&!tab.equals("Workplaces")&&!tab.equals("Alchemy")&&!tab.equals("Storage")&&!tab.equals("Inn");
+        c.set("#Previous.Visible",plotControls);c.set("#Next.Visible",plotControls);c.set("#Plot.Visible",!tab.equals("Workplaces")&&!tab.equals("Alchemy")&&!tab.equals("Storage")&&!tab.equals("Inn"));
         c.set("#Plot.Text",total==0?"No building":"Building "+(plotIndex+1)+" / "+total);
         for(String a:List.of("Previous","Next"))e.addEventBinding(CustomUIEventBindingType.Activating,"#"+a,new EventData().append("Action",a),false);
         c.clear("#Canvas");anchor(c,"#Canvas",0,0,640,all.stream().mapToInt(n -> n.y()+140).max().orElse(240));
@@ -183,13 +190,15 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
         c.set("#DetailItem.Visible",n.item()!=null);if(n.item()!=null)c.set("#DetailItem.ItemId",n.item());
         var parentNames=all.stream().filter(o -> n.parents().contains(o.id())).map(Node::title).toList();
         c.set("#Requires.Text","Town Level "+n.level()+(parentNames.isEmpty()?"":"\nRequires: "+String.join(", ",parentNames)));
-        var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);
         int ci=0;for(var cost:costs(town,n)) {
             c.append("#Costs","Aetherhaven/BuildingUpgradeCost.ui");String s="#Costs["+ci+++"]";
             c.set(s+" #Item.ItemId",cost.itemId());c.set(s+" #Count.Text",(inventory==null?0:InventoryMaterials.count(inventory,cost.itemId()))+" / "+cost.count());
         }
-        c.set("#Gold.Text",bought?"Purchased":gold(town,n)==0?"No gold required":gold(town,n)+" gold"+(n.kind()==Kind.SLOT||n.kind()==Kind.SMELTING||n.kind()==Kind.ALCHEMY||n.kind()==Kind.WAREHOUSE?" from treasury":"\nMaterials from your inventory"));
-        c.set("#Purchase.Text",bought?"Unlocked":"Unlock upgrade");c.set("#Purchase.Disabled",reason!=null||n.kind()==Kind.FOUNDATION);
+        boolean affordable=inventory!=null && available>=gold(town,n)
+            && costs(town,n).stream().allMatch(cost -> InventoryMaterials.count(inventory,cost.itemId())>=cost.count());
+        c.set("#Gold.Text",bought?"Purchased":gold(town,n)==0?"No gold required":gold(town,n)+" gold\nFrom inventory or treasury");
+        if(reason==null&&!affordable)c.set("#DetailState.Text","You need more gold or materials");
+        c.set("#Purchase.Text",bought?"Unlocked":"Unlock upgrade");c.set("#Purchase.Disabled",reason!=null||n.kind()==Kind.FOUNDATION||!affordable);
         e.addEventBinding(CustomUIEventBindingType.Activating,"#Purchase",new EventData().append("Action","Purchase").append("Type",token(p,n)),false);
     }
     @Override public void handleDataEvent(Ref<EntityStore> ref,Store<EntityStore> store,Data data) {
@@ -198,7 +207,7 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
         var town=manager.getTown(townId);if(town==null||!town.hasMemberOrOwner(playerRef.getUuid())){close();return;}
         var p=plot(town);var all=nodes(p);
         if("Tab".equals(data.action)) {
-            if(!List.of("Workplaces","Production","Restaurant","Alchemy","Storage").contains(data.type))return;
+            if(!List.of("Workplaces","Production","Restaurant","Alchemy","Storage","Inn").contains(data.type))return;
             tab=data.type;selected="home";
         } else if("Select".equals(data.action)) {
             if(all.stream().noneMatch(n -> n.id().equals(data.type)))return;selected=data.type;
@@ -221,37 +230,35 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
         var c=new UICommandBuilder();var e=new UIEventBuilder();build(ref,c,e,store);sendUpdate(c,e,false);
     }
     private String purchase(Ref<EntityStore> ref,Store<EntityStore> store,TownRecord town,PlotInstance p,Node n) {
+        var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);
+        if(inventory==null)return "Your inventory is unavailable.";
         switch(n.kind()) {
+            case INN: return "innkeeper".equals(supervisor)?town.getOutreach().unlock(town,playerRef.getUuid(),inventory):"Choose the Inn upgrades.";
             case WAREHOUSE: {
                 if(!"warehouse_manager".equals(supervisor))return "Choose the warehouse's upgrades.";
                 var warehouse=town.getWarehouse();
                 if(warehouse.upgrades()!=n.tier()-1)return "Storage changed. Choose its next upgrade again.";
                 long cost=warehouse.upgradeCost();
-                if(town.getTreasuryGoldCoinCount()<cost)return "Your treasury needs more gold.";
-                if(!warehouse.upgrade(warehouse.revision()))return "Storage changed. Try again.";
-                town.setTreasuryGoldCoinCount(town.getTreasuryGoldCoinCount()-cost);return null;
+                return buyGoldUpgrade(ref,store,town,inventory,cost,()->warehouse.upgrade(warehouse.revision()));
             }
             case ALCHEMY: {
                 if(!"alchemist".equals(supervisor)||com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService.level(town,"alchemist")<n.tier()*3)return "The Alchemist needs more Mastery.";
-                if(town.getTreasuryGoldCoinCount()<gold(town,n))return "Your treasury needs more gold.";
-                if(!town.getAlchemyLaboratory().upgrade(n.tier()-1))return "This upgrade has changed. Choose it again.";
-                town.setTreasuryGoldCoinCount(town.getTreasuryGoldCoinCount()-gold(town,n));return null;
+                if(town.getAlchemyLaboratory().upgrades()!=n.tier()-1)return "This upgrade has changed. Choose it again.";
+                return buyGoldUpgrade(ref,store,town,inventory,gold(town,n),()->town.getAlchemyLaboratory().upgrade(n.tier()-1));
             }
-            case WORKPLACE: return town.getApprenticeWorkplaces().unlock(town,TownsfolkWorkType.byId(n.branch()));
-            case SLOT: return town.getApprenticeWorkplaces().buySlot(town,playerRef.getUuid(),supervisor,n.tier()-1);
+            case WORKPLACE: return town.getApprenticeWorkplaces().buyUnlock(town,playerRef.getUuid(),TownsfolkWorkType.byId(n.branch()),inventory);
+            case SLOT: return town.getApprenticeWorkplaces().buySlot(town,playerRef.getUuid(),supervisor,n.tier()-1,inventory);
             case SMELTING: {
                 var storage=town.getWarehouse().smelting();
                 if(storage.upgrades()!=n.tier()-1||storage.upgrades()>=SmeltingOutputStore.MAX_UPGRADES)return "This upgrade has changed. Choose it again.";
-                if(town.getTreasuryGoldCoinCount()<gold(town,n))return "Your treasury needs more gold.";
-                if(!storage.upgrade(storage.revision()))return "Storage changed. Try again.";
-                town.setTreasuryGoldCoinCount(town.getTreasuryGoldCoinCount()-gold(town,n));return null;
+                return buyGoldUpgrade(ref,store,town,inventory,gold(town,n),()->storage.upgrade(storage.revision()));
             }
             case PRODUCTION: {
                 if(!production(p))return "This building is no longer available.";
                 var state=town.getOrCreatePlotProduction(p.getPlotId());var branch=WorkplaceProductionUpgrades.Branch.valueOf(n.branch());
                 if(WorkplaceProductionUpgrades.nextTier(state,branch)!=n.tier())return "Unlock the earlier tier first.";
                 var inv=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);if(inv==null)return "Your inventory is unavailable.";
-                var result=WorkplaceProductionUpgrades.tryPurchase(state,branch,town,inv,town.playerCanSpendTreasuryGold(playerRef.getUuid()));
+                var result=WorkplaceProductionUpgrades.tryPurchase(state,branch,town,inv,town.playerCanSpendTreasuryGold(playerRef.getUuid()),"rancher".equals(supervisor));
                 return switch(result){case OK -> null;case NEED_INGOT -> "You need more of the shown ingots.";case NEED_GOLD -> "You need more gold.";default -> "Cannot purchase this upgrade. Review its requirements.";};
             }
             case RESTAURANT: {
@@ -264,6 +271,16 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
             }
             default: return "Invite this resident to begin.";
         }
+    }
+    private String buyGoldUpgrade(Ref<EntityStore> ref,Store<EntityStore> store,TownRecord town,
+            CombinedItemContainer inventory,long cost,java.util.function.BooleanSupplier apply) {
+        var player=store.getComponent(ref,com.hypixel.hytale.server.core.entity.entities.Player.getComponentType());
+        if(player==null)return "Your inventory is unavailable.";
+        var spent=GoldCoinPayment.trySpendReturningBreakdown(town,inventory,cost,town.playerCanSpendTreasuryGold(playerRef.getUuid()));
+        if(spent==null)return "You need more gold in your inventory or treasury.";
+        if(apply.getAsBoolean())return null;
+        GoldCoinPayment.refund(town,player,ref,store,spent);
+        return "This upgrade has changed. Choose it again.";
     }
     public static final class Data {
         public static final BuilderCodec<Data> CODEC=BuilderCodec.builder(Data.class,Data::new)

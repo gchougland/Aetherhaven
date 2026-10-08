@@ -9,7 +9,7 @@
   "inputs": [
     {
       "itemId": "Ingredient_Life_Essence",
-      "count": 12
+      "count": 15
     }
   ],
   "output": "Plant_Seeds_Health1",

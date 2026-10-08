@@ -12,8 +12,8 @@ import java.util.UUID;
 /** Attended conversion of local, unreserved logs. No timer or catch-up output. */
 public final class TimberCharring {
     public static final String OUTPUT = "Wood_Burnt_Trunk";
-    public static final int LOG_COST = 2;
-    public static final double WORK_SECONDS = 12;
+    public static final int LOG_COST = 5;
+    public static final double WORK_SECONDS = 15;
     private TimberCharring() {}
 
     public static boolean selected(PlotProductionState production, ProductionCatalog.Entry entry, String item) {

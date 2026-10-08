@@ -694,6 +694,8 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     }
 
     private static boolean usesTouristMoveInParams(@Nonnull String translationKey) {
+        if (translationKey.contains("aetherhaven_dialogue_guild_adventurer")
+            && translationKey.contains("hire_confirm.")) return true;
         return translationKey.contains("aetherhaven_dialogue_tourist")
             && (translationKey.contains("_offer.")
                 || translationKey.contains("_accepted.")
@@ -1082,6 +1084,22 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if ("main_hub".equals(nodeId) && npcRef != null && npcRef.isValid()) {
             var supervisor = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
             var town = resolvePlayerTown(store, playerRef);
+            if(supervisor!=null&&town!=null&&town.getTownId().equals(supervisor.getTownId())&&TownVillagerBinding.KIND_GUARD.equals(supervisor.getKind())) {
+                var uuid=store.getComponent(npcRef,UUIDComponent.getComponentType());
+                var guard=uuid==null?null:com.hexvane.aetherhaven.patrol.GuardSpoils.guard(town,uuid.getUuid());
+                if(guard!=null){
+                    DialogueChoiceDefinition spoils=new DialogueChoiceDefinition();spoils.setId("guard_collect_spoils");
+                    spoils.setText(guard.collectsMobDrops()?"aetherhaven_backpack.guard.stop":"aetherhaven_backpack.guard.collect");
+                    JsonObject action=new JsonObject();action.addProperty("type","guard_collect_spoils");action.addProperty("enabled",!guard.collectsMobDrops());
+                    spoils.setActions(List.of(action));choices.add(spoils);
+                }
+            }
+            if (supervisor != null && town != null && town.getTownId().equals(supervisor.getTownId()) && "leatherworker".equals(supervisor.getKind())) {
+                DialogueChoiceDefinition backpack = new DialogueChoiceDefinition();
+                backpack.setId("backpack_workshop"); backpack.setText("aetherhaven_backpack.dialogue");
+                JsonObject action = new JsonObject(); action.addProperty("type", "open_backpack_workshop");
+                backpack.setActions(List.of(action)); choices.add(0, backpack);
+            }
             if (supervisor != null && town != null && town.getTownId().equals(supervisor.getTownId())
                 && com.hexvane.aetherhaven.warehouse.WarehouseAccess.MANAGER_KIND.equals(supervisor.getKind())) {
                 for (String destination : List.of("couriers", "storage")) {
@@ -1128,6 +1146,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         injectMarketChoices(choices, playerRef, store);
         injectWintertideGiftChoice(choices, playerRef, store);
         FestivalDialogueChoiceOrder.promoteToTop(choices);
+        com.hexvane.aetherhaven.dialogue.QuestDialogueChoiceOrder.promote(choices, tree);
         return choices;
     }
 

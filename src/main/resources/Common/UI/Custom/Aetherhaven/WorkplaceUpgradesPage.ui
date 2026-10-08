@@ -11,6 +11,7 @@ $C.@PageOverlay { LayoutMode: Middle;
         $C.@SecondaryTextButton #Restaurant { Text: "Restaurant"; Anchor: (Width: 175, Right: 8); }
         $C.@SecondaryTextButton #Alchemy { Text: "Alchemy"; Anchor: (Width: 175, Right: 8); }
         $C.@SecondaryTextButton #Storage { Text: "Storage"; Anchor: (Width: 175, Right: 8); }
+        $C.@SecondaryTextButton #Inn { Text: "Inn"; Anchor: (Width: 175, Right: 8); }
         Group { FlexWeight: 1; }
         $C.@SecondaryTextButton #Previous { Text: "<"; Anchor: (Width: 36, Right: 4); }
         Label #Plot { Anchor: (Width: 95); Style: (...$C.@DefaultLabelStyle, FontSize: 12, HorizontalAlignment: Center, VerticalAlignment: Center); }

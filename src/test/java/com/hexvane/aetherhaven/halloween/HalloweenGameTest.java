@@ -90,11 +90,11 @@ class HalloweenGameTest {
         var bag=new CombinedItemContainer(new SimpleItemContainer((short)1),new SimpleItemContainer((short)2));
         var head=HalloweenGameInventory.head(townId,game);put(bag,0,head);put(bag,2,head);
         assertTrue(HalloweenGameInventory.reward(bag,townId,game,()->state.reward(player,game.id(),4)));
-        assertEquals(3,bag.getItemStack((short)0).getQuantity());assertEquals("Aetherhaven_Spooky_Candy",bag.getItemStack((short)0).getItemId());
+        assertEquals(5,bag.getItemStack((short)0).getQuantity());assertEquals("Aetherhaven_Spooky_Candy",bag.getItemStack((short)0).getItemId());
         assertEquals(5,bag.getItemStack((short)1).getQuantity());assertEquals("Aetherhaven_Gold_Coin",bag.getItemStack((short)1).getItemId());
         assertEquals(head,bag.getItemStack((short)2));
         assertFalse(HalloweenGameInventory.reward(bag,townId,game,()->state.reward(player,game.id(),4)));
-        assertEquals(3,bag.getItemStack((short)0).getQuantity());assertEquals(5,bag.getItemStack((short)1).getQuantity());
+        assertEquals(5,bag.getItemStack((short)0).getQuantity());assertEquals(5,bag.getItemStack((short)1).getQuantity());
     }
     @Test void movedOrRemovedBuildingsInvalidateHidingPlaces() {
         var town=new TownRecord();var id=UUID.randomUUID();

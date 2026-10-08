@@ -16,7 +16,6 @@ import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.PlayerSkin;
 import com.hypixel.hytale.server.core.HytaleServer;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
-import com.hypixel.hytale.server.core.asset.type.model.config.ModelAttachment;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
@@ -25,6 +24,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplay
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
+import com.hypixel.hytale.server.core.modules.entity.player.PlayerSkinComponent;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -350,7 +350,7 @@ public final class FounderMonumentStatueRestoreSystem {
             networkId != null,
             modelName(model),
             persistentModel != null ? persistentModel.getModelReference().getModelAssetId() : "none",
-            hasAppliedStatueCosmetics(modelComponent),
+            hasAppliedStatueCosmetics(store.getComponent(ref, PlayerSkinComponent.getComponentType())),
             isClientVisibleStatue(modelComponent, networkId)
         );
     }
@@ -417,7 +417,7 @@ public final class FounderMonumentStatueRestoreSystem {
         FounderMonumentSpawnService.persistStatueOnBlock(
             world,
             pedestal.x() + 0.5,
-            pedestal.y() + 1.05,
+            pedestal.y() + 1.0,
             pedestal.z() + 0.5,
             statueId,
             skinJson,
@@ -457,25 +457,8 @@ public final class FounderMonumentStatueRestoreSystem {
         return isIdentityRotation(preferred) ? fallback : preferred;
     }
 
-    static boolean isStoneStatueMesh(@Nullable ModelComponent modelComponent) {
-        if (modelComponent == null) {
-            return false;
-        }
-        Model model = modelComponent.getModel();
-        if (model == null) {
-            return false;
-        }
-        return AetherhavenConstants.FOUNDER_MONUMENT_STATUE_TEXTURE.equals(model.getTexture())
-            || AetherhavenConstants.FOUNDER_MONUMENT_STATUE_BODY_MODEL.equals(model.getModel())
-            || AetherhavenConstants.FOUNDER_MONUMENT_STATUE_MODEL_ID.equals(model.getModelAssetId());
-    }
-
-    static boolean hasAppliedStatueCosmetics(@Nullable ModelComponent modelComponent) {
-        if (!isStoneStatueMesh(modelComponent)) {
-            return false;
-        }
-        ModelAttachment[] attachments = modelComponent.getModel().getAttachments();
-        return attachments != null && attachments.length > 0;
+    static boolean hasAppliedStatueCosmetics(@Nullable PlayerSkinComponent skinComponent) {
+        return skinComponent != null && skinComponent.getPlayerSkin() != null;
     }
 
     static boolean isClientVisibleStatue(@Nullable ModelComponent modelComponent, @Nullable NetworkId networkId) {
@@ -609,7 +592,7 @@ public final class FounderMonumentStatueRestoreSystem {
 
         boolean nearStatue(double statueX, double statueY, double statueZ) {
             double dx = statueX - (x + 0.5);
-            double dy = statueY - (y + 1.05);
+            double dy = statueY - (y + 1.0);
             double dz = statueZ - (z + 0.5);
             return Math.sqrt(dx * dx + dy * dy + dz * dz) <= NEARBY_STATUE_RANGE;
         }

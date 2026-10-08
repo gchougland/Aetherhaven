@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.inn;
 
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.*;
 import com.hexvane.aetherhaven.ui.*;
@@ -32,10 +34,11 @@ public final class InnOutreachPage extends AetherhavenInteractiveCustomUIPage<In
     @Override public void build(Ref<EntityStore> ref, UICommandBuilder c, UIEventBuilder e, Store<EntityStore> store) {
         var plugin = AetherhavenPlugin.get(); if (plugin == null) return;
         var town = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin).getTown(townId);
-        if (town == null || !town.hasMemberOrOwner(playerRef.getUuid())) { close(); return; }
+        if (town == null || !town.hasMemberOrOwner(playerRef.getUuid()) || !town.getOutreach().unlocked()) { close(); return; }
         if (!appended) { c.append("Aetherhaven/InnOutreachPage.ui"); appended = true; }
         var candidates = plugin.getVillagerDefinitionCatalog().allByNpcRoleId().values().stream()
             .filter(VillagerDefinition::isInnPoolEligible)
+            .filter(d -> InnPoolService.isVisitorRoleEligible(plugin, town, store, d.getNpcRoleId()))
             .filter(d -> !town.getInnVisitorPoolExcludedRoleIds().contains(d.getNpcRoleId()))
             .filter(d -> town.getResidentNpcRecords().stream().noneMatch(r -> d.getNpcRoleId().equals(r.getNpcRoleId())
                 && !com.hexvane.aetherhaven.villager.TownVillagerBinding.isVisitorKind(r.getKind())))
@@ -46,17 +49,15 @@ public final class InnOutreachPage extends AetherhavenInteractiveCustomUIPage<In
             selected = candidates.isEmpty() ? null : candidates.getFirst().getNpcRoleId();
         frame++;
         var outreach = town.getOutreach();
+        var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);
+        long available=inventory==null?0:GoldCoinPayment.totalAvailable(town,inventory,town.playerCanSpendTreasuryGold(playerRef.getUuid()));
         var bounds=new Anchor();
         bounds.setWidth(Value.of(1020));
-        bounds.setHeight(Value.of(outreach.unlocked() ? 650 : 730));
+        bounds.setHeight(Value.of(650));
         c.setObject("#GuestBook.Anchor",bounds);
         c.set("#Summary.Text", town.getDisplayName() + " | Town Level " + TownPopulation.levelFor(TownPopulation.count(town))
-            + " | Treasury: " + town.getTreasuryGoldCoinCount() + " gold");
+            + " | Available: " + available + " gold");
         c.set("#Hint.Text", hint);
-        c.set("#Upgrade.Visible", !outreach.unlocked());
-        c.set("#Unlock.Disabled", !town.playerCanManageConstructions(playerRef.getUuid()) || !town.playerCanSpendTreasuryGold(playerRef.getUuid())
-            || TownPopulation.levelFor(TownPopulation.count(town)) < InnOutreach.UNLOCK_LEVEL || town.getTreasuryGoldCoinCount() < InnOutreach.UNLOCK_COST);
-        e.addEventBinding(CustomUIEventBindingType.Activating, "#Unlock", event("Unlock", ""), false);
         c.set("#Pending.Text", outreach.requestedRole().isEmpty() ? "No invitation pending"
             : "Invited: " + AetherhavenRoleLabels.displayNameForRoleId(outreach.requestedRole()));
         c.set("#Cancel.Visible", !outreach.requestedRole().isEmpty());
@@ -85,9 +86,10 @@ public final class InnOutreachPage extends AetherhavenInteractiveCustomUIPage<In
             c.set("#SelectedStatus.Text", status);
             var building = plugin.getConstructionCatalog().get(d.getWorkConstructionId());
             c.set("#Description.Text", building == null || building.getDescription() == null ? "A new neighbor for your growing town." : building.getDescription());
-            c.set("#Invite.Text", role.equals(outreach.requestedRole()) ? "Invitation sent" : "Invite to the Inn");
+            c.set("#Invite.Text", role.equals(outreach.requestedRole()) ? "Invitation sent" : "Invite for 50 gold");
             c.set("#Invite.Disabled", !outreach.unlocked() || !town.playerCanManageConstructions(playerRef.getUuid())
-                || !eligible || visiting || role.equals(outreach.requestedRole()));
+                || inventory==null || available < InnOutreach.INVITE_COST
+                || !eligible || visiting || !outreach.requestedRole().isEmpty());
             e.addEventBinding(CustomUIEventBindingType.Activating, "#Invite", event("Invite", role), false);
         }
     }
@@ -100,23 +102,20 @@ public final class InnOutreachPage extends AetherhavenInteractiveCustomUIPage<In
         var plugin = AetherhavenPlugin.get(); if (plugin == null) return;
         var manager = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
         var town = manager.getTown(townId);
-        if (town == null || !town.hasMemberOrOwner(playerRef.getUuid())) { close(); return; }
+        if (town == null || !town.hasMemberOrOwner(playerRef.getUuid()) || !town.getOutreach().unlocked()) { close(); return; }
         if (!Long.toString(frame).equals(data.frame)) hint = "The guest book changed. Please choose again.";
         else if ("Select".equals(data.action)) selected = data.role;
         else if (!town.playerCanManageConstructions(playerRef.getUuid())) hint = "You need permission to manage town buildings.";
-        else if ("Unlock".equals(data.action)) {
-            String error = town.getOutreach().unlock(town, playerRef.getUuid());
-            hint = error == null ? "Outreach is ready. Choose a guest to invite." : error;
-            manager.updateTown(town);
-        } else if ("Cancel".equals(data.action) && town.getOutreach().unlocked()) {
-            town.getOutreach().request(null); manager.updateTown(town); hint = "The pending invitation has been cancelled.";
+        else if ("Cancel".equals(data.action) && town.getOutreach().unlocked()) {
+            town.getOutreach().request(null); manager.updateTown(town); hint = "The invitation has been cancelled. Its delivery fee is not refunded.";
         } else if ("Invite".equals(data.action)) {
             if (!town.getOutreach().unlocked()) hint = "Unlock outreach first.";
             else if (data.role == null || data.role.isBlank() || !town.isInnActive() || !InnPoolService.isVisitorRoleEligible(plugin, town, store, data.role)) hint = "That guest is not available yet.";
             else if (InnPoolService.isRoleVisiting(store, town, data.role)) hint = "That guest is already staying at the Inn.";
             else {
-                town.getOutreach().request(data.role); manager.updateTown(town);
-                hint = "Invitation sent. They will take the next free morning guest spot. Current guests on quests keep their rooms.";
+                String error = town.getOutreach().invite(town, playerRef.getUuid(), data.role, InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING));
+                if (error == null) manager.updateTown(town);
+                hint = error == null ? "Invitation sent. They will take the next free morning guest spot. Current guests on quests keep their rooms." : error;
             }
         }
         var c = new UICommandBuilder(); var e = new UIEventBuilder(); build(ref, c, e, store); sendUpdate(c, e, false);

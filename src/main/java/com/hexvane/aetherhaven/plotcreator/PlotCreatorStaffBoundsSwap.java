@@ -73,11 +73,8 @@ public final class PlotCreatorStaffBoundsSwap {
         return container.replaceItemStackInSlot(slot, held, mainStaff).succeeded();
     }
     public static boolean isEditorBoundsStaff(@Nullable ItemStack stack) {
-        if (!isBoundsStaff(stack) || stack.getMetadata() == null) return false;
-        var original = stack.getMetadata().get(ORIGINAL_STAFF);
-        return original instanceof org.bson.BsonDocument document
-            && document.get("Id") instanceof org.bson.BsonString id
-            && AetherhavenConstants.BUILDING_EDITOR_STAFF_ITEM_ID.equals(id.getValue());
+        if (!isBoundsStaff(stack)) return false;
+        return BuildingEditorInteractions.isBuildingEditorStaff(stack.getFromMetadataOrNull(ORIGINAL_STAFF, ItemStack.CODEC));
     }
 
     static ItemStack toBoundsStaff(ItemStack held) {
@@ -87,11 +84,8 @@ public final class PlotCreatorStaffBoundsSwap {
             .withMetadata(ORIGINAL_STAFF, ItemStack.CODEC, held);
     }
     static ItemStack fromBoundsStaff(ItemStack held) {
-        var metadata = held.getMetadata();
-        if (metadata != null && metadata.get(ORIGINAL_STAFF) instanceof org.bson.BsonDocument original) {
-            var restored = ItemStack.CODEC.decode(original, new com.hypixel.hytale.codec.ExtraInfo());
-            if (isMainStaff(restored) || BuildingEditorInteractions.isBuildingEditorStaff(restored)) return restored;
-        }
+        var restored = held.getFromMetadataOrNull(ORIGINAL_STAFF, ItemStack.CODEC);
+        if (isMainStaff(restored) || BuildingEditorInteractions.isBuildingEditorStaff(restored)) return restored;
         // Old saves had a plain bounds staff with no original-item receipt.
         return new ItemStack(AetherhavenConstants.PLOT_CREATOR_STAFF_ITEM_ID, held.getQuantity());
     }

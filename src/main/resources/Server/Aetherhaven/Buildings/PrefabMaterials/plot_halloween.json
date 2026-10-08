@@ -1,0 +1,114 @@
+{
+  "constructionId": "plot_halloween",
+  "prefabPath": "Spook_House.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Deadwood_Planks",
+      "count": 171
+    },
+    {
+      "itemId": "Wood_Burnt_Trunk",
+      "count": 155
+    },
+    {
+      "itemId": "Wood_Blackwood_Roof",
+      "count": 98
+    },
+    {
+      "itemId": "Wood_Blackwood_Planks",
+      "count": 83
+    },
+    {
+      "itemId": "Wood_Blackwood_Decorative",
+      "count": 76
+    },
+    {
+      "itemId": "Rock_Basalt_Cobble",
+      "count": 60
+    },
+    {
+      "itemId": "Wood_Blackwood_Roof_Shallow",
+      "count": 56
+    },
+    {
+      "itemId": "Wood_Blackwood_Stairs",
+      "count": 52
+    },
+    {
+      "itemId": "Rock_Basalt_Brick",
+      "count": 43
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Window",
+      "count": 36
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 36
+    },
+    {
+      "itemId": "Wood_Blackwood_Roof_Flat",
+      "count": 25
+    },
+    {
+      "itemId": "Wood_Blackwood_Roof_Steep",
+      "count": 22
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Ladder",
+      "count": 14
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 12
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 12
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Ancient_Bookshelf",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Chest_Small",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Shelf",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Lantern_Ceiling",
+      "count": 3
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Coffin",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Stool",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Wardrobe",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Bed",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Table",
+      "count": 1
+    }
+  ]
+}

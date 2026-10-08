@@ -12,10 +12,10 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/** Charter amendments: population counts and tier thresholds. */
+/** Charter amendments: town level requirements. */
 public final class TownCharterService {
-    public static final int TIER1_RESIDENTS_REQUIRED = 3;
-    public static final int TIER2_RESIDENTS_REQUIRED = 5;
+    public static final int TIER1_TOWN_LEVEL_REQUIRED = 3;
+    public static final int TIER2_TOWN_LEVEL_REQUIRED = 5;
 
     private TownCharterService() {}
 
@@ -48,11 +48,11 @@ public final class TownCharterService {
     }
 
     /** 0 = none, 1 = tax policy row, 2 = specialization row. */
-    public static int unlockedAmendmentTier(int residentCount) {
-        if (residentCount >= TIER2_RESIDENTS_REQUIRED) {
+    public static int unlockedAmendmentTier(int townLevel) {
+        if (townLevel >= TIER2_TOWN_LEVEL_REQUIRED) {
             return 2;
         }
-        if (residentCount >= TIER1_RESIDENTS_REQUIRED) {
+        if (townLevel >= TIER1_TOWN_LEVEL_REQUIRED) {
             return 1;
         }
         return 0;

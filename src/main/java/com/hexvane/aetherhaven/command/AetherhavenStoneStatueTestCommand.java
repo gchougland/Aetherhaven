@@ -39,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import org.joml.Vector3d;
 
-/** Spawns non-persistent stone previews of every Aetherhaven villager appearance. */
+/** Spawns non-persistent statue previews of every Aetherhaven villager appearance. */
 final class AetherhavenStoneStatueTestCommand extends AbstractPlayerCommand {
     private static final String PLAYER_MODEL = "Characters/Player.blockymodel";
     private static final String AETHERHAVEN_ICON_PREFIX = "Icons/ModelsGenerated/Aetherhaven_";
@@ -81,7 +81,7 @@ final class AetherhavenStoneStatueTestCommand extends AbstractPlayerCommand {
             ModelAsset appearance = appearances.get(i);
             Model model;
             try {
-                model = FounderMonumentSpawnService.buildStonePreviewModel(appearance);
+                model = FounderMonumentSpawnService.buildStatuePreviewModel(appearance);
             } catch (RuntimeException e) {
                 failed.add(appearance.getId() + " (" + e.getMessage() + ")");
                 continue;
@@ -108,7 +108,7 @@ final class AetherhavenStoneStatueTestCommand extends AbstractPlayerCommand {
         PREVIEWS_BY_PLAYER.put(playerRef.getUuid(), spawnedIds);
         String failureSuffix = failed.isEmpty() ? "" : " Failed: " + String.join(", ", failed);
         playerRef.sendMessage(
-            Message.raw("Spawned " + spawnedIds.size() + " transient stone villager previews." + failureSuffix)
+            Message.raw("Spawned " + spawnedIds.size() + " transient villager statue previews." + failureSuffix)
         );
     }
 

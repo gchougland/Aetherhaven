@@ -27,7 +27,7 @@ class TimberCharringTest {
         var p=ready();var stock=new TownWarehouse();
         assertEquals(WOOD, TimberCharring.input(p, ENTRY, stock, PLOT));
         assertTrue(TimberCharring.process(p, ENTRY, stock, PLOT, WOOD, SOURCE));
-        assertEquals(3, p.getAmount(WOOD));assertEquals(20, p.getAmount(RARE));
+        assertEquals(0, p.getAmount(WOOD));assertEquals(20, p.getAmount(RARE));
         assertEquals(0, p.getAmount(TimberCharring.OUTPUT));
         assertEquals(1, p.timber().cargo().carried());
         assertFalse(TimberCharring.process(p, ENTRY, stock, PLOT, WOOD, SOURCE));
@@ -35,7 +35,7 @@ class TimberCharringTest {
         assertEquals(0,p.timber().deliver(p,0,16));
         assertEquals(1,p.timber().deliver(p,100,16));
         assertEquals(0,p.timber().deliver(p,100,16));
-        assertEquals(1,p.getAmount(TimberCharring.OUTPUT));assertEquals(3,p.getAmount(WOOD));
+        assertEquals(1,p.getAmount(TimberCharring.OUTPUT));assertEquals(0,p.getAmount(WOOD));
     }
 
     @Test void changedSelectionsLockedSlotsAndFullOutputSpendNothing() {

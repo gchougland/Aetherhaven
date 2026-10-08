@@ -100,6 +100,56 @@
       "interactionKind": "WORK_SURFACE",
       "workResidentKind": "rancher",
       "interactionTargetYawDegrees": -54.192505
+    },
+    {
+      "localX": 5,
+      "localY": 2,
+      "localZ": -15,
+      "tags": [
+        "BARN_PEN"
+      ],
+      "capacity": 1,
+      "interactionTargetYawDegrees": -90
+    },
+    {
+      "localX": 12,
+      "localY": 2,
+      "localZ": -15,
+      "tags": [
+        "BARN_PEN"
+      ],
+      "capacity": 1,
+      "interactionTargetYawDegrees": 90
+    },
+    {
+      "localX": 5,
+      "localY": 2,
+      "localZ": -10,
+      "tags": [
+        "BARN_PEN"
+      ],
+      "capacity": 1,
+      "interactionTargetYawDegrees": -90
+    },
+    {
+      "localX": 12,
+      "localY": 2,
+      "localZ": -10,
+      "tags": [
+        "BARN_PEN"
+      ],
+      "capacity": 1,
+      "interactionTargetYawDegrees": 90
+    },
+    {
+      "localX": 5,
+      "localY": 2,
+      "localZ": -13,
+      "tags": [
+        "BARN_PEN"
+      ],
+      "capacity": 1,
+      "interactionTargetYawDegrees": -90
     }
   ],
   "managementBlockLocalPos": [

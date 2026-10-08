@@ -1,0 +1,4 @@
+$C = "../Common.ui";
+Button { Anchor: (Width: 21, Height: 21); Background: #26303c; TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+ AssetImage #Stairs { Anchor: (Full: 2); Visible: false; }
+}

@@ -9,10 +9,10 @@
   "inputs": [
     {
       "itemId": "Ingredient_Life_Essence",
-      "count": 3
+      "count": 5
     }
   ],
   "output": "Plant_Seeds_Carrot",
   "outputCount": 1,
-  "workSeconds": 12
+  "workSeconds": 15
 }

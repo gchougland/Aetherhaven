@@ -14,3 +14,10 @@ Use the **Warehouse Ledger Desk** to open town storage. Search updates the item 
 Enable **Logistics** for employed Townsfolk on the journal's **Work** page. Couriers carry reserved ingredients from storage and production buildings to workplaces, then bring finished goods back. Supplies remain at their source until pickup. A full destination pauses the delivery.
 
 Choose **Building upgrades** from town storage to buy more storage room. Each expansion needs the previous expansion, the shown Town Level and treasury gold. Apprentice recipes only begin when the workplace has its bench, a qualified worker and the required supplies.
+
+
+### Friendship rewards
+
+- **Friendship 25:** Warehouse Supply Link recipe. Craft it at the Town Planning Desk and place it within the normal chest range of your workbenches. It draws from general storage, crafted goods and building outputs, keeping courier reservations safe. Open the link to browse the warehouse. Collect barn milk into buckets first.
+- **Friendship 50:** Quartermaster Pack recipe.
+- **Friendship 75:** Field Ledger.

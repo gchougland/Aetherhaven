@@ -1,0 +1,8 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { Anchor: (Width: 450, Height: 60, Bottom: 8, Right: 12);
+  Button #Button { Anchor: (Full: 0); Padding: (Full: 8); TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+    Style: (Default: (Background: $T.@Slot), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed), Disabled: (Background: $T.@Inset));
+    Label #Text { Anchor: (Full: 0); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, HorizontalAlignment: Center, VerticalAlignment: Center); }
+  }
+}

@@ -1,0 +1,37 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+  Group { Anchor: (Width: 1120, Height: 880); Background: $T.@Panel; Padding: (Full: 22); LayoutMode: Top;
+    Label { Text: "LEATHERWORKER'S BACKPACK WORKSHOP"; Anchor: (Height: 36); Style: (...$C.@TitleStyle, HorizontalAlignment: Center); }
+    Label #Summary { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, TextColor: #e8c984, HorizontalAlignment: Center); }
+    Group { LayoutMode: Left; FlexWeight: 1;
+      Group { Anchor: (Width: 230, Right: 12); Background: $T.@Inset; Padding: (Full: 12); LayoutMode: Top;
+        Label { Text: "YOUR BACKPACKS"; Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, RenderBold: true); }
+        Group #Bags { FlexWeight: 1; LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
+        ItemIcon { ItemId: "Aetherhaven_Backpack"; Anchor: (Width: 64, Height: 64, Left: 64); }
+        Group { Anchor: (Height: 65); LayoutMode: Top;
+          Label { Text: "Simple Backpack"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center); }
+          Label { Text: "15 slots"; Anchor: (Height: 21); Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center); }
+          Label { Text: "10 Light Leather"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center); }
+        }
+        $C.@TextButton #Craft { Text: "Craft backpack"; Anchor: (Height: 38, Bottom: 10); }
+        $C.@TextButton #Open { Text: "Open backpack"; Anchor: (Height: 38); }
+      }
+      Group { FlexWeight: 1; Background: $T.@Inset; Padding: (Full: 10); LayoutMode: Top;
+        Group { Anchor: (Height: 25);
+          Label { Text: "MATERIALS"; Anchor: (Left: 20, Width: 394, Height: 25); Style: (...$C.@DefaultLabelStyle, FontSize: 13, RenderBold: true, TextColor: #e8c984, HorizontalAlignment: Center); }
+          Label { Text: "COMPRESSION"; Anchor: (Left: 490, Width: 174, Height: 25); Style: (...$C.@DefaultLabelStyle, FontSize: 13, RenderBold: true, TextColor: #e8c984, HorizontalAlignment: Center); }
+        }
+        Group { FlexWeight: 1; LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle;
+          Group #Tree { Anchor: (Width: 760, Height: 610); }
+        }
+      }
+    }
+    Group { Anchor: (Height: 95, Top: 10); Background: $T.@Inset; Padding: (Full: 10); LayoutMode: Left;
+      Label #Details { FlexWeight: 1; Anchor: (Right: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+      $C.@TextButton #Purchase { Text: "Purchase upgrade"; Anchor: (Width: 210, Height: 42, Top: 12); }
+    }
+    Label #Hint { Anchor: (Height: 32, Top: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true); }
+  }
+}
+$C.@BackButton {}

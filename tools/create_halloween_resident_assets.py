@@ -69,36 +69,8 @@ write(RES / 'Server/Aetherhaven/Villagers/Aetherhaven_Halloween.json', villager)
 schedule = json.loads((RES / 'Server/Aetherhaven/VillagerSchedules/Aetherhaven_Clown.json').read_text(encoding='utf-8'))
 write(RES / 'Server/Aetherhaven/VillagerSchedules/Aetherhaven_Halloween.json', schedule)
 
-# Seven-block shelter with an open two-block entrance, clear interior and records shelf.
-cells = {}
-def block(x, y, z, name, **extra):
-    cells[x,y,z] = dict(x=x, y=y, z=z, name=name, **extra)
-for x in range(-3,4):
-    for z in range(-3,4):
-        block(x,-1,z,'Wood_Hardwood_Planks')
-        for y in range(4): block(x,y,z,'Empty')
-        block(x,4,z,'Wood_Softwood_Roof_Flat')
-for x in [-3,3]:
-    for z in [-3,3]:
-        for y in range(4):block(x,y,z,'Wood_Beech_Trunk')
-for x in range(-2,3):block(x,0,-3,'Wood_Hardwood_Beam')
-for z in range(-2,3):
-    for x in [-3,3]:block(x,0,z,'Wood_Hardwood_Beam')
-block(-2,0,2,'Wood_Hardwood_Beam')
-block(-2,1,2,'Aetherhaven_Management_Block',components={'Components':{'AetherhavenManagementBlock':{'PlotId':'','TownId':''}}})
-block(2,0,-2,'Deco_Halloween_Pumpkin_Scary')
-write(RES / 'Server/Prefabs/Halloween_Shelter.prefab.json', {'version':8,'blockIdVersion':11,'anchorX':0,'anchorY':0,'anchorZ':0,'blocks':list(cells.values()),'fluids':[]})
-write(RES / 'Server/Aetherhaven/Buildings/plot_halloween.json', {
-    'id':'plot_halloween','displayName':'Pumpkin Shelter',
-    'description':'A simple shelter for Jack Hollow and his curious games.',
-    'prefabPath':'Halloween_Shelter.prefab.json','plotTokenItemId':'Aetherhaven_Plot_Token',
-    'plotAnchorOffset':[0,1,0],'rotationYaw':'None','frontFacing':'South','styleId':'core',
-    'boundsLocal':{'min':[-3,-1,-3],'max':[3,4,3]},'managementBlockLocalPos':[-2,1,2],
-    'selfBuildGameDays':1.0,'treasuryGoldCoinCost':25,'materials':[{'resourceTypeId':'Wood_All','count':80}],
-    'tags':['work'],'pois':[{'localX':0,'localY':0,'localZ':0,'tags':['WORK','workActivity:leisure'],
-        'capacity':1,'blockTypeId':'Wood_Hardwood_Beam','interactionKind':'WORK_SURFACE',
-        'interactionTargetYawDegrees':180,'equipmentProfileId':'work_bard','workResidentKind':'halloween'}]
-})
+# The authored Spook House prefab and building definition are maintained separately.
+# Do not regenerate or furnish this building here.
 
 # Recruitment uses the same town quest, token and visitor lock flow as existing residents.
 quests = ROOT / 'subplugin-assets/Quests/Server/Aetherhaven/Quests/Town'
@@ -108,9 +80,9 @@ rescue.pop('titleLangKey',None); rescue.pop('descriptionLangKey',None)
 write(quests/'q_halloween_rescue.json',rescue)
 quest = json.loads((quests/'q_clown_tent.json').read_text(encoding='utf-8'))
 quest = json.loads(json.dumps(quest).replace('q_clown_tent','q_halloween_shelter').replace('plot_clown_tent','plot_halloween').replace('Aetherhaven_Clown','Aetherhaven_Halloween'))
-quest.update(title="Jack's Pumpkin Shelter",description='Build a simple shelter so Jack Hollow can settle in town.')
+quest.update(title="Jack's Spook House",description='Build a Spook House so Jack Hollow can settle in town.')
 quest.pop('titleLangKey',None);quest.pop('descriptionLangKey',None)
-for obj,text in zip(quest['objectives'],["Take Jack's Pumpkin Shelter token.",'Build the Pumpkin Shelter.','Talk to Jack.']):
+for obj,text in zip(quest['objectives'],["Take Jack's Spook House token.",'Build the Spook House.','Talk to Jack.']):
     obj['text']=text;obj.pop('textLangKey',None)
 write(quests/'q_halloween_shelter.json',quest)
 

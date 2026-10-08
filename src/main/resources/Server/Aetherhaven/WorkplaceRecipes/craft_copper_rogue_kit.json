@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Copper",
-      "count": 18
+      "count": 20
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 6
+      "count": 10
     },
     {
       "itemId": "Ingredient_Fibre",
-      "count": 8
+      "count": 10
     }
   ],
   "output": "Aetherhaven_Copper_Rogue_Kit",

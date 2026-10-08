@@ -123,7 +123,7 @@ public final class PlotCreatorSubstepHandler {
             );
             case SHOP_SPOT, TOURIST_PORTAL_BLOCK -> tryRemoveSpecialBlockNear(draft, targetBlock, playerRef);
             case WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI, PLANNING_DESK_POI, BARD_WORK_POI,
-                QUEST_BOARD_POI -> tryRemoveMatchingPoiNear(draft, targetBlock, req, playerRef);
+                QUEST_BOARD_POI, BARN_PEN -> tryRemoveMatchingPoiNear(draft, targetBlock, req, playerRef);
             case FESTIVAL_NPC ->
                 PlotCreatorFestivalPlacement.tryRemoveNpcNear(draft, targetBlock, req.workResidentKind(), playerRef);
             case FESTIVAL_TOURIST_SPOT ->
@@ -467,6 +467,7 @@ public final class PlotCreatorSubstepHandler {
                 store
             );
             case MINING_NODE -> PlotCreatorMiningNodes.add(session,targetBlock,playerRef);
+            case BARN_PEN -> PlotCreatorBarnPens.add(session,targetBlock,playerRef,playerEntityRef,store);
             case FESTIVAL_NPC -> PlotCreatorFestivalPlacement.placeNpc(
                 session,
                 targetBlock,

@@ -42,7 +42,7 @@ public final class TownsfolkProfilePage extends AetherhavenInteractiveCustomUIPa
     @Override public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commands,
             @Nonnull UIEventBuilder events, @Nonnull Store<EntityStore> store) {
         boolean initial = !appended;
-        if (initial) { commands.append("Aetherhaven/TownsfolkProfilePage.ui"); commands.append("#NeedsHost", "Aetherhaven/ResidentNeeds.ui"); appended = true; }
+        if (initial) { commands.append("Aetherhaven/TownsfolkProfilePage.ui"); appended = true; }
         commands.set("#ReturnToJournal.Visible", fromJournal);
         if (fromJournal) events.addEventBinding(CustomUIEventBindingType.Activating, "#ReturnToJournal", new EventData().append("Kind", "journal"), false);
         var plugin = AetherhavenPlugin.get();
@@ -90,7 +90,6 @@ public final class TownsfolkProfilePage extends AetherhavenInteractiveCustomUIPa
         events.addEventBinding(CustomUIEventBindingType.Activating, "#GuardDuty", new EventData().append("Kind", "guardDuty"), false);
         int row = 0;
         var guard=town.getHiredGuardRecords().stream().filter(g->characterId.equals(g.getCharacterId())).findFirst().orElse(null);
-        ResidentNeedsUi.render(commands, store, town, residentId, guard == null);
         var guardEquipment=guard==null?null:plugin.getEquipmentProfileCatalog().byId(guard.getEquipmentProfileId());
         String guardClass=guard==null?null:com.hexvane.aetherhaven.equipment.GuardKitService.classFor(guard.getEquipmentProfileId(),plugin.getGuardKits());
         commands.set("#DutyLabel.Text",guardClass==null?"TOWNSFOLK":guardClass.substring("guard_".length()).toUpperCase(java.util.Locale.ROOT)+" GUARD");

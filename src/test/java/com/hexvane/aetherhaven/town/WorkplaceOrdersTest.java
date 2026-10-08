@@ -109,11 +109,11 @@ class WorkplaceOrdersTest {
     }
     @Test void limitsRejectBadOrExcessiveTasksWithoutChangingRevision() {
         var tasks=new WorkplaceOrders();
-        assertNotNull(tasks.add(0,"iron",COUNT,0)); assertNotNull(tasks.add(0,"iron",MAINTAIN,10000));
+        assertNotNull(tasks.add(0,"iron",COUNT,0)); assertNotNull(tasks.add(0,"iron",MAINTAIN,10001));
         assertNotNull(tasks.add(0,"",FOREVER,1)); assertNotNull(tasks.add(0,"iron",null,1));
         assertEquals(0,tasks.revision());
-        for(int i=0;i<32;i++) assertNull(tasks.add(i,"iron",COUNT,1));
-        assertNotNull(tasks.add(32,"iron",COUNT,1)); assertEquals(32,tasks.revision());
+        for(int i=0;i<35;i++) assertNull(tasks.add(i,"iron",COUNT,1));
+        assertNotNull(tasks.add(35,"iron",COUNT,1)); assertEquals(35,tasks.revision());
     }
     @Test void removedTasksCannotBeChangedThroughAnOldMenu() {
         var tasks=new WorkplaceOrders(); tasks.add(0,"iron",COUNT,1);

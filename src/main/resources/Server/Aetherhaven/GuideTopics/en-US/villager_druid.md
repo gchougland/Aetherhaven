@@ -24,3 +24,9 @@ Seed and sapling recipes are available at Crafting workplaces and use the Appren
 Herb Garden workplaces have been removed. The Druid grows ingredients directly in the Conservatory. Existing plants remain in the world. Unused supplies stay in storage, and couriers return supplies that were already picked up.
 
 These plants produce potion ingredients. They do not provide town food support.
+
+
+### Friendship rewards
+
+- **Friendship 25:** Botanist's Tool Roll recipe for town blacksmithing.
+- **Friendship 75:** Verdant Catalyst recipe.

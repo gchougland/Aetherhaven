@@ -9479,12 +9479,6 @@
     },
     {
       "x": -6,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": -6,
       "y": 0,
       "z": -1,
       "name": "Soil_Dirt"
@@ -9518,12 +9512,6 @@
       "y": 5,
       "z": -1,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": -6,
-      "y": 6,
-      "z": -1,
-      "name": "Empty"
     },
     {
       "x": -6,
@@ -9563,12 +9551,6 @@
     },
     {
       "x": -6,
-      "y": 6,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -6,
       "y": 0,
       "z": 1,
       "name": "Soil_Dirt"
@@ -9602,12 +9584,6 @@
       "y": 5,
       "z": 1,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": -6,
-      "y": 6,
-      "z": 1,
-      "name": "Empty"
     },
     {
       "x": -6,
@@ -9647,12 +9623,6 @@
     },
     {
       "x": -6,
-      "y": 6,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -6,
       "y": 0,
       "z": 3,
       "name": "Soil_Dirt"
@@ -9686,12 +9656,6 @@
       "y": 5,
       "z": 3,
       "name": "Rock_Stone_Brick_Decorative"
-    },
-    {
-      "x": -6,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": -6,
@@ -10549,12 +10513,6 @@
     },
     {
       "x": -5,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": -5,
       "y": 0,
       "z": -3,
       "name": "Soil_Dirt"
@@ -10592,12 +10550,6 @@
     },
     {
       "x": -5,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": -5,
       "y": 0,
       "z": -2,
       "name": "Soil_Dirt"
@@ -10632,12 +10584,6 @@
       "z": -2,
       "name": "Rock_Stone_Brick_Ornate",
       "support": 15
-    },
-    {
-      "x": -5,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
     },
     {
       "x": -5,
@@ -10678,12 +10624,6 @@
     },
     {
       "x": -5,
-      "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -5,
       "y": 0,
       "z": 0,
       "name": "Soil_Dirt"
@@ -10718,12 +10658,6 @@
       "z": 0,
       "name": "Rock_Stone_Brick_Ornate",
       "support": 15
-    },
-    {
-      "x": -5,
-      "y": 6,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": -5,
@@ -10764,12 +10698,6 @@
     },
     {
       "x": -5,
-      "y": 6,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -5,
       "y": 0,
       "z": 2,
       "name": "Soil_Dirt"
@@ -10807,12 +10735,6 @@
     },
     {
       "x": -5,
-      "y": 6,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -5,
       "y": 0,
       "z": 3,
       "name": "Soil_Dirt"
@@ -10847,12 +10769,6 @@
       "z": 3,
       "name": "Rock_Stone_Brick_Ornate",
       "support": 15
-    },
-    {
-      "x": -5,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": -5,
@@ -10890,12 +10806,6 @@
       "z": 4,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": -5,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
     },
     {
       "x": -5,
@@ -10933,12 +10843,6 @@
       "z": 5,
       "name": "Rock_Stone_Brick_Decorative",
       "support": 15
-    },
-    {
-      "x": -5,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
     },
     {
       "x": -5,
@@ -11681,12 +11585,6 @@
     },
     {
       "x": -4,
-      "y": 6,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
       "y": 0,
       "z": -4,
       "name": "Soil_Dirt"
@@ -11724,12 +11622,6 @@
     },
     {
       "x": -4,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
       "y": 0,
       "z": -3,
       "name": "Soil_Dirt"
@@ -11764,12 +11656,6 @@
       "z": -3,
       "name": "Rock_Stone_Brick_Ornate",
       "support": 15
-    },
-    {
-      "x": -4,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
     },
     {
       "x": -4,
@@ -11806,12 +11692,6 @@
       "y": 5,
       "z": -2,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": -4,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
     },
     {
       "x": -4,
@@ -11864,30 +11744,6 @@
     },
     {
       "x": -4,
-      "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 7,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 8,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 9,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
       "y": 0,
       "z": 0,
       "name": "Soil_Dirt"
@@ -11921,30 +11777,6 @@
       "y": 5,
       "z": 0,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": -4,
-      "y": 6,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 7,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 8,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 9,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": -4,
@@ -11984,30 +11816,6 @@
     },
     {
       "x": -4,
-      "y": 6,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 7,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 8,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 9,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
       "y": 0,
       "z": 2,
       "name": "Soil_Dirt"
@@ -12044,30 +11852,6 @@
     },
     {
       "x": -4,
-      "y": 6,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 7,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 8,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
-      "y": 9,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
       "y": 0,
       "z": 3,
       "name": "Soil_Dirt"
@@ -12101,12 +11885,6 @@
       "y": 5,
       "z": 3,
       "name": "Rock_Stone_Brick_Mossy"
-    },
-    {
-      "x": -4,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": -4,
@@ -12160,12 +11938,6 @@
     },
     {
       "x": -4,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
       "y": 0,
       "z": 5,
       "name": "Soil_Dirt"
@@ -12203,12 +11975,6 @@
     },
     {
       "x": -4,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": -4,
       "y": 0,
       "z": 6,
       "name": "Soil_Dirt"
@@ -12243,12 +12009,6 @@
       "z": 6,
       "name": "Rock_Stone_Brick_Decorative",
       "support": 15
-    },
-    {
-      "x": -4,
-      "y": 6,
-      "z": 6,
-      "name": "Empty"
     },
     {
       "x": -4,
@@ -12968,12 +12728,6 @@
     },
     {
       "x": -3,
-      "y": 6,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
       "y": 0,
       "z": -4,
       "name": "Soil_Dirt"
@@ -13011,12 +12765,6 @@
     },
     {
       "x": -3,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
       "y": 0,
       "z": -3,
       "name": "Soil_Dirt"
@@ -13051,12 +12799,6 @@
       "z": -3,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": -3,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
     },
     {
       "x": -3,
@@ -13109,18 +12851,6 @@
     },
     {
       "x": -3,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
-      "y": 7,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
       "y": 8,
       "z": -2,
       "name": "*Rock_Stone_Brick_Stairs_State_Definitions_Inverted_Corner_Right",
@@ -13128,12 +12858,6 @@
     },
     {
       "x": -3,
-      "y": 9,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
       "y": 0,
       "z": -1,
       "name": "Soil_Dirt"
@@ -13170,22 +12894,10 @@
     },
     {
       "x": -3,
-      "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
       "y": 8,
       "z": -1,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": -3,
-      "y": 9,
-      "z": -1,
-      "name": "Empty"
     },
     {
       "x": -3,
@@ -13225,22 +12937,10 @@
     },
     {
       "x": -3,
-      "y": 6,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
       "y": 8,
       "z": 0,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": -3,
-      "y": 9,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": -3,
@@ -13280,22 +12980,10 @@
     },
     {
       "x": -3,
-      "y": 6,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
       "y": 8,
       "z": 1,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": -3,
-      "y": 9,
-      "z": 1,
-      "name": "Empty"
     },
     {
       "x": -3,
@@ -13335,22 +13023,10 @@
     },
     {
       "x": -3,
-      "y": 6,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
       "y": 8,
       "z": 2,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": -3,
-      "y": 9,
-      "z": 2,
-      "name": "Empty"
     },
     {
       "x": -3,
@@ -13390,28 +13066,10 @@
     },
     {
       "x": -3,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
-      "y": 7,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
       "y": 8,
       "z": 3,
       "name": "*Rock_Stone_Brick_Stairs_State_Definitions_Inverted_Corner_Right",
       "rotation": 9
-    },
-    {
-      "x": -3,
-      "y": 9,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": -3,
@@ -13449,12 +13107,6 @@
       "z": 4,
       "name": "Rock_Stone_Brick_Mossy",
       "support": 15
-    },
-    {
-      "x": -3,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
     },
     {
       "x": -3,
@@ -13508,12 +13160,6 @@
     },
     {
       "x": -3,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": -3,
       "y": 0,
       "z": 6,
       "name": "Soil_Dirt"
@@ -13548,12 +13194,6 @@
       "z": 6,
       "name": "Rock_Stone_Brick_Decorative",
       "support": 15
-    },
-    {
-      "x": -3,
-      "y": 6,
-      "z": 6,
-      "name": "Empty"
     },
     {
       "x": -3,
@@ -14236,12 +13876,6 @@
     },
     {
       "x": -2,
-      "y": 6,
-      "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 0,
       "z": -5,
       "name": "Soil_Dirt"
@@ -14279,12 +13913,6 @@
     },
     {
       "x": -2,
-      "y": 6,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 0,
       "z": -4,
       "name": "Soil_Dirt"
@@ -14318,12 +13946,6 @@
       "y": 5,
       "z": -4,
       "name": "Rock_Stone_Brick_Decorative"
-    },
-    {
-      "x": -2,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
     },
     {
       "x": -2,
@@ -14376,18 +13998,6 @@
     },
     {
       "x": -2,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
-      "y": 7,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 8,
       "z": -3,
       "name": "*Rock_Stone_Brick_Stairs_State_Definitions_Inverted_Corner_Right",
@@ -14395,12 +14005,6 @@
     },
     {
       "x": -2,
-      "y": 9,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 0,
       "z": -2,
       "name": "Soil_Dirt"
@@ -14438,22 +14042,10 @@
     },
     {
       "x": -2,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 8,
       "z": -2,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": -2,
-      "y": 9,
-      "z": -2,
-      "name": "Empty"
     },
     {
       "x": -2,
@@ -14494,22 +14086,10 @@
     },
     {
       "x": -2,
-      "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 8,
       "z": -1,
       "name": "Rock_Stone_Brick_Mossy",
       "support": 15
-    },
-    {
-      "x": -2,
-      "y": 9,
-      "z": -1,
-      "name": "Empty"
     },
     {
       "x": -2,
@@ -14578,23 +14158,11 @@
     },
     {
       "x": -2,
-      "y": 9,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 10,
       "z": 0,
       "name": "Rock_Stone_Brick_Stairs",
       "support": 15,
       "rotation": 3
-    },
-    {
-      "x": -2,
-      "y": 11,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": -2,
@@ -14656,23 +14224,11 @@
     },
     {
       "x": -2,
-      "y": 9,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 10,
       "z": 1,
       "name": "Rock_Stone_Brick_Stairs",
       "support": 15,
       "rotation": 3
-    },
-    {
-      "x": -2,
-      "y": 11,
-      "z": 1,
-      "name": "Empty"
     },
     {
       "x": -2,
@@ -14713,22 +14269,10 @@
     },
     {
       "x": -2,
-      "y": 6,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 8,
       "z": 2,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": -2,
-      "y": 9,
-      "z": 2,
-      "name": "Empty"
     },
     {
       "x": -2,
@@ -14776,22 +14320,10 @@
     },
     {
       "x": -2,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 8,
       "z": 3,
       "name": "Rock_Stone_Brick_Mossy",
       "support": 15
-    },
-    {
-      "x": -2,
-      "y": 9,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": -2,
@@ -14831,28 +14363,10 @@
     },
     {
       "x": -2,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
-      "y": 7,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 8,
       "z": 4,
       "name": "*Rock_Stone_Brick_Stairs_State_Definitions_Inverted_Corner_Right",
       "rotation": 9
-    },
-    {
-      "x": -2,
-      "y": 9,
-      "z": 4,
-      "name": "Empty"
     },
     {
       "x": -2,
@@ -14889,12 +14403,6 @@
       "y": 5,
       "z": 5,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": -2,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
     },
     {
       "x": -2,
@@ -14948,12 +14456,6 @@
     },
     {
       "x": -2,
-      "y": 6,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 0,
       "z": 7,
       "name": "Soil_Dirt"
@@ -14987,12 +14489,6 @@
       "y": 5,
       "z": 7,
       "name": "Rock_Stone_Brick_Decorative"
-    },
-    {
-      "x": -2,
-      "y": 6,
-      "z": 7,
-      "name": "Empty"
     },
     {
       "x": -2,
@@ -15626,12 +15122,6 @@
     },
     {
       "x": -1,
-      "y": 6,
-      "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 0,
       "z": -5,
       "name": "Soil_Dirt"
@@ -15669,12 +15159,6 @@
     },
     {
       "x": -1,
-      "y": 6,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 0,
       "z": -4,
       "name": "Soil_Dirt"
@@ -15708,30 +15192,6 @@
       "y": 5,
       "z": -4,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": -1,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
-      "y": 7,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
-      "y": 8,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
-      "y": 9,
-      "z": -4,
-      "name": "Empty"
     },
     {
       "x": -1,
@@ -15771,22 +15231,10 @@
     },
     {
       "x": -1,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 8,
       "z": -3,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": -1,
-      "y": 9,
-      "z": -3,
-      "name": "Empty"
     },
     {
       "x": -1,
@@ -15827,22 +15275,10 @@
     },
     {
       "x": -1,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 8,
       "z": -2,
       "name": "Rock_Stone_Brick_Decorative",
       "support": 15
-    },
-    {
-      "x": -1,
-      "y": 9,
-      "z": -2,
-      "name": "Empty"
     },
     {
       "x": -1,
@@ -15927,12 +15363,6 @@
     },
     {
       "x": -1,
-      "y": 11,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 0,
       "z": 0,
       "name": "Soil_Dirt"
@@ -15984,28 +15414,10 @@
     },
     {
       "x": -1,
-      "y": 9,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 10,
       "z": 0,
       "name": "Rock_Stone_Brick_Decorative",
       "support": 15
-    },
-    {
-      "x": -1,
-      "y": 11,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
-      "y": 12,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": -1,
@@ -16067,28 +15479,10 @@
     },
     {
       "x": -1,
-      "y": 9,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 10,
       "z": 1,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": -1,
-      "y": 11,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
-      "y": 12,
-      "z": 1,
-      "name": "Empty"
     },
     {
       "x": -1,
@@ -16166,12 +15560,6 @@
     },
     {
       "x": -1,
-      "y": 11,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 0,
       "z": 3,
       "name": "Soil_Dirt"
@@ -16209,22 +15597,10 @@
     },
     {
       "x": -1,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 8,
       "z": 3,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": -1,
-      "y": 9,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": -1,
@@ -16271,22 +15647,10 @@
     },
     {
       "x": -1,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 8,
       "z": 4,
       "name": "Rock_Stone_Brick_Mossy",
       "support": 15
-    },
-    {
-      "x": -1,
-      "y": 9,
-      "z": 4,
-      "name": "Empty"
     },
     {
       "x": -1,
@@ -16323,30 +15687,6 @@
       "y": 5,
       "z": 5,
       "name": "Rock_Stone_Brick_Decorative"
-    },
-    {
-      "x": -1,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
-      "y": 7,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
-      "y": 8,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
-      "y": 9,
-      "z": 5,
-      "name": "Empty"
     },
     {
       "x": -1,
@@ -16387,12 +15727,6 @@
     },
     {
       "x": -1,
-      "y": 6,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 0,
       "z": 7,
       "name": "Soil_Dirt"
@@ -16426,12 +15760,6 @@
       "y": 5,
       "z": 7,
       "name": "Rock_Stone_Brick_Decorative"
-    },
-    {
-      "x": -1,
-      "y": 6,
-      "z": 7,
-      "name": "Empty"
     },
     {
       "x": -1,
@@ -17076,12 +16404,6 @@
     },
     {
       "x": 0,
-      "y": 6,
-      "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
       "y": 0,
       "z": -5,
       "name": "Soil_Dirt"
@@ -17116,12 +16438,6 @@
       "z": -5,
       "name": "Rock_Stone_Brick_Ornate",
       "support": 15
-    },
-    {
-      "x": 0,
-      "y": 6,
-      "z": -5,
-      "name": "Empty"
     },
     {
       "x": 0,
@@ -17161,30 +16477,6 @@
     },
     {
       "x": 0,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
-      "y": 7,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
-      "y": 8,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
-      "y": 9,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
       "y": 0,
       "z": -3,
       "name": "Soil_Dirt"
@@ -17221,22 +16513,10 @@
     },
     {
       "x": 0,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
       "y": 8,
       "z": -3,
       "name": "Rock_Stone_Brick_Decorative",
       "support": 15
-    },
-    {
-      "x": 0,
-      "y": 9,
-      "z": -3,
-      "name": "Empty"
     },
     {
       "x": 0,
@@ -17298,23 +16578,11 @@
     },
     {
       "x": 0,
-      "y": 9,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
       "y": 10,
       "z": -2,
       "name": "Rock_Stone_Brick_Stairs",
       "support": 15,
       "rotation": 2
-    },
-    {
-      "x": 0,
-      "y": 11,
-      "z": -2,
-      "name": "Empty"
     },
     {
       "x": 0,
@@ -17369,28 +16637,10 @@
     },
     {
       "x": 0,
-      "y": 9,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
       "y": 10,
       "z": -1,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 0,
-      "y": 11,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
-      "y": 12,
-      "z": -1,
-      "name": "Empty"
     },
     {
       "x": 0,
@@ -17436,12 +16686,6 @@
       "name": "Rock_Crystal_Cyan_Block",
       "support": 15,
       "rotation": 4
-    },
-    {
-      "x": 0,
-      "y": 9,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": 0,
@@ -17522,12 +16766,6 @@
       "name": "Rock_Crystal_Cyan_Block",
       "support": 15,
       "rotation": 4
-    },
-    {
-      "x": 0,
-      "y": 9,
-      "z": 1,
-      "name": "Empty"
     },
     {
       "x": 0,
@@ -17616,28 +16854,10 @@
     },
     {
       "x": 0,
-      "y": 9,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
       "y": 10,
       "z": 2,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 0,
-      "y": 11,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
-      "y": 12,
-      "z": 2,
-      "name": "Empty"
     },
     {
       "x": 0,
@@ -17699,22 +16919,10 @@
     },
     {
       "x": 0,
-      "y": 9,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
       "y": 10,
       "z": 3,
       "name": "Rock_Stone_Brick_Stairs",
       "support": 15
-    },
-    {
-      "x": 0,
-      "y": 11,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": 0,
@@ -17754,22 +16962,10 @@
     },
     {
       "x": 0,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
       "y": 8,
       "z": 4,
       "name": "Rock_Stone_Brick_Decorative",
       "support": 15
-    },
-    {
-      "x": 0,
-      "y": 9,
-      "z": 4,
-      "name": "Empty"
     },
     {
       "x": 0,
@@ -17806,30 +17002,6 @@
       "y": 5,
       "z": 5,
       "name": "Rock_Stone_Brick_Mossy"
-    },
-    {
-      "x": 0,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
-      "y": 7,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
-      "y": 8,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
-      "y": 9,
-      "z": 5,
-      "name": "Empty"
     },
     {
       "x": 0,
@@ -17870,12 +17042,6 @@
     },
     {
       "x": 0,
-      "y": 6,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
       "y": 0,
       "z": 7,
       "name": "Soil_Dirt"
@@ -17909,12 +17075,6 @@
       "y": 5,
       "z": 7,
       "name": "Rock_Stone_Brick_Mossy"
-    },
-    {
-      "x": 0,
-      "y": 6,
-      "z": 7,
-      "name": "Empty"
     },
     {
       "x": 0,
@@ -18565,12 +17725,6 @@
     },
     {
       "x": 1,
-      "y": 6,
-      "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
       "y": 0,
       "z": -5,
       "name": "Soil_Dirt"
@@ -18608,12 +17762,6 @@
     },
     {
       "x": 1,
-      "y": 6,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
       "y": 0,
       "z": -4,
       "name": "Soil_Dirt"
@@ -18650,30 +17798,6 @@
     },
     {
       "x": 1,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
-      "y": 7,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
-      "y": 8,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
-      "y": 9,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
       "y": 0,
       "z": -3,
       "name": "Soil_Dirt"
@@ -18707,12 +17831,6 @@
       "y": 5,
       "z": -3,
       "name": "Rock_Stone_Brick_Decorative"
-    },
-    {
-      "x": 1,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
     },
     {
       "x": 1,
@@ -18720,12 +17838,6 @@
       "z": -3,
       "name": "Rock_Stone_Brick_Mossy",
       "support": 15
-    },
-    {
-      "x": 1,
-      "y": 9,
-      "z": -3,
-      "name": "Empty"
     },
     {
       "x": 1,
@@ -18787,23 +17899,11 @@
     },
     {
       "x": 1,
-      "y": 9,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
       "y": 10,
       "z": -2,
       "name": "Rock_Stone_Brick_Stairs",
       "support": 15,
       "rotation": 2
-    },
-    {
-      "x": 1,
-      "y": 11,
-      "z": -2,
-      "name": "Empty"
     },
     {
       "x": 1,
@@ -18862,18 +17962,6 @@
       "z": -1,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 1,
-      "y": 11,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
-      "y": 12,
-      "z": -1,
-      "name": "Empty"
     },
     {
       "x": 1,
@@ -19101,18 +18189,6 @@
     },
     {
       "x": 1,
-      "y": 11,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
-      "y": 12,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
       "y": 0,
       "z": 3,
       "name": "Soil_Dirt"
@@ -19171,22 +18247,10 @@
     },
     {
       "x": 1,
-      "y": 9,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
       "y": 10,
       "z": 3,
       "name": "Rock_Stone_Brick_Stairs",
       "support": 15
-    },
-    {
-      "x": 1,
-      "y": 11,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": 1,
@@ -19226,22 +18290,10 @@
     },
     {
       "x": 1,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
       "y": 8,
       "z": 4,
       "name": "Rock_Stone_Brick_Decorative",
       "support": 15
-    },
-    {
-      "x": 1,
-      "y": 9,
-      "z": 4,
-      "name": "Empty"
     },
     {
       "x": 1,
@@ -19278,30 +18330,6 @@
       "y": 5,
       "z": 5,
       "name": "Rock_Stone_Brick_Mossy"
-    },
-    {
-      "x": 1,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
-      "y": 7,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
-      "y": 8,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
-      "y": 9,
-      "z": 5,
-      "name": "Empty"
     },
     {
       "x": 1,
@@ -19342,12 +18370,6 @@
     },
     {
       "x": 1,
-      "y": 6,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
       "y": 0,
       "z": 7,
       "name": "Soil_Dirt"
@@ -19381,12 +18403,6 @@
       "y": 5,
       "z": 7,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 1,
-      "y": 6,
-      "z": 7,
-      "name": "Empty"
     },
     {
       "x": 1,
@@ -20030,12 +19046,6 @@
     },
     {
       "x": 2,
-      "y": 6,
-      "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
       "y": 0,
       "z": -5,
       "name": "Soil_Dirt"
@@ -20073,12 +19083,6 @@
     },
     {
       "x": 2,
-      "y": 6,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
       "y": 0,
       "z": -4,
       "name": "Soil_Dirt"
@@ -20112,30 +19116,6 @@
       "y": 5,
       "z": -4,
       "name": "Rock_Stone_Brick_Mossy"
-    },
-    {
-      "x": 2,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
-      "y": 7,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
-      "y": 8,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
-      "y": 9,
-      "z": -4,
-      "name": "Empty"
     },
     {
       "x": 2,
@@ -20175,22 +19155,10 @@
     },
     {
       "x": 2,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
       "y": 8,
       "z": -3,
       "name": "Rock_Stone_Brick_Mossy",
       "support": 15
-    },
-    {
-      "x": 2,
-      "y": 9,
-      "z": -3,
-      "name": "Empty"
     },
     {
       "x": 2,
@@ -20231,22 +19199,10 @@
     },
     {
       "x": 2,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
       "y": 8,
       "z": -2,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 2,
-      "y": 9,
-      "z": -2,
-      "name": "Empty"
     },
     {
       "x": 2,
@@ -20331,12 +19287,6 @@
     },
     {
       "x": 2,
-      "y": 11,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
       "y": 0,
       "z": 0,
       "name": "Soil_Dirt"
@@ -20392,18 +19342,6 @@
       "z": 0,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 2,
-      "y": 11,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
-      "y": 12,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": 2,
@@ -20462,18 +19400,6 @@
       "z": 1,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 2,
-      "y": 11,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
-      "y": 12,
-      "z": 1,
-      "name": "Empty"
     },
     {
       "x": 2,
@@ -20551,12 +19477,6 @@
     },
     {
       "x": 2,
-      "y": 11,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
       "y": 0,
       "z": 3,
       "name": "Soil_Dirt"
@@ -20594,22 +19514,10 @@
     },
     {
       "x": 2,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
       "y": 8,
       "z": 3,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 2,
-      "y": 9,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": 2,
@@ -20656,22 +19564,10 @@
     },
     {
       "x": 2,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
       "y": 8,
       "z": 4,
       "name": "Rock_Stone_Brick_Decorative",
       "support": 15
-    },
-    {
-      "x": 2,
-      "y": 9,
-      "z": 4,
-      "name": "Empty"
     },
     {
       "x": 2,
@@ -20708,30 +19604,6 @@
       "y": 5,
       "z": 5,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 2,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
-      "y": 7,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
-      "y": 8,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
-      "y": 9,
-      "z": 5,
-      "name": "Empty"
     },
     {
       "x": 2,
@@ -20772,12 +19644,6 @@
     },
     {
       "x": 2,
-      "y": 6,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
       "y": 0,
       "z": 7,
       "name": "Soil_Dirt"
@@ -20811,12 +19677,6 @@
       "y": 5,
       "z": 7,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 2,
-      "y": 6,
-      "z": 7,
-      "name": "Empty"
     },
     {
       "x": 2,
@@ -21450,12 +20310,6 @@
     },
     {
       "x": 3,
-      "y": 6,
-      "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 0,
       "z": -5,
       "name": "Soil_Dirt"
@@ -21493,12 +20347,6 @@
     },
     {
       "x": 3,
-      "y": 6,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 0,
       "z": -4,
       "name": "Soil_Dirt"
@@ -21532,12 +20380,6 @@
       "y": 5,
       "z": -4,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
     },
     {
       "x": 3,
@@ -21590,18 +20432,6 @@
     },
     {
       "x": 3,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
-      "y": 7,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 8,
       "z": -3,
       "name": "*Rock_Stone_Brick_Stairs_State_Definitions_Inverted_Corner_Right",
@@ -21609,12 +20439,6 @@
     },
     {
       "x": 3,
-      "y": 9,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 0,
       "z": -2,
       "name": "Soil_Dirt"
@@ -21652,22 +20476,10 @@
     },
     {
       "x": 3,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 8,
       "z": -2,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 3,
-      "y": 9,
-      "z": -2,
-      "name": "Empty"
     },
     {
       "x": 3,
@@ -21708,22 +20520,10 @@
     },
     {
       "x": 3,
-      "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 8,
       "z": -1,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 3,
-      "y": 9,
-      "z": -1,
-      "name": "Empty"
     },
     {
       "x": 3,
@@ -21792,23 +20592,11 @@
     },
     {
       "x": 3,
-      "y": 9,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 10,
       "z": 0,
       "name": "Rock_Stone_Brick_Stairs",
       "support": 15,
       "rotation": 1
-    },
-    {
-      "x": 3,
-      "y": 11,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": 3,
@@ -21870,23 +20658,11 @@
     },
     {
       "x": 3,
-      "y": 9,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 10,
       "z": 1,
       "name": "Rock_Stone_Brick_Stairs",
       "support": 15,
       "rotation": 1
-    },
-    {
-      "x": 3,
-      "y": 11,
-      "z": 1,
-      "name": "Empty"
     },
     {
       "x": 3,
@@ -21927,22 +20703,10 @@
     },
     {
       "x": 3,
-      "y": 6,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 8,
       "z": 2,
       "name": "Rock_Stone_Brick_Mossy",
       "support": 15
-    },
-    {
-      "x": 3,
-      "y": 9,
-      "z": 2,
-      "name": "Empty"
     },
     {
       "x": 3,
@@ -21987,12 +20751,6 @@
       "z": 3,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": 3,
@@ -22003,12 +20761,6 @@
     },
     {
       "x": 3,
-      "y": 9,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 0,
       "z": 4,
       "name": "Soil_Dirt"
@@ -22042,18 +20794,6 @@
       "y": 5,
       "z": 4,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
-      "y": 7,
-      "z": 4,
-      "name": "Empty"
     },
     {
       "x": 3,
@@ -22064,12 +20804,6 @@
     },
     {
       "x": 3,
-      "y": 9,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 0,
       "z": 5,
       "name": "Soil_Dirt"
@@ -22103,12 +20837,6 @@
       "y": 5,
       "z": 5,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
     },
     {
       "x": 3,
@@ -22162,12 +20890,6 @@
     },
     {
       "x": 3,
-      "y": 6,
-      "z": 6,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
       "y": 0,
       "z": 7,
       "name": "Soil_Dirt"
@@ -22201,12 +20923,6 @@
       "y": 5,
       "z": 7,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": 7,
-      "name": "Empty"
     },
     {
       "x": 3,
@@ -22890,12 +21606,6 @@
     },
     {
       "x": 4,
-      "y": 6,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
       "y": 0,
       "z": -4,
       "name": "Soil_Dirt"
@@ -22933,12 +21643,6 @@
     },
     {
       "x": 4,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
       "y": 0,
       "z": -3,
       "name": "Soil_Dirt"
@@ -22973,12 +21677,6 @@
       "z": -3,
       "name": "Rock_Stone_Brick_Mossy",
       "support": 15
-    },
-    {
-      "x": 4,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
     },
     {
       "x": 4,
@@ -23031,28 +21729,10 @@
     },
     {
       "x": 4,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
-      "y": 7,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
       "y": 8,
       "z": -2,
       "name": "*Rock_Stone_Brick_Stairs_State_Definitions_Inverted_Corner_Right",
       "rotation": 11
-    },
-    {
-      "x": 4,
-      "y": 9,
-      "z": -2,
-      "name": "Empty"
     },
     {
       "x": 4,
@@ -23089,12 +21769,6 @@
       "y": 5,
       "z": -1,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 4,
-      "y": 6,
-      "z": -1,
-      "name": "Empty"
     },
     {
       "x": 4,
@@ -23105,12 +21779,6 @@
     },
     {
       "x": 4,
-      "y": 9,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
       "y": 0,
       "z": 0,
       "name": "Soil_Dirt"
@@ -23147,22 +21815,10 @@
     },
     {
       "x": 4,
-      "y": 6,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
       "y": 8,
       "z": 0,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 4,
-      "y": 9,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": 4,
@@ -23202,22 +21858,10 @@
     },
     {
       "x": 4,
-      "y": 6,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
       "y": 8,
       "z": 1,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 4,
-      "y": 9,
-      "z": 1,
-      "name": "Empty"
     },
     {
       "x": 4,
@@ -23254,12 +21898,6 @@
       "y": 5,
       "z": 2,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 4,
-      "y": 6,
-      "z": 2,
-      "name": "Empty"
     },
     {
       "x": 4,
@@ -23270,12 +21908,6 @@
     },
     {
       "x": 4,
-      "y": 9,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
       "y": 0,
       "z": 3,
       "name": "Soil_Dirt"
@@ -23312,28 +21944,10 @@
     },
     {
       "x": 4,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
-      "y": 7,
-      "z": 3,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
       "y": 8,
       "z": 3,
       "name": "*Rock_Stone_Brick_Stairs_State_Definitions_Inverted_Corner_Right",
       "rotation": 10
-    },
-    {
-      "x": 4,
-      "y": 9,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": 4,
@@ -23371,12 +21985,6 @@
       "z": 4,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 4,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
     },
     {
       "x": 4,
@@ -23430,12 +22038,6 @@
     },
     {
       "x": 4,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
       "y": 0,
       "z": 6,
       "name": "Soil_Dirt"
@@ -23470,12 +22072,6 @@
       "z": 6,
       "name": "Rock_Stone_Brick_Mossy",
       "support": 15
-    },
-    {
-      "x": 4,
-      "y": 6,
-      "z": 6,
-      "name": "Empty"
     },
     {
       "x": 4,
@@ -24196,12 +22792,6 @@
     },
     {
       "x": 5,
-      "y": 6,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
       "y": 0,
       "z": -4,
       "name": "Soil_Dirt"
@@ -24239,12 +22829,6 @@
     },
     {
       "x": 5,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
       "y": 0,
       "z": -3,
       "name": "Soil_Dirt"
@@ -24279,12 +22863,6 @@
       "z": -3,
       "name": "Rock_Stone_Brick_Ornate",
       "support": 15
-    },
-    {
-      "x": 5,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
     },
     {
       "x": 5,
@@ -24321,12 +22899,6 @@
       "y": 5,
       "z": -2,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 5,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
     },
     {
       "x": 5,
@@ -24379,30 +22951,6 @@
     },
     {
       "x": 5,
-      "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 7,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 8,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 9,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
       "y": 0,
       "z": 0,
       "name": "Soil_Dirt"
@@ -24436,30 +22984,6 @@
       "y": 5,
       "z": 0,
       "name": "Rock_Stone_Brick_Mossy"
-    },
-    {
-      "x": 5,
-      "y": 6,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 7,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 8,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 9,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": 5,
@@ -24499,30 +23023,6 @@
     },
     {
       "x": 5,
-      "y": 6,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 7,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 8,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 9,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
       "y": 0,
       "z": 2,
       "name": "Soil_Dirt"
@@ -24556,30 +23056,6 @@
       "y": 5,
       "z": 2,
       "name": "Rock_Stone_Brick_Mossy"
-    },
-    {
-      "x": 5,
-      "y": 6,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 7,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 8,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 9,
-      "z": 2,
-      "name": "Empty"
     },
     {
       "x": 5,
@@ -24617,12 +23093,6 @@
       "z": 3,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 5,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": 5,
@@ -24676,12 +23146,6 @@
     },
     {
       "x": 5,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
       "y": 0,
       "z": 5,
       "name": "Soil_Dirt"
@@ -24719,12 +23183,6 @@
     },
     {
       "x": 5,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
       "y": 0,
       "z": 6,
       "name": "Soil_Dirt"
@@ -24759,12 +23217,6 @@
       "z": 6,
       "name": "Rock_Stone_Brick_Decorative",
       "support": 15
-    },
-    {
-      "x": 5,
-      "y": 6,
-      "z": 6,
-      "name": "Empty"
     },
     {
       "x": 5,
@@ -25506,12 +23958,6 @@
     },
     {
       "x": 6,
-      "y": 6,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 6,
       "y": 0,
       "z": -3,
       "name": "Soil_Dirt"
@@ -25549,12 +23995,6 @@
     },
     {
       "x": 6,
-      "y": 6,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 6,
       "y": 0,
       "z": -2,
       "name": "Soil_Dirt"
@@ -25589,12 +24029,6 @@
       "z": -2,
       "name": "Rock_Stone_Brick_Ornate",
       "support": 15
-    },
-    {
-      "x": 6,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
     },
     {
       "x": 6,
@@ -25635,12 +24069,6 @@
     },
     {
       "x": 6,
-      "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 6,
       "y": 0,
       "z": 0,
       "name": "Soil_Dirt"
@@ -25675,12 +24103,6 @@
       "z": 0,
       "name": "Rock_Stone_Brick_Ornate",
       "support": 15
-    },
-    {
-      "x": 6,
-      "y": 6,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": 6,
@@ -25721,12 +24143,6 @@
     },
     {
       "x": 6,
-      "y": 6,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": 6,
       "y": 0,
       "z": 2,
       "name": "Soil_Dirt"
@@ -25764,12 +24180,6 @@
     },
     {
       "x": 6,
-      "y": 6,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": 6,
       "y": 0,
       "z": 3,
       "name": "Soil_Dirt"
@@ -25804,12 +24214,6 @@
       "z": 3,
       "name": "Rock_Stone_Brick_Ornate",
       "support": 15
-    },
-    {
-      "x": 6,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": 6,
@@ -25850,12 +24254,6 @@
     },
     {
       "x": 6,
-      "y": 6,
-      "z": 4,
-      "name": "Empty"
-    },
-    {
-      "x": 6,
       "y": 0,
       "z": 5,
       "name": "Soil_Dirt"
@@ -25890,12 +24288,6 @@
       "z": 5,
       "name": "Rock_Stone_Brick",
       "support": 15
-    },
-    {
-      "x": 6,
-      "y": 6,
-      "z": 5,
-      "name": "Empty"
     },
     {
       "x": 6,
@@ -26752,12 +25144,6 @@
     },
     {
       "x": 7,
-      "y": 6,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": 7,
       "y": 0,
       "z": -1,
       "name": "Soil_Dirt"
@@ -26794,12 +25180,6 @@
     },
     {
       "x": 7,
-      "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 7,
       "y": 0,
       "z": 0,
       "name": "Soil_Dirt"
@@ -26833,12 +25213,6 @@
       "y": 5,
       "z": 0,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 7,
-      "y": 6,
-      "z": 0,
-      "name": "Empty"
     },
     {
       "x": 7,
@@ -26878,12 +25252,6 @@
     },
     {
       "x": 7,
-      "y": 6,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": 7,
       "y": 0,
       "z": 2,
       "name": "Soil_Dirt"
@@ -26917,12 +25285,6 @@
       "y": 5,
       "z": 2,
       "name": "Rock_Stone_Brick"
-    },
-    {
-      "x": 7,
-      "y": 6,
-      "z": 2,
-      "name": "Empty"
     },
     {
       "x": 7,
@@ -26959,12 +25321,6 @@
       "y": 5,
       "z": 3,
       "name": "Rock_Stone_Brick_Decorative"
-    },
-    {
-      "x": 7,
-      "y": 6,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": 7,

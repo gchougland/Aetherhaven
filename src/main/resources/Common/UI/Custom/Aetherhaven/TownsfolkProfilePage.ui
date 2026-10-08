@@ -40,7 +40,6 @@ $C.@PageOverlay { LayoutMode: Middle;
           $C.@ProgressBar #MasteryXpBar { Anchor: (Height: 10, Bottom: 8); Value: 0.0; }
           Label #SkillPoints { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #99c7b5); }
           Label #AttributePoints { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #e0c891); }
-          Group #NeedsHost { LayoutMode: Top; Anchor: (Top: 12, Bottom: 4); }
           Button #Equipment { TextTooltipStyle: $C.@DefaultTextTooltipStyle; LayoutMode: Left; Anchor: (Height: 62, Top: 8); Padding: (Full: 8);
             Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
             ItemIcon #KitIcon { Anchor: (Width: 44, Height: 44, Right: 8); }

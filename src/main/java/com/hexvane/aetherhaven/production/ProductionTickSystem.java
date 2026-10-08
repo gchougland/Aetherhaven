@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.production;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
+
 
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
@@ -235,6 +237,7 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
         ProductionCatalog catalog = plugin.getProductionCatalog();
 
         PlotProductionState state = town.getOrCreatePlotProduction(jobPlotId);
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(gameplayPlotId)) { state.herd(); return; }
         if (state.usesPhysicalTimber() || state.usesPhysicalField() || state.usesPhysicalHerd()) return;
 
         ProductionCatalog.Entry entry =

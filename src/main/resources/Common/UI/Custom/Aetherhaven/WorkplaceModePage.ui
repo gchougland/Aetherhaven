@@ -89,10 +89,10 @@ AssetImage { AssetPath: "UI/Custom/arrow_forward_256.png"; Anchor: (Left: 39, To
       Button #MINESHAFT { LayoutMode: Left; Anchor: (Height: 70, Bottom: 8); Padding: (Full: 14);
         Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
         Group { LayoutMode: Top; Anchor: (Width: 220, Right: 16);
-          Label { Text: "Plan mineshaft"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 20, TextColor: #eee0bf, RenderBold: true); }
+          Label { Text: "Manage mineshafts"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 20, TextColor: #eee0bf, RenderBold: true); }
           Label #Active { Text: "SELECTED"; Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #9cdeb4, RenderBold: true); }
         }
-        Label { Text: "Choose the entrance ground, then set a direction and length through the rock."; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b5c6ce, Wrap: true); }
+        Label { Text: "Open the map of an existing Mining workplace. Use Create workplace to mark a new base around a Workbench."; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b5c6ce, Wrap: true); }
       }
       Label { Text: "Your saved workplaces stay unchanged until you save the new plan."; Anchor: (Height: 42, Top: 6); Style: (...$C.@DefaultLabelStyle, Wrap: true, FontSize: 13, TextColor: #91a6ad, HorizontalAlignment: Center); }
     }

@@ -65,7 +65,7 @@ $C.@PageOverlay {
               TabButton { Id: "GUIDE"; Icon: "../open-book.png"; TooltipText: "Guide"; }
               TabButton { Id: "QUESTS"; Icon: "../list.png"; TooltipText: "Quests"; }
               TabButton { Id: "WORK"; Icon: "../hammer.png"; TooltipText: "Work priorities"; }
-              TabButton { Id: "BILLS"; Icon: "../dollar_coin_icon_256.png"; TooltipText: "Bills"; }
+              TabButton { Id: "BILLS"; Icon: "../Bill.png"; TooltipText: "Bills"; }
               TabButton { Id: "SETTINGS"; Icon: "../cog.png"; TooltipText: "Settings"; }
             }
           }

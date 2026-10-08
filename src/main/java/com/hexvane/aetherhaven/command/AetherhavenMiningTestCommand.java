@@ -34,6 +34,11 @@ final class AetherhavenMiningTestCommand extends AbstractPlayerCommand {
     }
     @Override protected void execute(CommandContext ctx,Store<EntityStore> store,Ref<EntityStore> player,PlayerRef pr,World world) {
         var plugin=AetherhavenPlugin.get(); if(plugin==null) return;
+        if("assets".equals(ctx.get(action))){
+            var catalog=plugin.getProductionCatalog().get(AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT);
+            for(int i=0;i<catalog.catalogSize();i++)if(!MiningNodeBlocks.supported(catalog.itemAtCursor(i)))throw new IllegalStateException("Missing native mining block for "+catalog.itemAtCursor(i));
+            report(ctx,"All "+catalog.catalogSize()+" core mining outputs resolve to regular native blocks.");return;
+        }
         if("editor".equals(ctx.get(action))) {
             var session=com.hexvane.aetherhaven.plotcreator.PlotCreatorSessions.get(pr.getUuid());
             if(session==null || session.getWorld()!=world) { report(ctx,"No building editor session."); return; }

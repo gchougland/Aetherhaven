@@ -10,11 +10,11 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Cobalt",
-      "count": 36
+      "count": 40
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 12
+      "count": 15
     },
     {
       "itemId": "Ingredient_Fibre",

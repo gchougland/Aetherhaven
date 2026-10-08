@@ -693,3 +693,7 @@ aetherhaven.plotcreator.help.saveEmptySpaces.title = Save empty spaces
 aetherhaven.plotcreator.help.saveEmptySpaces.enabled = When ON: Empty space is part of your saved build. When the building is placed, any existing blocks where there was air in your selected area are removed. Use this to keep rooms and open spaces clear.
 aetherhaven.plotcreator.help.saveEmptySpaces.disabled = When OFF: Air in your selected area is ignored, so existing blocks in those spots stay. To clear a particular spot, put an Editor Empty block there before saving. That spot will be replaced with air when the building is placed.
 aetherhaven.plotcreator.help.close = Got it
+
+aetherhaven.plotcreator.spot.BARN_PEN=Animal pens
+aetherhaven.plotcreator.substep.BARN_PEN=Click five clear pen floors in slot order. Animals stand above each marker and face where you look. Right click a marker to remove it.
+aetherhaven.plotcreator.error.barnPensRequired=Mark five animal pens inside the barn bounds.

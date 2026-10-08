@@ -59,7 +59,7 @@ public final class NativeFarmCrops {
             var bed=new FieldProductionState.Bed(p,crop.block(),crop.output());
             if(!usable(world,town,plot,bed))continue;
             beds.add(bed);
-            if(beds.size()>FieldProductionState.MAX_BEDS)return new Review(List.of(),"Keep no more than 64 crop beds inside this farm.");
+            if(beds.size()>FieldProductionState.MAX_BEDS)return new Review(List.of(),"Keep no more than 75 crop beds inside this farm.");
         }
         return new Review(beds,beds.isEmpty()?"Plant crops on the farm's tilled beds, then review them here.":null);
     }

@@ -15,6 +15,13 @@ $Sounds = "../Sounds.ui";
   Disabled: (Background: PatchStyle(TexturePath: "../dollar_coin_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
   Sounds: $Sounds.@ButtonsLight
 );
+@TreasuryTabBillsStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../Bill.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../Bill.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../Bill.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Bill.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
 @TreasuryTabTitheStyle = TextButtonStyle(
   Default: (Background: PatchStyle(TexturePath: "../crown_coin_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
   Hovered: (Background: PatchStyle(TexturePath: "../crown_coin_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
@@ -80,9 +87,13 @@ $C.@PageOverlay {
                 Text: ".";
                 TooltipText: "";
               }
-              $C.@SecondaryTextButton #TabBillsButton {
-                Anchor: (Height: 44, Width: 86, Left: 10);
-                Text: "Bills";
+              TextButton #TabBillsButton {
+                Style: @TreasuryTabBillsStyle;
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Height: 44, Width: 48, Left: 10);
+                Padding: (Full: 0);
+                Text: ".";
+                TooltipText: "Bills";
               }
 
             }

@@ -8,11 +8,11 @@
     "Input": [
       {
         "ResourceTypeId": "Wood_All",
-        "Quantity": 12
+        "Quantity": 15
       },
       {
         "ItemId": "Ingredient_Bar_Copper",
-        "Quantity": 4
+        "Quantity": 5
       },
       {
         "ItemId": "Aetherhaven_Gold_Coin",
@@ -36,7 +36,11 @@
   ],
   "Set": "Aetherhaven",
   "BlockType": {
-    "BlockEntity": { "Components": { "AetherhavenWarehouseDesk": {} } },
+    "BlockEntity": {
+      "Components": {
+        "AetherhavenWarehouseDesk": {}
+      }
+    },
     "Material": "Solid",
     "DrawType": "Model",
     "Opacity": "Transparent",

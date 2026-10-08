@@ -48,9 +48,9 @@ class AlchemyFlaskTest {
         var flask=AlchemyFlask.upgrade(fresh().withMetadata("engraving",new BsonDocument("text",new org.bson.BsonString("Orin"))));
         var ingredients=List.of("Plant_Crop_Health2","Plant_Crop_Mana3","Plant_Crop_Mushroom_Boomshroom_Small");
         flask=AlchemyFlask.consume(AlchemyFlask.fill(flask,ingredients));
-        var restored=new ItemStack(flask.getItemId(),1,flask.getDurability(),flask.getMaxDurability(),BsonDocument.parse(flask.getMetadata().toJson()));
+        var restored=new ItemStack(flask.getItemId(),1,flask.getDurability(),flask.getMaxDurability(),BsonDocument.parse(com.hexvane.aetherhaven.inventory.ItemStackData.metadata(flask).toJson()));
         assertEquals(2,AlchemyFlask.capacity(restored));assertEquals(1,AlchemyFlask.charges(restored));
-        assertEquals(ingredients,AlchemyFlask.ingredients(restored));assertTrue(restored.getMetadata().containsKey("engraving"));
+        assertEquals(ingredients,AlchemyFlask.ingredients(restored));assertTrue(com.hexvane.aetherhaven.inventory.ItemStackData.metadata(restored).containsKey("engraving"));
     }
     @Test void nativeTooltipRetainsEveryCombinedEffectAndItsColor() {
         var ingredients=List.of("Plant_Crop_Health2","Plant_Crop_Mana3","Plant_Crop_Mushroom_Boomshroom_Small");
@@ -67,7 +67,7 @@ class AlchemyFlaskTest {
     }
     @Test void upgradingLegacyTooltipPreservesPaidCapacityAndRemainingMixture() {
         var flask=AlchemyFlask.consume(AlchemyFlask.fill(AlchemyFlask.upgrade(AlchemyFlask.upgrade(fresh())),List.of("Plant_Crop_Mana2")));
-        var metadata=BsonDocument.parse(flask.getMetadata().toJson());metadata.getDocument("AetherhavenAlchemyFlask").remove("displayVersion");
+        var metadata=BsonDocument.parse(com.hexvane.aetherhaven.inventory.ItemStackData.metadata(flask).toJson());metadata.getDocument("AetherhavenAlchemyFlask").remove("displayVersion");
         flask=new ItemStack(flask.getItemId(),1,flask.getDurability(),flask.getMaxDurability(),metadata);
         assertTrue(AlchemyFlask.needsDisplayRefresh(flask));var updated=AlchemyFlask.refreshDisplay(flask);
         assertFalse(AlchemyFlask.needsDisplayRefresh(updated));assertEquals(3,AlchemyFlask.capacity(updated));assertEquals(2,AlchemyFlask.charges(updated));
@@ -99,7 +99,7 @@ class AlchemyFlaskTest {
         var bag=new SimpleItemContainer((short)2);var flask=fresh();put(bag,0,flask);
         var cost=Map.of(AlchemyFlask.upgradeLeather(1),AlchemyFlask.upgradeLeatherCount(1));
         assertFalse(AlchemyInventory.exchange(bag,(short)0,flask,AlchemyFlask.upgrade(flask),cost));
-        put(bag,1,new ItemStack(AlchemyFlask.upgradeLeather(1),4));
+        put(bag,1,new ItemStack(AlchemyFlask.upgradeLeather(1),5));
         assertTrue(AlchemyInventory.exchange(bag,(short)0,flask,AlchemyFlask.upgrade(flask),cost));
         assertEquals(2,AlchemyFlask.capacity(bag.getItemStack((short)0)));assertEquals(0,AlchemyFlask.charges(bag.getItemStack((short)0)));
         assertNull(bag.getItemStack((short)1));

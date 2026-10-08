@@ -19,11 +19,19 @@ public final class ProductionStockSources {
             var pickup = ProductionStorageLocator.find(world, plot, now);
             if (pickup != null) result.add(new TownWarehouse.ProductionStock(plot.getPlotId(), pickup, inventory));
         }
+        for(var site:town.getApprenticeWorkplaces().sites()){
+            var inventory=com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,site.id());
+            if(inventory==null)continue;
+            var point=com.hexvane.aetherhaven.workplace.NativeExcavation.bufferPoint(town,site);
+            if(com.hexvane.aetherhaven.workplace.NativeExcavation.observe(world,point).loaded())result.add(new TownWarehouse.ProductionStock(site.id(),point,inventory));
+        }
         return result;
     }
 
     public static TownWarehouse.ProductionStock at(World world, TownRecord town, AetherhavenPlugin plugin,
                                                    UUID plotId, WarehouseBatch.Point pickup) {
+        var output=com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,plotId);
+        if(output!=null){var site=town.getApprenticeWorkplaces().find(plotId);return Objects.equals(pickup,com.hexvane.aetherhaven.workplace.NativeExcavation.bufferPoint(town,site))&&com.hexvane.aetherhaven.workplace.NativeExcavation.observe(world,pickup).loaded()?new TownWarehouse.ProductionStock(plotId,pickup,output):null;}
         var plot = plotId == null ? null : town.findPlotById(plotId);
         var inventory = inventory(town, plugin, plot);
         return inventory != null && ProductionStorageLocator.valid(world, plot, pickup)

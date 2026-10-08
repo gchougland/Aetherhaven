@@ -20,8 +20,9 @@ class RanchCaptureCompatibilityTest {
     }
     private Group roles(String id,String... roles){return new Group(id,null,null,roles,null);}
     private Set<String> captured(Map<String,TagSet> groups) {
-        var roleNames=List.of("Chicken","Tetrabird","Bluebird","Aetherhaven_Ranch_Chicken",
-            "Aetherhaven_Ranch_Bluebird_Young","Mod_OwnedBird","Mod_Rabbit","Cow","Wolf");
+        var roleNames=new ArrayList<>(List.of("Chicken","Tetrabird","Bluebird","Aetherhaven_Ranch_Chicken",
+            "Aetherhaven_Ranch_Bluebird_Young","Mod_OwnedBird","Mod_Rabbit","Cow","Wolf"));
+        BarnAnimalCatalog.all().forEach(species->roleNames.add(species.role()));
         var roleIndexes=new Object2IntOpenHashMap<String>();
         for(int n=0;n<roleNames.size();n++)roleIndexes.put(roleNames.get(n),n);
         var groupIndexes=new Object2IntOpenHashMap<String>();
@@ -47,7 +48,7 @@ class RanchCaptureCompatibilityTest {
         assertSame(original,assets.get("Capture_Crate"));
         assertArrayEquals(new String[]{"Mod_Capture"},original.getIncludedTagSets());assertNull(original.getExcludedTags());
         assertSame(assets.get("Mod_Capture"),view.get("Mod_Capture"));
-        assertEquals(Set.of("Chicken","Aetherhaven_Ranch_Chicken","Mod_Rabbit","Mod_OwnedBird"),captured(assets),
+        assertEquals(Set.of("Chicken","Aetherhaven_Ranch_Chicken","Aetherhaven_Barn_Chicken","Mod_Rabbit","Mod_OwnedBird"),captured(assets),
             "Removing the integration restores the original native and add-on asset view");
     }
 
@@ -71,4 +72,12 @@ class RanchCaptureCompatibilityTest {
         assets.remove("Capture_Crate");
         assertFalse(RanchCaptureCompatibility.captureView(assets,List.of()).containsKey("Capture_Crate"));
     }
+    @Test void everyOwnedBarnSpeciesIsProtectedEvenWhenAnotherPackAllowsAllAnimals() {
+        var original=groups(roles("Capture_Crate","*"));
+        var view=RanchCaptureCompatibility.captureView(original,List.of());
+        var allowed=captured(view);
+        for(var species:BarnAnimalCatalog.all())assertFalse(allowed.contains(species.role()));
+        assertTrue(allowed.contains("Cow"));assertTrue(allowed.contains("Mod_Rabbit"));
+    }
+
 }

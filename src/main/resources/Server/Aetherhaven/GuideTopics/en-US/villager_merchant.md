@@ -38,6 +38,7 @@ Build a shop where you can sell goods to townsfolk and tourists.
 
 Visit them after your friendship reaches each level to pick up the reward through dialogue.
 
+- **Friendship 25:** teaches your town the **Jeweler's Case** recipe.
 - **Friendship 50:** teaches you to craft **Appraisal Bench**
 - **Friendship 100:** teaches you to craft **Jewelry Crafting Bench**
 

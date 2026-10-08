@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Iron",
-      "count": 3
+      "count": 5
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 4
+      "count": 5
     },
     {
       "itemId": "Ingredient_Fibre",
-      "count": 8
+      "count": 10
     }
   ],
   "output": "Aetherhaven_Botanist_Kit",

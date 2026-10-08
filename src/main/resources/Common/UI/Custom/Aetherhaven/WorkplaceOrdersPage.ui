@@ -3,7 +3,7 @@ $C.@PageOverlay {
   LayoutMode: Middle;
   $C.@DecoratedContainer {
     Anchor: (Width: 1120, Height: 830);
-    #Title { Label #TitleText { Text: "WORKPLACE TASKS"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+    #Title { Label #TitleText { Text: "WORKPLACE TASKS"; Anchor: (Width: 1000); Style: (...$C.@TitleStyle, FontSize: 20, HorizontalAlignment: Center); } }
     #Content {
       LayoutMode: Top; Padding: (Full: 18);
       Group { LayoutMode: Left; Anchor: (Height: 38, Bottom: 5);

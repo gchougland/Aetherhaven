@@ -85,7 +85,7 @@ public final class MiningWorkService {
         if (visit.active && (visit.slot>=count || !mining.cycle(visit.slot).ready()
             || com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issueForKind(town,"miner",mining.cycle(visit.slot).item())!=null
             || !MiningNodeBlocks.intact(world,plot,mining,visit.node))) stop(ref,store,npc,buffer,visit);
-        if (now>=visit.nextSave) { manager.updateTown(town); visit.nextSave=now+5000; }
+        if (now>=visit.nextSave) { buffer.run(st->{if(MiningNodeBlocks.migrateLegacy(world,plot,mining))manager.updateTown(town);}); manager.updateTown(town); visit.nextSave=now+5000; }
         if (now<visit.retry) return true;
         if (!visit.active) {
             int selected=-1;
@@ -109,7 +109,7 @@ public final class MiningWorkService {
             autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE); autonomy.clearTravelAndPoiState();
             buffer.putComponent(ref,VillagerAutonomyState.getComponentType(),autonomy);
             visit.slot=selected; visit.node=node; visit.approach=approach; visit.began=now; visit.active=true;
-            int ownedNode=node; String block=MiningNodeBlocks.PREFIX+mining.cycle(selected).item();
+            int ownedNode=node; String block=MiningNodeBlocks.blockFor(mining.cycle(selected).item());
             buffer.run(st->{ if (ref.isValid() && MiningNodeBlocks.replace(world,plot,mining,ownedNode,block)) manager.updateTown(town); });
             return true;
         }
@@ -124,7 +124,7 @@ public final class MiningWorkService {
             VillagerDoorUtil.tryOpenDoorsTowardLeash(world,position,visit.approach,null);
             buffer.putComponent(ref,NPCEntity.getComponentType(),npc); return true;
         }
-        if (!Objects.equals(MiningNodeBlocks.current(world,cell),MiningNodeBlocks.PREFIX+cycle.item())) return true;
+        if (!Objects.equals(MiningNodeBlocks.current(world,cell),MiningNodeBlocks.blockFor(cycle.item()))) return true;
         NpcStandStill.hold(ref,store,npc,visit.approach,buffer);
         if (!visit.working) {
             com.hexvane.aetherhaven.equipment.VillagerEquipmentService.applyProfile(ref,store,buffer,plugin.getEquipmentProfileCatalog(),"work_miner");

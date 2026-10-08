@@ -6,19 +6,19 @@
   "bench": "Aetherhaven_Jewelry_Crafting_Bench",
   "benchTier": 1,
   "skillLevel": 4,
-  "requiresKnowledge": false,
+  "requiresKnowledge": true,
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Silver",
-      "count": 4
+      "count": 5
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 4
+      "count": 5
     },
     {
       "itemId": "Ingredient_Crystal_White",
-      "count": 2
+      "count": 5
     }
   ],
   "output": "Aetherhaven_Jeweler_Kit",

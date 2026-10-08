@@ -11,13 +11,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("town")
 class TownPayrollAndWorkTest {
+    private final com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer inventory =
+        new com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer(new com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer((short) 1));
     private static final String WORKER = "apprentice";
 
     @Test void someoneOutsideTownCannotPayItsBillsThroughAStalePage() {
         var town = new TownRecord(); town.setOwner(java.util.UUID.randomUUID(), "Owner");
         town.setTreasuryGoldCoinCount(100);
         town.getPayroll().ensureCurrentBill(WORKER);
-        assertFalse(com.hexvane.aetherhaven.economy.TownPayrollService.pay(town, null, java.util.UUID.randomUUID(), town.getPayroll().bills().getFirst().id()));
+        assertFalse(com.hexvane.aetherhaven.economy.TownPayrollService.pay(town, null, java.util.UUID.randomUUID(), town.getPayroll().bills().getFirst().id(), inventory));
         assertEquals(100, town.getTreasuryGoldCoinCount());
     }
 

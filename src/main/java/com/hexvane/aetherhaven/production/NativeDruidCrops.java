@@ -41,7 +41,7 @@ public final class NativeDruidCrops {
             if(crop==null)continue;
             var bed=new FieldProductionState.Bed(new WarehouseBatch.Point(x,y,z),crop.plantedBlock(),crop.item());
             if(usable(world,town,plot,bed))beds.add(bed);
-            if(beds.size()>FieldProductionState.MAX_BEDS)return new NativeFarmCrops.Review(List.of(),"Keep no more than 64 planted beds inside this conservatory.");
+            if(beds.size()>FieldProductionState.MAX_BEDS)return new NativeFarmCrops.Review(List.of(),"Keep no more than 75 planted beds inside this conservatory.");
         }
         return new NativeFarmCrops.Review(beds,beds.isEmpty()?"Plant alchemical seeds on crystal soil, then review their beds here.":null);
     }

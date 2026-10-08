@@ -1,0 +1,6 @@
+Group {
+ LayoutMode: Middle;
+ Anchor: (Width: 22, Height: 22, Right: 2);
+ Background: (TexturePath: "../Heart_Full.png", Border: 0, Color: #606060(0.35));
+ AssetImage #Fg { Anchor: (Width: 20, Height: 20); AssetPath: "UI/Custom/Heart_Full.png"; }
+}

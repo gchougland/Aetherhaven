@@ -106,14 +106,14 @@ final class AetherhavenGuardStatsTestCommand extends AbstractAsyncCommand {
                         require(effects!=null&&effects.getActiveEffects().containsKey(speed),"Missing speed effect: "+profile);
                         for(int s=1;s<=40;s++)if(s!=expected.speed())require(!effects.getActiveEffects().containsKey(EntityEffect.getAssetMap().getIndex("Aetherhaven_Guard_Speed_"+s)),"Stacked speed effect");
                         float before=health.get();
-                        var hit=new Damage(new Damage.EnvironmentSource("guard_stats_fixture"),DamageCause.PHYSICAL,10);
+                        var hit=new Damage(new Damage.EnvironmentSource("guard_stats_fixture"),DamageCause.getAssetMap().getIndex("Physical"),10);
                         DamageSystems.executeDamage(ref,store,hit);
                         require(!hit.isCancelled(),"Incoming probe cancelled: "+profile);
                         // Native ApplyDamage rounds once after all damage filters.
                         close(Math.round(10*(1-expected.damageReduction())),before-health.get(),profile+" protection");
                         for(boolean projectile:List.of(false,true)) {
                             var target=dummyStats.get(healthId);dummyStats.setStatValue(healthId,target.getMax());float start=target.get();
-                            var attack=new Damage(projectile?new Damage.ProjectileSource(ref,dummy):new Damage.EntitySource(ref),DamageCause.PHYSICAL,10);
+                            var attack=new Damage(projectile?new Damage.ProjectileSource(ref,dummy):new Damage.EntitySource(ref),DamageCause.getAssetMap().getIndex("Physical"),10);
                             DamageSystems.executeDamage(dummy,store,attack);
                             require(!attack.isCancelled(),"Outgoing probe cancelled: "+profile);
                             close(Math.round(10*expected.damageMultiplier()),start-target.get(),profile+" outgoing "+projectile);

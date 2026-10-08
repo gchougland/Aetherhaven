@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Copper",
-      "count": 3
+      "count": 5
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 4
+      "count": 5
     },
     {
       "itemId": "Potion_Empty_Small",
-      "count": 3
+      "count": 5
     }
   ],
   "output": "Aetherhaven_Alchemist_Kit",

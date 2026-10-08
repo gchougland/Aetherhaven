@@ -192,6 +192,10 @@ public final class VillagerLifeVisuals {
         // BillboardY keeps both 64px icon and bubble in the same vertical plane.
         var networkId = store.getComponent(ref, com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId.getComponentType());
         if (networkId == null) return;
+        var life = store.getComponent(ref, VillagerLifeState.getComponentType());
+        // Context, personality and conversation bubbles share one visible slot.
+        // Native particles last 2.8 seconds; do not stack another system over them.
+        if (life == null || !life.beginBubble(System.nanoTime() / 1_000_000L)) return;
         var particle = bubbleParticle(PREFIX + (speech ? "Speech_" : "Thought_") + icon,
             (float) (height + .2 + 59 * .28 / 32));
         var packet = new com.hypixel.hytale.protocol.packets.entities.SpawnModelParticles(networkId.getId(),

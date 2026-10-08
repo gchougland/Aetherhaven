@@ -1,0 +1,41 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_backpack.iron.name",
+    "Description": "aetherhaven_backpack.description"
+  },
+  "Model": "Items/Aetherhaven/Backpack/Backpack.blockymodel",
+  "Texture": "Items/Aetherhaven/Backpack/Iron.png",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Backpack_Iron.png",
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "Quality": "Uncommon",
+  "Categories": [
+    "Items.Tools",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": {
+            "Id": "AetherhavenBackpack"
+          }
+        }
+      ]
+    }
+  },
+  "IconProperties": {
+    "Scale": 1.5,
+    "Rotation": [
+      22.5,
+      45,
+      0
+    ],
+    "Translation": [
+      0,
+      -10
+    ]
+  }
+}

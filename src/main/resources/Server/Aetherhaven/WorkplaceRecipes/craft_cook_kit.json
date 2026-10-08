@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Iron",
-      "count": 4
+      "count": 5
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 3
+      "count": 5
     },
     {
       "itemId": "Ingredient_Fabric_Scrap_Linen",
-      "count": 6
+      "count": 10
     }
   ],
   "output": "Aetherhaven_Cook_Kit",

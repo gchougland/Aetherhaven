@@ -34,18 +34,25 @@ public final class CourierAssignments {
 
     /** Returns feedback. Repeated explicit assignments cannot toggle the role or generate extra bills. */
     @Deprecated public static String set(TownRecord town, UUID player, Worker worker, boolean assigned) {
+        return setPriority(town, player, worker, assigned ? 1 : 0);
+    }
+
+    /** Explicit Logistics priority for integrations using the current work-priority system. */
+    public static String setPriority(TownRecord town, UUID player, Worker worker, int priority) {
+        if (priority < 0 || priority > 4) return "Choose a priority from 0 to 4.";
         if (!WarehouseAccess.canManageCouriers(town, player)) return "You need a resident Warehouse Manager and permission to manage workers.";
         if (worker == null) return "This resident is no longer available.";
-        if (assigned && !worker.progress().isCourier()) {
+        var type = com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.LOGISTICS;
+        if (priority > 0 && worker.progress().priority(type) != priority) {
             String blocked = blockedReason(town, worker);
             if (blocked != null) return blocked;
-            worker.progress().setCourier(true);
+            worker.progress().setPriority(type, priority);
             worker.progress().setEmployed(true);
             town.getPayroll().ensureCurrentBill(worker.characterId());
             return worker.name() + " has Logistics enabled in work priorities. Review wages in Bills.";
         }
-        if (!assigned && worker.progress().isCourier()) {
-            worker.progress().setCourier(false);
+        if (priority == 0 && worker.progress().priority(type) > 0) {
+            worker.progress().setPriority(type, 0);
             return worker.name() + " has Logistics disabled. Employment and owed bills are unchanged.";
         }
         return "This assignment is already up to date.";

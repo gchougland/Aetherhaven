@@ -1,316 +1,103 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
-import com.hexvane.aetherhaven.town.CharterSpecialization;
-import com.hexvane.aetherhaven.town.CharterTaxPolicy;
-import com.hexvane.aetherhaven.town.TownCharterService;
-import com.hexvane.aetherhaven.town.TownRecord;
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
+import com.hexvane.aetherhaven.town.*;
+import com.hypixel.hytale.codec.*;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
-import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
-import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
+import com.hypixel.hytale.component.*;
+import com.hypixel.hytale.protocol.packets.interface_.*;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
-import com.hypixel.hytale.server.core.ui.builder.EventData;
-import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
-import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
-import com.hypixel.hytale.server.core.util.NotificationUtil;
+import com.hypixel.hytale.server.core.ui.*;
+import com.hypixel.hytale.server.core.ui.builder.*;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.*;
 
-/** Skill-tree style charter amendments: tax policy (tier 1) and specialization (tier 2). */
+/** Permanent charter choices, presented with the same nodes and details as building upgrades. */
 public final class CharterAmendmentsPage extends AetherhavenInteractiveCustomUIPage<CharterAmendmentsPage.PageData> {
-    private boolean templateAppended;
-
-    public CharterAmendmentsPage(@Nonnull PlayerRef playerRef) {
-        super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
+    private record Choice(String id,String label,String icon,int tier,int x,int y) {}
+    private static final List<Choice> CHOICES=List.of(
+        new Choice("t1_per_capita","t1.perCapita","MultipleUsers",1,125,52),
+        new Choice("t1_happiness","t1.happiness","Emotions",1,341,52),
+        new Choice("t2_mining","t2.mining","Pickaxe",2,125,290),
+        new Choice("t2_logging","t2.logging","Axe",2,341,290),
+        new Choice("t2_farming","t2.farming","Farmer",2,125,452),
+        new Choice("t2_ranching","t2.ranching","Bull",2,341,452));
+    private boolean appended;
+    private String selected="t1_per_capita",hint="Choose one amendment from each tier. Adopted choices are permanent.";
+    public CharterAmendmentsPage(PlayerRef player){super(player,CustomPageLifetime.CanDismissOrCloseThroughInteraction,PageData.CODEC);}
+    private TownRecord town(Store<EntityStore> store){
+        var plugin=AetherhavenPlugin.get();if(plugin==null)return null;
+        var town=AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(),plugin).findTownForOwnerInWorld(playerRef.getUuid());
+        return town!=null&&town.playerCanManageConstructions(playerRef.getUuid())?town:null;
     }
-
-    @Override
-    public void build(
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull UICommandBuilder commandBuilder,
-        @Nonnull UIEventBuilder eventBuilder,
-        @Nonnull Store<EntityStore> store
-    ) {
-        if (!templateAppended) {
-            commandBuilder.append("Aetherhaven/CharterAmendments.ui");
-            templateAppended = true;
-        }
-        AetherhavenUiLocalization.applyCharterAmendmentsChrome(commandBuilder);
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        World world = store.getExternalData().getWorld();
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-        if (plugin == null || uc == null || pr == null) {
-            commandBuilder.set("#PopHint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
-            return;
-        }
-        var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
-        if (town == null) {
-            commandBuilder.set("#PopHint.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.noTown"));
-            return;
-        }
-        if (!town.playerCanManageConstructions(uc.getUuid())) {
-            commandBuilder.set("#PopHint.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.noPermission"));
-            return;
-        }
-        int pop = TownCharterService.countResidents(town, store);
-        int tierUnlock = TownCharterService.unlockedAmendmentTier(pop);
-        commandBuilder.set(
-            "#PopHint.TextSpans",
-            Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.popHint").param("count", pop)
-        );
-
-        boolean t1Done = town.getCharterTaxPolicyEnum() != null;
-        boolean t2Done = town.getCharterSpecializationEnum() != null;
-
-        bindTier1(commandBuilder, eventBuilder, tierUnlock, town);
-        bindTier2(commandBuilder, eventBuilder, tierUnlock, t1Done, town);
-
-        if (t1Done && t2Done) {
-            commandBuilder.set("#Status.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.allChosen"));
-        } else {
-            commandBuilder.set("#Status.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.hint"));
-        }
+    private static Message label(String key){return Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter."+key);}
+    private static boolean chosen(TownRecord town,Choice c){
+        return switch(c.id()){
+            case "t1_per_capita"->town.getCharterTaxPolicyEnum()==CharterTaxPolicy.PER_CAPITA;
+            case "t1_happiness"->town.getCharterTaxPolicyEnum()==CharterTaxPolicy.HAPPINESS_WEIGHTED;
+            default->town.getCharterSpecializationEnum()!=null&&town.getCharterSpecializationEnum().name().equalsIgnoreCase(c.id().substring(3));
+        };
     }
-
-    private static void bindTier1(
-        @Nonnull UICommandBuilder commandBuilder,
-        @Nonnull UIEventBuilder eventBuilder,
-        int tierUnlock,
-        @Nonnull TownRecord town
-    ) {
-        commandBuilder.set("#T1PerCapitaText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t1.perCapitaShort"));
-        commandBuilder.set("#T1HappinessText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t1.happinessShort"));
-        commandBuilder.set("#T1PerCapita.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t1.perCapitaTooltip"));
-        commandBuilder.set("#T1Happiness.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t1.happinessTooltip"));
-
-        CharterTaxPolicy policy = town.getCharterTaxPolicyEnum();
-        boolean tier1Unlocked = tierUnlock >= 1;
-        boolean perCapitaDisabled;
-        boolean happinessDisabled;
-        if (!tier1Unlocked) {
-            perCapitaDisabled = true;
-            happinessDisabled = true;
-        } else if (policy == null) {
-            perCapitaDisabled = false;
-            happinessDisabled = false;
-        } else {
-            perCapitaDisabled = policy != CharterTaxPolicy.PER_CAPITA;
-            happinessDisabled = policy != CharterTaxPolicy.HAPPINESS_WEIGHTED;
-        }
-        commandBuilder.set("#T1PerCapita.Disabled", perCapitaDisabled);
-        commandBuilder.set("#T1Happiness.Disabled", happinessDisabled);
-        commandBuilder.set("#T1PerCapitaDim.Visible", perCapitaDisabled);
-        commandBuilder.set("#T1HappinessDim.Visible", happinessDisabled);
-        commandBuilder.set(
-            "#T1PerCapitaText.Style.TextColor",
-            perCapitaDisabled ? "#8a8698" : "#e4dfd4"
-        );
-        commandBuilder.set(
-            "#T1HappinessText.Style.TextColor",
-            happinessDisabled ? "#8a8698" : "#e4dfd4"
-        );
-
-        if (tier1Unlocked && policy == null) {
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#T1PerCapita",
-                new EventData().append("Action", "Pick").append("Choice", "t1_per_capita"),
-                false
-            );
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#T1Happiness",
-                new EventData().append("Action", "Pick").append("Choice", "t1_happiness"),
-                false
-            );
-        }
+    private static String blocked(TownRecord town,Choice c,int tier){
+        if(chosen(town,c))return "ADOPTED";
+        if(c.tier()==1&&town.getCharterTaxPolicyEnum()!=null||c.tier()==2&&town.getCharterSpecializationEnum()!=null)return "ANOTHER AMENDMENT CHOSEN";
+        if(tier<c.tier())return "Requires Town Level "+(c.tier()==1?3:5);
+        if(c.tier()==2&&town.getCharterTaxPolicyEnum()==null)return "Adopt a tax policy first";
+        return null;
     }
-
-    private static void bindTier2(
-        @Nonnull UICommandBuilder commandBuilder,
-        @Nonnull UIEventBuilder eventBuilder,
-        int tierUnlock,
-        boolean t1Done,
-        @Nonnull TownRecord town
-    ) {
-        commandBuilder.set("#T2MiningText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.miningShort"));
-        commandBuilder.set("#T2LoggingText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.loggingShort"));
-        commandBuilder.set("#T2FarmingText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.farmingShort"));
-        commandBuilder.set("#T2RanchingText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.ranchingShort"));
-        commandBuilder.set("#T2Mining.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.miningTooltip"));
-        commandBuilder.set("#T2Logging.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.loggingTooltip"));
-        commandBuilder.set("#T2Farming.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.farmingTooltip"));
-        commandBuilder.set("#T2Ranching.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.ranchingTooltip"));
-
-        CharterSpecialization spec = town.getCharterSpecializationEnum();
-        boolean tier2Unlocked = tierUnlock >= 2 && t1Done;
-        boolean miningD;
-        boolean loggingD;
-        boolean farmingD;
-        boolean ranchingD;
-        if (!tier2Unlocked) {
-            miningD = true;
-            loggingD = true;
-            farmingD = true;
-            ranchingD = true;
-        } else if (spec == null) {
-            miningD = false;
-            loggingD = false;
-            farmingD = false;
-            ranchingD = false;
-        } else {
-            miningD = spec != CharterSpecialization.MINING;
-            loggingD = spec != CharterSpecialization.LOGGING;
-            farmingD = spec != CharterSpecialization.FARMING;
-            ranchingD = spec != CharterSpecialization.RANCHING;
-        }
-        commandBuilder.set("#T2Mining.Disabled", miningD);
-        commandBuilder.set("#T2Logging.Disabled", loggingD);
-        commandBuilder.set("#T2Farming.Disabled", farmingD);
-        commandBuilder.set("#T2Ranching.Disabled", ranchingD);
-        commandBuilder.set("#T2MiningDim.Visible", miningD);
-        commandBuilder.set("#T2LoggingDim.Visible", loggingD);
-        commandBuilder.set("#T2FarmingDim.Visible", farmingD);
-        commandBuilder.set("#T2RanchingDim.Visible", ranchingD);
-        commandBuilder.set("#T2MiningText.Style.TextColor", miningD ? "#8a8698" : "#e4dfd4");
-        commandBuilder.set("#T2LoggingText.Style.TextColor", loggingD ? "#8a8698" : "#e4dfd4");
-        commandBuilder.set("#T2FarmingText.Style.TextColor", farmingD ? "#8a8698" : "#e4dfd4");
-        commandBuilder.set("#T2RanchingText.Style.TextColor", ranchingD ? "#8a8698" : "#e4dfd4");
-
-        if (tier2Unlocked && spec == null) {
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#T2Mining",
-                new EventData().append("Action", "Pick").append("Choice", "t2_mining"),
-                false
-            );
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#T2Logging",
-                new EventData().append("Action", "Pick").append("Choice", "t2_logging"),
-                false
-            );
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#T2Farming",
-                new EventData().append("Action", "Pick").append("Choice", "t2_farming"),
-                false
-            );
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#T2Ranching",
-                new EventData().append("Action", "Pick").append("Choice", "t2_ranching"),
-                false
-            );
-        }
+    private static void anchor(UICommandBuilder c,String path,int x,int y,int width,int height){
+        var a=new Anchor();a.setLeft(Value.of(x));a.setTop(Value.of(y));a.setWidth(Value.of(width));a.setHeight(Value.of(height));c.setObject(path+".Anchor",a);
     }
-
-    @Override
-    public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
-        if (data.action == null || !data.action.equalsIgnoreCase("Pick") || data.choice == null || data.choice.isBlank()) {
-            return;
+    @Override public void build(Ref<EntityStore> ref,UICommandBuilder c,UIEventBuilder e,Store<EntityStore> store){
+        var town=town(store);if(town==null){close();return;}
+        if(!appended){c.append("Aetherhaven/CharterAmendments.ui");appended=true;}
+        int townLevel=TownPopulation.levelFor(TownPopulation.count(town)),tier=TownCharterService.unlockedAmendmentTier(townLevel);
+        c.set("#Summary.Text",town.getDisplayName()+"  |  Town Level "+townLevel+"  |  Charter amendments");
+        c.clear("#Canvas");
+        c.appendInline("#Canvas","Label { Anchor: (Left: 24, Top: 10, Width: 590, Height: 28); Text: \"TAX POLICY | TOWN LEVEL 3 | CHOOSE ONE\"; Style: (FontSize: 14, TextColor: #e8c984); }");
+        c.appendInline("#Canvas","Group { Anchor: (Left: 319, Top: 181, Width: 2, Height: 68); Background: #7bad99; }");
+        c.appendInline("#Canvas","Label { Anchor: (Left: 24, Top: 249, Width: 590, Height: 28); Text: \"SPECIALIZATION | TOWN LEVEL 5 | CHOOSE ONE\"; Style: (FontSize: 14, TextColor: #e8c984); }");
+        c.appendInline("#Canvas","Group #Nodes { Anchor: (Full: 0); }");
+        for(int i=0;i<CHOICES.size();i++){
+            var n=CHOICES.get(i);String path="#Nodes["+i+"]",reason=blocked(town,n,tier);boolean owned=chosen(town,n);
+            c.append("#Nodes","Aetherhaven/BuildingUpgradeNode.ui");anchor(c,path,n.x(),n.y(),174,112);
+            c.set(path+" #Title.TextSpans",label(n.label()+"Short"));
+            c.set(path+" #Icon.AssetPath","Icons/ItemsGenerated/Aetherhaven_Charter_Icon_"+n.icon()+".png");
+            c.set(path+" #Item.Visible",false);c.set(path+" #Selected.Visible",selected.equals(n.id()));
+            c.set(path+" #LockedBackground.Visible",!owned&&reason!=null);c.set(path+" #Lock.Visible",!owned&&reason!=null);
+            c.set(path+" #State.Text",owned?"ADOPTED":reason==null?"AVAILABLE":"LOCKED");
+            c.set(path+" #State.Style.TextColor",owned?"#96d4b4":reason==null?"#e8c984":"#889bad");
+            e.addEventBinding(CustomUIEventBindingType.Activating,path,new EventData().append("Action","Select").append("Choice",n.id()),false);
         }
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        World world = store.getExternalData().getWorld();
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-        if (plugin == null || uc == null || pr == null) {
-            return;
-        }
-        var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
-            if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
-            return;
-        }
-        int pop = TownCharterService.countResidents(town, store);
-        int tierUnlock = TownCharterService.unlockedAmendmentTier(pop);
-        String c = data.choice.trim();
-        String err = null;
-        switch (c) {
-            case "t1_per_capita" -> {
-                if (tierUnlock < 1 || town.getCharterTaxPolicyEnum() != null) {
-                    err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.locked";
-                } else {
-                    town.setCharterTaxPolicy(CharterTaxPolicy.PER_CAPITA.id());
-                }
+        var n=CHOICES.stream().filter(v->v.id().equals(selected)).findFirst().orElse(CHOICES.getFirst());String reason=blocked(town,n,tier);
+        c.set("#DetailTitle.TextSpans",label(n.label()+"Short"));c.set("#Description.TextSpans",label(n.label()+"Tooltip"));
+        c.set("#DetailIcon.AssetPath","Icons/ItemsGenerated/Aetherhaven_Charter_Icon_"+n.icon()+".png");c.set("#DetailIcon.Visible",true);c.set("#DetailItem.Visible",false);
+        c.set("#DetailLock.Visible",!chosen(town,n)&&reason!=null);c.set("#DetailState.Text",reason==null?"READY TO ADOPT":reason);
+        c.set("#Requires.Text",(n.tier()==1?"Town Level 3":"Town Level 5\nA chosen tax policy")+"\nChoose one option in this tier.");
+        c.clear("#Costs");c.set("#Gold.Text","No gold required");c.set("#Purchase.Text",chosen(town,n)?"Adopted":"Adopt amendment");c.set("#Purchase.Disabled",reason!=null);
+        c.set("#Hint.Text",hint);e.addEventBinding(CustomUIEventBindingType.Activating,"#Purchase",new EventData().append("Action","Pick").append("Choice",n.id()),false);
+    }
+    @Override public void handleDataEvent(Ref<EntityStore> ref,Store<EntityStore> store,PageData data){
+        var town=town(store);if(town==null){close();return;}
+        var choice=CHOICES.stream().filter(c->c.id().equals(data.choice)).findFirst().orElse(null);if(choice==null)return;
+        if("Select".equals(data.action))selected=choice.id();
+        else if("Pick".equals(data.action)){
+            var error=blocked(town,choice,TownCharterService.unlockedAmendmentTier(TownPopulation.levelFor(TownPopulation.count(town))));
+            if(error!=null)hint=error;
+            else{
+                if(choice.tier()==1)town.setCharterTaxPolicy((choice.id().equals("t1_per_capita")?CharterTaxPolicy.PER_CAPITA:CharterTaxPolicy.HAPPINESS_WEIGHTED).id());
+                else town.setCharterSpecialization(CharterSpecialization.valueOf(choice.id().substring(3).toUpperCase(Locale.ROOT)).id());
+                AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(),AetherhavenPlugin.get()).updateTown(town);
+                hint="Amendment adopted. Your charter has been updated.";
             }
-            case "t1_happiness" -> {
-                if (tierUnlock < 1 || town.getCharterTaxPolicyEnum() != null) {
-                    err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.locked";
-                } else {
-                    town.setCharterTaxPolicy(CharterTaxPolicy.HAPPINESS_WEIGHTED.id());
-                }
-            }
-            case "t2_mining", "t2_logging", "t2_farming", "t2_ranching" -> {
-                if (tierUnlock < 2 || town.getCharterTaxPolicyEnum() == null || town.getCharterSpecializationEnum() != null) {
-                    err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.locked";
-                } else {
-                    CharterSpecialization spec =
-                        switch (c) {
-                            case "t2_mining" -> CharterSpecialization.MINING;
-                            case "t2_logging" -> CharterSpecialization.LOGGING;
-                            case "t2_farming" -> CharterSpecialization.FARMING;
-                            case "t2_ranching" -> CharterSpecialization.RANCHING;
-                            default -> null;
-                        };
-                    if (spec == null) {
-                        err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.invalid";
-                    } else {
-                        town.setCharterSpecialization(spec.id());
-                    }
-                }
-            }
-            default -> err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.invalid";
-        }
-        if (err != null) {
-            NotificationUtil.sendNotification(
-                pr.getPacketHandler(),
-                Message.translation(err),
-                NotificationStyle.Danger
-            );
-            refresh(ref, store);
-            return;
-        }
-        tm.updateTown(town);
-        NotificationUtil.sendNotification(
-            pr.getPacketHandler(),
-            Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.saved"),
-            NotificationStyle.Success
-        );
-        refresh(ref, store);
+        }else return;
+        var c=new UICommandBuilder();var e=new UIEventBuilder();build(ref,c,e,store);sendUpdate(c,e,false);
     }
-
-    private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
-        UICommandBuilder cmd = new UICommandBuilder();
-        UIEventBuilder ev = new UIEventBuilder();
-        build(ref, cmd, ev, store);
-        sendUpdate(cmd, ev, false);
-    }
-
     public static final class PageData {
-        public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
-            .append(new KeyedCodec<>("Action", Codec.STRING), (d, v) -> d.action = v, d -> d.action)
-            .add()
-            .append(new KeyedCodec<>("Choice", Codec.STRING), (d, v) -> d.choice = v, d -> d.choice)
-            .add()
-            .build();
-
-        @Nullable
-        private String action;
-        @Nullable
-        private String choice;
+        public static final BuilderCodec<PageData> CODEC=BuilderCodec.builder(PageData.class,PageData::new)
+            .append(new KeyedCodec<>("Action",Codec.STRING),(d,v)->d.action=v,d->d.action).add()
+            .append(new KeyedCodec<>("Choice",Codec.STRING),(d,v)->d.choice=v,d->d.choice).add().build();
+        String action,choice;
     }
 }

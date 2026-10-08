@@ -9,7 +9,7 @@ $C.@PageOverlay {
       LayoutMode: Top;
       Padding: (Full: 24);
       Label { Text: "CHOOSE WHERE TO DIG"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true, TextColor: #dec68d); }
-      Label { Text: "The ground you clicked marks the entrance. The first digging row is one block forward. Keep the clicked row and two rows behind it clear for the worker and Workbench."; Anchor: (Height: 58, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #b7c9bb); }
+      Label { Text: "The ground you clicked marks the entrance. The first digging row is one block forward. Keep the clicked row and two rows behind it clear for the worker. This creates the Mining workplace. No separate bench or workplace is needed."; Anchor: (Height: 58, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #b7c9bb); }
       Label { Text: "WORKPLACE NAME"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
       $C.@TextField #Name { Anchor: (Height: 40, Bottom: 16); PlaceholderText: "Mineshaft name"; }
       Group { LayoutMode: Left; Anchor: (Height: 40, Bottom: 12);

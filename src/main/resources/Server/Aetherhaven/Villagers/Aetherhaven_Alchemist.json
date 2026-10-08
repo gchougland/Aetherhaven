@@ -30,17 +30,9 @@
     {
       "rewardId": "rep_alchemist_25",
       "minReputation": 25,
-      "itemId": "Aetherhaven_Alchemist_Kit",
-      "itemCount": 1,
-      "dialogueNodeId": "rep_reward_25",
-      "learnRecipeItemId": null
-    },
-    {
-      "rewardId": "rep_alchemist_50",
-      "minReputation": 50,
       "itemId": "",
       "itemCount": 0,
-      "dialogueNodeId": "rep_reward_50",
+      "dialogueNodeId": "rep_reward_25",
       "learnRecipeItemId": "Aetherhaven_Alchemist_Kit"
     },
     {

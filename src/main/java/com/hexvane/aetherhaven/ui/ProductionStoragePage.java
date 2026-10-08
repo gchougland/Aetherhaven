@@ -132,6 +132,10 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             commandBuilder.set("#ErrMsg.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.plot"));
             return;
         }
+        if (com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(gameplayConstructionId)) {
+            world.execute(()->{if(ref.isValid()){var player=store.getComponent(ref,Player.getComponentType());if(player!=null)player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.RancherHerdPage(pr,townId,plotId));}});
+            return;
+        }
         PlotProductionState state = town.getOrCreatePlotProduction(plotId);
         if (!plot.getProductionLayout().legacy() && plot.getProductionLayout().validationError()!=null) {
             commandBuilder.set("#ErrMsg.Visible", true);
@@ -276,7 +280,7 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         if(state.getAmount(item)>=capacity)return "Storage full";
         var cargo=state.herd().cargo();
         if(cargo!=null&&cargo.output().equals(item))return cargo.quantity()+" being carried to storage";
-        return state.herd().feed()>0?"Feeding and raising livestock":"Supply wheat at herd review";
+        return "Manage animals and food at the barn";
     }
 
     private static String fieldStatus(PlotProductionState state,String item,long capacity) {

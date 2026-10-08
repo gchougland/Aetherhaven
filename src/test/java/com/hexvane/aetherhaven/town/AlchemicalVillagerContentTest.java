@@ -25,15 +25,16 @@ class AlchemicalVillagerContentTest {
             var villager=read(ROOT.resolve("Server/Aetherhaven/Villagers/Aetherhaven_"+role+".json"));
             var dialogue=read(ROOT.resolve("Server/Aetherhaven/Dialogue/aetherhaven_"+kind+".json")).getAsJsonObject("nodes");
             var rewards=villager.getAsJsonArray("reputationMilestones");
-            assertEquals(3,rewards.size());
-            for(int i=0;i<3;i++) {
+            assertEquals(2,rewards.size());
+            for(int i=0;i<2;i++) {
                 var reward=rewards.get(i).getAsJsonObject();
                 String id=reward.get("rewardId").getAsString();assertTrue(ids.add(id));
-                assertEquals(25*(i+1),reward.get("minReputation").getAsInt());
+                assertEquals(i==0?25:75,reward.get("minReputation").getAsInt());
                 var node=dialogue.getAsJsonObject(reward.get("dialogueNodeId").getAsString());
                 assertEquals(id,node.getAsJsonArray("actions").get(0).getAsJsonObject().get("rewardId").getAsString());
-                if(i==0) {assertEquals("Aetherhaven_"+kit+"_Kit",reward.get("itemId").getAsString());continue;}
-                Path path=i==1?ROOT.resolve("Server/Aetherhaven/WorkplaceRecipes/craft_"+kit.toLowerCase(java.util.Locale.ROOT)+"_kit.json")
+                assertEquals("",reward.get("itemId").getAsString());
+                assertEquals(0,reward.get("itemCount").getAsInt());
+                Path path=i==0?ROOT.resolve("Server/Aetherhaven/WorkplaceRecipes/craft_"+kit.toLowerCase(java.util.Locale.ROOT)+"_kit.json")
                     :Path.of("subplugin-assets/ReputationUnlocks/Server/Aetherhaven/WorkplaceRecipes/"+(kind.equals("druid")?"brew_verdant_catalyst":"brew_gaia_shard")+".json");
                 var recipe=gson.fromJson(Files.readString(path),com.hexvane.aetherhaven.workplace.WorkplaceRecipe.class);
                 assertTrue(recipe.valid());assertTrue(recipe.townOnly());assertTrue(recipe.requiresKnowledge());
@@ -41,7 +42,7 @@ class AlchemicalVillagerContentTest {
                 var town=new TownRecord();assertFalse(recipe.unlocked(town));
                 assertTrue(com.hexvane.aetherhaven.workplace.WorkplaceRecipeUnlocks.grant(town,java.util.List.of(recipe),recipe.output()));
                 assertTrue(recipe.unlocked(town));
-                if(i==2) {
+                if(i==1) {
                     int tier=kind.equals("druid")?2:3;
                     for(String family:java.util.List.of("Health","Stamina","Mana"))assertTrue(recipe.inputs().stream()
                         .anyMatch(input->("Plant_Crop_"+family+tier).equals(input.itemId())),"Advanced formulas must use all three existing plant families");

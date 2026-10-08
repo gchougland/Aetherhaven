@@ -4,7 +4,7 @@ import java.util.*;
 
 /** Town-save state. No live world, entity or inventory references. */
 public final class HalloweenGameState {
-    public static final int CANDIES = 3, GOLD = 5;
+    public static final int CANDIES = 5, GOLD = 5;
     public record Spot(UUID plot, int x, int y, int z, String buildingPosition) {}
     public record Game(UUID id, UUID player, Spot spot, boolean found) {}
     private Map<UUID, Long> rewardedDays = new LinkedHashMap<>();

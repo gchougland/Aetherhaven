@@ -71,7 +71,10 @@ class EntityReferenceCleanupTest {
             var one = f.entity(first); var two = f.entity(first); var other = f.entity(second);
             a.addEntityReference(one); a.addEntityReference(two); b.addEntityReference(other);
             f.sweep(first); f.sweep(second); assertEquals(2, f.scans);
-            first.removeEntities(new Ref[]{one, two}, RemoveReason.UNLOAD);
+            // Generic arrays cannot be constructed directly; every entry has EntityStore's type.
+            @SuppressWarnings("unchecked")
+            Ref<EntityStore>[] removals = (Ref<EntityStore>[]) new Ref<?>[]{one, two};
+            first.removeEntities(removals, RemoveReason.UNLOAD);
             f.sweep(second); assertEquals(2, f.scans); assertEquals(Set.of(other), b.getEntityReferences());
             f.sweep(first); assertEquals(3, f.scans); assertTrue(a.getEntityReferences().isEmpty());
             assertDoesNotThrow(a::clone);

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.PoiScoring;
@@ -636,7 +638,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 commandBuilder.set("#WorkNotice.Visible", workStatus != null);
                 if (workStatus != null) commandBuilder.set("#WorkNotice.TextSpans", workStatus);
             } else {
-                TownBillsUi.build(commandBuilder, eventBuilder, town, plugin, uc == null ? null : uc.getUuid());
+                TownBillsUi.build(commandBuilder, eventBuilder, town, plugin, uc == null ? null : uc.getUuid(), store, InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING));
             }
             return;
         }
@@ -2551,7 +2553,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (town == null) return;
             var manager = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
             if (action.equals("PayBill")) {
-                com.hexvane.aetherhaven.economy.TownPayrollService.pay(town, manager, uc.getUuid(), data.billId);
+                com.hexvane.aetherhaven.economy.TownPayrollService.pay(town, manager, uc.getUuid(), data.billId, InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING));
             } else if (action.equals("WorkGuardDuty")) {
                 if (!town.hasMemberOrOwner(uc.getUuid()) || !town.playerCanManageConstructions(uc.getUuid())) {
                     workStatus = TownWorkforceUi.t("guardNotAllowed");

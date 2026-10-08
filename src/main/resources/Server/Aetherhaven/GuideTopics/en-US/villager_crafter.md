@@ -12,3 +12,9 @@ Mark a workplace with the Building Staff and place an ordinary **Workbench** ins
 Seed and sapling plans use **Life Essence** and the Apprentice's **Farming** skill. The task screen shows the required Farming level for each plant.
 
 Couriers bring ingredients and return completed goods to the warehouse. Bench upgrades and required recipe unlocks still apply. A **Pattern Cabinet** improves attended Crafting work speed without replacing the workbench.
+
+
+### Friendship rewards
+
+- **Friendship 25:** Joiner's Toolbox recipe for town crafting.
+- **Friendship 75:** Pattern Cabinet recipe.

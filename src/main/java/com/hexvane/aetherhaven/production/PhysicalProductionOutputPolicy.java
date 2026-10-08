@@ -5,7 +5,7 @@ public final class PhysicalProductionOutputPolicy {
     private PhysicalProductionOutputPolicy() {}
 
     public static boolean available(PlotProductionState state, String item) {
-        if (state.usesPhysicalHerd()) return RanchProducts.supported(item);
+        if (state.usesPhysicalHerd()) return BarnAnimalCatalog.output(item);
         if (state.usesPhysicalField()) return NativeFarmCrops.supportedOutput(item);
         return !state.usesPhysicalTimber() || NativeTimberGrowth.species(item) != null
             || NativeTimberProducts.supported(item) || TimberCharring.OUTPUT.equals(item);

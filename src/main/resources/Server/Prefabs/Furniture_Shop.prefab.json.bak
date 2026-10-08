@@ -8470,6 +8470,12 @@
     },
     {
       "x": 0,
+      "y": 0,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 1,
       "z": 5,
       "name": "Empty"
@@ -8530,6 +8536,12 @@
     },
     {
       "x": 0,
+      "y": 0,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 1,
       "z": 6,
       "name": "Empty"
@@ -8586,6 +8598,12 @@
       "x": 0,
       "y": 10,
       "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 7,
       "name": "Empty"
     },
     {
@@ -9400,6 +9418,12 @@
     },
     {
       "x": 1,
+      "y": 0,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 1,
       "z": 5,
       "name": "Empty"
@@ -9460,6 +9484,12 @@
     },
     {
       "x": 1,
+      "y": 0,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 1,
       "z": 6,
       "name": "Empty"
@@ -9516,6 +9546,12 @@
       "x": 1,
       "y": 10,
       "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 7,
       "name": "Empty"
     },
     {
@@ -10344,6 +10380,12 @@
     },
     {
       "x": 2,
+      "y": 0,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 1,
       "z": 5,
       "name": "Empty"
@@ -10404,6 +10446,12 @@
     },
     {
       "x": 2,
+      "y": 0,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 1,
       "z": 6,
       "name": "Empty"
@@ -10460,6 +10508,12 @@
       "x": 2,
       "y": 10,
       "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 7,
       "name": "Empty"
     },
     {
@@ -11286,6 +11340,12 @@
     },
     {
       "x": 3,
+      "y": 0,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 1,
       "z": 5,
       "name": "Empty"
@@ -11346,6 +11406,12 @@
     },
     {
       "x": 3,
+      "y": 0,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 1,
       "z": 6,
       "name": "Empty"
@@ -11402,6 +11468,12 @@
       "x": 3,
       "y": 10,
       "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 7,
       "name": "Empty"
     },
     {
@@ -12221,6 +12293,12 @@
     },
     {
       "x": 4,
+      "y": 0,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 1,
       "z": 5,
       "name": "Empty"
@@ -12281,6 +12359,12 @@
     },
     {
       "x": 4,
+      "y": 0,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 1,
       "z": 6,
       "name": "Empty"
@@ -12337,6 +12421,12 @@
       "x": 4,
       "y": 10,
       "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 7,
       "name": "Empty"
     },
     {
@@ -13163,6 +13253,12 @@
     },
     {
       "x": 5,
+      "y": 0,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 1,
       "z": 5,
       "name": "Empty"
@@ -13223,6 +13319,12 @@
     },
     {
       "x": 5,
+      "y": 0,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 1,
       "z": 6,
       "name": "Empty"
@@ -13279,6 +13381,12 @@
       "x": 5,
       "y": 10,
       "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "z": 7,
       "name": "Empty"
     },
     {
@@ -14092,6 +14200,12 @@
     },
     {
       "x": 6,
+      "y": 0,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 1,
       "z": 5,
       "name": "Empty"
@@ -14152,6 +14266,12 @@
     },
     {
       "x": 6,
+      "y": 0,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 1,
       "z": 6,
       "name": "Empty"
@@ -14208,6 +14328,12 @@
       "x": 6,
       "y": 10,
       "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "z": 7,
       "name": "Empty"
     },
     {
@@ -15042,6 +15168,12 @@
     },
     {
       "x": 7,
+      "y": 0,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 1,
       "z": 5,
       "name": "Empty"
@@ -15102,6 +15234,12 @@
     },
     {
       "x": 7,
+      "y": 0,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 1,
       "z": 6,
       "name": "Empty"
@@ -15158,6 +15296,12 @@
       "x": 7,
       "y": 10,
       "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 7,
       "name": "Empty"
     },
     {
@@ -15985,6 +16129,12 @@
     },
     {
       "x": 8,
+      "y": 0,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 8,
       "y": 1,
       "z": 5,
       "name": "Empty"
@@ -16045,6 +16195,12 @@
     },
     {
       "x": 8,
+      "y": 0,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 8,
       "y": 1,
       "z": 6,
       "name": "Empty"
@@ -16101,6 +16257,12 @@
       "x": 8,
       "y": 10,
       "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": 7,
       "name": "Empty"
     },
     {
@@ -16918,6 +17080,12 @@
     },
     {
       "x": 9,
+      "y": 0,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 9,
       "y": 1,
       "z": 5,
       "name": "Empty"
@@ -16978,6 +17146,12 @@
     },
     {
       "x": 9,
+      "y": 0,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 9,
       "y": 1,
       "z": 6,
       "name": "Empty"
@@ -17034,6 +17208,12 @@
       "x": 9,
       "y": 10,
       "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": 7,
       "name": "Empty"
     },
     {
@@ -17100,17 +17280,11 @@
   "entities": [
     {
       "Components": {
-        "Invulnerable": {},
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "Version": 1,
-          "BlockTypeKey": "Furniture_Village_Wardrobe"
-        },
+        "AetherhavenBlockEntityScaleMigrated": {},
         "Transform": {
           "Position": {
             "X": -6.5313873291015625,
-            "Y": 3.3405288755893707,
+            "Y": 3.415528878569603,
             "Z": 7.6837615966796875
           },
           "Rotation": {
@@ -17119,15 +17293,19 @@
             "Roll": 0.0
           }
         },
+        "Prop": {},
+        "BlockEntity": {
+          "Version": 1,
+          "BlockTypeKey": "Furniture_Village_Wardrobe"
+        },
         "UUID": {
           "UUID": {
-            "$binary": "PF7/czx3OEewO0OYh2DfKQ==",
+            "$binary": "DiNEGl0FOHClDTPSTFVnUQ==",
             "$type": "04"
           }
         },
-        "PreventPickup": {},
         "EntityScale": {
-          "Scale": 0.30000001192092896
+          "Scale": 0.15000000596046448
         },
         "Item": {
           "Item": {
@@ -17143,22 +17321,19 @@
           "PickupThrottle": 0.0,
           "RemovedByPlayerPickup": false
         },
-        "PrefabCopyable": {}
+        "PrefabCopyable": {},
+        "Invulnerable": {},
+        "PreventItemMerging": {},
+        "PreventPickup": {}
       }
     },
     {
       "Components": {
-        "Invulnerable": {},
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "Version": 1,
-          "BlockTypeKey": "Furniture_Village_Wardrobe"
-        },
+        "AetherhavenBlockEntityScaleMigrated": {},
         "Transform": {
           "Position": {
             "X": -6.460662841796875,
-            "Y": 3.3405288755893707,
+            "Y": 3.415528878569603,
             "Z": 7.39056396484375
           },
           "Rotation": {
@@ -17167,15 +17342,19 @@
             "Roll": 0.0
           }
         },
+        "Prop": {},
+        "BlockEntity": {
+          "Version": 1,
+          "BlockTypeKey": "Furniture_Village_Wardrobe"
+        },
         "UUID": {
           "UUID": {
-            "$binary": "b1cGgYc1MfqJ3y5cFAhq5A==",
+            "$binary": "IcQ2WJlXMn2iVZZ1udQyLw==",
             "$type": "04"
           }
         },
-        "PreventPickup": {},
         "EntityScale": {
-          "Scale": 0.30000001192092896
+          "Scale": 0.15000000596046448
         },
         "Item": {
           "Item": {
@@ -17191,7 +17370,10 @@
           "PickupThrottle": 0.0,
           "RemovedByPlayerPickup": false
         },
-        "PrefabCopyable": {}
+        "PrefabCopyable": {},
+        "Invulnerable": {},
+        "PreventItemMerging": {},
+        "PreventPickup": {}
       }
     }
   ]

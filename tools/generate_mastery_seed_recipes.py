@@ -49,7 +49,7 @@ def generate(assets: Path, destination: Path) -> int:
             "inputs": [{"itemId": "Ingredient_Life_Essence", "count": quantity}],
             "output": item,
             "outputCount": 1,
-            "workSeconds": 8 + skill * 2,
+            "workSeconds": ((8 + skill * 2 + 4) // 5) * 5,
         }
         target = destination / (recipe_id + ".json")
         target.write_text(json.dumps(recipe, indent=2) + "\n", encoding="utf-8")

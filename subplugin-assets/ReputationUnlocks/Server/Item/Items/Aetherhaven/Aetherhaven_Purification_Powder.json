@@ -13,8 +13,8 @@
     "KnowledgeRequired": true,
     "Input": [
       {
-        "ResourceTypeId": "Crystal_Shards",
-        "Quantity": 4
+        "ItemId": "Ingredient_Crystal_Cyan",
+        "Quantity": 5
       },
       {
         "ItemId": "Ingredient_Life_Essence",

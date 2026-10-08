@@ -1,7 +1,7 @@
 aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Would you like to live in our town?
 aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=Goodbye
-aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Invite this Townsfolk to become a resident. You can choose their work in the journal or assign guard duty from their profile.
-aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Welcome to town
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=I would like to live here. Bring me {items} and I will join your town. You can then choose my work in the journal or guard duty from my profile.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Give {items} and welcome them to town
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=Not now
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=Your new resident is ready to settle in. Provide a home and choose how they will help the town.
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=Goodbye

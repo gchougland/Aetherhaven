@@ -1,8 +1,6 @@
 package com.hexvane.aetherhaven.production;
 
 import com.google.gson.Gson;
-import com.hexvane.aetherhaven.warehouse.WarehouseBatch;
-import com.hexvane.aetherhaven.workplace.RanchCare;
 import java.util.*;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -10,161 +8,136 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("town")
 class HerdProductionStateTest {
-    private final HerdProductionState.Pair pair=new HerdProductionState.Pair("Cow",List.of(UUID.randomUUID(),UUID.randomUUID()),new WarehouseBatch.Point(8,100,8));
-    private final RanchProducts.Product milk=new RanchProducts.Product("Cow",ProductionWithdrawal.MILK_BUCKET_ITEM_ID,1,false,"Container_Bucket");
-    private PlotProductionState adopted(){var p=new PlotProductionState();assertNull(p.herd().adopt(0,List.of(pair)));return p;}
-    private UUID ready(HerdProductionState state) {
-        var care=state.herds().get("Cow").care();var id=UUID.randomUUID();care.born(id,"Cow");care.matured(id);care.advance(RanchCare.GROW_MINUTES);return id;
+    private static final String CARROT="Plant_Crop_Carrot_Item";
+    private UUID buy(HerdProductionState herd,String species) {
+        assertNull(herd.buy(herd.revision(),species,10,()->true));
+        return herd.animals().getLast().id();
     }
-    @Test void adoptionIsExplicitAndPreservesOldStockWithoutDuplicateBreeders() {
-        var p=new PlotProductionState();p.addAmount("Ingredient_Hide_Heavy",12,100);var herd=p.herd();
-        assertFalse(p.usesPhysicalHerd());assertNotNull(herd.adopt(0,List.of()));
-        assertNotNull(herd.adopt(0,List.of(pair,pair)));assertNotNull(herd.adopt(1,List.of(pair)));
-        var bad=new HerdProductionState.Pair("Sheep",pair.breeders(),pair.trough());assertNotNull(herd.adopt(0,List.of(pair,bad)));
-        assertNull(herd.adopt(0,List.of(pair)));assertTrue(p.usesPhysicalHerd());assertNotNull(herd.adopt(0,List.of(pair)));
-        assertEquals(12,p.getAmount("Ingredient_Hide_Heavy"));assertTrue(PhysicalProductionOutputPolicy.available(p,"Ingredient_Hide_Heavy"));
-        assertFalse(PhysicalProductionOutputPolicy.available(p,"Ingredient_Hide_Storm"));
-        assertTrue(PhysicalProductionOutputPolicy.available(p,milk.output()));
+    private UUID active(PlotProductionState stock,String species) {
+        var herd=stock.herd();var id=buy(herd,species);
+        assertTrue(herd.assign(herd.revision(),0,id,1));return id;
     }
-    @Test void FeedTransactionsAndCareRequireSuppliesAndSuccessfulAttendance() {
-        var h=adopted().herd();assertFalse(h.supply(()->false));assertEquals(0,h.feed());
-        assertFalse(h.fed("Cow",()->fail("No supply must not act")));
-        assertTrue(h.supply(()->true));assertFalse(h.fed("Cow",()->false));assertEquals(1,h.feed());
-        assertTrue(h.fed("Cow",()->true));assertEquals(0,h.feed());assertEquals(0,h.herds().get("Cow").sinceFeed());
-        assertTrue(h.supply(()->true));assertFalse(h.fed("Cow",()->fail("A second immediate visit cannot spend feed")));
-        assertFalse(h.takeFeed(()->false));assertEquals(1,h.feed());assertTrue(h.takeFeed(()->true));
-        for(int i=0;i<HerdProductionState.FEED_CAPACITY;i++)assertTrue(h.supply(()->true));
-        assertFalse(h.supply(()->fail("Full bins cannot remove player items")));
+    private void feed(HerdProductionState herd,UUID animal,long day) {
+        assertTrue(herd.supply(BarnAnimalCatalog.get(herd.animal(animal).species()).food(),()->true));
+        assertTrue(herd.feedAnimal(animal,day,5));
     }
-    @Test void UnsimulatedTimeAndNeglectCannotContinueGrowth() {
-        var h=adopted().herd();h.supply(()->true);h.fed("Cow",()->true);var care=h.herds().get("Cow").care();care.born(UUID.randomUUID(),"Cow");
-        h.advance("Cow",720,false);assertEquals(0,care.ageMinutes());assertEquals(0,h.herds().get("Cow").sinceFeed());
-        h.advance("Cow",360,true);assertEquals(360,care.ageMinutes());assertTrue(h.herds().get("Cow").hungry());
-        h.advance("Cow",99999,true);assertEquals(1440,care.ageMinutes());assertEquals(1440,h.herds().get("Cow").sinceFeed());
-        care.matured(care.offspring());h.advance("Cow",1440,true);assertEquals(0,care.ageMinutes());
-        h.supply(()->true);assertTrue(h.fed("Cow",()->true));h.advance("Cow",60,true);assertEquals(60,care.ageMinutes());
+    private void advance(PlotProductionState stock,long start,long end,UUID id) {
+        for(long m=start;m<=end;m++)stock.herd().advance(m,1,Set.of(id),stock,1000,1);
     }
-    @Test void BreedingStockAndFailedOrRepeatedCollectionsNeverPay() {
-        var h=adopted().herd();var id=ready(h);
-        assertFalse(h.collect("Cow",pair.breeders().getFirst(),milk,()->fail("Breeder selected")));
-        assertFalse(h.collect("Cow",id,milk,()->false));assertNull(h.cargo());
-        assertTrue(h.collect("Cow",id,milk,()->true));assertEquals(id,h.herds().get("Cow").care().offspring());
-        assertEquals(0,h.herds().get("Cow").care().ageMinutes());
-        assertFalse(h.collect("Cow",id,milk,()->fail("Cannot collect twice")));
+    @Test void barnStorageGroupsSharedProductsAndCapacityDoesNotRequireSpeed(){
+        var state=new PlotProductionState();buy(state.herd(),"Rabbit");buy(state.herd(),"Pig");
+        var items=BarnAnimalCatalog.storageItems(state);
+        assertEquals(1,Collections.frequency(items,"Ingredient_Hide_Light"));assertTrue(items.contains("Ingredient_Poop"));
+        state.setIronUpgrade(1);state.setCobaltLevel(1);
+        assertTrue(WorkplaceProductionUpgrades.prerequisitesMet(state,WorkplaceProductionUpgrades.Branch.ADAMANTITE,true));
+        assertFalse(WorkplaceProductionUpgrades.prerequisitesMet(state,WorkplaceProductionUpgrades.Branch.THORIUM,true));
+        for(int tier=0;tier<=3;tier++){state.setAdamantineLevel(tier);assertEquals(10+10*tier,WorkplaceProductionUpgrades.barnCapacity(state));}
+        var tree=com.hexvane.aetherhaven.workplace.BuildingUpgradeTree.production(true);
+        assertTrue(tree.stream().noneMatch(n->n.branch().equals("THORIUM")));
+        assertTrue(tree.stream().flatMap(n->n.parents().stream()).allMatch(id->tree.stream().anyMatch(n->n.id().equals(id))));
     }
-    @Test void SavedCargoAndPartialDeliveriesRemainBoundedAndCannotDuplicate() {
-        var p=adopted();var h=p.herd();var id=ready(h);
-        var product=new RanchProducts.Product("Cow","Food_Beef_Raw",2,true,"Tool_Hatchet_Crude");
-        assertTrue(h.collect("Cow",id,product,()->{h.herds().get("Cow").care().harvested();return true;}));assertEquals(0,p.getAmount(product.output()));
-        var copy=new Gson().fromJson(new Gson().toJson(p),PlotProductionState.class);var cargo=copy.herd().cargo();
-        assertEquals(0,copy.herd().deliver(copy,UUID.randomUUID(),10));assertEquals(0,copy.herd().deliver(copy,cargo.id(),0));
-        assertEquals(1,copy.herd().deliver(copy,cargo.id(),1));assertEquals(1,copy.herd().cargo().quantity());
-        assertEquals(0,copy.herd().deliver(copy,cargo.id(),1));assertEquals(1,copy.herd().deliver(copy,cargo.id(),2));
-        assertNull(copy.herd().cargo());assertEquals(0,copy.herd().deliver(copy,cargo.id(),20));assertEquals(2,copy.getAmount(product.output()));
-    }
-    @Test void RereviewAndStaleLossCannotOrphanAnExistingOffspring() {
-        var h=adopted().herd();var id=ready(h);
-        var sheep=new HerdProductionState.Pair("Sheep",List.of(UUID.randomUUID(),UUID.randomUUID()),pair.trough());
-        assertNull(h.adopt(1,List.of(sheep)));assertEquals(id,h.herds().get("Cow").care().offspring());
-        assertFalse(h.lost(UUID.randomUUID()));assertEquals(id,h.herds().get("Cow").care().offspring());
-        assertTrue(h.lost(id));assertNull(h.herds().get("Cow").care().offspring());
-        assertNull(h.adopt(2,List.of(sheep)));assertFalse(h.herds().containsKey("Cow"));
-    }
-
-    @Test void specialtyProductsRequireTheirRegisteredAnimalFamilyAndKeepLivingAnimals() {
-        assertEquals("Mosshorn",RanchProducts.family("Tamed_Mosshorn"));
-        assertEquals("Skrill",RanchProducts.family("Skrill"));
-        assertNull(RanchProducts.family("Aetherhaven_Ranch_Skrill_Young"));
-        var heavy=RanchProducts.product("Mosshorn","Ingredient_Hide_Heavy");
-        assertTrue(heavy.slaughter());assertEquals(1,heavy.amount());
-        assertNull(RanchProducts.product("Cow","Ingredient_Hide_Heavy"));
-        var h=adopted().herd();var id=ready(h);
-        assertFalse(h.collect("Cow",id,heavy,()->fail("Wrong family cannot act")));
-        var manure=RanchProducts.product("Cow","Ingredient_Poop");
-        assertFalse(manure.slaughter());assertTrue(h.collect("Cow",id,manure,()->true));
-        assertEquals(id,h.herds().get("Cow").care().offspring());
-        assertEquals(0,h.herds().get("Cow").care().ageMinutes());
-        assertFalse(h.collect("Cow",id,manure,()->fail("Collection is not repeatable without tended growth")));
-        assertEquals("Ingredient_Poop",h.cargo().output());
-    }
-
-    @Test void allNineNativeFamiliesCanBeAdoptedWithoutReusingBreeders() {
+    @Test void purchasesValidateMasteryRevisionAndPaymentBeforeCreatingOwnership() {
         var h=new HerdProductionState();
-        var pairs=List.of("Cow","Sheep","Goat","Pig","Chicken","Mosshorn","Skrill","Tetrabird","Bluebird")
-            .stream().map(f->new HerdProductionState.Pair(f,List.of(UUID.randomUUID(),UUID.randomUUID()),pair.trough())).toList();
-        assertNull(h.adopt(0,pairs));assertEquals(9,h.herds().size());
+        assertNotNull(h.buy(0,"Bear",6,()->fail("Locked purchase cannot charge")));
+        assertNotNull(h.buy(1,"Rabbit",1,()->fail("Stale purchase cannot charge")));
+        assertNotNull(h.buy(0,"Rabbit",1,()->false));assertTrue(h.animals().isEmpty());
+        assertNull(h.buy(0,"Rabbit",1,()->true));assertEquals(1,h.animals().size());
+        assertNotNull(h.buy(0,"Rabbit",1,()->fail("Repeated button cannot charge")));
+    }
+    @Test void switchingPensSwapsAnimalsAndRestingPreservesNamesAndHearts() {
+        var h=new HerdProductionState();var rabbit=buy(h,"Rabbit");var bear=buy(h,"Bear");
+        assertFalse(h.assign(h.revision(),1,rabbit,1));
+        assertTrue(h.assign(h.revision(),0,rabbit,2));assertTrue(h.assign(h.revision(),1,bear,2));
+        assertTrue(h.rename(h.revision(),rabbit,"  Clover  "));assertEquals("Clover",h.animal(rabbit).name());
+        assertTrue(h.pet(rabbit,0,2));
+        assertTrue(h.assign(h.revision(),1,rabbit,2));assertEquals(bear,h.slot(0).id());
+        assertEquals(rabbit,h.slot(1).id());assertTrue(h.assign(h.revision(),1,null,2));
+        assertFalse(h.pet(rabbit,1,2));assertFalse(h.lost(rabbit));
         var saved=new Gson().fromJson(new Gson().toJson(h),HerdProductionState.class);
-        assertEquals(h.herds().keySet(),saved.herds().keySet());
-        var duplicate=new ArrayList<>(pairs);
-        duplicate.set(8,new HerdProductionState.Pair("Bluebird",pairs.getFirst().breeders(),pair.trough()));
-        assertNotNull(saved.adopt(saved.revision(),duplicate));assertEquals(9,saved.herds().size());
-        var tooMany=new ArrayList<HerdProductionState.Pair>();
-        for(int n=0;n<=HerdProductionState.MAX_FAMILIES;n++)tooMany.add(new HerdProductionState.Pair("Mod_"+n,List.of(UUID.randomUUID(),UUID.randomUUID()),pair.trough()));
-        assertNotNull(saved.adopt(saved.revision(),tooMany));assertEquals(9,saved.herds().size());
+        assertEquals("Clover",saved.animal(rabbit).name());assertEquals(5,saved.animal(rabbit).friendship());
+        assertEquals(-1,saved.assignedSlot(rabbit));
     }
-
-    @Test void featherCollectionPreservesRaisedBirdsAndCannotRepeatWithoutCare() {
-        for(var row:Map.of("Tetrabird","Ingredient_Feathers_Dark","Bluebird","Ingredient_Feathers_Blue").entrySet()) {
-            String family=row.getKey();var p=new PlotProductionState();var h=p.herd();
-            assertEquals(family,RanchProducts.family(family));
-            assertNull(RanchProducts.family("Aetherhaven_Ranch_"+family+"_Young"));
-            assertNull(h.adopt(0,List.of(new HerdProductionState.Pair(family,List.of(UUID.randomUUID(),UUID.randomUUID()),pair.trough()))));
-            var care=h.herds().get(family).care();var animal=UUID.randomUUID();
-            care.born(animal,family);care.matured(animal);care.advance(RanchCare.GROW_MINUTES);
-            var feathers=RanchProducts.product(family,row.getValue());assertFalse(feathers.slaughter());
-            assertFalse(h.collect(family,animal,feathers,()->false));assertNull(h.cargo());
-            assertTrue(h.collect(family,animal,feathers,()->true));assertEquals(animal,care.offspring());
-            assertFalse(h.collect(family,animal,feathers,()->fail("Repeated collection must not act")));
-            assertEquals(0,p.getAmount(feathers.output()));
-            assertEquals(feathers.amount(),h.deliver(p,h.cargo().id(),25));assertEquals(animal,care.offspring());
-            assertEquals(0,care.ageMinutes());
+    @Test void feedingAndPettingAreOncePerDayAndUseTheSpecificFood() {
+        var stock=new PlotProductionState();var rabbit=active(stock,"Rabbit");var h=stock.herd();
+        assertFalse(h.supply(CARROT,()->false));
+        assertTrue(h.supply("Plant_Crop_Potato_Item",()->true));assertFalse(h.feedAnimal(rabbit,0,1));
+        feed(h,rabbit,0);assertEquals(1,h.feed("Plant_Crop_Potato_Item"));
+        assertTrue(h.supply(CARROT,()->true));assertFalse(h.feedAnimal(rabbit,0,1));assertEquals(1,h.feed(CARROT));
+        assertTrue(h.pet(rabbit,0,1));assertFalse(h.pet(rabbit,0,1));assertFalse(h.pet(rabbit,-1,1));
+        assertFalse(h.feedAnimal(rabbit,-1,1));assertEquals(25,h.animal(rabbit).friendship());
+        assertTrue(h.feedAnimal(rabbit,1,1));assertTrue(h.pet(rabbit,1,1));assertEquals(50,h.animal(rabbit).friendship());
+        assertFalse(h.supply(HerdProductionState.FEED,()->fail("Wheat is no longer animal food")));
+    }
+    @Test void foodPaymentsAreBoundedAndEachBinIsIndependent() {
+        var h=new HerdProductionState();
+        for(int i=0;i<75;i++)assertTrue(h.supply(CARROT,()->true));
+        assertFalse(h.supply(CARROT,()->fail("Full bin cannot charge")));
+        assertTrue(h.supply("Food_Wildmeat_Raw",()->true));
+        assertFalse(h.takeFeed(CARROT,()->false));assertEquals(75,h.feed(CARROT));
+        assertTrue(h.takeFeed(CARROT,()->true));assertEquals(74,h.feed(CARROT));
+        assertFalse(h.receiveCourierFeed("Wrong",1));assertFalse(h.receiveCourierFeed(CARROT,1));
+    }
+    @Test void bulkSupplyChargesOnlyFreeSpaceAndLeavesStockUnchangedWhenPaymentFails() {
+        var h=new HerdProductionState();var paid=new java.util.concurrent.atomic.AtomicInteger();
+        assertEquals(50,h.supply(CARROT,50,n->{paid.addAndGet(n);return true;}));
+        assertEquals(25,h.supply(CARROT,200,n->{paid.addAndGet(n);return true;}));
+        assertEquals(75,paid.get());assertEquals(75,h.feed(CARROT));
+        assertEquals(0,h.supply(CARROT,10,n->{fail("Full bin cannot remove inventory");return true;}));
+        assertEquals(0,h.supply("Food_Wildmeat_Raw",20,n->false));assertEquals(0,h.feed("Food_Wildmeat_Raw"));
+        assertEquals(0,h.supply("Wrong",20,n->{fail("Invalid food cannot remove inventory");return true;}));
+        assertEquals(0,h.supply("Food_Wildmeat_Raw",0,n->{fail("Empty inventory cannot remove food");return true;}));
+    }
+    @Test void onlyFedLoadedActiveAnimalsProduceAllProductsAndSlowPoop() {
+        var stock=new PlotProductionState();var cow=active(stock,"Cow");var h=stock.herd();
+        advance(stock,0,360,cow);assertTrue(stock.getAmounts().isEmpty());
+        feed(h,cow,0);advance(stock,361,720,cow);
+        var products=BarnAnimalCatalog.get("Cow").products();
+        for(var p:products.entrySet())assertEquals(p.getValue().longValue(),stock.getAmount(p.getKey()));
+        assertEquals(0,stock.getAmount("Ingredient_Poop"));
+        for(long m=721;m<=1080;m++)h.advance(m,1,Set.of(),stock,1000,1);
+        assertEquals(1,stock.getAmount(ProductionWithdrawal.MILK_BUCKET_ITEM_ID));
+        advance(stock,1081,1440,cow);feed(h,cow,1);advance(stock,1441,2160,cow);
+        assertEquals(4,stock.getAmount(ProductionWithdrawal.MILK_BUCKET_ITEM_ID));assertEquals(1,stock.getAmount("Ingredient_Poop"));
+        advance(stock,2160,2160,cow);assertEquals(4,stock.getAmount(ProductionWithdrawal.MILK_BUCKET_ITEM_ID));
+    }
+    @Test void clockJumpsAndUnfedDaysDoNotGrantCatchupProduction() {
+        var stock=new PlotProductionState();var rabbit=active(stock,"Rabbit");var h=stock.herd();feed(h,rabbit,0);
+        advance(stock,0,359,rabbit);assertTrue(stock.getAmounts().isEmpty());
+        h.advance(20000,1,Set.of(rabbit),stock,1000,1);assertTrue(stock.getAmounts().isEmpty());
+        assertFalse(h.advance(360,1,Set.of(rabbit),stock,1000,1));
+        assertFalse(h.feedAnimal(rabbit,-1,1));
+    }
+    @Test void fullStorageWaitsForTheWholeBundleAndReloadKeepsProgress() {
+        var stock=new PlotProductionState();var rabbit=active(stock,"Rabbit");var h=stock.herd();feed(h,rabbit,0);
+        stock.addAmount("Ingredient_Hide_Light",1000,1000);advance(stock,0,360,rabbit);
+        assertEquals(0,stock.getAmount("Food_Wildmeat_Raw"));
+        stock=new Gson().fromJson(new Gson().toJson(stock),PlotProductionState.class);
+        stock.removeAmountUpTo("Ingredient_Hide_Light",1);advance(stock,361,361,rabbit);
+        assertEquals(1,stock.getAmount("Food_Wildmeat_Raw"));assertEquals(1000,stock.getAmount("Ingredient_Hide_Light"));
+    }
+    @Test void fractionalHeartBonusesAccumulateWithoutRoundingEveryProductUp() {
+        var stock=new PlotProductionState();var rabbit=active(stock,"Rabbit");var h=stock.herd();
+        for(int day=0;day<5;day++)feed(h,rabbit,day);
+        assertEquals(1,h.animal(rabbit).hearts());
+        advance(stock,5760,7200,rabbit);assertEquals(4,stock.getAmount("Food_Wildmeat_Raw"));
+        feed(h,rabbit,5);advance(stock,7201,7560,rabbit);assertEquals(6,stock.getAmount("Food_Wildmeat_Raw"));
+    }
+    @Test void foodProgressionIncludesLateCropsAndTheRequestedExceptions() {
+        assertEquals(15,BarnAnimalCatalog.all().size());
+        assertEquals(CARROT,BarnAnimalCatalog.get("Rabbit").food());
+        assertEquals("Food_Wildmeat_Raw",BarnAnimalCatalog.get("Bear").food());
+        for(var s:BarnAnimalCatalog.all()) {
+            if(s.rarity()==BarnAnimalCatalog.Rarity.COMMON)assertTrue(s.farmingTier()<=3);
+            if(s.rarity()==BarnAnimalCatalog.Rarity.UNCOMMON)assertTrue(s.farmingTier()>=4);
+            if(s.rarity()==BarnAnimalCatalog.Rarity.RARE&&!s.id().equals("Bear"))assertEquals(7,s.farmingTier());
         }
+        assertTrue(BarnAnimalCatalog.get("Chicken").products().containsKey("Food_Egg"));
+        assertTrue(BarnAnimalCatalog.get("Skrill").products().containsKey("Food_Egg"));
     }
-
-    @Test void expandedFamiliesRespectSelectedOutputSlotsInsteadOfProducingEveryNativeDrop() {
-        var state=new PlotProductionState();
-        var entry=ProductionCatalog.Entry.create(List.of("Ingredient_Hide_Heavy","Ingredient_Feathers_Red","Ingredient_Poop"),
-            new int[]{1,1,1},new long[]{25,25,25});
-        assertEquals(List.of(RanchProducts.product("Mosshorn","Ingredient_Hide_Heavy")),RanchProducts.selected("Mosshorn",state,entry));
-        assertTrue(RanchProducts.selected("Skrill",state,entry).isEmpty());
-        state.setSlotCursor(0,1);
-        var feathers=RanchProducts.product("Skrill","Ingredient_Feathers_Red");
-        assertEquals(List.of(feathers),RanchProducts.selected("Skrill",state,entry));
-        assertFalse(feathers.slaughter());assertEquals(2,feathers.amount());
-        assertTrue(RanchProducts.selected("Mosshorn",state,entry).isEmpty());
-        state.setSlotCursor(0,2);
-        for(String family:RanchProducts.families())assertEquals("Ingredient_Poop",RanchProducts.selected(family,state,entry).getFirst().output());
-    }
-
-    @Test void shearingRecoveryPersistsAndCannotFinishWithoutTendedGrowth() {
-        var p=new PlotProductionState();var h=p.herd();
-        var pair=new HerdProductionState.Pair("Sheep",List.of(UUID.randomUUID(),UUID.randomUUID()),this.pair.trough());
-        assertNull(h.adopt(0,List.of(pair)));var herd=h.herds().get("Sheep");var id=UUID.randomUUID();
-        herd.care().born(id,"Sheep");herd.care().matured(id);herd.care().advance(RanchCare.GROW_MINUTES);
-        var wool=RanchProducts.product("Sheep","Ingredient_Fabric_Scrap_Wool");
-        assertFalse(h.collect("Sheep",id,wool,()->false));assertNull(herd.recoveringOutput());
-        assertTrue(h.collect("Sheep",id,wool,()->true));assertEquals(wool.output(),herd.recoveringOutput());
-        assertFalse(herd.recovered(id));assertEquals(2,h.deliver(p,h.cargo().id(),10));
-        h=new Gson().fromJson(new Gson().toJson(h),HerdProductionState.class);herd=h.herds().get("Sheep");
-        assertEquals(wool.output(),herd.recoveringOutput());h.advance("Sheep",RanchCare.GROW_MINUTES,false);
-        assertEquals(0,herd.care().ageMinutes());assertFalse(herd.recovered(id));
-        for(int n=0;n<4;n++){assertTrue(h.supply(()->true));assertTrue(h.fed("Sheep",()->true));h.advance("Sheep",HerdProductionState.FEED_INTERVAL,true);}
-        assertFalse(herd.recovered(UUID.randomUUID()));assertTrue(herd.recovered(id));assertNull(herd.recoveringOutput());
-        assertFalse(herd.recovered(id));assertNull(h.cargo());
-        assertTrue(h.collect("Sheep",id,wool,()->true));assertFalse(h.lost(UUID.randomUUID()));assertNotNull(herd.recoveringOutput());
-        assertTrue(h.lost(id));assertNull(herd.recoveringOutput());
-    }
-    @Test void livingProductAppearancePreservesUnrelatedAttachmentsAndAllowsExplicitIntegrations() {
-        var wool=RanchProductAppearance.get("Sheep","Ingredient_Fabric_Scrap_Wool");assertNotNull(wool);
-        var original=Map.of("Fleece","Wool","Tag","Blue");
-        var shorn=RanchProductAppearance.attachments(original,wool,false);
-        assertEquals(Map.of("Tag","Blue"),shorn);assertEquals("Wool",original.get("Fleece"));
-        assertEquals(original,RanchProductAppearance.attachments(shorn,wool,true));
-        assertNull(RanchProductAppearance.get("Cow","Ingredient_Fabric_Scrap_Wool"));
-        assertNull(RanchProductAppearance.get("Sheep","Ingredient_Poop"));
-        var custom=new RanchProductAppearance.Appearance("Test_Animal","Coat","Grown","Short",null,null);
-        RanchProductAppearance.register("Test_Animal","Test_Fiber",custom);RanchProductAppearance.register("Test_Animal","Test_Fiber",custom);
-        assertEquals(Map.of("Coat","Short"),RanchProductAppearance.attachments(null,custom,false));
-        assertThrows(IllegalArgumentException.class,()->RanchProductAppearance.register("Test_Animal","Test_Fiber",wool));
+    @Test void legacyFoodAndStoredProductsSurviveTheUnreleasedSystemReplacement() {
+        var h=new Gson().fromJson("{\"feed\":12,\"adopted\":true,\"herds\":{}}",HerdProductionState.class);
+        assertEquals(12,h.feed(HerdProductionState.FEED));assertTrue(h.requestedFoods(5).isEmpty());
+        assertTrue(h.takeFeed(HerdProductionState.FEED,()->true));assertEquals(11,h.feed(HerdProductionState.FEED));
+        assertTrue(h.animals().isEmpty());assertNull(h.slot(0));
     }
 }

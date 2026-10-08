@@ -8,15 +8,15 @@
     "Input": [
       {
         "ItemId": "Ingredient_Bar_Adamantite",
-        "Quantity": 8
+        "Quantity": 10
       },
       {
         "ItemId": "Ingredient_Leather_Heavy",
-        "Quantity": 3
+        "Quantity": 5
       },
       {
         "ItemId": "Ingredient_Fabric_Scrap_Cindercloth",
-        "Quantity": 4
+        "Quantity": 5
       }
     ],
     "BenchRequirement": [

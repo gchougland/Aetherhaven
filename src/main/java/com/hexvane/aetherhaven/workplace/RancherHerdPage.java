@@ -3,138 +3,210 @@ package com.hexvane.aetherhaven.workplace;
 import com.hexvane.aetherhaven.*;
 import com.hexvane.aetherhaven.production.*;
 import com.hexvane.aetherhaven.town.*;
+import com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.codec.*;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.*;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.packets.interface_.*;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.*;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.ui.*;
 import com.hypixel.hytale.server.core.ui.builder.*;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.*;
 
-/** Explicit herd adoption. Opening this review never changes livestock or old barn production. */
+/** Separate dialogue shop and barn management views with disjoint allowed actions. */
 public final class RancherHerdPage extends AetherhavenInteractiveCustomUIPage<RancherHerdPage.Data> {
-    private record Context(TownManager manager,TownRecord town,PlotInstance plot,PlotProductionState production,ProductionCatalog.Entry entry) {}
+    private record Context(TownManager manager,TownRecord town,PlotInstance plot,PlotProductionState production) {}
     private final UUID townId,plotId;
-    private boolean appended;
-    private World world;
-    private List<Integer> footprint;
-    private long revision;
-    private long feedOrderRevision;
-    private int familyPage;
-    private static final int FAMILIES_PER_PAGE=4;
-    private NativeHerdService.Review reviewed;
-    private String hint;
-    public RancherHerdPage(PlayerRef player,UUID town,UUID plot) {
-        super(player,CustomPageLifetime.CanDismiss,Data.CODEC);townId=town;plotId=plot;
-    }
+    private final boolean shopOnly;
+    private int choosingPen=-1;
+    private boolean appended;private String tab="Animals",hint="Choose an owned animal for each unlocked pen. Pet animals in the world once each day.";
+    private int page;private long revision;private int slots;
+    public RancherHerdPage(PlayerRef player,UUID town,UUID plot){this(player,town,plot,false);}
+    public RancherHerdPage(PlayerRef player,UUID town,UUID plot,boolean shop){super(player,CustomPageLifetime.CanDismiss,Data.CODEC);townId=town;plotId=plot;shopOnly=shop;if(shop){tab="Shop";hint="Buy animals here, then choose their active pens at the barn.";}}
+    private RancherHerdPage(PlayerRef player,UUID town,UUID plot,int pen){this(player,town,plot,false);choosingPen=pen;hint="Choose an animal for pen "+(pen+1)+". Choosing an animal in another pen swaps the occupants.";}
     private Context current(Ref<EntityStore> ref,Store<EntityStore> store) {
-        var plugin=AetherhavenPlugin.get();var player=store.getComponent(ref,PlayerRef.getComponentType());
-        var transform=store.getComponent(ref,TransformComponent.getComponentType());if(plugin==null||player==null||transform==null)return null;
-        var actualWorld=store.getExternalData().getWorld();var manager=AetherhavenWorldRegistries.getOrCreateTownManager(actualWorld,plugin);
-        var town=manager.getTown(townId);var p=transform.getPosition();
-        if(town==null||!town.hasMemberOrOwner(player.getUuid())||!town.playerCanManageConstructions(player.getUuid())
-            ||!TownTerritoryClaims.contains(town,ChunkUtil.chunkCoordinate((int)Math.floor(p.x)),ChunkUtil.chunkCoordinate((int)Math.floor(p.z))))return null;
-        var plot=town.findPlotById(plotId);
-        if(plot==null||plot.getState()!=PlotInstanceState.COMPLETE||!plugin.getConstructionCatalog().matchesGameplayConstruction(plot.getConstructionId(),AetherhavenConstants.CONSTRUCTION_PLOT_BARN))return null;
-        var f=plot.toFootprint();var bounds=List.of(f.getMinX(),f.getMinY(),f.getMinZ(),f.getMaxX(),f.getMaxY(),f.getMaxZ());
-        if(world==null){world=actualWorld;footprint=bounds;}
-        if(world!=actualWorld||!footprint.equals(bounds))return null;
-        var production=town.getOrCreatePlotProduction(plotId);
-        var entry=ProductionEffectiveCatalog.effective(plugin.getProductionCatalog(),plugin.getWorkplaceUnlockCatalog(),AetherhavenConstants.CONSTRUCTION_PLOT_BARN,production);
-        return entry==null?null:new Context(manager,town,plot,production,entry);
+        var plugin=AetherhavenPlugin.get();if(plugin==null)return null;
+        var manager=AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(),plugin);var town=manager.getTown(townId);
+        var position=store.getComponent(ref,TransformComponent.getComponentType());
+        if(town==null||position==null||!town.hasMemberOrOwner(playerRef.getUuid())||!town.playerCanManageConstructions(playerRef.getUuid()))return null;
+        var p=position.getPosition();
+        if(!TownTerritoryClaims.contains(town,com.hypixel.hytale.math.util.ChunkUtil.chunkCoordinate((int)Math.floor(p.x)),com.hypixel.hytale.math.util.ChunkUtil.chunkCoordinate((int)Math.floor(p.z))))return null;
+        var plot=town.findPlotById(plotId);if(!NativeHerdService.barn(plugin,plot))return null;
+        return new Context(manager,town,plot,town.getOrCreatePlotProduction(plotId));
     }
+    private EventData event(String action,String key){return new EventData().append("Action",action).append("Key",key).append("Revision",Long.toString(revision));}
+    private void bind(UIEventBuilder e,String path,String action,String key){e.addEventBinding(CustomUIEventBindingType.Activating,path,event(action,key),false);}
     @Override public void build(Ref<EntityStore> ref,UICommandBuilder b,UIEventBuilder e,Store<EntityStore> store) {
         var c=current(ref,store);if(c==null){close();return;}
-        if(!appended) {
-            b.append("Aetherhaven/RancherHerdPage.ui");appended=true;
-            for(String action:List.of("Save","Refresh","Supply","Take","CourierFeed","PreviousFamily","NextFamily"))e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,EventData.of("Action",action),false);
+        boolean cards=shopOnly||choosingPen>=0;
+        if(!appended){b.append(cards?"Aetherhaven/RancherAnimalShopPage.ui":"Aetherhaven/RancherHerdPage.ui");appended=true;}
+        var state=c.production();var herd=state.herd();revision=herd.revision();slots=WorkplaceProductionUpgrades.slotCount(state);
+        long day=Math.floorDiv(NativeHerdService.minute(store),1440);int mastery=CoreVillagerMasteryService.level(c.town(),"rancher");
+        b.set("#Summary.Text",herd.animals().size()+" owned animals   |   "+slots+" active pens   |   Rancher Mastery "+mastery);
+        for(String action:cards?List.of("Previous","Next","Refresh"):List.of("Animals","Food","Storage","Previous","Next","Refresh","Courier"))bind(e,"#"+action,action,"");
+        if(choosingPen>=0){b.set("#ScreenTitle.Text","CHOOSE AN ANIMAL FOR PEN "+(choosingPen+1));b.set("#Instructions.Text","Select a card below. Animals keep their name and hearts when resting or changing pens.");b.set("#Return.Visible",true);bind(e,"#Return","Return","");}
+        if(!cards){
+        b.set("#Courier.Text",herd.courierFeedTarget()==0?"Courier food: Off":"Keep "+herd.courierFeedTarget()+" of each food");
+        b.clear("#Slots");
+        var pens=NativeHerdService.pens(AetherhavenPlugin.get(),c.plot());
+        for(int i=0;i<5;i++) {
+            b.append("#Slots","Aetherhaven/BarnAnimalSlot.ui");String row="#Slots["+i+"]";var animal=herd.slot(i);
+            boolean locked=i>=slots;var species=animal==null?null:BarnAnimalCatalog.get(animal.species());
+            b.set(row+" #Title.Text","PEN "+(i+1));b.set(row+" #Lock.Visible",locked);b.set(row+" #Picture.Visible",!locked&&species!=null);
+            if(species!=null){b.set(row+" #Picture.AssetPath",species.icon());b.set(row+" #FoodIcon.ItemId",species.food());}
+            b.set(row+" #FoodIcon.Visible",!locked&&species!=null);
+            b.set(row+".Background",Value.ref("Aetherhaven/TownUiTheme.ui",locked?"BarnCardLocked":"BarnCard"));
+            b.set(row+" #Name.Text",locked?"Building upgrade needed":animal==null?"Empty pen":animal.name());
+            b.set(row+" #Status.Text",locked?"Ask the Rancher about upgrades":i>=pens.size()?"Mark this pen in the building editor":animal==null?"Choose an owned animal":animal.fed(day)?"Fed today":"Waiting for food");
+            for(String action:List.of("ChooseAnimal","Empty")){b.set(row+" #"+action+".Disabled",locked||herd.animals().isEmpty());bind(e,row+" #"+action,action,Integer.toString(i));}
         }
-        var herd=c.production().herd();revision=herd.revision();reviewed=NativeHerdService.review(world,c.town(),c.plot());
-        feedOrderRevision=herd.feedOrderRevision();
-        b.set("#Mode.Text",herd.adopted()?"HERD WORK ACTIVE":"HERD PREVIEW");
-        b.set("#Feed.Text",herd.feed()+" / "+HerdProductionState.FEED_CAPACITY+" wheat");
-        b.set("#Supply.Disabled",herd.feed()>=HerdProductionState.FEED_CAPACITY);b.set("#Take.Disabled",herd.feed()==0);
-        b.set("#CourierFeed.Text",herd.courierFeedTarget()==0?"Courier feed: Off":"Keep "+herd.courierFeedTarget()+" wheat");
-        b.set("#CourierFeed.Disabled",!herd.adopted());
-        b.set("#Save.Text",herd.adopted()?"Update breeding pairs":"Start herd work");
-        boolean selected=reviewed.pairs().stream().anyMatch(pair->!RanchProducts.selected(pair.family(),c.production(),c.entry()).isEmpty());
-        b.set("#Save.Disabled",!reviewed.ready()||!selected);
-        b.set("#Status.Text",hint!=null?hint:reviewed.issue()!=null?reviewed.issue():!selected?"Select an output for one of these herds in barn storage.":"Breeding animals stay safe. Only livestock raised by the Rancher provides these products.");
-        b.set("#Warning.Text",herd.adopted()?"One wheat feeds a family for six hours. A full day without care pauses its growth. Apprentice ranches provide town food support only.":"Starting herd work replaces all old output at this barn. Stock and upgrades stay. Mosshorns provide heavy hides, Skrills provide red feathers, and tended herds provide manure. Other specialty hides and feather colours need another source.");
-        var feedTrip=c.town().getWarehouse().batches().stream().filter(batch->batch.herdFeed()&&plotId.equals(batch.workplaceId())).findFirst().orElse(null);
-        String feedStatus=feedTrip==null?(herd.courierFeedTarget()==0?"Manual feed supply.":"Couriers keep up to "+herd.courierFeedTarget()+" wheat in the bin.")
-            :feedTrip.cancelled()?"Spare wheat is being returned to general storage.":feedTrip.courierId()!=null?"A Courier is bringing wheat to barn storage.":"Wheat reserved for a Courier to collect.";
-        b.set("#Cargo.Text",herd.cargo()==null?feedStatus:herd.cargo().quantity()+" products awaiting barn storage. "+feedStatus);
-        var families=RanchProducts.families();
-        familyPage=Math.clamp(familyPage,0,Math.max(0,(families.size()-1)/FAMILIES_PER_PAGE));
-        int first=familyPage*FAMILIES_PER_PAGE,last=Math.min(families.size(),first+FAMILIES_PER_PAGE);
-        b.set("#FamilyPage.Text","Herds "+(families.isEmpty()?0:first+1)+" to "+last+" of "+families.size());
-        b.set("#PreviousFamily.Disabled",familyPage==0);b.set("#NextFamily.Disabled",last==families.size());
-        b.clear("#Herds");int index=0;
-        for(String family:families.subList(first,last)) {
-            b.append("#Herds","Aetherhaven/RancherHerdCard.ui");String path="#Herds["+(index++)+"]";
-            b.set(path+" #Family.Text",family.toUpperCase(Locale.ROOT));
-            var pair=reviewed.pairs().stream().filter(p->p.family().equals(family)).findFirst().orElse(null);
-            var saved=herd.herds().get(family);var care=saved==null?null:saved.care();
-            var selectedProducts=RanchProducts.selected(family,c.production(),c.entry());
-            String icon=selectedProducts.isEmpty()?switch(family){case "Cow"->ProductionWithdrawal.MILK_BUCKET_ITEM_ID;case "Sheep"->"Ingredient_Fabric_Scrap_Wool";case "Chicken"->"Food_Egg";case "Pig"->"Food_Pork_Raw";case "Mosshorn"->"Ingredient_Hide_Heavy";case "Skrill"->"Ingredient_Feathers_Red";case "Tetrabird"->"Ingredient_Feathers_Dark";case "Bluebird"->"Ingredient_Feathers_Blue";default->"Food_Wildmeat_Raw";}:selectedProducts.get(saved==null?0:saved.productIndex(selectedProducts.size())).output();
-            b.set(path+" #Icon.ItemId",icon);
-            b.set(path+" #Pair.Text",pair==null?"Pair not nearby":"Breeding pair found");
-            b.set(path+" #Stage.Text",pair==null?"PAIR NEEDED":saved==null?"NOT STARTED":care==null||care.offspring()==null?"BREEDING":saved.recoveringOutput()!=null?"REGROWING FLEECE":care.grown()?"RAISED LIVESTOCK":"YOUNG LIVESTOCK");
-            String activity=pair==null?"Keep two matching animals near a feeding trough.":selectedProducts.isEmpty()?"Choose an output in barn storage.":saved==null?"Ready to start herd work.":care.offspring()==null?(care.canBreed()?"Leave room near the trough for the young animal.":"Feeding visits prepare the next birth."):saved.sinceFeed()>=HerdProductionState.NEGLECT?"Needs care to resume growing.":NativeHerdService.offspring(world,c.town(),c.plot(),saved)==null?"Bring the raised animal back to its pen.":care.ready()?"Ready for the Rancher to visit.":((RanchCare.GROW_MINUTES-care.ageMinutes()+59)/60)+" hours of tended growth remaining.";
-            b.set(path+" #Activity.Text",activity);
-            if(pair==null&&"Bluebird".equals(family))b.set(path+" #Activity.Text","Keep two Bluebirds in a covered pen near a trough.");
-            int progress=care==null||care.offspring()==null?0:(int)(1000*care.ageMinutes()/RanchCare.GROW_MINUTES);
-            b.set(path+" #Fill.FlexWeight",Math.max(1,progress));b.set(path+" #Remainder.FlexWeight",Math.max(1,1000-progress));
-            b.set(path+" #Progress.Visible",care!=null&&care.offspring()!=null);
-            var item=Item.getAssetMap().getAsset(icon);
-            b.set(path+" #Icon.TextTooltipStyle",Value.ref("Common.ui","DefaultTextTooltipStyle"));
-            b.set(path+" #Icon.TooltipTextSpans",item==null?Message.raw(icon):Message.translation(item.getTranslationKey()));
         }
+        List<?> rows=switch(tab) {
+            case "Shop"->BarnAnimalCatalog.all();
+            case "Food"->{var foods=new LinkedHashSet<String>();herd.animals().forEach(a->{var species=BarnAnimalCatalog.get(a.species());if(species!=null)foods.add(species.food());});foods.addAll(herd.foods().keySet());yield foods.stream().sorted().toList();}
+            case "Storage"->BarnAnimalCatalog.storageItems(state);
+            default->herd.animals();
+        };
+        int pageSize=cards?8:4;
+        page=Math.clamp(page,0,Math.max(0,(rows.size()-1)/pageSize));int start=page*pageSize,end=Math.min(rows.size(),start+pageSize);
+        b.set("#Page.Text",tab+"   "+(rows.isEmpty()?0:start+1)+" to "+end+" of "+rows.size());
+        b.set("#Previous.Disabled",page==0);b.set("#Next.Disabled",end>=rows.size());
+        b.clear("#Rows");
+        for(int i=start;i<end;i++) {
+            b.append("#Rows",cards?"Aetherhaven/BarnAnimalCard.ui":"Aetherhaven/BarnAnimalRow.ui");String row="#Rows["+(i-start)+"]";Object value=rows.get(i);
+            if(cards){var anchor=new Anchor();anchor.setLeft(Value.of((i-start)%4*257));anchor.setTop(Value.of((i-start)/4*238));anchor.setWidth(Value.of(245));anchor.setHeight(Value.of(230));b.setObject(row+".Anchor",anchor);}
+            boolean owned=value instanceof HerdProductionState.Animal,shop=value instanceof BarnAnimalCatalog.Species;
+            var animal=owned?(HerdProductionState.Animal)value:null;
+            var species=shop?(BarnAnimalCatalog.Species)value:owned?BarnAnimalCatalog.get(animal.species()):null;
+            b.set(row+" #Portrait.Visible",owned||shop);
+            if(!cards){b.set(row+" #AnimalPicture.Visible",owned||shop);b.set(row+" #Item.Visible",!owned&&!shop);b.set(row+" #RenameGroup.Visible",owned);b.set(row+" #Secondary.Visible","Food".equals(tab));b.set(row+" #Primary.Visible",!owned);}
+            if(species!=null) {
+                b.set(row+" #Portrait.AssetPath",species.icon());
+                b.set(row+" #FoodIcon.Visible",true);b.set(row+" #FoodIcon.ItemId",species.food());
+                b.set(row+" #FoodIcon.TextTooltipStyle",Value.ref("Common.ui","DefaultTextTooltipStyle"));b.set(row+" #FoodIcon.TooltipText","Eats "+foodName(species.food())+" daily");
+                b.set(row+" #Title.Text",cards?(shop?species.id():animal.name()):animal.name()+"  |  "+species.id());
+                String food=foodName(species.food())+(species.farmingTier()>0?" (Farming Bench tier "+species.farmingTier()+")":"");
+                b.set(row+" #Detail.Text",shop?species.rarity().label+" | Eats "+foodName(species.food()):cards?species.id()+" | "+animal.hearts()+" / 5 hearts":"Hearts "+animal.hearts()+" / 5  |  "+animal.friendship()+" / 500 affection  |  "+(animal.petted(day)?"Pet today":"Pet in its pen"));
+                b.set(row+" #Info.Text",shop?"Mastery "+species.rarity().mastery+"  |  "+species.rarity().gold+" gold":(herd.assignedSlot(animal.id())<0?"Resting":"Active")+"  |  "+(animal.fed(day)?"Fed today":"Needs "+foodName(species.food()))+"  |  Yield +"+(animal.hearts()*20)+"%");
+                if(shop) {
+                    boolean locked=mastery<species.rarity().mastery;b.set(row+" #Lock.Visible",locked);
+                    b.set(row+".Background",Value.ref("Aetherhaven/TownUiTheme.ui",locked?"BarnCardLocked":"BarnCard"));
+                    b.set(row+" #Primary.Text",locked?"Locked":"Buy "+species.rarity().gold+" gold");b.set(row+" #Primary.Disabled",locked);
+                    bind(e,row+" #Primary","Buy",species.id());
+                }else {
+                    b.set(row+" #Hearts.Visible",true);
+                    for(int heart=0;heart<5;heart++) {
+                        b.append(row+" #Hearts","Aetherhaven/BarnHeartSlot.ui");
+                        int points=Math.clamp(animal.friendship()-heart*100,0,100);
+                        b.set(row+" #Hearts["+heart+"] #Fg.Visible",points>=100);
+                    }
+                    if(cards){int assigned=herd.assignedSlot(animal.id());b.set(row+" #Info.Text",assigned<0?"Resting":"In pen "+(assigned+1));b.set(row+" #Primary.Text",assigned==choosingPen?"Selected":assigned<0?"Choose":"Swap from pen "+(assigned+1));b.set(row+" #Primary.Disabled",assigned==choosingPen);bind(e,row+" #Primary","Assign",animal.id().toString());}
+                    else{b.set(row+" #Rename.Value",animal.name());e.addEventBinding(CustomUIEventBindingType.Activating,row+" #RenameButton",event("Rename",animal.id().toString()).append("@Name",row+" #Rename.Value"),false);}
+                }
+            }else {
+                String item=(String)value;b.set(row+" #Item.ItemId",item);b.set(row+" #Title.TextSpans",itemName(item));
+                if("Food".equals(tab)) {
+                    b.set(row+" #Detail.Text",herd.feed(item)+" / 75 in the food bin");b.set(row+" #Info.Text","One serving per active animal each day");
+                    b.set(row+" #Primary.Text","Supply all");b.set(row+" #Primary.Disabled",!BarnAnimalCatalog.food(item)||herd.feed(item)>=HerdProductionState.FEED_CAPACITY);
+                    b.set(row+" #Primary.TextTooltipStyle",Value.ref("Common.ui","DefaultTextTooltipStyle"));
+                    b.set(row+" #Primary.TooltipText","Transfer as much of this food from your inventory as fits in the bin.");
+                    b.set(row+" #Secondary.Text","Take one");b.set(row+" #Secondary.Disabled",herd.feed(item)==0);
+                    bind(e,row+" #Primary","Supply",item);bind(e,row+" #Secondary","TakeFood",item);
+                }else {
+                    long reserved=c.town().getWarehouse().reservedProduction(plotId,item);long available=Math.max(0,state.getAmount(item)-reserved);
+                    b.set(row+" #Detail.Text",state.getAmount(item)+" / "+WorkplaceProductionUpgrades.barnCapacity(state)+" capacity  |  "+reserved+" reserved for deliveries");
+                    b.set(row+" #Info.Text",ProductionWithdrawal.isMilkBucketItem(item)?"Bring empty buckets to collect milk":"Produced by your fed animals");
+                    b.set(row+" #Primary.Text","Collect up to 10");b.set(row+" #Primary.Disabled",available==0);bind(e,row+" #Primary","Collect",item);
+                }
+            }
+        }
+        b.set("#FooterStatus.Text",hint);b.set("#EmptyList.Visible",rows.isEmpty());
+        b.set("#EmptyList.Text",switch(tab){case "Animals"->"Talk to the Rancher to visit the Animal shop.";case "Food"->"Buy an animal to see its food here.";default->"No resources stored yet. Active, fed animals produce all their resources.";});
     }
+    private static String foodName(String item){return item.replace("Plant_Crop_","").replace("_Item","").replace("Food_","").replace('_',' ');}
+    private static Message itemName(String item){var asset=Item.getAssetMap().getAsset(item);return asset==null?Message.raw(foodName(item)):Message.translation(asset.getTranslationKey());}
     @Override public void handleDataEvent(Ref<EntityStore> ref,Store<EntityStore> store,Data data) {
-        var c=current(ref,store);if(c==null){close();return;}
-        if("Save".equals(data.action)) {
-            var fresh=NativeHerdService.review(world,c.town(),c.plot());
-            if(reviewed==null||!fresh.ready()||!fresh.pairs().equals(reviewed.pairs()))hint="The breeding pairs changed. Review the herd again.";
-            else if(fresh.pairs().stream().noneMatch(pair->!RanchProducts.selected(pair.family(),c.production(),c.entry()).isEmpty()))hint="Select a herd output in barn storage first.";
-            else {
-                hint=c.production().herd().adopt(revision,fresh.pairs());
-                if(hint==null){c.manager().updateTown(c.town());hint="The Rancher will care for these herds during work hours.";}
+        var c=current(ref,store);if(c==null){close();return;}var state=c.production();var herd=state.herd();var world=store.getExternalData().getWorld();
+        if(data.action==null)return;
+        if(!allowedAction(shopOnly,data.action))return;
+        if("Return".equals(data.action)){open(ref,store,new RancherHerdPage(playerRef,townId,plotId));return;}
+        if("ChooseAnimal".equals(data.action)){
+            int pen;try{pen=Integer.parseInt(data.key);}catch(Exception invalid){return;}
+            if(choosingPen<0&&pen>=0&&pen<WorkplaceProductionUpgrades.slotCount(state))open(ref,store,new RancherHerdPage(playerRef,townId,plotId,pen));return;
+        }
+        if(choosingPen>=0&&!List.of("Assign","Previous","Next","Refresh").contains(data.action))return;
+        if(List.of("Animals","Food","Storage").contains(data.action)){tab=data.action;page=0;}
+        else if("Previous".equals(data.action))page=Math.max(0,page-1);
+        else if("Next".equals(data.action))page++;
+        else if(!"Refresh".equals(data.action)) {
+            long expected;try{expected=Long.parseLong(data.revision);}catch(Exception ex){return;}
+            if(expected!=herd.revision()){hint="The barn changed. Please choose again.";refresh(ref,store);return;}
+            var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);
+            switch(data.action) {
+                case "Buy"->{
+                    var species=BarnAnimalCatalog.get(data.key);if(species==null||inventory==null)return;
+                    hint=herd.buy(expected,data.key,CoreVillagerMasteryService.level(c.town(),"rancher"),()->GoldCoinPayment.trySpend(c.town(),inventory,species.rarity().gold,c.town().playerCanSpendTreasuryGold(playerRef.getUuid())));
+                    if(hint==null)hint=species.id()+" purchased. Choose it in an active pen.";
+                }
+                case "Assign"->{
+                    if(choosingPen<0)return;UUID selected;try{selected=UUID.fromString(data.key);}catch(Exception invalid){return;}
+                    NativeHerdService.update(world,AetherhavenPlugin.get(),c.town(),c.plot());
+                    if(!herd.assign(expected,choosingPen,selected,WorkplaceProductionUpgrades.slotCount(state))){hint="The pen changed. Choose again.";break;}
+                    NativeHerdService.update(world,AetherhavenPlugin.get(),c.town(),c.plot());c.manager().updateTown(c.town());open(ref,store,new RancherHerdPage(playerRef,townId,plotId));return;
+                }
+                case "Empty"->{
+                    int slot;try{slot=Integer.parseInt(data.key);}catch(Exception ex){return;}
+                    int unlocked=WorkplaceProductionUpgrades.slotCount(state);if(slot<0||slot>=unlocked)return;
+                    NativeHerdService.update(world,AetherhavenPlugin.get(),c.town(),c.plot());
+                    herd.assign(expected,slot,null,unlocked);hint="Pen selection updated. Resting animals keep their name and hearts.";
+                }
+                case "Rename"->{UUID id;try{id=UUID.fromString(data.key);}catch(Exception ex){return;}
+                    hint=herd.rename(expected,id,data.name)?"Animal renamed.":"Choose a name from 1 to 24 characters.";}
+                case "Supply","TakeFood"->{
+                    if(inventory==null||data.key==null||(!BarnAnimalCatalog.food(data.key)&&herd.feed(data.key)==0))return;var stack=new ItemStack(data.key,1);boolean supply="Supply".equals(data.action);
+                    if(supply){
+                        int amount=herd.supply(data.key,com.hexvane.aetherhaven.inventory.InventoryMaterials.count(inventory,data.key),
+                            count->inventory.removeItemStack(new ItemStack(data.key,count),true,true).succeeded());
+                        hint=amount>0?"Added "+amount+" servings to the food bin.":"No food transferred. Check your inventory and the food bin's space.";
+                    }else hint=herd.takeFeed(data.key,()->inventory.addItemStack(stack,true,false,true).succeeded())?"Food returned to your inventory.":"Check your available inventory space.";
+                }
+                case "Courier"->{int target=switch(herd.courierFeedTarget()){case 0->10;case 10->25;case 25->50;case 50->75;default->0;};
+                    herd.configureCourierFeed(herd.feedOrderRevision(),target);hint=target==0?"Automatic food deliveries stopped.":"Couriers will bring each active animal's food from farm output or town storage. A Warehouse Manager and Logistics worker are needed.";}
+                case "Collect"->{
+                    if(data.key==null||Item.getAssetMap().getAsset(data.key)==null)return;
+                    var plugin=AetherhavenPlugin.get();var entry=ProductionEffectiveCatalog.effective(plugin.getProductionCatalog(),plugin.getWorkplaceUnlockCatalog(),"plot_barn",state);
+                    var player=store.getComponent(ref,Player.getComponentType());if(entry==null||player==null)return;
+                    long available=Math.max(0,state.getAmount(data.key)-c.town().getWarehouse().reservedProduction(plotId,data.key));
+                    var result=new ProductionWithdrawal.ResultSink();long collected=ProductionWithdrawal.withdrawToPlayer(ref,store,player,state,entry,data.key,Math.min(10,available),result);
+                    if(collected>0)c.town().getWarehouse().markProductionWithdrawal();
+                    hint=result.needEmptyBuckets?"Bring empty buckets to collect milk.":"Collected "+collected+" items.";
+                }
+                default->{return;}
             }
-        }else if("Supply".equals(data.action)||"Take".equals(data.action)) {
-            var inventory=com.hypixel.hytale.server.core.inventory.InventoryComponent.getCombined(store,ref,com.hypixel.hytale.server.core.inventory.InventoryComponent.EVERYTHING);
-            boolean supply="Supply".equals(data.action);
-            var stack=new com.hypixel.hytale.server.core.inventory.ItemStack(HerdProductionState.FEED,1);
-            boolean changed=inventory!=null&&(supply?c.production().herd().supply(()->inventory.removeItemStack(stack,true,true).succeeded()):c.production().herd().takeFeed(()->inventory.addItemStack(stack,true,false,true).succeeded()));
-            if(changed){c.manager().updateTown(c.town());hint=supply?"Wheat supplied to the barn.":"Wheat returned to your inventory.";}
-            else hint=supply?"Carry wheat and leave room in the feed bin.":"Leave room in your inventory to take spare feed.";
-        }else if("CourierFeed".equals(data.action)) {
-            var herd=c.production().herd();
-            int target=switch(herd.courierFeedTarget()){case 0->8;case 8->16;case 16->32;case 32->64;default->0;};
-            if(!herd.adopted()||!herd.configureCourierFeed(feedOrderRevision,target))hint="The feed order changed. Choose it again.";
-            else {
-                if(target==0)for(var batch:List.copyOf(c.town().getWarehouse().batches()))
-                    if(batch.herdFeed()&&plotId.equals(batch.workplaceId()))c.town().getWarehouse().cancel(batch.id());
-                c.manager().updateTown(c.town());
-                hint=target==0?"Courier feed stopped. Carried wheat will return to general storage.":"Couriers will bring wheat from town stock. A Warehouse Manager and employed townsfolk with Logistics enabled are needed.";
-            }
-        }else if("PreviousFamily".equals(data.action))familyPage=Math.max(0,familyPage-1);
-        else if("NextFamily".equals(data.action))familyPage++;
-        else if("Refresh".equals(data.action))hint=null;else return;
-        var b=new UICommandBuilder();var e=new UIEventBuilder();build(ref,b,e,store);sendUpdate(b,e,false);
+            NativeHerdService.update(world,AetherhavenPlugin.get(),c.town(),c.plot());c.manager().updateTown(c.town());
+        }
+        refresh(ref,store);
     }
+    static boolean allowedAction(boolean shop,String action){
+        if(List.of("Previous","Next","Refresh").contains(action))return true;
+        return shop?"Buy".equals(action):List.of("Animals","Food","Storage","ChooseAnimal","Assign","Return","Empty","Rename","Supply","TakeFood","Courier","Collect").contains(action);
+    }
+    private void open(Ref<EntityStore> ref,Store<EntityStore> store,RancherHerdPage page){store.getComponent(ref,Player.getComponentType()).getPageManager().openCustomPage(ref,store,page);}
+    private void refresh(Ref<EntityStore> ref,Store<EntityStore> store){var b=new UICommandBuilder();var e=new UIEventBuilder();build(ref,b,e,store);sendUpdate(b,e,false);}
     public static final class Data {
         public static final BuilderCodec<Data> CODEC=BuilderCodec.builder(Data.class,Data::new)
-            .append(new KeyedCodec<>("Action",Codec.STRING),(d,v)->d.action=v,d->d.action).add().build();
-        String action;
+            .append(new KeyedCodec<>("Action",Codec.STRING),(d,v)->d.action=v,d->d.action).add()
+            .append(new KeyedCodec<>("Key",Codec.STRING),(d,v)->d.key=v,d->d.key).add()
+            .append(new KeyedCodec<>("Revision",Codec.STRING),(d,v)->d.revision=v,d->d.revision).add()
+            .append(new KeyedCodec<>("@Name",Codec.STRING),(d,v)->d.name=v,d->d.name).add().build();
+        String action,key,revision,name;
     }
 }

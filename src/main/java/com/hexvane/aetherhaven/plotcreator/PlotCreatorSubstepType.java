@@ -58,5 +58,7 @@ public enum PlotCreatorSubstepType {
     /** Snowball fight out pad (stores facing). */
     FESTIVAL_SNOWBALL_OUT,
     /** Physical ore cell, not a villager standing spot. */
-    MINING_NODE
+    MINING_NODE,
+    /** Animal standing position, in Barn slot order. */
+    BARN_PEN
 }

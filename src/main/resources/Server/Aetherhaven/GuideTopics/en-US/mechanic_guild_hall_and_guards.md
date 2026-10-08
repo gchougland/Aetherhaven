@@ -12,7 +12,7 @@ Once the hall is finished you can assign **guards**, draw **patrol routes**, and
 
 ## Residents and guard duty
 
-Talk to adventurers at the guild hall to **invite them to live in town**. Invitations need enough food capacity. The new resident can perform profession work or become a guard.
+Talk to adventurers at the guild hall to **invite them to live in town**. Each adventurer asks for the same move in items they would request as a tourist. Bring the items shown in their invitation to give them when they join. Invitations also need enough food capacity. The new resident can perform profession work or become a guard.
 
 Open any resident Townsfolk's **profile**, then choose **Guard duty**. Choose Knight, Archer, Rogue or Mage. Town Rank limits how many guards you can support. Changing an existing guard's class does not need another place.
 

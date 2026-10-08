@@ -37,3 +37,9 @@ Filling a flask consumes **one of each selected ingredient per charge**. A five 
 ## Apprentice brewing
 
 Orin also supervises Alchemy workplaces. Unlock Alchemy through his workplace controls, mark a site with the Building Staff and provide an Alchemist's Workbench. Paid Apprentices with Alchemy skill can brew queued recipes using ingredients brought by Couriers. Collect these finished goods from the warehouse. Cauldron mixtures use your carried flask and available ingredients from your inventory and town storage. Reserved delivery supplies cannot be spent twice.
+
+
+### Friendship rewards
+
+- **Friendship 25:** Brewer's Case recipe for town alchemy.
+- **Friendship 75:** Shard of Gaia recipe.

@@ -9,15 +9,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Iron",
-      "count": 4
+      "count": 5
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 4
+      "count": 5
     },
     {
       "resourceType": "Wood_Trunk",
-      "count": 4
+      "count": 5
     }
   ],
   "output": "Aetherhaven_Smith_Kit",

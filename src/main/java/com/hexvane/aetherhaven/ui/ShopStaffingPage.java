@@ -82,7 +82,7 @@ public final class ShopStaffingPage extends AetherhavenInteractiveCustomUIPage<S
         } else if("Assign".equals(data.action)&&selected!=null) {
             var worker=TownsfolkWorkRoster.list(town,manager,store,plugin).stream().filter(w->selected.equals(w.characterId())).findFirst().orElse(null);
             String error=worker==null?"Choose a current town resident.":unavailable(town,worker);
-            if(error==null){ShopStaffing.assign(town,plot,selected);worker.progress().setEmployed(true);town.getPayroll().ensureCurrentBill(worker.characterId());manager.updateTown(town);hint=worker.name()+" will serve customers here during daylight. Weekly wages come from the treasury.";}
+            if(error==null){ShopStaffing.assign(town,plot,selected);worker.progress().setEmployed(true);town.getPayroll().ensureCurrentBill(worker.characterId());manager.updateTown(town);hint=worker.name()+" will serve customers here during daylight. Pay weekly wages from your inventory or treasury in Bills.";}
             else hint=error;
         }
         var c=new UICommandBuilder();var e=new UIEventBuilder();build(ref,c,e,store);sendUpdate(c,e,false);

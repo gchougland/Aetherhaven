@@ -9,15 +9,15 @@
     "Input": [
       {
         "ItemId": "Ingredient_Bar_Iron",
-        "Quantity": 12
+        "Quantity": 15
       },
       {
         "ItemId": "Soil_Clay_Smooth_White",
-        "Quantity": 8
+        "Quantity": 10
       },
       {
         "ItemId": "Ingredient_Tree_Sap",
-        "Quantity": 4
+        "Quantity": 5
       }
     ],
     "BenchRequirement": [

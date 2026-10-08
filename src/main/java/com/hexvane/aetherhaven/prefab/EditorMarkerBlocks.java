@@ -5,12 +5,15 @@ import javax.annotation.Nullable;
 
 /** World-editor marker blocks that must not appear in saved prefabs or construction paste. */
 public final class EditorMarkerBlocks {
-    private static final int EDITOR_EMPTY_INDEX = BlockType.getAssetMap().getIndex("Editor_Empty");
-
     private EditorMarkerBlocks() {}
 
     public static boolean isEditorEmpty(int blockId) {
-        return EDITOR_EMPTY_INDEX != Integer.MIN_VALUE && blockId == EDITOR_EMPTY_INDEX;
+        // The helper can be loaded before assets, and asset maps can be replaced on reload.
+        // Resolve against the current store rather than freezing an index during class initialization.
+        var store = BlockType.getAssetStore();
+        if (store == null) return false;
+        int editorEmptyIndex = store.getAssetMap().getIndex("Editor_Empty");
+        return editorEmptyIndex != Integer.MIN_VALUE && blockId == editorEmptyIndex;
     }
 
     /** Prefab air cells use block id {@code 0}; editor empty in-world markers map to that. */

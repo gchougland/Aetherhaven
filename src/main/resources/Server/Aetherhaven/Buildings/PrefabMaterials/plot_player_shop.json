@@ -79,6 +79,10 @@
       "count": 4
     },
     {
+      "itemId": "Furniture_Tavern_Chest_Small",
+      "count": 4
+    },
+    {
       "itemId": "Wood_Softwood_Beam",
       "count": 4
     },
@@ -88,10 +92,6 @@
     },
     {
       "itemId": "Furniture_Crude_Torch",
-      "count": 2
-    },
-    {
-      "itemId": "Furniture_Tavern_Chest_Large",
       "count": 2
     },
     {

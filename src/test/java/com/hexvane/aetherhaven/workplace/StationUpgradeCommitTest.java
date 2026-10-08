@@ -50,12 +50,12 @@ class StationUpgradeCommitTest {
         var engraved=new ItemStack("ingot",6,BsonDocument.parse("{source:'test'}"));put(bag,0,engraved);
         var oldRefund=new ItemStack("oldMaterial",2);
         var bench=new BenchBlock(1,new ItemStack[]{oldRefund});
-        var costs=new MaterialQuantity[]{new MaterialQuantity("ingot",null,null,4,engraved.getMetadata())};
+        var costs=new MaterialQuantity[]{new MaterialQuantity("ingot",null,null,4,com.hexvane.aetherhaven.inventory.ItemStackData.metadata(engraved))};
         assertEquals(StationUpgradeCommit.Result.UPGRADED,StationUpgradeCommit.apply(bench,1,costs,bag,false));
         assertEquals(2,count(bag,0));assertEquals(2,bench.getTierLevel());
         assertTrue(Arrays.asList(bench.getUpgradeItems()).contains(oldRefund));
         var refund=Arrays.stream(bench.getUpgradeItems()).filter(s->s.getItemId().equals("ingot")).findFirst().orElseThrow();
-        assertEquals(4,refund.getQuantity());assertEquals(engraved.getMetadata(),refund.getMetadata());
+        assertEquals(4,refund.getQuantity());assertEquals(com.hexvane.aetherhaven.inventory.ItemStackData.metadata(engraved),com.hexvane.aetherhaven.inventory.ItemStackData.metadata(refund));
         assertEquals(StationUpgradeCommit.Result.CHANGED,StationUpgradeCommit.apply(bench,1,costs,bag,false));
         assertEquals(2,count(bag,0));assertEquals(2,bench.getUpgradeItems().length);
     }

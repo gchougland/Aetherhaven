@@ -8,11 +8,11 @@
     "Input": [
       {
         "ItemId": "Ingredient_Bar_Copper",
-        "Quantity": 3
+        "Quantity": 5
       },
       {
         "ResourceTypeId": "Wood_Trunk",
-        "Quantity": 6
+        "Quantity": 10
       },
       {
         "ItemId": "Ingredient_Fibre",

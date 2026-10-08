@@ -14,8 +14,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Persisted copy of the placer's {@link PlayerSkin} so founder statue entities can rebuild the full cosmetics model
- * after chunk load ({@link com.hypixel.hytale.server.core.modules.entity.component.ModelComponent} is not saved).
+ * Persisted copy of the placer's {@link PlayerSkin} so founder statue entities can restore the native skin component
+ * after chunk load ({@link com.hypixel.hytale.server.core.modules.entity.player.PlayerSkinComponent} is not saved).
  */
 public final class FounderMonumentStatueSkin implements Component<EntityStore> {
     private static final Gson GSON = new GsonBuilder().create();

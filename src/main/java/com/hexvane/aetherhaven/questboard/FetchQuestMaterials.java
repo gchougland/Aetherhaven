@@ -34,8 +34,9 @@ final class FetchQuestMaterials {
             var stack=inventory.getItemStack(slot);if(ItemStack.isEmpty(stack))continue;
             String id=stack.getItemId();long remaining=counts.getOrDefault(id,0L);
             if(remaining==0)continue;
-            if(variants.stream().anyMatch(v->id.equals(v.getItemId())&&Objects.equals(stack.getMetadata(),v.getMetadata())))continue;
-            var variant=new MaterialQuantity(id,null,null,1,stack.getMetadata());
+            var metadata = com.hexvane.aetherhaven.inventory.ItemStackData.metadata(stack);
+            if(variants.stream().anyMatch(v->id.equals(v.getItemId())&&Objects.equals(metadata,v.getMetadata())))continue;
+            var variant=new MaterialQuantity(id,null,null,1,metadata);
             variants.add(variant);
             int available=inventory.countRemovableMaterial(variant);
             int take=(int)Math.min(remaining,Math.max(0,available));

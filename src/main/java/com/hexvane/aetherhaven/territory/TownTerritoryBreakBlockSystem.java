@@ -56,10 +56,14 @@ public final class TownTerritoryBreakBlockSystem extends EntityEventSystem<Entit
         if (town == null) {
             return;
         }
-        if (!TownTerritoryGuard.isBreakProtectionActive(plugin.getConfig().get(), town)) {
+        if (TownTerritoryGuard.shouldBypassPlayer(player, playerUuid, pos, store, ref)) {
             return;
         }
-        if (TownTerritoryGuard.shouldBypassPlayer(player, playerUuid, pos, store, ref)) {
+        if (com.hexvane.aetherhaven.production.MiningNodeBlocks.managed(world,town,pos)) {
+            event.setCancelled(true);
+            return;
+        }
+        if (!TownTerritoryGuard.isBreakProtectionActive(plugin.getConfig().get(), town)) {
             return;
         }
         if (!TownTerritoryGuard.playerMayBreak(town, playerUuid, event.getBlockType())) {

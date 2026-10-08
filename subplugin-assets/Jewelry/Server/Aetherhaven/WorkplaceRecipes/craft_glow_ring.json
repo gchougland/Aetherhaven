@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Silver",
-      "count": 4
+      "count": 5
     },
     {
       "itemId": "Ingredient_Crystal_Cyan",
-      "count": 6
+      "count": 10
     },
     {
       "itemId": "Ingredient_Life_Essence",
-      "count": 4
+      "count": 5
     }
   ],
   "output": "Aetherhaven_Ring_Glow",

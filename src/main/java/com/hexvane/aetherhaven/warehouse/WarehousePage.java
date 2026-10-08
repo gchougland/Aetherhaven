@@ -41,6 +41,7 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
     private boolean access(TownRecord town) {
         if(!WarehouseAccess.canBrowse(town,playerRef.getUuid()))return false;
         if(localPlot==null)return true;
+        if(com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,localPlot)!=null)return true;
         var lodge=town.findPlotById(localPlot);
         return lodge!=null&&lodge.getState()==PlotInstanceState.COMPLETE&&AetherhavenPlugin.get().getConstructionCatalog()
             .matchesGameplayConstruction(lodge.getConstructionId(),com.hexvane.aetherhaven.hunter.HuntService.CONSTRUCTION);
@@ -60,7 +61,7 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         var town=manager.getTown(townId);if(!access(town)){close();return;}
         var warehouse=town.getWarehouse();revision=warehouse.revision();frame++;entries.clear();
         huntRevision=town.getHunts().revision();
-        c.set("#TitleText.Text",localPlot==null?"TOWN WAREHOUSE":"LODGE SPOILS");
+        c.set("#TitleText.Text",localPlot==null?"TOWN WAREHOUSE":com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,localPlot)!=null?"MINESHAFT OUTPUT":"LODGE SPOILS");
         c.set("#TownName.Text",town.getDisplayName());
         var capacityPage=tab==Tab.GENERAL?TownWarehouse.Page.GENERAL:TownWarehouse.Page.OUTPUT;
         c.set("#CapacityPanel.Visible",tab!=Tab.PRODUCTION);
@@ -76,8 +77,8 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         for(var t:Tab.values()) {c.set("#"+t.name()+".Disabled",tab==t);e.addEventBinding(CustomUIEventBindingType.Activating,"#"+t.name(),event(t.name()),false);}
         if(localPlot!=null) {
             for(var t:Tab.values())c.set("#"+t.name()+".Visible",false);
-            c.set("#Description.Text","Spoils collected during survival runs. Couriers collect crafting supplies here.");
-            c.set("#InventoryHint.Text","Click spoils to collect them. Deposits are not allowed.");
+            c.set("#Description.Text",com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,localPlot)!=null?"Mined resources stored at this workplace. Couriers collect crafting supplies here.":"Spoils collected during survival runs. Couriers collect crafting supplies here.");
+            c.set("#InventoryHint.Text","Click items to collect them. Deposits are not allowed.");
         }
         c.set("#View.Text",grid?"List view":"Grid view");c.set("#Sort.Text","Sort: "+sort.name().toLowerCase(Locale.ROOT));
         c.set("#View.Visible",tab!=Tab.PRODUCTION);
@@ -101,6 +102,13 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
                 }
                 List<Entry> slots=new ArrayList<>();List<Long> capacities=new ArrayList<>();Set<String> shown=new HashSet<>();
                 int unlockedSlots=WorkplaceProductionUpgrades.slotCount(state);
+                if("plot_barn".equals(type)) {
+                    unlockedSlots=Integer.MAX_VALUE;
+                    for(String item:BarnAnimalCatalog.storageItems(state))if(Item.getAssetMap().getAsset(item)!=null){
+                        slots.add(new Entry(false,(short)-1,new ItemStack(item,1),plot.getPlotId(),name,state.getAmount(item),warehouse.reservedProduction(plot.getPlotId(),item)));
+                        capacities.add(WorkplaceProductionUpgrades.barnCapacity(state));shown.add(item);
+                    }
+                } else
                 for(int i=0;i<WorkplaceProductionUpgrades.MAX_SLOT_COUNT;i++) {
                     if(i>=unlockedSlots) {
                         slots.add(new Entry(false,(short)i,null,plot.getPlotId(),name,0,0));
@@ -132,6 +140,16 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
                 if(query.isBlank()||"hunter's lodge".contains(query)||slots.stream().anyMatch(row->matches(row,query)))
                     buildings.add(new Building(lodge.getPlotId(),"Hunter's Lodge",lodge.getSignX()+", "+lodge.getSignY()+", "+lodge.getSignZ(),slots,capacities,Integer.MAX_VALUE));
             }
+            for(var site:town.getApprenticeWorkplaces().sites()) {
+                var output=com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,site.id());if(output==null)continue;
+                List<Entry> slots=new ArrayList<>();List<Long> capacities=new ArrayList<>();
+                for(var held:output.getAmounts().entrySet())if(held.getValue()>0&&Item.getAssetMap().getAsset(held.getKey())!=null){
+                    slots.add(new Entry(false,(short)-1,new ItemStack(held.getKey(),1),site.id(),site.name(),held.getValue(),warehouse.reservedProduction(site.id(),held.getKey())));capacities.add(-1L);
+                }
+                String query=search.toLowerCase(Locale.ROOT);var point=com.hexvane.aetherhaven.workplace.NativeExcavation.bufferPoint(town,site);
+                if(query.isBlank()||site.name().toLowerCase(Locale.ROOT).contains(query)||slots.stream().anyMatch(row->matches(row,query)))
+                    buildings.add(new Building(site.id(),site.name()+" mineshaft output",point.x()+", "+point.y()+", "+point.z(),slots,capacities,Integer.MAX_VALUE));
+            }
             for(var origin:warehouse.smelting().origins()) {
                 var point=origin.location();
                 var site=town.getApprenticeWorkplaces().sites().stream().filter(w->w.area().contains(point.x()+.5,point.y()+.5,point.z()+.5)).findFirst().orElse(null);
@@ -154,13 +172,13 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         }
         if(localPlot!=null) {
             var activeLodge=town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(),com.hexvane.aetherhaven.hunter.HuntService.CONSTRUCTION);
-            buildings.removeIf(building->activeLodge==null||!activeLodge.getPlotId().equals(building.plot()));
+            buildings.removeIf(building->!localPlot.equals(building.plot()));
         }
         stock.removeIf(row->!displayName(row.stack()).toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT))&&!row.stack().getItemId().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT)));
         Comparator<Entry> order=switch(sort){case NAME->Comparator.comparing(row->displayName(row.stack()));case QUANTITY->Comparator.comparingLong(Entry::amount).reversed();case SOURCE->Comparator.comparing(Entry::location);};
         stock.sort(order.thenComparing(row->row.stack().getItemId()).thenComparingInt(Entry::slot));
         buildings.sort(sort==Sort.QUANTITY?Comparator.<Building>comparingLong(b->b.slots().stream().mapToLong(Entry::amount).sum()).reversed().thenComparing(Building::name):Comparator.comparing(Building::name).thenComparing(Building::location));
-        int limit=tab==Tab.PRODUCTION?8:grid?48:8,total=tab==Tab.PRODUCTION?buildings.size():stock.size();
+        int limit=tab==Tab.PRODUCTION?8:grid?36:5,total=tab==Tab.PRODUCTION?buildings.size():stock.size();
         int pages=Math.max(1,(total+limit-1)/limit);page=Math.clamp(page,0,pages-1);
         c.set("#Page.Text",(page+1)+" / "+pages);c.set("#Previous.Disabled",page==0);c.set("#Next.Disabled",page==pages-1);
         if(tab==Tab.PRODUCTION) {
@@ -184,7 +202,7 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
                         continue;
                     }
                     c.set(cell+" #Name.Text",row.stack()==null?"No output selected":displayName(row.stack()));
-                    c.set(cell+" #Capacity.Text",warehouse.smelting().origin(building.plot())==null?row.amount()+" / "+building.capacities().get(slot)
+                    c.set(cell+" #Capacity.Text",building.capacities().get(slot)<0?row.amount()+" stored":warehouse.smelting().origin(building.plot())==null?row.amount()+" / "+building.capacities().get(slot)
                         :warehouse.smelting().count(row.stack().getItemId())+" / "+building.capacities().get(slot)+" town total");
                     c.set(cell+" #Cell.Disabled",row.amount()==0||row.stack()==null);
                 }
@@ -203,13 +221,14 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         c.set("#EmptyTitle.Text",!search.isBlank()?"No matching items":tab==Tab.GENERAL?"Room for your town to grow":tab==Tab.OUTPUT?"Awaiting crafted goods":"No production buildings yet");
         c.set("#EmptyHelp.Text",!search.isBlank()?"Try another item name or clear your search.":tab==Tab.GENERAL?"Click something in your inventory to store it here.":tab==Tab.OUTPUT?"Items made by townsfolk will appear here when their work is finished.":"Each completed production building will show its own output slots here.");
         var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.HOTBAR_STORAGE_BACKPACK);
-        if(inventory!=null) for(short i=0;i<inventory.getCapacity();i++) {
-            var stack=inventory.getItemStack(i);
-            render(c,e,"#PlayerItems",i,new Entry(true,i,stack,null,"Your inventory",ItemStack.isEmpty(stack)?0:stack.getQuantity(),0),false);
-        }
+        if(inventory!=null) com.hexvane.aetherhaven.ui.PlayerInventoryLayout.render(c,store,ref,inventory,(host,column,slot)->{
+            var stack=inventory.getItemStack(slot);
+            render(c,e,host,column,new Entry(true,slot,stack,null,"Your inventory",ItemStack.isEmpty(stack)?0:stack.getQuantity(),0),false);
+        });
+        c.set("#Return.Visible",localPlot!=null&&com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,localPlot)!=null);
         c.set("#Upgrade.Visible",localPlot==null);
         c.set("#Upgrade.Text","Building upgrades");
-        for(String action:List.of("View","Sort","Refresh","SearchButton","Previous","Next","Upgrade")) e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,event(action),false);
+        for(String action:List.of("View","Sort","Refresh","SearchButton","Previous","Next","Upgrade","Return")) e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,event(action),false);
     }
     private EventData event(String action) {return new EventData().append("Action",action).append("Frame",Long.toString(frame)).append("@Search","#Search.Value");}
     private void render(UICommandBuilder c,UIEventBuilder e,String host,int index,Entry entry,boolean list) {
@@ -250,6 +269,7 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         if(localPlot!=null&&("GENERAL".equals(data.action)||"OUTPUT".equals(data.action)||"Upgrade".equals(data.action)))return;
         boolean stale=!Long.toString(frame).equals(data.frame);
         if(data.search!=null)search=data.search.strip().substring(0,Math.min(80,data.search.strip().length()));
+        if("Return".equals(data.action)&&localPlot!=null&&com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,localPlot)!=null){store.getComponent(ref,Player.getComponentType()).getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.MineshaftPlannerPage(playerRef,townId,localPlot));return;}
         if("Transfer".equals(data.action)) {
             var row=entries.get(data.entry);var warehouse=town.getWarehouse();
             if(stale||row==null||warehouse.revision()!=revision||town.getHunts().revision()!=huntRevision)hint="Storage changed. The view has been refreshed. Try again.";
@@ -260,7 +280,13 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
                 else if(inventory!=null&&row.plot()!=null) {
                     var origin=warehouse.smelting().origin(row.plot());
                     var plot=town.findPlotById(row.plot());
-                    if(origin!=null) {
+                    var mining=com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,row.plot());
+                    if(mining!=null) {
+                        String item=row.stack().getItemId();int count=(int)Math.min(amount==TownWarehouse.Amount.ONE?1:row.stack().getItem().getMaxStack(),Math.max(0,mining.getAmount(item)-warehouse.reservedProduction(row.plot(),item)));
+                        if(count>0&&inventory.addItemStack(new ItemStack(item,count),true,false,true).succeeded()){
+                            mining.removeAmountUpTo(item,count);warehouse.markProductionWithdrawal();manager.updateTown(town);hint="Collected "+count+" items.";
+                        }else hint=count==0?"Those supplies are reserved for a workplace.":"Your inventory is full.";
+                    } else if(origin!=null) {
                         int count=Math.min(amount==TownWarehouse.Amount.ONE?1:row.stack().getQuantity(),Math.max(0,row.stack().getQuantity()-warehouse.reservedSmelting(origin.id(),row.slot())));
                         int moved=warehouse.smelting().withdraw(origin.id(),row.slot(),row.stack(),count,inventory,warehouse.smelting().revision());
                         hint=moved>0?"Collected "+moved+" items.":"Storage changed or your inventory is full.";

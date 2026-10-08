@@ -66,6 +66,14 @@ public final class BardActivePerformancesResource implements Resource<EntityStor
                 }
             }
         );
+        var backpackType=com.hexvane.aetherhaven.backpack.BackpackRuntime.getComponentType();
+        if(backpackType!=null)store.forEachChunk(backpackType,(chunk,buffer)->{
+            for(int i=0;i<chunk.size();i++){
+                var backpack=chunk.getComponent(i,backpackType);
+                var transform=chunk.getComponent(i,TransformComponent.getComponentType());
+                if(backpack!=null&&backpack.music!=0&&transform!=null){var p=transform.getPosition();active.add(new Snapshot(p.x,p.y,p.z,backpack.music,15,20));}
+            }
+        });
     }
 
     @Nonnull
@@ -86,7 +94,8 @@ public final class BardActivePerformancesResource implements Resource<EntityStor
             double dy = py - snapshot.y;
             double dz = pz - snapshot.z;
             double distSq = dx * dx + dy * dy + dz * dz;
-            if (distSq <= radiusSq && distSq < bestDistSq) {
+            double allowed=alreadyListening?snapshot.leaveRadius:snapshot.radius;
+            if (distSq <= allowed*allowed && distSq < bestDistSq) {
                 bestDistSq = distSq;
                 bestIndex = snapshot.musicContainerIndex;
                 bestX = snapshot.x;
@@ -108,7 +117,8 @@ public final class BardActivePerformancesResource implements Resource<EntityStor
         return copy;
     }
 
-    private record Snapshot(double x, double y, double z, int musicContainerIndex) {
+    private record Snapshot(double x, double y, double z, int musicContainerIndex, double radius, double leaveRadius) {
+        Snapshot(double x,double y,double z,int musicContainerIndex){this(x,y,z,musicContainerIndex,MUSIC_RADIUS,MUSIC_LEAVE_RADIUS);}
         Snapshot(@Nonnull Vector3d pos, int musicContainerIndex) {
             this(pos.x, pos.y, pos.z, musicContainerIndex);
         }

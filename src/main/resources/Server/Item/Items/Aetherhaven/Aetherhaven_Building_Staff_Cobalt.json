@@ -8,15 +8,15 @@
     "Input": [
       {
         "ItemId": "Ingredient_Bar_Cobalt",
-        "Quantity": 7
+        "Quantity": 10
       },
       {
         "ItemId": "Ingredient_Leather_Heavy",
-        "Quantity": 2
+        "Quantity": 5
       },
       {
         "ItemId": "Ingredient_Fabric_Scrap_Shadoweave",
-        "Quantity": 4
+        "Quantity": 5
       }
     ],
     "BenchRequirement": [

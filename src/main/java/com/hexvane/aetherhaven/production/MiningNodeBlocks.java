@@ -11,7 +11,7 @@ import org.joml.Vector3i;
 /** Exact-cell ownership checks precede every node mutation. Never loads chunks. */
 public final class MiningNodeBlocks {
     public static final String PREFIX = "Aetherhaven_Mining_Node_";
-    public static final String DEPLETED = PREFIX + "Depleted";
+    public static final String DEPLETED = "Rock_Stone";
     private MiningNodeBlocks() {}
 
     public static Vector3i point(PlotInstance plot, int node) {
@@ -28,8 +28,20 @@ public final class MiningNodeBlocks {
         return type == null ? null : type.getId();
     }
     public static boolean supported(String output) {
-        return output != null && BlockType.getAssetMap().getAsset(PREFIX + output) != null;
+        return output != null && safeOriginal(BlockType.getAssetMap().getAsset(blockFor(output)));
     }
+    public static String blockFor(String output) {
+        if(output==null)return null;
+        return switch(output){
+            case "Ore_Thorium" -> "Ore_Thorium_Sandstone";
+            case "Ore_Cobalt" -> "Ore_Cobalt_Slate";
+            case "Ore_Adamantite" -> "Ore_Adamantite_Magma";
+            // These native ingredients have no placeable ore block yet.
+            case "Ore_Prisma", "Ore_Onyxium", "Depleted" -> DEPLETED;
+            default -> output.startsWith("Ore_")&&output.indexOf('_',4)<0?output+"_Stone":output;
+        };
+    }
+    public static String nativeOwned(String owned){return owned!=null&&owned.startsWith(PREFIX)?blockFor(owned.substring(PREFIX.length())):owned;}
     public static boolean safeOriginal(BlockType type) {
         if (type == null) return false;
         String id=type.getId(), draw=String.valueOf(type.getDrawType());
@@ -43,18 +55,39 @@ public final class MiningNodeBlocks {
             || ChunkSectionBlockUtil.filler(world,p.x,p.y,p.z)!=0
             || ChunkSectionBlockUtil.blockEntityHolderAt(world,p.x,p.y,p.z)!=null) return false;
         String owned=state.ownedBlock(node), actual=current(world,p);
-        if (owned != null) return owned.equals(actual) && owned.startsWith(PREFIX);
+        if (owned != null) return ownedMatches(owned,actual) && (owned.startsWith(PREFIX)||safeOriginal(BlockType.getAssetMap().getAsset(owned)));
         String expected=plot.getProductionLayout().nodes().get(node).expectedBlockId();
         return expected.equals(actual) && safeOriginal(BlockType.getAssetMap().getAsset(expected));
     }
+    public static boolean ownedMatches(String owned,String actual){
+        return owned!=null&&(owned.equals(actual)||owned.startsWith(PREFIX)&&nativeOwned(owned).equals(actual));
+    }
     /** Invoke outside entity iteration using its command buffer. */
     public static boolean replace(World world, PlotInstance plot, MiningProductionState state, int node, String replacement) {
-        if (!replacement.startsWith(PREFIX) || BlockType.getAssetMap().getAsset(replacement)==null
+        if (!safeOriginal(BlockType.getAssetMap().getAsset(replacement))
             || !intact(world,plot,state,node)) return false;
         var p=point(plot,node);
         if (!replacement.equals(current(world,p))
             && !ChunkSectionBlockUtil.setBlockByKey(world,p.x,p.y,p.z,replacement,0)) return false;
         state.own(node,replacement);
         return true;
+    }
+    /** Old preview saves retain the original missing ID, so only exactly owned cells are converted. */
+    public static boolean migrateLegacy(World world,PlotInstance plot,MiningProductionState state){
+        boolean changed=false;
+        for(int node=0;node<plot.getProductionLayout().nodes().size();node++){
+            String old=state.ownedBlock(node);
+            if(old!=null&&old.startsWith(PREFIX))changed|=replace(world,plot,state,node,nativeOwned(old));
+        }
+        return changed;
+    }
+    public static boolean managed(World world,com.hexvane.aetherhaven.town.TownRecord town,Vector3i cell){
+        for(var plot:town.getPlotInstances()){
+            if(plot.getState()!=com.hexvane.aetherhaven.town.PlotInstanceState.COMPLETE||!plot.containsWorldBlock(cell.x,cell.y,cell.z))continue;
+            var state=town.peekPlotProduction(plot.getPlotId());if(state==null)continue;
+            for(int n=0;n<plot.getProductionLayout().nodes().size();n++)
+                if(cell.equals(point(plot,n))&&state.mining().ownedBlock(n)!=null&&intact(world,plot,state.mining(),n))return true;
+        }
+        return false;
     }
 }

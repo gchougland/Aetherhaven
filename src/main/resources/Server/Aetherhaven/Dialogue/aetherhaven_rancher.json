@@ -9,6 +9,21 @@
       "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.main_hub.fallback",
       "choices": [
         {
+          "text": "aetherhaven_barn.barn.animalShop",
+          "condition": {
+            "type": "not",
+            "condition": {
+              "type": "npc_binding_is_visitor"
+            }
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "open_barn_shop"
+            }
+          ]
+        },
+        {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
           "condition": {
             "type": "and",

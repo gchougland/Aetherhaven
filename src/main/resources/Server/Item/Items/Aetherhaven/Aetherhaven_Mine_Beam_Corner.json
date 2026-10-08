@@ -1,0 +1,85 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Wood_Softwood_Beam.name"
+  },
+  "ItemLevel": 15,
+  "MaxStack": 100,
+  "Icon": "Icons/ItemsGenerated/Wood_Softwood_Beam.png",
+  "Categories": [
+    "Blocks.Wood"
+  ],
+  "SubCategory": "BlockSets",
+  "FuelQuality": 3,
+  "PlayerAnimationsId": "Item",
+  "Interactions": {
+    "Primary": "Block_Primary",
+    "Secondary": "Block_Secondary"
+  },
+  "Set": "Wood_Softwood_Planks",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Aetherhaven/Aetherhaven_Mine_Beam_Corner.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Structures/Tubes/Long_Thin_Textures/Softwood.png",
+        "Weight": 1
+      }
+    ],
+    "Group": "Wood",
+    "HitboxType": "Aetherhaven_Mine_Beam_Corner",
+    "Flags": {},
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Woods",
+        "ItemId": "Wood_Softwood_Beam"
+      }
+    },
+    "VariantRotation": "NESW",
+    "BlockParticleSetId": "Wood",
+    "Supporting": {
+      "Down": [
+        {
+          "FaceType": "Wood_Beam"
+        }
+      ],
+      "Up": [
+        {
+          "FaceType": "Wood_Beam"
+        }
+      ]
+    },
+    "ParticleColor": "#65482d",
+    "BlockSoundSetId": "Branch",
+    "PhysicalMaterialId": "Wood",
+    "TextureComputedColor": "#5A3A23"
+  },
+  "ResourceTypes": [
+    {
+      "Id": "Fuel"
+    },
+    {
+      "Id": "Charcoal"
+    }
+  ],
+  "Tags": {
+    "Type": [
+      "Wood"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "IconProperties": {
+    "Scale": 0.58823,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -13.5
+    ]
+  },
+  "Variant": true
+}

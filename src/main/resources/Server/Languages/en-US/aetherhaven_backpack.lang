@@ -1,0 +1,11 @@
+name = Backpack
+description = Carry extra supplies. Ask the Leatherworker about upgrades.
+dialogue = I'd like to craft or improve a backpack.
+guard.collect = Collect your kills after patrol battles and take the spoils to storage.
+guard.stop = Stop collecting spoils while patrolling.
+
+simple.name = Simple Backpack
+iron.name = Iron Backpack
+cobalt.name = Cobalt Backpack
+thorium.name = Thorium Backpack
+adamantite.name = Adamantite Backpack

@@ -55,7 +55,7 @@ class FetchQuestMaterialsTest {
         bag.setItemStackForSlot((short)0,new ItemStack("Copper",8,BsonDocument.parse("{origin:'crafted'}")),false);
         assertTrue(FetchQuestMaterials.available(bag,List.of(item("Copper",4))));
         assertTrue(FetchQuestMaterials.consume(bag,List.of(item("Copper",4))));
-        assertEquals(4,count(bag,"Copper"));assertEquals("crafted",bag.getItemStack((short)0).getMetadata().getString("origin").getValue());
+        assertEquals(4,count(bag,"Copper"));assertEquals("crafted",com.hexvane.aetherhaven.inventory.ItemStackData.metadata(bag.getItemStack((short)0)).getString("origin").getValue());
     }
     @Test void malformedOrOverflowingRequestsCannotBecomeFreeCompletions() {
         var bag=new SimpleItemContainer((short)1);

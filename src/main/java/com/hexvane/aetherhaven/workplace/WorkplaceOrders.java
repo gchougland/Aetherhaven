@@ -5,7 +5,7 @@ import java.util.*;
 /** Saved intent, not a timer. Only the physical work executor may complete a batch. */
 public final class WorkplaceOrders {
     public enum Mode { COUNT, FOREVER, MAINTAIN }
-    public static final int MAX_ORDERS = 32, MAX_QUANTITY = 9999;
+    public static final int MAX_ORDERS = 35, MAX_QUANTITY = 10000;
     private List<Order> orders = new ArrayList<>();
     private long revision;
     public List<Order> list() { return Collections.unmodifiableList(orders); }
@@ -23,7 +23,7 @@ public final class WorkplaceOrders {
     }
     public String add(long expected, String recipeId, Mode mode, int quantity) {
         if (expected != revision) return "The task list changed. Review it and try again.";
-        if (orders.size() >= MAX_ORDERS) return "A workplace can keep up to 32 tasks.";
+        if (orders.size() >= MAX_ORDERS) return "A workplace can keep up to 35 tasks.";
         if (recipeId == null || recipeId.isBlank() || mode == null || quantity < 1 || quantity > MAX_QUANTITY) return "Choose a recipe and an amount from 1 to 9999.";
         orders.add(new Order(recipeId, mode, quantity)); revision++; return null;
     }

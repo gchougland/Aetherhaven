@@ -29,10 +29,10 @@
     {
       "rewardId": "rep_warehouse_25",
       "minReputation": 25,
-      "itemId": "Aetherhaven_Courier_Kit",
-      "itemCount": 1,
+      "itemId": "",
+      "itemCount": 0,
       "dialogueNodeId": "rep_reward_25",
-      "learnRecipeItemId": null
+      "learnRecipeItemId": "Aetherhaven_Warehouse_Supply_Link"
     },
     {
       "rewardId": "rep_warehouse_50",

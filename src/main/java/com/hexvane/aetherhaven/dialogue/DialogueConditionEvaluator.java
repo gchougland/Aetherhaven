@@ -65,6 +65,11 @@ public final class DialogueConditionEvaluator {
         return switch (type) {
             case "literal" -> o.get("value") != null && o.get("value").isJsonPrimitive() && o.get("value").getAsBoolean();
             case "true" -> true;
+            case "inn_outreach_unlocked" -> {
+                var binding = npcRef == null || !npcRef.isValid() ? null : store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                var town = plugin == null || binding == null ? null : com.hexvane.aetherhaven.town.AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin).getTown(binding.getTownId());
+                yield town != null && town.getOutreach().unlocked();
+            }
             case "elder_can_repair_town" -> ElderRepairActions.manageableTown(playerRef, store, npcRef) != null;
             case "false" -> false;
             case "not" -> {

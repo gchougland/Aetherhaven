@@ -1,6 +1,6 @@
 {
   "id": "plot_crystal_keepers_shop",
-  "displayName": "Crystal Keeper's Shop",
+  "displayName": "Crystal Keeper\u0027s Shop",
   "description": "A shop for selling gems and crystals.",
   "prefabPath": "plot_crystal_keepers_shop.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -117,5 +117,22 @@
   ],
   "touristDestination": true,
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_crystal_keepers_shop.displayName",
-  "styleId": "core"
+  "styleId": "core",
+  "frontFacing": "South",
+  "tags": [
+    "shop",
+    "work"
+  ],
+  "boundsLocal": {
+    "min": [
+      1,
+      0,
+      -11
+    ],
+    "max": [
+      14,
+      11,
+      -1
+    ]
+  }
 }

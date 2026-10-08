@@ -115,6 +115,22 @@ public final class DialogueActionExecutor {
             return;
         }
         switch (type) {
+            case "open_barn_shop" -> {
+                if(plugin==null||npcRef==null||!npcRef.isValid())return;
+                var binding=store.getComponent(npcRef,TownVillagerBinding.getComponentType());
+                if(binding==null||!TownVillagerBinding.KIND_RANCHER.equals(binding.getKind()))return;
+                var manager=AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(),plugin);
+                var town=manager.getTown(binding.getTownId());if(town==null)return;
+                var barn=town.getPlotInstances().stream().filter(p->com.hexvane.aetherhaven.production.NativeHerdService.barn(plugin,p)).findFirst().orElse(null);
+                if(barn==null){var pr=store.getComponent(playerRef,com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());if(pr!=null)pr.sendMessage(Message.raw("Build a barn before buying animals."));return;}
+                UUID townId=town.getTownId(),plotId=barn.getPlotId();out.setCloseDialogue(true);
+                out.setAfterClose(()->{
+                    if(!playerRef.isValid())return;
+                    var player=store.getComponent(playerRef,Player.getComponentType());
+                    var pr=store.getComponent(playerRef,com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    if(player!=null&&pr!=null)player.getPageManager().openCustomPage(playerRef,store,new com.hexvane.aetherhaven.workplace.RancherHerdPage(pr,townId,plotId,true));
+                });
+            }
             case "open_hunts" -> {
                 if(plugin==null||npcRef==null||!npcRef.isValid())return;
                 var binding=store.getComponent(npcRef,TownVillagerBinding.getComponentType());
@@ -195,6 +211,31 @@ public final class DialogueActionExecutor {
                     var pr = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
                     if (player != null && pr != null) player.getPageManager().openCustomPage(playerRef, store,
                         new com.hexvane.aetherhaven.mastery.CoreMasteryPage(pr, townId, kind, npcRef));
+                });
+            }
+            case "guard_collect_spoils" -> {
+                if(npcRef==null||!npcRef.isValid())return;
+                var town=com.hexvane.aetherhaven.patrol.GuardSpoils.town(npcRef,store);
+                var npcId=store.getComponent(npcRef,UUIDComponent.getComponentType());
+                var playerId=store.getComponent(playerRef,UUIDComponent.getComponentType());
+                if(town==null||npcId==null||playerId==null||!town.hasMemberOrOwner(playerId.getUuid())||!town.playerCanManageConstructions(playerId.getUuid()))return;
+                var guard=com.hexvane.aetherhaven.patrol.GuardSpoils.guard(town,npcId.getUuid());
+                if(guard==null||!a.has("enabled"))return;
+                guard.setCollectMobDrops(a.get("enabled").getAsBoolean());
+                AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(),AetherhavenPlugin.get()).updateTown(town);
+                out.setGotoNodeId("main_hub");
+            }
+            case "open_backpack_workshop" -> {
+                if (npcRef == null || !npcRef.isValid()) return;
+                var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                if (binding == null || !"leatherworker".equals(binding.getKind())) return;
+                out.setCloseDialogue(true);
+                out.setAfterClose(() -> {
+                    if (!playerRef.isValid()) return;
+                    Player player = store.getComponent(playerRef, Player.getComponentType());
+                    var pr = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    if (player != null && pr != null) player.getPageManager().openCustomPage(playerRef, store,
+                        new com.hexvane.aetherhaven.backpack.BackpackWorkshopPage(pr, npcRef));
                 });
             }
             case "open_workplace_upgrades" -> {
@@ -286,7 +327,7 @@ public final class DialogueActionExecutor {
                 var local = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), active);
                 var town = townForDialogue(playerRef, store, local, npcRef);
                 if (town == null) return;
-                var error = com.hexvane.aetherhaven.guild.GuildResidentInvitation.invite(store, town, owningTownManager(town, local), active, recipient.getUuid(), npcRef);
+                var error = com.hexvane.aetherhaven.guild.GuildResidentInvitation.invite(store, town, owningTownManager(town, local), active, recipient.getUuid(), playerRef, npcRef);
                 if (error != null) recipient.sendMessage(error);
                 else { recipient.sendMessage(Message.raw("Welcome to town. Choose work priorities in the journal or guard duty in their profile.")); out.setCloseDialogue(true); }
             }

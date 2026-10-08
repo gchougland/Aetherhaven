@@ -10,7 +10,7 @@
   "inputs": [
     {
       "itemId": "Ingredient_Charcoal",
-      "count": 2
+      "count": 5
     },
     {
       "itemId": "Ingredient_Bar_Iron",
@@ -18,7 +18,7 @@
     },
     {
       "itemId": "Ingredient_Fabric_Scrap_Linen",
-      "count": 2
+      "count": 5
     },
     {
       "itemId": "Ingredient_Life_Essence",
@@ -26,6 +26,6 @@
     }
   ],
   "output": "Aetherhaven_Festival_Firework",
-  "outputCount": 4,
+  "outputCount": 5,
   "workSeconds": 20
 }

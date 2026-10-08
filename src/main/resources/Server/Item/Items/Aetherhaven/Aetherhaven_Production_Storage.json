@@ -3,21 +3,31 @@
     "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Production_Storage.name",
     "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Production_Storage.description"
   },
-  "Icon": "Icons/ItemsGenerated/Furniture_Tavern_Wardrobe.png",
-  "Categories": ["Furniture.Furniture", "Aetherhaven.All"],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Production_Storage.png",
+  "Categories": [
+    "Furniture.Furniture",
+    "Aetherhaven.All"
+  ],
   "Set": "Aetherhaven",
   "IconProperties": {
-    "Rotation": [22.5, 45, 22.5],
-    "Scale": 0.36,
-    "Translation": [13.8, -22.2]
+    "Scale": 0.375,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      -10,
+      -35
+    ]
   },
   "BlockType": {
     "BlockParticleSetId": "Wood",
     "BlockSoundSetId": "Wood",
-    "CustomModel": "Blocks/Decorative_Sets/Tavern/Wardrobe.blockymodel",
+    "CustomModel": "Blocks/Aetherhaven/Workplace_Storage/Workplace_Storage.blockymodel",
     "CustomModelTexture": [
       {
-        "Texture": "Blocks/Decorative_Sets/Tavern/Wardrobe_Texture.png",
+        "Texture": "Blocks/Aetherhaven/Workplace_Storage/Workplace_Storage.png",
         "Weight": 1
       }
     ],
@@ -27,8 +37,8 @@
         "GatherType": "Unbreakable"
       }
     },
-    "HitboxType": "Wardrobe",
-    "InteractionHitboxType": "Wardrobe",
+    "HitboxType": "Aetherhaven_Production_Storage",
+    "InteractionHitboxType": "Aetherhaven_Production_Storage",
     "InteractionHint": "aetherhaven_feasts_production.aetherhaven.interaction.productionStorage",
     "Material": "Solid",
     "ParticleColor": "#543022",
@@ -40,7 +50,7 @@
       ]
     },
     "VariantRotation": "NESW",
-    "Opacity": "Transparent",
+    "Opacity": "Semitransparent",
     "Interactions": {
       "Use": {
         "Interactions": [
@@ -57,8 +67,12 @@
   "PlayerAnimationsId": "Block",
   "MaxStack": 1,
   "Tags": {
-    "Type": ["Furniture"],
-    "Family": ["Aetherhaven"]
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
   },
   "ItemSoundSetId": "ISS_Blocks_Wood"
 }

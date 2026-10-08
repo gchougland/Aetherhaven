@@ -41,6 +41,6 @@ building.name=Warehouse
 token.name=Warehouse Plot
 token.description=Stake a plot for a warehouse and ledger office.
 
-reward.25 = Every good delivery starts with a sound satchel. Take this one and give your courier a little more room.
+reward.25=I have a plan for keeping your supplies close at hand. Build a Warehouse Supply Link at the Town Planning Desk and place it near your workbenches. They will draw from our stored goods.
 reward.50 = You have earned a look at my packing plans. Your town can now craft Quartermaster Packs. A leatherworker with skill 5 can make them at a tannery.
 reward.75 = I made you a copy of our ledger. Open it anywhere inside town to reach the warehouse stores. Keep it close, and let the couriers handle the heavy lifting.

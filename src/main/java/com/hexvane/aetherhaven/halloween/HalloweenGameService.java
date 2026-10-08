@@ -41,9 +41,9 @@ public final class HalloweenGameService {
                 || access.town().playerCanManageConstructions(access.player().getUuid()));
         });
         var actions = plugin.getDialogueActionRegistry();
-        actions.register("halloween_game_start", (a,p,s,o,n) -> { say(s,p,start(p,s,n)); o.setGotoNodeId("main_hub"); });
-        actions.register("halloween_game_return", (a,p,s,o,n) -> { say(s,p,finish(p,s,n)); o.setGotoNodeId("main_hub"); });
-        actions.register("halloween_game_cancel", (a,p,s,o,n) -> { say(s,p,cancel(p,s,n)); o.setGotoNodeId("main_hub"); });
+        actions.register("halloween_game_start", (a,p,s,o,n) -> { o.setGotoNodeId("game_" + start(p,s,n)); });
+        actions.register("halloween_game_return", (a,p,s,o,n) -> { o.setGotoNodeId("game_" + finish(p,s,n)); });
+        actions.register("halloween_game_cancel", (a,p,s,o,n) -> { o.setGotoNodeId("game_" + cancel(p,s,n)); });
     }
     private record Access(TownManager manager, TownRecord town, PlayerRef player) {}
     private static Access resolve(Ref<EntityStore> player, Store<EntityStore> store, Ref<EntityStore> npc) {

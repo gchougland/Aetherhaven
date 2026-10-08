@@ -79,11 +79,10 @@ public final class HuntService extends TickingSystem<EntityStore> {
         if(plot==null)return "Complete the Hunter's Lodge first.";
         if(VillagerFollowPlayerSystem.shouldSkipAutonomy(store.getComponent(hunter,VillagerFollowPlayerState.getComponentType())))return "End Follow before starting a run.";
         if(!inside(hunter,plot,store))return "The Hunter must return to the lodge before a run can start.";
-        if(town.getTreasuryGoldCoinCount()<TownHunts.ENTRY_GOLD)return "The treasury needs "+TownHunts.ENTRY_GOLD+" gold.";
         return null;
     }
     /** Called only by the authorized screen, on the owning world thread. */
-    public static String start(TownRecord town,Ref<EntityStore> hunter,Store<EntityStore> store) {
+    public static String start(TownRecord town,Ref<EntityStore> hunter,Store<EntityStore> store,UUID player,com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer inventory) {
         String issue=preparationIssue(town,hunter,store);if(issue!=null)return issue;
         var plugin=AetherhavenPlugin.get();var world=store.getExternalData().getWorld();var state=town.getHunts();
         var plot=town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(),CONSTRUCTION);
@@ -98,10 +97,11 @@ public final class HuntService extends TickingSystem<EntityStore> {
         r.standard=furnishing.contains("Aetherhaven_Hunt_Practice_Standard");
         r.brazier=furnishing.contains("Aetherhaven_Hunt_Recovery_Brazier");
         r.sigil=furnishing.contains("Aetherhaven_Hunt_Warding_Sigil");
-        r.id=state.begin();if(r.id==null)return "Unlock an available creature first.";
+        String purchaseIssue=HuntPurchases.begin(town,player,inventory);if(purchaseIssue!=null)return purchaseIssue;
+        r.id=state.run();
         var effects=store.getComponent(hunter,com.hypixel.hytale.server.core.entity.effect.EffectControllerComponent.getComponentType());
         r.previousEffects=effects==null?Set.of():new HashSet<>(effects.getActiveEffects().keySet());
-        town.addTreasuryGoldCoins(-TownHunts.ENTRY_GOLD);r.elapsed=0;r.interval=3;r.collection=0;r.collecting=false;r.down=false;r.secondWind=false;r.lastTick=System.nanoTime();
+        r.elapsed=0;r.interval=3;r.collection=0;r.collecting=false;r.down=false;r.secondWind=false;r.lastTick=System.nanoTime();
         applyMaxHealth(hunter,state.maxHealth(),store);heal(hunter,Float.MAX_VALUE,store);
         save(town,store);r.status="Walking into the arena.";return null;
     }

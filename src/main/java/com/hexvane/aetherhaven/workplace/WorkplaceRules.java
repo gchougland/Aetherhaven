@@ -30,7 +30,8 @@ public final class WorkplaceRules {
             case FARMING, CULTIVATION -> "Farmer's Workbench";
             case RANCHING -> "Feeding Trough";
             case ALCHEMY -> "Alchemist's Workbench";
-            case CRAFTING, MINING -> "Workbench";
+            case CRAFTING -> "Workbench";
+            case MINING -> "Workbench. Use it to open the mineshaft map and plan tunnels.";
             case BUILDING -> WorkplaceEquipment.label(WorkplaceEquipment.BUILDERS_BENCH);
             case LEATHERWORKING -> "Tanning Rack";
             case COOKING -> "Chef's Stove";
@@ -53,7 +54,7 @@ public final class WorkplaceRules {
             case ARMOR_CRAFTING -> "Apprentices make armor and guard kits at an armorer's workbench.";
             case FARMING -> "Tending crops provides ten food points. This site produces no items.";
             case RANCHING -> "Tending livestock provides ten food points. This site produces no items.";
-            case MINING -> "Plan a tunnel at this site's workbench. Apprentices dig real rock and carry its drops to the core mine. Full mine storage pauses digging.";
+            case MINING -> "Mark a base around a Workbench. Use the bench to plan connected tunnels and stairs on a map, switch floors and manage digging. Workers carry the drops to core mine storage.";
             case BUILDING -> "Queue started town construction at a Builder's Workbench. Apprentices travel to the project and build reachable pieces. Better Building skill and equipment improve their pace.";
             case ALCHEMY -> "Apprentices brew potions from gathered and cultivated ingredients.";
             case CULTIVATION -> "Grow up to six alchemical plants on crystal soil. One Apprentice plants and harvests at a time. Growing plants need no worker and provide no food support.";

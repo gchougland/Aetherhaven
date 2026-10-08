@@ -70,5 +70,5 @@ public final class AlchemyFlask {
             case 3 -> "Heavy Leather"; default -> "Storm Leather"; };
     }
     public static int upgradeMastery(int currentCapacity) { return Math.min(10, currentCapacity * 2); }
-    public static int upgradeLeatherCount(int currentCapacity) { return currentCapacity * 4; }
+    public static int upgradeLeatherCount(int currentCapacity) { return currentCapacity * 5; }
 }

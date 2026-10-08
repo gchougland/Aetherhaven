@@ -26,7 +26,8 @@ class GuildHallSpawnBackoffTest {
 
         boolean slotFilled = false;
         if (!slotFilled && !failedCharacterIds.isEmpty()) {
-            slotFilled = filledSlots.remove(Integer.valueOf(slot));
+            // remove() reports whether a reservation was removed, not whether spawning succeeded.
+            assertTrue(filledSlots.remove(Integer.valueOf(slot)));
         }
 
         assertFalse(slotFilled);

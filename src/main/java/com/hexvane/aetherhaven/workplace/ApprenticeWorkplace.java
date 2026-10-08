@@ -16,6 +16,16 @@ public final class ApprenticeWorkplace {
     public BuildingOrders existingBuilding(){return building;}
     public BuildingOrders building(){if(building==null)building=new BuildingOrders();return building;}
     private ExcavationPlan excavation;
+    private UUID mineBaseId;
+    private UUID minePrerequisiteId;
+    private MinePreferences minePreferences;
+    public record MinePreferences(MineshaftSelection.Direction direction, ExcavationPlan.Layout layout,
+                                  int length, ExcavationFittings.Mode fittings) {}
+    public MinePreferences minePreferences(){return minePreferences;}
+    public void minePreferences(MinePreferences value){minePreferences=value;}
+    public UUID mineBaseId(){return mineBaseId;}
+    public UUID minePrerequisiteId(){return minePrerequisiteId;}
+    void attachTunnel(UUID base,UUID prerequisite){mineBaseId=java.util.Objects.requireNonNull(base);minePrerequisiteId=prerequisite;}
     // The unscheduled designation remembers its choices without replacing the saved excavation order.
     private ExcavationPlan.Entrance mineshaftEntrance;
     private ExcavationPlan.Layout mineshaftLayout;

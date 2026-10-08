@@ -6,7 +6,7 @@ import java.util.function.BooleanSupplier;
 
 /** Core Farmer or Druid beds and carried produce. Apprentice food support never uses this inventory. */
 public final class FieldProductionState {
-    public static final int MAX_BEDS=64;
+    public static final int MAX_BEDS=75;
     public record Bed(WarehouseBatch.Point point,String crop,String output) {}
     public record Cargo(UUID id,String output,int quantity) {}
     public record Pending(UUID id,Bed bed,int quantity,String regrownBlock,Map<String,Integer> yields) {
@@ -31,7 +31,7 @@ public final class FieldProductionState {
     /** Caller freshly checks the plot, native crop shapes and the player's authority. */
     public String adopt(long expected,List<Bed> reviewed) {
         if(expected!=revision)return "The field changed. Review it again.";
-        if(reviewed==null||reviewed.isEmpty()||reviewed.size()>MAX_BEDS)return "Plant between 1 and 64 supported crops inside this building.";
+        if(reviewed==null||reviewed.isEmpty()||reviewed.size()>MAX_BEDS)return "Plant between 1 and 75 supported crops inside this building.";
         var points=new HashSet<WarehouseBatch.Point>();
         for(var bed:reviewed)if(bed==null||bed.point()==null||bed.crop()==null||bed.crop().isBlank()
                 ||bed.output()==null||bed.output().isBlank()||!points.add(bed.point()))return "These beds need another review.";
