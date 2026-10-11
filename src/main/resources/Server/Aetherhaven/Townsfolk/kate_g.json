@@ -26,5 +26,15 @@
       "itemId": "Ingredient_Charcoal",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "building": 5,
+    "crafting": 5,
+    "alchemy": 3
+  },
+  "startingAttributes": {
+    "strength": 8,
+    "vitality": 7,
+    "intelligence": 7
+  }
 }

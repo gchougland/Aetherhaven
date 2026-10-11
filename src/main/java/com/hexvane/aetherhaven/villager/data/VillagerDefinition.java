@@ -42,6 +42,15 @@ public final class VillagerDefinition {
     @Nullable
     private String workConstructionId;
 
+    /** Optional explicit recruitment quest for villagers sharing another resident's workplace. */
+    @SerializedName("moveInQuestId")
+    private String moveInQuestId;
+
+    @Nullable
+    public String getMoveInQuestId() {
+        return moveInQuestId == null || moveInQuestId.isBlank() ? null : moveInQuestId.trim();
+    }
+
     @SerializedName("workEquipmentProfileId")
     @Nullable
     private String workEquipmentProfileId;

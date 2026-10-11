@@ -33,3 +33,4 @@ items.Aetherhaven_Building_Staff_Cobalt.name=Equipe do prédio Cobalt
 items.Aetherhaven_Building_Staff_Cobalt.description=Igual à equipe de construção de cobre. O secundário preenche até 9x9x9 nós de construção destacados de uma só vez. Enquanto estiver equipado, concede +600 de mana máxima e recuperação de mana mais rápida; cada bloco colocado custa 1 de mana.
 items.Aetherhaven_Building_Staff_Adamantite.name=Equipe de construção adamantita
 items.Aetherhaven_Building_Staff_Adamantite.description=Igual à equipe de construção de cobre. O secundário preenche até 11x11x11 nós de construção destacados de uma só vez. Enquanto estiver equipado, concede +900 de mana máxima e recuperação de mana mais rápida; cada bloco colocado custa 1 de mana.
+aetherhaven.interaction.cutLoose=Press [{key}] to cut the ropes

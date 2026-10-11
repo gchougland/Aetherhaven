@@ -9,16 +9,19 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.ecs.*;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
-/** Player edits invalidate a planting without cancelling the player's action or changing terrain. */
+/**
+ * Player edits never cancel the player's action. Breaking a Rootstone frees it from its lumbermill;
+ * edits to a grove tree simply reduce what the Logger later finds to harvest.
+ */
 public final class TimberPlayerEditSystems {
     private TimberPlayerEditSystems() {}
-    private static void mark(Store<EntityStore> store,AetherhavenPlugin plugin,TimberHarvestPlan.Position point) {
+    private static void mark(Store<EntityStore> store,AetherhavenPlugin plugin,TimberHarvestPlan.Position point,boolean rootstone) {
         var world=store.getExternalData().getWorld();var manager=AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin);
         var town=manager.findTownContainingBlock(world.getName(),point.x(),point.z());if(town==null)return;
         boolean changed=false;
-        for(var plot:town.getPlotInstances()) {
+        if(rootstone)for(var plot:town.getPlotInstances()) {
             var production=town.peekPlotProduction(plot.getPlotId());
-            if(production!=null)changed|=production.markGroveEdited(point);
+            if(production!=null)changed|=production.uprootStoneAt(point);
         }
         for(var site:town.getApprenticeWorkplaces().sites())changed|=site.excavation().markEdited(new com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point(point.x(),point.y(),point.z()));
         if(changed)manager.updateTown(town);
@@ -29,7 +32,8 @@ public final class TimberPlayerEditSystems {
         @Override public Query<EntityStore> getQuery(){return Player.getComponentType();}
         @Override public void handle(int index,ArchetypeChunk<EntityStore> chunk,Store<EntityStore> store,CommandBuffer<EntityStore> buffer,BreakBlockEvent event) {
             var p=event.getTargetBlock();var point=new TimberHarvestPlan.Position(p.x,p.y,p.z);
-            buffer.run(st->{if(!event.isCancelled())mark(st,plugin,point);});
+            boolean rootstone=Rootstone.is(event.getBlockType().getId());
+            buffer.run(st->{if(!event.isCancelled())mark(st,plugin,point,rootstone);});
         }
     }
     public static final class Placing extends EntityEventSystem<EntityStore,PlaceBlockEvent> {
@@ -38,7 +42,7 @@ public final class TimberPlayerEditSystems {
         @Override public Query<EntityStore> getQuery(){return Player.getComponentType();}
         @Override public void handle(int index,ArchetypeChunk<EntityStore> chunk,Store<EntityStore> store,CommandBuffer<EntityStore> buffer,PlaceBlockEvent event) {
             var p=event.getTargetBlock();var point=new TimberHarvestPlan.Position(p.x,p.y,p.z);
-            buffer.run(st->{if(!event.isCancelled())mark(st,plugin,point);});
+            buffer.run(st->{if(!event.isCancelled())mark(st,plugin,point,false);});
         }
     }
 }

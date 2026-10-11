@@ -33,3 +33,4 @@ items.Aetherhaven_Building_Staff_Cobalt.name=Personnel du bâtiment Cobalt
 items.Aetherhaven_Building_Staff_Cobalt.description=Identique au bâton de construction en cuivre. Le secondaire remplit jusqu'à 9×9×9 nœuds de construction mis en évidence simultanément. Lorsqu'il est tenu, il confère +600 mana maximum et une récupération de mana plus rapide ; chaque bloc placé coûte 1 mana.
 items.Aetherhaven_Building_Staff_Adamantite.name=Personnel de construction d'Adamantite
 items.Aetherhaven_Building_Staff_Adamantite.description=Identique au bâton de construction en cuivre. Le secondaire remplit jusqu'à 11×11×11 nœuds de construction mis en évidence simultanément. Lorsqu'il est tenu, il confère +900 points de mana maximum et une récupération de mana plus rapide ; chaque bloc placé coûte 1 point de mana.
+aetherhaven.interaction.cutLoose=Press [{key}] to cut the ropes

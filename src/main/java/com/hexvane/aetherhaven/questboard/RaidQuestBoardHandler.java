@@ -60,6 +60,10 @@ public final class RaidQuestBoardHandler implements QuestBoardQuestTypeHandler {
         if (roster.isEmpty()) {
             return false;
         }
+        if (entry.isRescue()
+            && !RescueCampService.prepareOffer(slot, town, store.getExternalData().getWorld(), entry.rescueCampPrefabsOrEmpty(), rank, rng)) {
+            return false;
+        }
 
         slot.setInstanceId(QuestBoardSlotRecord.newInstanceId());
         slot.setState(QuestBoardSlotState.OFFER);
@@ -237,9 +241,9 @@ public final class RaidQuestBoardHandler implements QuestBoardQuestTypeHandler {
         String key = slot.getTitleLangKey();
         String villager = QuestBoardGiverDisplay.giverName(slot, store, town);
         if (key != null && !key.isBlank()) {
-            return Message.translation(key.trim()).param("villager", villager);
+            return Message.translation(key.trim()).param("villager", villager).param("captive", captiveName(slot));
         }
-        return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.raidFallbackTitle")
+        return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard." + (slot.isRescueQuest() ? "rescueFallbackTitle" : "raidFallbackTitle"))
             .param("villager", villager);
     }
 
@@ -255,9 +259,10 @@ public final class RaidQuestBoardHandler implements QuestBoardQuestTypeHandler {
         String villager = QuestBoardGiverDisplay.giverName(slot, store, town);
         Message direction = raidApproachDirectionLabel(slot);
         if (key != null && !key.isBlank()) {
-            return Message.translation(key.trim()).param("villager", villager).param("direction", direction);
+            return Message.translation(key.trim()).param("villager", villager).param("direction", direction)
+                .param("captive", captiveName(slot));
         }
-        return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.raidFallbackDescription")
+        return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard." + (slot.isRescueQuest() ? "rescueFallbackDescription" : "raidFallbackDescription"))
             .param("villager", villager)
             .param("direction", direction);
     }
@@ -275,6 +280,16 @@ public final class RaidQuestBoardHandler implements QuestBoardQuestTypeHandler {
         Message direction = raidApproachDirectionLabel(slot);
         int need = slot.getRaidKillRequired();
         int cur = slot.getRaidKillProgress();
+        if (slot.isRescueQuest()) {
+            return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard." + (slot.isAccepted() && need > 0 ? "rescueObjectiveProgress" : "rescueObjective"))
+                .param("current", String.valueOf(cur))
+                .param("need", String.valueOf(need))
+                .param("count", String.valueOf(need))
+                .param("target", target)
+                .param("direction", direction)
+                .param("captive", captiveName(slot))
+                .param("villager", villager);
+        }
         if (slot.isAccepted() && need > 0) {
             return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.raidObjectiveProgress")
                 .param("current", String.valueOf(cur))
@@ -296,7 +311,21 @@ public final class RaidQuestBoardHandler implements QuestBoardQuestTypeHandler {
         if (key != null && !key.isBlank()) {
             return Message.translation(key.trim());
         }
-        return Message.raw("raiders");
+        return Message.raw(slot.isRescueQuest() ? "captors" : "raiders");
+    }
+
+    /** Display name of the townsfolk a rescue contract frees, or an empty string for ordinary raids. */
+    @Nonnull
+    public static String captiveName(@Nonnull QuestBoardSlotRecord slot) {
+        String id = slot.getRescueCharacterId();
+        var plugin = com.hexvane.aetherhaven.AetherhavenPlugin.get();
+        if (id == null || plugin == null) {
+            return "";
+        }
+        var definition = plugin.getTownsfolkCharacterCatalog().byId(id);
+        // Never show a raw id to a player.
+        return definition != null && definition.getDisplayName() != null && !definition.getDisplayName().isBlank()
+            ? definition.getDisplayName() : "a townsfolk";
     }
 
     @Nonnull
@@ -309,6 +338,14 @@ public final class RaidQuestBoardHandler implements QuestBoardQuestTypeHandler {
         Message target = raidTargetLabel(slot);
         Message direction = raidApproachDirectionLabel(slot);
         int need = slot.getRaidKillRequired();
+        if (slot.isRescueQuest()) {
+            return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard." + (slot.isAccepted() && need > 0 ? "rescueObjectiveCardProgress" : "rescueObjectiveCard"))
+                .param("current", String.valueOf(slot.getRaidKillProgress()))
+                .param("count", String.valueOf(need))
+                .param("target", target)
+                .param("direction", direction)
+                .param("captive", captiveName(slot));
+        }
         if (slot.isAccepted() && need > 0) {
             return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.raidObjectiveCardProgress")
                 .param("current", String.valueOf(slot.getRaidKillProgress()))

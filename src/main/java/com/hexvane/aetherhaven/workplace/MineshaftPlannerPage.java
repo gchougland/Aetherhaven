@@ -47,7 +47,9 @@ public final class MineshaftPlannerPage extends AetherhavenInteractiveCustomUIPa
         if(!draftActive)return new NativeExcavation.Review(List.of(),"Select a base or passage cell to plan another tunnel.");
         if(connection(c)==null)return new NativeExcavation.Review(List.of(),"Choose a start on the blue base or a saved passage at this floor.");
         try{
-            var draft=draft();var result=NativeExcavation.review(store.getExternalData().getWorld(),c.town(),draft,draft.mineshaftEntrance(),layout);
+            var draft=draft();var overlap=c.town().getApprenticeWorkplaces().tunnelOverlapIssue(c.base().id(),draft);
+            if(overlap!=null)return new NativeExcavation.Review(List.of(),overlap);
+            var result=NativeExcavation.review(store.getExternalData().getWorld(),c.town(),draft,draft.mineshaftEntrance(),layout);
             var remaining=MineshaftNetwork.remaining(result.cells(),MineshaftNetwork.ancestorCells(c.town().getApprenticeWorkplaces(),prerequisite(c)));
             if(result.issue()!=null)return result;
             var protectedFloors=MineshaftNetwork.protectedFloors(c.town().getApprenticeWorkplaces(),c.base());

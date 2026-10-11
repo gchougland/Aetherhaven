@@ -1,0 +1,32 @@
+{
+  "Input": [
+    {
+      "ResourceTypeId": "Wood_Trunk",
+      "Quantity": 5
+    },
+    {
+      "ItemId": "Ingredient_Fibre",
+      "Quantity": 10
+    }
+  ],
+  "PrimaryOutput": {
+    "ItemId": "Bench_Trough",
+    "Quantity": 1
+  },
+  "Output": [
+    {
+      "ItemId": "Bench_Trough",
+      "Quantity": 1
+    }
+  ],
+  "BenchRequirement": [
+    {
+      "Type": "Crafting",
+      "Id": "Workbench",
+      "Categories": [
+        "Workbench_Crafting"
+      ]
+    }
+  ],
+  "TimeSeconds": 3
+}

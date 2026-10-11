@@ -33,3 +33,4 @@ items.Aetherhaven_Building_Staff_Cobalt.name=Kobalt binası personeli
 items.Aetherhaven_Building_Staff_Cobalt.description=Bakır bina personeliyle aynı. İkincil, aynı anda <color is="#4ade80">9×9×9</color> adet vurgulanmış bina düğümünü doldurur. Basılı tutulduğunda <color is="#60a5fa">+600 maksimum mana</color> ve daha hızlı mana yenilenmesi sağlar; yerleştirilen her blok <color is="#60a5fa">1 mana</color> maliyetindedir.
 items.Aetherhaven_Building_Staff_Adamantite.name=Adamantit bina personeli
 items.Aetherhaven_Building_Staff_Adamantite.description=Bakır bina personeliyle aynı. İkincil, aynı anda <color is="#4ade80">11×11×11</color> vurgulanmış bina düğümünü doldurur. Basılı tutulduğunda <color is="#60a5fa">+900 maksimum mana</color> ve daha hızlı mana yenilenmesi sağlar; yerleştirilen her blok <color is="#60a5fa">1 mana</color> maliyetindedir.
+aetherhaven.interaction.cutLoose=Press [{key}] to cut the ropes

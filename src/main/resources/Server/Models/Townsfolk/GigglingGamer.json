@@ -1,0 +1,93 @@
+{
+  "Parent": "Aetherhaven_Human",
+  "Model": "Characters/Player.blockymodel",
+  "Texture": "Characters/Player_Textures/Player_Greyscale.png",
+  "GradientSet": "Skin",
+  "GradientId": "09",
+  "DefaultAttachments": [
+    {
+      "Model": "Cosmetics/Underwears/Underwear.blockymodel",
+      "Texture": "Cosmetics/Underwears/Underwear_Textures/Underwear_Boxer_Texture.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Purple"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Faces/Player_Face_Detached.blockymodel",
+      "Texture": "Characters/Body_Attachments/Faces/Faces_Detached_Textures/Face.png",
+      "GradientSet": "Skin",
+      "GradientId": "09"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Ears/Ears1.blockymodel",
+      "Texture": "Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png",
+      "GradientSet": "Skin",
+      "GradientId": "09"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Mouths/Mouth1.blockymodel",
+      "Texture": "Characters/Body_Attachments/Mouths/Mouth1_Textures/Makeup_Greyscale.png",
+      "GradientSet": "Skin",
+      "GradientId": "09"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Eyes/Eyes.blockymodel",
+      "Texture": "Characters/Body_Attachments/Eyes/Eyes_Textures/Eyes_Square_Pupil.png",
+      "GradientSet": "Eyes_Gradient",
+      "GradientId": "Purple"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Eyebrows/Eyebrows_Medium.blockymodel",
+      "Texture": "Characters/Body_Attachments/Eyebrows/Thin_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "PitchBlack"
+    },
+    {
+      "Model": "Characters/Haircuts/StraightHairBun.blockymodel",
+      "Texture": "Characters/Haircuts/StraightHairBun_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "PitchBlack"
+    },
+    {
+      "Model": "Cosmetics/Pants/HighSkirt.blockymodel",
+      "Texture": "Cosmetics/Pants/HighSkirt_Textures/PopstarSkirt_Texture.png",
+      "GradientSet": "Fantasy_Cotton_Dark",
+      "GradientId": "BlueDark"
+    },
+    {
+      "Model": "Cosmetics/Undertops/Top.blockymodel",
+      "Texture": "Cosmetics/Undertops/Top_Textures/Heart_Camisole_Greyscale.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Purple"
+    },
+    {
+      "Model": "Cosmetics/Overtops/FancyMiniJacket.blockymodel",
+      "Texture": "Cosmetics/Overtops/FancyMiniJacket_Textures/PopstarJacket_Textures.png",
+      "GradientSet": "Fantasy_Cotton_Dark",
+      "GradientId": "Purple"
+    },
+    {
+      "Model": "Cosmetics/Shoes/HeeledShoes.blockymodel",
+      "Texture": "Cosmetics/Shoes/HeeledShoes_Textures/PopstarShoes_Texture.png",
+      "GradientSet": "Fantasy_Cotton_Dark",
+      "GradientId": "Purple"
+    },
+    {
+      "Model": "Cosmetics/Head/Hibiscus.blockymodel",
+      "Texture": "Cosmetics/Head/Hibiscus_Textures/Hibiscus_Greyscale_Texture.png",
+      "GradientSet": "Shiny_Fabric",
+      "GradientId": "Purple"
+    },
+    {
+      "Model": "Cosmetics/Head/DoubleEarrings.blockymodel",
+      "Texture": "Cosmetics/Head/MetalEarring_Texture_Greyscale.png",
+      "GradientSet": "Ornamented_Metal",
+      "GradientId": "Brass_Purple"
+    },
+    {
+      "Model": "Cosmetics/Capes/Cape_PopStar.blockymodel",
+      "Texture": "Cosmetics/Capes/Cape_PopStar_Textures/Cape_PopStar_Texture.png",
+      "GradientSet": "Fantasy_Cotton_Dark",
+      "GradientId": "BlueDark"
+    }
+  ]
+}

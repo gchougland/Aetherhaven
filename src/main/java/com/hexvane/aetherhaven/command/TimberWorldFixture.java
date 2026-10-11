@@ -88,11 +88,10 @@ final class TimberWorldFixture {
             })).thenCompose(ignored->awaitHeat(world,plot,storage,heat,0)).thenCompose(ignored->onWorld(world,()->{
                 require(heat.equals(TimberCharring.findHeat(world,plot,storage)),"Nearby lit campfire not found");
                 var p=new com.google.gson.Gson().fromJson("{\"timber\":{\"adopted\":true}}",PlotProductionState.class);
-                p.addWorkplaceOutputUnlock(TimberCharring.OUTPUT);p.setIronUpgrade(1);
+                p.timber().setCharWood("Wood_Beech_Trunk");
                 var plugin=com.hexvane.aetherhaven.AetherhavenPlugin.get();
                 var entry=ProductionEffectiveCatalog.effective(plugin.getProductionCatalog(),plugin.getWorkplaceUnlockCatalog(),"plot_lumbermill",p);
-                require(p.setSlotCursorToItem(0,entry,"Wood_Beech_Trunk")&&p.setSlotCursorToItem(1,entry,TimberCharring.OUTPUT),"Charring output catalog missing");
-                p.addAmount("Wood_Beech_Trunk",2,100);var stock=new com.hexvane.aetherhaven.warehouse.TownWarehouse();
+                p.addAmount("Wood_Beech_Trunk",TimberCharring.LOG_COST,100);var stock=new com.hexvane.aetherhaven.warehouse.TownWarehouse();
                 require(TimberCharring.process(p,entry,stock,plot.getPlotId(),"Wood_Beech_Trunk",new Position(16,128,16)),"Charring transaction failed");
                 require(p.getAmount("Wood_Beech_Trunk")==0&&p.getAmount(TimberCharring.OUTPUT)==0,"Charring did not keep its cost/output boundary");
                 p=new com.google.gson.Gson().fromJson(new com.google.gson.Gson().toJson(p),PlotProductionState.class);
@@ -126,9 +125,9 @@ final class TimberWorldFixture {
         CompletableFuture<Void> chain=CompletableFuture.allOf(loads.toArray(CompletableFuture[]::new)).thenCompose(ignored->onWorld(world,()->{
             world.getWorldConfig().setGameTimePaused(true);world.getWorldConfig().setBlockTicking(false);
             var ground=new LinkedHashSet<>(tree.footprint());ground.add(new Position(root.x(),root.y()-1,root.z()));
-            for(var p:ground)if(p.y()<root.y())require(ChunkSectionBlockUtil.setBlockByKey(world,p.x(),p.y(),p.z(),"Soil_Dirt",0),"Fixture ground placement failed");
+            for(var p:ground)if(p.y()<root.y())require(ChunkSectionBlockUtil.setBlockByKey(world,p.x(),p.y(),p.z(),p.y()==root.y()-1&&p.x()==root.x()&&p.z()==root.z()?Rootstone.BLOCK:"Soil_Dirt",0),"Fixture ground placement failed");
             require(production.timber().plan(0,1,0,tree,p->true,p->NativeTimberPlanting.observe(world,p))==null,"Free grove plan failed");
-            require(production.timber().activate(1)==null,"Grove activation still requires a sapling");
+            require(production.usesPhysicalTimber(),"Binding a Rootstone did not start grove work");
             var ready=NativeTimberPlanting.prepare(world,production,0,tree,p->p.y()>=0&&p.y()<320);
             require(ready.ready(),"Plant preparation: "+ready.issue());
             String issue=NativeTimberPlanting.plant(world,production,0,ready,p->true);require(issue==null,"Plant commit: "+issue);
@@ -168,17 +167,16 @@ final class TimberWorldFixture {
             var inspected=NativeTimberHarvest.inspect(world,planted,p->true);
             require(inspected.ready(),"Mature harvest: "+inspected.issue()+diagnostic(world,planted));
             var plugin=com.hexvane.aetherhaven.AetherhavenPlugin.get();
-            production.addWorkplaceOutputUnlock(tree.output());
             var entry=ProductionEffectiveCatalog.effective(plugin.getProductionCatalog(),plugin.getWorkplaceUnlockCatalog(),"plot_lumbermill",production);
             var selected=List.of(tree.output(),"Ingredient_Stick","Ingredient_Tree_Sap",tree.sapling());
-            require(WorkplaceProductionUpgrades.slotCount(production)==1&&production.setSlotCursorToItem(0,entry,tree.output()),"Single timber slot unavailable");
+            // Only completely full stores hold a tree back. One full product alone never does.
             for(String product:selected) {
                 long cap=WorkplaceProductionUpgrades.effectiveMaxStorage(production,entry,product);
                 production.addAmount(product,cap,cap);
-                require(!NativeTimberHarvest.fell(world,production,0,entry,p->true),"Full storage did not block felling: "+product);
-                require(NativeTimberHarvest.inspect(world,planted,p->true).ready(),"Refused felling changed the tree");
-                production.removeAmountUpTo(product,cap);
             }
+            require(!NativeTimberHarvest.fell(world,production,0,entry,p->true),"Completely full storage did not block felling");
+            require(NativeTimberHarvest.inspect(world,planted,p->true).ready(),"Refused felling changed the tree");
+            for(String product:selected)production.removeAmountUpTo(product,WorkplaceProductionUpgrades.effectiveMaxStorage(production,entry,product));
             require(NativeTimberHarvest.fell(world,production,0,entry,p->true),"Native tree removal refused");
             for(var original:planted.originals()) {
                 var p=original.position();var actual=NativeTimberPlanting.observe(world,p);

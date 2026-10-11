@@ -8,7 +8,7 @@
   "assignNpcRoleId": "Aetherhaven_Bard",
   "prerequisites": {
     "completedQuestIds": [
-      "q_build_guild_hall"
+      "q_bard"
     ],
     "anyCompletedQuestIds": []
   },

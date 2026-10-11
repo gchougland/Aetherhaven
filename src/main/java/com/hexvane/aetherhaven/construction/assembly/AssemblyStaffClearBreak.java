@@ -45,7 +45,7 @@ final class AssemblyStaffClearBreak {
             return false;
         }
         Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
-        if (cellWorld.y < ChunkUtil.MIN_Y || cellWorld.y > ChunkUtil.HEIGHT_MINUS_1) {
+        if (cellWorld.y < ChunkUtil.MIN_Y) {
             return false;
         }
         Ref<ChunkStore> sectionRef =

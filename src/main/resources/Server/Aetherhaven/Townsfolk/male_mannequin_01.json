@@ -24,5 +24,15 @@
       "itemId": "Ingredient_Spices",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "building": 5,
+    "crafting": 3,
+    "blacksmithing": 2
+  },
+  "startingAttributes": {
+    "strength": 7,
+    "vitality": 7,
+    "intelligence": 6
+  }
 }

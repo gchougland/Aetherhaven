@@ -20,5 +20,14 @@
       "itemId": "Food_Salad_Berry",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "crafting": 5,
+    "cooking": 3,
+    "leatherworking": 2
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "intelligence": 6
+  }
 }

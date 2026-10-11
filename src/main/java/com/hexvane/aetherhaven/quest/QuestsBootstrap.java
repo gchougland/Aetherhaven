@@ -40,6 +40,9 @@ public final class QuestsBootstrap {
         RaidQuestMobBinding.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new QuestKillProgressSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new RaidQuestMarchSystem(core));
+        com.hexvane.aetherhaven.questboard.RescueCampService.register(core);
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.questboard.RescueCaptiveSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.questboard.RescueArrivalSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new RaidHealthBarHudRefreshSystem(core));
         PlayerQuestProgress.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new PlayerQuestProgressInitSystem());

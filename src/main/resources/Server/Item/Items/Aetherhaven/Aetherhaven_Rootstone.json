@@ -1,0 +1,97 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_grove.items.rootstone.name",
+    "Description": "aetherhaven_grove.items.rootstone.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ResourceTypeId": "Rock",
+        "Quantity": 10
+      },
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 5
+      },
+      {
+        "ItemId": "Ingredient_Fibre",
+        "Quantity": 5
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning_Misc"
+        ]
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Rootstone.png",
+  "Categories": [
+    "Blocks.Soils",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Cube",
+    "Group": "Stone",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Soils"
+      }
+    },
+    "BlockParticleSetId": "Stone",
+    "ParticleColor": "#74796f",
+    "BlockSoundSetId": "Stone",
+    "PhysicalMaterialId": "Stone",
+    "TextureComputedColor": "#74796f",
+    "Textures": [
+      {
+        "Up": "BlockTextures/Aetherhaven_Rootstone_Top.png",
+        "Sides": "BlockTextures/Aetherhaven_Rootstone_Side.png",
+        "Down": "BlockTextures/Aetherhaven_Rootstone_Bottom.png",
+        "Weight": 1
+      }
+    ],
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AetherhavenRootstone"
+            }
+          }
+        ]
+      }
+    },
+    "InteractionHint": "aetherhaven_grove.items.rootstone.hint"
+  },
+  "PlayerAnimationsId": "Block",
+  "Tags": {
+    "Type": [
+      "Soil"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "MaxStack": 10,
+  "ItemSoundSetId": "ISS_Blocks_Stone",
+  "IconProperties": {
+    "Scale": 0.58823,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -13.5
+    ]
+  }
+}

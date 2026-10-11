@@ -199,6 +199,16 @@ public final class VillagerWorkVisuals {
         });
     }
 
+    /** The Logger's growth song at a Rootstone tree: a soft ring of light and a rustle of new growth. */
+    public static void groveSong(@Nonnull Store<EntityStore> store, @Nonnull Vector3d at) {
+        playSound3d(com.hexvane.aetherhaven.production.Rootstone.SONG_SOUND, at, 0.8F, store);
+        try {
+            ParticleUtil.spawnParticleEffect(com.hexvane.aetherhaven.production.Rootstone.SONG_PARTICLE, at, store);
+        } catch (RuntimeException ignored) {
+            // Particle asset may be absent on some packs; skip quietly.
+        }
+    }
+
     private static void playSound3d(
         @Nonnull String soundEventId,
         @Nonnull Vector3d pos,

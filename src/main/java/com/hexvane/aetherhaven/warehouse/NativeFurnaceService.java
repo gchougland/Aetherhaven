@@ -28,6 +28,26 @@ public final class NativeFurnaceService {
     }
     public static boolean available(World world,WarehouseBatch.Point point) { return at(world,point)!=null; }
     public static WarehouseBatch queue(World world,TownRecord town,ApprenticeWorkplace site,WorkplaceOrders.Order order,WorkplaceRecipe recipe,WarehouseBatch.Point point,List<TownWarehouse.ProductionStock> sources) {
+        return queue(world,town,site,order,recipe,point,sources,1,false);
+    }
+    /** The most crafts whose input and output each still fit one furnace slot. */
+    static int stackLimit(List<MaterialQuantity> inputs,List<ItemStack> outputs) {
+        int limit=WorkplaceBatchSize.MAX_FURNACE_CRAFTS;
+        for(var input:inputs) {
+            if(input==null||input.getQuantity()<=0)continue;
+            var item=input.getItemId()==null?null:Item.getAssetMap().getAsset(input.getItemId());
+            // An ingredient named by kind may be met by items with different stack sizes. Stay with the smallest sensible load.
+            int stack=item==null?input.getQuantity():Math.max(1,item.getMaxStack());
+            limit=Math.min(limit,Math.max(1,stack/input.getQuantity()));
+        }
+        for(var output:outputs)if(!ItemStack.isEmpty(output))limit=Math.min(limit,Math.max(1,Math.max(1,output.getItem().getMaxStack())/output.getQuantity()));
+        return Math.max(1,limit);
+    }
+    /**
+     * @param need crafts the task still wants
+     * @param forever true for a task with no end
+     */
+    public static WarehouseBatch queue(World world,TownRecord town,ApprenticeWorkplace site,WorkplaceOrders.Order order,WorkplaceRecipe recipe,WarehouseBatch.Point point,List<TownWarehouse.ProductionStock> sources,int need,boolean forever) {
         var furnace=at(world,point);if(town.getWarehouse().destinationReserved(point)||furnace==null||!furnace.processing.getInputContainer().isEmpty()||!furnace.processing.getOutputContainer().isEmpty())return null;
         var source=recipe.source();if(source==null||source.getOutputs()==null||recipe.nativeUnlockIssue(town,world)!=null)return null;
         if(recipe.nativeCharcoal()) {
@@ -60,10 +80,20 @@ public final class NativeFurnaceService {
             if(!compatible)continue;
             // Two logs produce one native charcoal byproduct. Do not add them to recipe input as well.
             if(recipe.nativeCharcoal()&&existingFuel>2)continue;
-            int quantity=recipe.nativeCharcoal()?2-existingFuel:Math.max(hasFuel?0:1,(int)Math.ceil(Math.max(0,source.getTimeSeconds()-available)/item.getFuelQuality()));
             var materials=recipe.nativeCharcoal()||source.getInput()==null?List.<MaterialQuantity>of():Arrays.asList(source.getInput());
-            var batch=stock.reserveSmelting(site.id(),order.id(),recipe.id(),materials,outputs,sources,id,quantity);
-            if(batch!=null){stock.setDestination(batch.id(),point);return batch;}
+            // A furnace takes whole stacks. Load as many crafts as the task wants and one slot holds, with fuel for all of
+            // them, and try fewer when ore, fuel or storage room falls short.
+            int most=recipe.nativeCharcoal()?1:WorkplaceBatchSize.furnaceCrafts(need,forever,stackLimit(materials,outputs));
+            for(int crafts=most;crafts>=1;crafts=WorkplaceBatchSize.smaller(crafts)) {
+                int quantity=recipe.nativeCharcoal()?2-existingFuel:Math.max(hasFuel?0:1,(int)Math.ceil(Math.max(0,crafts*source.getTimeSeconds()-available)/item.getFuelQuality()));
+                // A long load must not run dry part way: a furnace that stops with ore still in it would wait forever.
+                // One spare piece of fuel covers rounding, and whatever is left over serves the next load.
+                if(crafts>1&&!recipe.nativeCharcoal()&&existingFuel+quantity+1<=Math.max(1,item.getMaxStack()))quantity++;
+                // The fuel slot holds one stack.
+                if(existingFuel+quantity>Math.max(1,item.getMaxStack()))continue;
+                var batch=stock.reserveSmeltingCrafts(site.id(),order.id(),recipe.id(),materials,outputs,sources,id,quantity,crafts,existingFuel+quantity);
+                if(batch!=null){stock.setDestination(batch.id(),point);return batch;}
+            }
         }
         return null;
     }
@@ -71,7 +101,12 @@ public final class NativeFurnaceService {
     public static boolean needsService(World world,WarehouseBatch batch) {
         var furnace=at(world,batch.destination());if(furnace==null)return false;
         if(!batch.nativeLoaded())return batch.state()==WarehouseBatch.State.READY;
-        return !furnace.processing.getOutputContainer().isEmpty()||!furnace.processing.isActive();
+        // A load is many items now. Come back when the furnace has stopped, not for every ingot. A full output would
+        // stall it, so that also brings the worker.
+        if(!furnace.processing.isActive())return true;
+        var output=furnace.processing.getOutputContainer();
+        for(short slot=0;slot<output.getCapacity();slot++)if(ItemStack.isEmpty(output.getItemStack(slot)))return false;
+        return true;
     }
     public static boolean service(World world,TownRecord town,WarehouseBatch batch) {
         return service(world,town,batch,()->{});

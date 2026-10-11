@@ -26,5 +26,15 @@
       "itemId": "Food_Wildmeat_Cooked",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "logistics": 5,
+    "alchemy": 3,
+    "commerce": 2
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "speed": 8,
+    "intelligence": 6
+  }
 }

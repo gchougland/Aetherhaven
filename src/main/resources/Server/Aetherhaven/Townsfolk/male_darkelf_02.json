@@ -26,5 +26,16 @@
       "itemId": "Ingredient_Spices",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "leatherworking": 5,
+    "mining": 3,
+    "blacksmithing": 2,
+    "commerce": 0
+  },
+  "startingAttributes": {
+    "dexterity": 7,
+    "speed": 8,
+    "vitality": 6
+  }
 }

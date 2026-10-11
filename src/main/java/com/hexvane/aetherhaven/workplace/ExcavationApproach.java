@@ -63,17 +63,31 @@ public final class ExcavationApproach {
     public static boolean besideRail(Point target,Vector3d position){
         return Math.abs(position.x-target.x()-.5)>=.9||Math.abs(position.z-target.z()-.5)>=.9;
     }
+    /** The passage's own floor, or anywhere for a plan that has no area. */
+    public static Predicate<Point> floorOf(ExcavationPlan plan){
+        var floor=plan.floorCells();
+        return floor.isEmpty()?cell->true:floor::contains;
+    }
     public static Vector3d choose(ExcavationPlan plan,Point target,Vector3d from,int attempt,Function<Point,Vector3d> stand,Predicate<Vector3d> usable){
+        return choose(plan,target,from,attempt,stand,usable,floorOf(plan));
+    }
+    /**
+     * @param onFloor where a worker should stand. A stand anywhere else, such as the surface above a shallow cut or a
+     *                ledge beside it, is only used when no stand on the floor can reach the block, so work never stops
+     *                for want of one.
+     */
+    public static Vector3d choose(ExcavationPlan plan,Point target,Vector3d from,int attempt,Function<Point,Vector3d> stand,Predicate<Vector3d> usable,Predicate<Point> onFloor){
         var feet=feet(from);
         var current=stand.apply(feet);
-        if(attempt==0&&current!=null&&Math.abs(current.y-from.y)<=.15&&plan.withinWorkReach(feet,target)&&usable.test(from))return new Vector3d(from.x,current.y,from.z);
+        if(attempt==0&&current!=null&&Math.abs(current.y-from.y)<=.15&&plan.withinWorkReach(feet,target)&&usable.test(from)&&onFloor.test(feet))return new Vector3d(from.x,current.y,from.z);
         int reach=plan.layout()==ExcavationPlan.Layout.ROOM?6:plan.area()!=null&&ExcavationPlan.passageHeight(plan.area(),plan.layout())==4?5:4;
-        var options=new ArrayList<Vector3d>();
+        var options=new ArrayList<Vector3d>();var elsewhere=new ArrayList<Vector3d>();
         for(int dx=-reach;dx<=reach;dx++)for(int dz=-reach;dz<=reach;dz++)for(int dy=-reach;dy<=2;dy++){
             var cell=new Point(target.x()+dx,target.y()+dy,target.z()+dz);
             if(!plan.withinWorkReach(cell,target))continue;
-            var point=stand.apply(cell);if(point!=null&&usable.test(point))options.add(point);
+            var point=stand.apply(cell);if(point!=null&&usable.test(point))(onFloor.test(cell)?options:elsewhere).add(point);
         }
+        if(options.isEmpty())options=elsewhere;
         options.sort(Comparator.comparingDouble(from::distanceSquared));
         return options.isEmpty()?null:options.get(Math.floorMod(attempt,options.size()));
     }

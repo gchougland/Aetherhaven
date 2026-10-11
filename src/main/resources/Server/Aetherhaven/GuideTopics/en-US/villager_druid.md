@@ -19,7 +19,7 @@ You can plant additional alchemical seeds on Crystal Soil inside the Conservator
 
 ## Seeds and older gardens
 
-Seed and sapling recipes are available at Crafting workplaces and use the Apprentice's **Farming** skill. Alchemical seed tiers need Farming **1, 4 and 7**. Check each recipe for its Life Essence cost and equipment requirements.
+Seed and sapling recipes are available at Crafting workplaces and use the Apprentice's **Farming** skill. Alchemical seed tiers need Farming **1, 4 and 7**. Check each recipe for its cost and equipment requirements. Ordinary seeds cost Life Essence and alchemical seeds cost Void Essence, both at the base game's rates.
 
 Herb Garden workplaces have been removed. The Druid grows ingredients directly in the Conservatory. Existing plants remain in the world. Unused supplies stay in storage, and couriers return supplies that were already picked up.
 

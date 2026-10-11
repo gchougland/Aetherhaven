@@ -35,7 +35,7 @@ final class AetherhavenTimberTestCommand extends AbstractCommandCollection {
                 for (int offset = 0; offset < 4; offset++) {
                     var root = new TimberHarvestPlan.Position(-33 + offset * 17, 128 + offset, 31 - offset * 17);
                     var result = NativeTimberGrowth.capture(species.output(), root, 0, p ->
-                            p.y() >= ChunkUtil.MIN_Y && p.y() <= ChunkUtil.HEIGHT_MINUS_1);
+                            p.y() >= ChunkUtil.MIN_Y);
                     if (!result.ready()) { failed++; report(ctx, wood + " at " + root + ": " + result.issue()); }
                     else {
                         String harvestIssue = harvestFixture(result.receipt());
@@ -104,8 +104,7 @@ final class AetherhavenTimberTestCommand extends AbstractCommandCollection {
             if (town == null || !town.hasMemberOrOwner(player.getUuid()) || !town.playerCanManageConstructions(player.getUuid())) {
                 report(ctx, "Choose a root inside a town you can manage."); return;
             }
-            var result = NativeTimberGrowth.capture(ctx.get(output), root, 0, p -> p.y() >= ChunkUtil.MIN_Y
-                    && p.y() <= ChunkUtil.HEIGHT_MINUS_1 && TownTerritoryClaims.contains(town,
+            var result = NativeTimberGrowth.capture(ctx.get(output), root, 0, p -> p.y() >= ChunkUtil.MIN_Y && TownTerritoryClaims.contains(town,
                         ChunkUtil.chunkCoordinate(p.x()), ChunkUtil.chunkCoordinate(p.z())));
             if (!result.ready()) { report(ctx, result.issue()); return; }
             var receipt = result.receipt();

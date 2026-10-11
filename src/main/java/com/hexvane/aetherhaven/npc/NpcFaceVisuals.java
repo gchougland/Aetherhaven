@@ -147,6 +147,7 @@ public final class NpcFaceVisuals {
     }
 
     public static boolean isInInteractionDialogue(@Nonnull NPCEntity npc) {
+        if (NpcServicePause.isHeld(npc)) return true;
         if (npc.getRole() == null) {
             return false;
         }

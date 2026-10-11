@@ -124,6 +124,7 @@ aetherhaven.ui.jewelryAppraisal.empty=В панели быстрого дост�
 aetherhaven.ui.jewelryAppraisal.pick=Выберите произведение ниже.
 aetherhaven.ui.jewelryAppraisal.select=Выбирать
 aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.rowEquipped={itemName} ({status}, equipped)
 aetherhaven.ui.jewelryAppraisal.statusAppraised=оцененный
 aetherhaven.ui.jewelryAppraisal.statusUnidentified=неопознанный
 aetherhaven.ui.jewelryAppraisal.selectedHeader=Выбрано: {itemName}

@@ -12,11 +12,43 @@
 
 - **Farmer field work preview** Review planted crop beds from farm storage and choose physical field work. The Farmer waters, harvests and carries selected crops and Life Essence to local storage. Existing stock stays available, and Apprentice farms still provide food support only. Worker paths, visuals and balance are still being tested.
 
-- **Managed grove preview** Plan tree locations with the Building Staff and start physical Logger work from lumbermill storage. Planting is free. The Logger plants, waters, chops and carries each tree's wood, matching sapling, sap and sticks back in batches. These harvest products need no extra slots. Groves support 32 tree types and keep stored harvests collectible. An extra material slot can collect fibre. Trained Loggers can char gathered timber into Burnt wood beside a lit campfire. Visuals and balance are still being tested.
+- **Goblin hunts** Kael can now fight Goblin Scrappers in his arena for Scraps, the metal Tobin's props are built from.
+- **Rescue contracts** A new kind of quest board job. A townsfolk is tied up at a temporary camp outside town, held by goblins, trorks or outlanders. The camp is marked on your compass. Defeat the captors, cut the ropes by interacting with the captive, then talk to them and they move into your town with no move in gift to pay. They arrive a level better than usual at two skills, rising to five skills for the highest rank contracts. You can check who it is from the quest board first.
+- **Mining contracts** The Miner and Blacksmith now post jobs to mine ore yourself, from copper up to adamantite. You keep everything you dig.
+- **Salvaging workplace** Mark a workplace around a Salvager's Workbench and the Crafter's apprentices take apart old weapons, armor and tools for you. Recovered materials go to Crafted Goods.
+- **Craft from your backpacks** Crafting benches now use materials inside the backpacks you are carrying.
+- **Upgrades from the warehouse** Building, restaurant, backpack and bench upgrades take missing materials from the town warehouse when you are allowed to use it.
+- **Finished goods at the workplace** The workplace task page shows what its tasks have finished and lets you collect it there.
+- **Appraise worn jewelry** Rings and necklaces can be appraised while you are wearing them.
+- **Work list portraits** The journal's Work tab shows each townsfolk's portrait.
+- **House quest marker** When assigning a house, residents waiting on their house quest are listed first with a quest mark.
+- **Smelting skill** Smelting an ingot now needs the same Blacksmithing skill as mining its ore. Cobalt, Adamantite, Silver, Gold and Mithril were far too easy.
+- **Shop displays** Player shops keep their goods on show while closed.
+- **Shop clerks** Clerks stand on the staff side of the counter.
+- **Idle crafters** A crafter no longer waits forever for a more skilled townsfolk who is busy elsewhere.
+- **Faster workplaces** A courier now brings the materials for several crafts in one trip, and the Apprentice makes them all in one visit. Furnaces are loaded with a whole stack of ore at once.
+- **Furnace contents** A smelting workplace's task page shows what each furnace holds and the ingots waiting at it.
+- **Commerce priority** The journal's Work tab has a Commerce column. It decides when a shop's clerk staffs the counter and when other work comes first.
+- **Work tab** Smelting, Armor Crafting and Jewelry have their own icons, and the list keeps its place when you click a priority.
+- **Armory tiers** Equipment tiers the town cannot make yet are greyed out, and the requirement text stays inside its panel.
+- **Feeding trough recipe** The Feeding Trough can now be crafted at the Workbench from 5 tree trunks and 10 Plant Fiber.
+- **Life Essence from farming** Every crop the Farmer harvests brings back Life Essence while the farm has room for it. You no longer need to choose it as an output.
+- **Hardwood mine supports** Mineshaft beams and their joining pieces are hardwood.
+- **Warehouse outputs** Building Outputs no longer shows output slots a building has not unlocked.
+- **Right building for the job** Couriers fetch each material from one place that holds it: the production building or furnace that has it, otherwise the warehouse. A pickup that is emptied before they arrive is planned again.
+- **Miners in the passage** Apprentice miners stand on the mineshaft's own floor, not on the ground above it.
+- **Core Miner** The Miner waits beside the rock between veins and no longer stands on it. The mine's storage page says why he is waiting.
+- **Stuck workers** A townsfolk who gets stuck on the way to work is brought to where they were going after a few seconds, the way villagers already were. This covers workplaces, mineshafts, farms, deliveries, shop counters and the clinic.
+- **Nameless residents** A townsfolk could be listed in the journal by an internal name with no portrait. They are now recorded properly and never shown that way.
+- **Ranch workplaces** A ranch with too little room for its animals still feeds the town.
+- **Harder contracts** The quest board now sometimes posts very large delivery orders and elite raids. They give a week to finish and are the contracts that pay Shards of Gaia and Verdant Catalysts. Every town rank has at least one.
+- **Bigger, better raids** The quest board now offers 22 raids instead of 6, with at least two to choose from at every town rank. Face goblin scouts, restless graves, the Frozen Host, scarak swarms, a trork chieftain's warhost, outlander cults, void surges and the Feastmaster's horde. Higher rank raids bring leaders and more enemies, and every raid now pays far more gold plus a bundle of themed materials.
+- **Tobin's Pattern Book** The Crafter now makes props. Show Tobin any prop once and he keeps its pattern for the whole town. Commission copies with sticks, stone rubble, scraps and linen scraps from your pack or the town warehouse, which Crafting Apprentices can now make. No gold is needed. Tobin builds commissions at his bench during work hours and keeps finished props on his shelf. Salvage spare props for materials. Collecting patterns earns a longer bench queue, better salvage and faster work.
+- **The Singing Grove** The lumbermill has a new way to work. Place Rootstones anywhere in town and give each one a sapling. Seren plants the tree, sings it tall with nature magic, fells it and carries home its wood, a sapling, sap and sticks. The stone then regrows the same tree for free. Any of 32 trees works once you own its sapling. Bless a Rootstone with Life Essence for double wood from its next tree. Lumbermill upgrades let Seren tend more Rootstones. You can also ask her to gather fibre or char one kind of spare log into Burnt wood beside a lit campfire. Seren gives two Rootstones when her lumbermill is finished, and more can be crafted at the Town Planning Desk.
 
 - **More friendship rewards** Earn training supplies, tools, resident cosmetics, and Apprentice crafting plans through friendship. New plans include fireworks, decorative flags, balloons, garden arches, terrariums, streetlights, weapon racks, and both Glow Rings. Profession equipment rewards teach town crafting plans.
 
-- **Crafter and Leatherworker preview** Meet Tobin Reedwright at Town Level 3 and Sera Brindle at Level 4. Their Core workshop and tannery unlock apprentice crafting and leatherworking. More skilled leatherworkers can prepare medium and heavy leather. Earn profession tool recipes and plans for a Pattern Cabinet or Stitching Frame through friendship. Sera crafts portable backpacks with five distinct appearances, branched metal upgrades, extra stack capacity, an item magnet and a travelling jukebox. Buildings, recruitment and rewards are still being tested.
+- **Crafter and Leatherworker preview** Meet Tobin Reedwright at Town Level 3 and Hazel Brindle at Level 4. Their Core workshop and tannery unlock apprentice crafting and leatherworking. More skilled leatherworkers can prepare medium and heavy leather. Earn profession tool recipes and plans for a Pattern Cabinet or Stitching Frame through friendship. Hazel crafts portable backpacks with five distinct appearances, branched metal upgrades, extra stack capacity, an item magnet and a travelling jukebox. Buildings, recruitment and rewards are still being tested.
 
 - **Monster Hunter preview** Build Kael Thorne's lodge and start paid survival runs from his dialogue. Unlock creatures with gold and their drops, including frost and fire undead, Outlanders and Void creatures. Spoils follow their normal material drop chances. Train him between runs and collect spoils through the required lodge storage or warehouse. Couriers bring lodge supplies to workplaces, including venom for apprentice brewed antidotes. Defeat ends the run and restores him immediately. Each new run needs your order. Creature balance and building polish are still being tested.
 
@@ -49,6 +81,10 @@
 
 ### Changed
 
+- **Bard recruitment** Invite Elias to stay through his own guild hall welcome quest.
+- **Prowl** Asks for corn when moving in and holds corn while eating.
+- **Gaia revival** A roomier revival screen with framed resident cards and clearer controls.
+
 - **Charter amendments** Choose permanent town policies in a building upgrade style screen with clearer requirements and details.
 - **Purification Powder** Craft with Cyan Crystal Shards and Life Essence.
 
@@ -61,6 +97,9 @@
 - **Jewelry crafting** Apprentices now craft jewelry at Merchant workplaces. Higher qualities require more skill, and an Appraisal Bench reveals finished pieces automatically.
 
 ### Fixed
+
+- **Residents at home** House shelves show saved residents while they are away or awaiting revival, with a teleport button beside each resident. House assignments survive revival.
+- **Villager visits** Residents pause briefly after being brought to you and stay still during conversations.
 
 - **Gold payments** Failed payments no longer consume part of your carried gold.
 
@@ -75,9 +114,9 @@
 - **Snowball piles** Restored the interaction prompt for taking snowballs.
 - **Town activity** Avoids a parallel NPC occupancy scan that stalled the town during testing. Reduces temporary memory use while tracking residents and buildings. Villager destination reservations stay separate for each world. Skips repeated world cleanup checks when nothing has changed. Clears pending villager removals when a world closes. Avoids reloading prop and palette icons when travelling between worlds.
 - **Town maps** Fixed an error that could interrupt map updates while exploring.
-- **Building placement** Placement errors appear inside the building preview controls, where they remain visible. Movement arrows follow where you look, even when your body faces another direction. Moving a building preserves furniture at the original plot marker position. The Building Staff guide prioritizes the building you are standing in.
+- **Building placement** Placement errors appear inside the building preview controls, where they remain visible. Plot signs sit above the higher ground when their width spans a slope. Movement arrows follow where you look, even when your body faces another direction. Moving a building preserves furniture at the original plot marker position. The Building Staff guide prioritizes the building you are standing in.
 - **Building editor** Resize existing buildings through the bounds step. Saved air cells appear as Editor Empty markers when loaded for editing. The selection tool works normally outside the bounds selection step.
-- **Town journal** Bills include an estimate of tomorrow's taxes. Reuses unchanged page content when switching tabs and fetches marketplace thumbnails without blocking the Town page. The resident list includes Townsfolk and their current activity, with separate filters and pages. Every villager Guide begins with a portrait. The refreshed Town Records Shelf has the same combined resident list and a teleport button beside the assigned worker.
+- **Town journal** Bills include an estimate of tomorrow's taxes. Reuses unchanged page content when switching tabs and fetches marketplace thumbnails without blocking the Town page. The resident list includes Townsfolk and their current activity, with separate filters and pages. Every villager Guide begins with a portrait. The refreshed Town Records Shelf has the same combined resident list and a teleport button beside the assigned worker. Home resident and workplace worker pickers support name search as you type.
 - **New villager models** New human villagers use the shared villager animation set.
 - **Villager models** Corrected human ear attachment points so residents can wear their earrings.
 

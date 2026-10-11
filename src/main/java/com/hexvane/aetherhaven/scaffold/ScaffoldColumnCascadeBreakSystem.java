@@ -68,7 +68,7 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
      */
     private static boolean hasDirectStructuralGroundBelow(@Nonnull World world, int x, int y, int z) {
         int by = y - 1;
-        if (by < ChunkUtil.MIN_Y || by > ChunkUtil.HEIGHT_MINUS_1) {
+        if (by < ChunkUtil.MIN_Y) {
             return false;
         }
         BlockType below = ChunkSectionBlockUtil.blockType(world, x, by, z);
@@ -90,7 +90,7 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
             int nx = rootX + DX6[i];
             int ny = rootY + DY6[i];
             int nz = rootZ + DZ6[i];
-            if (ny < ChunkUtil.MIN_Y || ny > ChunkUtil.HEIGHT_MINUS_1) {
+            if (ny < ChunkUtil.MIN_Y) {
                 continue;
             }
             BlockType t = ChunkSectionBlockUtil.blockType(world, nx, ny, nz);
@@ -108,7 +108,7 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
                 int nx = c.x() + DX6[i];
                 int ny = c.y() + DY6[i];
                 int nz = c.z() + DZ6[i];
-                if (ny < ChunkUtil.MIN_Y || ny > ChunkUtil.HEIGHT_MINUS_1) {
+                if (ny < ChunkUtil.MIN_Y) {
                     continue;
                 }
                 BlockType t = ChunkSectionBlockUtil.blockType(world, nx, ny, nz);

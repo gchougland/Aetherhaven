@@ -108,7 +108,7 @@ public final class ScaffoldPlacementResolver {
      * only the topmost stack in the column.
      */
     public static int scaffoldSegmentTopY(@Nonnull World world, int x, int ySeed, int z) {
-        if (ySeed < ChunkUtil.MIN_Y || ySeed > ChunkUtil.HEIGHT_MINUS_1) {
+        if (ySeed < ChunkUtil.MIN_Y) {
             return -1;
         }
         BlockType at = ChunkSectionBlockUtil.blockType(world, x, ySeed, z);
@@ -116,7 +116,7 @@ public final class ScaffoldPlacementResolver {
             return -1;
         }
         int top = ySeed;
-        for (int y = ySeed + 1; y <= ChunkUtil.HEIGHT_MINUS_1; y++) {
+        for (int y = ySeed + 1; ; y++) {
             BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
             if (t != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(t.getId())) {
                 top = y;

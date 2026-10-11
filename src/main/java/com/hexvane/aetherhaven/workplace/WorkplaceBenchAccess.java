@@ -36,6 +36,7 @@ public final class WorkplaceBenchAccess {
             case CRAFTING,MINING -> "Workbench".equals(bench);
             case BUILDING -> WorkplaceEquipment.BUILDERS_BENCH.equals(bench);
             case LEATHERWORKING -> "Tannery".equals(bench);
+            case SALVAGING -> "Salvagebench".equals(bench);
             case COOKING -> "Cookingbench".equals(bench);
             case JEWELRY -> WorkplaceEquipment.JEWELRY_BENCH.equals(bench);
             default -> false;

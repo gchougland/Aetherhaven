@@ -22,5 +22,15 @@
       "itemId": "Food_Vegetable_Cooked",
       "count": 3
     }
-  ]
+  ],
+  "startingSkills": {
+    "jewelry": 5,
+    "commerce": 3,
+    "alchemy": 2
+  },
+  "startingAttributes": {
+    "dexterity": 7,
+    "speed": 8,
+    "intelligence": 7
+  }
 }

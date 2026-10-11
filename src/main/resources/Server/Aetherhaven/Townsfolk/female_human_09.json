@@ -24,5 +24,14 @@
       "itemId": "Ingredient_Flour",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "crafting": 5,
+    "cooking": 3,
+    "farming": 2
+  },
+  "startingAttributes": {
+    "intelligence": 7,
+    "dexterity": 7
+  }
 }

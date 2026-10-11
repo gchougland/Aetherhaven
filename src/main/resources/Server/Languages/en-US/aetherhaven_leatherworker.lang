@@ -1,12 +1,12 @@
-npcRoles.Aetherhaven_Leatherworker.name=Sera Brindle
+npcRoles.Aetherhaven_Leatherworker.name=Hazel Brindle
 profession=Leatherworker
-speaker=Sera Brindle
+speaker=Hazel Brindle
 hub=A strong stitch is worth taking your time over.
 quest.title=Hides and Handywork
-quest.description=Build Sera a tannery with room to prepare hides and leather goods.
-quest.objective.token=Collect the tannery plot token from Sera.
+quest.description=Build Hazel a tannery with room to prepare hides and leather goods.
+quest.objective.token=Collect the tannery plot token from Hazel.
 quest.objective.build=Build the tannery.
-quest.objective.talk=Return to Sera.
+quest.objective.talk=Return to Hazel.
 bye=See you later.
 how=Tell me about your work.
 offer=Would you settle here as our leatherworker?

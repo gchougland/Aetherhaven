@@ -68,10 +68,10 @@ final class AetherhavenHalloweenTestCommand extends AbstractAsyncCommand {
         require(HalloweenGameInventory.matches(saved,town,game),"Native item codec lost the game receipt");
         bag.setItemStackForSlot((short)0,saved,false);
         require(HalloweenGameInventory.reward(bag,town,game,()->state.reward(owner,game.id(),100)),"Native reward exchange failed");
-        require(count(bag,"Aetherhaven_Spooky_Candy")==3&&count(bag,"Aetherhaven_Gold_Coin")==5&&count(bag,HalloweenGameInventory.HEAD)==0,"Native reward quantities wrong");
+        require(count(bag,"Aetherhaven_Spooky_Candy")==HalloweenGameState.CANDIES&&count(bag,"Aetherhaven_Gold_Coin")==HalloweenGameState.GOLD&&count(bag,HalloweenGameInventory.HEAD)==0,"Native reward quantities wrong");
         require(!HalloweenGameInventory.reward(bag,town,game,()->state.reward(owner,game.id(),100)),"Repeated reward accepted");
         require(!state.canStart(owner,100)&&state.canStart(owner,101),"Daily reward limit failed");
-        String result="Halloween assets: PASSED. Both head variants, native pickup prompt, item receipt roundtrip, exact 3 candy / 5 gold payout and repeat rejection.";
+        String result="Halloween assets: PASSED. Both head variants, native pickup prompt, item receipt roundtrip, exact "+HalloweenGameState.CANDIES+" candy / "+HalloweenGameState.GOLD+" gold payout and repeat rejection.";
         ctx.sendMessage(Message.raw(result));com.hypixel.hytale.logger.HytaleLogger.forEnclosingClass().atInfo().log(result);
         return CompletableFuture.completedFuture(null);
     }

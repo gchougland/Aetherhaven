@@ -150,6 +150,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     private boolean hideHouseResidentElsewhereHoused;
     /** House resident picker modal open. */
     private boolean houseResidentPickerOpen;
+    private String houseResidentSearch = "", workplaceWorkerSearch = "";
     /** Workplace worker picker modal open. */
     private boolean workplaceWorkerPickerOpen;
     /** Visitor portal preset color picker modal. */
@@ -228,6 +229,10 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.append("Aetherhaven/PlotConstructionPage.ui");
             templateAppended = true;
             AetherhavenUiLocalization.applyPlotConstructionPage(commandBuilder);
+            eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#HouseResidentSearch",
+                EventData.of("Action", "SearchHouseResidents").append("@ResidentSearch", "#HouseResidentSearch.Value"), false);
+            eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#WorkplaceWorkerSearch",
+                EventData.of("Action", "SearchWorkplaceWorkers").append("@ResidentSearch", "#WorkplaceWorkerSearch.Value"), false);
         }
         if (managementUi && pendingMoveBuildingModal) {
             moveBuildingConfirmOpen = true;
@@ -1290,6 +1295,11 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             );
 
             UUID slotResident = plotInstance != null ? plotInstance.getHomeResidentAt(slot) : null;
+            commandBuilder.set(slotPath + " #TeleportHouseResident.Visible", slotResident != null);
+            commandBuilder.set(slotPath + " #TeleportHouseResident.Disabled", viewOnly || town == null || !town.playerHasQuestPermission(playerRef.getUuid()));
+            if (slotResident != null) eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,
+                slotPath + " #TeleportHouseResident", new EventData().append("Action", "TeleportHouseResident")
+                    .append("HouseResidentSlot", Integer.toString(slot)).append("WorkplaceWorkerUuid", slotResident.toString()), false);
             if (slotResident == null) {
                 commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewPortrait.Visible", false);
                 commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewNameLine.TextSpans", Message.raw(unassignedLabel));
@@ -1349,13 +1359,18 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             false
         );
         rowIndex++;
-        for (HouseResidentDirectory.HouseResidentRow row : assignable) {
-            if (occupiedOtherSlots.contains(row.entityUuid())) {
+        // Whoever is waiting on a house quest goes first and is marked, then everyone else by name as before.
+        Set<UUID> waiting = town == null || plugWork == null ? Set.of() : HouseResidentDirectory.housingQuestResidents(town, plugWork);
+        List<HouseResidentDirectory.HouseResidentRow> ordered = new ArrayList<>(assignable);
+        ordered.sort(Comparator.comparing((HouseResidentDirectory.HouseResidentRow r) -> !waiting.contains(r.entityUuid())));
+        for (HouseResidentDirectory.HouseResidentRow row : ordered) {
+            if (occupiedOtherSlots.contains(row.entityUuid()) || !ResidentSearch.matches(row.displayName(), houseResidentSearch)) {
                 continue;
             }
             commandBuilder.append(HOUSE_RESIDENT_ROWS, "Aetherhaven/HouseResidentAssignRow.ui");
             String rowPath = HOUSE_RESIDENT_ROWS + "[" + rowIndex + "]";
             AetherhavenUiLocalization.applyHouseResidentAssignRow(commandBuilder, rowPath);
+            commandBuilder.set(rowPath + " #QuestMark.Visible", waiting.contains(row.entityUuid()));
             commandBuilder.set(rowPath + " #Portrait.AssetPath", row.portraitPath());
             commandBuilder.set(rowPath + " #NameLine.TextSpans", Message.raw(row.displayName()));
             commandBuilder.set(rowPath + " #RoleLine.TextSpans", row.roleLine());
@@ -1369,6 +1384,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             );
             rowIndex++;
         }
+        commandBuilder.set("#HouseResidentSearchEmpty.Visible", rowIndex == 1);
     }
 
     private void applyHouseResidentSelection(
@@ -1535,6 +1551,35 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if ("SearchHouseResidents".equals(data.action) || "SearchWorkplaceWorkers".equals(data.action)) {
+            if ("SearchHouseResidents".equals(data.action)) {
+                if (!houseResidentPickerOpen) return;
+                houseResidentSearch = ResidentSearch.query(data.residentSearch);
+            } else {
+                if (!workplaceWorkerPickerOpen) return;
+                workplaceWorkerSearch = ResidentSearch.query(data.residentSearch);
+            }
+            var commands = new UICommandBuilder(); var events = new UIEventBuilder();
+            build(ref, commands, events, store);
+            // The template and text field remain mounted; never echo a Value over newer typing.
+            sendUpdate(commands, events, false);
+            return;
+        }
+        if ("TeleportHouseResident".equals(data.action)) {
+            if (!managementUi || viewOnly) return;
+            var town = resolveManagementTown(store);
+            var plotId = resolveManagementPlotId();
+            if (town == null || plotId == null || !town.hasMemberOrOwner(playerRef.getUuid())) return;
+            var house = town.findPlotById(plotId);
+            if (house == null || data.houseResidentSlot == null) return;
+            try {
+                int slot = Integer.parseInt(data.houseResidentSlot);
+                UUID resident = slot < 0 ? null : house.getHomeResidentAt(slot);
+                if (resident != null && resident.toString().equals(data.workplaceWorkerUuid))
+                    VillagerNeedsOverviewPage.rescueResident(playerRef, ref, store, town.getTownId(), resident);
+            } catch (NumberFormatException ignored) { }
+            return;
+        }
         if ("TeleportWorker".equals(data.action)) {
             if(!managementUi||viewOnly)return;
             var town=resolveManagementTown(store);var plot=resolveManagementPlotId();
@@ -3125,6 +3170,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             rowIndex++;
         }
         for (WorkplaceWorkerDirectory.WorkplaceWorkerRow row : eligible) {
+            if (!ResidentSearch.matches(row.displayName(), workplaceWorkerSearch)) continue;
             commandBuilder.append(WORKPLACE_WORKER_ROWS, "Aetherhaven/HouseResidentAssignRow.ui");
             String rowPath = WORKPLACE_WORKER_ROWS + "[" + rowIndex + "]";
             AetherhavenUiLocalization.applyHouseResidentAssignRow(commandBuilder, rowPath);
@@ -3142,6 +3188,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             );
             rowIndex++;
         }
+        commandBuilder.set("#WorkplaceWorkerSearchEmpty.Visible", rowIndex == (allowUnassign ? 1 : 0));
     }
 
     private void handleWorkplaceAssignment(
@@ -3327,6 +3374,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
             .append(new KeyedCodec<>("Action", Codec.STRING), (d, a) -> d.action = a, d -> d.action)
             .add()
+            .append(new KeyedCodec<>("@ResidentSearch", Codec.STRING), (d, v) -> d.residentSearch = v, d -> d.residentSearch)
+            .add()
             .append(new KeyedCodec<>("MemberUuid", Codec.STRING), (d, v) -> d.memberUuid = v, d -> d.memberUuid)
             .add()
             .append(new KeyedCodec<>("@InviteName", Codec.STRING), (d, v) -> d.inviteName = v, d -> d.inviteName)
@@ -3386,6 +3435,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             .build();
 
         private String action;
+        private String residentSearch;
         @Nullable
         private String memberUuid;
         @Nullable

@@ -160,7 +160,7 @@ public final class NativeExcavation {
         var support=observe(world,fitting.support()!=null?fitting.support():new WarehouseBatch.Point(p.x(),p.y()-1,p.z()));
         var supportType=support.block()==null?null:BlockType.getAssetMap().getAsset(support.block());
         if(!support.loaded()||(fitting.support()!=null||fitting.rotation()==0)&&(support.empty()||supportType==null||supportType.getMaterial()!=com.hypixel.hytale.protocol.BlockMaterial.Solid))return "The next fitting needs its supporting floor, wall or ceiling.";
-        if(!town.getWarehouse().hasUnreservedStock(fitting.item()))return "Digging complete. Supply "+(ExcavationFittings.BEAM.equals(fitting.item())?"Softwood Beams":ExcavationFittings.LANTERN.equals(fitting.item())?"Lanterns":ExcavationFittings.RAIL.equals(fitting.item())?"Rails":"Crude Torches")+" in town storage for the remaining fittings.";
+        if(!town.getWarehouse().hasUnreservedStock(fitting.item()))return "Digging complete. Supply "+(ExcavationFittings.BEAM.equals(fitting.item())?"Hardwood Beams":ExcavationFittings.LANTERN.equals(fitting.item())?"Lanterns":ExcavationFittings.RAIL.equals(fitting.item())?"Rails":"Crude Torches")+" in town storage for the remaining fittings.";
         return BlockType.getAssetMap().getAsset(fitting.block())==null?"The fitting is unavailable.":null;
     }
     public static boolean placeFitting(World world,TownRecord town,ApprenticeWorkplace site,org.joml.Vector3d worker) {

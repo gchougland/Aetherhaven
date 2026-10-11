@@ -33,3 +33,4 @@ items.Aetherhaven_Building_Staff_Cobalt.name=코발트 빌딩 직원
 items.Aetherhaven_Building_Staff_Cobalt.description=구리 건물 지팡이와 동일합니다. 보조 지팡이는 강조 표시된 건물 노드를 한 번에 최대 9×9×9개까지 채웁니다. 소지 시 최대 마나가 600 증가하고 마나 회복 속도가 빨라집니다. 블록 하나를 설치하는 데 마나가 1 소모됩니다.
 items.Aetherhaven_Building_Staff_Adamantite.name=아다만타이트 빌딩 직원
 items.Aetherhaven_Building_Staff_Adamantite.description=구리 건물 지팡이와 동일합니다. 보조 지팡이는 강조 표시된 건물 노드를 한 번에 최대 11×11×11개까지 채웁니다. 들고 있는 동안 최대 마나가 900 증가하고 마나 회복 속도가 빨라집니다. 블록 하나를 설치하는 데 마나가 1 소모됩니다.
+aetherhaven.interaction.cutLoose=Press [{key}] to cut the ropes

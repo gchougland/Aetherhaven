@@ -12,6 +12,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.protocol.packets.interface_.EventTitleStyle;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -58,7 +59,7 @@ public final class CarnivalAnnounce {
                 if (!town.hasMemberOrOwner(uc.getUuid()) && !nearSquare) {
                     continue;
                 }
-                EventTitleUtil.showEventTitleToPlayer(pr, title, subtitle, true, null, 4.0F, 0.7F, 0.9F);
+                EventTitleUtil.showEventTitleToPlayer(pr, title, subtitle, EventTitleStyle.Major, null, 4.0F, 0.7F, 0.9F);
                 if (sting != SoundEvent.EMPTY_ID) {
                     SoundUtil.playSoundEvent2dToPlayer(pr, sting, SoundCategory.UI);
                 }

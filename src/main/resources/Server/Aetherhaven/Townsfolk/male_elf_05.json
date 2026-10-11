@@ -20,5 +20,15 @@
       "itemId": "Food_Pie_Apple",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "alchemy": 5,
+    "crafting": 3,
+    "jewelry": 2,
+    "commerce": 0
+  },
+  "startingAttributes": {
+    "intelligence": 9,
+    "dexterity": 6
+  }
 }

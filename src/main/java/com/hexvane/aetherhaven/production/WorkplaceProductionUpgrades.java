@@ -15,6 +15,8 @@ public final class WorkplaceProductionUpgrades {
     public static final int BASE_SLOT_COUNT = 1;
     public static final int MAX_SLOT_COUNT = 5;
     public static final int MAX_BRANCH_LEVEL = 3;
+    /** Base room for each wood and forest product a grove gathers. Matches the lumbermill's catalog lines. */
+    public static final long GROVE_STORAGE = 100;
 
     public static final String ITEM_IRON = "Ingredient_Bar_Iron";
     public static final String ITEM_THORIUM = "Ingredient_Bar_Thorium";
@@ -36,6 +38,11 @@ public final class WorkplaceProductionUpgrades {
         return Math.min(MAX_SLOT_COUNT, Math.max(BASE_SLOT_COUNT, n));
     }
 
+    /** Rootstones a lumbermill can tend: one more than its material slots. */
+    public static int stoneCount(@Nonnull PlotProductionState state) {
+        return Math.min(TimberProductionState.MAX_STONES, slotCount(state) + 1);
+    }
+
     public static double speedMultiplier(@Nonnull PlotProductionState state) {
         state.migrateIfNeeded();
         return state.usesPhysicalHerd()?1.0:1.0 + 0.2 * state.getThoriumLevel();
@@ -55,9 +62,12 @@ public final class WorkplaceProductionUpgrades {
         if(state.usesPhysicalHerd())return barnCapacity(state);
         double mul = capacityMultiplier(state);
         long base = state.usesPhysicalHerd() && BarnAnimalCatalog.output(itemId) ? 10 : entry.maxStorageForItem(itemId);
-        // Matching saplings are harvested without buying a separate output unlock.
-        if (state.usesPhysicalTimber() && !entry.containsItemId(itemId)
-                && NativeTimberProducts.automatic(itemId) && !NativeTimberProducts.BYPRODUCTS.contains(itemId)) base = 10;
+        // A grove stores whatever its Rootstones grow, without buying a separate output unlock.
+        if (state.usesPhysicalTimber() && !entry.containsItemId(itemId)) {
+            if (NativeTimberProducts.BYPRODUCTS.contains(itemId) || NativeTimberGrowth.species(itemId) != null
+                    || TimberCharring.OUTPUT.equals(itemId)) base = GROVE_STORAGE;
+            else if (NativeTimberProducts.automatic(itemId)) base = 10;
+        }
         long scaled = (long) Math.ceil(base * mul);
         return Math.max(1L, Math.min(ProductionCatalog.MAX_STORAGE_PER_OUTPUT, scaled));
     }

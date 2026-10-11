@@ -329,7 +329,7 @@ public final class PoiAutonomyVisuals {
             if (slot < 0 || slot >= hb.getInventory().getCapacity()) {
                 slot = 0;
             }
-            hb.getInventory().setItemStackForSlot((short) slot, new ItemStack(AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID, 1));
+            hb.getInventory().setItemStackForSlot((short) slot, new ItemStack(VillagerEatingFood.forNpc(npcRef, store), 1));
             VillagerEquipmentService.markHotbarEquipmentDirty(hb, slot, npcRef, commandBuffer);
             commandBuffer.putComponent(npcRef, InventoryComponent.Hotbar.getComponentType(), hb);
         } catch (RuntimeException ex) {
@@ -375,7 +375,7 @@ public final class PoiAutonomyVisuals {
                 slot = 0;
             }
             ItemStack active = hb.getActiveItem();
-            if (active != null && AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID.equals(active.getItemId())) {
+            if (active != null && VillagerEatingFood.forNpc(npcRef, store).equals(active.getItemId())) {
                 hb.getInventory().removeItemStackFromSlot((short) slot);
                 VillagerEquipmentService.markHotbarEquipmentDirty(hb, slot, npcRef, commandBuffer != null ? commandBuffer : store);
             }

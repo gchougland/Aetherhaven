@@ -39,6 +39,41 @@ public abstract class AetherhavenInteractiveCustomUIPage<T> extends InteractiveC
         super.onDismiss(ref, store);
     }
 
+    /**
+     * A page may decide to close while it is still being opened (for example when its town no longer exists).
+     * {@code PageManager.openCustomPage} has already dismissed the previous page by then and has not registered this
+     * one yet, so closing straight away sends the client a close it never counted and the client's acknowledgement is
+     * rejected. Wait until this page is the registered one, then close it normally.
+     */
+    @Override
+    protected void close() {
+        Ref<EntityStore> ref = this.playerRef.getReference();
+        if (ref == null || !ref.isValid()) {
+            return;
+        }
+        Store<EntityStore> store = ref.getStore();
+        Player playerComponent = store.getComponent(ref, Player.getComponentType());
+        if (playerComponent == null) {
+            return;
+        }
+        if (playerComponent.getPageManager().getCustomPage() == this) {
+            super.close();
+            return;
+        }
+        if (dismissed) {
+            return;
+        }
+        store.getExternalData().getWorld().execute(() -> {
+            if (dismissed || !ref.isValid()) {
+                return;
+            }
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player != null && player.getPageManager().getCustomPage() == this) {
+                super.close();
+            }
+        });
+    }
+
     @Override
     protected void rebuild() {
         if (dismissed) {
@@ -84,7 +119,7 @@ public abstract class AetherhavenInteractiveCustomUIPage<T> extends InteractiveC
                     return;
                 }
                 playerComponent.getPageManager()
-                    .updateCustomPage(
+                    .updateLegacyCustomPage(
                         new CustomPage(
                             this.getClass().getName(),
                             false,

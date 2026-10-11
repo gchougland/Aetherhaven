@@ -36,7 +36,11 @@ public final class PlotProductionState implements com.hexvane.aetherhaven.wareho
     public boolean usesPhysicalTimber() { return timber != null && timber.adopted(); }
     public TimberProductionState.Cargo waitingTimberCargo() { return timber == null ? null : timber.cargo(); }
     public boolean groveConflictsWith(TimberPlantingReceipt tree) { return timber != null && timber.conflictsWith(tree); }
-    public boolean markGroveEdited(TimberHarvestPlan.Position position) { return timber != null && timber.markEdited(position); }
+    /** A broken Rootstone gives up its tree. Blocks already grown stay where they are. */
+    public boolean uprootStoneAt(TimberHarvestPlan.Position block) {
+        int stone = timber == null ? -1 : timber.stoneAt(block);
+        return stone >= 0 && timber.uproot(stone);
+    }
 
     public MiningProductionState mining() {
         if (mining == null) mining = new MiningProductionState();

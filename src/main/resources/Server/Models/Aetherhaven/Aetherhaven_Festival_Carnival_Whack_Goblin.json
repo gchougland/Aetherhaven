@@ -5,7 +5,7 @@
   "DefaultAttachments": [
     {
       "Model": "NPC/Intelligent/Goblin/Models/Attachments/Cosmetics/Rag/Rag_Chest.blockymodel",
-      "Texture": "NPC/Intelligent/Goblin/Models/Attachments/Cosmetics/Rag/Rag_Chest_Brown.png"
+      "Texture": "NPC/Intelligent/Goblin/Models/Attachments/Cosmetics/Rag/Rag_Chest_Textures/Rag_Chest_Brown.png"
     },
     {
       "Model": "NPC/Intelligent/Goblin/Models/Attachments/Cosmetics/Hair/Goblin_Hair.blockymodel",

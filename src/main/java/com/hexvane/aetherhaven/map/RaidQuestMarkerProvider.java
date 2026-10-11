@@ -61,7 +61,9 @@ public final class RaidQuestMarkerProvider implements WorldMapManager.MarkerProv
         if (slot == null || !slot.isAccepted() || !slot.isRaidQuest()) {
             return false;
         }
-        return slot.raidSpawnedEntityUuidsOrEmpty().contains(entry.mobUuid().toString());
+        // A rescue marks its camp, under the camp event's id, so it can be found before any captor is there.
+        return slot.raidSpawnedEntityUuidsOrEmpty().contains(entry.mobUuid().toString())
+            || entry.mobUuid().toString().equals(slot.getRescueEventId());
     }
 
     @Nonnull

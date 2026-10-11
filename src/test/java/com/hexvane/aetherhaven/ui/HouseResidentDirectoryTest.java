@@ -17,6 +17,17 @@ import org.junit.jupiter.api.Test;
 class HouseResidentDirectoryTest {
 
     @Test
+    void deadNamedResidentStillHasAHousePreviewWhenItsEntityIsGone() {
+        var town = new TownRecord(); var uuid = UUID.randomUUID();
+        var record = new com.hexvane.aetherhaven.town.ResidentNpcRecord("Aetherhaven_Chef", "chef", null, uuid);
+        record.setPendingDawnRevival(true); town.getResidentNpcRecords().add(record);
+        var row = HouseResidentDirectory.recordedResidentPreview(town, uuid, null);
+        org.junit.jupiter.api.Assertions.assertNotNull(row);
+        org.junit.jupiter.api.Assertions.assertEquals(uuid, row.entityUuid());
+        org.junit.jupiter.api.Assertions.assertFalse(row.displayName().isBlank());
+    }
+
+    @Test
     void offlineCandidatesIncludeTouristWithActiveHousingQuest() {
         TownRecord town = new TownRecord();
         UUID touristUuid = UUID.randomUUID();

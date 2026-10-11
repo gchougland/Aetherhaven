@@ -5,13 +5,9 @@ import com.hexvane.aetherhaven.town.*;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType;
 import com.hexvane.aetherhaven.warehouse.WarehouseBatch;
 import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
-import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
 import com.hexvane.aetherhaven.economy.TownEconomyPresence;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.*;
 
 /** Read only habitat checks. No chunk requests, item output, or warehouse dependency. */
@@ -79,16 +75,7 @@ public final class FoodSiteService {
             return new Habitat(true, issue, crops);
         }
         if (!trough) return new Habitat(true, "Needs a feeding trough inside the workplace.", List.of());
-        int[] animals = {0};
-        world.getEntityStore().getStore().forEachChunk(Query.and(NPCEntity.getComponentType(), TransformComponent.getComponentType()), (chunk, buffer) -> {
-            for (int i=0; i<chunk.size(); i++) {
-                var npc = chunk.getComponent(i, NPCEntity.getComponentType());
-                var pos = chunk.getComponent(i, TransformComponent.getComponentType()).getPosition();
-                if (LIVESTOCK.contains(npc.getRoleName()) && area.contains(pos.x,pos.y,pos.z)
-                    && chunk.getComponent(i, DeathComponent.getComponentType()) == null) animals[0]++;
-            }
-        });
-        return new Habitat(true, animals[0] < 2 ? "Keep at least two farm animals inside this workplace." : null, List.of(feedPoint));
+        return new Habitat(true, null, List.of(feedPoint));
     }
 
     public static void advance(World world, AetherhavenPlugin plugin, long minutes) {
@@ -102,7 +89,7 @@ public final class FoodSiteService {
                 if (!WorkplaceFood.supports(site.type())) continue;
                 var habitat = inspect(world,site);
                 if (!habitat.simulated()) continue;
-                boolean offspringPresent=site.type()!=TownsfolkWorkType.RANCHING || RanchWorkService.offspringPresent(world,site);
+                boolean offspringPresent=site.type()!=TownsfolkWorkType.RANCHING;
                 site.food().advance(minutes,true,true,habitat.ready(),offspringPresent); changed = true;
             }
             if (changed) manager.updateTown(town);

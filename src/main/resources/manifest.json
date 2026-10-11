@@ -12,6 +12,7 @@
   "ServerVersion": "${server_version}",
   "OptionalDependencies": {
     "Hytale:NPC": "*",
+    "Hytale:WorldEvents": "*",
     "Airijko:EndlessLevelingCore": "*",
     "Zuxaw:RPGLeveling": "*"
   },

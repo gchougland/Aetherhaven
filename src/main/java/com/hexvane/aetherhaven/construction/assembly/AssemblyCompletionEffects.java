@@ -10,6 +10,7 @@ import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.protocol.packets.interface_.EventTitleStyle;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -42,7 +43,7 @@ public final class AssemblyCompletionEffects {
             pr,
             Message.translation("aetherhaven_misc.aetherhaven.banner.assembly.complete.secondary").param("name", buildName),
             Message.translation("aetherhaven_misc.aetherhaven.banner.assembly.complete.primary"),
-            true,
+            EventTitleStyle.Major,
             null,
             4.0F,
             0.7F,

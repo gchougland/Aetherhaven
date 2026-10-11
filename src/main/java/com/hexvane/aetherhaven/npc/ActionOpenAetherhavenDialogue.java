@@ -75,6 +75,20 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
         if (plugin == null) {
             return false;
         }
+        // Someone tied up at a rescue camp cannot talk. The interaction is used on their ropes instead.
+        World here = store.getExternalData().getWorld();
+        var npcId = store.getComponent(ref, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        var playerId = store.getComponent(playerRef, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        if (npcId != null && playerId != null
+            && com.hexvane.aetherhaven.questboard.RescueCampService.bound(here, npcId.getUuid()) != null) {
+            java.util.UUID captive = npcId.getUuid(), rescuer = playerId.getUuid();
+            Ref<EntityStore> boundNpc = ref, boundPlayer = playerRef;
+            here.execute(() -> {
+                com.hexvane.aetherhaven.questboard.RescueCampService.cutLoose(here, captive, rescuer);
+                NpcDialogueCleanup.scheduleReturnToIdle(boundNpc, boundPlayer, store);
+            });
+            return true;
+        }
         DialogueCatalog catalog = plugin.getDialogueCatalog();
         DialogueResolver resolver = plugin.getDialogueResolver();
         DialogueResolver.ResolvedDialogue resolved = resolver.resolve(this.dialogueId, this.villagerKind, ref, playerRef, store);

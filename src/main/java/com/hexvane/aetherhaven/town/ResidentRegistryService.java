@@ -38,6 +38,11 @@ public final class ResidentRegistryService {
         @Nullable UUID jobPlotId,
         @Nonnull UUID entityUuid
     ) {
+        upsertRecord(town, npcRoleId, kind, jobPlotId, entityUuid);
+        tm.updateTown(town);
+    }
+
+    static void upsertRecord(TownRecord town, String npcRoleId, String kind, UUID jobPlotId, UUID entityUuid) {
         String rid = npcRoleId.trim();
         if (rid.isEmpty()) {
             return;
@@ -60,14 +65,13 @@ public final class ResidentRegistryService {
                 copied[0] = true;
             }
             if (entityUuid.equals(r.getLastEntityUuid())) {
+                incoming.setPendingDawnRevival(r.isPendingDawnRevival());
                 incoming.setTownsfolkIdentity(r.getTownsfolkIdentity());
                 incoming.setGuardEquipmentProfile(r.getGuardEquipmentProfile());
             }
             return true;
         });
-        incoming.setPendingDawnRevival(false);
         list.add(incoming);
-        tm.updateTown(town);
     }
 
     public static void upsertFromBinding(
@@ -76,6 +80,7 @@ public final class ResidentRegistryService {
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store
     ) {
+        if (store.getComponent(npcRef, com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent.getComponentType()) != null) return;
         TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (b == null || npc == null || npc.getRoleName() == null || npc.getRoleName().isBlank()) {
@@ -92,6 +97,16 @@ public final class ResidentRegistryService {
             return;
         }
         upsert(town, tm, npc.getRoleName().trim(), b.getKind(), b.getJobPlotId(), uuidComp.getUuid());
+        // A townsfolk's record must say who they are. Without it they are listed by role id once they walk out of view.
+        var identity = store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType());
+        if (identity != null) {
+            for (ResidentNpcRecord record : town.getResidentNpcRecords()) {
+                if (uuidComp.getUuid().equals(record.getLastEntityUuid()) && record.getTownsfolkIdentity() == null) {
+                    record.setTownsfolkIdentity(identity);
+                    tm.updateTown(town);
+                }
+            }
+        }
     }
 
     /**
@@ -122,9 +137,11 @@ public final class ResidentRegistryService {
         @Nonnull UUID oldUuid,
         @Nonnull UUID newUuid
     ) {
-        if (oldUuid.equals(newUuid)) {
-            return;
-        }
+        if (replaceEntityReferences(town, oldUuid, newUuid)) tm.updateTown(town);
+    }
+
+    static boolean replaceEntityReferences(TownRecord town, UUID oldUuid, UUID newUuid) {
+        if (oldUuid.equals(newUuid)) return false;
         boolean changed = false;
         for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
             if (oldUuid.equals(r.getLastEntityUuid())) {
@@ -153,6 +170,9 @@ public final class ResidentRegistryService {
                 }
             }
         }
+        for (var tourist : town.getTouristRecords()) {
+            if (oldUuid.equals(tourist.getEntityUuid())) { tourist.setEntityUuid(newUuid); changed = true; }
+        }
         String oldS = oldUuid.toString();
         String newS = newUuid.toString();
         for (int i = 0; i < town.getInnPoolNpcIds().size(); i++) {
@@ -180,9 +200,7 @@ public final class ResidentRegistryService {
             changed = true;
         }
         town.markEntityUuidSuperseded(oldUuid);
-        if (changed) {
-            tm.updateTown(town);
-        }
+        return changed;
     }
 
     /**

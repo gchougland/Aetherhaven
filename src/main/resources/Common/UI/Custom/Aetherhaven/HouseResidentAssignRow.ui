@@ -11,6 +11,12 @@ Group #HouseResidentRow {
     FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
   }
 
+  Group #QuestMark {
+    Anchor: (Width: 24, Height: 24, Right: 8, Top: 16);
+    Background: (TexturePath: "../exclamation.png");
+    Visible: false;
+  }
+
   Group #Info {
     LayoutMode: Top;
     FlexWeight: 1;

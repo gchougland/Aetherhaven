@@ -26,5 +26,14 @@
       "itemId": "Ingredient_Stud_Iron",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "commerce": 5,
+    "jewelry": 4,
+    "alchemy": 3
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "dexterity": 7
+  }
 }

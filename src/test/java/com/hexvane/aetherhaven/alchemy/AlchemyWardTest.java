@@ -3,11 +3,12 @@ package com.hexvane.aetherhaven.alchemy;
 import static org.junit.jupiter.api.Assertions.*;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import org.junit.jupiter.api.*;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.ExplodeInteraction;
 
 @Tag("town")
 class AlchemyWardTest {
     @Test void blastWardDistinguishesExplosionsFromOtherEnvironmentalDamage() {
-        assertTrue(AlchemyBlastWardSystem.blocks(new Damage.EnvironmentSource("explosion"),"Environment"));
+        assertTrue(AlchemyBlastWardSystem.blocks(ExplodeInteraction.DAMAGE_SOURCE_EXPLOSION,"Environment"));
         assertFalse(AlchemyBlastWardSystem.blocks(new Damage.EnvironmentSource("fall"),"Environment"));
         assertFalse(AlchemyBlastWardSystem.blocks(new Damage.EnvironmentSource("drowning"),"Drowning"));
     }

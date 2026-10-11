@@ -2,7 +2,7 @@
   "npcRoleId": "Aetherhaven_Bard",
   "dialogueVillagerKind": "bard",
   "residentTreeId": "aetherhaven_bard",
-  "visitorTreeId": "aetherhaven_visitor_generic",
+  "visitorTreeId": "aetherhaven_bard",
   "workConstructionId": "plot_guild_hall",
   "displayName": "Elias Thornwood",
   "portraitIcon": "Aetherhaven_Bard.png",
@@ -253,5 +253,6 @@
   "birthdayDay": 24,
   "dialogueBirthdayGreetingLangKeys": [
     "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.birthday.greeting"
-  ]
+  ],
+  "moveInQuestId": "q_bard"
 }

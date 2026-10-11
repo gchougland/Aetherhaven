@@ -24,5 +24,14 @@
       "itemId": "Ingredient_Motes_Light",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "leatherworking": 5,
+    "jewelry": 3,
+    "crafting": 2
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "intelligence": 6
+  }
 }

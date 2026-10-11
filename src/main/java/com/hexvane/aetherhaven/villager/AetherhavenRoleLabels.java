@@ -70,7 +70,15 @@ public final class AetherhavenRoleLabels {
             }
         }
         String label = ROLE_ID_TO_LABEL.get(r);
-        return label != null ? label : r;
+        return label != null ? label : readable(r);
+    }
+
+    /** A role with no label is still never shown as its id: "Aetherhaven_Townsfolk" reads "Townsfolk". */
+    @Nonnull
+    static String readable(@Nonnull String roleId) {
+        String text = roleId.startsWith("Aetherhaven_") ? roleId.substring("Aetherhaven_".length()) : roleId;
+        text = text.replace('_', ' ').trim();
+        return text.isEmpty() ? "Resident" : text;
     }
 
     /**

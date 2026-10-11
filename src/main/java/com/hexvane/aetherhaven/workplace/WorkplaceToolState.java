@@ -12,12 +12,11 @@ public final class WorkplaceToolState implements Component<EntityStore> {
     Mode mode = Mode.BUILD;
     Vector3i first;
     UUID townId, editing;
-    TimberGroveSelection.Selection grove;
     long nextPreviewNanos;
     String hint = "Guide or assemble buildings. Choose a mode to manage workplaces.";
     public static boolean isWorkplaceMode(Ref<EntityStore> ref, Store<EntityStore> store) {
         var state = TYPE == null ? null : store.getComponent(ref, TYPE);
-        return state != null && (state.mode != Mode.BUILD || state.grove != null);
+        return state != null && (state.mode != Mode.BUILD);
     }
     void choose(Mode next, Ref<EntityStore> ref, Store<EntityStore> store) {
         clearSelection(); mode = next;
@@ -39,11 +38,11 @@ public final class WorkplaceToolState implements Component<EntityStore> {
         if (state == null) { state = new WorkplaceToolState(); store.putComponent(ref, TYPE, state); }
         return state;
     }
-    void clearSelection() { first = null; townId = null; editing = null; grove = null; nextPreviewNanos = 0; }
+    void clearSelection() { first = null; townId = null; editing = null; nextPreviewNanos = 0; }
     @Override public WorkplaceToolState clone() {
         var copy = new WorkplaceToolState();
         copy.mode = mode; copy.first = first == null ? null : new Vector3i(first);
-        copy.townId = townId; copy.editing = editing; copy.hint = hint; copy.grove = grove;
+        copy.townId = townId; copy.editing = editing; copy.hint = hint;
         return copy;
     }
 }

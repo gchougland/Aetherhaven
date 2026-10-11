@@ -34,6 +34,7 @@ public final class DialogueBootstrap {
         NPCPlugin npc = NPCPlugin.get();
         if (npc != null) {
             npc.registerCoreComponentType("OpenAetherhavenDialogue", BuilderActionOpenAetherhavenDialogue::new);
+            npc.registerCoreComponentType("SetAetherhavenInteractable", com.hexvane.aetherhaven.npc.BuilderActionSetAetherhavenInteractable::new);
             npc.registerCoreComponentType("BurstFestivalLettuce", BuilderActionBurstFestivalLettuce::new);
             npc.registerCoreComponentType("WanderInRectGroundPreference", BuilderBodyMotionWanderInRectGroundPreference::new);
             npc.registerCoreComponentType("AetherhavenGuardAutomaticAggro", () -> new com.hexvane.aetherhaven.patrol.BuilderSensorGuardEscortGate(false));

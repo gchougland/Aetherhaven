@@ -1,0 +1,12 @@
+{
+  "Forks": [
+    {
+      "Conditions": [
+        {
+          "Type": "SignalCondition",
+          "SignalId": "aetherhaven_rescue_camp_done"
+        }
+      ]
+    }
+  ]
+}

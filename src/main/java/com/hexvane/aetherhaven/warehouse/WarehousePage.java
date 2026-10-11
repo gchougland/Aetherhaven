@@ -109,12 +109,8 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
                         capacities.add(WorkplaceProductionUpgrades.barnCapacity(state));shown.add(item);
                     }
                 } else
-                for(int i=0;i<WorkplaceProductionUpgrades.MAX_SLOT_COUNT;i++) {
-                    if(i>=unlockedSlots) {
-                        slots.add(new Entry(false,(short)i,null,plot.getPlotId(),name,0,0));
-                        capacities.add(0L);
-                        continue;
-                    }
+                // Only the output slots this building has unlocked. Its own page still shows the locked ones.
+                for(int i=0;i<visibleSlots(unlockedSlots);i++) {
                     String item=catalog.itemAtCursor(state.getSlotCursor(i));
                     var stack=item==null||Item.getAssetMap().getAsset(item)==null?null:new ItemStack(item,1);
                     slots.add(new Entry(false,(short)i,stack,plot.getPlotId(),name,item==null?0:state.getAmount(item),item==null?0:warehouse.reservedProduction(plot.getPlotId(),item)));
@@ -229,6 +225,10 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         c.set("#Upgrade.Visible",localPlot==null);
         c.set("#Upgrade.Text","Building upgrades");
         for(String action:List.of("View","Sort","Refresh","SearchButton","Previous","Next","Upgrade","Return")) e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,event(action),false);
+    }
+    /** How many of a production building's output slots the Warehouse lists: the unlocked ones, never a placeholder. */
+    static int visibleSlots(int unlocked) {
+        return Math.clamp(unlocked,0,WorkplaceProductionUpgrades.MAX_SLOT_COUNT);
     }
     private EventData event(String action) {return new EventData().append("Action",action).append("Frame",Long.toString(frame)).append("@Search","#Search.Value");}
     private void render(UICommandBuilder c,UIEventBuilder e,String host,int index,Entry entry,boolean list) {

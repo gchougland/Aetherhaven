@@ -22,5 +22,15 @@
       "itemId": "Food_Fish_Raw_Rare",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "mining": 5,
+    "building": 3,
+    "leatherworking": 2
+  },
+  "startingAttributes": {
+    "strength": 8,
+    "vitality": 7,
+    "speed": 6
+  }
 }

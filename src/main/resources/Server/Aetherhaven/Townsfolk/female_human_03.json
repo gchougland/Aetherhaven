@@ -22,5 +22,15 @@
       "itemId": "Food_Candy_Cane",
       "count": 3
     }
-  ]
+  ],
+  "startingSkills": {
+    "logistics": 5,
+    "alchemy": 3,
+    "crafting": 2
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "dexterity": 7,
+    "speed": 7
+  }
 }

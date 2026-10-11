@@ -35,8 +35,6 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.protocol.BlockMaterial;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
@@ -755,8 +753,8 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             sendError(store, ref, "Plot sign position is outside your town territory.");
             return false;
         }
-        if (!isReplaceableSignCell(world, placedSignPos.x, placedSignPos.y, placedSignPos.z)) {
-            sendError(store, ref, "The plot sign needs a clear spot near the center. Move the preview or clear that spot.");
+        if (!PlotPlacementCommit.canPlacePlotSign(world, placedSignPos, session.getPrefabYaw())) {
+            sendError(store, ref, "The plot sign needs clear space across its full width and height. Move the preview or clear that spot.");
             return false;
         }
         if (!PlotTokenInventory.consumePlotToken(inv, def)) {
@@ -1068,11 +1066,6 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         if (pr != null) {
             pr.sendMessage(Message.raw(text));
         }
-    }
-
-    private static boolean isReplaceableSignCell(@Nonnull World world, int x, int y, int z) {
-        BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
-        return t == null || t.getMaterial() == BlockMaterial.Empty;
     }
 
     @Nonnull

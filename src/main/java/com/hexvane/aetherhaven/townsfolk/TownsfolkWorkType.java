@@ -2,9 +2,9 @@ package com.hexvane.aetherhaven.townsfolk;
 
 /** Separate priorities for workplace specializations sharing a profession skill. */
 public enum TownsfolkWorkType {
-    SMELTING("smelting", TownsfolkSkill.BLACKSMITHING),
+    SMELTING("smelting", TownsfolkSkill.BLACKSMITHING, "furnace.png"),
     BLACKSMITHING("blacksmithing", TownsfolkSkill.BLACKSMITHING),
-    ARMOR_CRAFTING("armorCrafting", TownsfolkSkill.BLACKSMITHING),
+    ARMOR_CRAFTING("armorCrafting", TownsfolkSkill.BLACKSMITHING, "armor.png"),
     RANCHING("ranching", TownsfolkSkill.RANCHING),
     FARMING("farming", TownsfolkSkill.FARMING),
     MINING("mining", TownsfolkSkill.MINING),
@@ -15,12 +15,18 @@ public enum TownsfolkWorkType {
     LEATHERWORKING("leatherworking", TownsfolkSkill.LEATHERWORKING),
     COOKING("cooking", TownsfolkSkill.COOKING),
     JEWELRY("jewelry", TownsfolkSkill.JEWELRY),
-    LOGISTICS("logistics", TownsfolkSkill.LOGISTICS);
+    SALVAGING("salvaging", TownsfolkSkill.CRAFTING),
+    LOGISTICS("logistics", TownsfolkSkill.LOGISTICS),
+    /** Staffing a player shop's counter. The shop is chosen at its Town Records Shelf; this sets when it comes first. */
+    COMMERCE("commerce", TownsfolkSkill.COMMERCE);
 
     public final String id;
     public final TownsfolkSkill skill;
-    TownsfolkWorkType(String id, TownsfolkSkill skill) { this.id = id; this.skill = skill; }
-    public boolean requiresWorkplace() { return this != LOGISTICS; }
+    /** Shown for this kind of work. Several kinds share one skill, so some have a picture of their own. */
+    public final String icon;
+    TownsfolkWorkType(String id, TownsfolkSkill skill) { this(id, skill, skill.icon); }
+    TownsfolkWorkType(String id, TownsfolkSkill skill, String icon) { this.id = id; this.skill = skill; this.icon = icon; }
+    public boolean requiresWorkplace() { return this != LOGISTICS && this != COMMERCE; }
     /** Kept for saved gardens and their deliveries, but retired from new work. */
     public boolean availableForNewWork() { return this != CULTIVATION; }
     public static TownsfolkWorkType byId(String id) {

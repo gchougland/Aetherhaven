@@ -14,11 +14,17 @@ The blacksmith starts with two shared workplace slots for Smelting, Blacksmithin
 
 **Tobin Reedwright**, the Crafter, can visit from Town Level 3. Build his Artisan Workshop to invite him to settle, then unlock Crafting through his dialogue. Crafting sites use an ordinary workbench and make supplies such as repair kits.
 
-**Sera Brindle**, the Leatherworker, can visit from Town Level 4. Build her Tannery and unlock Leatherworking through her dialogue. Tanning racks turn light, medium and heavy hides into leather at skill levels 1, 3 and 5. Leatherworking also makes courier satchels and other leather equipment. Every recipe shows its own requirements.
+**Hazel Brindle**, the Leatherworker, can visit from Town Level 4. Build her Tannery and unlock Leatherworking through her dialogue. Tanning racks turn light, medium and heavy hides into leather at skill levels 1, 3 and 5. Leatherworking also makes courier satchels and other leather equipment. Every recipe shows its own requirements.
+
+**Tobin**, the Crafter, also supervises Salvaging. Mark a workplace around a **Salvager's Workbench** (the Blacksmith sells one) and Apprentices take apart old weapons, armor and tools using their Crafting skill. The recovered materials go to Crafted Goods.
+
+The task page of every crafting workplace shows the finished goods waiting in Crafted Goods for its tasks. Click a stack to collect it there.
+
+A courier brings the materials for several crafts of a task in one trip, and the Apprentice makes them all in one visit. A task set to keep crafting is supplied a few crafts at a time, so it never empties the warehouse. Furnaces are loaded with a whole stack of ore and enough fuel for it, and the Apprentice returns when the furnace stops. A smelting workplace's task page shows what each furnace holds.
 
 The Artisan Workshop and Tannery are available in the Core style. Once the supervisor is a resident, workplaces may be built anywhere inside the town. They do not have to be inside the supervisor's building. Enable Logistics to deliver ingredients, and collect finished items from Crafted Goods in the warehouse.
 
-Friendship with Tobin and Sera grants a profession tool kit at 25, plans to craft more kits at 50, and workplace furnishing plans at 75. Equip the **Joiner's Toolbox** or **Leatherworker's Roll** through an Apprentice profile for 15% faster work in that profession.
+Friendship with Tobin and Hazel grants a profession tool kit at 25, plans to craft more kits at 50, and workplace furnishing plans at 75. Equip the **Joiner's Toolbox** or **Leatherworker's Roll** through an Apprentice profile for 15% faster work in that profession.
 
 Place a **Pattern Cabinet** in a Crafting site or a **Stitching Frame** in a Leatherworking site for 10% faster attended work. Only the strongest furnishing bonus counts. Furnishings do not replace the required workbench or its tier. These furnishings require skill 5 to craft, and the Pattern Cabinet needs a tier 2 workbench. Collect them from Crafted Goods after an Apprentice finishes making them.
 
@@ -42,6 +48,14 @@ Use the tool's mode key to cycle modes, or middle click to open the mode menu. T
 
 ## Plan your workforce
 
+### Ranch workplaces
+
+Craft a **Feeding Trough** at the Workbench from 5 tree trunks and 10 Plant Fiber. Place it inside a Ranching workplace and leave clear floor space around it. A cow and a chicken appear automatically near the trough. These workplace animals stay at their spots and cannot be captured or killed for resources. They disappear when the workplace is removed and return when its area is loaded again.
+
+You do not need to bring animals or find a breeding pair. Employ a Townsfolk with Ranching enabled so they can tend the trough. A tended ranch provides ten food points, enough to support five residents. It produces no inventory items. Keep a clear path to the trough and space for both animals.
+
+### Work priorities
+
 Open **Work** in the Town Journal. Employ civilian Townsfolk and choose profession priorities. One is highest priority; a dot means that profession is disabled. A zero skill means the Townsfolk cannot do that profession. Guards do no profession work while on guard duty.
 
 Use **Guard: On** or **Guard: Off** beside a worker to change guard duty. Starting duty lets you choose a guard class. Town permissions and safety restrictions still apply. Returning to civilian life makes their profession priorities available again.
@@ -52,7 +66,7 @@ Wages and Apprentice work pause when no town member is in the town's world. Food
 
 ## Bench recipes
 
-Crafting workplaces discover recipes from their matching benches: Workbench, Blacksmith's Anvil, Armorer's Workbench, Furnace, Tanning Rack, Chef's Stove and Alchemist's Workbench. Added pack recipes appear in the same list. Costs, outputs, required bench tiers, bench upgrades and Memories requirements come from those recipes. Town recipe unlocks still apply. Search updates as you type. Recipes that need a higher skill, bench tier or unlock are grey and appear below available recipes. Select one to see its requirements.
+Crafting workplaces discover recipes from their matching benches: Workbench, Blacksmith's Anvil, Armorer's Workbench, Furnace, Tanning Rack, Chef's Stove, Alchemist's Workbench and Salvager's Workbench. Added pack recipes appear in the same list. Costs, outputs, required bench tiers, bench upgrades and Memories requirements come from those recipes. Town recipe unlocks still apply. Search updates as you type. Recipes that need a higher skill, bench tier or unlock are grey and appear below available recipes. Select one to see its requirements.
 
 ## Plan a mineshaft
 

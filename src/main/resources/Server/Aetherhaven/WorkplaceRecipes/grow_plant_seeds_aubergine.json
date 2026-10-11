@@ -9,7 +9,7 @@
   "inputs": [
     {
       "itemId": "Ingredient_Life_Essence",
-      "count": 10
+      "count": 6
     }
   ],
   "output": "Plant_Seeds_Aubergine",

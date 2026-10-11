@@ -7,7 +7,9 @@ import java.util.*;
 
 /** Paid fittings stay inside reviewed air and leave the center walking route clear. */
 public final class ExcavationFittings {
-    public static final String BEAM="Wood_Softwood_Beam",TORCH="Furniture_Crude_Torch",LANTERN="Deco_Lantern",RAIL="Rail";
+    public static final String BEAM="Wood_Hardwood_Beam",TORCH="Furniture_Crude_Torch",LANTERN="Deco_Lantern",RAIL="Rail";
+    /** Supports were softwood before. Fittings still queued in older saves are built in hardwood like the rest. */
+    static final String LEGACY_BEAM="Wood_Softwood_Beam";
     public static final String CORNER="Aetherhaven_Mine_Beam_Corner",CEILING="Aetherhaven_Mine_Ceiling_Beam";
     public enum Mode {
         NONE("No fittings",false,false,false),SUPPORTS("Beams",true,false,false),LIGHTS("Wall torches",false,true,false),BOTH("Beams and wall torches",true,true,false),
@@ -22,7 +24,8 @@ public final class ExcavationFittings {
     }
     public record Fitting(Point point,String item,int rotation,String block,Point support) {
         public Fitting(Point point,String item,int rotation){this(point,item,rotation,null,null);}
-        @Override public String block(){return block==null?item:block;}
+        @Override public String item(){return LEGACY_BEAM.equals(item)?BEAM:item;}
+        @Override public String block(){String placed=block==null?item:block;return LEGACY_BEAM.equals(placed)?BEAM:placed;}
         @Override public int rotation(){
             // Native Wood_Torch_Wall attaches on local North. Derive the yaw from
             // the actual support so queued fittings in existing saves are fixed too.

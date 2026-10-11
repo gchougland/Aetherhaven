@@ -293,7 +293,7 @@ public final class QuestBoardService {
             if (parsed == null) {
                 continue;
             }
-            byType.computeIfAbsent(parsed.questType(), t -> new ArrayList<>()).add(key);
+            byType.computeIfAbsent(drawType(catalog, parsed), t -> new ArrayList<>()).add(key);
         }
         if (byType.isEmpty()) {
             return List.of();
@@ -301,6 +301,20 @@ public final class QuestBoardService {
         String pickedType = rollQuestType(catalog, byType.keySet(), rng);
         List<String> filtered = byType.get(pickedType);
         return filtered != null ? filtered : List.of();
+    }
+
+    /** Rescues are stored as raids but are drawn as their own kind, so one rescue is not lost among many raids. */
+    static final String DRAW_TYPE_RESCUE = "rescue";
+
+    @Nonnull
+    private static String drawType(@Nonnull QuestBoardCatalog catalog, @Nonnull QuestBoardDrawPool.ParsedEntryKey parsed) {
+        if (QuestBoardDrawPool.TYPE_RAID.equals(parsed.questType())) {
+            QuestBoardRaidEntryJson entry = findRaidEntry(catalog, parsed.roleId(), parsed.entryId());
+            if (entry != null && entry.isRescue()) {
+                return DRAW_TYPE_RESCUE;
+            }
+        }
+        return parsed.questType();
     }
 
     @Nonnull
@@ -368,6 +382,10 @@ public final class QuestBoardService {
             }
             for (QuestBoardRaidEntryJson entry : catalog.raidEntriesForRole(roleId)) {
                 if (!TownQuestBoardRank.townRankWithinWindow(townRankIndex, entry.minRank(), entry.maxRank())) {
+                    continue;
+                }
+                // A rescue brings a new resident, so it is only posted while the town has room for one.
+                if (entry.isRescue() && !canOfferRescue(town, store)) {
                     continue;
                 }
                 if (entry.id() == null || entry.id().isBlank()) {
@@ -542,7 +560,23 @@ public final class QuestBoardService {
 
     @Nullable
     public static QuestBoardSlotRecord findAcceptedForGiver(@Nonnull TownRecord town, @Nonnull UUID giverEntityUuid) {
-        return town.findAcceptedBoardQuestForGiver(giverEntityUuid);
+        QuestBoardSlotRecord rescue = findRescueForCaptive(town, giverEntityUuid);
+        if (rescue != null) {
+            return rescue;
+        }
+        QuestBoardSlotRecord slot = town.findAcceptedBoardQuestForGiver(giverEntityUuid);
+        return slot != null && slot.isRescueQuest() ? null : slot;
+    }
+
+    /** A rescue is finished by talking to the townsfolk who was saved, not to whoever posted it. */
+    @Nullable
+    public static QuestBoardSlotRecord findRescueForCaptive(@Nonnull TownRecord town, @Nonnull UUID npcUuid) {
+        for (QuestBoardSlotRecord slot : town.getQuestBoardSlots()) {
+            if (slot.isAccepted() && slot.isRescueQuest() && npcUuid.equals(RescueCampService.captiveId(slot))) {
+                return slot;
+            }
+        }
+        return null;
     }
 
     @Nullable
@@ -552,14 +586,19 @@ public final class QuestBoardService {
         @Nullable String giverRoleId,
         @Nonnull Store<EntityStore> store
     ) {
+        QuestBoardSlotRecord rescue = findRescueForCaptive(town, giverEntityUuid);
+        if (rescue != null) {
+            return rescue;
+        }
         QuestBoardSlotRecord slot = town.findAcceptedBoardQuestForGiver(giverEntityUuid);
-        if (slot != null) {
+        if (slot != null && !slot.isRescueQuest()) {
             return slot;
         }
         if (giverRoleId == null || giverRoleId.isBlank()) {
             return null;
         }
-        List<QuestBoardSlotRecord> forRole = town.findAcceptedBoardQuestsForRole(giverRoleId.trim());
+        List<QuestBoardSlotRecord> forRole = new ArrayList<>(town.findAcceptedBoardQuestsForRole(giverRoleId.trim()));
+        forRole.removeIf(QuestBoardSlotRecord::isRescueQuest);
         if (forRole.isEmpty()) {
             return null;
         }
@@ -639,14 +678,35 @@ public final class QuestBoardService {
             return false;
         }
         QuestBoardQuestTypeHandler handler = handlerFor(slot.getQuestType());
-        if (handler == null || !handler.consumeRequiredItems(playerRef, store, slot)) {
+        if (handler == null || !handler.hasRequiredItems(playerRef, store, slot)) {
+            return false;
+        }
+        UUID reputationGiver = giverEntityUuid;
+        if (slot.isRescueQuest()) {
+            if (!slot.isRescueUntied()) {
+                return false;
+            }
+            // The player is talking to the rescued townsfolk; the thanks still go to whoever posted the contract.
+            try {
+                String posted = slot.getGiverEntityUuid();
+                if (posted != null && !posted.isBlank()) {
+                    reputationGiver = UUID.fromString(posted.trim());
+                }
+            } catch (IllegalArgumentException invalid) {
+                reputationGiver = giverEntityUuid;
+            }
+            if (!welcomeRescued(slot, town, tm, playerRef, store)) {
+                return false;
+            }
+        }
+        if (!handler.consumeRequiredItems(playerRef, store, slot)) {
             return false;
         }
         Player player = store.getComponent(playerRef, Player.getComponentType());
         if (player == null) {
             return false;
         }
-        grantRewards(slot, town, tm, player, playerRef, store, giverEntityUuid);
+        grantRewards(slot, town, tm, player, playerRef, store, reputationGiver);
         int oldXp = town.getQuestBoardRankXp();
         Message completedName = displayTitle(slot, town, store, catalog);
         town.addQuestBoardRankXp(slot.getRankXpReward());
@@ -680,6 +740,80 @@ public final class QuestBoardService {
                 );
             }
         }
+        return true;
+    }
+
+    private static boolean canOfferRescue(@Nonnull TownRecord town, @Nonnull Store<EntityStore> store) {
+        var plugin = com.hexvane.aetherhaven.AetherhavenPlugin.get();
+        return plugin != null && RescueCampService.canOffer(plugin, town, store.getExternalData().getWorld());
+    }
+
+    /**
+     * Brings the townsfolk of a rescue contract into town, one level better at two skills. They skip the move in gift
+     * and still need a house. Returns false, after telling the player why, when the town cannot take them yet.
+     */
+    private static boolean welcomeRescued(
+        @Nonnull QuestBoardSlotRecord slot,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        var plugin = com.hexvane.aetherhaven.AetherhavenPlugin.get();
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+        String characterId = slot.getRescueCharacterId();
+        if (plugin == null || characterId == null) {
+            return false;
+        }
+        World world = store.getExternalData().getWorld();
+        String issue = RescueCampService.admissionIssue(plugin, town);
+        if (issue == null) {
+            Ref<EntityStore> captive = null;
+            try {
+                String uuid = slot.getRescueCaptiveUuid();
+                captive = uuid == null ? null : store.getExternalData().getRefFromUUID(UUID.fromString(uuid));
+            } catch (IllegalArgumentException invalid) {
+                captive = null;
+            }
+            if (captive == null || !captive.isValid()) {
+                // The camp is out of sight, so they walked back with the player.
+                var here = store.getComponent(playerRef, com.hypixel.hytale.server.core.modules.entity.component.TransformComponent.getComponentType());
+                com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService.release(world, plugin, town.getTownId(), characterId);
+                var spawned = here == null
+                    ? java.util.Optional.<com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService.SpawnedTownsfolk>empty()
+                    : com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService.trySpawn(world, plugin, town, store,
+                        new org.joml.Vector3d(here.getPosition()), com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds.IDLE,
+                        characterId, new Random());
+                captive = spawned.isEmpty() ? null : store.getExternalData().getRefFromUUID(spawned.get().entityUuid());
+            }
+            if (captive == null || !captive.isValid()) {
+                issue = "The rescued townsfolk could not be found. Try again in a moment.";
+            } else {
+                Message refused = com.hexvane.aetherhaven.guild.GuildResidentInvitation.welcomeRescued(store, town, tm, plugin, playerRef, captive);
+                if (refused != null) {
+                    if (pr != null) {
+                        pr.sendMessage(refused);
+                    }
+                    return false;
+                }
+            }
+        }
+        if (issue != null) {
+            if (pr != null) {
+                pr.sendMessage(Message.raw(issue));
+            }
+            return false;
+        }
+        var progress = com.hexvane.aetherhaven.townsfolk.TownsfolkProgressService.getOrCreate(town, tm, plugin, characterId);
+        for (String boosted : slot.rescueSkillBoostsOrEmpty()) {
+            for (var skill : com.hexvane.aetherhaven.townsfolk.TownsfolkSkill.values()) {
+                if (skill.id.equals(boosted)) {
+                    progress.setSkill(skill, Math.min(com.hexvane.aetherhaven.townsfolk.TownsfolkProgress.MAX_SKILL, progress.skill(skill) + 1));
+                }
+            }
+        }
+        // They are a resident now; taking the camp down must leave them alone.
+        slot.setRescueCaptiveUuid(null);
         return true;
     }
 

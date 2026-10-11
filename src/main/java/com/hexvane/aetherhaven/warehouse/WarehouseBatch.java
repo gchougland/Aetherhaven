@@ -37,6 +37,8 @@ public final class WarehouseBatch {
     void markNativeLoaded() { nativeLoaded=true;delivered=new SimpleItemContainer(BUFFER_SLOTS); }
 
     private double workSeconds;
+    /** How many crafts of the recipe this delivery covers. Zero in saves from before deliveries could cover several. */
+    private int crafts;
     private Point destination;
     private List<Source> sources;
     private String pendingData, cargoData, deliveredData, outputData;
@@ -59,6 +61,8 @@ public final class WarehouseBatch {
     public String courierId() { return courierId; }
     public boolean cancelled() { return cancelled; }
     public double workSeconds() { return Math.max(0,workSeconds); }
+    public int crafts() { return Math.max(1,crafts); }
+    void crafts(int count) { crafts=Math.max(1,count); }
     void advanceWork(double seconds) { workSeconds=Math.max(0,workSeconds)+seconds; }
     public Point destination() { return destination; }
     void destination(Point point) { destination=point; }

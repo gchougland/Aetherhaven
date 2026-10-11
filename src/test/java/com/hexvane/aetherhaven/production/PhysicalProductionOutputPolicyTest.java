@@ -22,7 +22,7 @@ class PhysicalProductionOutputPolicyTest {
             true,p.y()<100?"Soil_Dirt":"Empty",0,0,p.y()>=100,p.y()<100,p.y()<100,false);
         var timber=state.timber();
         assertNull(timber.plan(0,1,0,tree,p->true,ground));
-        assertNull(timber.activate(1));
+        assertTrue(state.usesPhysicalTimber());
         assertTrue(PhysicalProductionOutputPolicy.available(state,"Wood_Maple_Trunk"));
         assertTrue(PhysicalProductionOutputPolicy.available(state,"Ingredient_Tree_Sap"));
         assertTrue(PhysicalProductionOutputPolicy.available(state,"Wood_Burnt_Trunk"));
@@ -32,12 +32,12 @@ class PhysicalProductionOutputPolicyTest {
         var prepared=timber.prepare(0,1,tree,p->true,ground);
         assertNull(timber.plant(0,1,prepared,p->true,ground,()->true));
         assertNull(PhysicalProductionOutputPolicy.selectionIssue(state,0,tree.output()));
-        assertNotNull(PhysicalProductionOutputPolicy.selectionIssue(state,0,"Wood_Maple_Trunk"));
+        assertNull(PhysicalProductionOutputPolicy.selectionIssue(state,0,"Wood_Maple_Trunk"));
         var copy=new Gson().fromJson(new Gson().toJson(state),PlotProductionState.class);
         assertEquals(35,copy.getAmount("Ingredient_Tree_Sap"));
         assertTrue(copy.isWorkplaceOutputUnlocked("Plant_Sapling_Ash"));
         assertTrue(PhysicalProductionOutputPolicy.available(copy,"Ingredient_Tree_Sap"));
-        assertNotNull(PhysicalProductionOutputPolicy.selectionIssue(copy,0,"Wood_Maple_Trunk"));
+        assertNull(PhysicalProductionOutputPolicy.selectionIssue(copy,0,"Wood_Maple_Trunk"));
     }
 
     @Test void palmStemsAndUnusualCanopiesHaveExplicitHarvestKinds() {

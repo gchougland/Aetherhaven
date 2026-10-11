@@ -16,7 +16,7 @@ Use the arrows to select unlocked resources for the available output slots. Each
 
 An output may need greater **Mastery** or a better equipped tool. The storage screen explains what is missing. Talk to the resident specialist to train or change their tool. Earned stock and material already being carried stay available while you do this.
 
-For physical production, use the controls to review Farm or Conservatory beds, plan a Lumbermill grove or manage the Barn's herd. These work plans use real plants, trees and animals. The resident must finish the work and carry output back before it can be collected. A full cupboard pauses further harvesting. Couriers can collect stored materials needed by Apprentice tasks.
+For physical production, use the controls to review Farm or Conservatory beds, tend the Lumbermill's grove or manage the Barn's herd. These work plans use real plants, trees and animals. The resident must finish the work and carry output back before it can be collected. A full cupboard pauses further harvesting. Couriers can collect stored materials needed by Apprentice tasks.
 
 ## Unlocks tab
 

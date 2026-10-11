@@ -111,12 +111,23 @@ Group #QuestBoardCard {
 
     Group #CardFooter {
       LayoutMode: Top;
-      Anchor: (Height: 72);
+      Anchor: (Height: 76);
 
-      Label #DaysLeft {
-        Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #8a9eb0, HorizontalAlignment: Start);
-        Anchor: (Bottom: 6);
-        Text: "";
+      Group #FooterTop {
+        LayoutMode: Left;
+        Anchor: (Bottom: 6, Height: 26);
+
+        Label #DaysLeft {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #8a9eb0, HorizontalAlignment: Start);
+          FlexWeight: 1;
+          Text: "";
+        }
+
+        $C.@SecondaryTextButton #ProfileButton {
+          Anchor: (Width: 120, Height: 26);
+          Visible: false;
+          Text: "";
+        }
       }
 
       $C.@TextButton #ActionButton {

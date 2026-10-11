@@ -96,7 +96,7 @@ public final class PlotCraftingPrefabPreview {
         BlockChunk blockChunk = ChunkSectionBlockUtil.blockChunkAt(world, x, z);
         if (blockChunk != null) {
             packet.biomeTint = blockChunk.getTint(x, z);
-            int envId = blockChunk.getEnvironment(x, y, z);
+            int envId = ChunkSectionBlockUtil.environmentId(world, x, y, z);
             Environment environment = Environment.getAssetMap().getAsset(envId);
             if (environment != null) {
                 com.hypixel.hytale.protocol.Color waterColor = environment.getWaterTint();

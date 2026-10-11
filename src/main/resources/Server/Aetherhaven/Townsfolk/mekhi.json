@@ -22,5 +22,14 @@
       "itemId": "Food_Pie_Apple",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "logistics": 5,
+    "ranching": 3,
+    "cooking": 2
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "speed": 7
+  }
 }

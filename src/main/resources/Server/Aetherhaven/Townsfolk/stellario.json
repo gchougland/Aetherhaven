@@ -26,5 +26,16 @@
       "itemId": "Food_Bread",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "alchemy": 5,
+    "crafting": 3,
+    "cooking": 2,
+    "building": 0
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "dexterity": 6,
+    "speed": 4
+  }
 }

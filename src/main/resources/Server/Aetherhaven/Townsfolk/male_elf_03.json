@@ -26,5 +26,14 @@
       "itemId": "Food_Salad_Mushroom",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "jewelry": 5,
+    "alchemy": 3,
+    "crafting": 2
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "dexterity": 7
+  }
 }

@@ -1,12 +1,14 @@
 {
   "Type": "Variant",
-  "Reference": "Spider",
+  "Reference": "Template_Spider",
   "Modify": {
     "Appearance": "Spider_Cave",
     "DropList": "",
     "MaxHealth": 80,
-    "BlockStepDetectionBlockSet": "Web",
-    "BlockStepDetectionRange": 20,
+    "WebDetectionRange": 20,
+    "_CombatConfig": {
+      "EntityEffects": [ "Immunity_Webs" ]
+    },
     "_InteractionVars": {
       "Melee_Start": {
         "Interactions": [

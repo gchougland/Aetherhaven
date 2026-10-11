@@ -27,12 +27,5 @@
   "idleEmoteWeights": {
     "Fidget": 7,
     "LookAround": 1
-  },
-  "startingSkills": {
-    "crafting": 2,
-    "alchemy": 3
-  },
-  "startingAttributes": {
-    "intelligence": 6
   }
 }

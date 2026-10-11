@@ -54,7 +54,7 @@ Active, fed animals produce all their resources every six hours of loaded game t
 
 Open **Resources** to see each product's stored amount and capacity, including products that are still empty, and collect supplies. Bring an empty bucket for each milk bucket you collect. Full storage pauses the next resource bundle until there is enough room for every item. Animals that are resting, waiting for food or outside loaded chunks do not produce. Animal products never consume or kill an owned animal.
 
-Apprentice ranch workplaces remain separate from the core Barn.
+Apprentice ranch workplaces remain separate from the core Barn. Craft a Feeding Trough at the Workbench from 5 tree trunks and 10 Plant Fiber. Mark a Ranching workplace around it and leave clear floor space nearby. A cow and a chicken appear automatically and stay inside the workplace. You do not need to bring animals. Regular Apprentice tending provides town food support rather than item output.
 
 ### Quests
 

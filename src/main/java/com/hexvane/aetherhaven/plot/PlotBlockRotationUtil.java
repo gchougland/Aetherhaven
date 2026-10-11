@@ -18,7 +18,7 @@ public final class PlotBlockRotationUtil {
     @Nonnull
     public static Rotation readBlockYaw(@Nonnull World world, @Nonnull Vector3i blockWorldPos) {
         int y = blockWorldPos.y;
-        if (y < ChunkUtil.MIN_Y || y > ChunkUtil.HEIGHT_MINUS_1) {
+        if (y < ChunkUtil.MIN_Y) {
             return Rotation.None;
         }
         ChunkStore chunkStore = world.getChunkStore();
@@ -40,7 +40,7 @@ public final class PlotBlockRotationUtil {
      */
     public static int readBlockRotationIndex(@Nonnull World world, @Nonnull Vector3i blockWorldPos) {
         int y = blockWorldPos.y;
-        if (y < ChunkUtil.MIN_Y || y > ChunkUtil.HEIGHT_MINUS_1) {
+        if (y < ChunkUtil.MIN_Y) {
             return 0;
         }
         ChunkStore chunkStore = world.getChunkStore();

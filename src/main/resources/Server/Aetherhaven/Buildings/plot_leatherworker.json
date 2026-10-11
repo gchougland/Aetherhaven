@@ -1,7 +1,7 @@
 {
   "id": "plot_leatherworker",
   "displayName": "Tannery",
-  "description": "Build Sera a tannery with room to prepare hides and leather goods.",
+  "description": "Build Hazel a tannery with room to prepare hides and leather goods.",
   "touristDestination": true,
   "prefabPath": "Tannery.prefab.json",
   "selfBuildGameDays": 1.0,

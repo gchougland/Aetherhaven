@@ -59,9 +59,17 @@ public final class BackpackWorkshopPage extends AetherhavenInteractiveCustomUIPa
         if(id.startsWith("Compression")){int level=Integer.parseInt(id.substring(11));return Map.of("Ingredient_Leather_"+switch(level){case 1->"Light";case 2->"Medium";default->"Heavy";},level*10);}
         return BackpackUpgrades.cost(p,id);
     }
-    private static boolean afford(ItemContainer inv,Map<String,Integer> cost){
-        var left=new HashMap<>(cost);for(short i=0;i<inv.getCapacity();i++){var s=inv.getItemStack(i);if(!ItemStack.isEmpty(s))left.computeIfPresent(s.getItemId(),(k,v)->v-s.getQuantity());}
-        return left.values().stream().allMatch(v->v<=0);
+    /** Hazel's town warehouse, when this player may take from it. Workshop materials can come from there. */
+    private com.hexvane.aetherhaven.warehouse.TownWarehouse stock(Store<EntityStore> store){
+        if(leatherworker==null||!leatherworker.isValid())return null;
+        var binding=store.getComponent(leatherworker,TownVillagerBinding.getComponentType());
+        var town=binding==null?null:AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(),AetherhavenPlugin.get()).getTown(binding.getTownId());
+        return com.hexvane.aetherhaven.crafter.PatternBookPayment.stockFor(town,playerRef.getUuid());
+    }
+    private boolean afford(Store<EntityStore> store,ItemContainer inv,Map<String,Integer> cost){
+        var stock=stock(store);
+        for(var part:cost.entrySet())if(com.hexvane.aetherhaven.crafter.PatternBookPayment.available(inv,stock,part.getKey())<part.getValue())return false;
+        return true;
     }
     private EventData event(String action){return new EventData().append("Action",action).append("Frame",Long.toString(frame));}
     private static void anchor(UICommandBuilder c,String at,int x,int y){var a=new Anchor();a.setLeft(Value.of(x));a.setTop(Value.of(y));a.setWidth(Value.of(174));a.setHeight(Value.of(112));c.setObject(at+".Anchor",a);}
@@ -78,7 +86,7 @@ public final class BackpackWorkshopPage extends AetherhavenInteractiveCustomUIPa
         }
         expected=selected<0?null:inv.getItemStack(selected);var pack=Backpack.read(expected);boolean allowed=permitted(ref,store);
         c.set("#Summary.Text",pack==null?"Craft a backpack to begin.":pack.displayName()+" | "+pack.tier.slots+" slots | "+Backpack.stacksLabel(pack.multiplier())+" per slot");
-        c.set("#Craft.Disabled",!allowed||!afford(inv,Map.of("Ingredient_Leather_Light",10)));c.set("#Open.Disabled",pack==null);
+        c.set("#Craft.Disabled",!allowed||!afford(store,inv,Map.of("Ingredient_Leather_Light",10)));c.set("#Open.Disabled",pack==null);
         line(c,217,112,3,20);line(c,107,130,223,3);line(c,107,130,3,20);line(c,327,130,3,20);
         line(c,107,262,3,20);line(c,327,262,3,20);line(c,107,280,223,3);line(c,217,280,3,20);
         line(c,577,112,3,38);line(c,577,262,3,38);
@@ -92,7 +100,7 @@ public final class BackpackWorkshopPage extends AetherhavenInteractiveCustomUIPa
         }
         String materials=cost(pack,choice).entrySet().stream().sorted(Map.Entry.comparingByKey()).map(x->x.getValue()+" "+name(x.getKey())).collect(java.util.stream.Collectors.joining(", "));
         c.set("#Details.Text",description(pack,choice)+"\n"+materials+"\n"+requirement(pack,choice));
-        c.set("#Purchase.Disabled",!allowed||!available(pack,choice)||!afford(inv,cost(pack,choice)));c.set("#Hint.Text",allowed?hint:"Stay near Sera to craft or upgrade a backpack.");
+        c.set("#Purchase.Disabled",!allowed||!available(pack,choice)||!afford(store,inv,cost(pack,choice)));c.set("#Hint.Text",allowed?hint:"Stay near Hazel to craft or upgrade a backpack.");
         for(String a:List.of("Craft","Open","Purchase"))e.addEventBinding(CustomUIEventBindingType.Activating,"#"+a,event(a),false);
     }
     private String name(String id){var item=new ItemStack(id,1);var i=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();var n=i==null?null:i.getMessage(playerRef.getLanguage(),item.getItem().getTranslationKey());return n==null?id:n;}
@@ -104,8 +112,11 @@ public final class BackpackWorkshopPage extends AetherhavenInteractiveCustomUIPa
         if(d.action.startsWith("Bag:"))selected=Short.parseShort(d.action.substring(4));
         else if(d.action.startsWith("Node:")&&NODES.stream().anyMatch(n->n.id().equals(d.action.substring(5))))choice=d.action.substring(5);
         else if(d.action.equals("Open")&&Backpack.read(expected)!=null){store.getComponent(ref,Player.getComponentType()).getPageManager().openCustomPage(ref,store,new BackpackPage(playerRef,selected,null));return;}
-        else if(d.action.equals("Craft")&&permitted(ref,store))ok=BackpackExchange.craft(inv);
-        else if(d.action.equals("Purchase")&&permitted(ref,store)){var p=Backpack.read(expected);ok=available(p,choice)&&BackpackExchange.change(inv,selected,expected,cost(p,choice),b->BackpackUpgrades.apply(b,option(choice)));}
+        else if(d.action.equals("Craft")&&permitted(ref,store)){
+            com.hexvane.aetherhaven.crafter.PatternBookPayment.topUp(inv,stock(store),Map.of("Ingredient_Leather_Light",10));ok=BackpackExchange.craft(inv);}
+        else if(d.action.equals("Purchase")&&permitted(ref,store)){var p=Backpack.read(expected);
+            if(available(p,choice))com.hexvane.aetherhaven.crafter.PatternBookPayment.topUp(inv,stock(store),cost(p,choice));
+            ok=available(p,choice)&&BackpackExchange.change(inv,selected,expected,cost(p,choice),b->BackpackUpgrades.apply(b,option(choice)));}
         else ok=false;
         hint=ok?"Select an upgrade to see its materials and requirements.":"Check your materials, free inventory space and selected backpack.";
         var c=new UICommandBuilder();var e=new UIEventBuilder();build(ref,c,e,store);sendUpdate(c,e,false);

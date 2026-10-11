@@ -44,7 +44,7 @@
         },
         {
           "text": "aetherhaven_doctor.how",
-          "icon": "healing",
+          "icon": "UI/Custom/dialogue.png",
           "next": "how",
           "condition": {
             "type": "not",

@@ -18,8 +18,12 @@ public final class WorkplaceOrders {
     }
     /** The caller commits the actual output on the same world thread before recording completion. */
     public void recordCompletion(UUID id) {
+        recordCompletion(id,1);
+    }
+    /** One delivery can cover several crafts, which are all committed together. */
+    public void recordCompletion(UUID id,int crafts) {
         var order=find(id);if(order==null)throw new IllegalStateException("Completed work lost its order");
-        if(order.completed<Integer.MAX_VALUE)order.completed++;revision++;
+        order.completed=(int)Math.min(Integer.MAX_VALUE,(long)order.completed+Math.max(1,crafts));revision++;
     }
     public String add(long expected, String recipeId, Mode mode, int quantity) {
         if (expected != revision) return "The task list changed. Review it and try again.";

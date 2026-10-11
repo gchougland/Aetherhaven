@@ -76,6 +76,7 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         if (npc == null || npc.getRole() == null) {
             return;
         }
+        if (com.hexvane.aetherhaven.npc.NpcFaceVisuals.isInInteractionDialogue(npc)) return;
         UUIDComponent uc = chunk.getComponent(index, UUIDComponent.getComponentType());
         if (uc == null) {
             return;

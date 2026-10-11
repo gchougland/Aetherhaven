@@ -86,6 +86,7 @@ record SpecialistWorkPreview(UUID siteId, String recipeId, String worker, String
             case ARMOR_CRAFTING -> "Bench_Armour";
             case SMELTING -> "Bench_Furnace";
             case LEATHERWORKING -> "Bench_Tannery";
+            case SALVAGING -> "Bench_Salvage";
             case COOKING -> "Bench_Cooking";
             case ALCHEMY -> "Bench_Alchemy";
             default -> throw new IllegalArgumentException("Choose one of the seven native crafting professions.");

@@ -31,12 +31,37 @@ class TimberFellingPlanTest {
         assertEquals(Map.of(ROOT,AIR,TOP,AIR,SIDE,AIR,SOIL,DIRT),world);
         assertFalse(plan.plan().restore(world::get,(p,b)->fail("Cannot fell the same snapshot twice")));
     }
-    @Test void editedMissingRotatedProtectedAndUnloadedCellsStopBeforeAnyWrite() {
-        for(var bad:List.of(AIR,new Observed(true,"Furniture_Chest",0,true),new Observed(true,WOOD,1,false),new Observed(false,WOOD,0,false))) {
-            var world=world();world.put(TOP,bad);assertFalse(inspect(world).ready());
+    @Test void playerEditsAreLeftAloneAndOnlyReduceTheHarvest() {
+        for(var changed:List.of(AIR,new Observed(true,"Furniture_Chest",0,true),new Observed(true,WOOD,1,false),new Observed(true,"Rock_Stone",0,false))) {
+            var world=world();world.put(TOP,changed);var plan=inspect(world);
+            assertTrue(plan.ready(),plan.issue());assertEquals(1,plan.plan().yield(),"Only the trunk that is still there is harvested");
+            assertTrue(plan.plan().restore(world::get,(p,b)->{world.put(p,b);return true;}));
+            assertEquals(AIR,world.get(ROOT));assertEquals(changed,world.get(TOP),"A changed cell is never overwritten");
         }
-        var world=world();world.put(SIDE,LOG);assertFalse(inspect(world).ready(),"Do not remove connected player wood");
-        world=world();world.put(SOIL,AIR);assertFalse(inspect(world).ready(),"Do not replace excavated soil");
+        var unloaded=world();unloaded.put(TOP,new Observed(false,WOOD,0,false));assertFalse(inspect(unloaded).ready());
+        var world=world();world.put(SIDE,LOG);var plan=inspect(world);
+        assertTrue(plan.ready());assertEquals(2,plan.plan().yield());
+        assertTrue(plan.plan().restore(world::get,(p,b)->{world.put(p,b);return true;}));
+        assertEquals(LOG,world.get(SIDE),"Do not remove connected player wood");
+        var dug=world();dug.put(SOIL,AIR);plan=inspect(dug);assertTrue(plan.ready());
+        assertTrue(plan.plan().restore(dug::get,(p,b)->{dug.put(p,b);return true;}));
+        assertEquals(AIR,dug.get(SOIL),"Do not replace excavated soil");
+    }
+    @Test void aTreeThatIsEntirelyGoneIsReportedSoItsStoneCanGrowAgain() {
+        var world=world();world.put(ROOT,AIR);world.put(TOP,AIR);
+        var gone=inspect(world);assertFalse(gone.ready());assertEquals(TimberFellingPlan.GONE,gone.issue());
+        var built=world();built.put(ROOT,new Observed(true,"Rock_Stone",0,false));built.put(TOP,new Observed(true,"Rock_Stone",0,false));
+        assertEquals(TimberFellingPlan.GONE,inspect(built).issue(),"Blocks built where the tree stood are not the tree");
+    }
+    @Test void leftoverLeavesAreClearedWithoutAHarvest() {
+        var leaf=new Position(1,101,0);var foliage=new Observed(true,"Plant_Leaves_Beech",0,false);
+        cells.put(leaf,new Cell(leaf,"Plant_Leaves_Beech",0,Kind.FOLIAGE));
+        var original=planted();var saved=new ArrayList<>(original.originals());saved.add(new TimberProductionState.Original(leaf,"Empty",0));
+        var planted=new TimberProductionState.Planting(original.tree(),saved);
+        var world=world();world.put(ROOT,AIR);world.put(TOP,AIR);world.put(leaf,foliage);
+        var plan=TimberFellingPlan.inspect(planted,cells,p->true,world::get,(c,o)->c.blockId().equals(o.blockId()));
+        assertTrue(plan.ready(),plan.issue());assertEquals(0,plan.plan().yield());
+        assertTrue(plan.plan().restore(world::get,(p,b)->{world.put(p,b);return true;}));assertEquals(AIR,world.get(leaf));
     }
     @Test void lateEditsRejectTheWholeTransactionAndFailedWritesRestoreAppliedCells() {
         var world=world();var plan=inspect(world).plan();world.put(SIDE,LOG);
@@ -51,7 +76,7 @@ class TimberFellingPlanTest {
         assertFalse(TimberFellingPlan.inspect(malformed,cells,p->true,p->fail("Missing ground receipt"),(c,o)->true).ready());
         assertFalse(TimberFellingPlan.inspect(original,cells,p->p.y()<=100,p->fail("Outside town"),(c,o)->true).ready());
     }
-    @Test void nativeEarlierRootsCanVacateSoilButCannotAuthorizeRemovingNewBlocks() {
+    @Test void nativeEarlierRootsCanVacateSoilButNeverRemoveNewBlocks() {
         var original=planted();var oldRoot=new Position(-1,99,0);var tree=original.tree();
         var receipt=new TimberPlantingReceipt(tree.id(),tree.sapling(),tree.output(),tree.root(),0,List.of(
             tree.stages().getFirst(),new TimberPlantingReceipt.Stage(1,"young",List.of(
@@ -62,7 +87,10 @@ class TimberFellingPlanTest {
         var inspected=TimberFellingPlan.inspect(planted,cells,p->true,world::get,(c,o)->c.blockId().equals(o.blockId()));
         assertTrue(inspected.ready(),inspected.issue());assertEquals(2,inspected.plan().yield(),"Earlier roots do not award additional wood");
         assertTrue(inspected.plan().restore(world::get,(p,b)->{world.put(p,b);return true;}));assertEquals(DIRT,world.get(oldRoot));
-        var edited=world();edited.put(oldRoot,new Observed(true,"Furniture_Chest",0,false));
-        assertFalse(TimberFellingPlan.inspect(planted,cells,p->true,edited::get,(c,o)->c.blockId().equals(o.blockId())).ready());
+        var edited=world();var chest=new Observed(true,"Furniture_Chest",0,false);edited.put(oldRoot,chest);
+        var kept=TimberFellingPlan.inspect(planted,cells,p->true,edited::get,(c,o)->c.blockId().equals(o.blockId()));
+        assertTrue(kept.ready(),kept.issue());
+        assertTrue(kept.plan().restore(edited::get,(p,b)->{edited.put(p,b);return true;}));
+        assertEquals(chest,edited.get(oldRoot),"New blocks where an early root once grew are never removed");
     }
 }

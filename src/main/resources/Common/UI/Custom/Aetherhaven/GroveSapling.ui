@@ -1,0 +1,8 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Button { Anchor: (Width: 60, Height: 60, Right: 8); Background: $T.@Card;
+ TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+ Group { LayoutMode: Center;
+  ItemIcon #Icon { Anchor: (Width: 44, Height: 44); }
+ }
+}

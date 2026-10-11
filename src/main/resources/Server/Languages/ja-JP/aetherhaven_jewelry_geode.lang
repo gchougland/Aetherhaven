@@ -124,6 +124,7 @@ aetherhaven.ui.jewelryAppraisal.empty=ホットバー、防具、収納場所に
 aetherhaven.ui.jewelryAppraisal.pick=以下の作品からお選びください。
 aetherhaven.ui.jewelryAppraisal.select=選択
 aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.rowEquipped={itemName} ({status}, equipped)
 aetherhaven.ui.jewelryAppraisal.statusAppraised=評価された
 aetherhaven.ui.jewelryAppraisal.statusUnidentified=身元不明
 aetherhaven.ui.jewelryAppraisal.selectedHeader=選択済み: {itemName}

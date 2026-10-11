@@ -22,5 +22,15 @@
       "itemId": "Ingredient_Crystal_Cyan",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "crafting": 5,
+    "alchemy": 4,
+    "commerce": 3
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "dexterity": 7,
+    "speed": 4
+  }
 }

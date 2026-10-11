@@ -100,6 +100,18 @@ public final class ExcavationPlan {
     /** Unfinished decorations do not block access to a fully excavated passage. */
     public boolean passageReady(){return id()!=null&&next()==null&&!pending()&&!heldCargo();}
     public int floorAt(Point point){return floorAt(area,entrance,layout(),point);}
+    /**
+     * Where a worker's feet belong in this passage: the three approach rows in front of it, and every planned column at
+     * its floor height. On stairs that makes the stand the step before the one being dug. Empty for a plan with no area.
+     */
+    public Set<Point> floorCells() {
+        if(area==null||entrance==null)return Set.of();
+        var cells=new LinkedHashSet<Point>();
+        for(var p:tunnel(area,entrance,layout()))cells.add(new Point(p.x(),floorAt(area,entrance,layout(),p),p.z()));
+        if(cells.isEmpty())return Set.of();
+        for(int d=0;d<=2;d++)for(int w=-1;w<=1;w++)cells.add(point(area,entrance,layout(),d,w,0));
+        return cells;
+    }
     public long revision(){return revision;}public boolean paused(){return paused;}public boolean edited(){return edited;}
     public boolean pending(){return pending;}public boolean held(){return heldCargo()||!output().isEmpty();}
     public int total(){return cells.size();}public int completed(){return cursor;}

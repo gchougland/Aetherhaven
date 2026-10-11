@@ -28,7 +28,7 @@
         },
         {
           "text": "aetherhaven_leatherworker.how",
-          "icon": "UI/Custom/leather.png",
+          "icon": "UI/Custom/dialogue.png",
           "next": "how",
           "condition": {
             "type": "not",
@@ -40,7 +40,7 @@
         },
         {
           "text": "aetherhaven_leatherworker.offer",
-          "icon": "home",
+          "icon": "UI/Custom/leather.png",
           "next": "offer",
           "condition": {
             "type": "not",

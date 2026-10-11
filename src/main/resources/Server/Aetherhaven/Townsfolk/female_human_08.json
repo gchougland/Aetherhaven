@@ -22,5 +22,15 @@
       "itemId": "Ingredient_Powder_Boom",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "commerce": 5,
+    "logistics": 3,
+    "leatherworking": 2
+  },
+  "startingAttributes": {
+    "strength": 8,
+    "vitality": 7,
+    "speed": 6
+  }
 }

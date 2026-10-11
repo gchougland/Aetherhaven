@@ -27,13 +27,25 @@ public final class TownsfolkProfilePage extends AetherhavenInteractiveCustomUIPa
     private final UUID residentId;
     private boolean appended;
     private final boolean fromJournal;
+    /** Set when the page only previews someone who has not joined the town yet: skill ids shown one level higher. */
+    private final java.util.List<String> previewBoosts;
+
+    /** Read only look at a townsfolk a rescue contract would bring to town, with the skills they are better at. */
+    public static TownsfolkProfilePage preview(PlayerRef player, UUID townId, String characterId, java.util.List<String> boostedSkills) {
+        return new TownsfolkProfilePage(player, townId, characterId, null, false, java.util.List.copyOf(boostedSkills));
+    }
 
     public TownsfolkProfilePage(PlayerRef player, UUID townId, String characterId, UUID residentId) {
         this(player, townId, characterId, residentId, false);
     }
     public TownsfolkProfilePage(PlayerRef player, UUID townId, String characterId, UUID residentId, boolean fromJournal) {
+        this(player, townId, characterId, residentId, fromJournal, null);
+    }
+    private TownsfolkProfilePage(PlayerRef player, UUID townId, String characterId, UUID residentId, boolean fromJournal,
+                                 java.util.List<String> previewBoosts) {
         super(player, CustomPageLifetime.CanDismissOrCloseThroughInteraction, Data.CODEC);
         this.fromJournal = fromJournal;
+        this.previewBoosts = previewBoosts;
         this.townId = townId;
         this.characterId = characterId;
         this.residentId = residentId;
@@ -52,9 +64,18 @@ public final class TownsfolkProfilePage extends AetherhavenInteractiveCustomUIPa
         if (town == null || !town.hasMemberOrOwner(playerRef.getUuid())) { close(); return; }
         events.addEventBinding(CustomUIEventBindingType.Activating, "#Refresh", new EventData().append("Kind", "refresh"), false);
         var definition = plugin.getTownsfolkCharacterCatalog().byId(characterId);
-        var progress = TownsfolkProgressService.getOrCreate(town, manager, plugin, characterId);
+        boolean preview = previewBoosts != null;
+        // A preview must not create a town record for someone who may never arrive.
+        var known = town.getTownsfolkProgress().get(characterId.trim().toLowerCase(java.util.Locale.ROOT));
+        var progress = !preview ? TownsfolkProgressService.getOrCreate(town, manager, plugin, characterId)
+            : known != null ? known : TownsfolkProgressService.startingProgress(definition);
         var player = store.getComponent(ref, PlayerRef.getComponentType());
-        boolean canTrain = player != null && TownsfolkProgressService.canTrain(town, player.getUuid(), residentId);
+        boolean canTrain = !preview && player != null && TownsfolkProgressService.canTrain(town, player.getUuid(), residentId);
+        var trainingInventory = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
+        boolean hasShard = trainingInventory != null && com.hexvane.aetherhaven.inventory.InventoryMaterials.count(trainingInventory,
+            com.hexvane.aetherhaven.AetherhavenConstants.ITEM_SHARD_OF_GAIA) > 0;
+        boolean hasCatalyst = trainingInventory != null && com.hexvane.aetherhaven.inventory.InventoryMaterials.count(trainingInventory,
+            com.hexvane.aetherhaven.AetherhavenConstants.ITEM_VERDANT_CATALYST) > 0;
         commands.set("#Name.Text", definition != null && definition.getDisplayName() != null ? definition.getDisplayName() : characterId);
         commands.set("#Summary.Text", "Mastery " + progress.masteryLevel() + " / " + TownsfolkProgress.MAX_MASTERY_LEVEL);
         for (int i = 0; i < TownsfolkProgress.MAX_MASTERY_LEVEL; i++)
@@ -66,7 +87,9 @@ public final class TownsfolkProfilePage extends AetherhavenInteractiveCustomUIPa
         commands.set("#MasteryXpBar.Value",progress.masteryLevel()==TownsfolkProgress.MAX_MASTERY_LEVEL?1.0f:(float)progress.masteryXpInLevel()/progress.masteryXpToNextLevel());
         commands.set("#SkillPoints.Text", "Skill points: " + progress.masterySkillPoints());
         commands.set("#AttributePoints.Text", "Attribute points: " + progress.masteryAttributePoints());
-        commands.set("#Hint.Text", "One Gaia Shard adds 1 attribute. One Verdant Catalyst adds 1 skill. Mastery points add 1 without using an item.");
+        commands.set("#Hint.Text", preview
+            ? "This is who you would be saving. The skills shown already include what they are better at than usual."
+            : "One Gaia Shard adds 1 attribute. One Verdant Catalyst adds 1 skill. Mastery points add 1 without using an item.");
         commands.set("#Portrait.AssetPath", NpcPortraitProvider.portraitPathForTownsfolk(definition));
         commands.set("#Identity.Text", definition != null && definition.getDisplayName() != null ? definition.getDisplayName() : characterId);
         commands.set("#TownName.Text", town.getDisplayName());
@@ -96,7 +119,7 @@ public final class TownsfolkProfilePage extends AetherhavenInteractiveCustomUIPa
         for (var attribute : TownsfolkAttribute.values()) {
             if (initial) commands.append("#Attributes", "Aetherhaven/TownsfolkAttributeCard.ui");
             updateStat(commands, events, "#Attributes[" + row++ + "]", attribute.id, attribute.icon,
-                progress.attribute(attribute), TownsfolkProgress.MAX_ATTRIBUTE, "attribute", progress.attributeCost(attribute), canTrain, progress.masteryAttributePoints());
+                progress.attribute(attribute), TownsfolkProgress.MAX_ATTRIBUTE, "attribute", progress.attributeCost(attribute), canTrain, hasShard, progress.masteryAttributePoints());
             if(guardEquipment!=null&&guardEquipment.usesAttributeCombat()) {
                 int learned=progress.attribute(attribute),bonus=guardEquipment.attributeBonus(attribute.id);
                 String card="#Attributes["+(row-1)+"]";
@@ -109,14 +132,16 @@ public final class TownsfolkProfilePage extends AetherhavenInteractiveCustomUIPa
         for (var skill : TownsfolkSkill.values()) {
             String host = "#SkillRow" + row / 3;
             if (initial) commands.append(host, "Aetherhaven/TownsfolkSkillCard.ui");
-            updateStat(commands, events, host + "[" + row % 3 + "]", skill.id, skill.icon, progress.skill(skill),
-                TownsfolkProgress.MAX_SKILL, "skill", progress.skillCost(skill), canTrain, progress.masterySkillPoints());
+            int shown = preview && previewBoosts.contains(skill.id)
+                ? Math.min(TownsfolkProgress.MAX_SKILL, progress.skill(skill) + 1) : progress.skill(skill);
+            updateStat(commands, events, host + "[" + row % 3 + "]", skill.id, skill.icon, shown,
+                TownsfolkProgress.MAX_SKILL, "skill", progress.skillCost(skill), canTrain, hasCatalyst, progress.masterySkillPoints());
             row++;
         }
     }
 
     private void updateStat(UICommandBuilder commands, UIEventBuilder events, String row, String id, String icon,
-                           int level, int maximum, String kind, int cost, boolean canTrain, int masteryPoints) {
+                           int level, int maximum, String kind, int cost, boolean canTrain, boolean hasTrainingItem, int masteryPoints) {
         commands.set(row + " #Icon.AssetPath", "UI/Custom/" + icon);
         commands.set(row + " #Name.Text", Message.translation("aetherhaven_townsfolk_profile." + id));
         commands.set(row + " #Level.Text", Integer.toString(level));
@@ -130,8 +155,9 @@ public final class TownsfolkProfilePage extends AetherhavenInteractiveCustomUIPa
             : Message.translation("aetherhaven_townsfolk_profile." + tier));
         commands.set(row + " #Train.Text", cost == 0 ? (level == 0 ? "Locked" : "Max") : kind.equals("attribute") ? "Shard +1" : "Catalyst +1");
         commands.set(row + " #Train.TooltipText", cost == 0 ? (level == 0 ? "Cannot perform this profession" : "Fully trained")
+            : !hasTrainingItem ? "Carry one " + (kind.equals("attribute") ? "Gaia Shard" : "Verdant Catalyst") + " to train"
             : "Add 1 using one " + (kind.equals("attribute") ? "Gaia Shard" : "Verdant Catalyst"));
-        commands.set(row + " #Train.Disabled", !canTrain || cost == 0);
+        commands.set(row + " #Train.Disabled", !canTrain || cost == 0 || !hasTrainingItem);
         events.addEventBinding(CustomUIEventBindingType.Activating, row + " #Train",
             new EventData().append("Kind", kind).append("Stat", id).append("Level", Integer.toString(level)), false);
         commands.set(row + " #SpendPoint.Text", "Point +1");
@@ -151,6 +177,7 @@ public final class TownsfolkProfilePage extends AetherhavenInteractiveCustomUIPa
         if ("journal".equals(data.kind) && fromJournal) { QuestJournalPage.openTown(ref, store, playerRef, townId); return; }
         if (town == null || !town.hasMemberOrOwner(player.getUuid())) { close(); return; }
         if ("refresh".equals(data.kind)) { refresh(ref, store); return; }
+        if (previewBoosts != null) return;
         if (!TownsfolkProgressService.canTrain(town, player.getUuid(), residentId)) return;
         var progress = TownsfolkProgressService.getOrCreate(town, manager, plugin, characterId);
         if ("guardEquipment".equals(data.kind)) {

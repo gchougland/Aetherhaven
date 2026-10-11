@@ -29,7 +29,7 @@ public final class WorkplaceToolInteraction extends SimpleInstantInteraction {
         var buffer = context.getCommandBuffer();
         if (buffer == null || WorkplaceToolState.TYPE == null) return false;
         var state = buffer.getComponent(context.getEntity(), WorkplaceToolState.TYPE);
-        if (state == null || state.mode == WorkplaceToolState.Mode.BUILD && state.grove == null) return false;
+        if (state == null || state.mode == WorkplaceToolState.Mode.BUILD) return false;
         handle(type, context);
         context.getState().state = InteractionState.Finished;
         return true;
@@ -44,10 +44,6 @@ public final class WorkplaceToolInteraction extends SimpleInstantInteraction {
         var state = buffer.getComponent(ref, WorkplaceToolState.TYPE);
         if (state == null) { state = new WorkplaceToolState(); buffer.putComponent(ref, WorkplaceToolState.TYPE, state); }
         state.nextPreviewNanos = 0;
-        if (state.grove != null && TimberGroveSelection.handle(type, context, state)) {
-            context.getState().state = InteractionState.Finished;
-            return;
-        }
         if (type == InteractionType.Pick || (type == InteractionType.Use && state.mode == WorkplaceToolState.Mode.BUILD)) {
             var player = buffer.getComponent(ref, Player.getComponentType());
             var pr = buffer.getComponent(ref, PlayerRef.getComponentType());

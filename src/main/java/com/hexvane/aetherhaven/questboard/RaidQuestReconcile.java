@@ -60,7 +60,8 @@ public final class RaidQuestReconcile {
                 continue;
             }
             for (QuestBoardSlotRecord slot : town.acceptedBoardQuestsSnapshot()) {
-                if (!slot.isRaidQuest()) {
+                // A rescue puts missing captors back (RescueCampService.populate) and never lowers its count.
+                if (!slot.isRaidQuest() || slot.isRescueQuest()) {
                     continue;
                 }
                 if (reconcileSlot(worldName, store, town, slot, plugin)) {

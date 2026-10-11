@@ -331,7 +331,7 @@ public final class PrefabFootprintClearUtil {
     @Nonnull
     private static BlockPosition productionStorageBaseBlock(@Nonnull World world, int wx, int y, int wz) {
         BlockPosition position = new BlockPosition(wx, y, wz);
-        if (y < ChunkUtil.MIN_Y || y > ChunkUtil.HEIGHT_MINUS_1) {
+        if (y < ChunkUtil.MIN_Y) {
             return position;
         }
         Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(wx, y, wz);

@@ -1,0 +1,6 @@
+$C = "../Common.ui";
+Group { LayoutMode: Left; Anchor: (Height: 25);
+ ItemIcon #PartIcon { Anchor: (Width: 22, Height: 22, Right: 8); }
+ Label #PartName { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, VerticalAlignment: Center); }
+ Label #PartCount { Anchor: (Width: 110); Style: (...$C.@DefaultLabelStyle, FontSize: 13, HorizontalAlignment: End, VerticalAlignment: Center); }
+}

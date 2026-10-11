@@ -26,5 +26,15 @@
       "itemId": "Ingredient_Flour",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "building": 5,
+    "blacksmithing": 3,
+    "mining": 3
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "speed": 6,
+    "strength": 7
+  }
 }

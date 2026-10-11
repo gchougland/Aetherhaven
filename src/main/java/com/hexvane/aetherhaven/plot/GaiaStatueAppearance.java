@@ -15,7 +15,9 @@ public enum GaiaStatueAppearance {
     SCARAK("Scarak", "Furniture_Temple_Scarak_Statue"),
     WIND("Wind", "Furniture_Temple_Wind_Statue"),
     SANDSTONE("Sandstone", "Furniture_Temple_Wind_Statue_Gaia"),
-    VILLAGE("Village", "Furniture_Village_Statue");
+    VILLAGE("Village", "Furniture_Village_Statue"),
+    GOBLIN("Goblin", "Furniture_Goblin_Statue_Graffiti"),
+    BEARER("Bearer", "Furniture_Human_Ruins_Statue");
 
     private final String blockTypeId;
     private final String vanillaItemId;

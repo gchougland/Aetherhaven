@@ -296,16 +296,7 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         if(state.getAmount(item)>=capacity)return "Storage full";
         var cargo=timber.cargo();
         if(cargo!=null&&cargo.output().equals(item))return cargo.remaining()+" items awaiting delivery";
-        if(com.hexvane.aetherhaven.production.NativeTimberProducts.supported(item))return "Collected with tree harvests";
-        var tree=timber.trees().get(slot);
-        if(tree!=null) {
-            if(timber.edited(tree.tree().id()))return "Review changed tree";
-            return timber.chopping(slot)>0?"Chopping in progress":"Growing or awaiting Logger";
-        }
-        var plan=timber.groves().get(slot);
-        if(plan==null)return "Plan a tree location";
-        if(!plan.output().equals(item))return "Review changed timber";
-        return "Waiting for free planting";
+        return "Gathered from the grove";
     }
 
     private static String miningStatus(AetherhavenPlugin plugin, World world, TownRecord town, PlotInstance plot,
@@ -321,7 +312,10 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         }
         if (!intact) return "Check mining cells";
         if (cycle.remaining()>0) return "Vein returns in "+(int)Math.ceil(cycle.remaining())+"s";
-        return cycle.progress()>0 ? "Mining progress" : "Waiting for the Miner";
+        if (cycle.progress()>0) return "Mining progress";
+        // Say why, when the Miner himself knows: he cannot reach the rock, has nowhere to stand, and so on.
+        String reason=com.hexvane.aetherhaven.autonomy.MiningWorkService.waitingReason(plot.getPlotId());
+        return reason!=null ? reason : "Waiting for the Miner";
     }
 
     @Override
@@ -486,7 +480,7 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         if (action.equalsIgnoreCase("OpenGrove")
                 && com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(gameplayConstructionId)) {
             liveRefreshActive = false;
-            player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.TimberGrovePage(playerRef,townId,plotId));
+            player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.GrovePage(playerRef,townId,plotId,null));
             return;
         }
         if (action.equalsIgnoreCase("OpenUnlocks")) {
@@ -599,7 +593,7 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         refresh(ref, store);
     }
 
-    private static void notifyWithdrawResult(@Nonnull PlayerRef pr, @Nonnull ProductionWithdrawal.ResultSink result) {
+    public static void notifyWithdrawResult(@Nonnull PlayerRef pr, @Nonnull ProductionWithdrawal.ResultSink result) {
         if (result.needEmptyBuckets) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),

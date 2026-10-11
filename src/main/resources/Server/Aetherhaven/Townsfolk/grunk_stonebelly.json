@@ -22,5 +22,16 @@
       "itemId": "Food_Pie_Meat",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "mining": 5,
+    "blacksmithing": 5,
+    "building": 3,
+    "jewelry": 0
+  },
+  "startingAttributes": {
+    "strength": 9,
+    "vitality": 8,
+    "speed": 4
+  }
 }

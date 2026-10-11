@@ -142,6 +142,7 @@ public final class ClinicVisitService {
             var doc=store.getComponent(doctor,TransformComponent.getComponentType());
             if(doc!=null)face(ref,store,buffer,transform.getPosition(),doc.getPosition());
         } else {
+            WorkTravelRecovery.keepMoving(ref,store,buffer,npc,transform.getPosition(),v.destination,now);
             npc.setLeashPoint(new Vector3d(v.destination));VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
             VillagerDoorUtil.tryOpenDoorsTowardLeash(world,transform.getPosition(),v.destination,null);
             buffer.putComponent(ref,NPCEntity.getComponentType(),npc);

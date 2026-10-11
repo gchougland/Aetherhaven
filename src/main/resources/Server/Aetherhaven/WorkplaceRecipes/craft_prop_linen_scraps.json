@@ -1,0 +1,18 @@
+{
+  "id": "craft_prop_linen_scraps",
+  "name": "Linen Scraps",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:craft_prop_linen_scraps",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 1,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 10
+    }
+  ],
+  "output": "Ingredient_Fabric_Scrap_Linen",
+  "outputCount": 5,
+  "workSeconds": 10
+}

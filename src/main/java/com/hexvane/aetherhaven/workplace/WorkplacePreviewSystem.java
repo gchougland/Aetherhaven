@@ -29,7 +29,6 @@ public final class WorkplacePreviewSystem extends EntityTickingSystem<EntityStor
         if (player == null || player.isWaitingForClientReady()) return;
         var pr = chunk.getComponent(index, PlayerRef.getComponentType());
         var priorState = buffer.getComponent(ref, WorkplaceToolState.TYPE);
-        if (priorState != null) TimberGroveSelection.expire(ref, store, priorState);
         var hand = InventoryComponent.getItemInHand(buffer, ref);
         if (hand == null || !WorkplaceToolInteraction.isTool(hand.getItemId()) || player.getPageManager().getCustomPage() != null) {
             if (player.getHudManager().getCustomHud(HUD) != null) player.getHudManager().removeCustomHud(pr, HUD);
@@ -117,7 +116,7 @@ public final class WorkplacePreviewSystem extends EntityTickingSystem<EntityStor
         void refresh(WorkplaceToolState state) {
             var b = new UICommandBuilder();
             b.set("#BuildingStaffModeTabs.SelectedTab",state.mode.name());
-            b.set("#Mode.Text",state.grove != null ? "Choose a grove location" : switch(state.mode) { case BUILD -> "Build structures"; case CREATE -> "Create workplace"; case SELECT -> "Manage workplace"; case RESIZE -> "Resize workplace"; case MINESHAFT -> "Manage mineshafts"; });
+            b.set("#Mode.Text",switch(state.mode) { case BUILD -> "Build structures"; case CREATE -> "Create workplace"; case SELECT -> "Manage workplace"; case RESIZE -> "Resize workplace"; case MINESHAFT -> "Manage mineshafts"; });
             b.set("#Hint.Text", state.hint);
             b.clear("#Controls");
             var slots = new com.hexvane.aetherhaven.ui.ToolKeybindSlot[]{
@@ -127,7 +126,6 @@ public final class WorkplacePreviewSystem extends EntityTickingSystem<EntityStor
             String[] labels = {"Choose corner or workplace", "Cancel selection", "Open workplace", "Change mode", "Choose mode"};
             if (state.mode == WorkplaceToolState.Mode.BUILD) labels = new String[]{"Find building work", "Hold to build", "Choose mode", "Change mode", "Choose mode"};
             if (state.mode == WorkplaceToolState.Mode.MINESHAFT) labels = new String[]{"Open mine planner", "Cancel selection", "Open workplace", "Change mode", "Choose mode"};
-            if (state.grove != null) labels = new String[]{"Mark soil for this tree", "Cancel tree selection", "Review grove plan", "Cancel and change mode", "Cancel and choose mode"};
             for (int i = 0; i < slots.length; i++) com.hexvane.aetherhaven.ui.ToolHudHotkeyRows.appendRow(b,
                 "#Controls", i, slots[i], com.hypixel.hytale.server.core.Message.raw(labels[i]), viewer);
             update(false, b);

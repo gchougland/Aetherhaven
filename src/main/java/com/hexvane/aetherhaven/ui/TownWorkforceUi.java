@@ -14,30 +14,69 @@ import java.util.UUID;
 /** Journal work grid. Actual task selection uses the same saved priority and employment state. */
 final class TownWorkforceUi {
     private TownWorkforceUi() {}
+
+    /**
+     * What one open journal has already put on screen. Rebuilding the grid from nothing on every click threw away its
+     * scroll position, so the page and its rows are appended once and only their contents are set afterwards.
+     */
+    static final class Layout {
+        private boolean appended;
+        private final JournalRowLayout rows = new JournalRowLayout("#WorkRows", "Aetherhaven/TownWorkRow.ui");
+    }
+
+    /** The kinds of work that have a column, in order. Commerce only exists while player shops do. */
+    static java.util.List<TownsfolkWorkType> columns() {
+        var columns = new java.util.ArrayList<TownsfolkWorkType>();
+        for (var type : TownsfolkWorkType.values()) {
+            if (!type.availableForNewWork()) continue;
+            if (type == TownsfolkWorkType.COMMERCE && !commerceLoaded()) continue;
+            columns.add(type);
+        }
+        return columns;
+    }
+
+    private static boolean commerceLoaded() {
+        try {
+            return com.hexvane.aetherhaven.plugin.AetherhavenFeatures.isLoaded(com.hexvane.aetherhaven.plugin.AetherhavenPluginIds.COMMERCE);
+        } catch (RuntimeException | LinkageError unavailable) {
+            return true;
+        }
+    }
+
     static void build(UICommandBuilder c, UIEventBuilder e, TownRecord town, AetherhavenPlugin plugin,
-                      Store<EntityStore> store, UUID player) {
-        c.clear("#WorkPage");
-        c.append("#WorkPage", "Aetherhaven/TownWorkforce.ui");
+                      Store<EntityStore> store, UUID player, Layout layout) {
+        var columns = columns();
+        if (!layout.appended) {
+            c.clear("#WorkPage");
+            c.append("#WorkPage", "Aetherhaven/TownWorkforce.ui");
+            int column = 0;
+            for (var type : columns) {
+                c.append("#WorkColumns", "Aetherhaven/TownWorkHeader.ui");
+                String h = "#WorkColumns[" + column++ + "]";
+                c.set(h + " #Icon.AssetPath", "UI/Custom/" + type.icon);
+                c.set(h + " #Label.TextSpans", t(type.id + ".short"));
+                c.set(h + ".TooltipTextSpans", t(type.id));
+            }
+            layout.appended = true;
+        }
         c.set("#WorkIntro.TextSpans", t("intro").param("wage", TownPayroll.WEEKLY_WAGE));
         c.set("#WorkFooter.TextSpans", t("footer"));
         boolean allowed = town != null && player != null && town.hasMemberOrOwner(player) && town.playerCanManageConstructions(player);
-        int column = 0;
-        for (var type : TownsfolkWorkType.values()) {
-            if (!type.availableForNewWork()) continue;
-            c.append("#WorkColumns", "Aetherhaven/TownWorkHeader.ui");
-            String h = "#WorkColumns[" + column++ + "]";
-            c.set(h + " #Icon.AssetPath", "UI/Custom/" + type.skill.icon);
-            c.set(h + " #Label.TextSpans", t(type.id + ".short"));
-            c.set(h + ".TooltipTextSpans", t(type.id));
+        if (town == null || plugin == null) {
+            layout.rows.resize(c, 0);
+            c.set("#WorkEmpty.Visible", true);
+            c.set("#WorkEmpty.TextSpans", t("noTown"));
+            return;
         }
-        if (town == null || plugin == null) { c.set("#WorkEmpty.TextSpans", t("noTown")); return; }
         var manager = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
         var roster = TownsfolkWorkRoster.list(town, manager, store, plugin);
         c.set("#WorkEmpty.Visible", roster.isEmpty());
         c.set("#WorkEmpty.TextSpans", t("empty"));
         int rowIndex = 0;
+        // Rows that are already on screen are kept and only refilled. Only new rows get their cells appended.
+        int kept = layout.rows.resize(c, roster.size());
         for (var worker : roster) {
-            c.append("#WorkRows", "Aetherhaven/TownWorkRow.ui");
+            boolean fresh = rowIndex >= kept;
             String row = "#WorkRows[" + rowIndex++ + "]";
             var progress = worker.progress();
             boolean overdue = town.getPayroll().overdue(worker.characterId());
@@ -46,6 +85,8 @@ final class TownWorkforceUi {
             String state = !worker.alive() ? "dead" : worker.guard() ? "guard" : overdue ? "overdue"
                 : !progress.isEmployed() ? "unemployed" : shopClerk ? "shopClerk" : "employed";
             c.set(row + " #Name.Text", worker.name());
+            c.set(row + " #Portrait.AssetPath",
+                NpcPortraitProvider.portraitPathForTownsfolk(plugin.getTownsfolkCharacterCatalog().byId(worker.characterId())));
             c.set(row + " #Status.TextSpans", t(state));
             c.set(row + " #Employment.TextSpans", t(progress.isEmployed() ? "dismiss" : "hire"));
             c.set(row + " #Employment.Disabled", !allowed || worker.guard() || !worker.alive());
@@ -57,9 +98,8 @@ final class TownWorkforceUi {
             e.addEventBinding(CustomUIEventBindingType.Activating, row + " #GuardDuty",
                 new EventData().append("Action", "WorkGuardDuty").append("WorkCharacter", worker.characterId()), false);
             int cell = 0;
-            for (var type : TownsfolkWorkType.values()) {
-                if (!type.availableForNewWork()) continue;
-                c.append(row + " #Cells", "Aetherhaven/TownWorkCell.ui");
+            for (var type : columns) {
+                if (fresh) c.append(row + " #Cells", "Aetherhaven/TownWorkCell.ui");
                 String selector = row + " #Cells[" + cell++ + "] #Priority";
                 int priority = progress.priority(type);
                 int skill = progress.skill(type.skill);
@@ -89,7 +129,7 @@ final class TownWorkforceUi {
             if (progress.isEmployed()) town.getPayroll().ensureCurrentBill(character);
         } else {
             var type = TownsfolkWorkType.byId(workType);
-            if (type == null || !type.availableForNewWork() || progress.skill(type.skill) == 0) return;
+            if (type == null || !columns().contains(type) || progress.skill(type.skill) == 0) return;
             progress.setPriority(type, (progress.priority(type) + 1) % 5);
         }
         manager.updateTown(town);

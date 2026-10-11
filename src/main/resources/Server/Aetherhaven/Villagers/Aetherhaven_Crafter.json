@@ -47,5 +47,10 @@
     "aetherhaven_crafter.greeting.0",
     "aetherhaven_crafter.greeting.1",
     "aetherhaven_crafter.greeting.2"
-  ]
+  ],
+  "innPoolRequires": {
+    "completedQuestIds": [
+      "q_warehouse"
+    ]
+  }
 }

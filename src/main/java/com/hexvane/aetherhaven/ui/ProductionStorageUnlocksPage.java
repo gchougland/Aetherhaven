@@ -268,7 +268,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
     }
 
     @Nonnull
-    private static Message cellTooltipMessage(
+    private Message cellTooltipMessage(
         @Nonnull Message itemName,
         boolean unlocked,
         @Nonnull WorkplaceUnlockCatalog.UnlockLine line,
@@ -284,7 +284,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
      * Each line is green if sufficient, red if not.
      */
     @Nonnull
-    private static Message unlockRequirementBody(
+    private Message unlockRequirementBody(
         boolean unlocked,
         @Nonnull WorkplaceUnlockCatalog.UnlockLine line,
         @Nonnull TownRecord town,
@@ -298,7 +298,8 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             line.resourceCost(),
             town.effectiveDifficultyForGameplay()
         );
-        int held = InventoryMaterials.count(inv, line.itemId());
+        long held = com.hexvane.aetherhaven.crafter.PatternBookPayment.available(inv,
+            com.hexvane.aetherhaven.crafter.PatternBookPayment.stockFor(town, playerRef.getUuid()), line.itemId());
         boolean itemOk = held >= need;
         Message body =
             Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed")
@@ -391,6 +392,8 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
                 WorkplaceUnlockCatalog.goldCoinsForRarityTier(line.rarityTier()),
                 town.effectiveDifficultyForGameplay()
             );
+        com.hexvane.aetherhaven.crafter.PatternBookPayment.topUp(inv,
+            com.hexvane.aetherhaven.crafter.PatternBookPayment.stockFor(town, uc.getUuid()), java.util.Map.of(itemId, needRes));
         if (InventoryMaterials.count(inv, itemId) < needRes) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),

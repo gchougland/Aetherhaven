@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class TownsfolkCharacterDefinition {
-    /** Optional starting values for integrations. Skill zero explicitly means incapable. */
+    /** Authored per character. Omitted skills start at 1 and attributes at 5; skill 0 means incapable. */
     private java.util.Map<String, Integer> startingAttributes;
     private java.util.Map<String, Integer> startingSkills;
 

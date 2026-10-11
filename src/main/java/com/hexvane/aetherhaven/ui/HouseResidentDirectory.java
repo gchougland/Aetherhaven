@@ -99,6 +99,51 @@ public final class HouseResidentDirectory {
         return out;
     }
 
+    /**
+     * Residents whose own house quest is open, so the picker can put them first: the person a player is most likely
+     * looking for is the one waiting on a home.
+     */
+    @Nonnull
+    public static java.util.Set<UUID> housingQuestResidents(@Nonnull TownRecord town, @Nonnull AetherhavenPlugin plugin) {
+        java.util.Set<UUID> out = new java.util.HashSet<>();
+        for (String questId : town.getActiveQuestIdsSnapshot()) {
+            var quest = plugin.getQuestCatalog().get(questId);
+            if (quest == null) {
+                continue;
+            }
+            boolean assigns = false;
+            for (var objective : quest.objectivesOrEmpty()) {
+                assigns |= "assign_house_resident".equals(objective.kind());
+            }
+            if (!assigns) {
+                continue;
+            }
+            if (quest.assignByEntity()) {
+                UUID target = TownResidentEligibility.resolveLiveHousingQuestTargetUuid(town, questId);
+                if (target != null) {
+                    out.add(target);
+                }
+                continue;
+            }
+            String role = quest.assignNpcRoleId();
+            if (role == null || role.isBlank()) {
+                continue;
+            }
+            if (AetherhavenConstants.ELDER_NPC_ROLE_ID.equals(role) && town.getElderEntityUuid() != null) {
+                out.add(town.getElderEntityUuid());
+            }
+            if (AetherhavenConstants.INNKEEPER_NPC_ROLE_ID.equals(role) && town.getInnkeeperEntityUuid() != null) {
+                out.add(town.getInnkeeperEntityUuid());
+            }
+            for (var record : town.getResidentNpcRecords()) {
+                if (role.equals(record.getNpcRoleId()) && record.getLastEntityUuid() != null) {
+                    out.add(record.getLastEntityUuid());
+                }
+            }
+        }
+        return out;
+    }
+
     @Nullable
     public static HouseResidentRow findRow(@Nonnull List<HouseResidentRow> rows, @Nonnull UUID entityUuid) {
         for (HouseResidentRow row : rows) {
@@ -131,6 +176,8 @@ public final class HouseResidentDirectory {
                 );
             }
         }
+        HouseResidentRow recorded = recordedResidentPreview(town, entityUuid, plugin);
+        if (recorded != null) return recorded;
         if (entityUuid.equals(town.getElderEntityUuid())) {
             TownResidentDisplay.Resolved display =
                 TownResidentDisplay.resolveOffline(plugin, AetherhavenConstants.ELDER_NPC_ROLE_ID, null, null);
@@ -182,6 +229,19 @@ public final class HouseResidentDirectory {
                     roleLineMessage(TownVillagerBinding.KIND_TOWNSFOLK, AetherhavenConstants.NPC_TOWNSFOLK)
                 );
             }
+        }
+        return null;
+    }
+
+    @Nullable
+    static HouseResidentRow recordedResidentPreview(TownRecord town, UUID entityUuid, @Nullable AetherhavenPlugin plugin) {
+        for (var record : town.getResidentNpcRecords()) {
+            if (!entityUuid.equals(record.getLastEntityUuid())) continue;
+            var identity = record.getTownsfolkIdentity();
+            var display = resolveOfflineDisplay(plugin, record.getNpcRoleId(),
+                identity == null ? null : identity.getCharacterId(), null);
+            return new HouseResidentRow(display.displayName(), entityUuid, display.portraitPath(),
+                record.isPendingDawnRevival() ? Message.raw("Awaiting revival") : roleLineMessage(record.getKind(), record.getNpcRoleId()));
         }
         return null;
     }

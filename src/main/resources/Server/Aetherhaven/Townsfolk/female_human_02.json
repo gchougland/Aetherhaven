@@ -26,5 +26,16 @@
       "itemId": "Food_Bread",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "jewelry": 5,
+    "commerce": 3,
+    "leatherworking": 2,
+    "farming": 0
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "speed": 6,
+    "intelligence": 6
+  }
 }

@@ -56,7 +56,9 @@ public final class RaidQuestSpawnService {
             LOGGER.atWarning().log("Raid %s postponed: town owner's level is not known yet", slot.instanceIdOrEmpty());
             for (PlayerRef player : world.getPlayerRefs()) {
                 if (acceptingPlayerUuid.equals(player.getUuid())) {
-                    player.sendMessage(Message.raw("The town owner's level is not available yet. Have the owner join, wait a few seconds, then start the raid again."));
+                    player.sendMessage(Message.raw(slot.isRescueQuest()
+                        ? "The town owner's level is not available yet. Have the owner join, wait a few seconds, then accept the rescue again."
+                        : "The town owner's level is not available yet. Have the owner join, wait a few seconds, then start the raid again."));
                     break;
                 }
             }
@@ -65,6 +67,23 @@ public final class RaidQuestSpawnService {
 
         Random rng = new Random(slot.getGenerationSeed() ^ acceptingPlayerUuid.getLeastSignificantBits());
 
+        // A rescue's attackers gather around a camp outside town and march on it, not on the charter.
+        Vector3d campTarget = null;
+        if (slot.isRescueQuest()) {
+            campTarget = RescueCampService.start(town, slot, world, store, rng);
+            if (campTarget == null) {
+                return false;
+            }
+        }
+        if (campTarget != null) {
+            // The captors are placed when a player reaches the camp (RescueCampService.populate), not here: the
+            // camp is far from whoever is standing at the quest board.
+            slot.setRaidSpawnedEntityUuids(new ArrayList<>());
+            slot.setRaidKillRequired(roster.size());
+            slot.setRaidKillProgress(0);
+            notifyRescueAccepted(store, acceptingPlayerUuid, slot);
+            return true;
+        }
         Vector3d charterMarchTarget = charterMarchTarget(world, town);
         RaidQuestCompassCache.removeForTown(world.getName(), town.getTownId());
 
@@ -199,6 +218,9 @@ public final class RaidQuestSpawnService {
             removeEntityByUuidString(store, uuidStr);
         }
         slot.setRaidSpawnedEntityUuids(new ArrayList<>());
+        if (slot.isRescueQuest()) {
+            RescueCampService.stop(slot, townId, world, store, false);
+        }
     }
 
     @Nonnull
@@ -234,7 +256,7 @@ public final class RaidQuestSpawnService {
         store.putComponent(mobRef, NPCEntity.getComponentType(), npcEntity);
     }
 
-    private static void removeEntityByUuidString(@Nonnull Store<EntityStore> store, @Nullable String uuidStr) {
+    static void removeEntityByUuidString(@Nonnull Store<EntityStore> store, @Nullable String uuidStr) {
         if (uuidStr == null || uuidStr.isBlank()) {
             return;
         }
@@ -247,6 +269,61 @@ public final class RaidQuestSpawnService {
         } catch (IllegalArgumentException ignored) {
             // invalid uuid string
         }
+    }
+
+    /**
+     * Places one captor at a rescue camp. Returns the new entity's id, or null when the game refused it.
+     */
+    @Nullable
+    static String spawnRescueCaptor(@Nonnull TownRecord town, @Nonnull QuestBoardSlotRecord slot, @Nonnull Store<EntityStore> store,
+                                    @Nonnull String roleId, @Nonnull Vector3d position, @Nonnull Vector3d camp, int ownerLevel) {
+        NPCPlugin npc = NPCPlugin.get();
+        if (npc == null) {
+            return null;
+        }
+        int roleIndex = npc.getIndex(RaidQuestMarchRoles.spawnRoleFor(roleId));
+        if (roleIndex < 0) {
+            roleIndex = npc.getIndex(roleId);
+        }
+        if (roleIndex < 0) {
+            LOGGER.atWarning().log("Rescue %s: unknown NPC role %s", slot.instanceIdOrEmpty(), roleId);
+            return null;
+        }
+        Vector3d spawnPos = new Vector3d(position);
+        long nowMs = RaidQuestMarchUtil.resolveNowMs(store);
+        var pair = npc.spawnEntity(store, roleIndex, position, Rotation3f.ZERO, null,
+            (npcEntity, mobRef, st) -> configureRaidMobMarch(npcEntity, mobRef, spawnPos, camp, roleId, st));
+        if (pair == null) {
+            return null;
+        }
+        Ref<EntityStore> mobRef = pair.first();
+        UUIDComponent mobUuid = store.getComponent(mobRef, UUIDComponent.getComponentType());
+        if (mobUuid == null) {
+            return null;
+        }
+        RaidQuestMobBinding binding = new RaidQuestMobBinding(town.getTownId(), slot.instanceIdOrEmpty());
+        RaidQuestMarchUtil.bootstrapMarch(binding, spawnPos, camp, nowMs);
+        store.putComponent(mobRef, RaidQuestMobBinding.getComponentType(), binding);
+        com.hexvane.aetherhaven.leveling.LevelingIntegration.scaleRaid(mobRef, store, ownerLevel);
+        // Taken off again a moment later by RescueCampService.populate.
+        store.putComponent(mobRef, com.hypixel.hytale.server.core.modules.entity.component.Invulnerable.getComponentType(),
+            com.hypixel.hytale.server.core.modules.entity.component.Invulnerable.INSTANCE);
+        return mobUuid.getUuid().toString();
+    }
+
+    private static void notifyRescueAccepted(@Nonnull Store<EntityStore> store, @Nonnull UUID acceptingPlayerUuid, @Nonnull QuestBoardSlotRecord slot) {
+        Ref<EntityStore> playerRef = store.getExternalData().getRefFromUUID(acceptingPlayerUuid);
+        PlayerRef pr = playerRef == null || !playerRef.isValid() ? null : store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr == null) {
+            return;
+        }
+        NotificationUtil.sendNotification(
+            pr.getPacketHandler(),
+            Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.rescueStartedToast")
+                .param("captive", RaidQuestBoardHandler.captiveName(slot))
+                .param("direction", RaidQuestBoardHandler.raidApproachDirectionLabel(slot)),
+            NotificationStyle.Default
+        );
     }
 
     private static void notifyAcceptingPlayer(

@@ -23,8 +23,8 @@ public final class BuildingUpgradeTree {
         var types = Arrays.stream(TownsfolkWorkType.values()).filter(t -> t.requiresWorkplace() && t.availableForNewWork() && WorkplaceRules.supervisor(t).equals(supervisor)).toList();
         for(int i=0;i<types.size();i++) {
             var t=types.get(i);
-            String bench=switch(t) {case SMELTING -> "Bench_Furnace";case BLACKSMITHING -> "Bench_Weapon";case ARMOR_CRAFTING -> "Bench_Armour";default -> null;};
-            nodes.add(node("work:"+t.id,WorkplaceRules.label(t),WorkplaceRules.description(t),bench==null?t.skill.icon:null,bench,
+            String bench=switch(t) {case SMELTING -> "Bench_Furnace";case BLACKSMITHING -> "Bench_Weapon";case ARMOR_CRAFTING -> "Bench_Armour";case SALVAGING -> "Bench_Salvage";default -> null;};
+            nodes.add(node("work:"+t.id,WorkplaceRules.label(t),WorkplaceRules.description(t),bench==null?t.icon:null,bench,
                 Kind.WORKPLACE,t.id,1,1,types.size()==1?233:32+i*201,208,"home"));
         }
         for(int tier=1;tier<=35;tier++) {

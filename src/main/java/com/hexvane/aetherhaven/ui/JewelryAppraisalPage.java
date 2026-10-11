@@ -97,6 +97,13 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         }
 
         List<Short> slots = new ObjectArrayList<>();
+        // Worn jewelry first: it can be appraised where it is, without taking it off.
+        for (int worn = 0; worn < EQUIPPED_SLOTS; worn++) {
+            ItemStack st = stackAt(inv, ref, store, (short) (EQUIPPED_BASE + worn));
+            if (!ItemStack.isEmpty(st) && JewelryPieceKind.isEnchanted(st.getItemId())) {
+                slots.add((short) (EQUIPPED_BASE + worn));
+            }
+        }
         for (short s = 0; s < inv.getCapacity(); s++) {
             ItemStack st = inv.getItemStack(s);
             if (ItemStack.isEmpty(st)) {
@@ -117,7 +124,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         }
 
         if (selectedSlot >= 0) {
-            ItemStack sel = inv.getItemStack(selectedSlot);
+            ItemStack sel = stackAt(inv, ref, store, selectedSlot);
             if (ItemStack.isEmpty(sel) || !JewelryItemIds.isJewelry(sel.getItemId())) {
                 selectedSlot = -1;
             }
@@ -126,7 +133,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         int n = Math.min(slots.size(), MAX_ROWS);
         for (int i = 0; i < n; i++) {
             short slot = slots.get(i);
-            ItemStack stack = inv.getItemStack(slot);
+            ItemStack stack = stackAt(inv, ref, store, slot);
             JewelryTooltipUiSupport.ensureVirtualItemForStack(pr, stack);
             commandBuilder.append(ROWS, "Aetherhaven/JewelryAppraisalRow.ui");
             String row = ROWS + "[" + i + "]";
@@ -143,7 +150,8 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
                 commandBuilder, row + " #JewelryAppraisalItemGrid", AetherhavenUiItemGrids.jewelrySlotForUi(stack));
             commandBuilder.set(
                 row + " #Line.TextSpans",
-                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.row").param("itemName", itemName).param("status", statusMsg)
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal." + (slot >= EQUIPPED_BASE ? "rowEquipped" : "row"))
+                    .param("itemName", itemName).param("status", statusMsg)
             );
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -161,7 +169,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
 
-        ItemStack cur = inv.getItemStack(selectedSlot);
+        ItemStack cur = stackAt(inv, ref, store, selectedSlot);
         if (ItemStack.isEmpty(cur) || !JewelryItemIds.isJewelry(cur.getItemId())) {
             selectedSlot = -1;
             commandBuilder.set("#DetailPick.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.pick"));
@@ -233,11 +241,11 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
             }
             CombinedItemContainer invSel = InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
             if (invSel != null && selectedSlot >= 0) {
-                ItemStack v = invSel.getItemStack(selectedSlot);
+                ItemStack v = stackAt(invSel, ref, store, selectedSlot);
                 if (!ItemStack.isEmpty(v) && JewelryItemIds.isJewelry(v.getItemId())) {
                     ItemStack r = JewelryMetadata.ensureRolled(v);
                     if (r != v) {
-                        invSel.replaceItemStackInSlot(selectedSlot, v, r);
+                        replaceAt(invSel, ref, store, selectedSlot, v, r);
                     }
                 }
             }
@@ -266,7 +274,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
             refresh(ref, store);
             return;
         }
-        ItemStack cur = inv.getItemStack(slot);
+        ItemStack cur = stackAt(inv, ref, store, slot);
         if (ItemStack.isEmpty(cur) || !JewelryItemIds.isJewelry(cur.getItemId())) {
             refresh(ref, store);
             return;
@@ -295,8 +303,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
         if (rolled != cur) {
-            ItemStackSlotTransaction r0 = inv.replaceItemStackInSlot(slot, cur, rolled);
-            if (!r0.succeeded()) {
+            if (!replaceAt(inv, ref, store, slot, cur, rolled)) {
                 GoldCoinPayment.refund(town, player, ref, store, paid);
                 if (town != null && plugin != null) {
                     tm.updateTown(town);
@@ -305,7 +312,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
                 return;
             }
         }
-        ItemStack now = inv.getItemStack(slot);
+        ItemStack now = stackAt(inv, ref, store, slot);
         if (ItemStack.isEmpty(now)) {
             GoldCoinPayment.refund(town, player, ref, store, paid);
             if (town != null && plugin != null) {
@@ -315,8 +322,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
         ItemStack appraised = JewelryMetadata.setAppraised(now, true);
-        ItemStackSlotTransaction r1 = inv.replaceItemStackInSlot(slot, now, appraised);
-        if (!r1.succeeded()) {
+        if (!replaceAt(inv, ref, store, slot, now, appraised)) {
             GoldCoinPayment.refund(town, player, ref, store, paid);
             if (town != null && plugin != null) {
                 tm.updateTown(town);
@@ -338,6 +344,37 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_ARCANE_WORKBENCH_CRAFT);
         selectedSlot = slot;
         refresh(ref, store);
+    }
+
+    /** Slots from here up are the worn rings and necklace, which live on the player and not in any inventory. */
+    private static final short EQUIPPED_BASE = 20000;
+    private static final int EQUIPPED_SLOTS = 3;
+
+    @Nullable
+    private static ItemStack stackAt(@Nonnull CombinedItemContainer inv, @Nonnull Ref<EntityStore> ref,
+                                     @Nonnull Store<EntityStore> store, short slot) {
+        if (slot >= EQUIPPED_BASE) {
+            int worn = slot - EQUIPPED_BASE;
+            var loadout = store.getComponent(ref, com.hexvane.aetherhaven.jewelry.PlayerJewelryLoadout.getComponentType());
+            return loadout == null || worn >= EQUIPPED_SLOTS ? null : loadout.getSlot(worn);
+        }
+        return slot < 0 || slot >= inv.getCapacity() ? null : inv.getItemStack(slot);
+    }
+
+    /** Swaps one stack for another where it sits. Worn jewelry stays worn, in the same slot. */
+    private static boolean replaceAt(@Nonnull CombinedItemContainer inv, @Nonnull Ref<EntityStore> ref,
+                                     @Nonnull Store<EntityStore> store, short slot, @Nonnull ItemStack expected, @Nonnull ItemStack next) {
+        if (slot < EQUIPPED_BASE) {
+            return inv.replaceItemStackInSlot(slot, expected, next).succeeded();
+        }
+        int worn = slot - EQUIPPED_BASE;
+        var loadout = store.getComponent(ref, com.hexvane.aetherhaven.jewelry.PlayerJewelryLoadout.getComponentType());
+        if (loadout == null || worn >= EQUIPPED_SLOTS || !expected.equals(loadout.getSlot(worn))) {
+            return false;
+        }
+        loadout.setSlot(worn, next);
+        store.putComponent(ref, com.hexvane.aetherhaven.jewelry.PlayerJewelryLoadout.getComponentType(), loadout);
+        return true;
     }
 
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

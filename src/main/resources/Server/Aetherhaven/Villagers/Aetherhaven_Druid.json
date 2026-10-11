@@ -6,7 +6,7 @@
   "workConstructionId": "plot_druid",
   "displayName": "Rowan Mossweald",
   "portraitIcon": "Aetherhaven_Druid.png",
-  "speechVoiceId": "MellowFemale",
+  "speechVoiceId": "OldMale",
   "uiSortOrder": 21,
   "innPoolEligible": true,
   "innPoolOrder": 21,

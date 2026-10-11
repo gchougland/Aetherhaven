@@ -22,6 +22,7 @@ import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
@@ -52,6 +53,15 @@ public final class PlotPlacementCommit {
     }
 
     private PlotPlacementCommit() {}
+
+    /** Check every native sign cell, including neighboring columns and headroom, before charging a plot token. */
+    public static boolean canPlacePlotSign(@Nonnull World world, @Nonnull Vector3i position, @Nonnull Rotation yaw) {
+        var type = BlockType.getAssetMap().getAsset(AetherhavenConstants.PLOT_SIGN_ITEM_ID);
+        var section = ChunkSectionBlockUtil.blockSectionAt(world, position.x, position.y, position.z);
+        return type != null && section != null && world.getChunkStore() != null
+            && BlockOperations.testPlaceBlock(world.getChunkStore().getStore(), section,
+                position.x, position.y, position.z, type, RotationTuple.index(yaw, Rotation.None, Rotation.None));
+    }
 
     /**
      * Places {@link AetherhavenConstants#PLOT_SIGN_ITEM_ID} at {@code anchor} with NESW rotation from {@code prefabYaw}
@@ -96,7 +106,7 @@ public final class PlotPlacementCommit {
         }
         RotationTuple rt = RotationTuple.of(prefabYaw, Rotation.None, Rotation.None);
         int rotationIndex = rt.index();
-        // validatePlacement=false: replace existing blocks/fluids at the anchor (same idea as paste replacing voxels).
+        // Recheck native filler clearance at commit time; never overwrite solid obstacles beside the anchor.
         boolean ok =
             PathCementService.placePathBlock(world, x, y, z, AetherhavenConstants.PLOT_SIGN_ITEM_ID, rotationIndex, PLACE_SETTINGS);
         if (!ok) {

@@ -34,7 +34,7 @@ public final class HuntQuestBoardHandler implements QuestBoardQuestTypeHandler {
         @Nonnull Random rng
     ) {
         QuestBoardKillSetJson killSet = pickWeightedKillSet(entry, rng);
-        if (killSet == null || killSet.entityTagsAnyOrEmpty().isEmpty()) {
+        if (killSet == null || (killSet.entityTagsAnyOrEmpty().isEmpty() && killSet.blockIdPrefixesAnyOrEmpty().isEmpty())) {
             return false;
         }
         slot.setInstanceId(QuestBoardSlotRecord.newInstanceId());
@@ -62,6 +62,7 @@ public final class HuntQuestBoardHandler implements QuestBoardQuestTypeHandler {
         slot.setAcceptedByPlayerUuid(null);
         slot.setOnlineDaysElapsed(0);
         slot.setHuntEntityTagsAny(new ArrayList<>(killSet.entityTagsAnyOrEmpty()));
+        slot.setMineBlockIdPrefixesAny(killSet.blockIdPrefixesAnyOrEmpty());
         slot.setHuntKillRequired(killSet.killCount());
         slot.setHuntKillProgress(0);
         if (entry.targetLabelLangKey() != null && !entry.targetLabelLangKey().isBlank()) {
@@ -155,13 +156,13 @@ public final class HuntQuestBoardHandler implements QuestBoardQuestTypeHandler {
         int need = slot.getHuntKillRequired();
         int cur = slot.getHuntKillProgress();
         if (slot.isAccepted() && need > 0) {
-            return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.huntObjectiveProgress")
+            return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard." + (slot.isMineQuest() ? "mineObjectiveProgress" : "huntObjectiveProgress"))
                 .param("current", String.valueOf(cur))
                 .param("need", String.valueOf(need))
                 .param("target", target)
                 .param("villager", villager);
         }
-        return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.huntObjective")
+        return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard." + (slot.isMineQuest() ? "mineObjective" : "huntObjective"))
             .param("count", String.valueOf(need))
             .param("target", target)
             .param("villager", villager);
@@ -173,7 +174,7 @@ public final class HuntQuestBoardHandler implements QuestBoardQuestTypeHandler {
         if (key != null && !key.isBlank()) {
             return Message.translation(key.trim());
         }
-        return Message.raw("foes");
+        return Message.raw(slot.isMineQuest() ? "ore" : "foes");
     }
 
     @Nonnull
@@ -186,7 +187,7 @@ public final class HuntQuestBoardHandler implements QuestBoardQuestTypeHandler {
                 .param("count", String.valueOf(need))
                 .param("target", target);
         }
-        return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.huntObjectiveCard")
+        return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard." + (slot.isMineQuest() ? "mineObjectiveCard" : "huntObjectiveCard"))
             .param("count", String.valueOf(need))
             .param("target", target);
     }

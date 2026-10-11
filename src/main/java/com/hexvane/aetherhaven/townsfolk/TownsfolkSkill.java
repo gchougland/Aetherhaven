@@ -12,7 +12,7 @@ public enum TownsfolkSkill {
     COOKING("cooking", "food-tray.png"),
     LOGISTICS("logistics", "crate.png"),
     COMMERCE("commerce", "dollar_coin_icon_256.png"),
-    JEWELRY("jewelry", "forge.png");
+    JEWELRY("jewelry", "jewelery.png");
 
     public final String id;
     public final String icon;

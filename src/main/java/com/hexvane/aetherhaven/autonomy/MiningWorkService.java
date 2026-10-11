@@ -28,8 +28,27 @@ public final class MiningWorkService {
         UUID plot;
         int slot=-1, node, attempt;
         Vector3d approach;
-        long began, retry, lastHit, nextSave, lastTick;
-        boolean active, working;
+        /** Where he last worked. Between veins he waits here, beside the rock, and does not wander onto it. */
+        Vector3d rest;
+        long began, retry, lastHit, nextSave, lastTick, mismatchSince;
+        boolean active, working, resting;
+    }
+    /** How long the vein may fail to show its ore under the Miner's pick before the swing is given up and retried. */
+    static final long ORE_WAIT_MS=2500L;
+    /** Why each mine's Miner is not swinging right now, for the mine's own page. Absent while he works. */
+    private static final Map<UUID,String> WAITING=new java.util.concurrent.ConcurrentHashMap<>();
+
+    /** A short reason the Miner at this mine is idle, or null while he is working or nothing is known. */
+    public static String waitingReason(UUID plot) {
+        return plot==null?null:WAITING.get(plot);
+    }
+    private static void waiting(Visit visit,String reason) {
+        if(visit.plot==null)return;
+        if(reason==null)WAITING.remove(visit.plot);else WAITING.put(visit.plot,reason);
+    }
+    /** True when the ore has failed to appear for too long. */
+    static boolean oreOverdue(long mismatchSince,long now) {
+        return mismatchSince>0&&now-mismatchSince>=ORE_WAIT_MS;
     }
     public static boolean active(Ref<EntityStore> ref) {
         var v=VISITS.get(ref); return v!=null && v.active;
@@ -76,7 +95,7 @@ public final class MiningWorkService {
         // Only simulated nodes advance. A save reload or time command cannot mature a vein.
         boolean loaded=plot.getProductionLayout().nodes().size()>0
             && MiningNodeBlocks.loaded(world,MiningNodeBlocks.point(plot,mining.node(plot.getProductionLayout().nodes().size())));
-        if (!loaded) { stop(ref,store,npc,buffer,visit); return true; }
+        if (!loaded) { stop(ref,store,npc,buffer,visit); waiting(visit,"The mine is not in loaded terrain"); return true; }
         for (int slot=0;slot<count;slot++) {
             var cycle=mining.cycle(slot); String item=entry.itemAtCursor(state.getSlotCursor(slot));
             cycle.select(item,period(plugin,world,plot,state,entry,slot));
@@ -88,6 +107,7 @@ public final class MiningWorkService {
         if (now>=visit.nextSave) { buffer.run(st->{if(MiningNodeBlocks.migrateLegacy(world,plot,mining))manager.updateTown(town);}); manager.updateTown(town); visit.nextSave=now+5000; }
         if (now<visit.retry) return true;
         if (!visit.active) {
+            waiting(visit,null);
             int selected=-1;
             for (int i=0;i<count;i++) {
                 int slot=(mining.firstSlot(count)+i)%count; var cycle=mining.cycle(slot);
@@ -95,20 +115,30 @@ public final class MiningWorkService {
                     && com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issueForKind(town,"miner",cycle.item())==null
                     && hasSpace(state,entry,cycle.item(),outputCount)) { selected=slot; break; }
             }
-            if (selected<0) return true;
+            Set<Vector3i> veins=new HashSet<>();
+            for (int i=0;i<plot.getProductionLayout().nodes().size();i++) veins.add(MiningNodeBlocks.point(plot,i));
+            if (selected<0) {
+                // Nothing to mine yet: a vein is returning, storage is full, or training is missing. The slot text on
+                // the mine's page says which. Wait beside the rock he last worked, not on top of it.
+                if (visit.rest==null && !veins.isEmpty())
+                    visit.rest=approach(world,MiningNodeBlocks.point(plot,mining.node(veins.size())),position,0,veins);
+                rest(ref,store,npc,buffer,world,position,visit);
+                return true;
+            }
+            if (visit.resting) { NpcStandStill.release(ref,npc,buffer); visit.resting=false; }
             int nodes=plot.getProductionLayout().nodes().size(); Vector3d approach=null; int node=-1;
             for (int i=0;i<nodes;i++) {
                 int candidate=(mining.node(nodes)+i)%nodes;
                 if (!MiningNodeBlocks.intact(world,plot,mining,candidate)) continue;
-                approach=approach(world,MiningNodeBlocks.point(plot,candidate),position,visit.attempt);
+                approach=approach(world,MiningNodeBlocks.point(plot,candidate),position,visit.attempt,veins);
                 if (approach!=null) { node=candidate; break; }
             }
-            if (approach==null) { visit.retry=now+3000; return true; }
+            if (approach==null) { visit.retry=now+3000; waiting(visit,"The Miner has no clear place to stand beside the rock"); return true; }
             var registry=AetherhavenWorldRegistries.getOrCreatePoiRegistry(world,plugin);
             VillagerAutonomySystem.abortActivePoiUseAndDismount(ref,store,buffer,autonomy,needs,registry,false);
             autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE); autonomy.clearTravelAndPoiState();
             buffer.putComponent(ref,VillagerAutonomyState.getComponentType(),autonomy);
-            visit.slot=selected; visit.node=node; visit.approach=approach; visit.began=now; visit.active=true;
+            visit.slot=selected; visit.node=node; visit.approach=approach; visit.began=now; visit.active=true; visit.mismatchSince=0;
             int ownedNode=node; String block=MiningNodeBlocks.blockFor(mining.cycle(selected).item());
             buffer.run(st->{ if (ref.isValid() && MiningNodeBlocks.replace(world,plot,mining,ownedNode,block)) manager.updateTown(town); });
             return true;
@@ -116,15 +146,26 @@ public final class MiningWorkService {
         var cycle=mining.cycle(visit.slot); var cell=MiningNodeBlocks.point(plot,visit.node);
         if (!hasSpace(state,entry,cycle.item(),outputCount)) { stop(ref,store,npc,buffer,visit); return true; }
         if (!CourierWorkService.clearApproach(world,visit.approach) || !CourierWorkService.arrived(position,visit.approach) && now-visit.began>30000) {
-            visit.attempt++; visit.retry=now+3000; stop(ref,store,npc,buffer,visit); return true;
+            visit.attempt++; visit.retry=now+3000; stop(ref,store,npc,buffer,visit); waiting(visit,"The Miner could not reach the rock and is trying another side"); return true;
         }
         if (store.getComponent(ref,com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType())!=null) return true;
         if (!CourierWorkService.arrived(position,visit.approach)) {
+            WorkTravelRecovery.keepMoving(ref,store,buffer,npc,position,visit.approach,now);
             npc.setLeashPoint(new Vector3d(visit.approach)); VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
             VillagerDoorUtil.tryOpenDoorsTowardLeash(world,position,visit.approach,null);
             buffer.putComponent(ref,NPCEntity.getComponentType(),npc); return true;
         }
-        if (!Objects.equals(MiningNodeBlocks.current(world,cell),MiningNodeBlocks.blockFor(cycle.item()))) return true;
+        if (!Objects.equals(MiningNodeBlocks.current(world,cell),MiningNodeBlocks.blockFor(cycle.item()))) {
+            // The ore is put into the rock a moment after the Miner sets out. If it never shows, he used to stand here
+            // for good. Give this swing up and choose again, which puts the ore in afresh.
+            if (visit.mismatchSince==0) visit.mismatchSince=now;
+            if (oreOverdue(visit.mismatchSince,now)) {
+                visit.attempt++; visit.retry=now+1000; stop(ref,store,npc,buffer,visit);
+                waiting(visit,"The rock did not show its ore. The Miner is trying again");
+            }
+            return true;
+        }
+        visit.mismatchSince=0;
         NpcStandStill.hold(ref,store,npc,visit.approach,buffer);
         if (!visit.working) {
             com.hexvane.aetherhaven.equipment.VillagerEquipmentService.applyProfile(ref,store,buffer,plugin.getEquipmentProfileCatalog(),"work_miner");
@@ -148,9 +189,21 @@ public final class MiningWorkService {
                     mining.completed(slot); manager.updateTown(town);
                 }
             });
-            visit.attempt=0; stop(ref,store,npc,buffer,visit);
+            visit.attempt=0; visit.rest=new Vector3d(visit.approach); stop(ref,store,npc,buffer,visit);
         }
         return true;
+    }
+    /** Between veins the Miner stands where he last worked. Left to idle, he wandered up onto the rock itself. */
+    private static void rest(Ref<EntityStore> ref,Store<EntityStore> store,NPCEntity npc,CommandBuffer<EntityStore> buffer,
+            World world,Vector3d position,Visit visit) {
+        if (visit.rest==null || !CourierWorkService.clearApproach(world,visit.rest)) return;
+        if (CourierWorkService.arrived(position,visit.rest)) {
+            NpcStandStill.hold(ref,store,npc,visit.rest,buffer); visit.resting=true;
+        } else if (store.getComponent(ref,com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType())==null) {
+            if (visit.resting) { NpcStandStill.release(ref,npc,buffer); visit.resting=false; }
+            npc.setLeashPoint(new Vector3d(visit.rest)); VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
+            buffer.putComponent(ref,NPCEntity.getComponentType(),npc);
+        }
     }
     private static boolean hasSpace(PlotProductionState state, ProductionCatalog.Entry entry, String item,long amount) {
         return item!=null && amount>0 && WorkplaceProductionUpgrades.effectiveMaxStorage(state,entry,item)-state.getAmount(item)>=amount;
@@ -164,13 +217,18 @@ public final class MiningWorkService {
             WorkplaceProductionUpgrades.speedMultiplier(state),zone);
         return Math.max(1,ticks/AetherhavenConstants.PRODUCTION_ENTITY_TICKS_PER_SECOND-MiningCycle.EXTRACTION_SECONDS);
     }
-    private static Vector3d approach(World world, Vector3i node, Vector3d from,int attempt) {
-        List<Vector3d> choices=new ArrayList<>();
+    /** A stand on top of another vein is the last choice: mining from there looks like standing on the rock. */
+    static boolean onAVein(Set<Vector3i> veins,int x,int feetY,int z) {
+        return veins.contains(new Vector3i(x,feetY-1,z));
+    }
+    private static Vector3d approach(World world, Vector3i node, Vector3d from,int attempt,Set<Vector3i> veins) {
+        List<Vector3d> choices=new ArrayList<>(); List<Vector3d> onRock=new ArrayList<>();
         for(int[] offset:new int[][]{{1,0},{-1,0},{0,1},{0,-1}}) for(int dy=1;dy>=-1;dy--) {
             int x=node.x+offset[0], y=node.y+dy, z=node.z+offset[1];
             if(MiningNodeBlocks.loaded(world,new Vector3i(x,y,z)) && VillagerBlockUtil.isNpcStandColumn(world,x,y,z))
-                choices.add(new Vector3d(x+.5,VillagerBlockUtil.resolveFeetYForStandCell(world,x,y,z),z+.5));
+                (onAVein(veins,x,y,z)?onRock:choices).add(new Vector3d(x+.5,VillagerBlockUtil.resolveFeetYForStandCell(world,x,y,z),z+.5));
         }
+        if(choices.isEmpty())choices=onRock;
         // Prefer a side at the vein's base over a nearby ledge above it. Native travel can stop
         // horizontally close to a ledge before completing the step down into a shallow mine.
         choices.sort(Comparator.comparingDouble((Vector3d p)->Math.abs(p.y-node.y)).thenComparingDouble(from::distanceSquared));
@@ -180,7 +238,8 @@ public final class MiningWorkService {
         var visit=VISITS.get(ref); if(visit!=null) stop(ref,store,npc,buffer,visit);
     }
     private static void stop(Ref<EntityStore> ref,Store<EntityStore> store,NPCEntity npc,CommandBuffer<EntityStore> buffer,Visit v) {
-        if(v.active) NpcStandStill.release(ref,npc,buffer);
+        if(v.active||v.resting) NpcStandStill.release(ref,npc,buffer);
+        v.resting=false;
         if(v.working) {
             buffer.run(st->{ if(ref.isValid()) { VillagerLifeProps.clear(ref,st); AnimationUtils.stopAnimation(ref,AnimationSlot.Action,st); } });
             com.hexvane.aetherhaven.equipment.VillagerEquipmentService.clearHotbar(ref,store,buffer);

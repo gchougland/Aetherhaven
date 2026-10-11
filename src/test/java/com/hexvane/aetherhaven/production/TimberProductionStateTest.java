@@ -100,40 +100,39 @@ class TimberProductionStateTest {
         assertFalse(gson.fromJson("{\"timber\":{}}", PlotProductionState.class).usesPhysicalTimber());
     }
 
-    @Test void planningAndMovingLocationsKeepLegacyProductionAndSurviveReload() {
+    @Test void bindingAStoneStartsGroveWorkAndSurvivesReload() {
         var production=new PlotProductionState();production.addAmount(WOOD,9,100);
         var state=production.timber();var first=tree(10);
         assertNull(state.plan(0,2,0,first,p->true,CLEAR));
         assertEquals(1,state.layoutRevision());assertEquals(first,state.groves().get(0));
-        assertFalse(state.adopted());assertTrue(state.trees().isEmpty());assertFalse(production.usesPhysicalTimber());
+        assertTrue(state.adopted());assertTrue(state.trees().isEmpty());assertTrue(production.usesPhysicalTimber());
         var moved=tree(40);assertNull(state.plan(0,2,1,moved,p->true,CLEAR));
         var gson=new Gson();var restored=gson.fromJson(gson.toJson(production),PlotProductionState.class);
         assertEquals(moved,restored.timber().groves().get(0));assertEquals(2,restored.timber().layoutRevision());
-        assertEquals(9,restored.getAmount(WOOD));assertFalse(restored.usesPhysicalTimber());
+        assertEquals(9,restored.getAmount(WOOD));assertTrue(restored.usesPhysicalTimber());
         assertThrows(UnsupportedOperationException.class,()->restored.timber().groves().clear());
-        assertNull(restored.timber().removePlan(0,2));assertTrue(restored.timber().groves().isEmpty());
-        assertFalse(restored.usesPhysicalTimber());
+        assertTrue(restored.timber().uproot(0));assertTrue(restored.timber().groves().isEmpty());
+        assertTrue(restored.usesPhysicalTimber(),"An emptied grove never falls back to the old timers");
     }
 
     @Test void staleReviewsCannotOverwriteOrRemoveAnotherPlayersGroveEdits() {
         var state=new TimberProductionState();assertNull(state.plan(0,2,0,tree(10),p->true,CLEAR));
         var readCount=new AtomicInteger();Function<Position,Ground> read=p->{readCount.incrementAndGet();return CLEAR.apply(p);};
         assertNotNull(state.plan(1,2,0,tree(30),p->true,read));assertEquals(0,readCount.get());
-        assertNotNull(state.removePlan(0,0));assertEquals(1,state.groves().size());
         assertNotNull(state.plan(2,2,1,tree(30),p->true,read));assertEquals(0,readCount.get());
         assertFalse(state.prepare(1,2,tree(11),p->true,read).ready());assertEquals(0,readCount.get());
-        assertEquals(1,state.layoutRevision());assertFalse(state.adopted());
+        assertEquals(1,state.layoutRevision());assertTrue(state.adopted());
     }
 
     @Test void savedPlansReserveFutureGrowthAcrossLumbermillsWithoutClaimingOwnership() {
         var state=new TimberProductionState();assertNull(state.plan(0,2,0,tree(10),p->true,CLEAR));
         assertTrue(state.conflictsWith(tree(11)),"Hitbox clearance is reserved even before planting");
         assertFalse(state.conflictsWith(tree(30)));assertTrue(state.trees().isEmpty());
-        assertNull(state.removePlan(0,1));assertFalse(state.conflictsWith(tree(11)));
+        assertTrue(state.uproot(0));assertFalse(state.conflictsWith(tree(11)));
         var prepared=state.prepare(0,2,tree(10),p->true,CLEAR);
         assertNull(state.plant(0,2,prepared,p->true,CLEAR,()->true));assertTrue(state.conflictsWith(tree(11)));
         assertNotNull(state.plan(0,2,state.layoutRevision(),tree(40),p->true,CLEAR),"A planted tree cannot be moved by editing its plan");
-        assertNotNull(state.removePlan(0,state.layoutRevision()));assertTrue(state.adopted());
+        assertTrue(state.adopted());
     }
 
     @Test void plantingRechecksSavedPlansAgainstLaterTreesAndTerrain() {
@@ -143,6 +142,6 @@ class TimberProductionStateTest {
         var prepared=state.prepare(0,2,first,p->true,CLEAR);assertTrue(prepared.ready());
         var attempts=new AtomicInteger();
         assertNotNull(state.plant(0,2,prepared,p->true,p->p.y()==100?SOIL:CLEAR.apply(p),()->{attempts.incrementAndGet();return true;}));
-        assertEquals(0,attempts.get());assertFalse(state.adopted());assertEquals(2,state.groves().size());
+        assertEquals(0,attempts.get());assertTrue(state.trees().isEmpty());assertEquals(2,state.groves().size());
     }
 }

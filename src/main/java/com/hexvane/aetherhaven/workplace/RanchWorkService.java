@@ -68,13 +68,7 @@ public final class RanchWorkService {
         return offspring(world.getEntityStore().getStore(),site)!=null;
     }
     public static String herdStatus(World world,ApprenticeWorkplace site) {
-        var herd=site.food().ranch();
-        if(herd.offspring()==null)return herd.status();
-        var store=world.getEntityStore().getStore();var ref=store.getExternalData().getRefFromUUID(herd.offspring());
-        if(ref==null||!ref.isValid())return "The animal raised here is not nearby. Growth is paused until it returns.";
-        if(store.getComponent(ref,DeathComponent.getComponentType())!=null)return "The animal raised here has died. Feeding the breeding animals starts a new cycle.";
-        if(offspring(store,site)==null)return "Bring the animal raised here back inside this workplace. Growth is paused.";
-        return herd.status();
+        return "Workplace animals are provided automatically and stay near the trough. Regular tending supplies town food.";
     }
     private static Ref<EntityStore> offspring(Store<EntityStore> store,ApprenticeWorkplace site) {
         return offspring(store,site.area(),site.food().ranch());
@@ -92,17 +86,11 @@ public final class RanchWorkService {
             && (family.youngRole().equals(npc.getRoleName())||family.grownRole().equals(npc.getRoleName())) ? ref : null;
     }
     public static Job job(World world,ApprenticeWorkplace site,WarehouseBatch.Point trough) {
-        var herd=site.food().ranch();var store=world.getEntityStore().getStore();
-        var animal=offspring(store,site);
-        if(herd.ready() && animal!=null) {
-            var p=store.getComponent(animal,TransformComponent.getComponentType()).getPosition();
-            return new Job(new WarehouseBatch.Point((int)Math.floor(p.x),(int)Math.floor(p.y),(int)Math.floor(p.z)),herd.offspring(),herd.grown());
-        }
         return new Job(trough,null,false);
     }
     /** Called after real work and outside entity iteration. No inventory output or chunk loading. */
     public static boolean complete(World world,ApprenticeWorkplace site,Job job) {
-        return complete(world,site.area(),site.food().ranch(),job,null,animal->true,point->true,site.food()::careFailed);
+        return job.animal()==null && !job.slaughter() && ApprenticeRanchAnimals.feed(world,site);
     }
     /** Shared native lifecycle. Core barns supply their registered breeding pair and separate inventory accounting. */
     public static boolean complete(World world,WorkplaceArea area,RanchCare herd,Job job,Family preferred,

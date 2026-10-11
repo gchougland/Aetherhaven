@@ -28,7 +28,7 @@
         },
         {
           "text": "aetherhaven_warehouse_manager.how",
-          "icon": "storage",
+          "icon": "UI/Custom/dialogue.png",
           "next": "how",
           "condition": {
             "type": "not",

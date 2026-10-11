@@ -1,0 +1,13 @@
+{
+  "Parent": "Aetherhaven_Statue_Of_Gaia",
+  "Icon": "Icons/ItemsGenerated/Furniture_Human_Ruins_Statue.png",
+  "BlockType": {
+    "CustomModel": "Blocks/Decorative_Sets/Human_Ruins/Statue.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Decorative_Sets/Human_Ruins/Statue_Texture.png",
+        "Weight": 1
+      }
+    ]
+  }
+}

@@ -22,5 +22,15 @@
       "itemId": "Ingredient_Crystal_Red",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "commerce": 5,
+    "leatherworking": 3,
+    "logistics": 3
+  },
+  "startingAttributes": {
+    "dexterity": 7,
+    "speed": 8,
+    "intelligence": 7
+  }
 }

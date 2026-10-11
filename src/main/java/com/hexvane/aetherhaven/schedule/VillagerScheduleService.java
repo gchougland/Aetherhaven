@@ -103,6 +103,7 @@ public final class VillagerScheduleService {
         if (binding == null || npc == null || uc == null) {
             return;
         }
+        if (com.hexvane.aetherhaven.npc.NpcFaceVisuals.isInInteractionDialogue(npc)) return;
         if (TownVillagerBinding.isScheduleSuppressedKind(binding.getKind())) {
             return;
         }

@@ -35,11 +35,10 @@ class TimberProductCollectionTest {
     }
 
     @Test void selectionAndStorageUpgradesDetermineTheCollectionBudgetWithoutChangingStock() {
-        var p=new PlotProductionState();p.migrateIfNeeded();p.setIronUpgrade(1);p.setCobaltLevel(3);
-        p.setSlotCursor(0,0);p.setSlotCursor(1,1);p.setSlotCursor(2,1);p.setSlotCursor(3,3);p.setSlotCursor(4,4);
+        var p=new PlotProductionState();p.migrateIfNeeded();p.timber().setGathersFibre(true);
         p.addAmount(FIBRE,93,100);p.addAmount(SAP,20,20);p.addAmount(SEED,4,5);
         var limits=NativeTimberProducts.collectionLimits(p,catalog(),tree());
-        assertEquals(Map.of(FIBRE,7,SAP,0,SEED,1,STICK,50),limits,"Duplicate selections share one pool; sticks need no extra slot");
+        assertEquals(Map.of(FIBRE,7,SAP,0,SEED,1,STICK,50),limits,"Sticks, sap and the sapling are always gathered; fibre is the one choice");
         p.setAdamantineLevel(1);
         assertEquals(Map.of(FIBRE,107,SAP,20,SEED,6,STICK,100),NativeTimberProducts.collectionLimits(p,catalog(),tree()));
         assertEquals(93,p.getAmount(FIBRE));assertEquals(20,p.getAmount(SAP));assertEquals(4,p.getAmount(SEED));
@@ -60,10 +59,14 @@ class TimberProductCollectionTest {
         for(String product:List.of(WOOD,SEED,SAP,STICK)) {
             long cap=WorkplaceProductionUpgrades.effectiveMaxStorage(p,catalog(),product);
             p.addAmount(product,cap,cap);
-            assertFalse(NativeTimberProducts.hasRoom(p,catalog(),tree()),product);
+            assertTrue(NativeTimberProducts.hasRoom(p,catalog(),tree()),"One full store alone never holds a tree back: "+product);
             p.removeAmountUpTo(product,cap);
-            assertTrue(NativeTimberProducts.hasRoom(p,catalog(),tree()));
         }
+        for(String product:List.of(WOOD,SEED,SAP,STICK)) {
+            long cap=WorkplaceProductionUpgrades.effectiveMaxStorage(p,catalog(),product);
+            p.addAmount(product,cap,cap);
+        }
+        assertFalse(NativeTimberProducts.hasRoom(p,catalog(),tree()),"Only completely full stores do");
     }
 
     @Test void guaranteedProductsFillZeroRollsWithoutDoublingDropsOrExceedingSpace() {

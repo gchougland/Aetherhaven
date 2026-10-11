@@ -22,5 +22,15 @@
       "itemId": "Ingredient_Bar_Iron",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "blacksmithing": 5,
+    "crafting": 4,
+    "logistics": 3
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "speed": 6,
+    "strength": 7
+  }
 }

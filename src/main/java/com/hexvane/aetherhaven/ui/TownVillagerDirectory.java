@@ -73,6 +73,11 @@ public final class TownVillagerDirectory {
                         loadedStoryRoleIds.add(roleId.toLowerCase(Locale.ROOT));
                     }
                     TownResidentDisplay.Resolved display = TownResidentDisplay.resolveFromChunk(archetypeChunk, i, roleId, plugin);
+                    // A townsfolk with no name of their own would be listed by their role id. Leave them out.
+                    if (AetherhavenConstants.NPC_TOWNSFOLK.equals(roleId)
+                        && display.displayName().equals(NpcPortraitProvider.displayLabelForRoleId(roleId))) {
+                        continue;
+                    }
                     int ko = kindOrderForBindingKind(b.getKind());
                     boolean needs = TownResidentEligibility.usesVillagerNeeds(b.getKind(), roleId, plugin);
                     byUuid.put(
@@ -144,6 +149,41 @@ public final class TownVillagerDirectory {
     /**
      * Registry fallbacks keep the saved identity of unloaded townsfolk; story roles are deduplicated.
      */
+    /**
+     * Who a townsfolk is, when their own record does not say: the same person is also known to the town as a
+     * tourist who stayed, or as a hired guard. Null when nobody knows.
+     */
+    @Nullable
+    static String characterIdFor(@Nonnull TownRecord town, @Nonnull UUID entityUuid, @Nullable String known) {
+        if (known != null && !known.isBlank()) {
+            return known;
+        }
+        for (var tourist : town.getTouristRecords()) {
+            if (entityUuid.equals(tourist.getEntityUuid()) && tourist.getCharacterId() != null && !tourist.getCharacterId().isBlank()) {
+                return tourist.getCharacterId();
+            }
+        }
+        for (HiredGuardRecord guard : town.getHiredGuardRecords()) {
+            if (entityUuid.equals(guard.getEntityUuid()) && guard.getCharacterId() != null && !guard.getCharacterId().isBlank()) {
+                return guard.getCharacterId();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * True for a townsfolk who cannot be named: nobody knows who they are, or their character is not installed. Such
+     * a row would show a role id and no portrait, so it is left out of every list a player sees.
+     */
+    static boolean nameless(@Nonnull AetherhavenPlugin plugin, @Nonnull String roleId, @Nullable String characterId) {
+        return namelessTownsfolk(AetherhavenConstants.NPC_TOWNSFOLK.equals(roleId),
+            characterId != null && plugin.getTownsfolkCharacterCatalog().byId(characterId) != null);
+    }
+
+    static boolean namelessTownsfolk(boolean townsfolkRole, boolean characterKnown) {
+        return townsfolkRole && !characterKnown;
+    }
+
     private static void addResidentsFromRegistry(
         @Nonnull Map<UUID, TownVillagerRow> byUuid,
         @Nonnull Set<String> loadedStoryRoleIds,
@@ -174,8 +214,10 @@ public final class TownVillagerDirectory {
             String kind = r.getKind();
             int ko = kind != null && !kind.isBlank() ? kindOrderForBindingKind(kind) : kindOrderForRoleId(roleId);
             var identity=r.getTownsfolkIdentity();
+            String characterId=characterIdFor(town,u,identity==null?null:identity.getCharacterId());
+            if(nameless(plugin,roleId,characterId))continue;
             TownResidentDisplay.Resolved display = TownResidentDisplay.resolveOffline(plugin, roleId,
-                identity==null?null:identity.getCharacterId(),identity==null?null:identity.getModelAssetId());
+                characterId,identity==null?null:identity.getModelAssetId());
             byUuid.put(
                 u,
                 new TownVillagerRow(
@@ -269,8 +311,12 @@ public final class TownVillagerDirectory {
         if (characterId == null) {
             roleId = AetherhavenConstants.NPC_TOWNSFOLK;
             kind = TownVillagerBinding.KIND_TOWNSFOLK;
+            characterId = characterIdFor(town, entityUuid, null);
         }
         if (!TownResidentEligibility.includeInResidentList(town, entityUuid, kind, roleId, plugin, catalog)) {
+            return;
+        }
+        if (nameless(plugin, roleId, characterId)) {
             return;
         }
         TownResidentDisplay.Resolved display = TownResidentDisplay.resolveOffline(plugin, roleId, characterId, null);

@@ -72,7 +72,7 @@ class HuntAssetsTest {
     @Test void unlockAndRewardItemsExistWithIconsInTheInstalledGame()throws Exception {
         String appData=System.getenv("APPDATA");
         Assumptions.assumeTrue(appData!=null);
-        var assets=Path.of(appData,"Hytale/install/release/package/game/latest/Assets.zip");
+        var assets=Path.of(appData,"Hytale/install/pre-release/package/game/latest/Assets.zip");
         Assumptions.assumeTrue(Files.isRegularFile(assets));
         try(var zip=new java.util.zip.ZipFile(assets.toFile())) {
             var items=new HashMap<String,java.util.zip.ZipEntry>();

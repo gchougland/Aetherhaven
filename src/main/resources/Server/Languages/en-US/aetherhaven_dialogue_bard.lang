@@ -53,3 +53,19 @@ aetherhaven.dialogue.aetherhaven_bard.gift.love.birthday=It is my birthday and t
 aetherhaven.dialogue.aetherhaven_bard.gift.like.birthday=A birthday gift like this. You have good taste.
 aetherhaven.dialogue.aetherhaven_bard.gift.neutral.birthday=Thanks. A simple gift on my birthday still means a lot.
 aetherhaven.dialogue.aetherhaven_bard.gift.dislike.birthday=It is my birthday and you brought that. Well. I still appreciate the thought.
+
+aetherhaven.dialogue.aetherhaven_bard.move_in.invite = Would you like to stay in town?
+
+aetherhaven.dialogue.aetherhaven_bard.move_in.welcome = Welcome to your new stage, Elias.
+
+aetherhaven.dialogue.aetherhaven_bard.move_in.offer = A guild hall full of stories and a place by the fire? I could put down roots here. Would you have me as your resident bard?
+
+aetherhaven.dialogue.aetherhaven_bard.move_in.accept = The stage is yours.
+
+aetherhaven.dialogue.aetherhaven_bard.move_in.later = Let me think about it.
+
+aetherhaven.dialogue.aetherhaven_bard.move_in.accepted = Then my wandering days can wait. I will bring the music if you bring the audience.
+
+aetherhaven.dialogue.aetherhaven_bard.move_in.finish = A new home deserves a new song. I think I know just where to begin.
+
+aetherhaven.dialogue.aetherhaven_bard.move_in.bye = I look forward to hearing it.

@@ -22,7 +22,7 @@ public final class RtsHotbarSync {
         RtsCommandHotbarSlotInboundAdapter.runWithOutboundHotbarSlotSync(() -> {
             playerRefComponent
                 .getPacketHandler()
-                .writeNoCache(new UpdatePlayerInventory(null, null, hotbar.getInventory().toPacket(), null, null, null));
+                .writeNoCache(new UpdatePlayerInventory(null, null, hotbar.getInventory().toPacket(), null, null, null, null, null));
             playerRefComponent.getPacketHandler().writeNoCache(new SetActiveSlot(-1, hotbar.getActiveSlot()));
             hotbar.consumeIsDirty();
             playerRefComponent.getPacketHandler().tryFlush();

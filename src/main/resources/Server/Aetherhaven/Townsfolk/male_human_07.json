@@ -26,5 +26,14 @@
       "itemId": "Ingredient_Hay",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "farming": 5,
+    "alchemy": 4,
+    "ranching": 3
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "vitality": 6
+  }
 }

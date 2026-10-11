@@ -16,32 +16,28 @@ public final class TimberCharring {
     public static final double WORK_SECONDS = 15;
     private TimberCharring() {}
 
-    public static boolean selected(PlotProductionState production, ProductionCatalog.Entry entry, String item) {
-        for (int slot = 0; slot < WorkplaceProductionUpgrades.slotCount(production); slot++)
-            if (item.equals(entry.itemAtCursor(production.getSlotCursor(slot)))) return true;
-        return false;
+    /** Charring is a simple choice at the lumbermill, off by default. */
+    public static boolean enabled(PlotProductionState production) {
+        return production.usesPhysicalTimber() && production.timber().charWood() != null;
     }
 
     public static String input(PlotProductionState production, ProductionCatalog.Entry entry,
                                TownWarehouse stock, UUID plot) {
         if (!ready(production, entry)) return null;
-        // Slot order is explicit and stable. Unselected stock and rare spare logs are never swept.
-        for (int slot = 0; slot < WorkplaceProductionUpgrades.slotCount(production); slot++) {
-            String item = entry.itemAtCursor(production.getSlotCursor(slot));
-            if (available(production, entry, stock, plot, item)) return item;
-        }
-        return null;
+        // Only the wood the player chose is ever charred. Other stock and rare logs are never swept.
+        String chosen = production.timber().charWood();
+        return available(production, entry, stock, plot, chosen) ? chosen : null;
     }
 
     private static boolean ready(PlotProductionState production, ProductionCatalog.Entry entry) {
-        return production.usesPhysicalTimber() && production.timber().cargo() == null
-            && selected(production, entry, OUTPUT)
+        return enabled(production) && production.timber().cargo() == null
             && production.getAmount(OUTPUT) < WorkplaceProductionUpgrades.effectiveMaxStorage(production, entry, OUTPUT);
     }
 
     public static boolean available(PlotProductionState production, ProductionCatalog.Entry entry,
                                     TownWarehouse stock, UUID plot, String item) {
-        return item != null && NativeTimberGrowth.species(item) != null && selected(production, entry, item)
+        return item != null && !OUTPUT.equals(item) && item.equals(production.timber().charWood())
+            && NativeTimberGrowth.species(item) != null
             && production.getAmount(item) - stock.reservedProduction(plot, item) >= LOG_COST;
     }
 

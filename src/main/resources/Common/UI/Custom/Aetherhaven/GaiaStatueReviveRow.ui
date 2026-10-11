@@ -1,10 +1,11 @@
 $C = "../Common.ui";
+$T = "BuildingMasteryTheme.ui";
 
 Group #ReviveRow {
   LayoutMode: Left;
-  Anchor: (Bottom: 8);
-  Padding: (Horizontal: 6, Vertical: 4);
-  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+  Anchor: (Height: 80, Bottom: 10);
+  Padding: (Horizontal: 12, Vertical: 10);
+  Background: $T.@Panel;
 
   AssetImage #Portrait {
     Anchor: (Width: 56, Height: 56, Right: 8);
@@ -18,6 +19,7 @@ Group #ReviveRow {
   }
 
   $C.@TextButton #ReviveButton {
+    Anchor: (Width: 150, Height: 42, Top: 8);
     Text: "";
   }
 }

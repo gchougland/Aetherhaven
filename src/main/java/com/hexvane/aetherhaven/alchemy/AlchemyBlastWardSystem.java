@@ -6,6 +6,7 @@ import com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffec
 import com.hypixel.hytale.server.core.entity.effect.EffectControllerComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.*;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.ExplodeInteraction;
 
 /** Native explosions use Environment, which bypasses ordinary damage resistance assets. */
 public final class AlchemyBlastWardSystem extends DamageEventSystem {
@@ -21,7 +22,7 @@ public final class AlchemyBlastWardSystem extends DamageEventSystem {
         if(blast||poison)damage.setCancelled(true);
     }
     public static boolean blocks(Damage.Source source,String cause) {
-        return source instanceof Damage.EnvironmentSource environment && "explosion".equals(environment.getType())
+        return source == ExplodeInteraction.DAMAGE_SOURCE_EXPLOSION
             || source instanceof Damage.ProjectileSource && "Environment".equals(cause);
     }
 }

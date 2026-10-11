@@ -3,11 +3,16 @@ package com.hexvane.aetherhaven.placement;
 import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.pathtool.PathGrounding;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.blockhitbox.BlockBoundingBoxes;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -15,10 +20,12 @@ import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3i;
+import java.util.HashSet;
+import java.util.function.IntBinaryOperator;
 
 /**
  * Resolves plot sign placement independently from the building preview anchor: sign XZ sits at the horizontal center of
- * the prefab footprint (from the preview building pose), and sign Y is terrain-snapped under that column.
+ * the prefab footprint (from the preview building pose), and sign Y clears the highest ground under its rotated hitbox.
  */
 public final class PlotSignGrounding {
     private static final int MAX_RAY_DOWN = 512;
@@ -45,8 +52,24 @@ public final class PlotSignGrounding {
         int sx = fp.horizontalCenterX();
         int sz = fp.horizontalCenterZ();
         int startY = Math.max(previewSignAnchor.y, fp.getMaxY());
-        int signY = resolveSignY(world, sx, sz, startY, previewSignAnchor.y);
+        BlockType sign = BlockType.getAssetMap().getAsset(AetherhavenConstants.PLOT_SIGN_ITEM_ID);
+        BlockBoundingBoxes hitbox = sign == null ? null : BlockBoundingBoxes.getAssetMap().getAsset(sign.getHitboxTypeIndex());
+        int signY = hitbox == null ? resolveSignY(world, sx, sz, startY, previewSignAnchor.y)
+            : resolveFootprintY(hitbox.get(RotationTuple.index(prefabYaw, Rotation.None, Rotation.None)), sx, sz,
+                (x, z) -> resolveSignY(world, x, z, startY, previewSignAnchor.y));
         return new Vector3i(sx, signY, sz);
+    }
+
+    private record Column(int x, int z) {}
+
+    /** Use native filler coverage so all rotations and future sign hitbox changes stay consistent with placement. */
+    static int resolveFootprintY(BlockBoundingBoxes.RotatedVariantBoxes boxes, int x, int z, IntBinaryOperator columnY) {
+        var columns = new HashSet<Column>();
+        columns.add(new Column(x, z));
+        FillerBlockUtil.forEachFillerBlock(boxes, (dx, dy, dz) -> columns.add(new Column(x + dx, z + dz)));
+        int highest = Integer.MIN_VALUE;
+        for (var column : columns) highest = Math.max(highest, columnY.applyAsInt(column.x(), column.z()));
+        return highest;
     }
 
     /**

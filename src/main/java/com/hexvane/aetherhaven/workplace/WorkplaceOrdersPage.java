@@ -101,6 +101,8 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
         if(brewing)buildAlchemy(c,e,site,equipment,town,workers,plugin);
         if(cropSheet)buildCultivation(c,e,site,town,plugin);
         if(equipmentSheet)buildArmory(c,e,site,equipment,town,workers,plugin);
+        buildFurnaces(c,store.getExternalData().getWorld(),site,equipment);
+        buildStored(c,e,site,town,plugin);
         c.clear("#Recipes"); int index=0;
         boolean recipeList=!designer&&!brewing&&!cropSheet&&!equipmentSheet;
         var matches=recipeList?plugin.getApprenticeRecipes().all().stream()
@@ -163,9 +165,9 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
                 }
                 var craftRecipe=recipe.source();
                 double duration=craftRecipe==null?recipe.workSeconds():craftRecipe.getTimeSeconds();
-                int percent=(int)Math.min(100,Math.floor(100*batch.workSeconds()/Math.max(6,duration)));
+                int percent=(int)Math.min(100,Math.floor(100*batch.workSeconds()/(Math.max(6,duration)*batch.crafts())));
                 delivery=crafter==null?batch.workSeconds()>0?"Work paused at "+percent+"%. Waiting for an Apprentice.":delivery
-                    :crafter+" is crafting | "+percent+"% complete";
+                    :crafter+" is crafting"+(batch.crafts()>1?" "+batch.crafts()+" batches":"")+" | "+percent+"% complete";
             }
             if(batch!=null&&batch.cultivation()&&!batch.cancelled()) {
                 int growing=0,ready=0,preparing=0;
@@ -219,6 +221,10 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
             var plan=plugin.getApprenticeRecipes().find(armorRecipeId(armorClass,tier));
             c.set(row+" #Name.Text",pretty(tier));
             c.set(row+" #Skill.Text",plan==null?"No recipe":plan.townRank()==null?"Skill "+plan.skillLevel():"Rank "+plan.townRank()+" | Skill "+plan.skillLevel());
+            // A tier the town cannot make yet is greyed, but can still be picked to read what it needs.
+            boolean tierLocked=plan==null||plan.type()!=site.type()||locked(plan,site,equipment,town,workers);
+            c.set(row+" #Name.Style.TextColor",tierLocked?"#6f7884":"#e4e9ef");
+            c.set(row+" #Skill.Style.TextColor",tierLocked?"#5d6670":"#9fc5b2");
             c.set(row+" #Mark.Visible",tier.equals(armorTier));
             e.addEventBinding(CustomUIEventBindingType.Activating,row,event("ArmorTier",site).append("Id",tier),false);
         }
@@ -336,6 +342,109 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
         c.set(host+" #Status.Text",choice==null?"Browse all plans to find recipes supplied by other mods.":status(choice,site,equipment,town,workers));
     }
     private static String pretty(String word){return Character.toUpperCase(word.charAt(0))+word.substring(1).toLowerCase(Locale.ROOT);}
+    /** Item ids this workplace's tasks produce. Finished goods are shared by the town, so these pick out its own. */
+    private static Set<String> produced(ApprenticeWorkplace site,AetherhavenPlugin plugin) {
+        var items=new HashSet<String>();
+        for(var order:site.orders().list()) {
+            var recipe=plugin.getApprenticeRecipes().find(order.recipeId());var source=recipe==null?null:recipe.source();
+            if(source==null||source.getOutputs()==null)continue;
+            for(var output:source.getOutputs())if(output!=null&&output.getItemId()!=null)items.add(output.getItemId());
+        }
+        return items;
+    }
+    private static final int FURNACES_SHOWN=3;
+    /** One furnace as the game holds it right now: what is waiting to be smelted, its fuel, and what has come out. */
+    record FurnaceView(boolean active,List<com.hypixel.hytale.server.core.inventory.ItemStack> in,List<com.hypixel.hytale.server.core.inventory.ItemStack> out) {
+        String status(int number) {
+            int waiting=in.stream().mapToInt(com.hypixel.hytale.server.core.inventory.ItemStack::getQuantity).sum();
+            return "Furnace "+number+"\n"+(active?"Smelting":waiting>0||!out.isEmpty()?"Stopped":"Empty");
+        }
+    }
+    private static List<com.hypixel.hytale.server.core.inventory.ItemStack> stacks(com.hypixel.hytale.server.core.inventory.container.ItemContainer container) {
+        var held=new ArrayList<com.hypixel.hytale.server.core.inventory.ItemStack>();
+        if(container!=null)for(short slot=0;slot<container.getCapacity();slot++) {
+            var stack=container.getItemStack(slot);if(!com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(stack))held.add(stack);
+        }
+        return held;
+    }
+    /** Reads a furnace in live terrain. Null when the block is not a loaded furnace. */
+    private static FurnaceView furnace(com.hypixel.hytale.server.core.universe.world.World world,WorkplaceEquipment.Bench bench) {
+        var ref=com.hexvane.aetherhaven.world.ChunkSectionBlockUtil.blockEntityRefAt(world,bench.x(),bench.y(),bench.z());
+        var processing=ref==null||!ref.isValid()?null:world.getChunkStore().getStore().getComponent(ref,
+            com.hypixel.hytale.builtin.crafting.component.ProcessingBenchBlock.getComponentType());
+        if(processing==null)return null;
+        var in=new ArrayList<>(stacks(processing.getInputContainer()));in.addAll(stacks(processing.getFuelContainer()));
+        return new FurnaceView(processing.isActive(),in,stacks(processing.getOutputContainer()));
+    }
+    /** A smelting workplace shows what each of its furnaces holds, so a stalled or empty furnace can be seen at a glance. */
+    private void buildFurnaces(UICommandBuilder c,com.hypixel.hytale.server.core.universe.world.World world,ApprenticeWorkplace site,WorkplaceEquipment.Snapshot equipment) {
+        boolean smelting=site.type()==com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.SMELTING;
+        c.clear("#Furnaces");c.set("#Furnaces.Visible",smelting);
+        if(!smelting)return;
+        int row=0;
+        for(var bench:equipment.benches()) {
+            if(!"Furnace".equals(bench.id())||row>=FURNACES_SHOWN)continue;
+            var view=furnace(world,bench);if(view==null)continue;
+            c.append("#Furnaces","Aetherhaven/WorkplaceFurnaceRow.ui");String at="#Furnaces["+row+++"]";
+            c.set(at+" #Name.Text",view.status(row));
+            furnaceCells(c,at+" #In",view.in(),"In the furnace");
+            furnaceCells(c,at+" #Out",view.out(),"Smelted. An Apprentice collects it when the furnace stops.");
+        }
+    }
+    private static void furnaceCells(UICommandBuilder c,String group,List<com.hypixel.hytale.server.core.inventory.ItemStack> stacks,String tooltip) {
+        int cell=0;
+        for(var stack:stacks) {
+            if(cell>=4)break;
+            c.append(group,"Aetherhaven/WarehouseItemSlot.ui");String at=group+"["+cell+++"]";
+            c.set(at+" #Icon.ItemId",stack.getItemId());c.set(at+" #Quantity.Text",Integer.toString(stack.getQuantity()));
+            c.set(at+" #Cell.Disabled",true);c.set(at+" #Cell.TooltipText",stack.getQuantity()+" "+tooltip.substring(0,1).toLowerCase(Locale.ROOT)+tooltip.substring(1));
+        }
+    }
+    /** Smelted goods wait at the furnace that made them, not in Crafted Goods. */
+    private boolean buildSmelted(UICommandBuilder c,UIEventBuilder e,ApprenticeWorkplace site,TownRecord town) {
+        if(site.type()!=com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.SMELTING)return false;
+        var warehouse=town.getWarehouse();int shown=0;
+        boolean collect=com.hexvane.aetherhaven.warehouse.WarehouseAccess.canBrowse(town,playerRef.getUuid());
+        for(var origin:warehouse.smelting().origins()) {
+            var at=origin.location();
+            if(at==null||!site.area().contains(at.x()+.5,at.y()+.5,at.z()+.5))continue;
+            for(short slot=0;slot<origin.slots()&&shown<STORED_SHOWN;slot++) {
+                var stack=origin.stack(slot);if(com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(stack))continue;
+                int reserved=warehouse.reservedSmelting(origin.id(),slot),free=Math.max(0,stack.getQuantity()-reserved);
+                c.append("#Stored","Aetherhaven/WarehouseItemSlot.ui");String cell="#Stored["+shown+++"]";
+                c.set(cell+" #Icon.ItemId",stack.getItemId());c.set(cell+" #Quantity.Text",Integer.toString(stack.getQuantity()));
+                c.set(cell+" #Cell.Disabled",!collect||free<=0);
+                c.set(cell+" #Cell.TooltipText",stack.getQuantity()+" stored at the furnace"+(reserved>0?"\n"+reserved+" kept for a workplace":"")
+                    +(!collect?"\nYou may not take from the town stores.":free>0?"\nClick to collect":""));
+                e.addEventBinding(CustomUIEventBindingType.Activating,cell+" #Cell",event("CollectSmelted",site).append("Id",origin.id()+"|"+slot),false);
+            }
+        }
+        c.set("#StoredEmpty.Visible",shown==0);
+        c.set("#StoredTitle.Text","SMELTED GOODS AT THE FURNACES");
+        return true;
+    }
+    /** Shows what this workplace has finished and lets the player take it without walking to the warehouse. */
+    private void buildStored(UICommandBuilder c,UIEventBuilder e,ApprenticeWorkplace site,TownRecord town,AetherhavenPlugin plugin) {
+        c.clear("#Stored");
+        if(buildSmelted(c,e,site,town))return;
+        var warehouse=town.getWarehouse();var items=produced(site,plugin);int shown=0;
+        boolean collect=com.hexvane.aetherhaven.warehouse.WarehouseAccess.canBrowse(town,playerRef.getUuid());
+        var page=com.hexvane.aetherhaven.warehouse.TownWarehouse.Page.OUTPUT;
+        for(short slot=0;slot<warehouse.slots(page)&&shown<STORED_SHOWN;slot++) {
+            var stack=warehouse.stack(page,slot);
+            if(com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(stack)||!items.contains(stack.getItemId()))continue;
+            int reserved=warehouse.reserved(page,slot),free=Math.max(0,stack.getQuantity()-reserved);
+            c.append("#Stored","Aetherhaven/WarehouseItemSlot.ui");String cell="#Stored["+shown+++"]";
+            c.set(cell+" #Icon.ItemId",stack.getItemId());c.set(cell+" #Quantity.Text",Integer.toString(stack.getQuantity()));
+            c.set(cell+" #Cell.Disabled",!collect||free<=0);
+            c.set(cell+" #Cell.TooltipText",stack.getQuantity()+" in Crafted Goods"+(reserved>0?"\n"+reserved+" kept for a workplace":"")
+                +(!collect?"\nYou may not take from the town stores.":free>0?"\nClick to collect":""));
+            e.addEventBinding(CustomUIEventBindingType.Activating,cell+" #Cell",event("Collect",site).append("Id",Short.toString(slot)),false);
+        }
+        c.set("#StoredEmpty.Visible",shown==0);
+        c.set("#StoredTitle.Text","FINISHED GOODS IN STORE ("+warehouse.used(page)+" / "+warehouse.slots(page)+" slots)");
+    }
+    private static final int STORED_SHOWN=12;
     private EventData event(String action,ApprenticeWorkplace site) {
         return new EventData().append("Action",action).append("Revision",Long.toString(site.orders().revision()))
             .append("@Quantity","#OrderQuantity.Value").append("@Search","#Search.Value");
@@ -404,6 +513,42 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
             String query=data.search.strip().substring(0,Math.min(data.search.strip().length(),80));
             if(!query.equals(search))recipePage=0;
             search=query;
+        }
+        if("CollectSmelted".equals(data.action)&&data.id!=null) {
+            var warehouse=town.getWarehouse();
+            var inventory=com.hypixel.hytale.server.core.inventory.InventoryComponent.getCombined(store,ref,
+                com.hypixel.hytale.server.core.inventory.InventoryComponent.HOTBAR_STORAGE_BACKPACK);
+            try {
+                int bar=data.id.lastIndexOf('|');
+                var origin=bar<0?null:warehouse.smelting().origin(UUID.fromString(data.id.substring(0,bar)));
+                short slot=bar<0?-1:Short.parseShort(data.id.substring(bar+1));
+                var at=origin==null?null:origin.location();
+                var stack=origin==null||slot<0||slot>=origin.slots()?null:origin.stack(slot);
+                if(inventory==null||!com.hexvane.aetherhaven.warehouse.WarehouseAccess.canBrowse(town,playerRef.getUuid()))hint="You may not take from the town stores.";
+                else if(com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(stack)||at==null||!site.area().contains(at.x()+.5,at.y()+.5,at.z()+.5))hint="Those goods are no longer there.";
+                else {
+                    int count=Math.max(0,stack.getQuantity()-warehouse.reservedSmelting(origin.id(),slot));
+                    int moved=count==0?0:warehouse.smelting().withdraw(origin.id(),slot,stack,count,inventory,warehouse.smelting().revision());
+                    hint=moved>0?"Collected "+moved+(moved==1?" item.":" items."):count==0?"Those supplies are reserved for a workplace.":"Storage changed or your inventory is full.";
+                    if(moved>0){warehouse.markProductionWithdrawal();manager.updateTown(town);}
+                }
+            } catch(IllegalArgumentException invalid) { hint="Those goods are no longer there."; }
+        }
+        if("Collect".equals(data.action)&&data.id!=null) {
+            var warehouse=town.getWarehouse();var page=com.hexvane.aetherhaven.warehouse.TownWarehouse.Page.OUTPUT;
+            var inventory=com.hypixel.hytale.server.core.inventory.InventoryComponent.getCombined(store,ref,
+                com.hypixel.hytale.server.core.inventory.InventoryComponent.HOTBAR_STORAGE_BACKPACK);
+            try {
+                short slot=Short.parseShort(data.id);
+                var stack=slot<0||slot>=warehouse.slots(page)?null:warehouse.stack(page,slot);
+                if(inventory==null||!com.hexvane.aetherhaven.warehouse.WarehouseAccess.canBrowse(town,playerRef.getUuid()))hint="You may not take from the town stores.";
+                else if(com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(stack)||!produced(site,plugin).contains(stack.getItemId()))hint="Those goods are no longer there.";
+                else {
+                    var result=warehouse.withdraw(page,inventory,slot,stack,com.hexvane.aetherhaven.warehouse.TownWarehouse.Amount.STACK,warehouse.revision());
+                    hint=result.error()!=null?result.error():"Collected "+result.moved()+(result.moved()==1?" item.":" items.");
+                    if(result.moved()>0)manager.updateTown(town);
+                }
+            } catch(NumberFormatException invalid) { hint="Those goods are no longer there."; }
         }
         if("RecipePrevious".equals(data.action))recipePage--;
         if("RecipeNext".equals(data.action))recipePage++;

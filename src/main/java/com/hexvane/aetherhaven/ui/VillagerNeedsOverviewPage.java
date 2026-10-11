@@ -468,6 +468,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
                 AetherhavenNpcTeleport.apply(npcRef, es, Teleport.createExact(target, bodyRot));
                 long now = VillagerAutonomySystem.resolveAutonomyNowMs(es);
                 VillagerAutonomySystem.resetAutonomyForRescue(npcRef, es, now);
+                com.hexvane.aetherhaven.npc.NpcServicePause.begin(npcRef, es, true);
                 playerRef.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.rescueDone"));
             }
         );

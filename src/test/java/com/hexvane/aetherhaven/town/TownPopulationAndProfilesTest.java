@@ -110,9 +110,9 @@ class TownPopulationAndProfilesTest {
         assertEquals(5, corrupt.attribute(TownsfolkAttribute.STRENGTH));
     }
 
-    @Test void classStartingAttributesReflectTheirRoleWithoutResettingOtherAttributes() {
-        var mage = gson.fromJson("{\"equipmentProfileId\":\"guard_mage\"}", TownsfolkCharacterDefinition.class);
-        var archer = gson.fromJson("{\"equipmentProfileId\":\"guard_archer\"}", TownsfolkCharacterDefinition.class);
+    @Test void authoredStartingAttributesLeaveUnspecifiedAttributesAtDefault() {
+        var mage = gson.fromJson("{\"equipmentProfileId\":\"guard_mage\",\"startingAttributes\":{\"intelligence\":8}}", TownsfolkCharacterDefinition.class);
+        var archer = gson.fromJson("{\"equipmentProfileId\":\"guard_archer\",\"startingAttributes\":{\"dexterity\":8}}", TownsfolkCharacterDefinition.class);
         assertEquals(8, TownsfolkProgressService.startingProgress(mage).attribute(TownsfolkAttribute.INTELLIGENCE));
         assertEquals(8, TownsfolkProgressService.startingProgress(archer).attribute(TownsfolkAttribute.DEXTERITY));
         assertEquals(5, TownsfolkProgressService.startingProgress(archer).attribute(TownsfolkAttribute.STRENGTH));

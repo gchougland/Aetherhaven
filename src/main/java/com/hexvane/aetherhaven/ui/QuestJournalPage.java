@@ -179,6 +179,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     private Message journalSettingsPersonalStatus;
     @Nullable
     private Message workStatus;
+    private final TownWorkforceUi.Layout workLayout = new TownWorkforceUi.Layout();
 
     public QuestJournalPage(@Nonnull PlayerRef playerRef) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
@@ -634,7 +635,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         if (currentTab == PlayerTownJournalState.JournalTab.WORK || currentTab == PlayerTownJournalState.JournalTab.BILLS) {
             var town = plugin != null && uc != null ? journalTown(world, store, ref, plugin, uc.getUuid()) : null;
             if (currentTab == PlayerTownJournalState.JournalTab.WORK) {
-                TownWorkforceUi.build(commandBuilder, eventBuilder, town, plugin, store, uc == null ? null : uc.getUuid());
+                TownWorkforceUi.build(commandBuilder, eventBuilder, town, plugin, store, uc == null ? null : uc.getUuid(), workLayout);
                 commandBuilder.set("#WorkNotice.Visible", workStatus != null);
                 if (workStatus != null) commandBuilder.set("#WorkNotice.TextSpans", workStatus);
             } else {

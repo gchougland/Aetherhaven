@@ -42,6 +42,12 @@
       "itemId": "Aetherhaven_Gold_Coin",
       "count": 14,
       "grantTo": "player"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Rootstone",
+      "count": 2,
+      "grantTo": "player"
     }
   ],
   "lifecycle": {

@@ -40,7 +40,7 @@ public final class TimberWorkService {
     }
     public static boolean active(Ref<EntityStore> ref) {var v=VISITS.get(ref);return v!=null&&v.active;}
     public static Predicate<Position> bounds(TownRecord town) {
-        return p->p.y()>=ChunkUtil.MIN_Y&&p.y()<=ChunkUtil.HEIGHT_MINUS_1
+        return p->p.y()>=ChunkUtil.MIN_Y
             &&TownTerritoryClaims.contains(town,ChunkUtil.chunkCoordinate(p.x()),ChunkUtil.chunkCoordinate(p.z()));
     }
     public static boolean tick(float dt,Ref<EntityStore> ref,Store<EntityStore> store,CommandBuffer<EntityStore> buffer,
@@ -53,12 +53,14 @@ public final class TimberWorkService {
         }
         var production=town.getOrCreatePlotProduction(plot.getPlotId());
         if(!production.usesPhysicalTimber()){interrupt(ref,store,npc,buffer);return false;}
-        if(needs.getHunger()<20||needs.getEnergy()<20||autonomy.isFillingHunger()||autonomy.isFillingEnergy()
-            ||store.getComponent(ref,DeathComponent.getComponentType())!=null
+        if(store.getComponent(ref,DeathComponent.getComponentType())!=null){interrupt(ref,store,npc,buffer);return false;}
+        boolean offDuty=needs.getHunger()<20||needs.getEnergy()<20||autonomy.isFillingHunger()||autonomy.isFillingEnergy()
             ||!ProductionLiveWorkDetection.isOnWorkSchedule(store,ref,npc,plugin.getVillagerDefinitionCatalog(),plugin.getVillagerScheduleRegistry())
-            ||!com.hexvane.aetherhaven.economy.TownEconomyPresence.hasMemberHere(store,town)) {
-            interrupt(ref,store,npc,buffer);return false;
-        }
+            ||!com.hexvane.aetherhaven.economy.TownEconomyPresence.hasMemberHere(store,town);
+        // A felling under way and a harvest in her arms are always seen through, even when her shift has ended.
+        var underway=VISITS.get(ref);
+        boolean finishing=production.timber().cargo()!=null||underway!=null&&underway.active&&underway.action==Action.CHOP;
+        if(offDuty&&!finishing){interrupt(ref,store,npc,buffer);return false;}
         var transform=store.getComponent(ref,TransformComponent.getComponentType());if(transform==null)return true;
         var world=store.getExternalData().getWorld();var position=transform.getPosition();var timber=production.timber();
         var entry=ProductionEffectiveCatalog.effective(plugin.getProductionCatalog(),plugin.getWorkplaceUnlockCatalog(),AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL,production);
@@ -69,9 +71,13 @@ public final class TimberWorkService {
         visit.plot=plot.getPlotId();
         if(now<visit.retry)return true;
         if(!visit.active) {
-            if(!choose(world,plot,production,entry,town,visit,now)){visit.retry=now+2000;return true;}
+            if(!choose(world,plot,production,entry,town,visit,now)||offDuty&&visit.action!=Action.DELIVER) {
+                // Nothing she can finish right now, such as stores she cannot reach after hours. She keeps the harvest and rests.
+                if(offDuty){interrupt(ref,store,npc,buffer);return false;}
+                visit.retry=now+2000;return true;
+            }
             visit.approach=CourierWorkService.approach(world,visit.target,position,visit.attempt);
-            if(visit.approach==null){visit.retry=now+3000;return true;}
+            if(visit.approach==null){visit.attempt++;visit.retry=now+3000;if(offDuty){interrupt(ref,store,npc,buffer);return false;}return true;}
             var registry=AetherhavenWorldRegistries.getOrCreatePoiRegistry(world,plugin);
             VillagerAutonomySystem.abortActivePoiUseAndDismount(ref,store,buffer,autonomy,needs,registry,false);
             autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);autonomy.clearTravelAndPoiState();
@@ -83,11 +89,12 @@ public final class TimberWorkService {
             return true;
         }
         if(!masteryAllows(town,production,visit.action,visit.slot)||!valid(world,plot,production,entry,visit)||!CourierWorkService.clearApproach(world,visit.approach)
-            ||!CourierWorkService.arrived(position,visit.approach)&&now-visit.began>30000) {
+            ||!reached(position,visit)&&now-visit.began>30000) {
             visit.attempt++;visit.retry=now+3000;stop(ref,store,npc,buffer,visit);return true;
         }
         if(store.getComponent(ref,com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType())!=null)return true;
-        if(!CourierWorkService.arrived(position,visit.approach)) {
+        if(!reached(position,visit)) {
+            WorkTravelRecovery.keepMoving(ref,store,buffer,npc,position,visit.approach,now);
             npc.setLeashPoint(new Vector3d(visit.approach));VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
             VillagerDoorUtil.tryOpenDoorsTowardLeash(world,position,visit.approach,null);
             buffer.putComponent(ref,NPCEntity.getComponentType(),npc);return true;
@@ -98,9 +105,11 @@ public final class TimberWorkService {
         if(visit.action==Action.TEND) {
             visit.carrying=true;
             if(now-visit.lastHit>=2500) {
-                visit.lastHit=now;buffer.run(st->{if(ref.isValid()&&visit.active){
-                    VillagerLifeProps.equip(ref,"WaterCrops",st);
+                // The growth song: an open-handed gesture toward the tree while light gathers at its roots.
+                visit.lastHit=now;var song=new Vector3d(visit.target.x()+.5,visit.target.y()+.1,visit.target.z()+.5);
+                buffer.run(st->{if(ref.isValid()&&visit.active){
                     AnimationUtils.playAnimation(ref,AnimationSlot.Action,"Aetherhaven_Work_Actions","WaterCrops",true,st);
+                    VillagerWorkVisuals.groveSong(st,song);
                 }});
             }
             visit.tending+=step;
@@ -112,7 +121,7 @@ public final class TimberWorkService {
                     var worker=ref.isValid()?st.getComponent(ref,TownVillagerBinding.getComponentType()):null;
                     var planted=timber.trees().get(tendingSlot);
                     if(actual!=null&&worker!=null&&plot.getPlotId().equals(worker.getJobPlotId())&&town.getTownId().equals(worker.getTownId())
-                        &&TownVillagerBinding.KIND_LOGGER.equals(worker.getKind())&&planted!=null&&planted.tree().id().equals(tendingTree)&&!timber.edited(tendingTree)
+                        &&TownVillagerBinding.KIND_LOGGER.equals(worker.getKind())&&planted!=null&&planted.tree().id().equals(tendingTree)
                         &&NativeTimberProducts.hasRoom(production,entry,planted.tree())
                         &&st.getComponent(ref,DeathComponent.getComponentType())==null&&CourierWorkService.arrived(actual.getPosition(),tendingStand)
                         &&visit.active&&visit.action==Action.TEND&&plot.getState()==PlotInstanceState.COMPLETE
@@ -147,7 +156,7 @@ public final class TimberWorkService {
             var tree=timber.trees().get(visit.slot).tree();
             long logs=tree.mature().cells().stream().filter(c->c.kind()==TimberHarvestPlan.Kind.TIMBER&&c.filler()==0).count();
             if(timber.chopping(visit.slot)<Math.max(8,logs*2))return true;
-        }else if(visit.attendance<(visit.action==Action.PLANT?4:1.5))return true;
+        }else if(visit.attendance<(visit.action==Action.PLANT?4:visit.action==Action.DELIVER?.75:1.5))return true;
         // All terrain and storage mutations happen after the entity command buffer, with fresh attendance checks.
         final int slot=visit.slot;final UUID identity=visit.tree;final Action action=visit.action;
         final Vector3d standing=new Vector3d(visit.approach);final WarehouseBatch.Point target=visit.target;
@@ -159,9 +168,12 @@ public final class TimberWorkService {
             if(actual==null||bound==null||!plot.getPlotId().equals(bound.getJobPlotId())
                 ||!town.getTownId().equals(bound.getTownId())||!TownVillagerBinding.KIND_LOGGER.equals(bound.getKind())
                 ||plot.getState()!=PlotInstanceState.COMPLETE
-                ||!CourierWorkService.arrived(actual.getPosition(),standing)||town.findPlotById(plot.getPlotId())!=plot
-                ||!ProductionLiveWorkDetection.isOnWorkSchedule(st,ref,npc,plugin.getVillagerDefinitionCatalog(),plugin.getVillagerScheduleRegistry())
-                ||!com.hexvane.aetherhaven.economy.TownEconomyPresence.hasMemberHere(st,town))return;
+                ||!(CourierWorkService.arrived(actual.getPosition(),standing)||action==Action.DELIVER&&beside(actual.getPosition(),target))
+                ||town.findPlotById(plot.getPlotId())!=plot)return;
+            // Felling and putting the harvest away may finish after hours. Everything else needs her shift.
+            if(action!=Action.DELIVER&&action!=Action.CHOP
+                &&(!ProductionLiveWorkDetection.isOnWorkSchedule(st,ref,npc,plugin.getVillagerDefinitionCatalog(),plugin.getVillagerScheduleRegistry())
+                ||!com.hexvane.aetherhaven.economy.TownEconomyPresence.hasMemberHere(st,town)))return;
             if(!masteryAllows(town,production,action,slot))return;
             boolean changed=false;
             if(action==Action.CHAR) {
@@ -170,8 +182,8 @@ public final class TimberWorkService {
                         new Position(target.x(),target.y(),target.z()));
             }else if(action==Action.PLANT) {
                 var planned=timber.groves().get(slot);
-                if(planned!=null&&planned.id().equals(identity)&&planned.output().equals(entry.itemAtCursor(production.getSlotCursor(slot)))
-                    &&slot<WorkplaceProductionUpgrades.slotCount(production)&&!timber.trees().containsKey(slot)
+                if(planned!=null&&planned.id().equals(identity)
+                    &&slot<WorkplaceProductionUpgrades.stoneCount(production)&&!timber.trees().containsKey(slot)
                     &&timber.cargo()==null
                     &&NativeTimberProducts.hasRoom(production,entry,planned)&&!otherGrove(town,plot,planned)) {
                     var fresh=NativeTimberGrowth.capture(planned.output(),planned.root(),0,bounds(town));
@@ -185,11 +197,13 @@ public final class TimberWorkService {
                 var planted=timber.trees().get(slot);
                 if(planted!=null&&planted.tree().id().equals(identity)&&NativeTimberProducts.hasRoom(production,entry,planted.tree()))
                     changed=NativeTimberHarvest.fell(world,production,slot,entry,bounds(town));
+                // She gathers the whole harvest as the tree comes down: wood, sapling, sap, sticks and any fibre.
+                if(changed)timber.carryAll();
             }else if(timber.cargo()!=null&&timber.cargo().tree().equals(identity)) {
-                if(action==Action.PICKUP)changed=timber.pickUp(16)>0;
-                else if(ProductionStorageLocator.valid(world,plot,target)) {
-                    int delivered=timber.deliver(production,WorkplaceProductionUpgrades.effectiveMaxStorage(production,entry,timber.cargo().output()),16);
-                    changed=delivered>0;
+                if(ProductionStorageLocator.valid(world,plot,target)) {
+                    timber.carryAll();
+                    int delivered=timber.deliverAll(production,item->WorkplaceProductionUpgrades.effectiveMaxStorage(production,entry,item));
+                    changed=true;
                     if(changed)com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService.progress(town,"logger").earnXp(delivered);
                 }
             }
@@ -200,11 +214,13 @@ public final class TimberWorkService {
     private static boolean choose(World world,PlotInstance plot,PlotProductionState production,ProductionCatalog.Entry entry,TownRecord town,Visit v,long now) {
         var timber=production.timber();var cargo=timber.cargo();
         if(cargo!=null) {
-            if(!hasSpace(production,entry,cargo.output()))return false;
-            v.tree=cargo.tree();v.action=cargo.carried()>0?Action.DELIVER:Action.PICKUP;
-            v.target=cargo.carried()>0?ProductionStorageLocator.find(world,plot,now):point(cargo.source());return v.target!=null;
+            // One trip home with everything. Older saves may still have a harvest waiting at its stump.
+            timber.carryAll();
+            v.tree=cargo.tree();v.action=Action.DELIVER;
+            v.target=ProductionStorageLocator.find(world,plot,now);return v.target!=null;
         }
-        int slots=WorkplaceProductionUpgrades.slotCount(production);
+        // Stone numbers are stable, so rotate across every possible stone and skip the unused ones.
+        int slots=TimberProductionState.MAX_STONES;int allowed=WorkplaceProductionUpgrades.stoneCount(production);
         String charInput=TimberCharring.input(production,entry,town.getWarehouse(),plot.getPlotId());
         if(charInput!=null&&com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issueForKind(town,"logger",TimberCharring.OUTPUT)==null) {
             var storage=ProductionStorageLocator.find(world,plot,now);
@@ -218,11 +234,14 @@ public final class TimberWorkService {
             var planted=timber.trees().get(slot);var planned=timber.groves().get(slot);
             if(planted!=null) {
                 if(com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issueForKind(town,"logger",planted.tree().output())!=null
-                    ||timber.edited(planted.tree().id())||!NativeTimberProducts.hasRoom(production,entry,planted.tree())||!NativeTimberHarvest.inspect(world,planted,bounds(town)).ready())continue;
+                    ||!NativeTimberProducts.hasRoom(production,entry,planted.tree()))continue;
+                var ready=NativeTimberHarvest.inspect(world,planted,bounds(town));
+                // Nothing of this tree is left to walk to. Its stone is free to grow again.
+                if(TimberFellingPlan.GONE.equals(ready.issue())){timber.release(slot,planted.tree().id());continue;}
+                if(!ready.ready())continue;
                 v.action=Action.CHOP;v.tree=planted.tree().id();v.target=point(planted.tree().root());
             }else {
-                if(planned==null||com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issueForKind(town,"logger",planned.output())!=null
-                    ||!planned.output().equals(entry.itemAtCursor(production.getSlotCursor(slot)))
+                if(planned==null||slot>=allowed||com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issueForKind(town,"logger",planned.output())!=null
                     ||!NativeTimberProducts.hasRoom(production,entry,planned)||otherGrove(town,plot,planned)
                     ||!NativeTimberPlanting.prepare(world,production,slot,planned,bounds(town)).ready())continue;
                 v.action=Action.PLANT;v.tree=planned.id();v.target=point(planned.root());
@@ -232,7 +251,7 @@ public final class TimberWorkService {
         for(int offset=0;offset<slots;offset++) {
             int slot=(timber.firstSlot(slots)+offset)%slots;var planted=timber.trees().get(slot);
             if(planted==null||com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issueForKind(town,"logger",planted.tree().output())!=null
-                ||timber.edited(planted.tree().id())||!NativeTimberProducts.hasRoom(production,entry,planted.tree())
+                ||!NativeTimberProducts.hasRoom(production,entry,planted.tree())
                 ||!NativeTimberTending.growing(world,planted.tree()))continue;
             v.slot=slot;v.tree=planted.tree().id();v.action=Action.TEND;v.target=point(planted.tree().root());return true;
         }
@@ -247,15 +266,15 @@ public final class TimberWorkService {
     }
     private static boolean valid(World world,PlotInstance plot,PlotProductionState p,ProductionCatalog.Entry entry,Visit v) {
         if(v.action==Action.CHAR)return p.timber().cargo()==null
-            &&TimberCharring.selected(p,entry,TimberCharring.OUTPUT)&&hasSpace(p,entry,TimberCharring.OUTPUT)
+            &&TimberCharring.enabled(p)&&hasSpace(p,entry,TimberCharring.OUTPUT)
             &&ProductionStorageLocator.valid(world,plot,v.target)&&TimberCharring.heatAvailable(world,plot,v.target,v.heat);
-        var t=p.timber();if(v.action==Action.DELIVER)return t.cargo()!=null&&v.tree.equals(t.cargo().tree())&&ProductionStorageLocator.valid(world,plot,v.target)&&hasSpace(p,entry,t.cargo().output());
+        var t=p.timber();if(v.action==Action.DELIVER)return t.cargo()!=null&&v.tree.equals(t.cargo().tree())&&ProductionStorageLocator.valid(world,plot,v.target);
         if(v.action==Action.PICKUP)return t.cargo()!=null&&v.tree.equals(t.cargo().tree())&&hasSpace(p,entry,t.cargo().output());
-        if(t.cargo()!=null||v.slot>=WorkplaceProductionUpgrades.slotCount(p))return false;
-        if(v.action==Action.CHOP||v.action==Action.TEND){var tree=t.trees().get(v.slot);return tree!=null&&!t.edited(v.tree)&&tree.tree().id().equals(v.tree)&&NativeTimberProducts.hasRoom(p,entry,tree.tree())
+        if(t.cargo()!=null||v.slot>=TimberProductionState.MAX_STONES)return false;
+        if(v.action==Action.CHOP||v.action==Action.TEND){var tree=t.trees().get(v.slot);return tree!=null&&tree.tree().id().equals(v.tree)&&NativeTimberProducts.hasRoom(p,entry,tree.tree())
             &&(v.action!=Action.TEND||NativeTimberTending.growing(world,tree.tree()));}
         var plan=t.groves().get(v.slot);
-        boolean same=plan!=null&&plan.id().equals(v.tree)&&!t.trees().containsKey(v.slot)&&plan.output().equals(entry.itemAtCursor(p.getSlotCursor(v.slot)));
+        boolean same=plan!=null&&plan.id().equals(v.tree)&&!t.trees().containsKey(v.slot);
         return v.action==Action.PLANT&&same&&NativeTimberProducts.hasRoom(p,entry,plan);
     }
     private static boolean otherGrove(TownRecord town,PlotInstance plot,TimberPlantingReceipt tree) {
@@ -270,7 +289,17 @@ public final class TimberWorkService {
         int ticks=ProductionTimeScaling.effectiveTicksForItemAtPlot(plugin.getConfig().get(),entry.ticksAtCursor(cursor),
             WorkplaceProductionUpgrades.speedMultiplier(p),world,plot.getSignX(),plot.getSignZ(),tree.output());
         long logs=tree.mature().cells().stream().filter(c->c.kind()==TimberHarvestPlan.Kind.TIMBER&&c.filler()==0).count();
-        return Math.max(30,logs*ticks/AetherhavenConstants.PRODUCTION_ENTITY_TICKS_PER_SECOND/WorkplaceProductionUpgrades.slotCount(p));
+        // Singing a tree up takes about as long as the old timers took to make the same wood across the whole mill.
+        return Math.max(30,logs*ticks/AetherhavenConstants.PRODUCTION_ENTITY_TICKS_PER_SECOND/WorkplaceProductionUpgrades.stoneCount(p));
+    }
+    /** Standing at the chosen spot, or for a delivery simply close enough to reach the stores. */
+    private static boolean reached(Vector3d position,Visit v) {
+        return CourierWorkService.arrived(position,v.approach)||v.action==Action.DELIVER&&beside(position,v.target);
+    }
+    private static boolean beside(Vector3d position,WarehouseBatch.Point target) {
+        if(target==null)return false;
+        double dx=target.x()+.5-position.x,dz=target.z()+.5-position.z;
+        return dx*dx+dz*dz<=2.5*2.5&&Math.abs(target.y()-position.y)<=1.5;
     }
     private static WarehouseBatch.Point point(Position p){return new WarehouseBatch.Point(p.x(),p.y(),p.z());}
     public static void interrupt(Ref<EntityStore> ref,Store<EntityStore> store,NPCEntity npc,CommandBuffer<EntityStore> buffer) {

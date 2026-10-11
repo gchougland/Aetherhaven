@@ -22,5 +22,14 @@
       "itemId": "Ingredient_Motes_Light",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "commerce": 5,
+    "alchemy": 3,
+    "logistics": 2
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "speed": 6
+  }
 }

@@ -117,9 +117,9 @@ class TownPayrollAndWorkTest {
         assertEquals(0, progress.priority(TownsfolkWorkType.SMELTING));
     }
 
-    @Test void crossModGuardProfilesUseTheirActualNpcClass() {
-        var definition = new Gson().fromJson("{\"id\":\"example\",\"equipmentProfileId\":\"lotr_guard_hobbit\"}", TownsfolkCharacterDefinition.class);
-        var progress = TownsfolkProgressService.startingProgress(definition, "Aetherhaven_Guard_Knight");
+    @Test void crossModCharactersUseTheirAuthoredStartingAttributes() {
+        var definition = new Gson().fromJson("{\"id\":\"example\",\"equipmentProfileId\":\"lotr_guard_hobbit\",\"startingAttributes\":{\"strength\":8,\"vitality\":7}}", TownsfolkCharacterDefinition.class);
+        var progress = TownsfolkProgressService.startingProgress(definition);
         assertEquals(8, progress.attribute(TownsfolkAttribute.STRENGTH));
         assertEquals(7, progress.attribute(TownsfolkAttribute.VITALITY));
     }

@@ -44,7 +44,7 @@
         },
         {
           "text": "aetherhaven_monster_hunter.how",
-          "icon": "hunts",
+          "icon": "UI/Custom/dialogue.png",
           "next": "how",
           "condition": {
             "type": "not",

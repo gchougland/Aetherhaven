@@ -193,7 +193,7 @@
         "Continue": true,
         "Sensor": { "Type": "Any" },
         "Actions": [
-          { "Type": "SetInteractable", "Interactable": true, "Hint": "aetherhaven_misc.aetherhaven.interaction.dialogue" }
+          { "Type": "SetAetherhavenInteractable", "Hint": "aetherhaven_misc.aetherhaven.interaction.dialogue" }
         ]
       },
       {

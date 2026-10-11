@@ -29,7 +29,7 @@ The Miner starts with a **Crude Pickaxe** and the Logger with a **Crude Hatchet*
 
 ### Timber and growing requirements
 
-Timber Mastery follows the sapling's Farming Bench tier, with a minimum of 1. Sapling tiers 0 to 2 need a Crude Hatchet, tier 3 needs Copper, tier 4 needs Iron, tiers 5 and 6 need Thorium or Cobalt, and tiers 7 and above need Adamantite. Check the lumbermill's storage before choosing a new timber.
+Timber Mastery follows the sapling's Farming Bench tier, with a minimum of 1. Sapling tiers 0 to 2 need a Crude Hatchet, tier 3 needs Copper, tier 4 needs Iron, tiers 5 and 6 need Thorium or Cobalt, and tiers 7 and above need Adamantite. A Rootstone tells you when the Logger needs more training for its tree.
 
 Farm crops use their seed's Farming Bench tier for the Farmer's Mastery requirement. The Druid needs Mastery **1, 4 and 7** for alchemical plant tiers **1, 2 and 3**. The Rancher needs Mastery **4** for medium hides and red feathers, and **7** for heavy hides. Stored output and material already being carried remain available while you train.
 

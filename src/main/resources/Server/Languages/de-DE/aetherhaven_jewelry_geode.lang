@@ -124,6 +124,7 @@ aetherhaven.ui.jewelryAppraisal.empty=Kein Schmuck in deiner Schnellzugriffsleis
 aetherhaven.ui.jewelryAppraisal.pick=Wählen Sie unten ein Element aus.
 aetherhaven.ui.jewelryAppraisal.select=Wählen
 aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.rowEquipped={itemName} ({status}, equipped)
 aetherhaven.ui.jewelryAppraisal.statusAppraised=bewertet
 aetherhaven.ui.jewelryAppraisal.statusUnidentified=unbekannt
 aetherhaven.ui.jewelryAppraisal.selectedHeader=Ausgewählt: {itemName}

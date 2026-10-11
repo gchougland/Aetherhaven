@@ -4,8 +4,13 @@ import java.util.*;
 import java.util.function.*;
 import static com.hexvane.aetherhaven.production.TimberHarvestPlan.*;
 
-/** Restores only the saved footprint of an owned, intact mature tree. No connected-block search. */
+/**
+ * Restores only the saved footprint of an owned mature tree, and within it only the cells that still
+ * hold that tree. Player edits are left alone and simply reduce the harvest. No connected-block search.
+ */
 public final class TimberFellingPlan {
+    /** Nothing of the tree remains. Its stone can grow a new one. */
+    public static final String GONE = "This tree is gone. A new one will grow here.";
     public record Change(Position position, Observed before, Observed after) {}
     public record Inspection(TimberFellingPlan plan, String issue) {
         public boolean ready() { return plan != null && issue == null; }
@@ -45,22 +50,20 @@ public final class TimberFellingPlan {
         for(var original:originals.values()) {
             var p=original.position();var current=read.apply(p);
             if(current==null || !current.loaded())return reject("The whole tree must be in the active area.");
-            if(current.protectedCell())return reject("A protected block occupies this tree's growing space.");
             snapshot.put(p,current);
             var restored=new Observed(true,original.block(),original.rotation(),0,false);
             var expected=expanded.get(p);
             // Native roots may leave nonreplaceable underground stone untouched.
-            boolean untouched=current.equals(restored);
-            if(expected!=null && !(p.y()<receipt.root().y() && untouched)) {
-                if(!matches.test(expected,current))return reject("This tree is still growing or its blocks have changed.");
+            if(current.equals(restored))continue;
+            // Anything a player trimmed, replaced or built here is theirs. Only the tree's own remaining blocks are removed.
+            if(current.protectedCell())continue;
+            if(expected!=null && matches.test(expected,current)) {
                 if(expected.kind()==Kind.TIMBER && expected.filler()==0)yield++;
-            } else if(!untouched && !(earlierRoots.contains(p) && "Empty".equals(current.blockId())
-                    && current.rotation()==0 && current.filler()==0)) {
-                return reject("The space around this tree has changed. Check it before harvesting.");
-            }
-            if(!untouched)changes.add(new Change(p,current,restored));
+            } else if(!(earlierRoots.contains(p) && "Empty".equals(current.blockId())
+                    && current.rotation()==0 && current.filler()==0)) continue;
+            changes.add(new Change(p,current,restored));
         }
-        if(yield<1 || changes.isEmpty())return reject("This tree has no timber ready to harvest.");
+        if(changes.isEmpty())return reject(GONE);
         // Canopy first keeps the intact lower trunk visible until the final changes.
         changes.sort(Comparator.comparingInt((Change c)->c.position().y()).reversed());
         return new Inspection(new TimberFellingPlan(receipt.id(),yield,changes,snapshot),null);

@@ -422,7 +422,7 @@ public final class PropPrefabBrowserPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         packet.biomeTint = blockChunk.getTint(x, z);
-        int envId = blockChunk.getEnvironment(x, y, z);
+        int envId = ChunkSectionBlockUtil.environmentId(world, x, y, z);
         var environment = Environment.getAssetMap().getAsset(envId);
         if (environment != null) {
             var waterColor = environment.getWaterTint();

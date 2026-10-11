@@ -73,6 +73,11 @@ public final class QuestBoardSlotRecord {
     @Nullable
     private List<String> huntEntityTagsAny;
 
+    /** Set on mining contracts, which otherwise behave as hunts: the same counter, turn in and journal entry. */
+    @SerializedName("mineBlockIdPrefixesAny")
+    @Nullable
+    private List<String> mineBlockIdPrefixesAny;
+
     @SerializedName("huntTargetLabelLangKey")
     @Nullable
     private String huntTargetLabelLangKey;
@@ -105,6 +110,86 @@ public final class QuestBoardSlotRecord {
     @Nullable
     private String raidApproachDirection;
 
+    /** Rescue contracts are raids on a temporary camp. Set when the offer is posted, so the board can show who is held. */
+    @SerializedName("rescueCharacterId")
+    @Nullable
+    private String rescueCharacterId;
+
+    /** Skills (by id) the rescued townsfolk gains one level in when they move in. */
+    @SerializedName("rescueSkillBoosts")
+    @Nullable
+    private List<String> rescueSkillBoosts;
+
+    @SerializedName("rescueCampPrefabs")
+    @Nullable
+    private List<String> rescueCampPrefabs;
+
+    /** World event that holds the camp, the camp origin and the captive. Set only while the contract is accepted. */
+    @SerializedName("rescueEventId")
+    @Nullable
+    private String rescueEventId;
+
+    @SerializedName("rescueCamp")
+    @Nullable
+    private int[] rescueCamp;
+
+    @SerializedName("rescueCaptiveUuid")
+    @Nullable
+    private String rescueCaptiveUuid;
+
+    /** True once a player has cut the captive's ropes. Only then can the contract be finished by talking to them. */
+    @SerializedName("rescueUntied")
+    private boolean rescueUntied;
+
+    public boolean isRescueUntied() { return rescueUntied; }
+
+    public void setRescueUntied(boolean untied) { this.rescueUntied = untied; }
+
+    public boolean isRescueQuest() {
+        return isRaidQuest() && rescueCharacterId != null && !rescueCharacterId.isBlank();
+    }
+
+    @Nullable
+    public String getRescueCharacterId() { return rescueCharacterId; }
+
+    public void setRescueCharacterId(@Nullable String id) { this.rescueCharacterId = id; }
+
+    @Nonnull
+    public List<String> rescueSkillBoostsOrEmpty() { return rescueSkillBoosts != null ? rescueSkillBoosts : List.of(); }
+
+    public void setRescueSkillBoosts(@Nonnull List<String> skills) { this.rescueSkillBoosts = new ArrayList<>(skills); }
+
+    @Nonnull
+    public List<String> rescueCampPrefabsOrEmpty() { return rescueCampPrefabs != null ? rescueCampPrefabs : List.of(); }
+
+    public void setRescueCampPrefabs(@Nonnull List<String> prefabs) { this.rescueCampPrefabs = new ArrayList<>(prefabs); }
+
+    @Nullable
+    public String getRescueEventId() { return rescueEventId; }
+
+    public void setRescueEventId(@Nullable String id) { this.rescueEventId = id; }
+
+    /** Camp origin as x, y, z, or null before the contract is accepted. */
+    @Nullable
+    public int[] getRescueCamp() { return rescueCamp != null && rescueCamp.length == 3 ? rescueCamp : null; }
+
+    public void setRescueCamp(@Nullable int[] camp) { this.rescueCamp = camp; }
+
+    /** Where the captive sits beside the camp. They are only placed there once a player comes near. */
+    @SerializedName("rescueCaptiveSpot")
+    @Nullable
+    private int[] rescueCaptiveSpot;
+
+    @Nullable
+    public int[] getRescueCaptiveSpot() { return rescueCaptiveSpot != null && rescueCaptiveSpot.length == 3 ? rescueCaptiveSpot : null; }
+
+    public void setRescueCaptiveSpot(@Nullable int[] spot) { this.rescueCaptiveSpot = spot; }
+
+    @Nullable
+    public String getRescueCaptiveUuid() { return rescueCaptiveUuid; }
+
+    public void setRescueCaptiveUuid(@Nullable String uuid) { this.rescueCaptiveUuid = uuid; }
+
     @Nonnull
     public static QuestBoardSlotRecord empty() {
         QuestBoardSlotRecord r = new QuestBoardSlotRecord();
@@ -129,6 +214,11 @@ public final class QuestBoardSlotRecord {
         huntKillProgress = 0;
         raidKillProgress = 0;
         raidSpawnedEntityUuids = null;
+        rescueEventId = null;
+        rescueCamp = null;
+        rescueCaptiveSpot = null;
+        rescueCaptiveUuid = null;
+        rescueUntied = false;
     }
 
     public void clearToEmpty() {
@@ -149,6 +239,7 @@ public final class QuestBoardSlotRecord {
         onlineDaysElapsed = 0;
         generationSeed = 0L;
         huntEntityTagsAny = null;
+        mineBlockIdPrefixesAny = null;
         huntTargetLabelLangKey = null;
         huntKillRequired = 0;
         huntKillProgress = 0;
@@ -158,6 +249,14 @@ public final class QuestBoardSlotRecord {
         raidSpawnedEntityUuids = null;
         raidMobRoleIds = null;
         raidApproachDirection = null;
+        rescueUntied = false;
+        rescueCharacterId = null;
+        rescueSkillBoosts = null;
+        rescueCampPrefabs = null;
+        rescueEventId = null;
+        rescueCamp = null;
+        rescueCaptiveSpot = null;
+        rescueCaptiveUuid = null;
     }
 
     @Nullable
@@ -337,6 +436,20 @@ public final class QuestBoardSlotRecord {
 
     public void setHuntKillProgress(int huntKillProgress) {
         this.huntKillProgress = Math.max(0, huntKillProgress);
+    }
+
+    @Nonnull
+    public List<String> mineBlockIdPrefixesAnyOrEmpty() {
+        return mineBlockIdPrefixesAny != null ? mineBlockIdPrefixesAny : List.of();
+    }
+
+    public void setMineBlockIdPrefixesAny(@Nonnull List<String> prefixes) {
+        this.mineBlockIdPrefixesAny = prefixes.isEmpty() ? null : new ArrayList<>(prefixes);
+    }
+
+    /** A hunt whose target is ore the player mines, not creatures the player kills. */
+    public boolean isMineQuest() {
+        return isHuntQuest() && mineBlockIdPrefixesAny != null && !mineBlockIdPrefixesAny.isEmpty();
     }
 
     public boolean isHuntQuest() {

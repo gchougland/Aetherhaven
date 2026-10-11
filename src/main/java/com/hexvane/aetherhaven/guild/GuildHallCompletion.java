@@ -112,6 +112,7 @@ public final class GuildHallCompletion {
         @Nonnull Store<EntityStore> store,
         @Nonnull PoiRegistry reg
     ) {
+        if (!town.hasQuestActiveOrCompleted("q_bard")) return;
         Ref<EntityStore> bardRef = findBardRef(store, town);
         if (bardRef == null || !bardRef.isValid()) {
             return;

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "q_bard",
+  "category": "town",
+  "assignNpcRoleId": "Aetherhaven_Bard",
+  "dialogueOfferEntryNodeId": "move_in_offer",
+  "title": "A Song for Our Town",
+  "description": "Invite Elias to make the guild hall his regular stage.",
+  "prerequisites": {
+    "completedQuestIds": [
+      "q_build_guild_hall"
+    ],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "stage",
+      "kind": "construction_built",
+      "constructionId": "plot_guild_hall",
+      "text": "Provide a completed guild hall for Elias to perform in."
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Welcome Elias to town."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Bard",
+      "amount": 10,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
+    ],
+    "onComplete": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ],
+    "onAbandon": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ]
+  },
+  "repeat": {
+    "mode": "none"
+  }
+}

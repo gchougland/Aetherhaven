@@ -87,15 +87,15 @@
   },
   "PlayerAnimationsId": "Block",
   "IconProperties": {
-    "Scale": 0.5,
+    "Scale": 0.58823,
     "Rotation": [
       22.5,
       45,
-      0
+      22.5
     ],
     "Translation": [
       0,
-      -10
+      -13.5
     ]
   },
   "Tags": {

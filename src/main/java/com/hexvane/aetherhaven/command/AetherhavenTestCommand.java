@@ -51,6 +51,8 @@ public final class AetherhavenTestCommand extends AbstractCommandCollection {
         addSubCommand(new AetherhavenHuntTestCommand());
         addSubCommand(new AetherhavenMiningTestCommand());
         addSubCommand(new AetherhavenTimberTestCommand());
+        addSubCommand(new AetherhavenCrafterTestCommand());
+        addSubCommand(new AetherhavenRescueTestCommand());
         addSubCommand(new AetherhavenFieldTestCommand());
         addSubCommand(new AetherhavenHerdTestCommand());
         addSubCommand(new AetherhavenExcavationTestCommand());

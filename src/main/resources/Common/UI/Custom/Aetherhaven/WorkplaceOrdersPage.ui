@@ -15,6 +15,7 @@ $C.@PageOverlay {
         $C.@SecondaryTextButton #Fuel { Text: "Fuel: wood"; Anchor: (Width: 210, Right: 12); }
         Label { Text: "Charcoal batches use wood. Other tasks use the chosen fuel."; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, VerticalAlignment: Center); }
       }
+      Group #Furnaces { LayoutMode: Top; Visible: false; }
       Group { LayoutMode: Left; FlexWeight: 1;
         Group { LayoutMode: Top; Anchor: (Width: 500, Right: 18);
           Label #CatalogHeading { Text: "RECIPES"; Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 16); }
@@ -53,9 +54,14 @@ $C.@PageOverlay {
           Label { Text: "MATERIALS PER BATCH"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12); }
           Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; FlexWeight: 1; Group #Inputs { LayoutMode: Top; } }
         }
-        Group { LayoutMode: Top; FlexWeight: 1;
+        Group { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 18);
           Label { Text: "OUTPUT PER BATCH"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12); }
           Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; FlexWeight: 1; Group #Outputs { LayoutMode: Top; } }
+        }
+        Group { LayoutMode: Top; Anchor: (Width: 372);
+          Label #StoredTitle { Text: "FINISHED GOODS IN STORE"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12); }
+          Label #StoredEmpty { Text: "Nothing from this workplace's tasks is waiting. Click a stack to collect it."; Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, TextColor: #becadb); }
+          Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; FlexWeight: 1; Group #Stored { LayoutMode: LeftCenterWrap; } }
         }
       }
       Group { LayoutMode: Left; Anchor: (Height: 40, Bottom: 8);

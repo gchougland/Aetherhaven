@@ -22,5 +22,14 @@
       "itemId": "Ingredient_Hay",
       "count": 3
     }
-  ]
+  ],
+  "startingSkills": {
+    "farming": 5,
+    "commerce": 3,
+    "logistics": 2
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "speed": 7
+  }
 }

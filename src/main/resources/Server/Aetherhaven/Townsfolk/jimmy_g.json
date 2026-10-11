@@ -22,5 +22,15 @@
       "itemId": "Food_Kebab_Meat",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "logistics": 5,
+    "mining": 3,
+    "building": 2
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "speed": 8,
+    "strength": 6
+  }
 }

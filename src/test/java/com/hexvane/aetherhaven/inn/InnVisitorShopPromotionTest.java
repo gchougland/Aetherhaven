@@ -54,6 +54,26 @@ class InnVisitorShopPromotionTest {
     }
 
     @Test
+    void bardRequiresHisOwnInvitationEvenWhenTheGuildHallAndHousingQuestsExist() throws Exception {
+        var def = gson.fromJson(java.nio.file.Files.readString(java.nio.file.Path.of(
+            "src/main/resources/Server/Aetherhaven/Villagers/Aetherhaven_Bard.json")), VillagerDefinition.class);
+        Map<String, QuestDefinition> entries = new LinkedHashMap<>();
+        for (var relative : java.util.List.of("Town/q_bard.json", "Housing/q_house_bard.json")) {
+            var quest = gson.fromJson(java.nio.file.Files.readString(java.nio.file.Path.of(
+                "subplugin-assets/Quests/Server/Aetherhaven/Quests/" + relative)), QuestDefinition.class);
+            entries.put(quest.idOrEmpty(), quest);
+        }
+        entries.put("q_build_guild_hall", gson.fromJson("{\"id\":\"q_build_guild_hall\",\"grantPlotTokenConstructionId\":\"plot_guild_hall\"}", QuestDefinition.class));
+        var quests = QuestCatalog.of(entries);
+        assertEquals("q_bard", InnVisitorShopPromotion.findShopQuestId(quests, ConstructionCatalog.empty(), def, "plot_guild_hall"));
+        var town = new com.hexvane.aetherhaven.town.TownRecord();
+        town.addActiveQuest("q_build_guild_hall");
+        assertFalse(InnVisitorShopPromotion.hasActiveShopQuest(town, quests, ConstructionCatalog.empty(), def));
+        town.addActiveQuest("q_bard");
+        assertTrue(InnVisitorShopPromotion.hasActiveShopQuest(town, quests, ConstructionCatalog.empty(), def));
+    }
+
+    @Test
     void resolveResidentKind_prefersDialogueVillagerKind() {
         VillagerDefinition def = gson.fromJson(
             """

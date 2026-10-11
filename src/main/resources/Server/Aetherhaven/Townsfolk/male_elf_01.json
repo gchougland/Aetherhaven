@@ -24,5 +24,14 @@
       "itemId": "Food_Cheese",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "alchemy": 5,
+    "jewelry": 3,
+    "crafting": 2
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "dexterity": 7
+  }
 }

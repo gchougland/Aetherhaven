@@ -184,7 +184,7 @@ public final class RootRemoverService {
 
     /** Soil, stone, grass, and other solid terrain; not air, fluids, leaves, or log wood. */
     private static boolean isSolidTerrain(@Nonnull World world, int x, int y, int z) {
-        if (y < ChunkUtil.MIN_Y || y > ChunkUtil.HEIGHT_MINUS_1) {
+        if (y < ChunkUtil.MIN_Y) {
             return false;
         }
         BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
@@ -231,7 +231,7 @@ public final class RootRemoverService {
                 int nx = c.x() + DX6[i];
                 int ny = c.y() + DY6[i];
                 int nz = c.z() + DZ6[i];
-                if (ny < ChunkUtil.MIN_Y || ny > ChunkUtil.HEIGHT_MINUS_1) {
+                if (ny < ChunkUtil.MIN_Y) {
                     continue;
                 }
                 Vector3i n = new Vector3i(nx, ny, nz);

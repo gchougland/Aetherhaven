@@ -170,6 +170,12 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
             cmd.set(card + " #CompletedOnly.Visible", false);
             cmd.set(card + " #CardBody.Visible", true);
             cmd.set(card + " #CardFooter.Visible", true);
+            cmd.set(card + " #ProfileButton.Visible", slot.isRescueQuest());
+            if (slot.isRescueQuest()) {
+                cmd.set(card + " #ProfileButton.TextSpans", Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.rescueProfileButton"));
+                evt.addEventBinding(CustomUIEventBindingType.Activating, card + " #ProfileButton",
+                    new EventData().append("Action", "RescueProfile").append("SlotIndex", String.valueOf(i)), false);
+            }
             cmd.set(card + " #CardHeader.Visible", true);
             cmd.set(card + " #QuestDescription.Visible", true);
             cmd.set(card + " #RequestedLabel.Visible", true);
@@ -181,9 +187,13 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
                 cmd.set(
                     card + " #RequestedLabel.TextSpans",
                     Message.translation(
-                        slot.isRaidQuest()
+                        slot.isRescueQuest()
+                            ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.requestedRescueLabel"
+                            : slot.isRaidQuest()
                             ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.requestedRaidLabel"
-                            : "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.requestedHuntLabel"
+                            : slot.isMineQuest()
+                                ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.requestedMineLabel"
+                                : "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.requestedHuntLabel"
                     )
                 );
             } else {
@@ -359,9 +369,23 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
         QuestBoardCatalog catalog = plugin.getQuestBoardCatalog();
         int slotIndex = parseSlotIndex(data.slotIndex);
 
+        if ("RescueProfile".equalsIgnoreCase(data.action)) {
+            PlayerRef viewer = store.getComponent(ref, PlayerRef.getComponentType());
+            var player = store.getComponent(ref, com.hypixel.hytale.server.core.entity.entities.Player.getComponentType());
+            if (viewer == null || player == null || slotIndex < 0 || slotIndex >= town.getQuestBoardSlots().size()) {
+                return;
+            }
+            QuestBoardSlotRecord rescue = town.getQuestBoardSlots().get(slotIndex);
+            if (rescue.isRescueQuest() && rescue.getRescueCharacterId() != null) {
+                player.getPageManager().openCustomPage(ref, store, TownsfolkProfilePage.preview(viewer, town.getTownId(),
+                    rescue.getRescueCharacterId(), rescue.rescueSkillBoostsOrEmpty()));
+            }
+            return;
+        }
         if ("AcceptSlot".equalsIgnoreCase(data.action)) {
             QuestBoardSlotRecord slotBefore = town.getQuestBoardSlots().get(slotIndex);
             boolean wasRaidOffer = slotBefore.stateEnum() == QuestBoardSlotState.OFFER && slotBefore.isRaidQuest();
+            boolean wasRescueOffer = wasRaidOffer && slotBefore.isRescueQuest();
             boolean accepted = QuestBoardService.acceptOffer(town, uc.getUuid(), slotIndex, catalog, world, store);
             tm.updateTown(town);
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
@@ -369,7 +393,8 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
                 if (accepted) {
                     pr.sendMessage(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.acceptedToast"));
                 } else if (wasRaidOffer) {
-                    pr.sendMessage(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.raidSpawnFailedToast"));
+                    pr.sendMessage(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard."
+                        + (wasRescueOffer ? "rescueStartFailedToast" : "raidSpawnFailedToast")));
                 }
             }
         } else if ("AbandonSlot".equalsIgnoreCase(data.action)) {

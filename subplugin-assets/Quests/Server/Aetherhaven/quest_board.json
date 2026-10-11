@@ -60,6 +60,9 @@
     },
     "raid": {
       "weight": 20
+    },
+    "rescue": {
+      "weight": 30
     }
   },
   "villagers": {
@@ -240,6 +243,206 @@
           ],
           "materialPaymentBonusGold": 190
         }
+      ],
+      "huntEntries": [
+        {
+          "id": "mine_copper",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_copper.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_copper.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.ore_copper",
+          "killSets": [
+            {
+              "weight": 1,
+              "killCount": 20,
+              "blockIdPrefixesAny": [
+                "Ore_Copper"
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 30,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "mine_iron",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "B",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_iron.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_iron.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.ore_iron",
+          "killSets": [
+            {
+              "weight": 1,
+              "killCount": 25,
+              "blockIdPrefixesAny": [
+                "Ore_Iron"
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 50,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "mine_silver",
+          "rank": "B",
+          "minRank": "B",
+          "maxRank": "S",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_silver.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_silver.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.ore_silver",
+          "killSets": [
+            {
+              "weight": 1,
+              "killCount": 25,
+              "blockIdPrefixesAny": [
+                "Ore_Silver"
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 120,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "mine_gold",
+          "rank": "A",
+          "minRank": "A",
+          "maxRank": "SS",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_gold.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_gold.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.ore_gold",
+          "killSets": [
+            {
+              "weight": 1,
+              "killCount": 25,
+              "blockIdPrefixesAny": [
+                "Ore_Gold"
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 180,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "mine_cobalt",
+          "rank": "S",
+          "minRank": "S",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_cobalt.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_cobalt.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.ore_cobalt",
+          "killSets": [
+            {
+              "weight": 1,
+              "killCount": 30,
+              "blockIdPrefixesAny": [
+                "Ore_Cobalt"
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 300,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "mine_adamantite",
+          "rank": "SS",
+          "minRank": "SS",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_adamantite.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.mine_adamantite.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.ore_adamantite",
+          "killSets": [
+            {
+              "weight": 1,
+              "killCount": 30,
+              "blockIdPrefixesAny": [
+                "Ore_Adamantite"
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 450,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        }
       ]
     },
     "Aetherhaven_Farmer": {
@@ -348,49 +551,6 @@
             }
           ],
           "materialPaymentBonusGold": 50
-        },
-        {
-          "id": "harvest_feast",
-          "rank": "B",
-          "minRank": "B",
-          "maxRank": "SSS",
-          "weight": 10,
-          "daysLimit": 4,
-          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.farmer.harvest_feast.title",
-          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.farmer.harvest_feast.description",
-          "itemSets": [
-            {
-              "weight": 1,
-              "items": [
-                {
-                  "itemId": "Plant_Crop_Wheat_Item",
-                  "count": 20
-                },
-                {
-                  "itemId": "Plant_Crop_Carrot_Item",
-                  "count": 16
-                },
-                {
-                  "itemId": "Plant_Crop_Potato_Item",
-                  "count": 16
-                }
-              ]
-            }
-          ],
-          "rewards": [
-            {
-              "kind": "item",
-              "itemId": "Aetherhaven_Gold_Coin",
-              "count": 65,
-              "grantTo": "player"
-            },
-            {
-              "kind": "reputation",
-              "amount": 5,
-              "grantTo": "quest_giver_npc"
-            }
-          ],
-          "materialPaymentBonusGold": 65
         }
       ]
     },
@@ -555,6 +715,131 @@
             }
           ],
           "materialPaymentBonusGold": 260
+        },
+        {
+          "id": "armory_restock",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "A",
+          "weight": 4,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.armory_restock.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.armory_restock.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                {
+                  "itemId": "Ingredient_Bar_Iron",
+                  "count": 40
+                },
+                {
+                  "itemId": "Ingredient_Leather_Light",
+                  "count": 20
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 180,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Shard_Of_Gaia",
+              "count": 1,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "materialPaymentBonusGold": 180
+        },
+        {
+          "id": "siege_armory",
+          "rank": "S",
+          "minRank": "S",
+          "maxRank": "SSS",
+          "weight": 4,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.siege_armory.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.siege_armory.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                {
+                  "itemId": "Ingredient_Bar_Thorium",
+                  "count": 30
+                },
+                {
+                  "itemId": "Ingredient_Bar_Cobalt",
+                  "count": 30
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 620,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Verdant_Catalyst",
+              "count": 2,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "materialPaymentBonusGold": 620
+        }
+      ],
+      "huntEntries": [
+        {
+          "id": "mine_thorium",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "A",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.mine_thorium.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.mine_thorium.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.ore_thorium",
+          "killSets": [
+            {
+              "weight": 1,
+              "killCount": 25,
+              "blockIdPrefixesAny": [
+                "Ore_Thorium"
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 90,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
         }
       ]
     },
@@ -860,6 +1145,51 @@
             }
           ],
           "materialPaymentBonusGold": 190
+        },
+        {
+          "id": "altar_consecration",
+          "rank": "B",
+          "minRank": "B",
+          "maxRank": "S",
+          "weight": 4,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.altar_consecration.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.altar_consecration.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                {
+                  "itemId": "Ingredient_Life_Essence",
+                  "count": 40
+                },
+                {
+                  "itemId": "Ingredient_Life_Essence_Concentrated",
+                  "count": 4
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 280,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Verdant_Catalyst",
+              "count": 1,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "materialPaymentBonusGold": 280
         }
       ],
       "huntEntries": [
@@ -935,7 +1265,7 @@
           "id": "undead_raid",
           "rank": "D",
           "minRank": "D",
-          "maxRank": "SSS",
+          "maxRank": "B",
           "weight": 8,
           "daysLimit": 5,
           "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.undead_raid.title",
@@ -945,13 +1275,7 @@
             {
               "weight": 1,
               "mobCountsByRank": {
-                "D": 6,
-                "C": 8,
-                "B": 10,
-                "A": 12,
-                "S": 15,
-                "SS": 18,
-                "SSS": 22
+                "D": 6
               },
               "mobPool": [
                 {
@@ -977,7 +1301,13 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 28,
+              "count": 80,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Life_Essence",
+              "count": 6,
               "grantTo": "player"
             },
             {
@@ -991,7 +1321,7 @@
           "id": "void_raid",
           "rank": "C",
           "minRank": "C",
-          "maxRank": "SSS",
+          "maxRank": "A",
           "weight": 8,
           "daysLimit": 5,
           "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.void_raid.title",
@@ -1001,12 +1331,7 @@
             {
               "weight": 1,
               "mobCountsByRank": {
-                "C": 6,
-                "B": 8,
-                "A": 10,
-                "S": 15,
-                "SS": 18,
-                "SSS": 22
+                "C": 8
               },
               "mobPool": [
                 {
@@ -1022,12 +1347,14 @@
                   "weight": 2
                 },
                 {
-                  "roleId": "Spectre_Void",
+                  "roleId": "Void_Spectre",
                   "weight": 2
-                },
+                }
+              ],
+              "guaranteedMobs": [
                 {
-                  "roleId": "Spawn_Void",
-                  "weight": 1
+                  "roleId": "Void_Spawn_Entombed",
+                  "count": 1
                 }
               ]
             }
@@ -1036,7 +1363,421 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 50,
+              "count": 140,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Void_Essence",
+              "count": 5,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "frozen_host",
+          "rank": "B",
+          "minRank": "B",
+          "maxRank": "S",
+          "weight": 8,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.frozen_host.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.frozen_host.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.undead",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "B": 10
+              },
+              "mobPool": [
+                {
+                  "roleId": "Skeleton_Frost_Soldier_Wander",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Skeleton_Frost_Archer_Wander",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Skeleton_Frost_Scout_Wander",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Zombie_Frost",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Skeleton_Frost_Knight_Wander",
+                  "count": 1
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 220,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Ice_Essence",
+              "count": 6,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Life_Essence",
+              "count": 8,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "burnt_legion",
+          "rank": "S",
+          "minRank": "S",
+          "maxRank": "SSS",
+          "weight": 8,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.burnt_legion.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.burnt_legion.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.undead",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "S": 15
+              },
+              "mobPool": [
+                {
+                  "roleId": "Skeleton_Burnt_Soldier_Wander",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Skeleton_Burnt_Archer_Wander",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Skeleton_Burnt_Lancer_Wander",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Skeleton_Burnt_Gunner_Wander",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Skeleton_Burnt_Wizard_Wander",
+                  "weight": 1
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Skeleton_Burnt_Knight_Wander",
+                  "count": 2
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 500,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Fire_Essence",
+              "count": 8,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Bar_Adamantite",
+              "count": 4,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "void_surge",
+          "rank": "SS",
+          "minRank": "SS",
+          "maxRank": "SSS",
+          "weight": 8,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.void_surge.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.void_surge.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.void",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "SS": 18
+              },
+              "mobPool": [
+                {
+                  "roleId": "Crawler_Void_Surge",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Larva_Void_Surge",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Eye_Void_Surge",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Void_Spectre",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Void_Spawn_Surge",
+                  "count": 2
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 700,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Void_Essence",
+              "count": 14,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Voidheart",
+              "count": 1,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "praetorian_host",
+          "rank": "SSS",
+          "minRank": "SSS",
+          "maxRank": "SSS",
+          "weight": 8,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.praetorian_host.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.praetorian_host.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.undead",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "SSS": 22
+              },
+              "mobPool": [
+                {
+                  "roleId": "Skeleton_Burnt_Soldier_Wander",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Skeleton_Burnt_Lancer_Wander",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Skeleton_Burnt_Gunner_Wander",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Skeleton_Burnt_Wizard_Wander",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Skeleton_Burnt_Knight_Wander",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Skeleton_Burnt_Praetorian_Wander",
+                  "count": 2
+                },
+                {
+                  "roleId": "Skeleton_Archmage_Wander",
+                  "count": 1
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 950,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Fire_Essence",
+              "count": 14,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Bar_Onyxium",
+              "count": 4,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "the_bone_lord",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "B",
+          "weight": 4,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.the_bone_lord.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.the_bone_lord.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.undead",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "D": 9
+              },
+              "mobPool": [
+                {
+                  "roleId": "Skeleton_Soldier_Wander",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Skeleton_Archer_Wander",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Skeleton_Scout_Wander",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Zombie",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Skeleton_Knight_Wander",
+                  "count": 2
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 130,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Shard_Of_Gaia",
+              "count": 1,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "the_void_breach",
+          "rank": "S",
+          "minRank": "S",
+          "maxRank": "SSS",
+          "weight": 4,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.the_void_breach.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.the_void_breach.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.void",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "S": 20
+              },
+              "mobPool": [
+                {
+                  "roleId": "Crawler_Void_Surge",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Larva_Void_Surge",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Eye_Void_Surge",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Void_Spectre",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Void_Spawn_Surge",
+                  "count": 3
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 680,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Shard_Of_Gaia",
+              "count": 2,
               "grantTo": "player"
             },
             {
@@ -1383,6 +2124,55 @@
             }
           ],
           "materialPaymentBonusGold": 260
+        },
+        {
+          "id": "harvest_feast",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "B",
+          "weight": 4,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.harvest_feast.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.harvest_feast.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                {
+                  "itemId": "Food_Bread",
+                  "count": 30
+                },
+                {
+                  "itemId": "Plant_Crop_Carrot_Item",
+                  "count": 30
+                },
+                {
+                  "itemId": "Food_Beef_Raw",
+                  "count": 20
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 110,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Verdant_Catalyst",
+              "count": 1,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "materialPaymentBonusGold": 110
         }
       ]
     },
@@ -1697,6 +2487,110 @@
             }
           ],
           "materialPaymentBonusGold": 260
+        },
+        {
+          "id": "founders_stockpile",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 4,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.founders_stockpile.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.founders_stockpile.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                {
+                  "itemId": "Wood_Oak_Trunk",
+                  "count": 40
+                },
+                {
+                  "itemId": "Ore_Iron",
+                  "count": 20
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 60,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Shard_Of_Gaia",
+              "count": 1,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "materialPaymentBonusGold": 60
+        },
+        {
+          "id": "gaias_great_offering",
+          "rank": "SSS",
+          "minRank": "SSS",
+          "maxRank": "SSS",
+          "weight": 4,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.gaias_great_offering.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.gaias_great_offering.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                {
+                  "itemId": "Ingredient_Bar_Gold",
+                  "count": 30
+                },
+                {
+                  "itemId": "Ingredient_Bar_Adamantite",
+                  "count": 20
+                },
+                {
+                  "itemId": "Ingredient_Life_Essence_Concentrated",
+                  "count": 12
+                },
+                {
+                  "itemId": "Rock_Gem_Diamond",
+                  "count": 6
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 1150,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Shard_Of_Gaia",
+              "count": 2,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Verdant_Catalyst",
+              "count": 2,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "materialPaymentBonusGold": 1150
         }
       ],
       "huntEntries": [
@@ -1739,7 +2633,7 @@
           "id": "vermin_raid",
           "rank": "E",
           "minRank": "E",
-          "maxRank": "SSS",
+          "maxRank": "C",
           "weight": 8,
           "daysLimit": 4,
           "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.vermin_raid.title",
@@ -1749,14 +2643,7 @@
             {
               "weight": 1,
               "mobCountsByRank": {
-                "E": 4,
-                "D": 6,
-                "C": 8,
-                "B": 10,
-                "A": 12,
-                "S": 15,
-                "SS": 18,
-                "SSS": 22
+                "E": 4
               },
               "mobPool": [
                 {
@@ -1778,7 +2665,13 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 18,
+              "count": 40,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Hide_Light",
+              "count": 4,
               "grantTo": "player"
             },
             {
@@ -1786,6 +2679,291 @@
               "amount": 5,
               "grantTo": "quest_giver_npc"
             }
+          ]
+        },
+        {
+          "id": "goblin_scouts",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 8,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.goblin_scouts.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.goblin_scouts.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.goblin",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "E": 4
+              },
+              "mobPool": [
+                {
+                  "roleId": "Goblin_Scrapper",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Miner",
+                  "weight": 2
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 40,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Scraps",
+              "count": 4,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "restless_graves",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "B",
+          "weight": 8,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.restless_graves.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.restless_graves.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.undead",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "D": 6
+              },
+              "mobPool": [
+                {
+                  "roleId": "Zombie",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Skeleton",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Skeleton_Scout_Wander",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Ghoul",
+                  "count": 1
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 80,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Life_Essence",
+              "count": 6,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "scarak_swarm",
+          "rank": "A",
+          "minRank": "A",
+          "maxRank": "SS",
+          "weight": 6,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.scarak_swarm.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.scarak_swarm.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.scarak",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "A": 12
+              },
+              "mobPool": [
+                {
+                  "roleId": "Scarak_Louse",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Scarak_Fighter",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Scarak_Seeker",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Scarak_Defender",
+                  "count": 2
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 340,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Sac_Venom",
+              "count": 6,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Hide_Scaled",
+              "count": 6,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "royal_brood",
+          "rank": "SSS",
+          "minRank": "SSS",
+          "maxRank": "SSS",
+          "weight": 8,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.royal_brood.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.royal_brood.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.scarak",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "SSS": 22
+              },
+              "mobPool": [
+                {
+                  "roleId": "Scarak_Fighter",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Scarak_Seeker",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Scarak_Louse",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Scarak_Defender",
+                  "weight": 3
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Scarak_Fighter_Royal_Guard",
+                  "count": 4
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 950,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Sac_Venom",
+              "count": 14,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Hide_Prismic",
+              "count": 4,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "rescue_from_goblins",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "D",
+          "weight": 6,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.rescue_from_goblins.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.rescue_from_goblins.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.goblin",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "E": 5
+              },
+              "mobPool": [
+                {
+                  "roleId": "Goblin_Scrapper",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Miner",
+                  "weight": 2
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 20,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "rescueCampPrefabs": [
+            "Monuments/Incidental/Softwood/Tent/Incidental_Softwood_003",
+            "Monuments/Incidental/Grasslands/Camps/Plains/Incidental_Grasslands_Plains_Incidentals_Grasslands_Camps_Plains_001",
+            "Monuments/Incidental/Grasslands/Camps/Beach/Incidental_Grasslands_Beach_Incidentals_Grasslands_Camps_Beach_001"
           ]
         }
       ]
@@ -2233,7 +3411,7 @@
           "id": "goblin_raid",
           "rank": "C",
           "minRank": "C",
-          "maxRank": "SSS",
+          "maxRank": "A",
           "weight": 8,
           "daysLimit": 5,
           "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.goblin_raid.title",
@@ -2243,12 +3421,7 @@
             {
               "weight": 1,
               "mobCountsByRank": {
-                "C": 8,
-                "B": 10,
-                "A": 12,
-                "S": 15,
-                "SS": 18,
-                "SSS": 22
+                "C": 8
               },
               "mobPool": [
                 {
@@ -2264,7 +3437,7 @@
                   "weight": 2
                 },
                 {
-                  "roleId": "Goblin_Scavenger",
+                  "roleId": "Goblin_Burner",
                   "weight": 2
                 }
               ]
@@ -2274,7 +3447,19 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 50,
+              "count": 140,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Scraps",
+              "count": 8,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Bar_Iron",
+              "count": 4,
               "grantTo": "player"
             },
             {
@@ -2288,7 +3473,7 @@
           "id": "trork_raid",
           "rank": "C",
           "minRank": "C",
-          "maxRank": "SSS",
+          "maxRank": "A",
           "weight": 8,
           "daysLimit": 5,
           "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.trork_raid.title",
@@ -2298,12 +3483,7 @@
             {
               "weight": 1,
               "mobCountsByRank": {
-                "C": 8,
-                "B": 10,
-                "A": 12,
-                "S": 15,
-                "SS": 18,
-                "SSS": 22
+                "C": 8
               },
               "mobPool": [
                 {
@@ -2319,8 +3499,14 @@
                   "weight": 2
                 },
                 {
-                  "roleId": "Trork_Mauler",
+                  "roleId": "Trork_Brawler",
                   "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Trork_Mauler",
+                  "count": 1
                 }
               ]
             }
@@ -2329,7 +3515,19 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 50,
+              "count": 140,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Hide_Medium",
+              "count": 6,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Bar_Iron",
+              "count": 4,
               "grantTo": "player"
             },
             {
@@ -2343,8 +3541,8 @@
           "id": "outlander_assault",
           "rank": "B",
           "minRank": "B",
-          "maxRank": "SSS",
-          "weight": 6,
+          "maxRank": "S",
+          "weight": 8,
           "daysLimit": 5,
           "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.outlander_assault.title",
           "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.outlander_assault.description",
@@ -2353,11 +3551,7 @@
             {
               "weight": 1,
               "mobCountsByRank": {
-                "B": 10,
-                "A": 12,
-                "S": 15,
-                "SS": 18,
-                "SSS": 22
+                "B": 10
               },
               "mobPool": [
                 {
@@ -2375,6 +3569,16 @@
                 {
                   "roleId": "Outlander_Brute",
                   "weight": 2
+                },
+                {
+                  "roleId": "Outlander_Stalker",
+                  "weight": 1
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Outlander_Berserker",
+                  "count": 1
                 }
               ]
             }
@@ -2383,7 +3587,19 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 65,
+              "count": 220,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Hide_Heavy",
+              "count": 6,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Bar_Thorium",
+              "count": 4,
               "grantTo": "player"
             },
             {
@@ -2391,6 +3607,607 @@
               "amount": 5,
               "grantTo": "quest_giver_npc"
             }
+          ]
+        },
+        {
+          "id": "goblin_siege",
+          "rank": "A",
+          "minRank": "A",
+          "maxRank": "SS",
+          "weight": 8,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.goblin_siege.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.goblin_siege.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.goblin",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "A": 12
+              },
+              "mobPool": [
+                {
+                  "roleId": "Goblin_Scrapper",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Lobber",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Burner",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Miner",
+                  "weight": 1
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Goblin_Guardian",
+                  "count": 2
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 340,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Scraps",
+              "count": 16,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Bar_Cobalt",
+              "count": 5,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "trork_warhost",
+          "rank": "A",
+          "minRank": "A",
+          "maxRank": "SS",
+          "weight": 8,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.trork_warhost.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.trork_warhost.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.trork",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "A": 12
+              },
+              "mobPool": [
+                {
+                  "roleId": "Trork_Warrior",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Trork_Mauler",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Trork_Shaman",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Trork_Hunter",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Trork_Guard",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Trork_Chieftain",
+                  "count": 1
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 340,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Hide_Heavy",
+              "count": 10,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Bar_Cobalt",
+              "count": 5,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "outlander_cult",
+          "rank": "S",
+          "minRank": "S",
+          "maxRank": "SSS",
+          "weight": 8,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.outlander_cult.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.outlander_cult.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.outlander",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "S": 15
+              },
+              "mobPool": [
+                {
+                  "roleId": "Outlander_Cultist",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Outlander_Marauder",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Outlander_Stalker",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Outlander_Brute",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Outlander_Sorcerer",
+                  "weight": 1
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Outlander_Priest",
+                  "count": 1
+                },
+                {
+                  "roleId": "Outlander_Berserker",
+                  "count": 2
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 500,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Hide_Dark",
+              "count": 8,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Bar_Adamantite",
+              "count": 4,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "feastmasters_horde",
+          "rank": "SS",
+          "minRank": "SS",
+          "maxRank": "SSS",
+          "weight": 8,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.feastmasters_horde.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.feastmasters_horde.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.goblin",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "SS": 18
+              },
+              "mobPool": [
+                {
+                  "roleId": "Goblin_Burner",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Lobber",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Scrapper",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Goblin_Miner",
+                  "weight": 1
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Goblin_Feastmaster",
+                  "count": 1
+                },
+                {
+                  "roleId": "Goblin_Guardian",
+                  "count": 3
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 700,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Scraps",
+              "count": 24,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Bar_Mithril",
+              "count": 4,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "warlords_vanguard",
+          "rank": "B",
+          "minRank": "B",
+          "maxRank": "S",
+          "weight": 4,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.warlords_vanguard.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.warlords_vanguard.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.trork",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "B": 14
+              },
+              "mobPool": [
+                {
+                  "roleId": "Trork_Warrior",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Trork_Brawler",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Trork_Hunter",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Trork_Shaman",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Trork_Chieftain",
+                  "count": 1
+                },
+                {
+                  "roleId": "Trork_Mauler",
+                  "count": 3
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 330,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Verdant_Catalyst",
+              "count": 1,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "the_scrap_king",
+          "rank": "SSS",
+          "minRank": "SSS",
+          "maxRank": "SSS",
+          "weight": 4,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.the_scrap_king.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.the_scrap_king.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.goblin",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "SSS": 28
+              },
+              "mobPool": [
+                {
+                  "roleId": "Goblin_Burner",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Lobber",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Scrapper",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Miner",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Goblin_Feastmaster",
+                  "count": 2
+                },
+                {
+                  "roleId": "Goblin_Guardian",
+                  "count": 5
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 1300,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Shard_Of_Gaia",
+              "count": 2,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Verdant_Catalyst",
+              "count": 2,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        },
+        {
+          "id": "rescue_from_trorks",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "B",
+          "weight": 6,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.rescue_from_trorks.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.rescue_from_trorks.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.trork",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "C": 9
+              },
+              "mobPool": [
+                {
+                  "roleId": "Trork_Warrior",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Trork_Hunter",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Trork_Brawler",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Trork_Mauler",
+                  "count": 1
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 70,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "rescueCampPrefabs": [
+            "Monuments/Incidental/Softwood/Tent/Incidental_Softwood_003",
+            "Monuments/Incidental/Grasslands/Camps/Plains/Incidental_Grasslands_Plains_Incidentals_Grasslands_Camps_Plains_001",
+            "Monuments/Incidental/Grasslands/Camps/Beach/Incidental_Grasslands_Beach_Incidentals_Grasslands_Camps_Beach_001"
+          ]
+        },
+        {
+          "id": "rescue_from_outlanders",
+          "rank": "A",
+          "minRank": "A",
+          "maxRank": "S",
+          "weight": 6,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.rescue_from_outlanders.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.rescue_from_outlanders.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.outlander",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "A": 13
+              },
+              "mobPool": [
+                {
+                  "roleId": "Outlander_Peon",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Outlander_Marauder",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Outlander_Hunter",
+                  "weight": 2
+                },
+                {
+                  "roleId": "Outlander_Stalker",
+                  "weight": 2
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Outlander_Brute",
+                  "count": 2
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 170,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "rescueCampPrefabs": [
+            "Monuments/Incidental/Softwood/Tent/Incidental_Softwood_003",
+            "Monuments/Incidental/Grasslands/Camps/Plains/Incidental_Grasslands_Plains_Incidentals_Grasslands_Camps_Plains_001",
+            "Monuments/Incidental/Grasslands/Camps/Beach/Incidental_Grasslands_Beach_Incidentals_Grasslands_Camps_Beach_001"
+          ]
+        },
+        {
+          "id": "rescue_from_the_horde",
+          "rank": "SS",
+          "minRank": "SS",
+          "maxRank": "SSS",
+          "weight": 6,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.rescue_from_the_horde.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.rescue_from_the_horde.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.goblin",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": {
+                "SS": 19
+              },
+              "mobPool": [
+                {
+                  "roleId": "Goblin_Burner",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Lobber",
+                  "weight": 3
+                },
+                {
+                  "roleId": "Goblin_Scrapper",
+                  "weight": 3
+                }
+              ],
+              "guaranteedMobs": [
+                {
+                  "roleId": "Goblin_Guardian",
+                  "count": 3
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 350,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "rescueCampPrefabs": [
+            "Monuments/Incidental/Softwood/Tent/Incidental_Softwood_003",
+            "Monuments/Incidental/Grasslands/Camps/Plains/Incidental_Grasslands_Plains_Incidentals_Grasslands_Camps_Plains_001",
+            "Monuments/Incidental/Grasslands/Camps/Beach/Incidental_Grasslands_Beach_Incidentals_Grasslands_Camps_Beach_001"
           ]
         }
       ]
@@ -3535,6 +5352,55 @@
             }
           ],
           "materialPaymentBonusGold": 260
+        },
+        {
+          "id": "resonance_array",
+          "rank": "A",
+          "minRank": "A",
+          "maxRank": "SS",
+          "weight": 4,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.crystal_keeper.resonance_array.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.crystal_keeper.resonance_array.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                {
+                  "itemId": "Ingredient_Crystal_Green",
+                  "count": 20
+                },
+                {
+                  "itemId": "Ingredient_Crystal_Cyan",
+                  "count": 20
+                },
+                {
+                  "itemId": "Rock_Gem_Diamond",
+                  "count": 3
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 430,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Shard_Of_Gaia",
+              "count": 2,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "materialPaymentBonusGold": 430
         }
       ]
     },
@@ -4002,6 +5868,69 @@
             }
           ],
           "materialPaymentBonusGold": 260
+        },
+        {
+          "id": "royal_wedding_feast",
+          "rank": "SS",
+          "minRank": "SS",
+          "maxRank": "SSS",
+          "weight": 4,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.chef.royal_wedding_feast.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.chef.royal_wedding_feast.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                {
+                  "itemId": "Food_Pie_Apple",
+                  "count": 10
+                },
+                {
+                  "itemId": "Food_Pie_Meat",
+                  "count": 10
+                },
+                {
+                  "itemId": "Food_Pie_Pumpkin",
+                  "count": 10
+                },
+                {
+                  "itemId": "Food_Salad_Caesar",
+                  "count": 10
+                },
+                {
+                  "itemId": "Food_Bread",
+                  "count": 30
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 850,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Shard_Of_Gaia",
+              "count": 2,
+              "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Verdant_Catalyst",
+              "count": 1,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ],
+          "materialPaymentBonusGold": 850
         }
       ]
     }

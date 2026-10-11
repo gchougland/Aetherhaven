@@ -52,8 +52,9 @@ public final class TownMapMarkerProvider implements WorldMapManager.MarkerProvid
         int bx = town.getCharterX();
         int bz = town.getCharterZ();
         WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfNonTicking(world, ChunkUtil.indexChunkFromBlock(bx, bz));
-        if (chunk != null) {
-            return chunk.getHeight(bx, bz) + 1.0;
+        int surfaceY = chunk != null ? ChunkSectionBlockUtil.surfaceHeightIfInMemory(world, bx, bz) : ChunkSectionBlockUtil.NO_SURFACE;
+        if (surfaceY != ChunkSectionBlockUtil.NO_SURFACE) {
+            return surfaceY + 1.0;
         }
         return town.getCharterY() + 1.0;
     }

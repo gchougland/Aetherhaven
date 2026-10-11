@@ -33,3 +33,4 @@ items.Aetherhaven_Building_Staff_Cobalt.name=钴建筑员工
 items.Aetherhaven_Building_Staff_Cobalt.description=与铜制建筑杖相同。次级效果可同时填充最多 9×9×9 个高亮显示的建筑节点。持有时，可获得 600 点最大法力值，并加快法力恢复速度；每个放置的方块消耗 1 点法力值。
 items.Aetherhaven_Building_Staff_Adamantite.name=金刚石建筑人员
 items.Aetherhaven_Building_Staff_Adamantite.description=与铜制建筑杖相同。次级技能可一次性填充最多 11×11×11 个高亮显示的建筑节点。持有该技能时，可获得 900 点最大法力值加成和更快的法力恢复速度；每个放置的方块消耗 1 点法力值。
+aetherhaven.interaction.cutLoose=Press [{key}] to cut the ropes

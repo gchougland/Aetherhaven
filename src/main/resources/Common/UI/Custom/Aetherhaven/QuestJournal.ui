@@ -63,7 +63,7 @@ $C.@PageOverlay {
               SelectedTab: "TOWN";
               TabButton { Id: "TOWN"; Icon: "../house_icon_256.png"; TooltipText: "Town"; }
               TabButton { Id: "GUIDE"; Icon: "../open-book.png"; TooltipText: "Guide"; }
-              TabButton { Id: "QUESTS"; Icon: "../list.png"; TooltipText: "Quests"; }
+              TabButton { Id: "QUESTS"; Icon: "../quest.png"; TooltipText: "Quests"; }
               TabButton { Id: "WORK"; Icon: "../hammer.png"; TooltipText: "Work priorities"; }
               TabButton { Id: "BILLS"; Icon: "../Bill.png"; TooltipText: "Bills"; }
               TabButton { Id: "SETTINGS"; Icon: "../cog.png"; TooltipText: "Settings"; }

@@ -1,0 +1,20 @@
+{
+  "Forks": [
+    {
+      "Conditions": [
+        {
+          "Type": "AetherhavenRescueCampSite",
+          "PrefabKey": "Camp"
+        }
+      ],
+      "Actions": [
+        {
+          "Type": "PrefabPasteAction",
+          "PrefabKey": "Camp",
+          "Permanent": false
+        }
+      ],
+      "Next": "Aetherhaven_Rescue_Camp_Hold"
+    }
+  ]
+}

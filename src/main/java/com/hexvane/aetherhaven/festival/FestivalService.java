@@ -23,6 +23,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.protocol.packets.interface_.EventTitleStyle;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -560,7 +561,7 @@ public final class FestivalService {
                 if (squareCenter == null) {
                     continue;
                 }
-                EventTitleUtil.showEventTitleToPlayer(pr, bannerTitle, bannerSubtitle, true, null, 4.0F, 0.7F, 0.9F);
+                EventTitleUtil.showEventTitleToPlayer(pr, bannerTitle, bannerSubtitle, EventTitleStyle.Major, null, 4.0F, 0.7F, 0.9F);
                 if (sting != SoundEvent.EMPTY_ID) {
                     SoundUtil.playSoundEvent2dToPlayer(pr, sting, SoundCategory.UI);
                 }

@@ -1,0 +1,55 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer #PatternWindow { Anchor: (Width: 1000, Height: 790);
+  #Title { Label { Text: "TOBIN'S PATTERN BOOK"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 24);
+   Group { LayoutMode: Left; Anchor: (Height: 26);
+    Label #Summary { Text: "PATTERNS"; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 16, RenderBold: true, TextColor: #dec68d); }
+    Label #Goal { Anchor: (Width: 560); Style: (...$C.@DefaultLabelStyle, FontSize: 13, HorizontalAlignment: End, TextColor: #b7c9bb); }
+   }
+   Label #Intro { Text: "Show Tobin a prop once and he keeps its pattern for the whole town. He can then build more from simple materials. No gold is needed."; Anchor: (Height: 44, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+   Group { LayoutMode: Left; Anchor: (Height: 360, Bottom: 12);
+    Group { FlexWeight: 1; Anchor: (Right: 16); Background: $T.@Panel; Padding: (Full: 10);
+     Group #GridScroll { LayoutMode: TopScrolling; Anchor: (Full: 0); ScrollbarStyle: $C.@DefaultScrollbarStyle;
+      Group #Grid { LayoutMode: Top; }
+     }
+    }
+    Group { Anchor: (Width: 360); LayoutMode: Top; Background: $T.@Panel; Padding: (Full: 16);
+     Group { LayoutMode: Left; Anchor: (Height: 76, Bottom: 6);
+      Group { Anchor: (Width: 72, Height: 72, Right: 14); Background: #1a2530;
+       AssetImage #PropIcon { Anchor: (Full: 0); FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png"; }
+      }
+      Group { FlexWeight: 1; LayoutMode: Top;
+       Label #PropState { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #dec68d); }
+       Label #PropName { Anchor: (Height: 50); Style: (...$C.@DefaultLabelStyle, FontSize: 18, RenderBold: true, Wrap: true); }
+      }
+     }
+     Label #CostTitle { Text: "MATERIALS NEEDED"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #dec68d); }
+     Group #Costs { LayoutMode: Top; Anchor: (Height: 100); }
+     Label #PropTime { Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb); }
+     $C.@TextButton #Commission { Text: "Commission one"; Anchor: (Height: 40, Bottom: 8); }
+     $C.@SecondaryTextButton #Salvage { Text: "Salvage one for materials"; Anchor: (Height: 36); }
+    }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 22);
+    Label #BenchTitle { Text: "ON THE BENCH"; Anchor: (Width: 290); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #dec68d); }
+    Label #ShelfTitle { Text: "FINISHED AND WAITING"; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #dec68d); }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 82, Bottom: 6); Background: $T.@Panel; Padding: (Full: 10);
+    Group #Bench { LayoutMode: Left; Anchor: (Width: 280); }
+    Group #Shelf { LayoutMode: Left; FlexWeight: 1; }
+    Group { LayoutMode: Middle; Anchor: (Width: 170);
+     $C.@TextButton #Collect { Text: "Collect all"; Anchor: (Width: 160, Height: 40); }
+    }
+   }
+   $C.@ProgressBar #BenchProgress { Anchor: (Height: 12, Bottom: 10); Value: 0.0; }
+   Group { LayoutMode: Left; Anchor: (Height: 40, Bottom: 8);
+    $C.@TextButton #Learn { Text: "Show Tobin the props you carry"; FlexWeight: 1; Anchor: (Right: 10); }
+    $C.@SecondaryTextButton #Refresh { Text: "Refresh"; Anchor: (Width: 120); }
+   }
+   Label #BookNote { Anchor: (Height: 42); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #dec68d, Wrap: true); }
+  }
+ }
+}
+$C.@BackButton {}

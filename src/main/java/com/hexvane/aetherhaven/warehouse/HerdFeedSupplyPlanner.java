@@ -59,9 +59,11 @@ public final class HerdFeedSupplyPlanner {
             if(herd==null||stock.workplaceBatch(plot.getPlotId())!=null)continue;
             var destination=ProductionStorageLocator.find(world,plot,now);
             if(destination==null||!TownTerritoryClaims.contains(town,ChunkUtil.chunkCoordinate(destination.x()),ChunkUtil.chunkCoordinate(destination.z())))continue;
+            // A barn is never sent feed out of its own store: the courier would carry it out and straight back in.
+            var elsewhere=sources.stream().filter(source->!plot.getPlotId().equals(source.plot())).toList();
             for(String food:herd.requestedFoods(com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades.slotCount(town.peekPlotProduction(plot.getPlotId())))) {
-                int quantity=Math.min(herd.courierFeedNeeded(food),availableFood(stock,sources,food));
-                if(quantity>0&&stock.reserveHerdFeed(plot.getPlotId(),destination,food,quantity,sources)!=null){changed=true;break;}
+                int quantity=Math.min(herd.courierFeedNeeded(food),availableFood(stock,elsewhere,food));
+                if(quantity>0&&stock.reserveHerdFeed(plot.getPlotId(),destination,food,quantity,elsewhere)!=null){changed=true;break;}
             }
         }
         return changed;

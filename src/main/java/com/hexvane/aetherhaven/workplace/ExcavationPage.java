@@ -51,7 +51,7 @@ public final class ExcavationPage extends AetherhavenInteractiveCustomUIPage<Exc
         var plannedFittings=ExcavationFittings.plan(c.site().area(),entrance,layout,fittings);
         long beams=plannedFittings.stream().filter(f->ExcavationFittings.BEAM.equals(f.item())).count(),torches=plannedFittings.size()-beams;
         b.set("#Fittings.Text",fittings.label);
-        b.set("#FittingsCost.Text",fittings==ExcavationFittings.Mode.NONE?"Optional supports and lights are added by the worker after digging.":beams+" Softwood Beams, "+torches+" Crude Torches from town storage. Used only as each piece is placed.");
+        b.set("#FittingsCost.Text",fittings==ExcavationFittings.Mode.NONE?"Optional supports and lights are added by the worker after digging.":beams+" Hardwood Beams, "+torches+" Crude Torches from town storage. Used only as each piece is placed.");
         b.set("#Cargo.Text",plan.cargo().isEmpty()?"Drops are stored at this workplace. Collect them here or through the warehouse.":plan.cargo().values().stream().mapToInt(Integer::intValue).sum()+" items being carried to workplace storage.");
         b.set("#Start.Text",plan.id()==null?"Start reviewed tunnel":"Replace with this review");b.set("#Start.Disabled",!reviewed.ready()||plan.held()||!canFit(c.town()));
         b.set("#Pause.Text",plan.paused()?"Resume saved tunnel":"Pause saved tunnel");b.set("#Pause.Disabled",plan.id()==null||plan.edited()||plan.next()==null&&plan.nextFitting()==null);

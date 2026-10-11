@@ -14,6 +14,8 @@ public record HuntFamily(String id,String name,String description,String role,St
             "Aetherhaven_Hunt_Skeleton","Ingredient_Bone_Fragment",10,40,Map.of("Ingredient_Bone_Fragment",2,"Ingredient_Fabric_Scrap_Linen",2),"Drop_Skeleton_Fighter"));
         register(new HuntFamily("web","Silken Hollows","A cave spider lured from its sheltered nest.",
             "Aetherhaven_Hunt_Spider","Ingredient_Sac_Venom",10,75,Map.of("Ingredient_Sac_Venom",1),"Drop_Spider_Cave"));
+        register(new HuntFamily("goblin","Goblin Scrappers","A club swinging scrapper carrying the Scraps goblins prize.",
+            "Aetherhaven_Hunt_Goblin","Ingredient_Scraps",10,100,Map.of("Ingredient_Scraps",3),"Drop_Goblin_Scrapper"));
         register(new HuntFamily("swarm","Scarak Burrows","A chitinous scavenger from the desert tunnels.",
             "Aetherhaven_Hunt_Scarak","Ingredient_Chitin_Sturdy",10,150,Map.of("Ingredient_Chitin_Sturdy",1),"Drop_Scarak_Louse"));
         register(new HuntFamily("frost","Frozen Crypts","Frost undead carry cloth, bones and Ice Essence.",

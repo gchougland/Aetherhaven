@@ -1,0 +1,18 @@
+{
+  "id": "craft_prop_scraps",
+  "name": "Scraps",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:craft_prop_scraps",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 1,
+  "inputs": [
+    {
+      "resourceType": "Metal_Bars",
+      "count": 5
+    }
+  ],
+  "output": "Ingredient_Scraps",
+  "outputCount": 10,
+  "workSeconds": 10
+}

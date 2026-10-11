@@ -9,6 +9,7 @@ import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.protocol.packets.interface_.EventTitleStyle;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
 import javax.annotation.Nonnull;
 
@@ -26,7 +27,7 @@ public final class QuestBoardCompletionEffects {
             playerRef,
             questTitle,
             Message.translation("aetherhaven_misc.aetherhaven.banner.quest.completed.primary"),
-            true,
+            EventTitleStyle.Major,
             null,
             4.0F,
             0.7F,

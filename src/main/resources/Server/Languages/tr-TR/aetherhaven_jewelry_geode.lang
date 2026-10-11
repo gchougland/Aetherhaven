@@ -124,6 +124,7 @@ aetherhaven.ui.jewelryAppraisal.empty=Hızlı erişim çubuğunuzda, zırhınız
 aetherhaven.ui.jewelryAppraisal.pick=Aşağıdan bir eser seçin.
 aetherhaven.ui.jewelryAppraisal.select=Seçme
 aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.rowEquipped={itemName} ({status}, equipped)
 aetherhaven.ui.jewelryAppraisal.statusAppraised=değerlendirildi
 aetherhaven.ui.jewelryAppraisal.statusUnidentified=tanımlanamayan
 aetherhaven.ui.jewelryAppraisal.selectedHeader=Seçilen: {itemName}

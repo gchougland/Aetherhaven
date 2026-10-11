@@ -45,7 +45,19 @@ final class AetherhavenMasteryAssetsTestCommand extends AbstractAsyncCommand {
             var alchemy=java.util.regex.Pattern.compile("Plant_Seeds_(Health|Mana|Stamina)([123])").matcher(rule.output());
             if(alchemy.matches()) {
                 int cropTier=Integer.parseInt(alchemy.group(2));skill=switch(cropTier){case 1->1;case 2->4;default->7;};
-                cost=switch(cropTier){case 1->12;case 2->24;default->48;};
+                // Alchemical seeds keep the base game's Alchemy Bench recipe exactly: same ingredient, amount and yield.
+                var made=new ArrayList<CraftingRecipe>();Item.getAssetMap().getAsset(rule.output()).collectRecipesToGenerate(made);
+                var base=made.isEmpty()?null:made.getFirst();
+                if(base==null||base.getInput()==null||base.getInput().length!=1||base.getPrimaryOutput()==null) {
+                    failures.add(rule.id()+": base game recipe not found");continue;
+                }
+                var paid=base.getInput()[0];int makes=Math.max(1,base.getPrimaryOutput().getQuantity());
+                if(rule.type()!=TownsfolkWorkType.CRAFTING||rule.skill()!=TownsfolkSkill.FARMING||rule.skillLevel()!=skill)
+                    failures.add(rule.id()+": expected Farming "+skill+" at a Crafting workplace, got "+rule.skillLevel());
+                if(rule.inputs()==null||rule.inputs().size()!=1||!java.util.Objects.equals(paid.getItemId(),rule.inputs().getFirst().itemId())
+                    ||rule.inputs().getFirst().resourceType()!=null||rule.inputs().getFirst().count()!=paid.getQuantity()||rule.outputCount()!=makes)
+                    failures.add(rule.id()+": expected the base game's "+paid.getQuantity()+" "+paid.getItemId()+" for "+makes+", got "+rule.inputs()+" for "+rule.outputCount());
+                continue;
             }
             if(rule.type()!=TownsfolkWorkType.CRAFTING||rule.skill()!=TownsfolkSkill.FARMING||rule.skillLevel()!=skill)
                 failures.add(rule.id()+": expected Farming "+skill+" at a Crafting workplace, got "+rule.skillLevel());

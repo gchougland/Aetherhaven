@@ -14,7 +14,20 @@ final class NativeWorkplaceRecipes {
         "Furnace",TownsfolkWorkType.SMELTING,
         "Tannery",TownsfolkWorkType.LEATHERWORKING,
         "Cookingbench",TownsfolkWorkType.COOKING,
-        "Alchemybench",TownsfolkWorkType.ALCHEMY);
+        "Alchemybench",TownsfolkWorkType.ALCHEMY,
+        "Salvagebench",TownsfolkWorkType.SALVAGING);
+
+    /**
+     * Native bar recipes carry no tier, so every ingot would need skill 1. These follow the ladder used for mining
+     * the ore: whoever can dig a metal can smelt it. Kept here, not as recipe files, so saved orders keep their ids.
+     */
+    private static final Map<String,Integer> SMELTING_SKILL=Map.of(
+        "Silver",4,"Gold",4,"Cobalt",7,"Adamantite",9,"Mithril",10);
+
+    static int smeltingSkill(String recipeId,int fallback) {
+        for(var metal:SMELTING_SKILL.entrySet())if(recipeId.contains("_Bar_"+metal.getKey()+"_"))return metal.getValue();
+        return fallback;
+    }
 
     private NativeWorkplaceRecipes() {}
 
@@ -34,16 +47,26 @@ final class NativeWorkplaceRecipes {
                 var type=BENCHES.get(bench.id);
                 if(type==null||(bench.type!=BenchType.Crafting&&bench.type!=BenchType.Processing))continue;
                 if(explicit.contains(key(type.id,entry.getKey(),bench.id)))continue;
+                // Plot tokens and building staffs are taken apart by the player who owns them, not by a workshop.
+                if(type==TownsfolkWorkType.SALVAGING&&entry.getKey().startsWith("Salvage_Aetherhaven_"))continue;
                 int tier=Math.clamp(bench.requiredTierLevel,1,10);
                 String id="native/"+type.id+"/"+entry.getKey()+"/"+bench.id;
                 var existing=result.get(id);
-                if(existing==null||tier<existing.benchTier())result.put(id,new WorkplaceRecipe(id,label(output.getItemId()),type.id,
-                    entry.getKey(),bench.id,tier,Math.min(10,1+(tier-1)*2)));
+                if(existing==null||tier<existing.benchTier())result.put(id,new WorkplaceRecipe(id,
+                    type==TownsfolkWorkType.SALVAGING?salvageLabel(source,output.getItemId()):label(output.getItemId()),type.id,
+                    entry.getKey(),bench.id,tier,type==TownsfolkWorkType.SMELTING
+                        ?smeltingSkill(entry.getKey(),Math.min(10,1+(tier-1)*2)):Math.min(10,1+(tier-1)*2)));
             }
         }
         return result;
     }
     private static String key(String type,String recipe,String bench) {return type+"\n"+recipe+"\n"+bench;}
+    /** Many salvage recipes give the same ore or cloth, so they are named for what is taken apart. */
+    private static String salvageLabel(CraftingRecipe source,String fallbackItem) {
+        var input=source.getInput();
+        if(input!=null)for(var material:input)if(material!=null&&material.getItemId()!=null)return "Salvage "+label(material.getItemId());
+        return "Salvage for "+label(fallbackItem);
+    }
     private static String label(String itemId) {
         var store=com.hypixel.hytale.server.core.asset.type.item.config.Item.getAssetStore();
         var item=store==null?null:store.getAssetMap().getAsset(itemId);

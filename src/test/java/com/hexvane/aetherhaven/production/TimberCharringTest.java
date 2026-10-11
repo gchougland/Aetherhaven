@@ -18,7 +18,7 @@ class TimberCharringTest {
 
     private PlotProductionState ready() {
         var p = new Gson().fromJson("{\"timber\":{\"adopted\":true}}", PlotProductionState.class);
-        p.setIronUpgrade(1);p.setSlotCursor(0, 0);p.setSlotCursor(1, 1);
+        p.timber().setCharWood(WOOD);
         p.addAmount(WOOD, 5, 100);p.addAmount(RARE, 20, 100);
         return p;
     }
@@ -38,30 +38,30 @@ class TimberCharringTest {
         assertEquals(1,p.getAmount(TimberCharring.OUTPUT));assertEquals(0,p.getAmount(WOOD));
     }
 
-    @Test void changedSelectionsLockedSlotsAndFullOutputSpendNothing() {
+    @Test void switchedOffChangedWoodAndFullOutputSpendNothing() {
         var p=ready();var stock=new TownWarehouse();
-        p.setSlotCursor(1,0);
+        p.timber().setCharWood(null);
         assertFalse(TimberCharring.process(p,ENTRY,stock,PLOT,WOOD,SOURCE));
-        p.setSlotCursor(1,1);p.setIronUpgrade(0);
+        p.timber().setCharWood(RARE);
+        assertFalse(TimberCharring.process(p,ENTRY,stock,PLOT,WOOD,SOURCE),"A visit begun for one wood cannot spend it after the choice changes");
+        p.timber().setCharWood(WOOD);p.addAmount(TimberCharring.OUTPUT,100,100);
         assertFalse(TimberCharring.process(p,ENTRY,stock,PLOT,WOOD,SOURCE));
-        p.setIronUpgrade(1);p.addAmount(TimberCharring.OUTPUT,100,100);
-        assertFalse(TimberCharring.process(p,ENTRY,stock,PLOT,WOOD,SOURCE));
-        assertEquals(5,p.getAmount(WOOD));assertNull(p.timber().cargo());
+        assertEquals(5,p.getAmount(WOOD));assertEquals(20,p.getAmount(RARE));assertNull(p.timber().cargo());
     }
 
-    @Test void missingOrUnselectedInputsNeverFallBackToOtherStoredWood() {
+    @Test void missingOrUnchosenInputsNeverFallBackToOtherStoredWood() {
         var p=ready();var stock=new TownWarehouse();p.removeAmountUpTo(WOOD,4);
         assertNull(TimberCharring.input(p,ENTRY,stock,PLOT));
         assertFalse(TimberCharring.process(p,ENTRY,stock,PLOT,WOOD,SOURCE));
         assertFalse(TimberCharring.process(p,ENTRY,stock,PLOT,RARE,SOURCE));
         assertFalse(TimberCharring.process(p,ENTRY,stock,PLOT,TimberCharring.OUTPUT,SOURCE));
         assertEquals(1,p.getAmount(WOOD));assertEquals(20,p.getAmount(RARE));
-        p.setSlotCursor(0,2);
+        p.timber().setCharWood(RARE);
         assertEquals(RARE,TimberCharring.input(p,ENTRY,stock,PLOT));
     }
 
     @Test void legacyModeAndFailedPaymentCannotCreateCargo() {
-        var p=new PlotProductionState();p.setIronUpgrade(1);p.setSlotCursor(1,1);p.addAmount(WOOD,5,100);
+        var p=new PlotProductionState();p.timber().setCharWood(WOOD);p.addAmount(WOOD,5,100);
         assertFalse(TimberCharring.process(p,ENTRY,new TownWarehouse(),PLOT,WOOD,SOURCE));
         p=ready();assertFalse(p.timber().charLogs(SOURCE,()->false));
         assertFalse(p.timber().charLogs(null,()->fail("Missing work location cannot pay")));

@@ -825,15 +825,13 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         int uiSlot = 0;
         List<DialogueChoiceDefinition> choices = buildChoiceList(node, ref, store);
         int lastChoiceIndex = choices.isEmpty() ? -1 : choices.size() - 1;
+        // Quest board business comes first, like every other quest choice.
+        if (turnIn != null) {
+            uiSlot = appendQuestBoardTurnInRow(ref, store, commandBuilder, eventBuilder, uiSlot, turnIn);
+        }
         for (int i = 0; i < choices.size(); i++) {
-            if (i == lastChoiceIndex && turnIn != null) {
-                uiSlot = appendQuestBoardTurnInRow(ref, store, commandBuilder, eventBuilder, uiSlot, turnIn);
-            }
             uiSlot =
                 appendDialogueChoiceRow(ref, store, commandBuilder, eventBuilder, choices.get(i), i, uiSlot);
-        }
-        if (turnIn != null && lastChoiceIndex < 0) {
-            appendQuestBoardTurnInRow(ref, store, commandBuilder, eventBuilder, uiSlot, turnIn);
         }
     }
 
@@ -957,6 +955,10 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (slot == null) {
             return null;
         }
+        // A captive is cut loose with the interaction itself, before any conversation. Nothing to hand in until then.
+        if (slot.isRescueQuest() && !slot.isRescueUntied()) {
+            return null;
+        }
         com.hexvane.aetherhaven.questboard.QuestBoardQuestTypeHandler handler =
             com.hexvane.aetherhaven.questboard.QuestBoardService.handlerFor(slot.getQuestType());
         boolean ready = handler != null && handler.hasRequiredItems(ref, store, slot);
@@ -964,7 +966,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (com.hexvane.aetherhaven.questboard.FetchQuestBoardHandler.TYPE_ID.equalsIgnoreCase(slot.getQuestType())) {
             turnInItems = fetchQuestTurnInMaterials(slot);
         }
-        return new QuestBoardTurnInRow(ready, slot.isHuntQuest(), slot.isRaidQuest(), turnInItems);
+        String kind = slot.isRescueQuest() ? "Rescue"
+            : slot.isRaidQuest() ? "Raid" : slot.isMineQuest() ? "Mine" : slot.isHuntQuest() ? "Hunt" : "";
+        return new QuestBoardTurnInRow(ready, kind, turnInItems);
     }
 
     @Nonnull
@@ -990,26 +994,13 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         int uiSlot,
         @Nonnull QuestBoardTurnInRow turnIn
     ) {
-        Message choiceLine =
-            Message.translation(
-                turnIn.raidQuest()
-                    ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInRaid"
-                    : turnIn.huntQuest()
-                        ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInHunt"
-                        : "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnIn"
-            );
+        Message choiceLine = Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnIn" + turnIn.kind());
         if (!turnIn.ready() && turnIn.turnInItems().isEmpty()) {
             choiceLine =
                 choiceLine
                     .insert(Message.raw("  "))
                     .insert(
-                        Message.translation(
-                            turnIn.raidQuest()
-                                ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInRaidMissing"
-                                : turnIn.huntQuest()
-                                    ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInHuntMissing"
-                                    : "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInMissing"
-                        )
+                        Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnIn" + turnIn.kind() + "Missing")
                     );
         }
         List<MaterialRequirement> itemRequirements = DialogueChoiceItemRequirements.resolve(turnIn.turnInItems());
@@ -1031,10 +1022,10 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         return uiSlot + 1;
     }
 
+    /** {@code kind} picks the wording: empty for deliveries, or Hunt, Mine, Raid, Rescue. */
     private record QuestBoardTurnInRow(
         boolean ready,
-        boolean huntQuest,
-        boolean raidQuest,
+        @Nonnull String kind,
         @Nonnull List<MaterialRequirement> turnInItems
     ) {}
 
@@ -1099,6 +1090,13 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 backpack.setId("backpack_workshop"); backpack.setText("aetherhaven_backpack.dialogue");
                 JsonObject action = new JsonObject(); action.addProperty("type", "open_backpack_workshop");
                 backpack.setActions(List.of(action)); choices.add(0, backpack);
+            }
+            if (supervisor != null && town != null && town.getTownId().equals(supervisor.getTownId())
+                && com.hexvane.aetherhaven.crafter.PatternBookService.KIND.equals(supervisor.getKind())) {
+                DialogueChoiceDefinition patterns = new DialogueChoiceDefinition();
+                patterns.setId("pattern_book"); patterns.setText("aetherhaven_crafter.patterns");
+                JsonObject action = new JsonObject(); action.addProperty("type", "open_pattern_book");
+                patterns.setActions(List.of(action)); choices.add(0, patterns);
             }
             if (supervisor != null && town != null && town.getTownId().equals(supervisor.getTownId())
                 && com.hexvane.aetherhaven.warehouse.WarehouseAccess.MANAGER_KIND.equals(supervisor.getKind())) {
@@ -1549,6 +1547,8 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (ch.hasAction("open_core_mastery")) return ICON_PROFILE;
         if (ch.hasAction("open_townsfolk_profile")) return ICON_PROFILE;
         if (ch.hasAction("open_workplace_upgrades")) return ICON_UPGRADES;
+        if (ch.hasAction("open_pattern_book")) return "UI/Custom/woodworking.png";
+        if (ch.hasAction("open_backpack_workshop")) return "UI/Custom/leather.png";
         if (ch.hasAction("open_warehouse")) return ICON_STORAGE;
         if (ch.hasAction("open_courier_roster")) return ICON_PRIORITIES;
         if (ch.hasAction("open_clinic") || ch.hasAction("priestess_gold_heal")) return ICON_HEALING;
@@ -1728,6 +1728,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         applyBatchNavigation(ref, store, batch, choice.getNext());
     }
 
+    /** Cuts the ropes of the rescued townsfolk this dialogue is with, then shows the same dialogue again. */
     private void handleQuestBoardTurnIn(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         if (npcRef == null || !npcRef.isValid()) {
             return;

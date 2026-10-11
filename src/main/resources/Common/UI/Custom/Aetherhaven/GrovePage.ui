@@ -1,0 +1,42 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer #GroveWindow { Anchor: (Width: 900, Height: 700);
+  #Title { Label { Text: "THE SINGING GROVE"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 24);
+   Label #Summary { Text: "ROOTSTONES"; Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 16, RenderBold: true, TextColor: #dec68d); }
+   Label #Intro { Text: "Place a Rootstone anywhere in town and give it a sapling. Seren plants the tree, sings it tall, fells it and brings the wood home, again and again."; Anchor: (Height: 44, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+   Group #Stones { LayoutMode: Left; Anchor: (Height: 100, Bottom: 14); }
+   Group { LayoutMode: Left; Anchor: (Height: 150, Bottom: 10); Background: $T.@Panel; Padding: (Full: 16);
+    ItemIcon #TreeIcon { Anchor: (Width: 64, Height: 64, Right: 16); }
+    Group { FlexWeight: 1; LayoutMode: Top;
+     Label #StoneTitle { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #dec68d); }
+     Label #TreeName { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 18, RenderBold: true); }
+     $C.@ProgressBar #Growth { Anchor: (Height: 14, Top: 4, Bottom: 6); Value: 0.0; }
+     Label #StoneStatus { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #b7c9bb); }
+    }
+   }
+   Label #SaplingHint { Text: "CHOOSE A SAPLING YOU CARRY"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #dec68d); Visible: false; }
+   Group #Saplings { LayoutMode: Left; Anchor: (Height: 64, Bottom: 10); Visible: false; }
+   Group { LayoutMode: Left; Anchor: (Height: 40, Bottom: 12);
+    $C.@TextButton #Bless { Text: "Bless with 5 Life Essence"; FlexWeight: 1; Anchor: (Right: 10); }
+    $C.@SecondaryTextButton #Uproot { Text: "Uproot this tree"; Anchor: (Width: 220, Right: 10); }
+    $C.@SecondaryTextButton #Refresh { Text: "Refresh"; Anchor: (Width: 120); }
+   }
+   Label { Text: "MILL STORES"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #dec68d); }
+   Group { LayoutMode: Left; Anchor: (Height: 78, Bottom: 10); Background: $T.@Panel; Padding: (Full: 10);
+    Group #Stock { FlexWeight: 1; LayoutMode: Left; }
+    Label #StockEmpty { Text: "Nothing stored yet. Wood, saplings, sap and sticks arrive here as Seren brings them home."; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb, VerticalAlignment: Center); Visible: false; }
+    Group { LayoutMode: Middle; Anchor: (Width: 170);
+     $C.@TextButton #Collect { Text: "Collect all"; Anchor: (Width: 160, Height: 40); }
+    }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 8);
+    $C.@SecondaryTextButton #Fibre { Text: "Gather fibre"; FlexWeight: 1; Anchor: (Right: 10); }
+    $C.@SecondaryTextButton #Char { Text: "Char spare logs"; FlexWeight: 1; }
+   }
+   Label #GroveNote { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #dec68d, Wrap: true); }
+  }
+ }
+}
+$C.@BackButton {}

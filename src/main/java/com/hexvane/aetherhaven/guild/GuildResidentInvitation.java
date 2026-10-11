@@ -30,11 +30,51 @@ public final class GuildResidentInvitation {
         var world=store.getExternalData().getWorld();
         var checkout=TownsfolkExistenceService.checkoutForCharacter(world,plugin,town.getTownId(),identity.getCharacterId());
         if(checkout==null)return Message.raw("This visitor's town record needs repair.");
+        String houseQuest = com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK;
+        var quest = plugin.getQuestCatalog().get(houseQuest);
+        if (quest == null || !com.hexvane.aetherhaven.quest.QuestAvailability.isEnabled(quest))
+            return Message.raw("Housing quests are unavailable right now.");
+        if (!town.playerCanAcceptQuests(player)) return Message.raw("You need permission to accept quests to invite this resident.");
+        if (town.hasQuestActive(houseQuest)) return Message.raw("Finish the current visitor's house quest before inviting another resident.");
+        if (town.hasQuestCompletedForEntity(houseQuest, id.getUuid())) return Message.raw("This resident has already been invited.");
         var requirements=TouristMoveInRequirements.forNpc(plugin,store,ref);
         if(requirements.isEmpty())return Message.raw("This visitor's move in requirements are unavailable.");
         if(!TouristMoveInRequirements.removeAll(playerRef,store,requirements))
             return Message.raw("Bring ").insert(TouristMoveInRequirements.itemsLabelMessage(requirements)).insert(Message.raw(" to invite this resident."));
-        admit(town,id.getUuid(),identity.getCharacterId());
+        settle(store,town,manager,plugin,playerRef,ref,id.getUuid(),identity,checkout,quest);
+        return null;
+    }
+    /**
+     * Welcomes a townsfolk a player rescued for the quest board. They skip the move in gift, and still need a house.
+     *
+     * @return null on success, otherwise why they could not be welcomed
+     */
+    public static Message welcomeRescued(Store<EntityStore> store,TownRecord town,TownManager manager,AetherhavenPlugin plugin,
+            Ref<EntityStore> playerRef,Ref<EntityStore> ref) {
+        var id=store.getComponent(ref,UUIDComponent.getComponentType());
+        var identity=store.getComponent(ref,TownsfolkCharacterBinding.getComponentType());
+        if(id==null||identity==null||store.getComponent(ref,DeathComponent.getComponentType())!=null)return Message.raw("The rescued townsfolk is no longer available.");
+        var checkout=TownsfolkExistenceService.checkoutForCharacter(store.getExternalData().getWorld(),plugin,town.getTownId(),identity.getCharacterId());
+        var quest=plugin.getQuestCatalog().get(com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK);
+        if(checkout==null||quest==null)return Message.raw("The rescued townsfolk's town record needs repair.");
+        settle(store,town,manager,plugin,playerRef,ref,id.getUuid(),identity,checkout,quest);
+        return null;
+    }
+    /** Everything after the move in gift is settled: citizenship, the house quest and tourist behaviour until the house is built. */
+    private static void settle(Store<EntityStore> store,TownRecord town,TownManager manager,AetherhavenPlugin plugin,Ref<EntityStore> playerRef,
+            Ref<EntityStore> ref,UUID resident,TownsfolkCharacterBinding identity,TownsfolkPoolCheckoutRecord checkout,
+            com.hexvane.aetherhaven.quest.data.QuestDefinition quest) {
+        var world=store.getExternalData().getWorld();
+        String houseQuest=com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK;
+        admit(town,resident,identity.getCharacterId());
+        startHousing(town, resident);
+        com.hexvane.aetherhaven.quest.QuestProgressionService.initialize(plugin, town, houseQuest);
+        com.hexvane.aetherhaven.quest.QuestLifecycleEffects.runOnStart(world, plugin, town, manager, quest, resident);
+        // The invitation already paid the exact same gift. Never ask for or consume it twice.
+        town.completeQuestObjective(houseQuest, TouristMoveInRequirements.MOVE_IN_OBJECTIVE_ID);
+        if (com.hexvane.aetherhaven.quest.QuestPlotTokenOnStart.grantIfConfigured(plugin, quest, town, playerRef, store))
+            com.hexvane.aetherhaven.quest.QuestProgressionService.markStartGrant(plugin, town, houseQuest,
+                com.hexvane.aetherhaven.quest.QuestProgressionService.PLOT_TOKEN_RECEIVED);
         checkout.setAssignmentKind(TownsfolkAssignmentKinds.TOURIST);
         TownsfolkPoolPersistence.save(world,plugin,TownsfolkPoolPersistence.getOrLoad(world,plugin));
         store.putComponent(ref,TownsfolkCharacterBinding.getComponentType(),new TownsfolkCharacterBinding(identity.getCharacterId(),identity.getActivePersonalityId(),
@@ -44,7 +84,12 @@ public final class GuildResidentInvitation {
         store.putComponent(ref,TouristAutonomyState.getComponentType(),TouristAutonomyState.fresh(System.currentTimeMillis()));
         ResidentRegistryService.upsertFromBinding(town,manager,ref,store);
         manager.updateTown(town);
-        return null;
+    }
+    static void startHousing(TownRecord town, UUID resident) {
+        String quest = com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK;
+        town.clearGlobalQuestCompletion(quest);
+        town.addActiveQuest(quest);
+        town.setQuestTargetEntityUuid(quest, resident);
     }
     static void admit(TownRecord town,UUID id,String character) {
         String key=id.toString();

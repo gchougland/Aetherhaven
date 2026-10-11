@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.joml.Vector3d;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.ExplodeInteraction;
 
 /** Real effect ticks and damage filters on a temporary entity, never on a player or resident. */
 final class AetherhavenAlchemyTestCommand extends AbstractAsyncCommand {
@@ -94,7 +95,7 @@ final class AetherhavenAlchemyTestCommand extends AbstractAsyncCommand {
         }
         require(!AlchemyFlaskService.drink(f.ref,store,f.bag,(short)0),"Sixth sip duplicated charges");
         for(String cause:List.of("Environment","Poison")) {
-            var damage=new Damage(new Damage.EnvironmentSource(cause.equals("Environment")?"explosion":"alchemy_fixture"),DamageCause.getAssetMap().getAsset(cause),10);
+            var damage=new Damage(cause.equals("Environment")?ExplodeInteraction.DAMAGE_SOURCE_EXPLOSION:new Damage.EnvironmentSource("alchemy_fixture"),DamageCause.getAssetMap().getAsset(cause),10);
             DamageSystems.executeDamage(f.ref,store,damage);require(damage.isCancelled(),cause+" ward failed");
         }
         var projectile=new Damage(new Damage.ProjectileSource(f.ref,f.ref),DamageCause.getAssetMap().getAsset("Environment"),10);
@@ -112,7 +113,7 @@ final class AetherhavenAlchemyTestCommand extends AbstractAsyncCommand {
         require(f.stats.get(DefaultEntityStatTypes.getMana()).getMax()>=f.manaMax+19.9f,"Mana Boost 2 maximum did not apply");
         require(!f.effects.getActiveEffects().containsKey(EntityEffect.getAssetMap().getIndex("Poison_T3")),"Poison ward did not cleanse poison");
         for(String id:List.of("Aetherhaven_Alchemy_BlastWard1","Aetherhaven_Alchemy_PoisonWard1"))f.effects.removeEffect(f.ref,EntityEffect.getAssetMap().getIndex(id),store);
-        var damage=new Damage(new Damage.EnvironmentSource("explosion"),DamageCause.getAssetMap().getAsset("Environment"),1);
+        var damage=new Damage(ExplodeInteraction.DAMAGE_SOURCE_EXPLOSION,DamageCause.getAssetMap().getAsset("Environment"),1);
         DamageSystems.executeDamage(f.ref,store,damage);require(!damage.isCancelled(),"Expired blast ward still blocks damage");
         store.removeEntity(f.ref,RemoveReason.REMOVE);
     }

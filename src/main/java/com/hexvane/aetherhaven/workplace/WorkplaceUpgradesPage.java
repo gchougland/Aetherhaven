@@ -102,6 +102,12 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
             default -> 0;
         };
     }
+    /** Upgrade materials may come from the warehouse: whatever the player is short of is brought to them first. */
+    private void fetchMaterials(com.hypixel.hytale.server.core.inventory.container.ItemContainer inv,TownRecord town,Node n) {
+        var cost=new java.util.LinkedHashMap<String,Integer>();
+        for(var part:costs(town,n))cost.merge(part.itemId(),part.count(),Integer::sum);
+        com.hexvane.aetherhaven.crafter.PatternBookPayment.topUp(inv,com.hexvane.aetherhaven.crafter.PatternBookPayment.stockFor(town,playerRef.getUuid()),cost);
+    }
     private List<RestaurantUpgrades.IngredientCost> costs(TownRecord town,Node n) {
         if(n.kind()==Kind.PRODUCTION) {
             var branch=WorkplaceProductionUpgrades.Branch.valueOf(n.branch());
@@ -192,10 +198,12 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
         c.set("#Requires.Text","Town Level "+n.level()+(parentNames.isEmpty()?"":"\nRequires: "+String.join(", ",parentNames)));
         int ci=0;for(var cost:costs(town,n)) {
             c.append("#Costs","Aetherhaven/BuildingUpgradeCost.ui");String s="#Costs["+ci+++"]";
-            c.set(s+" #Item.ItemId",cost.itemId());c.set(s+" #Count.Text",(inventory==null?0:InventoryMaterials.count(inventory,cost.itemId()))+" / "+cost.count());
+            c.set(s+" #Item.ItemId",cost.itemId());c.set(s+" #Count.Text",(inventory==null?0:com.hexvane.aetherhaven.crafter.PatternBookPayment.available(inventory,
+                com.hexvane.aetherhaven.crafter.PatternBookPayment.stockFor(town,playerRef.getUuid()),cost.itemId()))+" / "+cost.count());
         }
         boolean affordable=inventory!=null && available>=gold(town,n)
-            && costs(town,n).stream().allMatch(cost -> InventoryMaterials.count(inventory,cost.itemId())>=cost.count());
+            && costs(town,n).stream().allMatch(cost -> com.hexvane.aetherhaven.crafter.PatternBookPayment.available(inventory,
+                com.hexvane.aetherhaven.crafter.PatternBookPayment.stockFor(town,playerRef.getUuid()),cost.itemId())>=cost.count());
         c.set("#Gold.Text",bought?"Purchased":gold(town,n)==0?"No gold required":gold(town,n)+" gold\nFrom inventory or treasury");
         if(reason==null&&!affordable)c.set("#DetailState.Text","You need more gold or materials");
         c.set("#Purchase.Text",bought?"Unlocked":"Unlock upgrade");c.set("#Purchase.Disabled",reason!=null||n.kind()==Kind.FOUNDATION||!affordable);
@@ -258,6 +266,7 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
                 var state=town.getOrCreatePlotProduction(p.getPlotId());var branch=WorkplaceProductionUpgrades.Branch.valueOf(n.branch());
                 if(WorkplaceProductionUpgrades.nextTier(state,branch)!=n.tier())return "Unlock the earlier tier first.";
                 var inv=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);if(inv==null)return "Your inventory is unavailable.";
+                fetchMaterials(inv,town,n);
                 var result=WorkplaceProductionUpgrades.tryPurchase(state,branch,town,inv,town.playerCanSpendTreasuryGold(playerRef.getUuid()),"rancher".equals(supervisor));
                 return switch(result){case OK -> null;case NEED_INGOT -> "You need more of the shown ingots.";case NEED_GOLD -> "You need more gold.";default -> "Cannot purchase this upgrade. Review its requirements.";};
             }
@@ -266,6 +275,7 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
                 var state=town.getOrCreatePlotRestaurant(p.getPlotId());var branch=RestaurantUpgrades.Branch.valueOf(n.branch());
                 if(RestaurantUpgrades.nextTier(state,branch)!=n.tier())return "Unlock the earlier tier first.";
                 var inv=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);if(inv==null)return "Your inventory is unavailable.";
+                fetchMaterials(inv,town,n);
                 var result=RestaurantUpgrades.tryPurchase(state,branch,town,inv,town.playerCanSpendTreasuryGold(playerRef.getUuid()));
                 return switch(result){case OK -> null;case NEED_INGREDIENT -> "You need more of the shown ingredients.";case NEED_GOLD -> "You need more gold.";default -> "Cannot purchase this upgrade. Review its requirements.";};
             }

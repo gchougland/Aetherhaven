@@ -62,6 +62,7 @@ import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.protocol.packets.interface_.EventTitleStyle;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -238,6 +239,19 @@ public final class DialogueActionExecutor {
                         new com.hexvane.aetherhaven.backpack.BackpackWorkshopPage(pr, npcRef));
                 });
             }
+            case "open_pattern_book" -> {
+                if (npcRef == null || !npcRef.isValid()) return;
+                var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                if (binding == null || !com.hexvane.aetherhaven.crafter.PatternBookService.KIND.equals(binding.getKind())) return;
+                out.setCloseDialogue(true);
+                out.setAfterClose(() -> {
+                    if (!playerRef.isValid()) return;
+                    Player player = store.getComponent(playerRef, Player.getComponentType());
+                    var pr = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    if (player != null && pr != null) player.getPageManager().openCustomPage(playerRef, store,
+                        new com.hexvane.aetherhaven.crafter.PatternBookPage(pr, npcRef));
+                });
+            }
             case "open_workplace_upgrades" -> {
                 if (npcRef == null || !npcRef.isValid()) return;
                 var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
@@ -329,7 +343,7 @@ public final class DialogueActionExecutor {
                 if (town == null) return;
                 var error = com.hexvane.aetherhaven.guild.GuildResidentInvitation.invite(store, town, owningTownManager(town, local), active, recipient.getUuid(), playerRef, npcRef);
                 if (error != null) recipient.sendMessage(error);
-                else { recipient.sendMessage(Message.raw("Welcome to town. Choose work priorities in the journal or guard duty in their profile.")); out.setCloseDialogue(true); }
+                else { recipient.sendMessage(Message.raw("Welcome to town. Assign them a home using its town records shelf, then talk to them to finish their house quest.")); out.setCloseDialogue(true); }
             }
             case "dismiss_hired_guard" -> dismissHiredGuard(playerRef, store, npcRef, out);
             case "despawn_npc" -> despawnNpc(a, playerRef, store, npcRef);
@@ -1661,7 +1675,7 @@ public final class DialogueActionExecutor {
             playerRef,
             primary,
             secondary,
-            isMajor,
+            isMajor ? EventTitleStyle.Major : EventTitleStyle.Default,
             null,
             4.0F,
             0.7F,

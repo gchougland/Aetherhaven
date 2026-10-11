@@ -124,6 +124,7 @@ aetherhaven.ui.jewelryAppraisal.empty=Немає коштовностей на �
 aetherhaven.ui.jewelryAppraisal.pick=Виберіть фрагмент нижче.
 aetherhaven.ui.jewelryAppraisal.select=Виберіть
 aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.rowEquipped={itemName} ({status}, equipped)
 aetherhaven.ui.jewelryAppraisal.statusAppraised=оцінений
 aetherhaven.ui.jewelryAppraisal.statusUnidentified=неідентифікований
 aetherhaven.ui.jewelryAppraisal.selectedHeader=Вибрано: {itemName}

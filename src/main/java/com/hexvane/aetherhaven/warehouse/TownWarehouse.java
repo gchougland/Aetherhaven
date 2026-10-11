@@ -231,8 +231,9 @@ public final class TownWarehouse {
             .allMatch(b->furnace&&b.smelting()&&b.nativeLoaded()
                 ||cultivation&&b.cultivation()&&b.cropPlanted()&&!b.cancelled());
     }
+    /** Crafts already on their way for a task. One delivery may cover several. */
     public int queuedForOrder(UUID order) {
-        return (int)batches.stream().filter(b->b.orderId().equals(order)&&!b.cancelled()).count();
+        return batches.stream().filter(b->b.orderId().equals(order)&&!b.cancelled()).mapToInt(WarehouseBatch::crafts).sum();
     }
     public boolean destinationReserved(WarehouseBatch.Point point) {
         return point!=null&&batches.stream().anyMatch(b->point.equals(b.destination()));
@@ -295,6 +296,46 @@ public final class TownWarehouse {
         var withFuel=new ArrayList<>(materials);if(fuelQuantity>0)withFuel.add(new MaterialQuantity(fuelItem,null,null,fuelQuantity,null));
         return reserve(workplace,order,recipe,withFuel,results,production,fuelItem,fuelQuantity);
     }
+    /**
+     * One delivery covering several crafts of a recipe. Materials and results are given for a single craft.
+     *
+     * @param maxStacks the delivery is refused when its materials would need more stacks than this to carry, so the
+     *                  caller can try a smaller number of crafts
+     */
+    public WarehouseBatch reserveCrafts(UUID workplace,UUID order,String recipe,List<MaterialQuantity> materials,List<ItemStack> results,
+            List<ProductionStock> production,int crafts,int maxStacks) {
+        if(crafts<1||crafts>WorkplaceBatchSize.MAX_CRAFTS||materials==null||results==null)return null;
+        if(crafts==1)return reserve(workplace,order,recipe,materials,results,production);
+        var batch=reserve(workplace,order,recipe,scale(materials,crafts),repeat(results,crafts),production,null,0,false,false,Math.max(1,maxStacks),0);
+        if(batch!=null){batch.crafts(crafts);changed();}
+        return batch;
+    }
+    /**
+     * A furnace load covering several crafts. Materials and results are given for a single craft; fuel is the total.
+     *
+     * @param fuelBurned all the fuel the furnace will hold, counting what is already in it. Every two logs leave one
+     *                   charcoal, and room must be promised for all of it or the furnace could never be emptied.
+     */
+    public WarehouseBatch reserveSmeltingCrafts(UUID workplace,UUID order,String recipe,List<MaterialQuantity> materials,List<ItemStack> results,
+            List<ProductionStock> production,String fuelItem,int fuelQuantity,int crafts,int fuelBurned) {
+        if(fuelItem==null||fuelItem.isBlank()||fuelQuantity<0||fuelQuantity>100||crafts<1||crafts>WorkplaceBatchSize.MAX_FURNACE_CRAFTS
+            ||materials==null||results==null)return null;
+        var withFuel=new ArrayList<>(scale(materials,crafts));if(fuelQuantity>0)withFuel.add(new MaterialQuantity(fuelItem,null,null,fuelQuantity,null));
+        var batch=reserve(workplace,order,recipe,withFuel,repeat(results,crafts),production,fuelItem,fuelQuantity,false,false,0,Math.max(fuelQuantity,fuelBurned));
+        if(batch!=null){batch.crafts(crafts);changed();}
+        return batch;
+    }
+    private static List<MaterialQuantity> scale(List<MaterialQuantity> materials,int crafts) {
+        var scaled=new ArrayList<MaterialQuantity>();
+        for(var material:materials)scaled.add(material==null?null:material.clone(Math.multiplyExact(material.getQuantity(),crafts)));
+        return scaled;
+    }
+    /** Results are repeated, not multiplied, so each keeps a legal stack size when it is added to a container. */
+    private static List<ItemStack> repeat(List<ItemStack> results,int crafts) {
+        var repeated=new ArrayList<ItemStack>();
+        for(int i=0;i<crafts;i++)repeated.addAll(results);
+        return repeated;
+    }
     /** A physical supply trip, with no recipe output or phantom reservation in the finished goods inventory. */
     public WarehouseBatch reserveHerdFeed(UUID plot,WarehouseBatch.Point destination,String food,int quantity,List<ProductionStock> sources) {
         if(destination==null||quantity<1||quantity>com.hexvane.aetherhaven.production.HerdProductionState.FEED_CAPACITY)return null;
@@ -311,6 +352,13 @@ public final class TownWarehouse {
         return reserve(workplace,order,recipe,materials,results,production,fuelItem,fuelQuantity,cultivation,false);
     }
     private WarehouseBatch reserve(UUID workplace,UUID order,String recipe,List<MaterialQuantity> materials,List<ItemStack> results,List<ProductionStock> production,String fuelItem,int fuelQuantity,boolean cultivation,boolean herdFeed) {
+        return reserve(workplace,order,recipe,materials,results,production,fuelItem,fuelQuantity,cultivation,herdFeed,0,fuelQuantity);
+    }
+    /**
+     * @param maxStacks when positive, refuse a delivery whose materials need more stacks than this to carry
+     * @param fuelBurned fuel counted towards the charcoal a wood fire leaves behind
+     */
+    private WarehouseBatch reserve(UUID workplace,UUID order,String recipe,List<MaterialQuantity> materials,List<ItemStack> results,List<ProductionStock> production,String fuelItem,int fuelQuantity,boolean cultivation,boolean herdFeed,int maxStacks,int fuelBurned) {
         if(workplace==null||order==null||recipe==null||recipe.isBlank()||materials==null||results==null||!herdFeed&&results.isEmpty()
             ||!canPrepare(workplace,fuelItem!=null,cultivation)||batches.size()>=256) return null;
         if(materials.stream().anyMatch(m->m==null||m.getQuantity()<=0)||results.stream().anyMatch(s->ItemStack.isEmpty(s))) return null;
@@ -319,6 +367,8 @@ public final class TownWarehouse {
         if(!addAll(promised,results)) return null;
         // Source addresses accompany the scratch slots. A town total is never a pickup location.
         List<WarehouseBatch.Source> addresses=new ArrayList<>();List<ItemStack> stocks=new ArrayList<>();
+        // Where each candidate stack is: a building, a furnace, or the warehouse itself.
+        List<String> places=new ArrayList<>();
         long demand=materials.stream().mapToLong(MaterialQuantity::getQuantity).sum();
         Set<UUID> seenPlots=new HashSet<>();
         for(var source:production) {
@@ -329,7 +379,7 @@ public final class TownWarehouse {
                 int count=(int)Math.min(Integer.MAX_VALUE,Math.min(demand,availableCount));
                 if(count==0)continue;
                 addresses.add(new WarehouseBatch.Source(null,(short)-1,(short)-1,source.plot(),source.pickup()));
-                stocks.add(new ItemStack(held.getKey(),count));
+                stocks.add(new ItemStack(held.getKey(),count));places.add("building:"+source.plot());
             }
         }
         for(var origin:smelting().origins())for(short slot=0;slot<origin.slots();slot++) {
@@ -337,7 +387,7 @@ public final class TownWarehouse {
             int remaining=held.getQuantity()-reservedSmelting(origin.id(),slot);
             if(remaining<0)throw new IllegalStateException("Reserved smelting stock is missing");
             if(remaining==0)continue;
-            addresses.add(new WarehouseBatch.Source(null,slot,(short)-1,origin.id(),origin.location()));stocks.add(held.withQuantity(remaining));
+            addresses.add(new WarehouseBatch.Source(null,slot,(short)-1,origin.id(),origin.location()));stocks.add(held.withQuantity(remaining));places.add("furnace:"+origin.id());
         }
         // Specific crafting output is player collected. It is not a remote ingredient depot.
         for(short slot=0;slot<inventory(Page.GENERAL).getCapacity();slot++) {
@@ -345,7 +395,7 @@ public final class TownWarehouse {
             if(ItemStack.isEmpty(stack)) continue;
             int remaining=stack.getQuantity()-reserved(Page.GENERAL,slot);
             if(remaining<0) throw new IllegalStateException("Reserved stock is missing");
-            if(remaining>0) {addresses.add(new WarehouseBatch.Source(Page.GENERAL,slot,(short)-1));stocks.add(stack.withQuantity(remaining));}
+            if(remaining>0) {addresses.add(new WarehouseBatch.Source(Page.GENERAL,slot,(short)-1));stocks.add(stack.withQuantity(remaining));places.add("warehouse");}
         }
         if(stocks.size()>Short.MAX_VALUE)return null;
         var available=new SimpleItemContainer((short)Math.max(1,stocks.size()));
@@ -354,6 +404,10 @@ public final class TownWarehouse {
         // Check each removal on the scratch inventory. Native bulk transactions can report
         // success even when overlapping ingredient queries exhaust one another's stock.
         for(var material:materials) {
+            // A courier collects from one place per trip. Take the whole of a material from a single place that holds
+            // enough of it: a building that makes it, a furnace, or the warehouse. Only when no one place has enough
+            // is it gathered from several.
+            if(takeFromOnePlace(available,places,material))continue;
             var removed=available.removeMaterial(material,true,true,false);
             // The installed server retains the original quantity in the aggregate remainder;
             // the last successful slot transaction carries the actual amount still needed.
@@ -372,14 +426,67 @@ public final class TownWarehouse {
             var address=addresses.get(slot);
             sources.add(new WarehouseBatch.Source(address.page(),address.slot(),batchSlot,address.plot(),address.pickup()));
         }
+        if(maxStacks>0) {
+            int stacks=0;
+            for(var stack:WarehouseBatch.items(pending))stacks+=WorkplaceBatchSize.stacks(stack.getQuantity(),stack.getItem().getMaxStack());
+            if(stacks>maxStacks)return null;
+        }
         var batch=new WarehouseBatch(workplace,order,recipe,sources,pending,promised);
         if(fuelItem!=null) {
             var promisedOutput=new ArrayList<>(results);
-            if(!"Ingredient_Charcoal".equals(fuelItem)&&results.stream().noneMatch(s->"Ingredient_Charcoal".equals(s.getItemId())))promisedOutput.add(new ItemStack("Ingredient_Charcoal",Math.max(1,(fuelQuantity+1)/2)));
+            if(!"Ingredient_Charcoal".equals(fuelItem)&&results.stream().noneMatch(s->"Ingredient_Charcoal".equals(s.getItemId())))promisedOutput.add(new ItemStack("Ingredient_Charcoal",Math.max(1,(fuelBurned+1)/2)));
             if(!smelting().reserve(batch.id(),promisedOutput))return null;
             batch.smelting(fuelItem,fuelQuantity);
         }
         batches.add(batch); changed(); return batch;
+    }
+    /**
+     * Tries to take a whole material from the stacks of one place, in the order the places are listed.
+     *
+     * @return true when one place covered it and the scratch inventory has been reduced
+     */
+    private static boolean takeFromOnePlace(SimpleItemContainer available,List<String> places,MaterialQuantity material) {
+        for(String place:new LinkedHashSet<>(places)) {
+            var alone=new SimpleItemContainer(available.getCapacity());
+            for(short slot=0;slot<places.size();slot++)if(place.equals(places.get(slot)))alone.setItemStackForSlot(slot,available.getItemStack(slot),false);
+            if(alone.isEmpty())continue;
+            var removed=alone.removeMaterial(material,true,true,false);
+            if(!removed.succeeded()||removed.getList().isEmpty()||removed.getList().getLast().getRemainder()!=0)continue;
+            for(short slot=0;slot<places.size();slot++)if(place.equals(places.get(slot)))available.setItemStackForSlot(slot,alone.getItemStack(slot),false);
+            return true;
+        }
+        return false;
+    }
+    /**
+     * True when a delivery that is still waiting to be collected can no longer be collected in full: the stock it
+     * reserved is gone or short. Stock in unloaded terrain is not judged.
+     *
+     * @param loaded production buildings whose stores are in live terrain right now
+     * @param exists whether a building or mineshaft base with that id is still part of the town
+     */
+    public boolean sourceLost(UUID id,List<ProductionStock> loaded,java.util.function.Predicate<UUID> exists) {
+        var batch=batch(id);
+        if(batch==null||batch.cancelled()||batch.nativeLoaded())return false;
+        for(var source:batch.pendingSources()) {
+            var wanted=batch.pending().getItemStack(source.batchSlot());
+            if(ItemStack.isEmpty(wanted))continue;
+            if(source.page()==Page.GENERAL) {
+                var held=inventory(Page.GENERAL).getItemStack(source.slot());
+                if(ItemStack.isEmpty(held)||!held.isStackableWith(wanted)||held.getQuantity()<wanted.getQuantity())return true;
+            } else if(source.plot()!=null&&source.slot()>=0) {
+                var origin=smelting().origin(source.plot());
+                if(origin==null)return true;
+                var held=origin.stack(source.slot());
+                if(ItemStack.isEmpty(held)||!held.isStackableWith(wanted)||held.getQuantity()<wanted.getQuantity())return true;
+            } else if(source.plot()!=null) {
+                if(!exists.test(source.plot()))return true;
+                for(var stock:loaded) {
+                    if(!source.plot().equals(stock.plot()))continue;
+                    if(!Objects.equals(stock.pickup(),source.pickup())||stock.state().getAmount(wanted.getItemId())<wanted.getQuantity())return true;
+                }
+            }
+        }
+        return false;
     }
     /** Only mutate disposable staging inventories here, since a later stack may not fit. */
     private static boolean addAll(SimpleItemContainer staging,List<ItemStack> stacks) {
@@ -521,11 +628,12 @@ public final class TownWarehouse {
     public boolean finishWork(UUID id,com.hexvane.aetherhaven.workplace.WorkplaceOrders orders,double requiredSeconds,
             java.util.function.UnaryOperator<ItemStack> decorate) {
         var batch=batch(id);
-        if(batch==null||!Double.isFinite(requiredSeconds)||requiredSeconds<=0||batch.workSeconds()<requiredSeconds
+        // A delivery covering several crafts needs the work of each, and all of them are committed together.
+        if(batch==null||!Double.isFinite(requiredSeconds)||requiredSeconds<=0||batch.workSeconds()<requiredSeconds*batch.crafts()
             ||!orders.canComplete(batch.orderId(),batch.recipeId()))return false;
-        UUID order=batch.orderId();
+        UUID order=batch.orderId();int crafts=batch.crafts();
         if(!finish(id,decorate))return false;
-        orders.recordCompletion(order);return true;
+        orders.recordCompletion(order,crafts);return true;
     }
     /** World thread only. Commit the seed after placing its native growth block successfully. */
     public boolean plantCrop(UUID id,java.util.function.BooleanSupplier plant) {
@@ -583,7 +691,7 @@ public final class TownWarehouse {
         var batch=batch(id);if(batch==null||!batch.nativeLoaded())return false;
         var order=orders==null?null:orders.find(batch.orderId());
         // Pausing prevents new loading; it cannot undo ore already processing in a native furnace.
-        if(!batch.cancelled()&&order!=null&&batch.recipeId().equals(order.recipeId()))orders.recordCompletion(batch.orderId());
+        if(!batch.cancelled()&&order!=null&&batch.recipeId().equals(order.recipeId()))orders.recordCompletion(batch.orderId(),batch.crafts());
         smelting().release(id);batches.remove(batch);changed();return true;
     }
     /** Release untouched reservations immediately. Picked up supplies still require a physical return trip. */

@@ -20,5 +20,14 @@
       "itemId": "Food_Popcorn",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "cooking": 5,
+    "alchemy": 3,
+    "farming": 2
+  },
+  "startingAttributes": {
+    "intelligence": 7,
+    "dexterity": 6
+  }
 }

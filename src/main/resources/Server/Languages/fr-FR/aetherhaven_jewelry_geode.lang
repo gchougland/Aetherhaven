@@ -124,6 +124,7 @@ aetherhaven.ui.jewelryAppraisal.empty=Aucun bijou dans votre barre d'accès rapi
 aetherhaven.ui.jewelryAppraisal.pick=Sélectionnez un élément ci-dessous.
 aetherhaven.ui.jewelryAppraisal.select=Sélectionner
 aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.rowEquipped={itemName} ({status}, equipped)
 aetherhaven.ui.jewelryAppraisal.statusAppraised=évalué
 aetherhaven.ui.jewelryAppraisal.statusUnidentified=non identifié
 aetherhaven.ui.jewelryAppraisal.selectedHeader=Sélectionné : {itemName}

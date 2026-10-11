@@ -20,5 +20,14 @@
       "itemId": "Ingredient_Crystal_Purple",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "alchemy": 5,
+    "crafting": 3,
+    "jewelry": 2
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "dexterity": 6
+  }
 }

@@ -110,6 +110,7 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new TownVillagerAuditRemoveSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.EachTick());
         NpcFaceVisualState.register(plugin.getEntityStoreRegistry());
+        com.hexvane.aetherhaven.npc.NpcServicePause.register(plugin.getEntityStoreRegistry());
         VillagerLifeState.register(plugin.getEntityStoreRegistry());
         VillagerSeatExit.register(plugin.getEntityStoreRegistry());
         VillagerMouthPlayback.register(plugin.getEntityStoreRegistry());
@@ -151,6 +152,7 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.hunter.HuntService.DamageFilter());
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.hunter.HuntService.Knockouts());
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.hunter.HuntService.Deaths());
+        com.hexvane.aetherhaven.workplace.ApprenticeRanchAnimals.register(plugin.getEntityStoreRegistry(),core);
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.workplace.RanchAnimalLifecycle.Deaths(core));
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.workplace.RanchAnimalLifecycle.Removals(core));
         plugin.getEntityStoreRegistry().registerSystem(new ClownCheerAssistSystem(core));

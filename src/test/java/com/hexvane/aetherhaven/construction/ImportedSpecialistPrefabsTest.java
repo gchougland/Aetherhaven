@@ -63,21 +63,11 @@ class ImportedSpecialistPrefabsTest {
         }
     }
 
-    @Test void druidPlantsAreHarvestableBlocksAndRetainTheStorage()throws Exception {
+    @Test void druidRetainsPlantingSoilAndConfiguredStorageWithoutRestoringRemovedDecorativeCrops()throws Exception {
         var prefab=prefab("druid");var blocks=cells(prefab);
-        for(String family:List.of("Health","Mana","Stamina"))for(int tier=1;tier<=3;tier++){
-            String expected="Plant_Crop_"+family+tier;
-            var plant=blocks.entrySet().stream().filter(e->expected.equals(e.getValue().get("name").getAsString())
-                &&(!e.getValue().has("filler")||e.getValue().get("filler").getAsInt()==0)).findFirst().orElseThrow();
-            assertEquals("Soil_Dirt_Crystal",name(blocks,plant.getKey().add(0,-1,0)));
-            if(tier==3){
-                var upper=blocks.get(plant.getKey().add(0,1,0));
-                assertNotNull(upper,expected+" needs room for its upper half");
-                assertEquals(expected,upper.get("name").getAsString());
-                assertEquals(1024,upper.get("filler").getAsInt());
-            }
-        }
-        assertEquals("Aetherhaven_Production_Storage",name(blocks,new Cell(0,0,3)));
+        assertTrue(blocks.values().stream().anyMatch(b -> "Soil_Dirt_Crystal".equals(b.get("name").getAsString())));
+        Cell storage=point(definition("druid").getAsJsonArray("productionStorageLocalPos"));
+        assertEquals("Aetherhaven_Production_Storage",name(blocks,storage));
         for(var e:prefab.has("entities")?prefab.getAsJsonArray("entities"):new JsonArray())assertFalse(e.getAsJsonObject().getAsJsonObject("Components").has("NPC"),"Editor NPC must not become a resident");
     }
 

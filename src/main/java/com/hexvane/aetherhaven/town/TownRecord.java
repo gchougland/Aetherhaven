@@ -577,6 +577,13 @@ public final class TownRecord {
     private com.hexvane.aetherhaven.warehouse.TownWarehouse warehouse;
 
     private com.hexvane.aetherhaven.clinic.TownClinic clinic;
+    private com.hexvane.aetherhaven.crafter.PatternBook patternBook;
+    public com.hexvane.aetherhaven.crafter.PatternBook getPatternBook() {
+        if(patternBook==null)patternBook=new com.hexvane.aetherhaven.crafter.PatternBook();
+        return patternBook;
+    }
+    /** The Crafter's book if this town has ever used it. Never creates one. */
+    public com.hexvane.aetherhaven.crafter.PatternBook peekPatternBook() { return patternBook; }
     private com.hexvane.aetherhaven.hunter.TownHunts hunts;
     public com.hexvane.aetherhaven.hunter.TownHunts getHunts() {
         if(hunts==null)hunts=new com.hexvane.aetherhaven.hunter.TownHunts();

@@ -102,7 +102,7 @@ public final class TownWorkplaces {
         for (var site : sites) {
             if (site.id().equals(editing)) continue;
             if(editing!=null&&editing.equals(site.mineBaseId()))continue;
-            if (site.area().overlaps(area)) return "This area overlaps another workplace on this floor.";
+            if (WorkplaceOverlap.workplace(area, site)) return "This area overlaps another workplace on this floor.";
             if (site.mineBaseId()==null && site.type() != null && WorkplaceRules.supervisor(site.type()).equals(supervisor)) count++;
         }
         return count >= slots(supervisor) ? "This villager has no free workplace slots. Upgrade their building to add one." : null;
@@ -157,7 +157,12 @@ public final class TownWorkplaces {
         var area=tunnel.area();var claims=TownTerritoryClaims.toChunkIndexSet(town);
         for(int x=ChunkUtil.chunkCoordinate(area.minX());x<=ChunkUtil.chunkCoordinate(area.maxX()-1);x++)for(int z=ChunkUtil.chunkCoordinate(area.minZ());z<=ChunkUtil.chunkCoordinate(area.maxZ()-1);z++)
             if(!claims.contains(ChunkUtil.indexChunk(x,z)))return "Keep the tunnel inside town borders.";
-        for(var other:sites)if(!other.id().equals(baseId)&&!baseId.equals(other.mineBaseId())&&other.area().overlaps(area))return "This tunnel overlaps another workplace.";
+        String overlap=tunnelOverlapIssue(baseId,tunnel);if(overlap!=null)return overlap;
         tunnel.attachTunnel(baseId,prerequisite);sites.add(tunnel);return null;
+    }
+    String tunnelOverlapIssue(UUID baseId,ApprenticeWorkplace tunnel){
+        for(var other:sites)if(!other.id().equals(baseId)&&!baseId.equals(other.mineBaseId())&&WorkplaceOverlap.tunnel(tunnel,other))
+            return "This tunnel crosses the passage or floor of another workplace: "+other.name()+".";
+        return null;
     }
 }

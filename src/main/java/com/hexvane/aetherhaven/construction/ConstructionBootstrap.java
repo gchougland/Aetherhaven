@@ -317,6 +317,7 @@ public final class ConstructionBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new PlotBlockPreviewCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new ScaffoldColumnCascadeBreakSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlayerBlockBreakBonusSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.quest.QuestMineProgressSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new FounderMonumentPlaceSystem(core));
         plugin.getChunkStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem.BlockLoad());
         plugin.getEntityStoreRegistry().registerSystem(new FounderMonumentBreakSystem(core));

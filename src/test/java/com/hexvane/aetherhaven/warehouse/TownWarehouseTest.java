@@ -59,7 +59,7 @@ class TownWarehouseTest {
     @Test void loggerCharringPreservesCourierReservationsAndRechecksAfterSelection() {
         String wood="Wood_Beech_Trunk", burnt=com.hexvane.aetherhaven.production.TimberCharring.OUTPUT;
         var p=new Gson().fromJson("{\"timber\":{\"adopted\":true}}",com.hexvane.aetherhaven.production.PlotProductionState.class);
-        p.setIronUpgrade(1);p.setSlotCursor(1,1);p.addAmount(wood,5,100);
+        p.timber().setCharWood(wood);p.addAmount(wood,5,100);
         var entry=new Gson().fromJson("{\"itemIds\":[\"Wood_Beech_Trunk\",\"Wood_Burnt_Trunk\"],\"ticksByIndex\":[1,1],\"maxStorageByIndex\":[100,100]}",com.hexvane.aetherhaven.production.ProductionCatalog.Entry.class);
         var stock=new TownWarehouse();var plot=UUID.randomUUID();var point=new WarehouseBatch.Point(3,100,4);
         var source=new TownWarehouse.ProductionStock(plot,point,p);
@@ -873,6 +873,80 @@ class TownWarehouseTest {
         assertEquals(legacy.getItemStack((short)4),migrated.cargoItems().getFirst());
         assertEquals(batch.courierId(),migrated.courierId());
     }
+    @Test void oneDeliveryCoversSeveralCraftsAndCommitsThemTogether() {
+        var town=new TownWarehouse();supply(town,stock("ore",9));
+        var orders=new com.hexvane.aetherhaven.workplace.WorkplaceOrders();
+        orders.add(0,"recipe",com.hexvane.aetherhaven.workplace.WorkplaceOrders.Mode.COUNT,6);var order=orders.list().getFirst();
+        var site=UUID.randomUUID();
+        // Five crafts would need ten ore. Four fit what is in stock.
+        assertNull(town.reserveCrafts(site,order.id(),"recipe",List.of(ingredient("ore",2)),List.of(stock("kit",1)),List.of(),5,1));
+        assertEquals(0,town.queuedForOrder(order.id()),"A refused delivery reserves nothing");
+        var batch=town.reserveCrafts(site,order.id(),"recipe",List.of(ingredient("ore",2)),List.of(stock("kit",1)),List.of(),4,1);
+        assertNotNull(batch);assertEquals(4,batch.crafts());
+        assertEquals(4,town.queuedForOrder(order.id()),"Queued work is counted in crafts");
+        assertEquals(2,order.batchesNeeded(0,0,1,town.queuedForOrder(order.id())));
+        assertEquals(4,town.incoming("kit"));
+        assertNull(town.reserveCrafts(site,order.id(),"recipe",List.of(ingredient("ore",2)),List.of(stock("kit",1)),List.of(),1,1),
+            "The bench is held by one delivery at a time");
+        // One trip carries all of it, and it survives a reload.
+        assertEquals(8,town.pickup(batch.id(),"courier",1));town.deliver(batch.id(),"courier");
+        town=reload(town);batch=town.batch(batch.id());assertEquals(4,batch.crafts());
+        assertEquals(1,town.count(TownWarehouse.Page.GENERAL,"ore"));
+        // Four crafts need four times the work. Nothing is made part way.
+        for(int i=0;i<24*4-1;i++)assertTrue(town.advanceWork(batch.id(),.25));
+        assertFalse(town.finishWork(batch.id(),orders,6));assertEquals(0,town.count(TownWarehouse.Page.OUTPUT,"kit"));
+        assertTrue(town.advanceWork(batch.id(),.25));
+        assertTrue(town.finishWork(batch.id(),orders,6));
+        assertEquals(4,town.count(TownWarehouse.Page.OUTPUT,"kit"));assertEquals(4,order.completed());
+        assertEquals(0,town.queuedForOrder(order.id()));assertEquals(2,order.batchesNeeded(0,0,1,0));
+        assertFalse(town.finishWork(batch.id(),orders,6));assertEquals(4,town.count(TownWarehouse.Page.OUTPUT,"kit"));
+    }
+    @Test void aDeliveryOfSeveralCraftsIsRefusedWhenItNeedsMoreStacksThanAllowedAndCancelReturnsEverything() {
+        var town=new TownWarehouse();supply(town,stock("ore",8),stock("wood",8));
+        var orders=new com.hexvane.aetherhaven.workplace.WorkplaceOrders();
+        orders.add(0,"recipe",com.hexvane.aetherhaven.workplace.WorkplaceOrders.Mode.FOREVER,1);var order=orders.list().getFirst();
+        var site=UUID.randomUUID();var inputs=List.of(ingredient("ore",2),ingredient("wood",2));
+        assertNull(town.reserveCrafts(site,order.id(),"recipe",inputs,List.of(stock("kit",1)),List.of(),4,1),"Two kinds of material need two stacks");
+        assertNull(town.reserveCrafts(site,order.id(),"recipe",inputs,List.of(stock("kit",1)),List.of(),17,9),"More crafts than one delivery may cover");
+        var batch=town.reserveCrafts(site,order.id(),"recipe",inputs,List.of(stock("kit",1)),List.of(),4,2);
+        assertNotNull(batch);assertEquals(4,batch.crafts());
+        // A single craft keeps today's behaviour: any number of trips, no stack limit.
+        town.cancel(batch.id());assertEquals(0,town.queuedForOrder(order.id()));
+        assertEquals(8,town.count(TownWarehouse.Page.GENERAL,"ore"));assertEquals(8,town.count(TownWarehouse.Page.GENERAL,"wood"));
+        var single=town.reserveCrafts(site,order.id(),"recipe",inputs,List.of(stock("kit",1)),List.of(),1,1);
+        assertNotNull(single);assertEquals(1,single.crafts());
+    }
+    @Test void aFurnaceLoadCoversAWholeStackAndPromisesRoomForAllItsCharcoal() {
+        var town=new TownWarehouse();supply(town,stock("ore",10),stock("wood",12));
+        var site=UUID.randomUUID();var orders=new com.hexvane.aetherhaven.workplace.WorkplaceOrders();
+        orders.add(0,"smelt",com.hexvane.aetherhaven.workplace.WorkplaceOrders.Mode.COUNT,10);var order=orders.list().getFirst();
+        assertNull(town.reserveSmeltingCrafts(site,order.id(),"smelt",List.of(ingredient("ore",1)),List.of(stock("ingot",1)),List.of(),"wood",8,11,8),
+            "There is not that much ore");
+        // Eight ore with six new logs, on top of four logs already in the furnace.
+        var load=town.reserveSmeltingCrafts(site,order.id(),"smelt",List.of(ingredient("ore",1)),List.of(stock("ingot",1)),List.of(),"wood",6,8,10);
+        assertNotNull(load);assertEquals(8,load.crafts());assertEquals(8,town.queuedForOrder(order.id()));
+        assertEquals(2,order.batchesNeeded(0,0,1,town.queuedForOrder(order.id())));
+        assertEquals(8,town.smelting().promised("ingot"));
+        assertEquals(5,town.smelting().promised("Ingredient_Charcoal"),"Ten logs leave five charcoal, and all of it needs room");
+        town.pickup(load.id(),"courier",2);town.deliver(load.id(),"courier");
+        var input=bag(2);var fuel=bag(1);
+        assertTrue(town.loadFurnace(load.id(),input,fuel,bag(4)));
+        assertEquals(8,input.getItemStack((short)0).getQuantity(),"The whole load goes in at once");
+        assertEquals(6,fuel.getItemStack((short)0).getQuantity());
+        town=reload(town);assertEquals(8,town.batch(load.id()).crafts());
+        assertTrue(town.finishFurnace(load.id(),orders));assertEquals(8,order.completed());
+        assertEquals(2,order.batchesNeeded(0,0,1,town.queuedForOrder(order.id())));
+    }
+    @Test void deliverySizesAreBoundedAndShrinkWhenTheyDoNotFit() {
+        assertEquals(1,WorkplaceBatchSize.crafts(1,false));assertEquals(5,WorkplaceBatchSize.crafts(5,false));
+        assertEquals(WorkplaceBatchSize.MAX_CRAFTS,WorkplaceBatchSize.crafts(500,false));
+        assertEquals(WorkplaceBatchSize.FOREVER_CRAFTS,WorkplaceBatchSize.crafts(Integer.MAX_VALUE,true),"A task with no end takes only some at a time");
+        assertEquals(25,WorkplaceBatchSize.furnaceCrafts(Integer.MAX_VALUE,true,25),"A furnace takes a whole stack even for an endless task");
+        assertEquals(3,WorkplaceBatchSize.furnaceCrafts(3,false,25));assertEquals(25,WorkplaceBatchSize.furnaceCrafts(60,false,25));
+        assertEquals(1,WorkplaceBatchSize.furnaceCrafts(0,false,25));
+        assertEquals(8,WorkplaceBatchSize.smaller(16));assertEquals(1,WorkplaceBatchSize.smaller(3));assertEquals(0,WorkplaceBatchSize.smaller(1));
+        assertEquals(0,WorkplaceBatchSize.stacks(0,25));assertEquals(1,WorkplaceBatchSize.stacks(25,25));assertEquals(2,WorkplaceBatchSize.stacks(26,25));
+    }
     @Test void finishingWorkCommitsOutputAndOrderOnceAndHonorsPause() {
         var town=new TownWarehouse();supply(town,stock("ore",2));
         var orders=new com.hexvane.aetherhaven.workplace.WorkplaceOrders();
@@ -1169,6 +1243,64 @@ class TownWarehouseTest {
     }
     private static WarehouseBatch reserve(TownWarehouse warehouse,int count,List<TownWarehouse.ProductionStock> sources) {
         return warehouse.reserve(UUID.randomUUID(),UUID.randomUUID(),"recipe",List.of(ingredient("ore",count)),List.of(stock("kit",1)),sources);
+    }
+    @Test void theWarehouseListsOnlyUnlockedOutputSlots() {
+        assertEquals(1,WarehousePage.visibleSlots(1),"A new farm or mine shows its one slot and no locked placeholders");
+        assertEquals(3,WarehousePage.visibleSlots(3));
+        assertEquals(com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades.MAX_SLOT_COUNT,WarehousePage.visibleSlots(99));
+        assertEquals(0,WarehousePage.visibleSlots(-1));
+    }
+    @Test void aMaterialIsFetchedWhollyFromOnePlaceThatHoldsIt() {
+        // The barn has a little hide and the warehouse has plenty: one trip to the warehouse, none to the barn.
+        var town=new TownWarehouse();var barn=production("hide",2,10);supply(town,stock("hide",20));
+        var batch=town.reserve(UUID.randomUUID(),UUID.randomUUID(),"recipe",List.of(ingredient("hide",8)),List.of(stock("kit",1)),List.of(barn));
+        assertNotNull(batch);assertEquals(1,batch.pendingSources().size());
+        assertEquals(TownWarehouse.Page.GENERAL,batch.pendingSources().getFirst().page());
+        assertEquals(0,town.reservedProduction(barn.plot(),"hide"),"The barn is left alone");
+        assertEquals(8,town.pickup(batch.id(),"courier",5));assertEquals(2,barn.state().getAmount("hide"));
+
+        // The barn has enough: it is the place that makes hide, so the courier goes there and nowhere else.
+        town=new TownWarehouse();var full=production("hide",10,10);supply(town,stock("hide",20));
+        batch=town.reserve(UUID.randomUUID(),UUID.randomUUID(),"recipe",List.of(ingredient("hide",8)),List.of(stock("kit",1)),List.of(full));
+        assertNotNull(batch);assertEquals(1,batch.pendingSources().size());
+        assertEquals(full.plot(),batch.pendingSources().getFirst().plot());assertEquals(8,town.reservedProduction(full.plot(),"hide"));
+        assertEquals(20,town.count(TownWarehouse.Page.GENERAL,"hide"));
+
+        // Two materials each go to the one place that has them, never to a building that has neither.
+        town=new TownWarehouse();var ranch=production("hide",9,10);var mine=production("ore",9,40);supply(town,stock("hide",1),stock("ore",1));
+        batch=town.reserve(UUID.randomUUID(),UUID.randomUUID(),"recipe",List.of(ingredient("hide",4),ingredient("ore",4)),List.of(stock("kit",1)),List.of(ranch,mine));
+        assertNotNull(batch);assertEquals(2,batch.pendingSources().size());
+        assertEquals(4,town.reservedProduction(ranch.plot(),"hide"));assertEquals(4,town.reservedProduction(mine.plot(),"ore"));
+        assertEquals(0,town.reservedProduction(ranch.plot(),"ore"));assertEquals(0,town.reservedProduction(mine.plot(),"hide"));
+
+        // Nowhere holds enough alone: it is still gathered, from several places as before.
+        town=new TownWarehouse();var small=production("hide",3,10);supply(town,stock("hide",6));
+        batch=town.reserve(UUID.randomUUID(),UUID.randomUUID(),"recipe",List.of(ingredient("hide",8)),List.of(stock("kit",1)),List.of(small));
+        assertNotNull(batch);assertEquals(2,batch.pendingSources().size());
+    }
+    @Test void aDeliveryWhoseSourceWasEmptiedIsNoticedAndPreparedAgainFromElsewhere() {
+        var town=new TownWarehouse();var barn=production("hide",10,10);supply(town,stock("hide",20));
+        var site=UUID.randomUUID();var order=UUID.randomUUID();
+        var batch=town.reserve(site,order,"recipe",List.of(ingredient("hide",8)),List.of(stock("kit",1)),List.of(barn));
+        assertEquals(barn.plot(),batch.pendingSources().getFirst().plot());
+        assertFalse(town.sourceLost(batch.id(),List.of(barn),id->true));
+        assertFalse(town.sourceLost(batch.id(),List.of(),id->true),"A barn in unloaded terrain is not judged");
+        // The barn's stock goes while the courier is on the way.
+        barn.state().removeAmountUpTo("hide",7);
+        assertTrue(town.sourceLost(batch.id(),List.of(barn),id->true));
+        assertEquals(3,barn.state().getAmount("hide"),"Checking moves nothing");assertEquals(20,town.count(TownWarehouse.Page.GENERAL,"hide"));
+        assertEquals(1,town.queuedForOrder(order));
+        assertTrue(town.cancel(batch.id()));assertEquals(0,town.queuedForOrder(order));assertEquals(0,town.reservedProduction(barn.plot(),"hide"));
+        var again=town.reserve(site,order,"recipe",List.of(ingredient("hide",8)),List.of(stock("kit",1)),List.of(barn));
+        assertNotNull(again);assertEquals(TownWarehouse.Page.GENERAL,again.pendingSources().getFirst().page());
+        // A building that has been removed loses the delivery too, and so does a store that was moved.
+        var gone=production("ore",9,40);var other=town.reserve(UUID.randomUUID(),UUID.randomUUID(),"recipe",List.of(ingredient("ore",4)),List.of(stock("kit",1)),List.of(gone));
+        assertNotNull(other);assertFalse(town.sourceLost(other.id(),List.of(gone),id->true));
+        assertTrue(town.sourceLost(other.id(),List.of(),id->false));
+        var moved=new TownWarehouse.ProductionStock(gone.plot(),new WarehouseBatch.Point(99,100,20),gone.state());
+        assertTrue(town.sourceLost(other.id(),List.of(moved),id->true));
+        // Warehouse stock that is taken by hand is noticed as well.
+        assertFalse(town.sourceLost(again.id(),List.of(),id->true));
     }
     @Test void directProductionPickupPreservesRealSourceAndDoesNotSweepOtherBuildings() {
         var town=new TownWarehouse();var mine=production("ore",6,10);var secondMine=production("ore",7,40);supply(town,stock("ore",8));

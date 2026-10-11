@@ -124,6 +124,7 @@ aetherhaven.ui.jewelryAppraisal.empty=No guardes joyas en tu barra de acceso rá
 aetherhaven.ui.jewelryAppraisal.pick=Seleccione una pieza a continuación.
 aetherhaven.ui.jewelryAppraisal.select=Seleccionar
 aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.rowEquipped={itemName} ({status}, equipped)
 aetherhaven.ui.jewelryAppraisal.statusAppraised=tasado
 aetherhaven.ui.jewelryAppraisal.statusUnidentified=no identificado
 aetherhaven.ui.jewelryAppraisal.selectedHeader=Seleccionado: {itemName}

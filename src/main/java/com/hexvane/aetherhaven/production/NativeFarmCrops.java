@@ -99,6 +99,13 @@ public final class NativeFarmCrops {
         return harvest(world,town,plot,production,bed,Set.of(bed.output()),save);
     }
     public static boolean harvest(World world,TownRecord town,PlotInstance plot,PlotProductionState production,FieldProductionState.Bed bed,Set<String> outputs,Runnable save) {
+        return harvest(world,town,plot,production,bed,outputs,0,save);
+    }
+    /**
+     * @param essenceRoom how much more Life Essence this farm can store. Every harvest brings some back while there is
+     *                    room, whether or not Life Essence is one of the farm's chosen outputs.
+     */
+    public static boolean harvest(World world,TownRecord town,PlotInstance plot,PlotProductionState production,FieldProductionState.Bed bed,Set<String> outputs,long essenceRoom,Runnable save) {
         if(NativeDruidCrops.supported(bed.crop()))return NativeDruidCrops.harvest(world,town,plot,production,bed,outputs,save);
         if(com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issueForKind(town,"farmer",bed.output())!=null)return false;
         if(production.field().cargo()!=null||production.field().pending()!=null||!usable(world,town,plot,bed)||!ripe(world,bed))return false;
@@ -108,7 +115,7 @@ public final class NativeFarmCrops {
         if(stages==null||stages.length==0||!(stages[0] instanceof com.hypixel.hytale.builtin.adventure.farming.config.stages.BlockStateFarmingStageData state))return false;
         var regrown=block.getBlockForState(state.getState());
         if(regrown==null||regrown.getId().equals(block.getId())||regrown.getGathering()!=null&&regrown.getGathering().getHarvest()!=null)return false;
-        var yields=harvestYields(block,bed,outputs);
+        var yields=harvestYields(block,bed,outputs,essenceRoom);
         boolean begun=production.field().beginHarvest(bed,regrown.getId(),yields,()->FoodSiteService.regrowCrop(world,p,bed.crop()));
         if(begun) {
             UUID claim=production.field().pending().id();
@@ -132,16 +139,36 @@ public final class NativeFarmCrops {
     }
     /** Roll the ripe plant's harvest table once. Seeds and unrelated drops are not town outputs. */
     public static Map<String,Integer> harvestYields(BlockType block,FieldProductionState.Bed bed,Set<String> outputs) {
+        return harvestYields(block,bed,outputs,0);
+    }
+    /**
+     * Life Essence comes with every crop harvest. A crop that drops none still gives one, and what is taken never
+     * exceeds the room left for it, so the farmer is never left holding essence that will not fit.
+     *
+     * @param chosen what the harvest gives from the farm's chosen outputs
+     * @param rolledEssence the essence the plant dropped this time, chosen or not
+     * @param essenceRoom how much more essence the farm can store
+     */
+    static Map<String,Integer> withEssence(Map<String,Integer> chosen,int rolledEssence,long essenceRoom) {
+        if(chosen.containsKey(LIFE_ESSENCE)||essenceRoom<1)return chosen;
+        var result=new LinkedHashMap<>(chosen);
+        result.put(LIFE_ESSENCE,(int)Math.min(essenceRoom,Math.max(1,rolledEssence)));
+        return result;
+    }
+    public static Map<String,Integer> harvestYields(BlockType block,FieldProductionState.Bed bed,Set<String> outputs,long essenceRoom) {
         var harvest=block.getGathering()==null?null:block.getGathering().getHarvest();
         if(harvest==null)return Map.of();
         var module=com.hypixel.hytale.server.core.modules.item.ItemModule.get();
         var rolled=harvest.getDropListId()!=null?module.getRandomItemDrops(harvest.getDropListId()):
             harvest.getItemId()==null?List.<com.hypixel.hytale.server.core.inventory.ItemStack>of():List.of(new com.hypixel.hytale.server.core.inventory.ItemStack(harvest.getItemId(),1));
-        var result=new LinkedHashMap<String,Integer>();
-        if(rolled!=null)for(var stack:rolled)if(!com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(stack)
-                &&outputs.contains(stack.getItemId())&&(bed.output().equals(stack.getItemId())||LIFE_ESSENCE.equals(stack.getItemId())))
-            result.merge(stack.getItemId(),stack.getQuantity(),Math::addExact);
-        return result;
+        var result=new LinkedHashMap<String,Integer>();int essence=0;
+        if(rolled!=null)for(var stack:rolled) {
+            if(com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(stack))continue;
+            if(LIFE_ESSENCE.equals(stack.getItemId()))essence=Math.addExact(essence,stack.getQuantity());
+            if(outputs.contains(stack.getItemId())&&(bed.output().equals(stack.getItemId())||LIFE_ESSENCE.equals(stack.getItemId())))
+                result.merge(stack.getItemId(),stack.getQuantity(),Math::addExact);
+        }
+        return withEssence(result,essence,essenceRoom);
     }
     public static Set<String> selectedOutputs(PlotProductionState p,ProductionCatalog.Entry entry,FieldProductionState.Bed bed) {
         var result=new LinkedHashSet<String>();

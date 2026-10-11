@@ -78,6 +78,23 @@ class FieldProductionStateTest {
         assertTrue(f.settleHarvest(claim,"Regrowing"));assertEquals(1,f.cargo().quantity());
         assertFalse(f.settleHarvest(claim,"Regrowing"));assertEquals(1,f.cargo().quantity());
     }
+    @Test void everyHarvestBringsLifeEssenceWhileThereIsRoomForIt() {
+        var crop=new LinkedHashMap<String,Integer>();crop.put(bed.output(),3);
+        // Essence is not one of the chosen outputs: the harvest still brings what the plant dropped.
+        var withDrop=NativeFarmCrops.withEssence(crop,5,100);
+        assertEquals(3,withDrop.get(bed.output()));assertEquals(5,withDrop.get(NativeFarmCrops.LIFE_ESSENCE));
+        // A crop from another pack that drops none still gives one.
+        assertEquals(1,NativeFarmCrops.withEssence(crop,0,100).get(NativeFarmCrops.LIFE_ESSENCE));
+        // Never more than the farm can still hold, so the farmer is not left carrying it.
+        assertEquals(2,NativeFarmCrops.withEssence(crop,5,2).get(NativeFarmCrops.LIFE_ESSENCE));
+        assertFalse(NativeFarmCrops.withEssence(crop,5,0).containsKey(NativeFarmCrops.LIFE_ESSENCE),"A full store still lets the crop be harvested");
+        // When essence is a chosen output its own amount stands.
+        var both=new LinkedHashMap<String,Integer>(crop);both.put(NativeFarmCrops.LIFE_ESSENCE,4);
+        assertEquals(4,NativeFarmCrops.withEssence(both,4,100).get(NativeFarmCrops.LIFE_ESSENCE));
+        // A harvest that gives only essence is still a harvest.
+        assertEquals(Map.of(NativeFarmCrops.LIFE_ESSENCE,1),NativeFarmCrops.withEssence(Map.of(),0,10));
+        assertEquals(1,crop.size(),"The rolled yields are not changed in place");
+    }
     @Test void multipleNativeProductsPersistAndEachDeliveryHasItsOwnClaim() {
         var p=new PlotProductionState();var f=p.field();assertNull(f.adopt(0,List.of(bed)));
         var yields=new LinkedHashMap<String,Integer>();yields.put(bed.output(),2);yields.put(NativeFarmCrops.LIFE_ESSENCE,4);

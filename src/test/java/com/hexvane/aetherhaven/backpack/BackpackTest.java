@@ -33,6 +33,29 @@ class BackpackTest {
     }
 
     static void put(ItemContainer inv,int slot,ItemStack item){inv.setItemStackForSlot((short)slot,item,false);}
+    @Test void benchCraftingTakesFromCarriedBagsOnlyAndNeverAddsToThem(){
+        var inv=new SimpleItemContainer((short)3);var bag=Backpack.create();var pack=Backpack.read(bag);
+        pack.insert(new ItemStack("test",1));pack.insert(new ItemStack("test",1));pack.insert(new ItemStack("test",1));
+        put(inv,1,pack.write(bag));put(inv,2,Backpack.create());
+        assertTrue(BackpackCraftingSupply.carriesSupplies(inv));
+        assertFalse(BackpackCraftingSupply.carriesSupplies(new SimpleItemContainer((short)1)));
+        var slots=BackpackCraftingSupply.slots(()->inv);
+        assertEquals(1,slots.size(),"Only filled slots of non-empty bags are offered");
+        assertEquals(3,slots.get(0).read().get().getQuantity());
+        assertFalse(slots.get(0).consume().test(4),"Cannot take more than the bag holds");
+        assertTrue(slots.get(0).consume().test(2));
+        assertEquals(1,slots.get(0).read().get().getQuantity());
+        assertEquals(1,Backpack.read(inv.getItemStack((short)1)).used());
+        assertTrue(slots.get(0).consume().test(1));
+        assertNull(slots.get(0).read().get());assertEquals(0,Backpack.read(inv.getItemStack((short)1)).used());
+        assertFalse(slots.get(0).consume().test(1));
+        // The bag leaves the inventory: the bench must stop seeing its contents at once.
+        var other=Backpack.create();var filled=Backpack.read(other);filled.insert(new ItemStack("test",1));put(inv,2,filled.write(other));
+        var later=BackpackCraftingSupply.slots(()->inv);assertEquals(1,later.size());
+        inv.setItemStackForSlot((short)2,null,false);
+        assertNull(later.get(0).read().get());assertFalse(later.get(0).consume().test(1));
+        assertTrue(BackpackCraftingSupply.slots(()->null).isEmpty());
+    }
     @Test void namingPersistsThroughUpgradeAndRejectsStaleChanges(){
         var inv=new SimpleItemContainer((short)2);var bag=Backpack.create();put(inv,0,bag);
         assertTrue(BackpackExchange.change(inv,(short)0,bag,Map.of(),p->p.rename("  Ore supplies  ")));
@@ -59,13 +82,13 @@ class BackpackTest {
         assertEquals(0,again.insert(Backpack.create()));
     }
     @Test void upgradeChangesAppearanceWithoutChangingIdentityOrStoredItems(){
-        var bag=Backpack.create().withMetadata("engraved",new BsonString("Sera"));
+        var bag=Backpack.create().withMetadata("engraved",new BsonString("Hazel"));
         var pack=Backpack.read(bag);var item=new ItemStack("test",1).withMetadata("special",BsonBoolean.TRUE);
         pack.insert(item);var id=pack.id;
         for(var tier:Backpack.Tier.values()){
             pack.tier=tier;bag=pack.write(bag);pack=Backpack.read(bag);
             assertEquals(Backpack.itemId(tier),bag.getItemId());assertEquals(id,pack.id);assertEquals(item,pack.items[0]);
-            assertEquals(new BsonString("Sera"),com.hexvane.aetherhaven.inventory.ItemStackData.metadata(bag).get("engraved"));
+            assertEquals(new BsonString("Hazel"),com.hexvane.aetherhaven.inventory.ItemStackData.metadata(bag).get("engraved"));
             assertEquals(0,pack.insert(new ItemStack(Backpack.itemId(tier),1)));
         }
     }

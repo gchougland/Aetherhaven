@@ -45,6 +45,7 @@ public final class NpcDialogueCleanup {
             return;
         }
         addTalker(npcRef, playerRef, store);
+        NpcServicePause.begin(npcRef, store, false);
         World world = store.getExternalData().getWorld();
         world.execute(
             () -> {
@@ -56,7 +57,7 @@ public final class NpcDialogueCleanup {
                     return;
                 }
                 try {
-                    NpcSupportUtil.setState(npcRef, INTERACTION_STATE, null, store);
+                    if (hasTalkers(npcRef, store)) NpcSupportUtil.setState(npcRef, INTERACTION_STATE, null, store);
                 } catch (Exception e) {
                     LOGGER.atWarning().withCause(e).log("Failed to set NPC to $Interaction for dialogue");
                 }
@@ -90,13 +91,25 @@ public final class NpcDialogueCleanup {
                     return;
                 }
                 try {
+                    if (hasTalkers(npcRef, store)) return;
                     NpcFaceVisuals.clearDialogueFace(npcRef, store);
-                    NpcSupportUtil.setState(npcRef, "Idle", null, store);
+                    if (!NpcServicePause.isHeld(npc)) NpcSupportUtil.setState(npcRef, "Idle", null, store);
                 } catch (Exception e) {
                     LOGGER.atWarning().withCause(e).log("Failed to reset NPC to Idle after dialogue");
                 }
             }
         );
+    }
+
+    public static boolean hasTalkers(Ref<EntityStore> npcRef, Store<EntityStore> store) {
+        UUID id = entityUuid(npcRef, store);
+        if (id == null) return false;
+        Set<UUID> talkers = TALKERS_BY_NPC.get(id);
+        if (talkers == null) return false;
+        dropDepartedTalkers(talkers, store);
+        if (!talkers.isEmpty()) return true;
+        TALKERS_BY_NPC.remove(id, talkers);
+        return false;
     }
 
     private static void addTalker(

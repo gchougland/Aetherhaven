@@ -63,7 +63,9 @@ public final class ShopClerkWorkService {
             store.getComponent(ref,DeathComponent.getComponentType())==null,TownVillagerBinding.KIND_GUARD.equals(binding.getKind()),town.getPayroll().overdue(id))
             ||!ShopSpotOpenService.isGameDay(store)||needs.getHunger()<20||needs.getEnergy()<20||autonomy.isFillingHunger()||autonomy.isFillingEnergy()
             ||!TownEconomyPresence.hasMemberHere(store,town)
-            ||town.getWarehouse().batches().stream().anyMatch(b->id.equals(b.courierId()))) {
+            ||town.getWarehouse().batches().stream().anyMatch(b->id.equals(b.courierId()))
+            ||!shopComesFirst(progress.priority(TownsfolkWorkType.COMMERCE),ApprenticeWorkService.availablePriority(
+                store.getExternalData().getWorld(),town,plugin,progress,id,store.getComponent(ref,com.hexvane.aetherhaven.workplace.ApprenticeWorkState.getComponentType()),now))) {
             interrupt(ref,store,npc,buffer);return false;
         }
         if(state==null){state=new ShopClerkState();buffer.putComponent(ref,ShopClerkState.getComponentType(),state);}
@@ -92,7 +94,11 @@ public final class ShopClerkWorkService {
                 buffer.putComponent(ref,com.hexvane.aetherhaven.tourist.TouristAutonomyState.getComponentType(),tourist);
             }
             state.plot=plot.getPlotId();state.approach=approach;state.active=true;state.beganAt=now;
-            state.entrance=Math.abs(pos.y-approach.y)>1?entrance(world,plot,pos,approach):null;
+            // From the shop floor a straight walk ends at the front of the counter, so go round by the door unless
+            // the clerk is already on the staff side.
+            var customers=customerSide(world,town,plot,plugin);
+            boolean round=customers!=null&&!behind(pos,counter,customers);
+            state.entrance=round||Math.abs(pos.y-approach.y)>1?entrance(world,plot,pos,approach):null;
         }
         if(!CourierWorkService.clearApproach(world,state.approach)) {
             state.attempt++;state.retryAt=now+3000;interrupt(ref,store,npc,buffer);return false;
@@ -108,6 +114,7 @@ public final class ShopClerkWorkService {
         state.attending=false;
         if(now-state.beganAt>30000){state.attempt++;state.retryAt=now+3000;interrupt(ref,store,npc,buffer);return false;}
         var destination=state.entrance==null?state.approach:state.entrance;
+        WorkTravelRecovery.keepMoving(ref,store,buffer,npc,pos,destination,now);
         npc.setLeashPoint(new org.joml.Vector3d(destination));VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
         VillagerDoorUtil.tryOpenDoorsTowardLeash(world,pos,state.approach,null);buffer.putComponent(ref,NPCEntity.getComponentType(),npc);return true;
     }
@@ -134,6 +141,33 @@ public final class ShopClerkWorkService {
         }
         return candidates.stream().min(Comparator.comparingDouble(from::distanceSquared)).orElse(null);
     }
+    /**
+     * Whether the counter is this clerk's job right now. Commerce set to off never staffs it. Workplace work that is
+     * ready and ranked above Commerce is done first; a tie goes to the shop.
+     *
+     * @param commerce the clerk's Commerce priority, one for most important, zero for off
+     * @param otherWork the priority of the best workplace job ready for them, zero for none
+     */
+    static boolean shopComesFirst(int commerce,int otherWork) {
+        return commerce>0&&(otherWork<=0||commerce<=otherWork);
+    }
+    /** Where customers stand in this shop: the middle of its browsing spots. Null when the building marks none. */
+    private static org.joml.Vector3d customerSide(World world,TownRecord town,PlotInstance plot,AetherhavenPlugin plugin) {
+        var pois=AetherhavenWorldRegistries.getOrCreatePoiRegistry(world,plugin);
+        var sum=new org.joml.Vector3d();int count=0;
+        for(String tag:List.of("TOURIST_VISIT","SHOP"))for(var poi:pois.listByTownAndTag(town.getTownId(),tag)) {
+            if(!plot.getPlotId().equals(poi.getPlotId())||poi.getTags().contains("WORK"))continue;
+            sum.add(poi.getX()+.5,poi.getY(),poi.getZ()+.5);count++;
+        }
+        return count==0?null:sum.div(count);
+    }
+    /** True when a spot is across the counter from the customers. */
+    static boolean behind(org.joml.Vector3d spot,double counterX,double counterZ,org.joml.Vector3d customers) {
+        return (spot.x-counterX)*(customers.x-counterX)+(spot.z-counterZ)*(customers.z-counterZ)<0;
+    }
+    private static boolean behind(org.joml.Vector3d spot,ShopSpotRecord counter,org.joml.Vector3d customers) {
+        return behind(spot,counter.getBlockX()+.5,counter.getBlockZ()+.5,customers);
+    }
     /** Existing buildings can provide a work spot behind the counter; no new marker is required. */
     private static org.joml.Vector3d clerkPosition(World world,TownRecord town,PlotInstance plot,AetherhavenPlugin plugin,
             ShopSpotRecord counter,org.joml.Vector3d from,int attempt) {
@@ -153,7 +187,15 @@ public final class ShopClerkWorkService {
         }
         double floor=authored.stream().mapToDouble(p->p.y).min()
             .orElseGet(()->fallback.stream().mapToDouble(p->p.y).min().orElse(counter.getBlockY()));
+        // Nearest the counter first, so the clerk stands at it and not a step back.
+        fallback.sort(Comparator.comparingDouble(p->p.distanceSquared(counter.getBlockX()+.5,p.y,counter.getBlockZ()+.5)));
         fallback.stream().filter(p->Math.abs(p.y-floor)<=.5).filter(p->!options.contains(p)).forEach(options::add);
+        // A clerk serves from the staff side. Drop every stand on the customers' side when the shop shows which is which.
+        var customers=customerSide(world,town,plot,plugin);
+        if(customers!=null) {
+            var staffSide=options.stream().filter(p->behind(p,counter,customers)).toList();
+            if(!staffSide.isEmpty()){options.clear();options.addAll(staffSide);}
+        }
         // Retry authored positions as well, rather than abandoning them forever after an obstruction.
         return options.isEmpty()?null:options.get(Math.floorMod(attempt,options.size()));
     }

@@ -9,7 +9,7 @@
   "inputs": [
     {
       "itemId": "Ingredient_Life_Essence",
-      "count": 5
+      "count": 2
     }
   ],
   "output": "Plant_Seeds_Wheat",

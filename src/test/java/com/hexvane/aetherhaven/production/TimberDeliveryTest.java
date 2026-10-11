@@ -59,15 +59,15 @@ class TimberDeliveryTest {
         assertEquals(.75,restored.timber().chopping(0));assertEquals(0,restored.getAmount(WOOD));
         assertNull(restored.timber().cargo());
     }
-    @Test void recordedPlayerEditsSurviveReloadAndPreventEvenARebuiltTreeFromPayingOut() {
-        var p=planted();var state=p.timber();var id=state.trees().get(0).tree().id();
-        assertFalse(state.markEdited(new Position(80,100,80)));
-        assertTrue(state.markEdited(new Position(ROOT.x(),ROOT.y()-1,ROOT.z())));
-        assertFalse(state.markEdited(ROOT));
+    @Test void breakingARootstoneGivesUpItsTreeWithoutAHarvest() {
+        var p=planted();var id=p.timber().trees().get(0).tree().id();
+        assertFalse(p.uprootStoneAt(new Position(80,100,80)));
+        assertFalse(p.uprootStoneAt(ROOT),"Only the stone beneath the tree is its Rootstone");
+        assertTrue(p.uprootStoneAt(new Position(ROOT.x(),ROOT.y()-1,ROOT.z())));
         var restored=new Gson().fromJson(new Gson().toJson(p),PlotProductionState.class);
-        assertTrue(restored.timber().edited(id));
-        assertFalse(restored.timber().fell(0,id,123,()->fail("An edited planting cannot authorize removal")));
-        assertNull(restored.timber().cargo());assertEquals(1,restored.timber().trees().size());
+        assertTrue(restored.timber().trees().isEmpty());assertTrue(restored.usesPhysicalTimber());
+        assertFalse(restored.timber().fell(0,id,123,()->fail("An uprooted tree belongs to the player")));
+        assertNull(restored.timber().cargo());
     }
 
     @Test void additionalProductsRequireSeparateTripsWithoutCreatingNurseryRefunds() {
@@ -106,17 +106,32 @@ class TimberDeliveryTest {
         var saved=new Gson().toJsonTree(t).getAsJsonObject();
         assertFalse(saved.has("nursery"));assertFalse(saved.has("seedCargo"));
     }
-    @Test void selectedExtraSlotsRespectSpeciesAndStorageWithoutMultiplyingOutput() {
+    @Test void fibreIsAnOptionalChoiceAndOneFullStoreNeverHoldsATreeBack() {
         var p=planted();var tree=p.timber().trees().get(0).tree();
-        var entry=ProductionCatalog.Entry.create(List.of(WOOD,"Ingredient_Fibre",tree.sapling(),"Plant_Sapling_Oak"),new int[]{1,1,1,1},new long[]{100,100,10,10});
-        p.setIronUpgrade(1);p.setCobaltLevel(3);
-        p.setSlotCursor(0,0);p.setSlotCursor(1,1);p.setSlotCursor(2,1);p.setSlotCursor(3,2);p.setSlotCursor(4,3);
+        var entry=ProductionCatalog.Entry.create(List.of(WOOD),new int[]{1},new long[]{100});
+        assertEquals(Set.of(tree.sapling(),"Ingredient_Tree_Sap","Ingredient_Stick"),NativeTimberProducts.selected(p,entry,tree));
+        p.timber().setGathersFibre(true);
         assertEquals(Set.of("Ingredient_Fibre",tree.sapling(),"Ingredient_Tree_Sap","Ingredient_Stick"),NativeTimberProducts.selected(p,entry,tree));
         assertTrue(NativeTimberProducts.hasRoom(p,entry,tree));p.addAmount("Ingredient_Fibre",100,100);
-        assertFalse(NativeTimberProducts.hasRoom(p,entry,tree));p.setSlotCursor(1,0);p.setSlotCursor(2,0);
-        assertTrue(NativeTimberProducts.hasRoom(p,entry,tree));p.addAmount(tree.sapling(),10,10);assertFalse(NativeTimberProducts.hasRoom(p,entry,tree));
+        assertTrue(NativeTimberProducts.hasRoom(p,entry,tree),"Full fibre alone does not stop the grove");
+        assertEquals(0,NativeTimberProducts.collectionLimits(p,entry,tree).get("Ingredient_Fibre"));
+        p=new Gson().fromJson(new Gson().toJson(p),PlotProductionState.class);assertTrue(p.timber().gathersFibre());
+        p.addAmount(tree.sapling(),10,10);p.addAmount("Ingredient_Tree_Sap",100,100);p.addAmount("Ingredient_Stick",100,100);
+        assertTrue(NativeTimberProducts.hasRoom(p,entry,tree),"There is still room for wood");
+        p.addAmount(WOOD,100,100);assertFalse(NativeTimberProducts.hasRoom(p,entry,tree),"Only completely full stores hold a tree back");
+        p.removeAmountUpTo("Ingredient_Stick",1);assertTrue(NativeTimberProducts.hasRoom(p,entry,tree));
         assertTrue(PhysicalProductionOutputPolicy.available(p,"Ingredient_Stick"));assertTrue(PhysicalProductionOutputPolicy.available(p,tree.sapling()));
         assertTrue(PhysicalProductionOutputPolicy.available(p,"Wood_Burnt_Trunk"));assertFalse(NativeTimberProducts.supported(null));
+    }
+    @Test void aGroveStoresAnyTreeItGrowsWithoutAPurchasedUnlock() {
+        var p=planted();var entry=ProductionCatalog.Entry.create(List.of(WOOD),new int[]{1},new long[]{100});
+        for(String item:List.of("Wood_Maple_Trunk","Ingredient_Tree_Sap","Ingredient_Stick","Ingredient_Fibre",TimberCharring.OUTPUT))
+            assertEquals(WorkplaceProductionUpgrades.GROVE_STORAGE,WorkplaceProductionUpgrades.effectiveMaxStorage(p,entry,item),item);
+        p.setAdamantineLevel(2);
+        assertEquals(300,WorkplaceProductionUpgrades.effectiveMaxStorage(p,entry,"Wood_Maple_Trunk"));
+        assertEquals(2,WorkplaceProductionUpgrades.stoneCount(new PlotProductionState()));
+        p.setIronUpgrade(1);p.setCobaltLevel(3);
+        assertEquals(TimberProductionState.MAX_STONES,WorkplaceProductionUpgrades.stoneCount(p));
     }
 
     @Test void automaticSaplingsHaveNormalCapacityWithoutPurchasingTheirOutputUnlock() {
@@ -128,6 +143,31 @@ class TimberDeliveryTest {
         assertEquals(20,WorkplaceProductionUpgrades.effectiveMaxStorage(p,entry,seed));
         assertTrue(NativeTimberProducts.hasRoom(p,entry,p.timber().trees().get(0).tree()));
         p.addAmount(seed,20,20);
-        assertFalse(NativeTimberProducts.hasRoom(p,entry,p.timber().trees().get(0).tree()));
+        assertTrue(NativeTimberProducts.hasRoom(p,entry,p.timber().trees().get(0).tree()),"Full saplings alone do not stop the grove");
+    }
+    @Test void theWholeHarvestOfATreeComesHomeInOneTrip() {
+        var p=planted();var t=p.timber();var tree=t.trees().get(0).tree();
+        var extras=new LinkedHashMap<String,Integer>();extras.put(tree.sapling(),1);extras.put("Ingredient_Tree_Sap",3);
+        extras.put("Ingredient_Stick",7);extras.put("Ingredient_Fibre",18);
+        assertFalse(t.carryAll(),"There is nothing to carry before a tree is felled");
+        assertTrue(t.fell(0,tree.id(),64,extras,()->true));
+        assertEquals(0,t.cargo().carried());assertTrue(t.carryAll());assertFalse(t.carryAll());
+        assertEquals(64,t.cargo().carried());
+        p=new Gson().fromJson(new Gson().toJson(p),PlotProductionState.class);t=p.timber();
+        assertEquals(64+1+3+7+18,t.deliverAll(p,item->100));
+        assertNull(t.cargo());assertTrue(t.waitingProducts().isEmpty());
+        assertEquals(64,p.getAmount(WOOD));assertEquals(1,p.getAmount(tree.sapling()));assertEquals(3,p.getAmount("Ingredient_Tree_Sap"));
+        assertEquals(7,p.getAmount("Ingredient_Stick"));assertEquals(18,p.getAmount("Ingredient_Fibre"));
+        assertEquals(0,t.deliverAll(p,item->100));
+    }
+    @Test void whateverDoesNotFitIsDiscardedSoOneFullStoreNeverBlocksTheRest() {
+        var p=planted();var t=p.timber();var tree=t.trees().get(0).tree();
+        p.addAmount(WOOD,90,100);p.addAmount("Ingredient_Stick",100,100);
+        assertTrue(t.fell(0,tree.id(),40,Map.of("Ingredient_Stick",5,tree.sapling(),1),()->true));t.carryAll();
+        assertEquals(11,t.deliverAll(p,item->100),"Ten logs and the sapling fit");
+        assertEquals(100,p.getAmount(WOOD));assertEquals(100,p.getAmount("Ingredient_Stick"));assertEquals(1,p.getAmount(tree.sapling()));
+        assertNull(t.cargo(),"Nothing is left waiting, so the next tree can start at once");assertTrue(t.waitingProducts().isEmpty());
+        p=new Gson().fromJson(new Gson().toJson(p),PlotProductionState.class);
+        assertNull(p.timber().cargo());assertEquals(0,p.timber().deliverAll(p,item->100));
     }
 }

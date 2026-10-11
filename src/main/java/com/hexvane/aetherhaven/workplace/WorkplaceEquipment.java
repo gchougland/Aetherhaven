@@ -81,6 +81,7 @@ public final class WorkplaceEquipment {
             case "Workbench" -> "Workbench";
             case BUILDERS_BENCH -> "Builder's Workbench";
             case "Tannery" -> "Tanning Rack";
+            case "Salvagebench" -> "Salvager's Workbench";
             case "Cookingbench" -> "Chef's Stove";
             case "Alchemybench" -> "Alchemist's Workbench";
             case JEWELRY_BENCH -> "Jewelry Crafting Bench";

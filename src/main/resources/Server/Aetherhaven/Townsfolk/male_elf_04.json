@@ -26,5 +26,14 @@
       "itemId": "Food_Cheese",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "cooking": 5,
+    "ranching": 4,
+    "logistics": 3
+  },
+  "startingAttributes": {
+    "strength": 8,
+    "vitality": 7
+  }
 }

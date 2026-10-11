@@ -20,7 +20,11 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.*;
 import org.joml.Vector3d;
 
-/** Native Seek travel with physical arrival gates. Never teleports a courier or loads a chunk. */
+/**
+ * Native Seek travel with physical arrival gates. Never loads a chunk. A courier who is stuck on the way is brought to
+ * the stand they were walking to (see {@link WorkTravelRecovery}); the pickup or delivery itself still only happens once
+ * they have stood there for a moment.
+ */
 public final class CourierWorkService {
     private CourierWorkService() {}
     private record Claim(String courier,long until) {}
@@ -129,6 +133,7 @@ public final class CourierWorkService {
             route.approachAttempt++;route.retryAt=now+3000;claims.remove(route.batchId);
             stop(ref,npc,buffer,route);return false;
         }
+        WorkTravelRecovery.keepMoving(ref,store,buffer,npc,pos,route.approach,now);
         npc.setLeashPoint(new Vector3d(route.approach));
         VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
         VillagerDoorUtil.tryOpenDoorsTowardLeash(world,pos,route.approach,null);
@@ -168,8 +173,20 @@ public final class CourierWorkService {
     private static Trip deskTrip(World world,TownManager manager,TownRecord town,WarehouseBatch batch,String action,Vector3d pos,CourierTravelState route) {
         if(route.active&&batch.id().equals(route.batchId)&&action.equals(route.action)&&loaded(world,route.endpoint)&&deskExists(world,route.endpoint))
             return new Trip(batch,action,route.endpoint,null);
-        return WarehouseDeskBlock.loaded(world,manager,town).stream().min(Comparator.comparingDouble(p->pos.distanceSquared(p.x()+.5,p.y(),p.z()+.5)))
+        // General stores are collected at the warehouse. A ledger desk placed beside another building is only used when
+        // the warehouse's own desk is not in live terrain.
+        var plugin=AetherhavenPlugin.get();
+        var desks=preferWarehouse(WarehouseDeskBlock.loaded(world,manager,town),p->{
+            var plot=town.findCompletePlotContaining(p.x(),p.y(),p.z());
+            return plot!=null&&plugin!=null&&plugin.getConstructionCatalog().matchesGameplayConstruction(plot.getConstructionId(),"plot_warehouse");
+        });
+        return desks.stream().min(Comparator.comparingDouble(p->pos.distanceSquared(p.x()+.5,p.y(),p.z()+.5)))
             .map(p->new Trip(batch,action,p,null)).orElse(null);
+    }
+    /** The desks inside the warehouse when there are any, otherwise every desk. */
+    static <T> List<T> preferWarehouse(List<T> desks,java.util.function.Predicate<T> inWarehouse) {
+        var inside=desks.stream().filter(inWarehouse).toList();
+        return inside.isEmpty()?desks:inside;
     }
     public static boolean arrived(Vector3d position,Vector3d destination) {
         double x=position.x-destination.x,z=position.z-destination.z;

@@ -124,6 +124,7 @@ aetherhaven.ui.jewelryAppraisal.empty=快捷欄、盔甲和儲物箱中都不能
 aetherhaven.ui.jewelryAppraisal.pick=請選擇以下一件作品。
 aetherhaven.ui.jewelryAppraisal.select=選擇
 aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.rowEquipped={itemName} ({status}, equipped)
 aetherhaven.ui.jewelryAppraisal.statusAppraised=已評估
 aetherhaven.ui.jewelryAppraisal.statusUnidentified=身份不明
 aetherhaven.ui.jewelryAppraisal.selectedHeader=已選擇：{itemName}

@@ -1,0 +1,41 @@
+{
+  "id": "kerp",
+  "displayName": "Kerp",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Kerp",
+  "personalityIds": [
+    "dramatic",
+    "homebody",
+    "silly"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "WarmMale",
+  "moveInRequirements": [
+    {
+      "itemId": "Plant_Crop_Lettuce_Item",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Wildmeat_Cooked",
+      "count": 2
+    }
+  ],
+  "startingSkills": {
+    "farming": 5,
+    "cooking": 5,
+    "building": 3,
+    "ranching": 3,
+    "logistics": 0
+  },
+  "startingAttributes": {
+    "strength": 8,
+    "vitality": 7
+  }
+}

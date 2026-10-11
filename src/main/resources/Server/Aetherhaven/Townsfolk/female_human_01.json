@@ -24,5 +24,14 @@
       "itemId": "Ingredient_Flour",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "commerce": 5,
+    "alchemy": 3,
+    "cooking": 2
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "speed": 6
+  }
 }

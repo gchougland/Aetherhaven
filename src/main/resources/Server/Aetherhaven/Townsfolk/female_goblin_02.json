@@ -15,5 +15,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "GravelyFemaleHigher"
+  "speechVoiceId": "GravelyFemaleHigher",
+  "startingSkills": {
+    "blacksmithing": 5,
+    "jewelry": 3,
+    "commerce": 2
+  },
+  "startingAttributes": {
+    "strength": 8,
+    "vitality": 7,
+    "dexterity": 6
+  }
 }

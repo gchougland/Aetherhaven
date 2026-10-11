@@ -36,9 +36,9 @@ public final class VillagerEquipmentService {
         @Nonnull EquipmentProfileCatalog catalog,
         @Nonnull String profileId
     ) {
-        // Old Halloween plots saved the bard profile on Jack's leisure spot.
+        // Legacy plots saved the bard profile on nonmusical residents' work spots.
         var binding=store.getComponent(npcRef,com.hexvane.aetherhaven.villager.TownVillagerBinding.getComponentType());
-        if ("work_bard".equals(profileId)&&binding!=null&&"halloween".equals(binding.getKind())) {
+        if ("work_bard".equals(profileId)&&binding!=null&&("halloween".equals(binding.getKind()) || "monster_hunter".equals(binding.getKind()))) {
             clearHotbar(npcRef,store,commandBuffer);
             return;
         }

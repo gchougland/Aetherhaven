@@ -171,9 +171,10 @@ public final class FloatingGiftSpawnService {
         double sy;
         World world = store.getExternalData().getWorld();
         WorldChunk surfaceChunk = ChunkSectionBlockUtil.worldChunkIfNonTicking(world, ChunkUtil.indexChunkFromBlock(bx, bz));
-        if (surfaceChunk != null) {
+        int surfaceY = surfaceChunk != null ? ChunkSectionBlockUtil.surfaceHeightIfInMemory(world, bx, bz) : ChunkSectionBlockUtil.NO_SURFACE;
+        if (surfaceY != ChunkSectionBlockUtil.NO_SURFACE) {
             // Same surface convention as FitToHeightMapSpawnProvider: air block above heightmap (+ optional vertical offset).
-            sy = surfaceChunk.getHeight(bx, bz) + 1.0 + heightOffset;
+            sy = surfaceY + 1.0 + heightOffset;
         } else {
             sy = origin.y + heightOffset;
         }

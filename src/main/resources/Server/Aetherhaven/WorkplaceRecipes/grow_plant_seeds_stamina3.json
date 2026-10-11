@@ -8,8 +8,8 @@
   "skillLevel": 7,
   "inputs": [
     {
-      "itemId": "Ingredient_Life_Essence",
-      "count": 50
+      "itemId": "Ingredient_Void_Essence",
+      "count": 8
     }
   ],
   "output": "Plant_Seeds_Stamina3",

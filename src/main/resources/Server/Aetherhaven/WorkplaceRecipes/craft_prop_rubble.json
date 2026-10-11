@@ -1,0 +1,18 @@
+{
+  "id": "craft_prop_rubble",
+  "name": "Stone Rubble",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:craft_prop_rubble",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 1,
+  "inputs": [
+    {
+      "resourceType": "Rock",
+      "count": 5
+    }
+  ],
+  "output": "Rubble_Stone",
+  "outputCount": 10,
+  "workSeconds": 10
+}

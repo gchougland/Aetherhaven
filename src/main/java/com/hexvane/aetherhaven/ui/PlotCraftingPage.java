@@ -733,7 +733,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                     return;
                 }
                 playerComponent.getPageManager()
-                    .updateCustomPage(
+                    .updateLegacyCustomPage(
                         new CustomPage(
                             this.getClass().getName(),
                             false,

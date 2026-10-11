@@ -1,0 +1,37 @@
+{
+  "id": "giggling_gamer",
+  "displayName": "GigglingGamer",
+  "gender": "female",
+  "race": "human",
+  "modelAssetId": "GigglingGamer",
+  "personalityIds": [
+    "cheerful",
+    "curious",
+    "silly"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "BrightFemale",
+  "moveInRequirements": [
+    {
+      "itemId": "Plant_Fruit_Poison",
+      "count": 2
+    }
+  ],
+  "startingSkills": {
+    "alchemy": 5,
+    "cooking": 5,
+    "ranching": 3,
+    "mining": 3,
+    "leatherworking": 0
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "vitality": 7
+  }
+}

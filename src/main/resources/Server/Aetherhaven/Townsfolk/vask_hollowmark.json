@@ -22,5 +22,15 @@
       "itemId": "Food_Fish_Grilled",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "leatherworking": 5,
+    "ranching": 5,
+    "cooking": 3
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "speed": 6,
+    "vitality": 7
+  }
 }

@@ -37,7 +37,7 @@ public final class BackpackPage extends AetherhavenInteractiveCustomUIPage<Backp
 
         c.set("#Title.Text","BACKPACK");c.set("#Hint.Text",hint);
         expected=selected<0?null:inv.getItemStack(selected);var pack=Backpack.read(expected);
-        c.set("#Summary.Text",pack==null?(selected<0?"Visit Sera Brindle to craft a backpack.":"This backpack cannot be read. Its contents have been preserved."):pack.displayName()+"   |   "+pack.used()+" / "+pack.tier.slots+" slots   |   "+Backpack.stacksLabel(pack.multiplier())+" per slot");
+        c.set("#Summary.Text",pack==null?(selected<0?"Visit Hazel Brindle to craft a backpack.":"This backpack cannot be read. Its contents have been preserved."):pack.displayName()+"   |   "+pack.used()+" / "+pack.tier.slots+" slots   |   "+Backpack.stacksLabel(pack.multiplier())+" per slot");
         c.set("#Main.Visible",picker.isEmpty());c.set("#InventoryPanel.Visible",picker.isEmpty());c.set("#Picker.Visible",!picker.isEmpty());
         c.set("#BagIcon.Visible",pack!=null);if(pack!=null)c.set("#BagIcon.ItemId",expected.getItemId());
         c.set("#BagName.Text",pack==null?"No backpack selected":pack.displayName());

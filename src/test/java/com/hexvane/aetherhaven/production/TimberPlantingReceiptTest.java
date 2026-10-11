@@ -69,7 +69,7 @@ class TimberPlantingReceiptTest {
 
     @Test void permittedFamiliesCoverEveryInstalledNativeTreeStage() throws Exception {
         String appData = System.getenv("APPDATA"); Assumptions.assumeTrue(appData != null);
-        Path assets = Path.of(appData, "Hytale/install/release/package/game/latest/Assets.zip");
+        Path assets = Path.of(appData, "Hytale/install/pre-release/package/game/latest/Assets.zip");
         Assumptions.assumeTrue(Files.isRegularFile(assets));
         int variants = 0;
         try (var zip = new ZipFile(assets.toFile())) {

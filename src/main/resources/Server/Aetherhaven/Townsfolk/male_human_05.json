@@ -22,5 +22,15 @@
       "itemId": "Food_Candy_Cane",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "alchemy": 5,
+    "crafting": 3,
+    "commerce": 2
+  },
+  "startingAttributes": {
+    "strength": 8,
+    "vitality": 7,
+    "intelligence": 7
+  }
 }

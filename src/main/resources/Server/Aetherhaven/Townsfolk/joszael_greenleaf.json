@@ -22,5 +22,15 @@
       "itemId": "Food_Wildmeat_Cooked",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "ranching": 5,
+    "leatherworking": 3,
+    "logistics": 3
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "speed": 7,
+    "vitality": 6
+  }
 }

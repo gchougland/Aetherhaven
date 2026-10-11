@@ -20,5 +20,14 @@
       "itemId": "Food_Fish_Raw_Uncommon",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "ranching": 5,
+    "cooking": 3,
+    "alchemy": 2
+  },
+  "startingAttributes": {
+    "dexterity": 7,
+    "intelligence": 6
+  }
 }

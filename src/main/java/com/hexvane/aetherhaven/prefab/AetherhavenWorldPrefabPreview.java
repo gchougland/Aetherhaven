@@ -132,7 +132,7 @@ public final class AetherhavenWorldPrefabPreview {
             return new Tint(DEFAULT_BIOME_TINT, DEFAULT_WATER_TINT);
         }
         int water = DEFAULT_WATER_TINT;
-        Environment environment = Environment.getAssetMap().getAsset(blockChunk.getEnvironment(x, y, z));
+        Environment environment = Environment.getAssetMap().getAsset(ChunkSectionBlockUtil.environmentId(world, x, y, z));
         if (environment != null && environment.getWaterTint() != null) {
             com.hypixel.hytale.protocol.Color waterColor = environment.getWaterTint();
             water = (waterColor.red & 255) << 16 | (waterColor.green & 255) << 8 | waterColor.blue & 255;

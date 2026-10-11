@@ -91,8 +91,8 @@ public final class CarnivalIds {
      * per club swing.
      */
     public static final float WHACK_HIT_LOCK_SECONDS = 0.4f;
-    public static final String SOUND_GOBLIN_HURT = "SFX_Goblin_Hurt";
-    public static final String SOUND_GOBLIN_ALERT = "SFX_Goblin_Alerted";
+    public static final String SOUND_GOBLIN_HURT = "SFX_Goblin_Scrapper_VO_Hurt";
+    public static final String SOUND_GOBLIN_ALERT = "SFX_Goblin_Scrapper_VO_Startled";
 
     private CarnivalIds() {}
 

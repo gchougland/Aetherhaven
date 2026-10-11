@@ -53,6 +53,7 @@ final class AetherhavenExcavationTestCommand extends AbstractCommandCollection {
         require(town.getApprenticeWorkplaces().save(town,null,TownsfolkWorkType.MINING,area,"Test shaft")==null,"Mining workplace failed");
         var site=town.getApprenticeWorkplaces().sites().getFirst();
         var tunnel=ExcavationPlan.tunnel(area,ExcavationPlan.Entrance.NORTH);var first=tunnel.getFirst();var plugin=AetherhavenPlugin.get();
+        var stood=new WarehouseBatch.Point[1];
         var chain=CompletableFuture.allOf(world.getChunkStore().getChunkSectionReferenceAsync(0,3,0,GetChunkFlags.SET_TICKING),world.getChunkStore().getChunkSectionReferenceAsync(0,4,0,GetChunkFlags.SET_TICKING)).thenCompose(ignored->onWorld(world,()->{
             for(int x=7;x<27;x++)for(int z=7;z<27;z++)require(ChunkSectionBlockUtil.setBlockByKey(world,x,127,z,"Rock_Stone",0),"Floor placement failed");
             for(var p:tunnel)require(ChunkSectionBlockUtil.setBlockByKey(world,p.x(),p.y(),p.z(),"Rock_Stone",0),"Face placement failed");
@@ -69,12 +70,15 @@ final class AetherhavenExcavationTestCommand extends AbstractCommandCollection {
             var state=town.getOrCreatePlotProduction(mine.getPlotId());state.addAmount("Ore_Iron",1000000,1000000);
             require(!NativeExcavation.excavate(world,town,site,3,new WarehouseBatch.Point(25,128,25),()->{}),"Distant miner can remove rock");
             require(!NativeExcavation.excavate(world,town,site,3,new WarehouseBatch.Point(first.x(),128,first.z()),()->{}),"Miner can work from inside rock");
-            require(NativeExcavation.excavate(world,town,site,3,standing(world,site),()->{}),"Real ore removal failed");require(!site.excavation().pending()&&site.excavation().cargo().getOrDefault("Ore_Iron",0)==1,"Synchronous removal was not confirmed");
+            // The miner starts on open ground beside the rock. He must come round to the passage's own floor.
+            stood[0]=standing(world,site);
+            require(ExcavationApproach.floorOf(site.excavation()).test(stood[0]),"Miner chose a stand off the passage floor: "+stood[0]);
+            require(NativeExcavation.excavate(world,town,site,3,stood[0],()->{}),"Real ore removal failed");require(!site.excavation().pending()&&site.excavation().cargo().getOrDefault("Ore_Iron",0)==1,"Synchronous removal was not confirmed");
             require(state.getAmount("Ore_Iron")==1000000,"Full core stock changed while mining into a carried load");
         }));
         chain=chain.thenCompose(ignored->after(world,()->{
             var plan=site.excavation();require(!plan.pending()&&plan.cargo().getOrDefault("Ore_Iron",0)==1,"Removal did not settle");
-            require(plan.cargoPoint().equals(new WarehouseBatch.Point(9,128,first.z())),"Cargo pickup point is not the clear worker position");
+            require(plan.cargoPoint().equals(stood[0]),"Cargo pickup point is not the clear worker position: "+plan.cargoPoint()+" for a miner at "+stood[0]);
             ProductionCargoDisplays.sync(world,List.of(town));require(cargoProps(world)==2,"Native ore and cobble displays did not spawn");
             ProductionCargoDisplays.sync(world,List.of(town));require(cargoProps(world)==2,"Cargo display refresh duplicated resources");
             require(NativeExcavation.observe(world,first).empty(),"Ore cell still exists");

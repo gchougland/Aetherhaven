@@ -22,5 +22,18 @@
       "itemId": "Ingredient_Fire_Essence",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "ranching": 5,
+    "crafting": 4,
+    "blacksmithing": 3,
+    "logistics": 3,
+    "alchemy": 0,
+    "commerce": 0
+  },
+  "startingAttributes": {
+    "strength": 8,
+    "vitality": 7,
+    "dexterity": 6
+  }
 }

@@ -79,7 +79,7 @@ $C.@PageOverlay {
         Anchor: (Top: 10, Height: 38);
         $C.@SecondaryTextButton #OpenGrove {
           Anchor: (Width: 240, Height: 38);
-          Text: "Plan a grove";
+          Text: "Tend the grove";
         }
       }
     }

@@ -33,3 +33,4 @@ items.Aetherhaven_Building_Staff_Cobalt.name=Персонал будівлі Cob
 items.Aetherhaven_Building_Staff_Cobalt.description=Те саме, що й мідний посох будівлі. Вторинне блокування заповнює до <color is="#4ade80">9×9×9</color> виділених вузлів будівлі одночасно. Поки блок утримується, він дає <color is="#60a5fa">+600 до максимальної мани</color> та швидше відновлення мани; кожен розміщений блок коштує <color is="#60a5fa">1 ману</color>.
 items.Aetherhaven_Building_Staff_Adamantite.name=Персонал будівництва Адамантиту
 items.Aetherhaven_Building_Staff_Adamantite.description=Те саме, що й мідний посох будівлі. Вторинне заповнення до <color is="#4ade80">11×11×11</color> виділених вузлів будівлі одночасно. Поки блок утримується, він дає <color is="#60a5fa">+900 до максимальної мани</color> та швидше відновлення мани; кожен розміщений блок коштує <color is="#60a5fa">1 ману</color>.
+aetherhaven.interaction.cutLoose=Press [{key}] to cut the ropes

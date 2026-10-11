@@ -6,13 +6,16 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
+import com.hypixel.hytale.server.core.asset.type.environment.config.Environment;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
 import com.hypixel.hytale.server.core.universe.world.chunk.ChunkFlag;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.heightmap.HeightmapColumn;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.EnvironmentSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.GetChunkFlags;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
@@ -137,7 +140,7 @@ public final class ChunkSectionBlockUtil {
 
     @Nullable
     public static BlockSection blockSectionAt(@Nonnull World world, int worldX, int worldY, int worldZ) {
-        if (worldY < ChunkUtil.MIN_Y || worldY > ChunkUtil.HEIGHT_MINUS_1) {
+        if (worldY < ChunkUtil.MIN_Y) {
             return null;
         }
         Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(worldX, worldY, worldZ);
@@ -154,7 +157,7 @@ public final class ChunkSectionBlockUtil {
         int worldY,
         int worldZ
     ) {
-        if (worldY < ChunkUtil.MIN_Y || worldY > ChunkUtil.HEIGHT_MINUS_1) {
+        if (worldY < ChunkUtil.MIN_Y) {
             return null;
         }
         Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(worldX, worldY, worldZ);
@@ -272,15 +275,39 @@ public final class ChunkSectionBlockUtil {
         return future.join();
     }
 
+    /** Returned by {@link #surfaceHeightIfInMemory} when the column is not in memory or holds no opaque block. */
+    public static final int NO_SURFACE = HeightmapColumn.NO_HEIGHT;
+
+    /**
+     * Highest opaque block Y of a column already in memory, or {@link #NO_SURFACE}.
+     */
+    public static int surfaceHeightIfInMemory(@Nonnull World world, int blockX, int blockZ) {
+        HeightmapColumn heightmap =
+            world.getChunkStore()
+                .getChunkComponent(ChunkUtil.indexChunkFromBlock(blockX, blockZ), HeightmapColumn.getComponentType());
+        return heightmap != null ? heightmap.getHeight(blockX, blockZ) : NO_SURFACE;
+    }
+
     /**
      * Highest non-transparent block Y in the column, or {@link ChunkUtil#MIN_Y}{@code - 1} if empty.
      */
-    public static short columnHeight(@Nonnull World world, int blockX, int blockZ) {
-        BlockChunk chunk = loadBlockChunk(world, blockX, blockZ);
-        if (chunk == null) {
-            return (short) (ChunkUtil.MIN_Y - 1);
+    public static int columnHeight(@Nonnull World world, int blockX, int blockZ) {
+        if (loadBlockChunk(world, blockX, blockZ) == null) {
+            return ChunkUtil.MIN_Y - 1;
         }
-        return chunk.getHeight(blockX, blockZ);
+        int height = surfaceHeightIfInMemory(world, blockX, blockZ);
+        return height != NO_SURFACE ? height : ChunkUtil.MIN_Y - 1;
+    }
+
+    /** Environment index at the cell, or {@link Environment#UNKNOWN_ID} when its section is not in memory. */
+    public static int environmentId(@Nonnull World world, int x, int y, int z) {
+        Ref<ChunkStore> sectionRef = sectionRefAt(world, x, y, z);
+        if (sectionRef == null) {
+            return Environment.UNKNOWN_ID;
+        }
+        EnvironmentSection section =
+            world.getChunkStore().getStore().getComponent(sectionRef, EnvironmentSection.getComponentType());
+        return section != null ? section.get(x, y, z) : Environment.UNKNOWN_ID;
     }
 
     public static boolean breakBlock(@Nonnull World world, int x, int y, int z, int settings) {
@@ -448,7 +475,7 @@ public final class ChunkSectionBlockUtil {
 
     @Nullable
     public static Ref<ChunkStore> sectionRefAt(@Nonnull World world, int worldX, int worldY, int worldZ) {
-        if (worldY < ChunkUtil.MIN_Y || worldY > ChunkUtil.HEIGHT_MINUS_1) {
+        if (worldY < ChunkUtil.MIN_Y) {
             return null;
         }
         Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(worldX, worldY, worldZ);

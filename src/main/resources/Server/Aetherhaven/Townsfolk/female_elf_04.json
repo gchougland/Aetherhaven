@@ -20,5 +20,14 @@
       "itemId": "Food_Kebab_Vegetable",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "logistics": 5,
+    "alchemy": 3,
+    "ranching": 2
+  },
+  "startingAttributes": {
+    "speed": 8,
+    "dexterity": 6
+  }
 }

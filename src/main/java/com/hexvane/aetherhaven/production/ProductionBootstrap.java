@@ -88,6 +88,10 @@ public final class ProductionBootstrap {
                 }
                 if (!AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION)) return null;
                 if(NativeHerdService.barn(p,plot))return new com.hexvane.aetherhaven.workplace.RancherHerdPage(playerRef,town.getTownId(),plot.getPlotId());
+                // A lumbermill that tends Rootstones keeps its stores and its grove on one screen.
+                if(town.playerCanManageConstructions(uc.getUuid())&&town.getOrCreatePlotProduction(plot.getPlotId()).usesPhysicalTimber()
+                    &&p.getConstructionCatalog().matchesGameplayConstruction(plot.getConstructionId(),AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL))
+                    return new com.hexvane.aetherhaven.workplace.GrovePage(playerRef,town.getTownId(),plot.getPlotId(),null);
                 return new ProductionStoragePage(
                     playerRef,
                     town.getTownId(),
@@ -96,6 +100,32 @@ public final class ProductionBootstrap {
                     targetBlock.y,
                     targetBlock.z
                 );
+            }
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(core, com.hexvane.aetherhaven.workplace.GrovePage.class, Rootstone.PAGE,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition target = context.getTargetBlock();
+                AetherhavenPlugin p = AetherhavenPlugin.get();
+                if (target == null || p == null || !AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION)) return null;
+                World world = ref.getStore().getExternalData().getWorld();
+                BlockType bt = ChunkSectionBlockUtil.blockType(world, target.x, target.y, target.z);
+                if (bt == null || !Rootstone.is(bt.getId())) return null;
+                TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, p).findTownContainingBlock(world.getName(), target.x, target.z);
+                if (town == null) {
+                    playerRef.sendMessage(com.hypixel.hytale.server.core.Message.raw("A Rootstone only wakes inside your town's borders."));
+                    return null;
+                }
+                if (!town.playerCanManageConstructions(playerRef.getUuid())) {
+                    playerRef.sendMessage(com.hypixel.hytale.server.core.Message.raw("You need permission to manage this town's buildings to tend its grove."));
+                    return null;
+                }
+                var block = new TimberHarvestPlan.Position(target.x, target.y, target.z);
+                PlotInstance mill = com.hexvane.aetherhaven.workplace.GrovePage.millFor(p, town, block);
+                if (mill == null) {
+                    playerRef.sendMessage(com.hypixel.hytale.server.core.Message.raw("Build a lumbermill first. Its Logger tends the Rootstones."));
+                    return null;
+                }
+                return new com.hexvane.aetherhaven.workplace.GrovePage(playerRef, town.getTownId(), mill.getPlotId(), block);
             }
         );
         OpenCustomUIInteraction.registerCustomPageSupplier(

@@ -16,7 +16,7 @@ public final class NativeTimberPlanting {
     public static TimberProductionState.Prepared prepare(World world, PlotProductionState production, int slot,
             TimberPlantingReceipt tree, Predicate<Position> withinGrove) {
         requireWorldThread(world);
-        return production.timber().prepare(slot, WorkplaceProductionUpgrades.slotCount(production), tree,
+        return production.timber().prepare(slot, WorkplaceProductionUpgrades.stoneCount(production), tree,
             withinGrove, p -> observe(world, p));
     }
 
@@ -37,14 +37,14 @@ public final class NativeTimberPlanting {
         var current = NativeTimberGrowth.capture(tree.output(), tree.root(), tree.initialGeneration(), withinGrove);
         if (!current.ready() || !current.receipt().stages().equals(tree.stages()) || !current.receipt().clearance().equals(tree.clearance()))
             return "This tree's growth has changed. Prepare its growing space again.";
-        return production.timber().plant(slot, WorkplaceProductionUpgrades.slotCount(production), prepared,
+        return production.timber().plant(slot, WorkplaceProductionUpgrades.stoneCount(production), prepared,
             withinGrove, p -> observe(world, p), () -> ChunkSectionBlockUtil.setBlockByKey(
                 world, root.x(), root.y(), root.z(), tree.sapling(), 0, 0));
     }
 
     public static TimberProductionState.Ground observe(World world, Position p) {
         requireWorldThread(world);
-        if (p.y() < ChunkUtil.MIN_Y || p.y() > ChunkUtil.HEIGHT_MINUS_1
+        if (p.y() < ChunkUtil.MIN_Y
                 || ChunkSectionBlockUtil.worldChunkIfTicking(world, p.x(), p.z()) == null)
             return new TimberProductionState.Ground(false, null, 0, 0, false, false, false, true);
         var section = ChunkSectionBlockUtil.sectionRefAt(world, p.x(), p.y(), p.z());
@@ -59,10 +59,12 @@ public final class NativeTimberPlanting {
         boolean wet = fluids != null && fluids.getFluidId(p.x(), p.y(), p.z()) != 0;
         int typeIndex = BlockType.getAssetMap().getIndex(type.getId());
         var soils = BlockType.getAssetMap().getIndexesForTag(AssetRegistry.getOrCreateTagIndex("Type=Soil"));
-        boolean soil = soils != null && soils.contains(typeIndex);
+        boolean soil = soils != null && soils.contains(typeIndex) || Rootstone.is(type.getId());
         boolean empty = BlockType.EMPTY.getId().equals(type.getId());
         String draw = String.valueOf(type.getDrawType());
-        boolean natural = (soil || type.getId().startsWith("Rock_") || type.getId().startsWith("Ore_"))
+        // A Rootstone is the one built block a grove tree may root in and later restore.
+        boolean natural = Rootstone.is(type.getId())
+            || (soil || type.getId().startsWith("Rock_") || type.getId().startsWith("Ore_"))
             && ("Cube".equals(draw) || "CubeWithModel".equals(draw))
             && (type.getInteractions() == null || type.getInteractions().isEmpty());
         return new TimberProductionState.Ground(true, type.getId(), blocks.getRotationIndex(p.x(), p.y(), p.z()),

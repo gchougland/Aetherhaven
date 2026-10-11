@@ -24,5 +24,15 @@
       "itemId": "Ingredient_Charcoal",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "jewelry": 5,
+    "leatherworking": 3,
+    "commerce": 2,
+    "ranching": 0
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "intelligence": 7
+  }
 }

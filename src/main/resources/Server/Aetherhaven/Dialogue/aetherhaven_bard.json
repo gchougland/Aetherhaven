@@ -8,6 +8,64 @@
       "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.fallback",
       "choices": [
         {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.move_in.invite",
+          "icon": "quest",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_completed",
+                "questId": "q_build_guild_hall"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_guild_hall"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_bard"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_bard"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "move_in_offer"
+        },
+        {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.move_in.welcome",
+          "icon": "quest",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_bard"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_guild_hall"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_bard"
+            }
+          ],
+          "next": "move_in_finish"
+        },
+        {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
           "condition": {
             "type": "and",
@@ -163,7 +221,7 @@
             "conditions": [
               {
                 "type": "town_quest_completed",
-                "questId": "q_build_guild_hall"
+                "questId": "q_bard"
               },
               {
                 "type": "not",
@@ -417,6 +475,79 @@
         {
           "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
           "next": "main_hub"
+        }
+      ]
+    },
+    "move_in_offer": {
+      "speaker": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.speaker",
+      "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.move_in.offer",
+      "speechClip": "Question",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.move_in.accept",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_guild_hall"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_bard"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_bard"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_bard"
+            }
+          ],
+          "next": "move_in_accepted",
+          "speechClip": "Agree"
+        },
+        {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.move_in.later",
+          "next": null
+        }
+      ]
+    },
+    "move_in_accepted": {
+      "speaker": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.speaker",
+      "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.move_in.accepted",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.move_in.welcome",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_bard"
+            }
+          ],
+          "next": "move_in_finish",
+          "speechClip": "Agree"
+        }
+      ]
+    },
+    "move_in_finish": {
+      "speaker": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.speaker",
+      "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.move_in.finish",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.move_in.bye",
+          "next": null
         }
       ]
     }

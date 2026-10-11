@@ -517,6 +517,7 @@ public final class GuardHireService {
             boolean deadOrGone = false;
             if (ref != null && ref.isValid()) {
                 deadOrGone = store.getComponent(ref, DeathComponent.getComponentType()) != null;
+                if (deadOrGone && com.hexvane.aetherhaven.town.ResidentRegistryService.preserveTownsfolkDeath(town, tm, ref, store, plugin)) continue;
             } else {
                 deadOrGone = EntityPresenceUtil.isConfirmedAbsent(EntityPresenceUtil.resolve(store, entityUuid));
             }

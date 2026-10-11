@@ -109,7 +109,12 @@ public final class AetherhavenStarterTownCommand extends AbstractPlayerCommand {
             context.sendMessage(Message.translation("aetherhaven_commands_help.commands.aetherhaven.startertown.chunkMissing"));
             return;
         }
-        int y = surfaceChunk.getHeight(x, z) + 1;
+        int surfaceY = ChunkSectionBlockUtil.surfaceHeightIfInMemory(world, x, z);
+        if (surfaceY == ChunkSectionBlockUtil.NO_SURFACE) {
+            context.sendMessage(Message.translation("aetherhaven_commands_help.commands.aetherhaven.startertown.chunkMissing"));
+            return;
+        }
+        int y = surfaceY + 1;
         Vector3i origin = new Vector3i(x, y, z);
         Rotation facing = cardinalRotation(transform.getRotation().yaw());
         UUID actorUuid = uuidComponent.getUuid();

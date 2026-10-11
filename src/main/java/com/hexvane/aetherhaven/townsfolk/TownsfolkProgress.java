@@ -57,6 +57,8 @@ public final class TownsfolkProgress {
         migrateCourierPriority();
         if (skill(type.skill) == 0) return 0;
         Integer value = workPriorities == null ? null : workPriorities.get(type.id);
+        // Clerks served their shop before Commerce had a priority. Until one is chosen it stays first, as it was.
+        if (value == null && type == TownsfolkWorkType.COMMERCE) return 1;
         return Math.clamp(value == null ? 0 : value, 0, 4);
     }
 

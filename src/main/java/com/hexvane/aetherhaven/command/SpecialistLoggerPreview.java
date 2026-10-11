@@ -34,15 +34,12 @@ record SpecialistLoggerPreview(UUID plotId, WarehouseBatch.Point heat) {
         require(fire!=null,"No empty supported campfire position near preview storage.");
         var root=new TimberHarvestPlan.Position((int)Math.floor(viewpoint.x),(int)Math.floor(viewpoint.y),(int)Math.floor(viewpoint.z));
         var captured=NativeTimberGrowth.capture("Wood_Beech_Trunk",root,0,pos->true);require(captured.ready(),captured.issue());
-        require(ChunkSectionBlockUtil.setBlockByKey(world,root.x(),root.y()-1,root.z(),"Soil_Dirt",0),"Preview soil failed.");
-        p.setIronUpgrade(1);p.addWorkplaceOutputUnlock(TimberCharring.OUTPUT);
-        var entry=ProductionEffectiveCatalog.effective(plugin.getProductionCatalog(),plugin.getWorkplaceUnlockCatalog(),"plot_lumbermill",p);
-        require(p.setSlotCursorToItem(0,entry,"Wood_Beech_Trunk")&&p.setSlotCursorToItem(1,entry,TimberCharring.OUTPUT),"Logger output catalog missing.");
+        require(ChunkSectionBlockUtil.setBlockByKey(world,root.x(),root.y()-1,root.z(),Rootstone.BLOCK,0),"Preview Rootstone failed.");
         var timber=p.timber();
         String issue=timber.plan(0,2,timber.layoutRevision(),captured.receipt(),pos->true,pos->NativeTimberPlanting.observe(world,pos));
         require(issue==null,issue);
-        require(timber.activate(timber.layoutRevision())==null,"Grove activation failed.");
-        p.addAmount("Wood_Beech_Trunk",4,100);
+        timber.setCharWood("Wood_Beech_Trunk");
+        p.addAmount("Wood_Beech_Trunk",TimberCharring.LOG_COST,100);
         var mastery=CoreVillagerMasteryService.progress(town,"logger");while(mastery.level()<4)mastery.train();
         mastery.setTool(new ItemStack("Tool_Hatchet_Iron",1));
         var resident=town.getResidentNpcRecords().stream().filter(r->"logger".equals(r.getKind())).findFirst().orElseThrow();
@@ -72,7 +69,7 @@ record SpecialistLoggerPreview(UUID plotId, WarehouseBatch.Point heat) {
             +", planted trees "+p.timber().trees().size()+", pending products "+p.timber().waitingProducts()
             +", cargo "+p.timber().cargo()+", tool "+CoreVillagerMasteryService.toolId(town,"logger")
             +", fire active "+(fire!=null&&fire.isActive())+", fuel seconds "+(fire==null?0:fire.getFuelTime())
-            +". Four fixture logs supplied; normal attended work must convert and deliver them. Use loggerfire, loggertool, loggergrove or visit --building=plot_lumbermill.";
+            +". Fixture logs for one charring batch supplied; normal attended work must convert and deliver them. Use loggerfire, loggertool, loggergrove or visit --building=plot_lumbermill.";
     }
     String toggleTool(World world,UUID owner) {
         require(world.getName().startsWith("aetherhaven_specialist_preview_")

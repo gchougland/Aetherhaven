@@ -20,5 +20,14 @@
       "itemId": "Ingredient_Bar_Copper",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "crafting": 5,
+    "blacksmithing": 4,
+    "alchemy": 3
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "intelligence": 7
+  }
 }

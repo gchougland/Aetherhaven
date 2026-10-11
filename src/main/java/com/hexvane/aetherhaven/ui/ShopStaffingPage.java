@@ -14,7 +14,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.*;
 
-/** Records shelf assignment exception. No Commerce workplace or extra priority column. */
+/** Records shelf assignment. The shop is chosen here; when it comes first is the Commerce priority in the journal. */
 public final class ShopStaffingPage extends AetherhavenInteractiveCustomUIPage<ShopStaffingPage.Data> {
     private final UUID townId,plotId;
     private boolean appended;
@@ -47,7 +47,7 @@ public final class ShopStaffingPage extends AetherhavenInteractiveCustomUIPage<S
         c.set("#Chance.Text",chosen==null?"":Math.round(100*ShopStaffing.purchaseChance(chosen.progress().skill(TownsfolkSkill.COMMERCE)))+"% visitor purchase chance");
         String blocked=chosen==null?null:unavailable(town,chosen);
         String elsewhere=chosen==null?null:town.getPlotInstances().stream().filter(p->!plotId.equals(p.getPlotId())&&chosen.characterId().equals(p.getShopClerkId())).map(p->"Moves this clerk from another shop. ").findFirst().orElse("");
-        c.set("#Details.Text",chosen==null?"Select a portrait to compare Commerce skill.":blocked!=null?blocked:elsewhere+"Uses the normal weekly Apprentice wage. The shop takes priority during its daytime shift. Other enabled work remains available off shift.");
+        c.set("#Details.Text",chosen==null?"Select a portrait to compare Commerce skill.":blocked!=null?blocked:elsewhere+"Uses the normal weekly Apprentice wage. During the day the clerk follows the Commerce priority in the town journal's Work tab: work ranked above it is done first.");
         if(chosen!=null)c.set("#Portrait.AssetPath",NpcPortraitProvider.portraitPathForTownsfolk(plugin.getTownsfolkCharacterCatalog().byId(chosen.characterId())));
         c.set("#Assign.Disabled",chosen==null||blocked!=null||Objects.equals(selected,plot.getShopClerkId())&&chosen.progress().isEmployed());
         c.set("#Assign.Text",chosen!=null&&Objects.equals(selected,plot.getShopClerkId())?(chosen.progress().isEmployed()?"Assigned":"Resume employment"):"Assign clerk");
@@ -78,7 +78,7 @@ public final class ShopStaffingPage extends AetherhavenInteractiveCustomUIPage<S
         else if("Choose".equals(data.action)&&choices.contains(data.choice))selected=data.choice;
         else if("Unassign".equals(data.action)) {
             ShopStaffing.assign(town,plot,null);manager.updateTown(town);
-            hint="Shop assignment removed. Employment and other work priorities are unchanged.";
+            hint="Shop assignment removed. Employment and work priorities are unchanged.";
         } else if("Assign".equals(data.action)&&selected!=null) {
             var worker=TownsfolkWorkRoster.list(town,manager,store,plugin).stream().filter(w->selected.equals(w.characterId())).findFirst().orElse(null);
             String error=worker==null?"Choose a current town resident.":unavailable(town,worker);

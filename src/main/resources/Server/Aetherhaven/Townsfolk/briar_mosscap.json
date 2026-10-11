@@ -26,5 +26,15 @@
       "itemId": "Ingredient_Hay",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "farming": 5,
+    "ranching": 3,
+    "crafting": 2
+  },
+  "startingAttributes": {
+    "dexterity": 8,
+    "speed": 6,
+    "intelligence": 6
+  }
 }

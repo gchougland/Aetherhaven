@@ -267,6 +267,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
 
+        if (com.hexvane.aetherhaven.npc.NpcFaceVisuals.isInInteractionDialogue(npc)) return;
         ClinicVisitService.observe(dt,ref,store);
         if (store.getComponent(ref, VillagerSeatExit.getComponentType()) != null) { interruptWork(ref, store, npc, commandBuffer); return; }
 
@@ -388,6 +389,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord townRecord = tm.getTown(binding.getTownId());
+        com.hexvane.aetherhaven.crafter.PatternBookService.tick(dt, ref, store, npc, binding, townRecord, tm, plugin);
         if (ClinicVisitService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, plugin)) return;
         if (ShopClerkWorkService.tick(ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, plugin)) return;
         if (CourierWorkService.tick(ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;

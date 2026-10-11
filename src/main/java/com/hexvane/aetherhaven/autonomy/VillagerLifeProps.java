@@ -60,6 +60,7 @@ public final class VillagerLifeProps {
         var life = VillagerLifeVisuals.state(ref, store);
         String item = gesture.equals("ShowItem") && life.conversationItemId != null
             ? life.conversationItemId : itemFor(gesture, binding == null ? "" : binding.getKind());
+        if (gesture.equals("Eat")) item = VillagerEatingFood.forNpc(ref, store);
         if (item == null) { clear(ref, store); return; }
         var hotbar = store.getComponent(ref, InventoryComponent.Hotbar.getComponentType());
         if (hotbar == null || hotbar.getInventory().getCapacity() == 0) return;

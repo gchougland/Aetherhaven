@@ -56,6 +56,6 @@ class DialogueSpeechCueTest {
                 }
             }
         }
-        assertEquals(50, offers);
+        assertTrue(offers >= 51, "Every quest offer, including the Bard invitation, must be checked");
     }
 }

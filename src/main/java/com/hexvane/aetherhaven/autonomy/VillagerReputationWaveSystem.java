@@ -83,6 +83,10 @@ public final class VillagerReputationWaveSystem extends EntityTickingSystem<Enti
         if (npc == null || uuidComp == null || tc == null || binding == null || autonomy == null) {
             return;
         }
+        // Someone tied up at a rescue camp cannot wave.
+        if (com.hexvane.aetherhaven.questboard.RescueCampService.isTied(uuidComp.getUuid())) {
+            return;
+        }
 
         long nowMs = System.currentTimeMillis();
         NpcReputationWaveState waveState = archetypeChunk.getComponent(index, NpcReputationWaveState.getComponentType());

@@ -18,8 +18,17 @@
   "speechVoiceId": "BrightMaleLower",
   "moveInRequirements": [
     {
-      "itemId": "Food_Kebab_Mushroom",
-      "count": 2
+      "itemId": "Plant_Crop_Corn_Item",
+      "count": 5
     }
-  ]
+  ],
+  "startingSkills": {
+    "logistics": 5,
+    "ranching": 3,
+    "commerce": 2
+  },
+  "startingAttributes": {
+    "speed": 8,
+    "dexterity": 8
+  }
 }

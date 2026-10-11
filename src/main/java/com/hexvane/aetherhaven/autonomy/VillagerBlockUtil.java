@@ -390,7 +390,7 @@ public final class VillagerBlockUtil {
         }
         Vector3i hit =
             TargetUtil.getTargetBlock(
-                world,
+                world.getChunkStore(),
                 (blockId, fluidId) -> blockId == 0,
                 clicked.x + 0.5,
                 clicked.y + 0.5,

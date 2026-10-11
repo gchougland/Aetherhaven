@@ -54,10 +54,20 @@ public final class CoreMasteryPage extends AetherhavenInteractiveCustomUIPage<Co
                 && !TownVillagerBinding.KIND_GUARD.equals(resident.getKind())
                 && (residentId == null || residentId.equals(resident.getLastEntityUuid())));
     }
+    /**
+     * Inn and guild visitors are not in the town's resident records, so the profile works from the visitor standing in
+     * front of the player: friendship, rewards and the gifts already discovered.
+     */
+    private boolean liveVisitor(TownRecord town, Store<EntityStore> store) {
+        if (town == null || kind == null || !TownVillagerBinding.isVisitorKind(kind) || npcRef == null || !npcRef.isValid()
+            || !town.hasMemberOrOwner(playerRef.getUuid())) return false;
+        var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        return binding != null && townId.equals(binding.getTownId()) && kind.equals(binding.getKind());
+    }
     @Override public void build(Ref<EntityStore> ref, UICommandBuilder c, UIEventBuilder e, Store<EntityStore> store) {
         var plugin = AetherhavenPlugin.get(); if (plugin == null) return;
         var town = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin).getTown(townId);
-        if (!allowed(town)) { close(); return; }
+        if (!allowed(town) && !liveVisitor(town, store)) { close(); return; }
         if (!appended) {
             c.append("Aetherhaven/CoreMasteryPage.ui");
             c.append("#NeedsHost", "Aetherhaven/ResidentNeeds.ui");
@@ -83,7 +93,12 @@ public final class CoreMasteryPage extends AetherhavenInteractiveCustomUIPage<Co
         for (int i = 0; i < CoreVillagerMastery.MAX_LEVEL; i++)
             c.setObject("#MasterySegments #Pip" + i + ".Background", new com.hypixel.hytale.server.core.ui.PatchStyle()
                 .setColor(com.hypixel.hytale.server.core.ui.Value.of(i < shownLevel ? "#d4b36a" : "#30434a")));
-        c.set("#Train.Disabled", !canTrain || shownLevel >= CoreVillagerMastery.MAX_LEVEL);
+        var trainingInventory = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
+        boolean hasCatalyst = trainingInventory != null && com.hexvane.aetherhaven.inventory.InventoryMaterials.count(
+            trainingInventory, AetherhavenConstants.ITEM_VERDANT_CATALYST) > 0;
+        c.set("#Train.Disabled", !canTrain || shownLevel >= CoreVillagerMastery.MAX_LEVEL || !hasCatalyst);
+        c.set("#Train.TooltipText", shownLevel >= CoreVillagerMastery.MAX_LEVEL ? "Fully trained"
+            : !hasCatalyst ? "Carry one Verdant Catalyst to train" : "Add 1 Mastery level using one Verdant Catalyst");
         c.set("#Train.TextSpans", text(shownLevel >= CoreVillagerMastery.MAX_LEVEL ? "complete" : "train"));
         c.set("#Hint.Text", canTrain || !mastery ? hint : "You can view this profile. Building permission is required to train or change equipment.");
         boolean hasTool = CoreVillagerMasteryService.toolFamily(kind) != null;
@@ -127,11 +142,12 @@ public final class CoreMasteryPage extends AetherhavenInteractiveCustomUIPage<Co
         }
         var resident = town.getResidentNpcRecords().stream().filter(r -> kind.equals(r.getKind()))
             .filter(r -> residentId == null || residentId.equals(r.getLastEntityUuid())).findFirst().orElse(null);
-        if (resident == null) { close(); return; }
-        residentId = resident.getLastEntityUuid();
-        String role = resident.getNpcRoleId();
+        if (resident == null && !(live && liveVisitor(town, store))) { close(); return; }
+        if (resident != null) residentId = resident.getLastEntityUuid();
+        var visiting = resident == null ? store.getComponent(npcRef, com.hypixel.hytale.server.npc.entities.NPCEntity.getComponentType()) : null;
+        String role = resident != null ? resident.getNpcRoleId() : visiting == null ? "" : visiting.getRoleName();
         ResidentNeedsUi.render(c, store, town, residentId, TownResidentEligibility.usesVillagerNeeds(kind, role, plugin));
-        var savedIdentity=resident.getTownsfolkIdentity();
+        var savedIdentity=resident==null?null:resident.getTownsfolkIdentity();
         var identity = live ? TownResidentDisplay.resolveFromEntity(store, npcRef, role, plugin)
             : TownResidentDisplay.resolveOffline(plugin, role, savedIdentity==null?null:savedIdentity.getCharacterId(),savedIdentity==null?null:savedIdentity.getModelAssetId());
         c.set("#Name.Text", identity.displayName()); c.set("#Portrait.AssetPath", identity.portraitPath());
@@ -181,7 +197,7 @@ public final class CoreMasteryPage extends AetherhavenInteractiveCustomUIPage<Co
     @Override public void handleDataEvent(Ref<EntityStore> ref, Store<EntityStore> store, Data data) {
         var plugin = AetherhavenPlugin.get(); if (plugin == null) return;
         var manager = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
-        var town = manager.getTown(townId); if (!allowed(town)) { close(); return; }
+        var town = manager.getTown(townId); if (!allowed(town) && !liveVisitor(town, store)) { close(); return; }
         if ("ReturnToJournal".equals(data.action) && fromJournal) {
             QuestJournalPage.openTown(ref, store, playerRef, townId); return;
         }

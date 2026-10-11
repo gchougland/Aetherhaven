@@ -402,7 +402,7 @@ final class AetherhavenSpecialistPreviewCommand extends AbstractPlayerCommand {
                     else if("loggergrove".equals(ctx.get(action))) {
                         var town=AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin).findTownForOwnerInWorld(player.getUuid());
                         store.getComponent(ref,com.hypixel.hytale.server.core.entity.entities.Player.getComponentType()).getPageManager()
-                            .openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.TimberGrovePage(player,town.getTownId(),session.logger.plotId()));
+                            .openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.GrovePage(player,town.getTownId(),session.logger.plotId(),null));
                     }else say(player,session.logger.status(world,player.getUuid()));
                 }catch(RuntimeException error){say(player,"Logger preview: "+error.getMessage());}
             }

@@ -10,17 +10,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class TownsfolkPersonalityDefinition {
-    private Map<String, Integer> startingAttributes;
-    private Map<String, Integer> startingSkills;
-
-    public Map<String, Integer> getStartingAttributes() {
-        return startingAttributes == null ? Map.of() : Collections.unmodifiableMap(startingAttributes);
-    }
-
-    public Map<String, Integer> getStartingSkills() {
-        return startingSkills == null ? Map.of() : Collections.unmodifiableMap(startingSkills);
-    }
-
     @SerializedName("id")
     private String id = "";
 

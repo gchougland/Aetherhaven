@@ -76,6 +76,7 @@ public final class FieldWorkService {
         }
         if(store.getComponent(ref,com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType())!=null)return true;
         if(!CourierWorkService.arrived(position,visit.approach)) {
+            WorkTravelRecovery.keepMoving(ref,store,buffer,npc,position,visit.approach,now);
             npc.setLeashPoint(new Vector3d(visit.approach));VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
             VillagerDoorUtil.tryOpenDoorsTowardLeash(world,position,visit.approach,null);buffer.putComponent(ref,NPCEntity.getComponentType(),npc);return true;
         }
@@ -106,7 +107,10 @@ public final class FieldWorkService {
                     if(changed)com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService.progress(town,NativeDruidCrops.isPlot(plot)?"druid":"farmer").earnXp(delivered);
                 }
             } else if(field.cargo()==null&&field.beds().contains(bed)&&masteryAllows(town,plot,bed)&&NativeFarmCrops.canTend(production,entry,bed)&&NativeFarmCrops.usable(world,town,plot,bed)) {
-                changed=action==Action.HARVEST?NativeFarmCrops.harvest(world,town,plot,production,bed,NativeFarmCrops.selectedOutputs(production,entry,bed),()->manager.updateTown(town))
+                // Life Essence comes with every harvest while the farm has room for it, chosen as an output or not.
+                long essenceRoom=!entry.containsItemId(NativeFarmCrops.LIFE_ESSENCE)?0:Math.max(0,
+                    WorkplaceProductionUpgrades.effectiveMaxStorage(production,entry,NativeFarmCrops.LIFE_ESSENCE)-production.getAmount(NativeFarmCrops.LIFE_ESSENCE));
+                changed=action==Action.HARVEST?NativeFarmCrops.harvest(world,town,plot,production,bed,NativeFarmCrops.selectedOutputs(production,entry,bed),essenceRoom,()->manager.updateTown(town))
                     :NativeFarmCrops.needsWater(world,bed)&&FoodSiteService.waterSoil(world,bed.point());
                 if(changed)field.rotateAfter(index);
             }

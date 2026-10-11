@@ -809,6 +809,18 @@ $C.@PageOverlay {
           LayoutMode: Top;
           Padding: (Full: 16);
 
+          $C.@TextField #WorkplaceWorkerSearch {
+            Anchor: (Height: 36, Bottom: 12);
+            PlaceholderText: "Search by name";
+          }
+
+          Label #WorkplaceWorkerSearchEmpty {
+            Visible: false;
+            Anchor: (Height: 24, Bottom: 6);
+            Style: $C.@DefaultLabelStyle;
+            Text: "No matching residents";
+          }
+
           Group #WorkplaceWorkerListScroll {
             LayoutMode: TopScrolling;
             ScrollbarStyle: $C.@DefaultScrollbarStyle;
@@ -846,6 +858,18 @@ $C.@PageOverlay {
         #Content {
           LayoutMode: Top;
           Padding: (Full: 16);
+
+          $C.@TextField #HouseResidentSearch {
+            Anchor: (Height: 36, Bottom: 12);
+            PlaceholderText: "Search by name";
+          }
+
+          Label #HouseResidentSearchEmpty {
+            Visible: false;
+            Anchor: (Height: 24, Bottom: 6);
+            Style: $C.@DefaultLabelStyle;
+            Text: "No matching residents";
+          }
 
           Group #HouseResidentListScroll {
             LayoutMode: TopScrolling;

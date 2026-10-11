@@ -1,0 +1,3 @@
+items.rootstone.name=Rootstone
+items.rootstone.description=Place on open ground inside your town, then use it to choose a tree from the saplings you carry. Your lumbermill's Logger plants the tree, sings it tall and fells it, and the stone regrows it for free.
+items.rootstone.hint=Press [{key}] to tend this Rootstone

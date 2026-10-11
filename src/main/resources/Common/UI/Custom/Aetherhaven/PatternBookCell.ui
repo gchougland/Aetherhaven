@@ -1,0 +1,13 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { Anchor: (Width: 62, Height: 62);
+  Button #Cell { Anchor: (Width: 58, Height: 58); TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+    Style: (Default: (Background: $T.@Slot), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed), Disabled: (Background: $T.@Inset));
+    Group #Chosen { Anchor: (Full: 0); Background: $T.@CardPressed; Visible: false; HitTestVisible: false; }
+    AssetImage #Art { Anchor: (Left: 5, Top: 5, Width: 48, Height: 48); FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png"; HitTestVisible: false; }
+    Group #Unknown { Anchor: (Full: 0); Background: #10161d(0.86); Visible: false; HitTestVisible: false;
+      Label { Text: "?"; Anchor: (Full: 0); Style: (...$C.@DefaultLabelStyle, FontSize: 26, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #6f8090); }
+    }
+    Label #Amount { Anchor: (Right: 4, Bottom: 2, Width: 48, Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, HorizontalAlignment: End); HitTestVisible: false; }
+  }
+}

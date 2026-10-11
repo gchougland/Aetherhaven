@@ -1,0 +1,124 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Goblin_Scrapper",
+  "Modify": {
+    "DropList": "",
+    "MaxHealth": 36,
+    "IsMemory": false,
+    "MemoriesCategory": "Goblin",
+    "MemoriesNameOverride": "Goblin_Scrapper",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    },
+    "_InteractionVars": {
+      "Club_Swing_Left_Right_Damage": {
+        "Interactions": [
+          {
+            "Parent": "Goblin_Scrapper_Club_Swing_Left_Right_Damage",
+            "DamageCalculator": {
+              "BaseDamage": {
+                "Physical": 12
+              },
+              "RandomPercentageModifier": 0.1
+            },
+            "DamageEffects": {
+              "Knockback": {
+                "Force": 0.15,
+                "RelativeX": 0,
+                "RelativeZ": -1,
+                "VelocityY": 0.6,
+                "VelocityType": "Set"
+              },
+              "WorldSoundEventId": "SFX_Unarmed_Impact",
+              "LocalSoundEventId": "SFX_Unarmed_Impact",
+              "WorldParticles": [
+                {
+                  "SystemId": "Impact_Sword_Basic"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "Club_Swing_Left_Right_Down_Damage": {
+        "Interactions": [
+          {
+            "Parent": "Goblin_Scrapper_Club_Swing_Left_Right_Down_Damage",
+            "DamageCalculator": {
+              "BaseDamage": {
+                "Physical": 16
+              },
+              "RandomPercentageModifier": 0.1
+            },
+            "DamageEffects": {
+              "Knockback": {
+                "Force": 0.15,
+                "RelativeX": 0,
+                "RelativeZ": -1,
+                "VelocityY": 0.6,
+                "VelocityType": "Set"
+              },
+              "WorldSoundEventId": "SFX_Unarmed_Impact",
+              "LocalSoundEventId": "SFX_Unarmed_Impact",
+              "WorldParticles": [
+                {
+                  "SystemId": "Impact_Sword_Basic"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "Thrown_Damage": {
+        "Interactions": [
+          {
+            "Parent": "DamageEntityParent",
+            "DamageCalculator": {
+              "BaseDamage": {
+                "Physical": 10
+              }
+            },
+            "DamageEffects": {
+              "Knockback": {
+                "Force": 1,
+                "RelativeX": 0,
+                "RelativeZ": 5,
+                "VelocityY": 5
+              },
+              "WorldSoundEventId": "SFX_Unarmed_Impact",
+              "LocalSoundEventId": "SFX_Unarmed_Impact",
+              "WorldParticles": [
+                {
+                  "SystemId": "Impact_Sword_Basic"
+                }
+              ],
+              "CameraEffect": "Impact"
+            }
+          }
+        ]
+      }
+    },
+    "Attack": "Root_NPC_Goblin_Scrapper_Club_Attack",
+    "AttackDistance": 2.5,
+    "CombatDirectWeight": 60,
+    "ViewRange": 12,
+    "ViewSector": 160,
+    "HearingRange": 8,
+    "MaxSpeed": 8,
+    "CombatMovingRelativeSpeed": 1.0,
+    "BrawlAttackWinChance": 5,
+    "AlertedRange": 45,
+    "BrawlFrequency": [
+      10,
+      60
+    ],
+    "Appearance": "Goblin_Scrapper",
+    "CombatMessageAcceptChance": 80
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Goblin_Scrapper.name",
+      "Description": "Translation key for NPC name display"
+    }
+  }
+}

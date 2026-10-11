@@ -26,5 +26,14 @@
       "itemId": "Ingredient_Salt",
       "count": 1
     }
-  ]
+  ],
+  "startingSkills": {
+    "cooking": 5,
+    "alchemy": 3,
+    "commerce": 2
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "dexterity": 6
+  }
 }

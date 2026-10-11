@@ -4,7 +4,7 @@
   "category": "town",
   "grantPlotTokenConstructionId": "plot_leatherworker",
   "title": "Hides and Handywork",
-  "description": "Build Sera a tannery with room to prepare hides and leather goods.",
+  "description": "Build Hazel a tannery with room to prepare hides and leather goods.",
   "prerequisites": {
     "completedQuestIds": [],
     "anyCompletedQuestIds": []
@@ -13,7 +13,7 @@
     {
       "id": "token",
       "kind": "plot_token_received",
-      "text": "Collect the tannery plot token from Sera.",
+      "text": "Collect the tannery plot token from Hazel.",
       "textLangKey": "aetherhaven_leatherworker.quest.objective.token"
     },
     {
@@ -26,7 +26,7 @@
     {
       "id": "talk",
       "kind": "dialogue_turn_in",
-      "text": "Return to Sera.",
+      "text": "Return to Hazel.",
       "textLangKey": "aetherhaven_leatherworker.quest.objective.talk"
     }
   ],

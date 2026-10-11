@@ -38,7 +38,8 @@ import javax.annotation.Nullable;
  * texture tint (e.g. orc tones); they must not be dropped from {@code DefaultAttachments}.
  */
 public final class PlayerSkinModelExporter {
-    private static final String PARENT_PLAYER = "Player";
+    /** The shared townsfolk rig. It carries the mouth and life animations that a bare Player parent lacks. */
+    static final String PARENT_TOWNSFOLK = "Aetherhaven_Human";
     private static final String HAIR_GRADIENT_SET_ID = "Hair";
     private static final String EARS1_BLOCKYMODEL = "Characters/Body_Attachments/Ears/Ears1.blockymodel";
     private static final String EAR_DEFAULT_NPC_GREYSCALE =
@@ -76,7 +77,7 @@ public final class PlayerSkinModelExporter {
             attachments.add(modelAttachmentToJson(ma));
         }
         JsonObject root = new JsonObject();
-        root.addProperty("Parent", PARENT_PLAYER);
+        root.addProperty("Parent", PARENT_TOWNSFOLK);
         if (rootModel != null) {
             root.addProperty("Model", rootModel);
             root.addProperty("Texture", rootTexture);

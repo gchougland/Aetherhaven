@@ -284,8 +284,8 @@ public final class ShopSpotDisplayService {
 
         boolean shouldShow(ShopSpotRecord record, TownRecord town) {
             if (!record.hasStock()) return false;
-            if (record.isPlayerControlled()) return staffedPlots.computeIfAbsent(new Workplace(town.getTownId(), record.getPlotId()),
-                key -> com.hexvane.aetherhaven.autonomy.ShopClerkWorkService.attendingSkill(store, town, key.plotId()) > 0);
+            // A player's shop keeps its wares on show at night and without a clerk. Only buying needs the shop open.
+            if (record.isPlayerControlled()) return true;
             if (!ShopSpotOpenService.isGameDay(store)) return false;
             return staffedPlots.computeIfAbsent(new Workplace(town.getTownId(), record.getPlotId()), key ->
                 ShopSpotOpenService.hasStaffedWorkplace(record, town, kind -> {

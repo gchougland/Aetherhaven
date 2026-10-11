@@ -156,7 +156,7 @@ public final class HalloweenGameService {
             var f = plot.toFootprint();
             if ((long)f.getMaxX()-f.getMinX() < 2 || (long)f.getMaxZ()-f.getMinZ() < 2 || (long)f.getMaxY()-f.getMinY() < 2) continue;
             int minY = Math.max(1, f.getMinY()+1);
-            int maxY = Math.min(com.hypixel.hytale.math.util.ChunkUtil.HEIGHT_MINUS_1, f.getMaxY());
+            int maxY = f.getMaxY();
             if (minY >= maxY) continue;
             for (int attempt = 0; attempt < 256 && budget-- > 0 && !search.exhausted(); attempt++) {
                 int x = random.nextInt(f.getMinX()+1, f.getMaxX());

@@ -26,5 +26,15 @@
       "itemId": "Food_Wildmeat_Cooked",
       "count": 2
     }
-  ]
+  ],
+  "startingSkills": {
+    "alchemy": 5,
+    "mining": 3,
+    "jewelry": 2,
+    "cooking": 0
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "vitality": 7
+  }
 }

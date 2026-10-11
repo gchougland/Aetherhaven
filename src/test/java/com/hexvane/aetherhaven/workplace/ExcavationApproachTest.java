@@ -55,6 +55,46 @@ import static org.junit.jupiter.api.Assertions.*;
         assertTrue(ExcavationApproach.besideRail(rail,new Vector3d(107.5,127,117.5)));
         assertFalse(ExcavationApproach.besideRail(rail,new Vector3d(107.1,127,117.5)));
     }
+    private static ExcavationPlan stairsDown(){
+        var area=MineshaftSelection.area(10,100,20,MineshaftSelection.Direction.SOUTH,12,ExcavationPlan.Layout.STAIRS_DOWN);
+        var entrance=ExcavationPlan.Entrance.NORTH;var first=ExcavationPlan.tunnel(area,entrance,ExcavationPlan.Layout.STAIRS_DOWN).getFirst();
+        var plan=new ExcavationPlan();
+        assertNull(plan.start(0,UUID.randomUUID(),UUID.randomUUID(),area,entrance,ExcavationPlan.Layout.STAIRS_DOWN,List.of(new ExcavationPlan.Cell(first,"Rock_Stone",0,1))));
+        return plan;
+    }
+    @Test void aMinerStandsOnThePassageFloorAndNotOnTheSurfaceAbove(){
+        var plan=stairsDown();var target=plan.next().point();var floor=plan.floorCells();
+        assertFalse(floor.isEmpty());
+        // The three rows in front of the passage are part of its floor, so the first face is dug from them.
+        var approachRow=floor.stream().filter(c->Math.abs(c.z()-target.z())<=3&&c.x()==target.x()&&!c.equals(new Point(target.x(),plan.floorAt(target),target.z()))).findFirst().orElseThrow();
+        // A rim cell two blocks above the cut is nearer to a worker standing on the surface.
+        var rim=new Point(approachRow.x()+2,approachRow.y()+2,approachRow.z());
+        assertFalse(floor.contains(rim));
+        java.util.function.Function<Point,Vector3d> stand=c->c.equals(rim)||c.equals(approachRow)?new Vector3d(c.x()+.5,c.y(),c.z()+.5):null;
+        var worker=new Vector3d(rim.x()+.5,rim.y(),rim.z()+.5);
+        var chosen=ExcavationApproach.choose(plan,target,worker,0,stand,c->true);
+        assertEquals(new Vector3d(approachRow.x()+.5,approachRow.y(),approachRow.z()+.5),chosen,"Already standing on the rim is no reason to stay there");
+        // Retries stay on the floor too.
+        assertEquals(chosen,ExcavationApproach.choose(plan,target,worker,1,stand,c->true));
+        // With no floor stand in reach the old behaviour applies, so work never stops for want of one.
+        assertEquals(worker,ExcavationApproach.choose(plan,target,worker,0,c->c.equals(rim)?worker:null,c->true));
+        // Picking a dropped load up is not limited to the floor.
+        assertEquals(worker,ExcavationApproach.choose(plan,target,worker,0,stand,c->true,c->true));
+    }
+    @Test void everyPassageHasAFloorIncludingItsApproachRows(){
+        for(var direction:MineshaftSelection.Direction.values())for(var layout:ExcavationPlan.Layout.values()){
+            var area=MineshaftSelection.area(10,100,20,direction,12,layout);var entrance=MineshaftSelection.entrance(direction);
+            var tunnel=ExcavationPlan.tunnel(area,entrance,layout);if(tunnel.isEmpty())continue;
+            var plan=new ExcavationPlan();
+            assertNull(plan.start(0,UUID.randomUUID(),UUID.randomUUID(),area,entrance,layout,List.of(new ExcavationPlan.Cell(tunnel.getFirst(),"Rock_Stone",0,1))));
+            var floor=plan.floorCells();
+            for(var cell:tunnel)assertTrue(floor.contains(new Point(cell.x(),plan.floorAt(cell),cell.z())),layout+" "+direction);
+            // Nine cells in front of the first face: three rows, three wide.
+            long approach=floor.stream().filter(c->tunnel.stream().noneMatch(t->t.x()==c.x()&&t.z()==c.z())).count();
+            assertEquals(9,approach,layout+" "+direction);
+        }
+        assertTrue(new ExcavationPlan().floorCells().isEmpty(),"A plan with no area limits nothing");
+    }
     @Test void lastStairRailCanBeInstalledFromItsSideLane(){
         var area=MineshaftSelection.area(10,100,20,MineshaftSelection.Direction.SOUTH,9,ExcavationPlan.Layout.DEEP_STAIRS_DOWN);
         var entrance=ExcavationPlan.Entrance.NORTH;var rail=ExcavationFittings.plan(area,entrance,ExcavationPlan.Layout.DEEP_STAIRS_DOWN,ExcavationFittings.Mode.RAILS).getLast().point();

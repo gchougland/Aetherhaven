@@ -27,15 +27,13 @@ public final class NativeTimberProducts {
         result.add(tree.sapling());
         result.add("Ingredient_Tree_Sap");
         result.add("Ingredient_Stick");
-        for(int slot=0;slot<WorkplaceProductionUpgrades.slotCount(production);slot++) {
-            String item=entry.itemAtCursor(production.getSlotCursor(slot));
-            if(item!=null&&(BYPRODUCTS.contains(item)||tree.sapling().equals(item)))result.add(item);
-        }
+        if(production.timber().gathersFibre())result.add("Ingredient_Fibre");
         return Collections.unmodifiableSet(result);
     }
+    /** A tree is worth growing while the stores can take at least one thing it gives. The rest is discarded. */
     public static boolean hasRoom(PlotProductionState production,ProductionCatalog.Entry entry,TimberPlantingReceipt tree) {
         var outputs=new HashSet<>(selected(production,entry,tree));outputs.add(tree.output());
-        return outputs.stream().allMatch(item->production.getAmount(item)<WorkplaceProductionUpgrades.effectiveMaxStorage(production,entry,item));
+        return outputs.stream().anyMatch(item->production.getAmount(item)<WorkplaceProductionUpgrades.effectiveMaxStorage(production,entry,item));
     }
     /** Extra collection is bounded by free local storage, before any cargo is created. */
     public static Map<String,Integer> collectionLimits(PlotProductionState production,ProductionCatalog.Entry entry,TimberPlantingReceipt tree) {

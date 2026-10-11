@@ -196,6 +196,8 @@ public final class InnVisitorShopPromotion {
         @Nonnull VillagerDefinition def,
         @Nonnull String workConstructionId
     ) {
+        String recruitment = def.getMoveInQuestId();
+        if (recruitment != null) return quests.get(recruitment) == null ? null : recruitment;
         String roleId = def.getNpcRoleId();
         String workGameplay = constructions.resolveGameplayConstructionId(workConstructionId);
         String roleMatchedGrant = null;

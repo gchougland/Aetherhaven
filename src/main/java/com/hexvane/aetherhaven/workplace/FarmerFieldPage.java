@@ -73,7 +73,7 @@ public final class FarmerFieldPage extends AetherhavenInteractiveCustomUIPage<Fa
             +(storageFull?" Make room in "+building+" storage to continue.":" The "+worker+" will carry the harvest to "+building+" storage."));
         b.set("#Mode.Text",field.adopted()?druid?"CONSERVATORY WORK ACTIVE":"FIELD WORK ACTIVE":druid?"CONSERVATORY PREVIEW":"FIELD PREVIEW");
         b.set("#Status.Text",hint!=null?hint:reviewed.issue()!=null?reviewed.issue():selected==0?
-            locked>0?"Train the "+worker+" to the required Mastery, then select an available crop in storage.":"Select "+(druid?"an alchemical crop":"a crop or Life Essence")+" as an output in "+building+" storage before starting work.":
+            locked>0?"Train the "+worker+" to the required Mastery, then select an available crop in storage.":"Select "+(druid?"an alchemical crop":"a crop")+" as an output in "+building+" storage before starting work.":
             "Green beds are ripe. Gold beds are growing. Grey beds need their output selected or more Mastery.");
         b.set("#Save.Text",field.adopted()?"Update tended beds":druid?"Start growing":"Start field work");
         b.set("#Save.Disabled",!reviewed.ready()||selected==0);

@@ -1,0 +1,18 @@
+{
+  "id": "craft_prop_sticks",
+  "name": "Sticks",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:craft_prop_sticks",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 1,
+  "inputs": [
+    {
+      "resourceType": "Wood_All",
+      "count": 5
+    }
+  ],
+  "output": "Ingredient_Stick",
+  "outputCount": 10,
+  "workSeconds": 10
+}

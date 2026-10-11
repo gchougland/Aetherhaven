@@ -52,6 +52,23 @@ public final class QuestBoardRaidEntryJson {
     @Nullable
     private List<QuestReward> rewards;
 
+    /**
+     * Makes this raid a rescue: the attackers march on a temporary camp where a townsfolk is held, and finishing the
+     * contract brings that townsfolk into town. Each entry is a prefab path under {@code Server/Prefabs}.
+     */
+    @SerializedName("rescueCampPrefabs")
+    @Nullable
+    private List<String> rescueCampPrefabs;
+
+    @Nonnull
+    public List<String> rescueCampPrefabsOrEmpty() {
+        return rescueCampPrefabs != null ? rescueCampPrefabs : List.of();
+    }
+
+    public boolean isRescue() {
+        return rescueCampPrefabs != null && !rescueCampPrefabs.isEmpty();
+    }
+
     @Nullable
     public String id() {
         return id;

@@ -30,7 +30,7 @@ Irienne wants roots under rafters that belong to her, not borrowed floorboards b
 
 Plant crops on tilled beds inside the farm building's area. Open farm storage, select the crops you want as its outputs, then choose **Review planted beds**. The map shows planted crops and which are ripe. Choose **Start field work** to let Irienne tend those beds during work hours.
 
-This replaces the farm's old automatic output. Stored items and upgrades are kept. **Collect all** can still recover old stock, including Life Essence. Select Life Essence as an output to collect it from ripe crops. Select both a crop and Life Essence with purchased output slots to collect both in one harvest. Harvest amounts follow the planted crop. Seeds are not collected.
+This replaces the farm's old automatic output. Stored items and upgrades are kept. **Collect all** can still recover old stock, including Life Essence. Every harvest also brings back Life Essence, as much as the crop drops and at least one, while the farm has room for it. You do not need to select it as an output. Collect it with **Collect all** or from Building Outputs in the Warehouse. Harvest amounts follow the planted crop. Seeds are not collected.
 
 Irienne waters growing beds, harvests ripe crops and carries each harvest to the farm's storage. Native crops regrow after harvesting. Produce only becomes available after she delivers it. A full store pauses further harvesting, so empty it or let Couriers collect the materials they need.
 

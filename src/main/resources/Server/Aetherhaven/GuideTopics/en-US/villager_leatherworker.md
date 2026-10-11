@@ -1,11 +1,11 @@
 ---
-name: Sera Brindle
+name: Hazel Brindle
 description: Leather, equipment and courier satchels
 author: Hexvane
 npcRoleId: Aetherhaven_Leatherworker
 ---
 
-Sera can visit from **Town Level 4**. Complete her **Tannery**, then unlock Leatherworking workplaces through her dialogue.
+Hazel can visit from **Town Level 4**. Complete her **Tannery**, then unlock Leatherworking workplaces through her dialogue.
 
 Mark a workplace with the Building Staff and place a **Tanning Rack** inside it. Employ an Apprentice with Leatherworking skill and enable that profession on the journal's Work page. Add orders through the workplace controls.
 

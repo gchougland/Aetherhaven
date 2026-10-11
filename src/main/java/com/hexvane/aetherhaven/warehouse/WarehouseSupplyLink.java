@@ -24,6 +24,16 @@ public final class WarehouseSupplyLink {
     private final UUID player;
     private final WarehouseBatch.Point link;
     private ItemContainer lastCombined;
+    /** What the crafter carries in backpacks. Set by whoever opens the bench; null for none. */
+    private java.util.function.Supplier<List<WarehouseCraftingContainer.Slot>> bags;
+
+    /** A link with no warehouse behind it, for a bench that only draws on the crafter's backpacks. */
+    public static WarehouseSupplyLink bagsOnly(AetherhavenPlugin plugin,World world,UUID player) {
+        return new WarehouseSupplyLink(plugin,world,null,null,player,null);
+    }
+    public WarehouseSupplyLink withBags(java.util.function.Supplier<List<WarehouseCraftingContainer.Slot>> bags) {
+        this.bags=bags;return this;
+    }
     public WarehouseSupplyLink(AetherhavenPlugin plugin,World world,TownManager manager,TownRecord town,UUID player,WarehouseBatch.Point link) {
         this.plugin=plugin;this.world=world;this.manager=manager;this.town=town;this.player=player;this.link=link;
     }
@@ -43,6 +53,7 @@ public final class WarehouseSupplyLink {
         return null;
     }
     private boolean allowed() {
+        if(town==null||manager==null||link==null)return false;
         var owner=manager.findTownContainingBlock(world.getName(),link.x(),link.z());
         var block=ChunkSectionBlockUtil.blockType(world,link.x(),link.y(),link.z());
         return owner==town&&WarehouseAccess.canBrowse(town,player)&&WarehouseAccess.hasManager(town)&&block!=null&&ITEM.equals(block.getId());
@@ -50,7 +61,14 @@ public final class WarehouseSupplyLink {
     public MaterialExtraResourcesSection append(MaterialExtraResourcesSection section,BlockType block,int tier) {
         // Native invalidation replaces its container. Never wrap our previous combined view again.
         if(section.getItemContainer()==lastCombined)return section;
-        if(!allowed())return section;
+        var views=new ArrayList<ItemContainer>();views.add(section.getItemContainer());
+        var carried=bags==null?List.<WarehouseCraftingContainer.Slot>of():bags.get();
+        // Backpacks are the crafter's own, so they need no town permission and nothing to save.
+        if(!carried.isEmpty())views.add(new WarehouseCraftingContainer(carried,()->true,()->{}));
+        if(!allowed()) {
+            if(views.size()==1)return section;
+            return publish(section,block,tier,views);
+        }
         var slots=new ArrayList<WarehouseCraftingContainer.Slot>();
         var stock=town.getWarehouse();WarehouseCraftingContainer.addStorage(slots,stock);
         var ids=new HashSet<UUID>();
@@ -64,8 +82,11 @@ public final class WarehouseSupplyLink {
             if(output!=null&&ids.add(site.id()))WarehouseCraftingContainer.addProduction(slots,stock,site.id(),output,
                 ()->MineshaftOutput.find(town,site.id())!=null);
         }
-        var remote=new WarehouseCraftingContainer(slots,this::allowed,()->manager.updateTown(town));
-        lastCombined=new CombinedItemContainer(section.getItemContainer(),remote);
+        views.add(new WarehouseCraftingContainer(slots,this::allowed,()->manager.updateTown(town)));
+        return publish(section,block,tier,views);
+    }
+    private MaterialExtraResourcesSection publish(MaterialExtraResourcesSection section,BlockType block,int tier,List<ItemContainer> views) {
+        lastCombined=new CombinedItemContainer(views.toArray(ItemContainer[]::new));
         section.setItemContainer(lastCombined);
         var materials=new TreeMap<String,ItemQuantity>();
         lastCombined.forEach((slot,item)->{

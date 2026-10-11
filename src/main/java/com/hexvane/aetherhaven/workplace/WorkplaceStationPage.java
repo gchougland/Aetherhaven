@@ -28,7 +28,25 @@ import org.joml.Vector3i;
 public final class WorkplaceStationPage extends AetherhavenInteractiveCustomUIPage<WorkplaceStationPage.Data> {
     private final UUID townId,siteId;private final Vector3i pos;
     private boolean appended,refreshing;
-    private String hint="Upgrade materials come from your inventory. Stay near the station while upgrading.";
+    private String hint="Upgrade materials come from your inventory, then the town warehouse. Stay near the station while upgrading.";
+
+    private boolean fetched(Store<EntityStore> store,com.hypixel.hytale.server.core.inventory.container.ItemContainer inventory,
+            com.hypixel.hytale.server.core.inventory.MaterialQuantity[] input) {
+        if(inventory.canRemoveMaterials(Arrays.asList(input)))return true;
+        fetchMaterials(store,inventory,input);
+        return inventory.canRemoveMaterials(Arrays.asList(input));
+    }
+    /** Brings missing upgrade materials out of the warehouse. Requirements given as a resource type are left to the pack. */
+    private void fetchMaterials(Store<EntityStore> store,com.hypixel.hytale.server.core.inventory.container.ItemContainer inventory,
+            com.hypixel.hytale.server.core.inventory.MaterialQuantity[] input) {
+        if(inventory==null||input==null)return;
+        var cost=new java.util.LinkedHashMap<String,Integer>();
+        for(var material:input)if(material!=null&&material.getItemId()!=null)cost.merge(material.getItemId(),material.getQuantity(),Integer::sum);
+        var plugin=com.hexvane.aetherhaven.AetherhavenPlugin.get();
+        var town=plugin==null?null:com.hexvane.aetherhaven.town.AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(),plugin).getTown(townId);
+        if(!cost.isEmpty())com.hexvane.aetherhaven.crafter.PatternBookPayment.topUp(inventory,
+            com.hexvane.aetherhaven.crafter.PatternBookPayment.stockFor(town,playerRef.getUuid()),cost);
+    }
     private Ref<ChunkStore> upgradingBench;
     private BenchUpgradeRequirement upgradingRequirement;
     private int upgradingTier;
@@ -81,7 +99,7 @@ public final class WorkplaceStationPage extends AetherhavenInteractiveCustomUIPa
             var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.BACKPACK_STORAGE_HOTBAR);
             if(req.getInput()==null||req.getInput().length==0)hint="This station's upgrade has no material requirements defined.";
             else if(!station.bench().getWindows().isEmpty())hint="Close the station's other crafting windows before upgrading.";
-            else if(player.getGameMode()!=GameMode.Creative&&!inventory.canRemoveMaterials(Arrays.asList(req.getInput())))hint="Bring the required upgrade materials in your inventory.";
+            else if(player.getGameMode()!=GameMode.Creative&&!fetched(store,inventory,req.getInput()))hint="You need the upgrade materials in your inventory or the town warehouse.";
             else {
                 upgradingBench=station.ref();upgradingTier=station.bench().getTierLevel();upgradingRequirement=req;started=System.nanoTime();
                 hint="Upgrading the station. Closing this screen cancels without spending materials.";

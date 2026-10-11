@@ -8,11 +8,11 @@
   "skillLevel": 4,
   "inputs": [
     {
-      "itemId": "Ingredient_Life_Essence",
-      "count": 25
+      "itemId": "Ingredient_Void_Essence",
+      "count": 4
     }
   ],
   "output": "Plant_Seeds_Health2",
-  "outputCount": 1,
+  "outputCount": 2,
   "workSeconds": 20
 }

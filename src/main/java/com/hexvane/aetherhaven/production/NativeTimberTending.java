@@ -25,6 +25,10 @@ public final class NativeTimberTending {
         if(previous==null&&(current==null||!tree.sapling().equals(current.getId())))return null;
         return farming;
     }
+    /** Share of the way to a full tree, or -1 once it is grown or no longer growing here. */
+    public static double progress(World world,TimberPlantingReceipt tree) {
+        var farming=growth(world,tree);return farming==null?-1:Math.min(1,farming.getGrowthProgress()/(double)tree.mature().index());
+    }
     public static boolean tend(World world,TimberPlantingReceipt tree,double seconds,double workBudget) {
         var farming=growth(world,tree);if(farming==null)return false;
         // Read only loaded columns. A missing canopy column never triggers a load.

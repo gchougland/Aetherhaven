@@ -33,8 +33,17 @@ public final class WarehouseBenchUseSystem extends EntityEventSystem<EntityStore
         if(block==null||block.getBench()==null)return;
         switch(block.getBench().getType()){case Crafting,DiagramCrafting,StructuralCrafting:break;default:return;}
         var player=chunk.getComponent(index,PlayerRef.getComponentType());int rotation=blocks.getRotationIndex(pos.x,pos.y,pos.z);
-        var link=WarehouseSupplyLink.find(plugin,world,player.getUuid(),pos.x,pos.y,pos.z,block,rotation);if(link==null)return;
-        var ref=chunk.getReferenceTo(index);var craft=buffer.getComponent(ref,CraftingManager.getComponentType());
+        var found=WarehouseSupplyLink.find(plugin,world,player.getUuid(),pos.x,pos.y,pos.z,block,rotation);
+        var ref=chunk.getReferenceTo(index);
+        // A bench also draws on the backpacks its crafter is carrying, with or without a warehouse link nearby.
+        java.util.function.Supplier<com.hypixel.hytale.server.core.inventory.container.ItemContainer> carried=()->ref.isValid()
+            ?com.hypixel.hytale.server.core.inventory.InventoryComponent.getCombined(ref.getStore(),ref,
+                com.hypixel.hytale.server.core.inventory.InventoryComponent.HOTBAR_STORAGE_BACKPACK):null;
+        if(found==null&&!com.hexvane.aetherhaven.backpack.BackpackCraftingSupply.carriesSupplies(
+            com.hypixel.hytale.server.core.inventory.InventoryComponent.getCombined(buffer,ref,
+                com.hypixel.hytale.server.core.inventory.InventoryComponent.HOTBAR_STORAGE_BACKPACK)))return;
+        var link=(found==null?WarehouseSupplyLink.bagsOnly(plugin,world,player.getUuid()):found)
+            .withBags(()->com.hexvane.aetherhaven.backpack.BackpackCraftingSupply.slots(carried));var craft=buffer.getComponent(ref,CraftingManager.getComponentType());
         if(craft==null||craft.hasBenchSet())return;
         var entity=BlockModule.getBlockEntity(cs,section,pos.x,pos.y,pos.z);if(entity==null)return;
         var bench=cs.getComponent(entity,BenchBlock.getComponentType());if(bench==null)return;

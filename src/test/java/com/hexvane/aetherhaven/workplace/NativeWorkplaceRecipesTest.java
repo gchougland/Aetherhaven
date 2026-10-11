@@ -35,6 +35,27 @@ class NativeWorkplaceRecipesTest {
         assertFalse(NativeWorkplaceRecipes.merge(Map.of(),Map.of("mod_recipe",recipe("Workbench",1))).isEmpty());
         assertTrue(NativeWorkplaceRecipes.merge(Map.of(),Map.of()).isEmpty());
     }
+    @Test void salvageRecipesGoToSalvagingAndAreNamedForWhatIsTakenApart() {
+        var result=NativeWorkplaceRecipes.merge(Map.of(),Map.of("Salvage_Old_Sword",recipe("Salvagebench",1),
+            "Salvage_Aetherhaven_Plot_Token_House",recipe("Salvagebench",1)));
+        assertEquals(1,result.size(),"Plot tokens are not workshop salvage");
+        var discovered=result.values().iterator().next();
+        assertEquals("salvaging",discovered.workplace());
+        assertEquals("Salvage Ingredient Fibre",discovered.name());
+        assertTrue(WorkplaceBenchAccess.matches(com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.SALVAGING,"Salvagebench","Bench_Salvage"));
+        assertFalse(WorkplaceBenchAccess.matches(com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.CRAFTING,"Salvagebench","Bench_Salvage"));
+        assertEquals("crafter",WorkplaceRules.supervisor(com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.SALVAGING));
+    }
+    @Test void smeltingSkillClimbsWithTheMetal() {
+        var bars=new LinkedHashMap<String,CraftingRecipe>();
+        for(String metal:List.of("Silver","Gold","Cobalt","Adamantite","Mithril","Onyxium"))
+            bars.put("Ingredient_Bar_"+metal+"_Recipe_Generated_0",recipe("Furnace",1));
+        var skill=new HashMap<String,Integer>();
+        NativeWorkplaceRecipes.merge(Map.of(),bars).values().forEach(r->skill.put(r.sourceRecipe().split("_")[2],r.skillLevel()));
+        assertEquals(Map.of("Silver",4,"Gold",4,"Cobalt",7,"Adamantite",9,"Mithril",10,"Onyxium",1),skill);
+        assertEquals(1,NativeWorkplaceRecipes.merge(Map.of(),Map.of("Ingredient_Bar_Cobalt_Recipe_Generated_0",recipe("Workbench",1)))
+            .values().iterator().next().skillLevel(),"Only smelting uses the metal ladder");
+    }
     @Test void fieldcraftDoesNotBecomeAWorkplaceRecipe() {
         assertTrue(NativeWorkplaceRecipes.merge(Map.of(),Map.of("field_recipe",recipe("Fieldcraft",1))).isEmpty());
     }

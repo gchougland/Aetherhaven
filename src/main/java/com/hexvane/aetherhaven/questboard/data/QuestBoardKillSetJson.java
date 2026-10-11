@@ -24,6 +24,16 @@ public final class QuestBoardKillSetJson {
         return Math.max(1, killCount);
     }
 
+    /** Mining contracts: block ids that count when a player breaks them, matched by prefix (for example {@code Ore_Iron_}). */
+    @SerializedName("blockIdPrefixesAny")
+    @Nullable
+    private List<String> blockIdPrefixesAny;
+
+    @Nonnull
+    public List<String> blockIdPrefixesAnyOrEmpty() {
+        return blockIdPrefixesAny != null ? blockIdPrefixesAny : List.of();
+    }
+
     @Nonnull
     public List<String> entityTagsAnyOrEmpty() {
         return entityTagsAny != null ? entityTagsAny : List.of();

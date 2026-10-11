@@ -81,7 +81,8 @@ final class AetherhavenFieldTestCommand extends AbstractCommandCollection {
         chain=chain.thenCompose(ignored->after(world,()->{
             require(NativeFarmCrops.ripe(world,bed),"Final native stage is not harvestable");
             verifyMasteryGate(world,town,plot,production,bed,"farmer");
-            require(NativeFarmCrops.harvest(world,town,plot,production,bed,Set.of(crop.output(),NativeFarmCrops.LIFE_ESSENCE),()->{}),"Native harvest failed");
+            // Only the crop is chosen as an output. The harvest must still bring Life Essence back.
+            require(NativeFarmCrops.harvest(world,town,plot,production,bed,Set.of(crop.output()),100,()->{}),"Native harvest failed");
             require(production.getAmount(crop.output())==0,"Harvest credited stock before delivery");
             require(production.field().pending()!=null&&production.field().cargo()==null,"Harvest credited cargo before its deferred crop transition");
             require(!NativeFarmCrops.harvest(world,town,plot,production,bed),"Pending transition allowed a second harvest");

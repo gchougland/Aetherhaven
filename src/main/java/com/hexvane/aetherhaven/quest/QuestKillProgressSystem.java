@@ -74,7 +74,14 @@ public final class QuestKillProgressSystem extends DeathSystems.OnDeathSystem {
                 RaidQuestCompassCache.removeMob(world.getName(), victimUuid.getUuid());
             }
             TownRecord raidTown = tm.getTown(raidBinding.getTownId());
-            if (raidTown != null && processBoardRaidKills(victimRef, store, raidTown, victimUuid)) {
+            Damage how = death.getDeathInfo();
+            Ref<EntityStore> killer = how == null ? null : resolveKillerRef(how);
+            boolean byPlayer = killer != null && killer.isValid() && store.getComponent(killer, Player.getComponentType()) != null;
+            var causeAsset = how == null ? null
+                : com.hypixel.hytale.server.core.modules.entity.damage.DamageCause.getAssetMap().getAsset(how.getDamageCauseIndex());
+            String cause = how == null ? "unknown" : (causeAsset == null ? "no cause" : causeAsset.getId())
+                + " from " + (how.getSource() == null ? "nothing" : how.getSource().getClass().getSimpleName());
+            if (raidTown != null && processBoardRaidKills(victimRef, store, raidTown, victimUuid, byPlayer, cause)) {
                 tm.updateTown(raidTown);
                 AetherhavenHudRefreshSystem.requestRefresh(world);
             }
@@ -143,7 +150,9 @@ public final class QuestKillProgressSystem extends DeathSystems.OnDeathSystem {
         @Nonnull Ref<EntityStore> victimRef,
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town,
-        @Nullable UUIDComponent victimUuid
+        @Nullable UUIDComponent victimUuid,
+        boolean killedByPlayer,
+        @Nonnull String cause
     ) {
         RaidQuestMobBinding binding = store.getComponent(victimRef, RaidQuestMobBinding.getComponentType());
         if (binding == null || victimUuid == null) {
@@ -165,6 +174,12 @@ public final class QuestKillProgressSystem extends DeathSystems.OnDeathSystem {
             java.util.List<String> remaining = new java.util.ArrayList<>(slot.raidSpawnedEntityUuidsOrEmpty());
             remaining.remove(victimId);
             slot.setRaidSpawnedEntityUuids(remaining);
+            // A rescue's captor who died of the ground they appeared on was not defeated. They come back.
+            if (slot.isRescueQuest() && com.hexvane.aetherhaven.questboard.RescueCampService.captorDied(
+                    slot, victimUuid.getUuid(), killedByPlayer, cause)) {
+                changed = true;
+                break;
+            }
 
             int need = slot.getRaidKillRequired();
             int cur = slot.getRaidKillProgress();

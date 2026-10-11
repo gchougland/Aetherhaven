@@ -28,7 +28,7 @@
         },
         {
           "text": "aetherhaven_crafter.how",
-          "icon": "UI/Custom/woodworking.png",
+          "icon": "UI/Custom/dialogue.png",
           "next": "how",
           "condition": {
             "type": "not",

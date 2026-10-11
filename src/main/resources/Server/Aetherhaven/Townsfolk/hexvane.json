@@ -1,0 +1,36 @@
+{
+  "id": "hexvane",
+  "displayName": "Hexvane",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Hexvane",
+  "personalityIds": [
+    "adventurer",
+    "homebody",
+    "curious"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_mage",
+  "speechVoiceId": "BrightMale",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Void_Essence",
+      "count": 5
+    }
+  ],
+  "startingSkills": {
+    "blacksmithing": 5,
+    "alchemy": 5,
+    "logistics": 3,
+    "commerce": 3
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "speed": 7
+  }
+}

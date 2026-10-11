@@ -56,8 +56,13 @@ public final class NativeTimberHarvest {
     }
     public static boolean fell(World world,PlotProductionState production,int slot,ProductionCatalog.Entry entry,Predicate<Position> bounds) {
         var planted=production.timber().trees().get(slot);var checked=inspect(world,planted,bounds);
-        if(!checked.ready() || production.timber().edited(planted.tree().id()))return false;
+        // A tree the player removed entirely just frees its stone to grow again.
+        if(planted!=null&&TimberFellingPlan.GONE.equals(checked.issue()))return production.timber().release(slot,planted.tree().id());
+        if(!checked.ready())return false;
         var cells=matureCells(planted.tree());var plan=checked.plan();
+        // Only leaves or branches remain: clear them away without a harvest.
+        if(plan.yield()<1)return plan.restore(p->observe(world,p,cells.get(p)),(p,target)->write(world,p,target))
+            &&production.timber().release(slot,plan.tree());
         if(entry!=null&&!NativeTimberProducts.hasRoom(production,entry,planted.tree()))return false;
         var products=entry==null?Map.<String,Integer>of():NativeTimberProducts.harvest(plan,planted.tree(),NativeTimberProducts.collectionLimits(production,entry,planted.tree()));
         return production.timber().fell(slot,plan.tree(),plan.yield(),products,()->plan.restore(

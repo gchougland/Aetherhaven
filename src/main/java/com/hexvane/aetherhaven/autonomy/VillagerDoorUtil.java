@@ -17,6 +17,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -725,7 +726,20 @@ public final class VillagerDoorUtil {
         }
         int rotationIndex = VillagerBlockUtil.rotationIndexForLoadedChunk(world, blockPosition.x, blockPosition.y, blockPosition.z);
         BlockBoundingBoxes oldHitbox = BlockBoundingBoxes.getAssetMap().getAsset(blockType.getHitboxTypeIndex());
-        world.setBlockInteractionState(blockPosition, blockType, interactionStateToSend);
+        Ref<ChunkStore> sectionRef = ChunkSectionBlockUtil.sectionRefAt(world, blockPosition.x, blockPosition.y, blockPosition.z);
+        if (sectionRef == null) {
+            return false;
+        }
+        BlockOperations.setBlockInteractionState(
+            world.getChunkStore(),
+            sectionRef,
+            blockPosition.x,
+            blockPosition.y,
+            blockPosition.z,
+            blockType,
+            interactionStateToSend,
+            false
+        );
         BlockType currentBlockType = ChunkSectionBlockUtil.blockType(world, blockPosition.x, blockPosition.y, blockPosition.z);
         if (currentBlockType == null) {
             return false;

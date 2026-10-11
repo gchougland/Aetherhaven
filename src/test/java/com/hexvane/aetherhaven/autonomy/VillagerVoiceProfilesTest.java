@@ -29,7 +29,7 @@ class VillagerVoiceProfilesTest {
                 }
             }
         }
-        assertEquals(88, count);
+        assertEquals(91, count);
         assertEquals("GravelyFemaleHigher", VillagerVoiceProfile.resolve("BrightFemaleHigher", "female", "goblin").id());
         assertEquals("GravelyMale", VillagerVoiceProfile.resolve(null, "male", "goblin").id());
     }
