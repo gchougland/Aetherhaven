@@ -2,7 +2,7 @@
   "Layers": [
     {
       "Files": [
-        "Sounds/Magic/Heal.ogg"
+        "Sounds/Magic/Magic_Heal_01.ogg"
       ],
       "RandomSettings": {
         "MinPitch": -2.0,

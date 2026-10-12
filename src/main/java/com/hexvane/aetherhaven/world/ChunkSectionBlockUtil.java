@@ -10,7 +10,6 @@ import com.hypixel.hytale.server.core.asset.type.environment.config.Environment;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
-import com.hypixel.hytale.server.core.universe.world.chunk.ChunkFlag;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.heightmap.HeightmapColumn;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
@@ -61,7 +60,29 @@ public final class ChunkSectionBlockUtil {
     }
 
     /**
-     * Chunk column in memory that is not simulating ({@link ChunkFlag#TICKING} clear). Matches vanilla
+     * Whether a chunk column is simulating. Since Hytale 0.7.0 a column that is not carries the engine's
+     * {@code NonTicking} marker component, as chunk sections do; the old {@code ChunkFlag.TICKING} is gone.
+     */
+    public static boolean isTicking(@Nonnull World world, @Nonnull WorldChunk chunk) {
+        Ref<ChunkStore> ref = chunk.getReference();
+        return ref != null
+            && ref.isValid()
+            && !world.getChunkStore().getStore().getArchetype(ref).contains(ChunkStore.REGISTRY.getNonTickingComponentType());
+    }
+
+    /**
+     * Starts a chunk column simulating by taking the {@code NonTicking} marker off, which is what the engine's own
+     * chunk loading does when a ticking column is asked for. World thread only, and not from a chunk store system.
+     */
+    public static void startTicking(@Nonnull World world, @Nonnull WorldChunk chunk) {
+        Ref<ChunkStore> ref = chunk.getReference();
+        if (ref != null && ref.isValid()) {
+            world.getChunkStore().getStore().tryRemoveComponent(ref, ChunkStore.REGISTRY.getNonTickingComponentType());
+        }
+    }
+
+    /**
+     * Chunk column in memory that is not simulating (see {@link #isTicking}). Matches vanilla
      * {@code getChunkIfNonTicking} — not {@code getNonTickingChunk}, which returns any in-memory column.
      *
      * <p>Near players, columns are almost always ticking; use {@link #worldChunkIfInMemory} for place/read
@@ -70,7 +91,7 @@ public final class ChunkSectionBlockUtil {
     @Nullable
     public static WorldChunk worldChunkIfNonTicking(@Nonnull World world, long chunkIndex) {
         WorldChunk chunk = worldChunkIfInMemory(world, chunkIndex);
-        if (chunk == null || chunk.is(ChunkFlag.TICKING)) {
+        if (chunk == null || isTicking(world, chunk)) {
             return null;
         }
         return chunk;
@@ -88,7 +109,7 @@ public final class ChunkSectionBlockUtil {
     @Nullable
     public static WorldChunk worldChunkIfTicking(@Nonnull World world, long chunkIndex) {
         WorldChunk chunk = worldChunkIfInMemory(world, chunkIndex);
-        return chunk != null && chunk.is(ChunkFlag.TICKING) ? chunk : null;
+        return chunk != null && isTicking(world, chunk) ? chunk : null;
     }
 
     @Nullable
@@ -112,8 +133,8 @@ public final class ChunkSectionBlockUtil {
             WorldChunk chunk =
                 world.getChunkStore().getStore().getComponent(inMemory, WorldChunk.getComponentType());
             if (chunk != null) {
-                chunk.setFlag(ChunkFlag.TICKING, true);
-                if (chunk.is(ChunkFlag.TICKING)) {
+                startTicking(world, chunk);
+                if (isTicking(world, chunk)) {
                     return chunk;
                 }
             }

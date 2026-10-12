@@ -48,7 +48,7 @@
       "Interactions": [
         {
           "Type": "ApplyEffect",
-          "EffectId": "Food_Instant_Heal_T3"
+          "EffectId": "Aetherhaven_Spooky_Candy_Heal"
         }
       ]
     }

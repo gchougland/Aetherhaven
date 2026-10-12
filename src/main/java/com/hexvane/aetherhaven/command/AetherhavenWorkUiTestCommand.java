@@ -35,7 +35,6 @@ import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.WorldConfig;
-import com.hypixel.hytale.server.core.universe.world.chunk.ChunkFlag;
 import com.hypixel.hytale.server.core.universe.world.storage.GetChunkFlags;
 import com.hypixel.hytale.server.core.universe.world.storage.provider.EmptyChunkStorageProvider;
 import com.hypixel.hytale.server.core.universe.world.worldgen.provider.VoidWorldGenProvider;
@@ -313,7 +312,7 @@ final class AetherhavenWorkUiTestCommand extends AbstractCommandCollection {
     private static CompletableFuture<Void> onWorld(World world,Runnable action){return CompletableFuture.runAsync(()->{
         // No player holds this disposable fixture's one chunk active between delayed checks.
         var chunk=ChunkSectionBlockUtil.worldChunkIfInMemory(world,0,0);
-        if(chunk!=null)chunk.setFlag(ChunkFlag.TICKING,true);
+        if(chunk!=null)ChunkSectionBlockUtil.startTicking(world,chunk);
         action.run();
     },world);}
     private static void require(boolean yes,String issue){if(!yes)throw new IllegalStateException(issue);}

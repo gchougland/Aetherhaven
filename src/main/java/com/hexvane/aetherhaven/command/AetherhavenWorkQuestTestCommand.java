@@ -40,7 +40,6 @@ import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.WorldConfig;
-import com.hypixel.hytale.server.core.universe.world.chunk.ChunkFlag;
 import com.hypixel.hytale.server.core.universe.world.storage.GetChunkFlags;
 import com.hypixel.hytale.server.core.universe.world.storage.provider.EmptyChunkStorageProvider;
 import com.hypixel.hytale.server.core.universe.world.worldgen.provider.VoidWorldGenProvider;
@@ -436,7 +435,7 @@ final class AetherhavenWorkQuestTestCommand extends AbstractAsyncCommand {
         return CompletableFuture.runAsync(() -> {
             for (int chunkX : LIVE) {
                 var chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, chunkX * 32, 0);
-                if (chunk != null) chunk.setFlag(ChunkFlag.TICKING, true);
+                if (chunk != null) ChunkSectionBlockUtil.startTicking(world, chunk);
             }
             action.run();
         }, world);

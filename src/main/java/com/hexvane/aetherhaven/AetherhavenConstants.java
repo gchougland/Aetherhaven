@@ -268,7 +268,7 @@ public final class AetherhavenConstants {
     public static final String SFX_ARCANE_WORKBENCH_CRAFT = "SFX_Arcane_Workbench_Craft";
 
     /**
-     * Priestess gold heal: vanilla {@code Sounds/Magic/Heal.ogg} via
+     * Priestess gold heal: vanilla {@code Sounds/Magic/Magic_Heal_01.ogg} via
      * {@code Server/Audio/SoundEvents/Aetherhaven/Aetherhaven_Magic_Heal.json} (not the potion UI wrapper id).
      */
     public static final String SFX_PRIESTESS_HEAL = "Aetherhaven_Magic_Heal";

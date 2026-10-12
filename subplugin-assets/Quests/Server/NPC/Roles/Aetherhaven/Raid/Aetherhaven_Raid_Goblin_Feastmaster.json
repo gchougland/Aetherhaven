@@ -1,4 +1,7 @@
 {
   "Type": "Variant",
-  "Reference": "Goblin_Feastmaster"
+  "Reference": "Dungeon_Feastmaster_Boss",
+  "Modify": {
+    "MaxHealth": 350
+  }
 }

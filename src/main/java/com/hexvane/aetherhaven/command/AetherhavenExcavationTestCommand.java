@@ -539,7 +539,7 @@ final class AetherhavenExcavationTestCommand extends AbstractCommandCollection {
         // Production code still requires a naturally simulated chunk and never promotes it.
         for(var at:FIXTURE_CHUNKS) {
             var chunk=ChunkSectionBlockUtil.worldChunkIfInMemory(world,ChunkUtil.indexChunk(at[0],at[1]));
-            if(chunk!=null)chunk.setFlag(com.hypixel.hytale.server.core.universe.world.chunk.ChunkFlag.TICKING,true);
+            if(chunk!=null)ChunkSectionBlockUtil.startTicking(world,chunk);
         }
         action.run();
     },world);}

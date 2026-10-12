@@ -6,7 +6,7 @@ plugins {
 import java.util.zip.ZipFile
 
 group = "com.hexvane"
-version = "4.0.0-dev"
+version = "4.0.0"
 val javaVersion = 25
 
 repositories {
@@ -177,7 +177,7 @@ hytale {
 
     // uncomment if you want to develop your mod against the pre-release version of the game.
     //
-    updateChannel = "pre-release"
+    // updateChannel = "pre-release"
 }
 
 java {
