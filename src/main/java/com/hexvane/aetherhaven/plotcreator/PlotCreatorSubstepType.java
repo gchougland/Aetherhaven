@@ -60,5 +60,7 @@ public enum PlotCreatorSubstepType {
     /** Physical ore cell, not a villager standing spot. */
     MINING_NODE,
     /** Animal standing position, in Barn slot order. */
-    BARN_PEN
+    BARN_PEN,
+    /** Where a shop's townsfolk clerk stands while working, usually behind the counter. */
+    CLERK_STAND
 }

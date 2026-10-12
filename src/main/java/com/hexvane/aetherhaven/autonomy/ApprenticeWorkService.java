@@ -48,6 +48,7 @@ public final class ApprenticeWorkService {
         if(state.buildingSite!=null)return tickBuilding(dt,ref,store,buffer,npc,needs,autonomy,town,manager,plugin,progress,id,state,claims,now);
         if(state.excavationSite!=null)return tickExcavation(dt,ref,store,buffer,npc,needs,autonomy,town,manager,plugin,progress,id,state,claims,now);
         if (state.foodSite != null) return tickFood(dt,ref,store,buffer,npc,needs,autonomy,town,manager,plugin,progress,id,state,claims,now);
+        if (state.growerSite != null) return tickGrower(dt,ref,store,buffer,npc,needs,autonomy,town,manager,plugin,progress,id,state,claims,now);
         if(now>=state.nextDecision) {
             state.nextDecision=now+250;claims.values().removeIf(c->c.until()<now);
             WorkplaceSupplyPlanner.tick(world,manager,town,plugin,now);
@@ -79,11 +80,24 @@ public final class ApprenticeWorkService {
                     .filter(s->{var claim=claims.get(s.id());return claim==null||claim.until()<now||id.equals(claim.worker());})
                     .filter(s->!preferSkilledWorker(store,town,s.type(),id,progress,now,s.id()))
                     .min(Comparator.comparingDouble(s->position.distanceSquared(s.area().minX(),s.area().floorY(),s.area().minZ()))).orElse(null);
+                // A yard takes every available builder, so it is never claimed by one or held back for a better one.
                 var building=town.getApprenticeWorkplaces().sites().stream()
                     .filter(s->retries.canTry(s.id(),now)&&buildingUsable(world,town,s,progress))
+                    .min(Comparator.comparingDouble(s->position.distanceSquared(s.area().minX(),s.area().floorY(),s.area().minZ()))).orElse(null);
+                var grower=town.getApprenticeWorkplaces().sites().stream()
+                    .filter(s->retries.canTry(s.id(),now)&&growerUsable(world,s,progress,position))
                     .filter(s->{var claim=claims.get(s.id());return claim==null||claim.until()<now||id.equals(claim.worker());})
                     .filter(s->!preferSkilledWorker(store,town,s.type(),id,progress,now,s.id()))
-                    .min(Comparator.comparingDouble(s->position.distanceSquared(s.area().minX(),s.area().floorY(),s.area().minZ()))).orElse(null);
+                    .min(Comparator.comparingInt((ApprenticeWorkplace s)->progress.priority(s.type()))
+                        .thenComparingDouble(s->position.distanceSquared(s.area().minX(),s.area().floorY(),s.area().minZ()))).orElse(null);
+                // Beds are quick visits: they go first among equally ranked crafting and food work, never ahead of a higher rank.
+                if(grower!=null&&progress.priority(grower.type())<=batchPriority
+                    &&(food==null||progress.priority(grower.type())<=progress.priority(food.type()))
+                    &&(excavation==null||progress.priority(grower.type())<progress.priority(TownsfolkWorkType.MINING))
+                    &&(building==null||progress.priority(grower.type())<progress.priority(TownsfolkWorkType.BUILDING))) {
+                    state.growerSite=grower.id();state.batch=null;
+                    return tickGrower(dt,ref,store,buffer,npc,needs,autonomy,town,manager,plugin,progress,id,state,claims,now);
+                }
                 if(building!=null&&progress.priority(TownsfolkWorkType.BUILDING)<=batchPriority
                     &&(food==null||progress.priority(TownsfolkWorkType.BUILDING)<progress.priority(food.type()))
                     &&(excavation==null||progress.priority(TownsfolkWorkType.BUILDING)<progress.priority(TownsfolkWorkType.MINING))) {
@@ -166,8 +180,9 @@ public final class ApprenticeWorkService {
             furnishingMultiplier=state.furnishingEquipment.workMultiplier(site.type());
         }
         // The warehouse refuses more than double speed. Cap a strong kit here, or the job would never advance.
-        town.getWarehouse().advanceWork(batch.id(),Math.min(.25,Math.max(0,dt)),Math.min(2,
-            com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,recipe.skill(),plugin.getProfessionKits())*furnishingMultiplier));
+        // A restaurant meal's work perk joins the same product and stays under the same limit.
+        town.getWarehouse().advanceWork(batch.id(),Math.min(.25,Math.max(0,dt)),Math.min(2,com.hexvane.aetherhaven.restaurant.RestaurantMeals.work(needs,
+            com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,recipe.skill(),plugin.getProfessionKits())*furnishingMultiplier)));
         if(batch.cultivation()) {
             double phaseEnd=batch.cropPlanted()?duration:6;
             if(batch.workSeconds()>=phaseEnd) {
@@ -217,6 +232,8 @@ public final class ApprenticeWorkService {
     }
     /** How long a worker leaves a job for someone better before taking it anyway. */
     static final long DEFER_PATIENCE_MS=20_000L;
+    /** A builder who finished a piece keeps the hammer out this long. Longer than the pause before the next piece is chosen. */
+    private static final long HAMMER_BETWEEN_PIECES_MS=1000L;
     private static final long DEFER_FORGET_MS=120_000L;
     private static final Map<String,Long> DEFERRED=new java.util.concurrent.ConcurrentHashMap<>();
 
@@ -261,7 +278,7 @@ public final class ApprenticeWorkService {
                 ||store.getComponent(ref,VillagerSeatExit.getComponentType())!=null)continue;
             var courier=store.getComponent(ref,CourierTravelState.getComponentType());if(courier!=null&&courier.active)continue;
             var work=store.getComponent(ref,ApprenticeWorkState.getComponentType());
-            if(work!=null&&(work.active||work.batch!=null||work.foodSite!=null||work.buildingSite!=null||work.excavationSite!=null||now<work.retryAt||!work.routeRetries.canTry(workplace,now)))continue;
+            if(work!=null&&(work.active||work.batch!=null||work.foodSite!=null||work.growerSite!=null||work.buildingSite!=null||work.excavationSite!=null||now<work.retryAt||!work.routeRetries.canTry(workplace,now)))continue;
             var needs=store.getComponent(ref,VillagerNeeds.getComponentType());var autonomy=store.getComponent(ref,VillagerAutonomyState.getComponentType());
             if(needs==null||needs.getHunger()<20||needs.getEnergy()<20||autonomy==null||autonomy.isFillingHunger()||autonomy.isFillingEnergy())continue;
             return true;
@@ -333,8 +350,8 @@ public final class ApprenticeWorkService {
                 else VillagerLifeProps.clear(ref,st);
                 AnimationUtils.playAnimation(ref,AnimationSlot.Action,watering?"Aetherhaven_Work_Actions":NpcFaceVisuals.itemAnimationsForFaceRig(ref,"Aetherhaven_Life_Actions",st),watering?"WaterCrops":"Tend",true,st);});
         }
-        if (site.food().work(dt,true,habitat.ready(),
-            com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,site.type().skill,plugin.getProfessionKits()))) {
+        if (site.food().work(dt,true,habitat.ready(),com.hexvane.aetherhaven.restaurant.RestaurantMeals.work(needs,
+            com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,site.type().skill,plugin.getProfessionKits())))) {
             boolean harvested=state.foodHarvest;
             var area=site.area();
             buffer.run(st->{
@@ -361,6 +378,91 @@ public final class ApprenticeWorkService {
             claims.remove(site.id());state.retryAt=now+1500;stop(ref,npc,buffer,state);return true;
         }
         if (now>=state.nextSave) { manager.updateTown(town);state.nextSave=now+2000; }
+        return true;
+    }
+    private static boolean growerUsable(World world,ApprenticeWorkplace site,TownsfolkProgress progress,Vector3d from) {
+        return GrowerPlan.supports(site.type())&&progress.canPerform(site.type(),false,false,true)
+            &&GrowerSiteService.task(world,site,progress.skill(site.type().skill),from)!=null;
+    }
+    /** One bed, one job, one worker. Seeding, tending and picking only count while the worker stands at the bed. */
+    private static boolean tickGrower(float dt,Ref<EntityStore> ref,Store<EntityStore> store,CommandBuffer<EntityStore> buffer,
+        NPCEntity npc,VillagerNeeds needs,VillagerAutonomyState autonomy,TownRecord town,TownManager manager,AetherhavenPlugin plugin,
+        TownsfolkProgress progress,String worker,ApprenticeWorkState state,Map<UUID,Claim> claims,long now) {
+        var world=store.getExternalData().getWorld();
+        var site=town.getApprenticeWorkplaces().find(state.growerSite);
+        var plan=site==null?null:GrowerSiteService.plan(site.type());
+        var claim=site==null?null:claims.get(site.id());
+        if(site==null||plan==null||!progress.canPerform(site.type(),false,false,true)
+            ||claim!=null&&claim.until()>now&&!worker.equals(claim.worker())) {
+            stop(ref,npc,buffer,state);return false;
+        }
+        var position=store.getComponent(ref,TransformComponent.getComponentType()).getPosition();
+        int skill=progress.skill(site.type().skill);
+        var grower=site.grower();
+        if(!state.active) {
+            var task=GrowerSiteService.task(world,site,skill,position);
+            if(task==null){stop(ref,npc,buffer,state);return false;}
+            CourierWorkService.interrupt(ref,store,npc,buffer);
+            var approach=CourierWorkService.approach(world,task.bed().point(),position,state.routeRetries.approachAttempt(site.id(),now));
+            if(approach==null){state.routeRetries.failed(site.id(),now);state.retryAt=now+1000;state.growerSite=null;return false;}
+            var registry=AetherhavenWorldRegistries.getOrCreatePoiRegistry(world,plugin);
+            VillagerAutonomySystem.abortActivePoiUseAndDismount(ref,store,buffer,autonomy,needs,registry,false);
+            autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);autonomy.clearTravelAndPoiState();
+            buffer.putComponent(ref,VillagerAutonomyState.getComponentType(),autonomy);
+            var tourist=store.getComponent(ref,com.hexvane.aetherhaven.tourist.TouristAutonomyState.getComponentType());
+            if(tourist!=null){tourist.clearVisitPlot();tourist.clearTravelTarget();tourist.resetAutonomyStallTracking();tourist.setPhase(0);buffer.putComponent(ref,com.hexvane.aetherhaven.tourist.TouristAutonomyState.getComponentType(),tourist);}
+            state.approach=approach;state.active=true;state.beganAt=now;state.nextVisual=0;
+            state.growerBed=task.bed().point();state.growerJob=task.job();
+        }
+        // The bed must still want the job the worker set out to do. A full store or a changed crop ends the visit.
+        var habitat=GrowerSiteService.sync(world,site);
+        var bed=grower.bed(state.growerBed);var crop=grower.chosen(plan);var job=state.growerJob;var target=state.growerBed;
+        if(habitat==null||!habitat.ready()||bed==null||crop==null||crop.skill()>skill||grower.full(plan,crop)
+            ||job!=grower.job(plan,bed,GrowerSiteService.ripe(world,plan,target))) {
+            claims.remove(site.id());stop(ref,npc,buffer,state);return false;
+        }
+        claims.put(site.id(),new Claim(worker,now+1500));
+        if(store.getComponent(ref,com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType())!=null)return true;
+        if(!CourierWorkService.clearApproach(world,state.approach)||now-state.beganAt>30_000&&!state.working) {
+            state.routeRetries.failed(site.id(),now);claims.remove(site.id());state.retryAt=now+1000;stop(ref,npc,buffer,state);return false;
+        }
+        if(!CourierWorkService.arrived(position,state.approach)) {
+            if(state.working)stopVisual(ref,buffer,state);
+            WorkTravelRecovery.keepMoving(ref,store,buffer,npc,position,state.approach,now);
+            npc.setLeashPoint(new Vector3d(state.approach));VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
+            VillagerDoorUtil.tryOpenDoorsTowardLeash(world,position,state.approach,null);buffer.putComponent(ref,NPCEntity.getComponentType(),npc);return true;
+        }
+        if(!state.working)state.routeRetries.succeeded(site.id());
+        state.working=true;NpcStandStill.hold(ref,store,npc,state.approach,buffer);
+        if(now>=state.nextVisual) {
+            // Bushes are watered with the can farmers use. Logs and picking are worked by hand.
+            boolean watering=!plan.logBeds()&&job==GrowerSite.Job.TEND;
+            state.nextVisual=now+(watering?2500:VillagerLifeTiming.durationMs("Tend"));
+            PoiAutonomyVisuals.applyBodyYaw(ref,store,buffer,(float)(Math.atan2(target.x()+.5-position.x,target.z()+.5-position.z)+Math.PI));
+            buffer.run(st->{if(!ref.isValid())return;
+                if(watering)VillagerLifeProps.equip(ref,"WaterCrops",st);else VillagerLifeProps.clear(ref,st);
+                AnimationUtils.playAnimation(ref,AnimationSlot.Action,watering?"Aetherhaven_Work_Actions":NpcFaceVisuals.itemAnimationsForFaceRig(ref,"Aetherhaven_Life_Actions",st),watering?"WaterCrops":"Tend",true,st);});
+        }
+        if(grower.work(plan,bed,job,dt,true,
+            com.hexvane.aetherhaven.restaurant.RestaurantMeals.work(needs,com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,site.type().skill,plugin.getProfessionKits())))) {
+            var area=site.area();boolean watering=!plan.logBeds()&&job==GrowerSite.Job.TEND;
+            buffer.run(st->{
+                if(!eligibleAtCommit(ref,st,town,worker,site.type())
+                    ||town.getApprenticeWorkplaces().find(site.id())!=site||!area.equals(site.area()))return;
+                var actual=st.getComponent(ref,TransformComponent.getComponentType());
+                if(actual==null||actual.getPosition().distanceSquared(target.x()+.5,target.y(),target.z()+.5)>16)return;
+                boolean done=GrowerSiteService.complete(world,site,target,job);
+                if(done&&watering)com.hypixel.hytale.server.core.universe.world.ParticleUtil.spawnParticleEffect("Water_Can_Splash",new Vector3d(target.x()+.5,target.y()+.1,target.z()+.5),st);
+                TownsfolkMastery.completed(progress,switch(job){case SEED->TownsfolkMastery.Work.GROWER_SEED;case TEND->TownsfolkMastery.Work.GROWER_TEND;case PICK->TownsfolkMastery.Work.GROWER_PICK;},done);
+                var current=st.getComponent(ref,ApprenticeWorkState.getComponentType());
+                if(current!=null&&!done)current.routeRetries.failed(site.id(),now);
+                if(done&&job==GrowerSite.Job.PICK)town.getWarehouse().markProductionWithdrawal();
+                manager.updateTown(town);
+            });
+            // The next bed is chosen on the next decision, so the worker walks from bed to bed.
+            claims.remove(site.id());state.retryAt=now+500;stop(ref,npc,buffer,state);return true;
+        }
+        if(now>=state.nextSave){manager.updateTown(town);state.nextSave=now+2000;}
         return true;
     }
     private static boolean excavationUsable(World world,TownRecord town,ApprenticeWorkplace site,AetherhavenPlugin plugin,TownsfolkProgress progress) {
@@ -459,7 +561,7 @@ public final class ApprenticeWorkService {
                 VillagerWorkVisuals.tickHit(ref,store,buffer,npc,visual,TownVillagerBinding.KIND_MINER,now,0);
             }
         }
-        if(!movingCargo)plan.attend(dt,true,com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,TownsfolkSkill.MINING,plugin.getProfessionKits()));
+        if(!movingCargo)plan.attend(dt,true,com.hexvane.aetherhaven.restaurant.RestaurantMeals.work(needs,com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,TownsfolkSkill.MINING,plugin.getProfessionKits())));
         boolean complete=movingCargo?now-state.beganAt>=1000:plan.work()>=(fitting?3:NativeExcavation.duration(plan.next()));
         if(complete) {
             var planId=plan.id();var standing=new Vector3d(state.approach);
@@ -513,55 +615,76 @@ public final class ApprenticeWorkService {
         NPCEntity npc,VillagerNeeds needs,VillagerAutonomyState autonomy,TownRecord town,TownManager manager,AetherhavenPlugin plugin,
         TownsfolkProgress progress,String worker,ApprenticeWorkState state,Map<UUID,Claim> claims,long now) {
         var world=store.getExternalData().getWorld();var site=town.getApprenticeWorkplaces().find(state.buildingSite);
-        var claim=site==null?null:claims.get(site.id());
-        if(site==null||!buildingUsable(world,town,site,progress)||claim!=null&&claim.until()>now&&!worker.equals(claim.worker())){stop(ref,npc,buffer,state);return false;}
+        if(site==null||!buildingUsable(world,town,site,progress)){if(site!=null)site.building().release(worker);stop(ref,npc,buffer,state);return false;}
         if(state.furnishingEquipment==null||!site.id().equals(state.furnishingSite)||!site.area().equals(state.furnishingArea)||now>=state.nextFurnishingCheck) {
             state.furnishingEquipment=WorkplaceEquipment.scan(world,site.area());state.furnishingSite=site.id();state.furnishingArea=site.area();state.nextFurnishingCheck=now+1000;
         }
         if(state.furnishingEquipment.requirement(WorkplaceEquipment.BUILDERS_BENCH,1)!=null){stop(ref,npc,buffer,state);state.retryAt=now+2000;return false;}
         var position=store.getComponent(ref,TransformComponent.getComponentType()).getPosition();
+        // Between pieces a builder fetches loose items off the site. CourierWorkService then walks the load to storage.
+        if(state.salvageTarget!=null||!state.active){var fetching=tickSalvage(ref,store,buffer,npc,needs,autonomy,town,manager,plugin,progress,worker,state,site,position,now);if(fetching!=null)return fetching;}
         if(state.active&&!NativeBuildingWork.valid(world,town,site,state.buildingTarget)){stop(ref,npc,buffer,state);return true;}
+        // The builder's real size, from the engine: stands and reach are judged with it, not with one block by two.
+        var body=com.hexvane.aetherhaven.construction.assembly.SiteBodies.localBox(store,ref);
         if(!state.active) {
-            NativeBuildingWork.Target chosen=null;Vector3d approach=null;
+            NativeBuildingWork.Target chosen=null;Vector3d approach=null;boolean taken=false;
+            // Cells of any running site that are still to be filled: nobody is sent to stand in one.
+            var unbuilt=com.hexvane.aetherhaven.construction.assembly.SiteCells.unbuiltSolid(world);
+            java.util.List<com.hexvane.aetherhaven.construction.assembly.SiteBodies.Body> others=null;
             for(var candidate:NativeBuildingWork.candidates(world,town,site,position)) {
+                // Another builder of this yard is already on that piece: take the next nearest instead.
+                if(site.building().heldByAnother(worker,candidate.cell(),now)){taken=true;continue;}
+                // Someone is standing where this piece goes. It could not be placed now, so take another and come back.
+                if(others==null){
+                    others=com.hexvane.aetherhaven.construction.assembly.SiteBodies.near(store,candidate.cell().x()+.5,candidate.cell().y()+.5,candidate.cell().z()+.5,32);
+                    others.removeIf(other->ref.equals(other.ref()));
+                }
+                var pieceBox=NativeBuildingWork.pieceBox(candidate);
+                if(pieceBox!=null&&com.hexvane.aetherhaven.construction.assembly.SiteBodies.blocker(others,candidate.cell().x(),candidate.cell().y(),candidate.cell().z(),pieceBox)!=null){taken=true;continue;}
                 // Search beneath a wall cell as well as beside it, without granting distant or vertical work.
                 for(int down=0;down<=3;down++) {
                     var point=new WarehouseBatch.Point(candidate.cell().x(),candidate.cell().y()-down,candidate.cell().z());
-                    var stand=CourierWorkService.approach(world,point,position,state.routeRetries.approachAttempt(site.id(),now));
-                    if(stand!=null&&NativeBuildingWork.inReach(stand,candidate)){chosen=candidate;approach=stand;break;}
+                    var stand=CourierWorkService.approach(world,point,position,state.routeRetries.approachAttempt(site.id(),now),
+                        spot->!com.hexvane.aetherhaven.construction.assembly.SiteCells.bodyIn(unbuilt,spot.x,spot.y,spot.z,body)&&NativeBuildingWork.inReach(spot,body,candidate));
+                    if(stand!=null){chosen=candidate;approach=stand;break;}
                 }
                 if(chosen!=null)break;
             }
-            if(chosen==null){state.routeRetries.failed(site.id(),now);stop(ref,npc,buffer,state);state.retryAt=now+1000;return false;}
+            // Pieces that are merely taken are not a blocked route: look again shortly instead of backing off the yard.
+            if(chosen==null){if(!taken)state.routeRetries.failed(site.id(),now);stop(ref,npc,buffer,state);state.retryAt=now+1000;return false;}
             CourierWorkService.interrupt(ref,store,npc,buffer);
             var registry=AetherhavenWorldRegistries.getOrCreatePoiRegistry(world,plugin);
             VillagerAutonomySystem.abortActivePoiUseAndDismount(ref,store,buffer,autonomy,needs,registry,false);
             autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);autonomy.clearTravelAndPoiState();buffer.putComponent(ref,VillagerAutonomyState.getComponentType(),autonomy);
             var tourist=store.getComponent(ref,com.hexvane.aetherhaven.tourist.TouristAutonomyState.getComponentType());
             if(tourist!=null){tourist.clearVisitPlot();tourist.clearTravelTarget();tourist.resetAutonomyStallTracking();tourist.setPhase(0);buffer.putComponent(ref,com.hexvane.aetherhaven.tourist.TouristAutonomyState.getComponentType(),tourist);}
-            state.buildingTarget=chosen;state.approach=approach;state.active=true;state.beganAt=now;state.nextVisual=0;site.building().focus(chosen.cell());
+            state.buildingTarget=chosen;state.approach=approach;state.active=true;state.beganAt=now;state.nextVisual=0;
         }
-        claims.put(site.id(),new Claim(worker,now+1500));
+        // Renewed every tick so the piece stays this builder's on the walk over; lost only if they stopped coming.
+        if(!site.building().focus(worker,state.buildingTarget.cell(),now)){site.building().release(worker);stop(ref,npc,buffer,state);state.retryAt=now+250;return false;}
         if(!CourierWorkService.clearApproach(world,state.approach)||now-state.beganAt>30000&&!state.working) {
-            claims.remove(site.id());state.routeRetries.failed(site.id(),now);stop(ref,npc,buffer,state);state.retryAt=now+1000;return false;
+            site.building().release(worker);state.routeRetries.failed(site.id(),now);stop(ref,npc,buffer,state);state.retryAt=now+1000;return false;
         }
         if(store.getComponent(ref,com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType())!=null)return true;
         if(!CourierWorkService.arrived(position,state.approach)) {
             if(state.working)stopVisual(ref,buffer,state);
+            // A builder walks to the next piece hammer in hand. The carrying flag is what makes stop() put it away.
+            if(state.nextVisual==0){state.nextVisual=BuilderWorkVisuals.CARRIED_STRIKE_DUE;state.excavationCarrying=true;BuilderWorkVisuals.carry(ref,buffer,plugin.getEquipmentProfileCatalog());}
             WorkTravelRecovery.keepMoving(ref,store,buffer,npc,position,state.approach,now);
             npc.setLeashPoint(new Vector3d(state.approach));VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
             VillagerDoorUtil.tryOpenDoorsTowardLeash(world,position,state.approach,null);buffer.putComponent(ref,NPCEntity.getComponentType(),npc);return true;
         }
         var target=state.buildingTarget;int tier=state.furnishingEquipment.tier(WorkplaceEquipment.BUILDERS_BENCH);
-        if(!NativeBuildingWork.inReach(position,target)){stop(ref,npc,buffer,state);return false;}
+        if(!NativeBuildingWork.inReach(position,body,target)){stop(ref,npc,buffer,state);return false;}
         state.routeRetries.succeeded(site.id());state.working=true;NpcStandStill.hold(ref,store,npc,state.approach,buffer);
         PoiAutonomyVisuals.applyBodyYaw(ref,store,buffer,(float)(Math.atan2(target.cell().x()+.5-position.x,target.cell().z()+.5-position.z)+Math.PI));
         if(now>=state.nextVisual) {
-            state.nextVisual=now+1000;buffer.run(st->{if(ref.isValid())VillagerLifeProps.carry(ref,"Tool_Hammer_Iron",st);});
-            com.hexvane.aetherhaven.builder.BuilderConstructionVisuals.swingHammer(ref,store,buffer,npc);
+            // One pass of the hammering clip, started again as it ends. The tool and the clip are named in work_builder.json.
+            state.nextVisual=now+BuilderWorkVisuals.strikeIntervalMs(plugin.getEquipmentProfileCatalog());
+            BuilderWorkVisuals.strike(ref,buffer,plugin.getEquipmentProfileCatalog());
         }
-        site.building().attend(target.cell(),dt,true,com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,TownsfolkSkill.BUILDING,plugin.getProfessionKits())*state.furnishingEquipment.workMultiplier(site.type()));
-        if(site.building().ready(target.cell(),BuildingOrders.duration(progress.skill(TownsfolkSkill.BUILDING),tier))) {
+        site.building().attend(worker,target.cell(),dt,true,com.hexvane.aetherhaven.restaurant.RestaurantMeals.work(needs,com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,TownsfolkSkill.BUILDING,plugin.getProfessionKits())*state.furnishingEquipment.workMultiplier(site.type())),now);
+        if(site.building().ready(worker,target.cell(),BuildingOrders.duration(progress.skill(TownsfolkSkill.BUILDING),tier))) {
             var area=site.area();var standing=new Vector3d(state.approach);
             buffer.run(st->{
                 var identity=ref.isValid()?st.getComponent(ref,TownsfolkCharacterBinding.getComponentType()):null;
@@ -575,14 +698,77 @@ public final class ApprenticeWorkService {
                     ||!CourierWorkService.arrived(actual.getPosition(),standing)||!CourierWorkService.clearApproach(world,standing)
                     ||!TownEconomyPresence.hasMemberHere(store,town))return;
                 var equipment=WorkplaceEquipment.scan(world,site.area());
-                if(equipment.requirement(WorkplaceEquipment.BUILDERS_BENCH,1)==null&&NativeBuildingWork.place(world,plugin,town,site,target,actual.getPosition(),current.skill(TownsfolkSkill.BUILDING),equipment.tier(WorkplaceEquipment.BUILDERS_BENCH))) {
+                if(equipment.requirement(WorkplaceEquipment.BUILDERS_BENCH,1)==null&&NativeBuildingWork.place(world,plugin,town,site,target,worker,actual.getPosition(),current.skill(TownsfolkSkill.BUILDING),equipment.tier(WorkplaceEquipment.BUILDERS_BENCH))) {
                     TownsfolkMastery.completed(current,TownsfolkMastery.Work.BUILDING_BLOCK,true);
                     manager.updateTown(town);
                 }
             });
             stop(ref,npc,buffer,state);state.retryAt=now+250;
+            // The hammer stays in hand for the short pause before the next piece. stop() puts it away when no piece follows.
+            state.excavationCarrying=true;state.nextVisual=now+HAMMER_BETWEEN_PIECES_MS;BuilderWorkVisuals.carry(ref,buffer,plugin.getEquipmentProfileCatalog());
         }else if(now>=state.nextSave){manager.updateTown(town);state.nextSave=now+2000;}
         return true;
+    }
+    /**
+     * A builder between pieces walks to the nearest loose item on the site and picks up what lies around it.
+     * {@link com.hexvane.aetherhaven.construction.SiteSalvage} decides what may be taken; this is only the walk.
+     *
+     * @return null when there is nothing to fetch now and building carries on
+     */
+    private static Boolean tickSalvage(Ref<EntityStore> ref,Store<EntityStore> store,CommandBuffer<EntityStore> buffer,NPCEntity npc,
+        VillagerNeeds needs,VillagerAutonomyState autonomy,TownRecord town,TownManager manager,AetherhavenPlugin plugin,
+        TownsfolkProgress progress,String worker,ApprenticeWorkState state,ApprenticeWorkplace site,Vector3d position,long now) {
+        var world=store.getExternalData().getWorld();
+        if(state.salvageTarget==null) {
+            if(now<state.nextSalvage)return null;
+            state.nextSalvage=now+com.hexvane.aetherhaven.construction.SiteSalvage.SCAN_MS;
+            // No finished Warehouse, no ledger desk in live terrain or hands holding a delivery: nothing is picked up.
+            var room=com.hexvane.aetherhaven.construction.SiteSalvage.storageReady(world,manager,town,plugin)
+                ?town.getWarehouse().salvageRoom(worker,com.hexvane.aetherhaven.construction.SiteSalvage.carryStacks(progress,plugin.getProfessionKits())):null;
+            if(room==null)return null;
+            var areas=com.hexvane.aetherhaven.construction.SiteSalvage.areas(town,site,order->NativeBuildingWork.issue(world,town,order)==null);
+            var found=com.hexvane.aetherhaven.construction.SiteSalvage.nearest(buffer,world,areas,worker,room,position,now);
+            if(found==null) {
+                // Hands full or nothing left to fetch: a load in hand goes to storage now, before the next piece.
+                state.salvageHold=0;if(!room.carrying())return null;
+                stop(ref,npc,buffer,state);return false;
+            }
+            var stand=CourierWorkService.approach(world,found.cell(),position,0,-1,1);
+            // Out of reach: it is left lying and the next look, a tick from now, skips it.
+            if(stand==null){com.hexvane.aetherhaven.construction.SiteSalvage.unreachable(world,found.item(),now);state.nextSalvage=now;return null;}
+            CourierWorkService.interrupt(ref,store,npc,buffer);
+            var registry=AetherhavenWorldRegistries.getOrCreatePoiRegistry(world,plugin);
+            VillagerAutonomySystem.abortActivePoiUseAndDismount(ref,store,buffer,autonomy,needs,registry,false);
+            autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);autonomy.clearTravelAndPoiState();buffer.putComponent(ref,VillagerAutonomyState.getComponentType(),autonomy);
+            var tourist=store.getComponent(ref,com.hexvane.aetherhaven.tourist.TouristAutonomyState.getComponentType());
+            if(tourist!=null){tourist.clearVisitPlot();tourist.clearTravelTarget();tourist.resetAutonomyStallTracking();tourist.setPhase(0);buffer.putComponent(ref,com.hexvane.aetherhaven.tourist.TouristAutonomyState.getComponentType(),tourist);}
+            state.salvageTarget=found.item();state.buildingTarget=null;state.approach=stand;state.active=true;state.working=false;state.beganAt=now;state.nextVisual=0;
+        }
+        var target=state.salvageTarget;
+        var lying=com.hexvane.aetherhaven.construction.SiteSalvage.pickable(buffer,target)==null?null:buffer.getComponent(target,TransformComponent.getComponentType());
+        // Someone else took it, or it is gone: look for the next one.
+        if(lying==null){com.hexvane.aetherhaven.construction.SiteSalvage.release(world,target,worker);state.nextSalvage=now;stop(ref,npc,buffer,state);return true;}
+        com.hexvane.aetherhaven.construction.SiteSalvage.claim(world,target,worker,now);
+        // What is already in hand stays there while the builder is still gathering.
+        state.salvageHold=now+com.hexvane.aetherhaven.construction.SiteSalvage.HOLD_MS;
+        if(store.getComponent(ref,com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType())!=null)return true;
+        double reach=com.hexvane.aetherhaven.construction.SiteSalvage.REACH;
+        if(CourierWorkService.arrived(position,state.approach)||position.distanceSquared(lying.getPosition())<=reach*reach) {
+            var areas=com.hexvane.aetherhaven.construction.SiteSalvage.areas(town,site,order->NativeBuildingWork.issue(world,town,order)==null);
+            int taken=com.hexvane.aetherhaven.construction.SiteSalvage.collect(buffer,areas,town.getWarehouse(),
+                com.hexvane.aetherhaven.construction.SiteSalvage.storageReady(world,manager,town,plugin),worker,
+                com.hexvane.aetherhaven.construction.SiteSalvage.carryStacks(progress,plugin.getProfessionKits()),position,
+                item->buffer.tryRemoveEntity(item,RemoveReason.REMOVE));
+            if(taken>0)manager.updateTown(town);
+            else com.hexvane.aetherhaven.construction.SiteSalvage.unreachable(world,target,now);
+            state.nextSalvage=now;stop(ref,npc,buffer,state);return true;
+        }
+        if(!CourierWorkService.clearApproach(world,state.approach)||now-state.beganAt>com.hexvane.aetherhaven.construction.SiteSalvage.WALK_MS) {
+            com.hexvane.aetherhaven.construction.SiteSalvage.unreachable(world,target,now);state.nextSalvage=now;stop(ref,npc,buffer,state);return true;
+        }
+        WorkTravelRecovery.keepMoving(ref,store,buffer,npc,position,state.approach,now);
+        npc.setLeashPoint(new Vector3d(state.approach));VillagerAutonomySystem.applyAutonomyRoleState(ref,npc,buffer);
+        VillagerDoorUtil.tryOpenDoorsTowardLeash(world,position,state.approach,null);buffer.putComponent(ref,NPCEntity.getComponentType(),npc);return true;
     }
     private static boolean usable(com.hypixel.hytale.server.core.universe.world.World world,WarehouseBatch batch,TownRecord town,AetherhavenPlugin plugin,TownsfolkProgress progress) {
         if(batch==null||batch.destination()==null)return false;
@@ -618,6 +804,7 @@ public final class ApprenticeWorkService {
             if(claim!=null&&claim.until()>now&&!worker.equals(claim.worker()))continue;
             if(excavationUsable(world,town,site,plugin,progress))best=Math.min(best,progress.priority(TownsfolkWorkType.MINING));
             if(buildingUsable(world,town,site,progress))best=Math.min(best,progress.priority(TownsfolkWorkType.BUILDING));
+            if(growerUsable(world,site,progress,null))best=Math.min(best,progress.priority(site.type()));
             if(WorkplaceFood.supports(site.type())&&site.food().needsTending()&&progress.canPerform(site.type(),false,false,true)
                 &&FoodSiteService.inspect(world,site).ready())best=Math.min(best,progress.priority(site.type()));
         }
@@ -626,6 +813,8 @@ public final class ApprenticeWorkService {
     public static void interrupt(Ref<EntityStore> ref,Store<EntityStore> store,NPCEntity npc,CommandBuffer<EntityStore> buffer) {
         var state=store.getComponent(ref,ApprenticeWorkState.getComponentType());
         stop(ref,npc,buffer,state);
+        // Other work, rest or a conversation takes over: a hammer kept out between pieces goes away at once.
+        if(state!=null&&state.excavationCarrying)stopVisual(ref,buffer,state);
     }
     private static void stopVisual(Ref<EntityStore> ref,CommandBuffer<EntityStore> buffer,ApprenticeWorkState state) {
         state.working=false;state.excavationCarrying=false;state.nextVisual=0;
@@ -635,8 +824,10 @@ public final class ApprenticeWorkService {
     private static void stop(Ref<EntityStore> ref,NPCEntity npc,CommandBuffer<EntityStore> buffer,ApprenticeWorkState state) {
         if(state==null)return;
         state.excavationGeneration++;
-        state.foodSite=null;state.excavationSite=null;state.buildingSite=null;state.buildingTarget=null;
-        if(!state.active)return;
+        state.foodSite=null;state.excavationSite=null;state.buildingSite=null;state.buildingTarget=null;state.salvageTarget=null;
+        state.growerSite=null;state.growerBed=null;state.growerJob=null;
+        // A builder between pieces is not active but has the hammer out until nextVisual. Choosing a piece resets that.
+        if(!state.active){if(state.excavationCarrying&&System.currentTimeMillis()>=state.nextVisual)stopVisual(ref,buffer,state);return;}
         if(state.working||state.excavationCarrying)stopVisual(ref,buffer,state);
         NpcStandStill.release(ref,npc,buffer);state.active=false;state.approach=null;buffer.putComponent(ref,ApprenticeWorkState.getComponentType(),state);
     }

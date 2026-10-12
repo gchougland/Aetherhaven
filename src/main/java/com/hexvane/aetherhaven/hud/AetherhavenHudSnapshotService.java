@@ -86,7 +86,7 @@ public final class AetherhavenHudSnapshotService {
         long treasuryCoins = town != null ? Math.max(0L, town.getTreasuryGoldCoinCount()) : 0L;
         List<HudQuestEntry> quests =
             preferences.isHudShowQuests()
-                ? questEntries(town, worldProgress, playerProgress, store, preferences.getPinnedQuestIds())
+                ? pinnedQuests(town, worldProgress, playerProgress, store, preferences.getPinnedQuestIds())
                 : List.of();
         return new AetherhavenHudSnapshot(
             preferences.isHudShowTime(),
@@ -103,8 +103,12 @@ public final class AetherhavenHudSnapshotService {
         );
     }
 
+    /**
+     * The rows the quest tracker draws for a list of pins: the pins that still name something active, in order, with
+     * the title and the line each shows.
+     */
     @Nonnull
-    private List<HudQuestEntry> questEntries(
+    public List<HudQuestEntry> pinnedQuests(
         @Nullable TownRecord town,
         @Nullable WorldNpcPlayerProgress worldProgress,
         @Nullable PlayerQuestProgress playerProgress,

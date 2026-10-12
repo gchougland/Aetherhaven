@@ -11,6 +11,8 @@ public final class CoreVillagerMastery {
     private int level = 1;
     private long xp;
     private String toolData;
+    /** Work that has not yet added up to one XP, for villagers whose single pieces of work are worth less than one. */
+    private int workTowardXp;
     private transient ItemStack tool;
 
     public int level() { return Math.clamp(level, 1, MAX_LEVEL); }
@@ -28,6 +30,20 @@ public final class CoreVillagerMastery {
         }
         return amount - remaining;
     }
+    /**
+     * Award for work worth a fraction of an XP each, such as one block the Builder places. Whole points are paid at
+     * once and the rest is kept for the next call, so nothing is lost between two steps of the same job.
+     *
+     * @return the XP paid now
+     */
+    public long earnWork(long units, int unitsPerXp) {
+        if (units <= 0 || unitsPerXp <= 0 || level() == MAX_LEVEL) return 0;
+        long total = workTowardXp() % unitsPerXp + units;
+        long earned = earnXp(total / unitsPerXp);
+        workTowardXp = level() == MAX_LEVEL ? 0 : (int) (total % unitsPerXp);
+        return earned;
+    }
+    public int workTowardXp() { return Math.max(0, workTowardXp); }
     public boolean train() {
         if (level() == MAX_LEVEL) return false;
         xp = xpInLevel();

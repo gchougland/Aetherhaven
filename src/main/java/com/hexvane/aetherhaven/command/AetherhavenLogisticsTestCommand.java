@@ -55,13 +55,13 @@ final class AetherhavenLogisticsTestCommand extends AbstractPlayerCommand {
                     if(inputs==null||Arrays.stream(inputs).anyMatch(m->m==null||m.getItemId()==null)) {
                         report(ctx,"This fixture needs explicit item ingredients: "+recipeId);continue;
                     }
-                    String error=site.orders().add(site.orders().revision(),recipeId,WorkplaceOrders.Mode.COUNT,1);
+                    String error=site.orders().add(recipeId,WorkplaceOrders.Mode.COUNT,1);
                     if(error!=null){report(ctx,error);continue;}
                     var inventory=new com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer((short)1);
                     for(var material:inputs) {
                         var stack=material.toItemStack();
                         inventory.setItemStackForSlot((short)0,stack,false);
-                        var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,(short)0,stack,TownWarehouse.Amount.STACK,town.getWarehouse().revision());
+                        var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,(short)0,stack,TownWarehouse.Amount.STACK);
                         report(ctx,"Artisan test supplies: "+stack.getItemId()+" x"+moved.moved()+" of "+stack.getQuantity());
                     }
                     manager.updateTown(town);
@@ -73,13 +73,13 @@ final class AetherhavenLogisticsTestCommand extends AbstractPlayerCommand {
                 var site=town.getApprenticeWorkplaces().sites().stream().filter(s->s.type()==TownsfolkWorkType.ALCHEMY).findFirst().orElse(null);
                 if(site==null){report(ctx,"Create an alchemy workplace first.");return;}
                 if(site.orders().list().stream().anyMatch(o->"brew_antidote".equals(o.recipeId()))){report(ctx,"An antidote test task already exists. Use the workplace menu to add more.");return;}
-                String error=site.orders().add(site.orders().revision(),"brew_antidote",WorkplaceOrders.Mode.COUNT,1);
+                String error=site.orders().add("brew_antidote",WorkplaceOrders.Mode.COUNT,1);
                 if(error!=null){report(ctx,error);return;}
                 var supplies=List.of(new ItemStack("Potion_Empty",1),new ItemStack("Ingredient_Fibre",5),new ItemStack("Ingredient_Life_Essence",2));
                 var inventory=new com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer((short)supplies.size());
                 for(short i=0;i<supplies.size();i++) {
                     inventory.setItemStackForSlot(i,supplies.get(i),false);
-                    var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,supplies.get(i),TownWarehouse.Amount.STACK,town.getWarehouse().revision());
+                    var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,supplies.get(i),TownWarehouse.Amount.STACK);
                     report(ctx,"Antidote test supplies: "+supplies.get(i).getItemId()+" x"+moved.moved());
                 }
                 manager.updateTown(town);report(ctx,"Added one antidote task. No venom granted. Couriers must collect earned venom from lodge storage and a skilled alchemist must brew it.");
@@ -118,12 +118,12 @@ final class AetherhavenLogisticsTestCommand extends AbstractPlayerCommand {
                 }
                 error=sites.save(town,null,TownsfolkWorkType.JEWELRY,area,"Test Jeweler");
                 if(error!=null){report(ctx,error);return;}
-                var site=sites.sites().getLast();site.orders().add(0,recipe.id(),WorkplaceOrders.Mode.COUNT,1);
+                var site=sites.sites().getLast();site.orders().add(recipe.id(),WorkplaceOrders.Mode.COUNT,1);
                 var supplies=List.of(new ItemStack("Ingredient_Bar_Silver",5),new ItemStack("Rock_Gem_Ruby",1),new ItemStack("Ingredient_Life_Essence",1));
                 var inventory=new com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer((short)supplies.size());
                 for(short i=0;i<supplies.size();i++) {
                     inventory.setItemStackForSlot(i,supplies.get(i),false);
-                    var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,supplies.get(i),TownWarehouse.Amount.STACK,town.getWarehouse().revision());
+                    var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,supplies.get(i),TownWarehouse.Amount.STACK);
                     report(ctx,"Granted jeweler test supplies: "+supplies.get(i).getItemId()+" x"+moved.moved());
                 }
                 manager.updateTown(town);report(ctx,"Created Test Jeweler with one Common silver ruby ring task. Delivery and work must happen normally.");
@@ -148,12 +148,12 @@ final class AetherhavenLogisticsTestCommand extends AbstractPlayerCommand {
                 }
                 error=sites.save(town,null,TownsfolkWorkType.ARMOR_CRAFTING,area,"Test Armory");
                 if(error!=null){report(ctx,error);return;}
-                sites.sites().getLast().orders().add(0,recipe.id(),WorkplaceOrders.Mode.COUNT,1);
+                sites.sites().getLast().orders().add(recipe.id(),WorkplaceOrders.Mode.COUNT,1);
                 var inputs=recipe.source().getInput();
                 var inventory=new com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer((short)inputs.length);
                 for(short i=0;i<inputs.length;i++) {
                     var stack=inputs[i].toItemStack();inventory.setItemStackForSlot(i,stack,false);
-                    var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,stack,TownWarehouse.Amount.STACK,town.getWarehouse().revision());
+                    var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,stack,TownWarehouse.Amount.STACK);
                     report(ctx,"Granted armory test supplies: "+stack.getItemId()+" x"+moved.moved());
                 }
                 manager.updateTown(town);report(ctx,"Created Test Armory with one Copper Knight Kit order. Couriers and Apprentices must deliver and craft normally.");
@@ -166,10 +166,10 @@ final class AetherhavenLogisticsTestCommand extends AbstractPlayerCommand {
                 var inventory=new com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer((short)supplies.size());
                 for(short i=0;i<supplies.size();i++) {
                     inventory.setItemStackForSlot(i,supplies.get(i),false);
-                    var transfer=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,supplies.get(i),TownWarehouse.Amount.STACK,town.getWarehouse().revision());
+                    var transfer=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,supplies.get(i),TownWarehouse.Amount.STACK);
                     report(ctx,"Granted kit test supplies to General storage: "+supplies.get(i).getItemId()+" x"+transfer.moved());
                 }
-                String error=site.orders().add(site.orders().revision(),"craft_smith_kit",WorkplaceOrders.Mode.COUNT,1);
+                String error=site.orders().add("craft_smith_kit",WorkplaceOrders.Mode.COUNT,1);
                 manager.updateTown(town);
                 report(ctx,error==null?"Added one smith kit task. Normal skill, courier, equipment, wage and physical work checks still apply.":error);
             }
@@ -314,7 +314,7 @@ final class AetherhavenLogisticsTestCommand extends AbstractPlayerCommand {
                 var error=sites.unlock(town,TownsfolkWorkType.BLACKSMITHING);
                 if(error==null)error=sites.save(town,null,TownsfolkWorkType.BLACKSMITHING,area,"Test Smithy");
                 if(error!=null){report(ctx,error);return;}
-                var site=sites.sites().getLast();site.orders().add(0,"forge_copper_sword",WorkplaceOrders.Mode.COUNT,1);
+                var site=sites.sites().getLast();site.orders().add("forge_copper_sword",WorkplaceOrders.Mode.COUNT,1);
                 manager.updateTown(town);report(ctx,"Created Test Smithy with one copper sword order at "+area+". Place an anvil inside it.");
             }
             case "stock" -> {
@@ -322,7 +322,7 @@ final class AetherhavenLogisticsTestCommand extends AbstractPlayerCommand {
                 var supplies=List.of(new ItemStack("Ingredient_Bar_Copper",4),new ItemStack("Ingredient_Fibre",3));
                 for(short i=0;i<supplies.size();i++) {
                     inventory.setItemStackForSlot(i,supplies.get(i),false);
-                    var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,supplies.get(i),TownWarehouse.Amount.STACK,town.getWarehouse().revision());
+                    var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,supplies.get(i),TownWarehouse.Amount.STACK);
                     report(ctx,"Granted test supplies to General storage: "+supplies.get(i).getItemId()+" x"+moved.moved());
                 }
                 manager.updateTown(town);

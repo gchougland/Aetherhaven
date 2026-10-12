@@ -57,7 +57,8 @@ public final class QuestCraftProgressSystem extends EntityEventSystem<EntityStor
             return;
         }
         changed |= PlayerQuestProgressionService.tryCompleteActiveQuests(plugin, progress);
-        store.putComponent(playerRef, PlayerQuestProgress.getComponentType(), progress);
+        // An event system runs while the store is being processed, so the write goes through the command buffer.
+        commandBuffer.putComponent(playerRef, PlayerQuestProgress.getComponentType(), progress);
         World world = store.getExternalData().getWorld();
         if (world != null) {
             AetherhavenHudRefreshSystem.requestRefresh(world);

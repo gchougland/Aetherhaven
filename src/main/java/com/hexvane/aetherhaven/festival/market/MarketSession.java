@@ -29,6 +29,8 @@ public final class MarketSession {
     private final int[] slotQuantities = new int[MarketIds.SLOT_COUNT];
     @Nullable
     private SimpleItemContainer liveContainer;
+    @Nullable
+    private UUID stallKeeper;
     @Nonnull
     private final List<UUID> playerDisplayUuids = new ArrayList<>();
     @Nonnull
@@ -146,6 +148,16 @@ public final class MarketSession {
     @Nullable
     public SimpleItemContainer getLiveContainer() {
         return liveContainer;
+    }
+
+    /** The town member who last opened the stall; goods nobody collects go back to them. */
+    @Nullable
+    public UUID getStallKeeper() {
+        return stallKeeper;
+    }
+
+    public void setStallKeeper(@Nullable UUID stallKeeper) {
+        this.stallKeeper = stallKeeper;
     }
 
     public void setLiveContainer(@Nullable SimpleItemContainer liveContainer) {
@@ -340,7 +352,13 @@ public final class MarketSession {
         year = 0L;
         Arrays.fill(slotItemIds, null);
         Arrays.fill(slotQuantities, 0);
+        // The goods themselves are saved with the town. A container that stops being the stall is emptied, so a
+        // window still open on it cannot hand out a second copy of what the next stall() reads back.
+        SimpleItemContainer old = liveContainer;
         liveContainer = null;
+        if (old != null) {
+            old.clear();
+        }
         playerDisplayUuids.clear();
         rivalDisplayUuids.clear();
         stallPadUuid = null;

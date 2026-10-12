@@ -42,6 +42,7 @@ public final class RtsBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new RtsExitMovementGuardSystem());
         plugin.getEntityStoreRegistry().registerSystem(new RtsCameraMousePollSystem());
         plugin.getEntityStoreRegistry().registerSystem(new RtsHudRefreshSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new RtsFieldFlagHudSystem());
         plugin.getEntityStoreRegistry().registerSystem(new RtsUncleanSessionRecoverySystem());
         plugin.getEntityStoreRegistry().registerSystem(new RtsOrphanedGuardRecoverySystem());
         plugin.getEntityStoreRegistry().registerSystem(new RtsCommanderNpcDamageFilterSystem());

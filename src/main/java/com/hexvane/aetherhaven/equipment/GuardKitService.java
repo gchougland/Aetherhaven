@@ -11,7 +11,6 @@ import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import java.util.Objects;
 
 /** Equipment exchanges run on the world thread and never grant a free removable starter kit. */
 public final class GuardKitService {
@@ -25,21 +24,23 @@ public final class GuardKitService {
         var stack=progress.guardKit();var kit=ItemStack.isEmpty(stack)?null:catalog.find(stack.getItemId());
         return kit!=null&&kit.guardClass().equals(guardClass)?kit.equipmentProfile():guardClass;
     }
+    /** Swaps the chosen kit with whatever the guard wears at this moment; see {@link ProfessionKitService#equip}. */
     public static String equip(TownsfolkProgress progress, GuardKitCatalog catalog, String guardClass,
-            ItemContainer source, short slot, ItemStack expected, ItemStack previous) {
-        if(!Objects.equals(progress.guardKit(),previous))return "Equipment changed. Choose a kit again.";
-        if(source==null||slot<0||slot>=source.getCapacity()||ItemStack.isEmpty(expected)||expected.getQuantity()!=1
-            ||!expected.equals(source.getItemStack(slot)))return "That kit moved. Choose a kit again.";
+            ItemContainer source, short slot, ItemStack expected) {
+        short at=ProfessionKitService.locate(source,slot,expected);
+        if(at<0)return ProfessionKitService.TAKEN;
         var kit=catalog.find(expected.getItemId());
         if(kit==null)return "This item is not a guard kit.";
         if(!kit.guardClass().equals(guardClass))return "Choose a kit for this guard's class.";
         String encoded=TownsfolkProgress.encodeProfessionKit(expected);
-        if(!source.replaceItemStackInSlot(slot,expected,previous).succeeded())return "That kit moved. Choose a kit again.";
+        if(!source.replaceItemStackInSlot(at,expected,progress.guardKit()).succeeded())return ProfessionKitService.TAKEN;
         progress.setGuardKitData(encoded);return null;
     }
-    public static String unequip(TownsfolkProgress progress,ItemContainer destination,ItemStack expected) {
-        if(ItemStack.isEmpty(expected)||!Objects.equals(progress.guardKit(),expected))return "Equipment changed. Choose a kit again.";
-        if(destination==null||!destination.addItemStack(expected,true,false,true).succeeded())return "Make room in your inventory for the kit.";
+    /** Returns the kit worn at this moment, whichever it is. */
+    public static String unequip(TownsfolkProgress progress,ItemContainer destination) {
+        var worn=progress.guardKit();
+        if(ItemStack.isEmpty(worn))return ProfessionKitService.NONE_WORN;
+        if(destination==null||!destination.addItemStack(worn,true,false,true).succeeded())return "Make room in your inventory for the kit.";
         progress.setGuardKitData(null);return null;
     }
     /** Preflight before touching either inventory. Wounded guards keep their current health fraction. */

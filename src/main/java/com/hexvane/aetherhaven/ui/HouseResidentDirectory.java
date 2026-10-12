@@ -144,6 +144,29 @@ public final class HouseResidentDirectory {
         return out;
     }
 
+    /**
+     * The picker's rows exactly as shown: residents waiting on a house quest first, then everyone else in the order
+     * given, without anyone who already has another bed in this house or does not match the search. Each row carries
+     * the resident's own id, and the page binds that id to the row's button, so reordering or filtering can never
+     * make a click choose a different resident.
+     */
+    @Nonnull
+    public static List<HouseResidentRow> pickerRows(
+        @Nonnull List<HouseResidentRow> assignable,
+        @Nonnull java.util.Set<UUID> waiting,
+        @Nonnull java.util.Set<UUID> occupiedOtherSlots,
+        @Nullable String search
+    ) {
+        List<HouseResidentRow> ordered = new ArrayList<>(assignable.size());
+        for (HouseResidentRow row : assignable) {
+            if (!occupiedOtherSlots.contains(row.entityUuid()) && ResidentSearch.matches(row.displayName(), search)) {
+                ordered.add(row);
+            }
+        }
+        ordered.sort(Comparator.comparing((HouseResidentRow r) -> !waiting.contains(r.entityUuid())));
+        return ordered;
+    }
+
     @Nullable
     public static HouseResidentRow findRow(@Nonnull List<HouseResidentRow> rows, @Nonnull UUID entityUuid) {
         for (HouseResidentRow row : rows) {

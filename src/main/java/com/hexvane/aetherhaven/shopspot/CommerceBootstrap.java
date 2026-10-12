@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.command.AetherhavenInnDebugCommand;
+import com.hexvane.aetherhaven.command.AetherhavenPriceCommand;
 import com.hexvane.aetherhaven.feast.FeastService;
 import com.hexvane.aetherhaven.inn.InnBellUseInteraction;
 import com.hexvane.aetherhaven.inn.InnPoolService;
@@ -116,6 +117,7 @@ public final class CommerceBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new ShopSpotLookAtSystem(core));
         core.registerShopPriceTooltipPackets();
         core.registerAetherhavenSubcommand(new AetherhavenInnDebugCommand());
+        core.registerAetherhavenSubcommand(new AetherhavenPriceCommand());
     }
 
     @Nonnull
@@ -136,6 +138,7 @@ public final class CommerceBootstrap {
                 ShopSpotDailyRerollService.scheduleTickFromHub(world, core, wtr);
                 FurnitureMerchantShopService.scheduleTickFromHub(world, core, wtr);
                 ShopSpotRefreshSystem.onGameMinute(world, store, core, wtr);
+                ShopSpotListingReturns.deliverToOnlineSellers(world, core);
             }
 
             @Override

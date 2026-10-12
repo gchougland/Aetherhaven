@@ -1,0 +1,48 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Environments/Zone1/Environments/Kweebec_Village/Emitters/Wind/Emit_Kweebec_Chimes_01.ogg",
+        "Sounds/Environments/Zone1/Environments/Kweebec_Village/Emitters/Wind/Emit_Kweebec_Chimes_02.ogg",
+        "Sounds/Environments/Zone1/Environments/Kweebec_Village/Emitters/Wind/Emit_Kweebec_Chimes_03.ogg"
+      ],
+      "RandomSettings": {
+        "MinPitch": -2.0,
+        "MaxPitch": 2.0
+      },
+      "StartDelay": 0,
+      "Volume": -2
+    },
+    {
+      "Files": [
+        "Sounds/Deployables/Totem_Heal/Deployable_Totem_Heal_Spawn_01.ogg",
+        "Sounds/Deployables/Totem_Heal/Deployable_Totem_Heal_Spawn_02.ogg",
+        "Sounds/Deployables/Totem_Heal/Deployable_Totem_Heal_Spawn_03.ogg",
+        "Sounds/Deployables/Totem_Heal/Deployable_Totem_Heal_Spawn_04.ogg"
+      ],
+      "RandomSettings": {
+        "MinPitch": -3.0,
+        "MaxPitch": 1.0,
+        "MinVolume": -1.0
+      },
+      "StartDelay": 0.2,
+      "Volume": -5
+    },
+    {
+      "Files": [
+        "Sounds/Items/Gem/Gem_Emit_Shimmer_01.ogg",
+        "Sounds/Items/Gem/Gem_Emit_Shimmer_03.ogg",
+        "Sounds/Items/Gem/Gem_Emit_Shimmer_05.ogg"
+      ],
+      "RandomSettings": {
+        "MinPitch": -2.0,
+        "MaxPitch": 3.0
+      },
+      "StartDelay": 0.9,
+      "Volume": -7
+    }
+  ],
+  "Volume": -4.0,
+  "PreventSoundInterruption": false,
+  "Parent": "SFX_Attn_Moderate"
+}

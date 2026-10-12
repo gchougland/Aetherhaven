@@ -1,0 +1,7 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+// A piece of armor the player carries that fits the slot above it. Selecting it puts it on the statue.
+Button { Anchor: (Width: 42, Height: 42, Horizontal: 2); LayoutMode: CenterMiddle; TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+ Style: (Default: (Background: $T.@Slot), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed), Disabled: (Background: $T.@Inset));
+ ItemIcon #Icon { Anchor: (Width: 34, Height: 34); }
+}

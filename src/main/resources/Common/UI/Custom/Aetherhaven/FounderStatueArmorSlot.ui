@@ -1,0 +1,15 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+// One armor slot of a founder statue: what it wears, a way to take it off, and matching pieces from the pack.
+Group { Anchor: (Width: 206, Right: 12); LayoutMode: Top; Background: $T.@Panel; Padding: (Full: 12);
+ Label #SlotName { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 13, RenderBold: true, HorizontalAlignment: Center, TextColor: #dec68d); }
+ Group { LayoutMode: Center; Anchor: (Height: 84, Top: 4);
+  Group { Anchor: (Width: 84, Height: 84); Background: $T.@Slot; LayoutMode: CenterMiddle;
+   ItemIcon #WornIcon { Anchor: (Width: 64, Height: 64); Visible: false; }
+  }
+ }
+ Label #ItemName { Anchor: (Height: 40, Top: 4); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, HorizontalAlignment: Center, VerticalAlignment: Center); }
+ $C.@SecondaryTextButton #TakeOff { Text: "Take off"; Anchor: (Height: 34, Top: 2); }
+ Label #ChoiceHint { Anchor: (Height: 20, Top: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 11, HorizontalAlignment: Center, TextColor: #96aea4); }
+ Group #Choices { LayoutMode: Center; Anchor: (Height: 44, Top: 2); }
+}

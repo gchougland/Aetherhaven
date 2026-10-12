@@ -18,6 +18,12 @@ import org.joml.Vector3d;
 
 /** Ground move-destination marker (ring + rising motes) until guards arrive. */
 public final class RtsMoveOrderVisuals {
+    /**
+     * How long a Command Flag order keeps its ground marker when a guard never arrives, in world ticks (about twenty
+     * seconds). A command post marker has no limit: it ends with the session.
+     */
+    public static final long FIELD_MARKER_TICKS = 600L;
+
     private static final Map<UUID, ActiveDestination> ACTIVE = new ConcurrentHashMap<>();
 
     private RtsMoveOrderVisuals() {}
@@ -27,10 +33,16 @@ public final class RtsMoveOrderVisuals {
         double y,
         double z,
         @Nonnull Set<UUID> guardIds,
-        long lastSpawnWorldTick
+        long lastSpawnWorldTick,
+        long expiresAtWorldTick
     ) {
         ActiveDestination withSpawnTick(long worldTick) {
-            return new ActiveDestination(x, y, z, guardIds, worldTick);
+            return new ActiveDestination(x, y, z, guardIds, worldTick, expiresAtWorldTick);
+        }
+
+        /** True once the marker has been shown for as long as it may be. */
+        public boolean expired(long worldTick) {
+            return worldTick >= expiresAtWorldTick;
         }
     }
 
@@ -42,9 +54,21 @@ public final class RtsMoveOrderVisuals {
         @Nonnull Collection<UUID> guardIds,
         long worldTick
     ) {
+        register(commanderId, x, y, z, guardIds, worldTick, Long.MAX_VALUE);
+    }
+
+    public static void register(
+        @Nonnull UUID commanderId,
+        double x,
+        double y,
+        double z,
+        @Nonnull Collection<UUID> guardIds,
+        long worldTick,
+        long expiresAtWorldTick
+    ) {
         ACTIVE.put(
             commanderId,
-            new ActiveDestination(x, y, z, new HashSet<>(guardIds), worldTick)
+            new ActiveDestination(x, y, z, new HashSet<>(guardIds), worldTick, expiresAtWorldTick)
         );
     }
 
@@ -57,11 +81,24 @@ public final class RtsMoveOrderVisuals {
         @Nonnull Collection<UUID> guardIds,
         long worldTick
     ) {
+        spawn(store, commanderRef, x, y, z, guardIds, worldTick, Long.MAX_VALUE);
+    }
+
+    public static void spawn(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> commanderRef,
+        double x,
+        double y,
+        double z,
+        @Nonnull Collection<UUID> guardIds,
+        long worldTick,
+        long expiresAtWorldTick
+    ) {
         UUID commanderId = commanderUuid(commanderRef, store);
         if (commanderId == null) {
             return;
         }
-        register(commanderId, x, y, z, guardIds, worldTick);
+        register(commanderId, x, y, z, guardIds, worldTick, expiresAtWorldTick);
         spawnEffect(store, commanderRef, x, y, z);
     }
 
@@ -102,6 +139,10 @@ public final class RtsMoveOrderVisuals {
         double y,
         double z
     ) {
+        // Only a player has a client to draw for. A check's stand-in commander has none.
+        if (store.getComponent(commanderRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType()) == null) {
+            return;
+        }
         double markerY = y + AetherhavenConstants.RTS_MOVE_ORDER_MARKER_SURFACE_LIFT;
         ParticleUtil.spawnParticleEffect(
             AetherhavenConstants.RTS_MOVE_ORDER_MARKER_PARTICLE,
@@ -117,4 +158,3 @@ public final class RtsMoveOrderVisuals {
         return uc != null ? uc.getUuid() : null;
     }
 }
-

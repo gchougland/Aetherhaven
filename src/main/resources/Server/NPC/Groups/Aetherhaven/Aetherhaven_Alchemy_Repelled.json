@@ -1,0 +1,15 @@
+{
+  "$Comment": "Creatures that ignore a player who drank Bug Repellent (Aetherhaven_Alchemy_Repellent1). Made for Scarak Seekers; it covers every Scarak except the Broodmother bosses, plus spiders and scorpions. Edit this list to change what the repellent works on.",
+  "IncludeRoles": [
+    "Scarak_*",
+    "Dungeon_Scarak_*",
+    "Spider",
+    "Spider_Cave",
+    "Scorpion",
+    "*Mosquito*"
+  ],
+  "ExcludeRoles": [
+    "Scarak_Broodmother*",
+    "Dungeon_Scarak_Broodmother*"
+  ]
+}

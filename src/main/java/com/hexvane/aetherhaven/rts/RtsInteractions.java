@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
@@ -62,11 +63,17 @@ public final class RtsInteractions {
         @Nonnull Store<EntityStore> store
     ) {
         RtsCommandPlayerComponent session = store.getComponent(playerRef, RtsCommandPlayerComponent.getComponentType());
+        ItemStack hand = InventoryComponent.getItemInHand(commandBuffer, playerRef);
         if (session == null || !session.isActive()) {
-            context.getState().state = InteractionState.Failed;
+            // In hand, away from the command post: the flag answers, the other tools say where they work.
+            if (isFlag(hand)) {
+                RtsFieldCommand.ready(playerRef, commandBuffer, store);
+                context.getState().state = InteractionState.Finished;
+            } else {
+                needsCommandPost(playerRef, commandBuffer, context);
+            }
             return;
         }
-        ItemStack hand = InventoryComponent.getItemInHand(commandBuffer, playerRef);
         if (!isRtsTool(hand)) {
             context.getState().state = InteractionState.Failed;
             return;
@@ -86,11 +93,23 @@ public final class RtsInteractions {
         @Nonnull Store<EntityStore> store
     ) {
         RtsCommandPlayerComponent session = store.getComponent(playerRef, RtsCommandPlayerComponent.getComponentType());
+        ItemStack hand = InventoryComponent.getItemInHand(commandBuffer, playerRef);
         if (session == null || !session.isActive()) {
-            context.getState().state = InteractionState.Failed;
+            // In hand, away from the command post: the flag sends every guard of the town to the block looked at.
+            if (isFlag(hand)) {
+                BlockPosition looked = resolveInteractionBlock(context);
+                RtsFieldCommand.Result sent = RtsFieldCommand.send(
+                    playerRef,
+                    commandBuffer,
+                    store,
+                    looked != null ? new Vector3i(looked.x, looked.y, looked.z) : null
+                );
+                context.getState().state = sent.outcome().acted() ? InteractionState.Finished : InteractionState.Failed;
+            } else {
+                needsCommandPost(playerRef, commandBuffer, context);
+            }
             return;
         }
-        ItemStack hand = InventoryComponent.getItemInHand(commandBuffer, playerRef);
         if (!isRtsTool(hand)) {
             context.getState().state = InteractionState.Failed;
             return;
@@ -129,12 +148,14 @@ public final class RtsInteractions {
         String itemId = hand.getItemId();
         if (AetherhavenConstants.RTS_FLAG_ITEM_ID.equals(itemId)) {
             if (session.getSelectedGuardUuids().isEmpty()) {
+                deny(playerRef, accessor, P + ".errorNoSelection");
                 return false;
             }
             RtsScreenPickUtil.GroundPick pick = RtsScreenPickUtil.resolveCommandGroundPick(
                 playerRef, store, session, targetBlock, screen
             );
             if (pick == null) {
+                deny(playerRef, accessor, P + ".errorNoGround");
                 return false;
             }
             PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
@@ -201,12 +222,17 @@ public final class RtsInteractions {
     ) {
         RtsCommandPlayerComponent session = store.getComponent(playerRef, RtsCommandPlayerComponent.getComponentType());
         if (session == null || !session.isActive()) {
-            context.getState().state = InteractionState.Failed;
+            // In hand, away from the command post. Crouching turns the first tool key into the third action.
+            RtsFieldCommand.Result result = ToolAbilityKeys.thirdActionHeld(commandBuffer, playerRef)
+                ? RtsFieldCommand.release(playerRef, commandBuffer, store)
+                : RtsFieldCommand.cycleOrderMode(playerRef, commandBuffer, store);
+            context.getState().state = result.outcome().acted() ? InteractionState.Finished : InteractionState.Failed;
             return;
         }
         session.cycleOrderMode();
         RtsCommandFeedback.playProfileSelect(playerRef, commandBuffer);
         commandBuffer.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
+        notify(playerRef, commandBuffer, RtsFieldCommand.orderModeOutcome(session.getOrderMode()).messageKey());
     }
 
     public static void handleStanceCycle(
@@ -217,7 +243,7 @@ public final class RtsInteractions {
     ) {
         RtsCommandPlayerComponent session = store.getComponent(playerRef, RtsCommandPlayerComponent.getComponentType());
         if (session == null || !session.isActive()) {
-            context.getState().state = InteractionState.Failed;
+            needsCommandPost(playerRef, commandBuffer, context);
             return;
         }
         session.cycleStanceMode();
@@ -235,11 +261,26 @@ public final class RtsInteractions {
     ) {
         RtsCommandPlayerComponent session = store.getComponent(playerRef, RtsCommandPlayerComponent.getComponentType());
         if (session == null || !session.isActive()) {
+            // In hand, away from the command post: every guard of the town holds where it stands.
+            RtsFieldCommand.Result result = RtsFieldCommand.stop(playerRef, commandBuffer, store);
+            context.getState().state = result.outcome().acted() ? InteractionState.Finished : InteractionState.Failed;
+            return;
+        }
+        int stopped = RtsOrderService.stopSelected(playerRef, commandBuffer, session);
+        if (stopped == 0) {
+            deny(playerRef, commandBuffer, P + ".errorNoSelection");
             context.getState().state = InteractionState.Failed;
             return;
         }
-        RtsOrderService.stopSelected(playerRef, commandBuffer, session);
         RtsCommandFeedback.playFreeGuards(playerRef, commandBuffer);
+        PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr != null) {
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation(RtsFieldCommand.Outcome.STOPPED.messageKey()).param("n", String.valueOf(stopped)),
+                NotificationStyle.Default
+            );
+        }
     }
 
     public static void handleCommandPostUse(
@@ -304,5 +345,44 @@ public final class RtsInteractions {
         if (pr != null) {
             NotificationUtil.sendNotification(pr.getPacketHandler(), Message.translation(key), NotificationStyle.Default);
         }
+    }
+
+    private static boolean isFlag(@Nullable ItemStack hand) {
+        return hand != null && !hand.isEmpty() && AetherhavenConstants.RTS_FLAG_ITEM_ID.equals(hand.getItemId());
+    }
+
+    /** A press that could do nothing still says why, with the sound that goes with a refusal. */
+    private static void deny(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull ComponentAccessor<EntityStore> accessor,
+        @Nonnull String key
+    ) {
+        PlayerRef pr = accessor.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr == null) {
+            return;
+        }
+        // At the command post one click can arrive twice, as a mouse event and as an interaction. Say it once.
+        long now = System.currentTimeMillis();
+        Denied last = LAST_DENIED.put(pr.getUuid(), new Denied(key, now));
+        if (last != null && RtsFieldCommand.repeats(last.key(), last.atMs(), key, now)) {
+            return;
+        }
+        NotificationUtil.sendNotification(pr.getPacketHandler(), Message.translation(key), NotificationStyle.Warning);
+        RtsCommandFeedback.playDenied(playerRef, accessor);
+    }
+
+    private record Denied(@Nonnull String key, long atMs) {}
+
+    private static final java.util.concurrent.ConcurrentHashMap<java.util.UUID, Denied> LAST_DENIED =
+        new java.util.concurrent.ConcurrentHashMap<>();
+
+    /** A command post tool used with no session open (handed out in creative, or left in a hotbar). */
+    private static void needsCommandPost(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull ComponentAccessor<EntityStore> accessor,
+        @Nonnull InteractionContext context
+    ) {
+        deny(playerRef, accessor, P + ".errorNeedsCommandPost");
+        context.getState().state = InteractionState.Failed;
     }
 }

@@ -11,7 +11,6 @@ import com.hexvane.aetherhaven.town.TownLogMessage;
 import com.hexvane.aetherhaven.town.TownLogService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hexvane.aetherhaven.ui.UiMaterialLabels;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -37,7 +36,6 @@ import org.joml.Vector3i;
 
 public final class ShopSpotPurchaseService {
     private static final String MSG = "aetherhaven_shop.aetherhaven.shop";
-    private static final double DURABILITY_EPS = 1e-6;
 
     private ShopSpotPurchaseService() {}
 
@@ -98,7 +96,7 @@ public final class ShopSpotPurchaseService {
         if (itemId == null || record.getStock() <= 0) {
             return false;
         }
-        ShopPriceEntry entry = ShopSpotPricing.catalogEntry(plugin, itemId);
+        ShopPriceEntry entry = ShopSpotPricing.entry(plugin, record);
         int maxBatches = entry.batchCountFromItemStock(record.getStock());
         int buyBatches = Math.max(1, Math.min(batchCount, maxBatches));
         int itemQty = entry.itemsForBatchCount(buyBatches);
@@ -168,13 +166,8 @@ public final class ShopSpotPurchaseService {
             );
             tm.updateTown(town);
         }
-        notifySellerIfNeeded(record, buyer, pr.getUsername(), itemId, itemQty, totalCost, world, store, plugin);
-        record.setStock(record.getStock() - itemQty);
-        if (record.getStock() <= 0) {
-            record.setItemId(null);
-            record.setSellerUuid(null);
-            ShopSpotJewelrySupport.clearJewelryListing(record);
-        }
+        notifySellerIfNeeded(record, buyer, pr.getUsername(), ShopListingText.name(record), itemQty, totalCost, world);
+        ShopListing.sold(record, itemQty);
         registry.put(record);
         ShopSpotPersistence.save(world, plugin, registry);
         if (record.isPlayerControlled() && com.hexvane.aetherhaven.autonomy.ShopClerkWorkService.completedSale(store,town,record.getPlotId()) > 0) {
@@ -287,71 +280,107 @@ public final class ShopSpotPurchaseService {
             fail(context);
             return;
         }
-        ItemStack hand = hotbar.getActiveItem();
-        if (ItemStack.isEmpty(hand)) {
-            fail(context);
-            return;
-        }
-        String itemId = hand.getItemId();
-        ShopPriceCatalog prices = plugin.getShopPriceCatalog();
-        if (!prices.hasExplicitPrice(itemId)) {
-            notify(playerRef, commandBuffer, Message.translation(MSG + ".noPrice"));
-            fail(context);
-            return;
-        }
-        ShopPriceEntry entry = prices.getEntry(itemId);
-        int handQty = hand.getQuantity();
-        int listQty = ShopPriceEntry.alignItemStockToBatches(handQty, entry.getBatchSize());
-        if (listQty <= 0) {
-            notify(
-                playerRef,
-                commandBuffer,
-                Message.translation(MSG + ".wrongBatchSize").param("count", String.valueOf(entry.getBatchSize()))
-            );
-            fail(context);
-            return;
-        }
-        if (hasPartialDurability(hand)) {
-            notify(playerRef, commandBuffer, Message.translation(MSG + ".damagedItem"));
-            fail(context);
-            return;
-        }
-        if (ShopSpotJewelrySupport.isJewelryListing(itemId)
-            && !ShopSpotJewelrySupport.capturePlayerJewelryListing(record, hand)) {
-            notify(playerRef, commandBuffer, Message.translation(MSG + ".jewelryNeedsAppraisal"));
-            fail(context);
-            return;
-        }
-        if (!ShopSpotJewelrySupport.isJewelryListing(itemId)) {
-            ShopSpotJewelrySupport.clearJewelryListing(record);
-        }
-        if (!removeFromActiveHotbarStack(playerRef, store, hotbar, hand, listQty)) {
-            fail(context);
-            return;
-        }
-        record.setItemId(itemId);
-        record.setStock(listQty);
-        record.setSellerUuid(playerUuid);
         PlayerRef sellerRef = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
-        if (sellerRef != null) {
-            record.setSellerName(sellerRef.getUsername());
+        Listed listed =
+            listFromSlot(
+                plugin.getShopPriceCatalog(),
+                record,
+                hotbar.getInventory(),
+                hotbar.getActiveSlot(),
+                playerUuid,
+                sellerRef != null ? sellerRef.getUsername() : null
+            );
+        if (!listed.done()) {
+            if (listed.refusal() != null) {
+                notify(
+                    playerRef,
+                    commandBuffer,
+                    Message.translation(MSG + "." + listed.refusal()).param("count", String.valueOf(listed.lot()))
+                );
+            }
+            fail(context);
+            return;
         }
         registry.put(record);
         ShopSpotPersistence.save(world, plugin, registry);
         ShopSpotDisplayService.syncDisplay(world, store, commandBuffer, plugin, registry, record, town);
-        int kept = handQty - listQty;
-        if (kept > 0) {
+        if (listed.kept() > 0) {
             notify(
                 playerRef,
                 commandBuffer,
                 Message.translation(MSG + ".listedPartial")
-                    .param("listed", String.valueOf(listQty))
-                    .param("kept", String.valueOf(kept))
+                    .param("listed", String.valueOf(listed.listed()))
+                    .param("kept", String.valueOf(listed.kept()))
             );
         } else {
             notify(playerRef, commandBuffer, Message.translation(MSG + ".listed"));
         }
         context.getState().state = InteractionState.Finished;
+    }
+
+    /**
+     * What came of an attempt to list.
+     *
+     * @param listed how many items went on the stall; zero when nothing was listed
+     * @param kept how many stayed in the slot because they did not fill a whole lot
+     * @param refusal lang key suffix to tell the seller, or null when there is nothing to say
+     * @param lot the lot size of the item, for the message that asks for more
+     */
+    public record Listed(int listed, int kept, @Nullable String refusal, int lot) {
+        public boolean done() {
+            return listed > 0;
+        }
+
+        static Listed refused(@Nullable String refusal, int lot) {
+            return new Listed(0, 0, refusal, lot);
+        }
+    }
+
+    /**
+     * Moves the stack in one inventory slot onto an empty player stall: the price gate, whole lots only, the stack
+     * taken out of the slot and kept whole on the stall with the price it went up at. The caller has checked who may
+     * sell here, and saves and shows the stall afterwards.
+     */
+    @Nonnull
+    public static Listed listFromSlot(
+        @Nonnull ShopPriceCatalog prices,
+        @Nonnull ShopSpotRecord record,
+        @Nonnull ItemContainer container,
+        short slot,
+        @Nonnull UUID seller,
+        @Nullable String sellerName
+    ) {
+        ItemStack hand = slot >= 0 && slot < container.getCapacity() ? container.getItemStack(slot) : null;
+        if (ItemStack.isEmpty(hand)) {
+            return Listed.refused(null, 1);
+        }
+        String itemId = hand.getItemId();
+        if (!prices.hasExplicitPrice(itemId)) {
+            return Listed.refused("noPrice", 1);
+        }
+        ShopPriceEntry entry = prices.getEntry(itemId);
+        int handQty = hand.getQuantity();
+        int listQty = ShopPriceEntry.alignItemStockToBatches(handQty, entry.getBatchSize());
+        if (listQty <= 0) {
+            return Listed.refused("wrongBatchSize", entry.getBatchSize());
+        }
+        if (ShopSpotJewelrySupport.isJewelryListing(itemId)
+            && !ShopSpotJewelrySupport.capturePlayerJewelryListing(record, hand)) {
+            return Listed.refused("jewelryNeedsAppraisal", 1);
+        }
+        if (!ShopSpotJewelrySupport.isJewelryListing(itemId)) {
+            ShopSpotJewelrySupport.clearJewelryListing(record);
+        }
+        if (!takeFromSlot(container, slot, hand, listQty)) {
+            return Listed.refused(null, 1);
+        }
+        // The stall keeps the stack itself, with its metadata and wear, and the price it went up at.
+        ShopListing.list(record, hand, listQty, entry);
+        record.setSellerUuid(seller);
+        if (sellerName != null) {
+            record.setSellerName(sellerName);
+        }
+        return new Listed(listQty, handQty - listQty, null, entry.getBatchSize());
     }
 
     private static void removeListing(
@@ -388,10 +417,7 @@ public final class ShopSpotPurchaseService {
         if (delivery.droppedOnGround()) {
             notify(playerRef, commandBuffer, Message.translation(MSG + ".itemsDropped"));
         }
-        record.setItemId(null);
-        record.setStock(0);
-        record.setSellerUuid(null);
-        ShopSpotJewelrySupport.clearJewelryListing(record);
+        ShopListing.clear(record);
         registry.put(record);
         ShopSpotPersistence.save(world, plugin, registry);
         ShopSpotDisplayService.syncDisplay(world, store, commandBuffer, plugin, registry, record, town);
@@ -436,16 +462,15 @@ public final class ShopSpotPurchaseService {
         return AetherhavenConstants.CONSTRUCTION_PLOT_PLAYER_SHOP.equals(gid);
     }
 
+    /** @param itemName the listing's own name, see {@link ShopListingText#name(ShopSpotRecord)} */
     public static void notifySellerIfNeeded(
         @Nonnull ShopSpotRecord record,
         @Nonnull UUID buyerUuid,
         @Nonnull String buyerName,
-        @Nonnull String itemId,
+        @Nonnull Message itemName,
         int itemQty,
         long gold,
-        @Nonnull World world,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull AetherhavenPlugin plugin
+        @Nonnull World world
     ) {
         if (!record.isPlayerControlled()) {
             return;
@@ -460,7 +485,7 @@ public final class ShopSpotPurchaseService {
                     pr.getPacketHandler(),
                     Message.translation(MSG + ".soldNotify")
                         .param("buyer", buyerName)
-                        .param("item", UiMaterialLabels.itemNameMessage(itemId))
+                        .param("item", itemName)
                         .param("count", String.valueOf(itemQty))
                         .param("gold", String.valueOf(gold)),
                     NotificationStyle.Success
@@ -506,20 +531,6 @@ public final class ShopSpotPurchaseService {
         notify(playerRef, commandBuffer.getStore(), commandBuffer, msg);
     }
 
-    /** Shop listings only store item id and quantity, so worn tools would be fully repaired on return. */
-    private static boolean hasPartialDurability(@Nonnull ItemStack stack) {
-        if (ItemStack.isEmpty(stack) || stack.isUnbreakable()) {
-            return false;
-        }
-        double baseMax = stack.getItem().getMaxDurability();
-        if (baseMax <= DURABILITY_EPS) {
-            return false;
-        }
-        double cur = stack.getDurability();
-        double stackMax = stack.getMaxDurability();
-        return cur < baseMax - DURABILITY_EPS || stackMax < baseMax - DURABILITY_EPS;
-    }
-
     private static boolean removeFromActiveHotbarStack(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,
@@ -527,11 +538,12 @@ public final class ShopSpotPurchaseService {
         @Nonnull ItemStack inHand,
         int removeQty
     ) {
-        if (removeQty <= 0) {
-            return false;
-        }
-        byte slot = hotbar.getActiveSlot();
-        if (slot < 0) {
+        return takeFromSlot(hotbar.getInventory(), hotbar.getActiveSlot(), inHand, removeQty);
+    }
+
+    /** Takes {@code removeQty} of the stack out of the slot. What is left keeps everything the stack carried. */
+    private static boolean takeFromSlot(@Nonnull ItemContainer container, short slot, @Nonnull ItemStack inHand, int removeQty) {
+        if (removeQty <= 0 || slot < 0) {
             return false;
         }
         int have = inHand.getQuantity();
@@ -544,9 +556,8 @@ public final class ShopSpotPurchaseService {
                 : (inHand.withQuantity(have - removeQty) != null
                     ? inHand.withQuantity(have - removeQty)
                     : ItemStack.EMPTY);
-        ItemContainer container = hotbar.getInventory();
-        container.replaceItemStackInSlot(slot, inHand, replacement);
-        return true;
+        // Only items that really left the slot go on the stall. Otherwise they would exist twice.
+        return container.replaceItemStackInSlot(slot, inHand, replacement).succeeded();
     }
 
     private static boolean clearActiveHotbarStack(

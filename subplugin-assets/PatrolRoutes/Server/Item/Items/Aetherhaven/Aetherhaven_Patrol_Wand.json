@@ -26,7 +26,7 @@
     ]
   },
   "Categories": [
-    "Items.Weapons",
+    "Items.Tools",
     "Aetherhaven.All"
   ],
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Patrol_Wand.png",
@@ -54,42 +54,40 @@
         {
           "Type": "AetherhavenPatrolWandPrimary"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.patrolWand.primary"
     },
     "Secondary": {
       "Interactions": [
         {
           "Type": "AetherhavenPatrolWandSecondary"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.patrolWand.secondary"
     },
     "Use": {
       "Interactions": [
         {
           "Type": "AetherhavenPatrolWandUse"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.patrolWand.use"
     },
     "Ability1": {
       "Interactions": [
         {
           "Type": "AetherhavenPatrolWandModeCycle"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.patrolWand.ability1"
     },
-    "Ability2": {
+    "Ability4": {
       "Interactions": [
         {
           "Type": "AetherhavenPatrolWandNewRoute"
         }
-      ]
-    },
-    "Ability3": {
-      "Interactions": [
-        {
-          "Type": "AetherhavenPatrolWandToggleClosed"
-        }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.patrolWand.ability4"
     }
   },
   "InteractionConfig": {

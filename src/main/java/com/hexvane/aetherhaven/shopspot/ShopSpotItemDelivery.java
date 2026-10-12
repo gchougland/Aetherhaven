@@ -67,6 +67,15 @@ public final class ShopSpotItemDelivery {
         return new Result(deliveredToInventory, dropped);
     }
 
+    /** Drops stacks as item entities when there is no player to give them to. World thread. */
+    public static boolean dropOnGround(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<ItemStack> stacks,
+        @Nonnull Vector3d dropPosition
+    ) {
+        return spawnItemDrops(store, null, stacks, dropPosition);
+    }
+
     /**
      * Spawns overflow item entities. Pass the interaction {@link CommandBuffer} when the store
      * processing lock may already be held; never call {@link Store#forEachChunk} from that path.

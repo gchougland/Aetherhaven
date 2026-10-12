@@ -54,6 +54,8 @@ The plain profiles play at the original pitch. No random pitch jitter is applied
 | Jora Kettle | WarmFemale | human | cheerful, curious, homebody |
 | Nico Stormlass | MellowFemaleLower | human | blunt, stoic, stingy |
 | Lacey Stand | MellowFemaleHigher | mannequin | mannequin_display, cheerful, shy |
+| Filipa Thespian | BrightFemale | sylvian | cheerful, dramatic, silly |
+| Gamevid4 | WarmMale | human | adventurer, cheerful, sporty |
 | Grunk Stonebelly | GravelyMaleLower | trork | trork_stoneheart, blunt, grumpy |
 | Haku Mistclaw | MellowMaleLower | slothian | slothian_canopy, stoic, foodie |
 | Jimmy G | BrightMaleLower | human | impatient, blunt, adventurer |

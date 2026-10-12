@@ -42,49 +42,48 @@
         {
           "Type": "AetherhavenPathToolSelect"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.pathTool.primary"
     },
     "Secondary": {
       "Interactions": [
         {
           "Type": "AetherhavenPathToolAddNode"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.pathTool.secondary"
     },
     "Use": {
       "Interactions": [
         {
           "Type": "AetherhavenPathToolUse"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.pathTool.use"
     },
     "Ability1": {
       "Interactions": [
         {
           "Type": "AetherhavenPathToolModeCycle"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.pathTool.ability1"
     },
-    "Ability2": {
+    "Ability4": {
       "Interactions": [
         {
           "Type": "AetherhavenPathToolWidthCycle"
         }
-      ]
-    },
-    "Ability3": {
-      "Interactions": [
-        {
-          "Type": "AetherhavenPathToolStyleCycle"
-        }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.pathTool.ability4"
     },
     "Pick": {
       "Interactions": [
         {
           "Type": "AetherhavenPathToolModeJump"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.pathTool.pick"
     }
   },
   "InteractionConfig": {
@@ -97,12 +96,6 @@
   },
   "Quality": "Uncommon",
   "Set": "Aetherhaven",
-  "HudUI": [
-    {
-      "Path": "Aetherhaven/PathToolKeyLegend.ui",
-      "Type": "Legend"
-    }
-  ],
   "Tags": {
     "Family": ["Aetherhaven"],
     "Type": ["Tool"]

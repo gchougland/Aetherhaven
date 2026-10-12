@@ -12,7 +12,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.spatial.SpatialResource;
 import com.hypixel.hytale.math.vector.Rotation3f;
-import com.hypixel.hytale.math.vector.Rotation3fc;
 import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.Color;
 import com.hypixel.hytale.protocol.SoundCategory;
@@ -44,6 +43,11 @@ import javax.annotation.Nullable;
  */
 public final class BuildingStaffAssemblyChannelExecutor {
     private static final int TRACER_STEPS = 14;
+    /**
+     * Size of the beads along the placement beam, as a share of the bead the guide bolt drops. The bead asset shrank
+     * to two thirds; this keeps the beam's already small beads the size they were (0.42 of the old bead).
+     */
+    static final float BEAM_BEAD_SCALE = 0.63F;
     private static final Color TRACER_TINT = new Color((byte) 170, (byte) 255, (byte) 230);
     private static final ConcurrentHashMap<UUID, Long> LAST_NO_MANA_HINT_NS = new ConcurrentHashMap<>();
     private static final long NO_MANA_HINT_INTERVAL_NS = 2_000_000_000L;
@@ -277,8 +281,8 @@ public final class BuildingStaffAssemblyChannelExecutor {
             return;
         }
         HeadRotation head = store.getComponent(playerRef, HeadRotation.getComponentType());
-        Vector3d forward = head != null ? head.getDirection() : directionFromRotation(transform.getRotation());
-        Vector3d tip = new Vector3d(transform.getPosition()).add(0.0, 1.32, 0.0).add(new Vector3d(forward).mul(0.42));
+        float lookPitch = head != null ? head.getRotation().pitch() : transform.getRotation().pitch();
+        Vector3d tip = BuildingStaffTip.estimate(transform.getPosition(), transform.getRotation().yaw(), lookPitch);
         Vector3d target = new Vector3d(hit.x + 0.5, hit.y + 0.52, hit.z + 0.5);
         List<Ref<EntityStore>> nearby = particleRecipientsForPlayer(playerRef, tip, store);
         for (int i = 1; i < TRACER_STEPS; i++) {
@@ -294,7 +298,7 @@ public final class BuildingStaffAssemblyChannelExecutor {
                 0.0F,
                 0.0F,
                 0.0F,
-                0.42F,
+                BEAM_BEAD_SCALE,
                 TRACER_TINT,
                 null,
                 nearby,
@@ -332,16 +336,5 @@ public final class BuildingStaffAssemblyChannelExecutor {
             }
         }
         return out;
-    }
-
-    @Nonnull
-    private static Vector3d directionFromRotation(@Nonnull Rotation3fc euler) {
-        double pitch = euler.pitch();
-        double yaw = euler.yaw();
-        double len = Math.cos(pitch);
-        double x = len * -Math.sin(yaw);
-        double y = Math.sin(pitch);
-        double z = len * -Math.cos(yaw);
-        return new Vector3d(x, y, z);
     }
 }

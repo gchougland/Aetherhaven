@@ -92,6 +92,7 @@ aetherhaven.debug.needs.entityNotLoaded=Entity not loaded or has no VillagerNeed
 aetherhaven.debug.needs.set=Set {which}={value} on {label} ({id})
 aetherhaven.debug.needs.inspectIntro=Villagers with needs (loaded chunks). Set with: /aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
 aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | hunger={hunger} energy={energy} fun={fun} (0..{max})
+aetherhaven.debug.needs.mealPerkLine=    meal perk {perk}: {percent}% for {seconds} more seconds
 aetherhaven.debug.needs.noHandle=(no handle)
 
 # === Debug: plots, POI dump, town list (console) ===

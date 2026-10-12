@@ -44,7 +44,7 @@ public final class SnowballLeaderboardPage
             commandBuilder.append("Aetherhaven/SnowballLeaderboardPage.ui");
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
-                "#CloseButton",
+                "#PageCloseButton",
                 EventData.of("Action", "Close"),
                 false
             );
@@ -59,7 +59,7 @@ public final class SnowballLeaderboardPage
             Message.translation("aetherhaven_festivals.aetherhaven.festival.snowball.leaderboard.hint")
         );
         commandBuilder.set(
-            "#CloseButton.TextSpans",
+            "#PageCloseButton.TextSpans",
             Message.translation("aetherhaven_festivals.aetherhaven.festival.snowball.leaderboard.close")
         );
 

@@ -25,6 +25,11 @@ public final class ProductionStockSources {
             var point=com.hexvane.aetherhaven.workplace.NativeExcavation.bufferPoint(town,site);
             if(com.hexvane.aetherhaven.workplace.NativeExcavation.observe(world,point).loaded())result.add(new TownWarehouse.ProductionStock(site.id(),point,inventory));
         }
+        // Grower sites keep their harvest in their own store, collected where their beds are.
+        for(var site:town.getApprenticeWorkplaces().sites()){
+            var harvest=com.hexvane.aetherhaven.workplace.GrowerOutput.find(town,site.id());
+            if(harvest!=null&&harvest.pickup()!=null&&simulated(world,harvest.pickup()))result.add(new TownWarehouse.ProductionStock(site.id(),harvest.pickup(),harvest));
+        }
         return result;
     }
 
@@ -32,10 +37,17 @@ public final class ProductionStockSources {
                                                    UUID plotId, WarehouseBatch.Point pickup) {
         var output=com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,plotId);
         if(output!=null){var site=town.getApprenticeWorkplaces().find(plotId);return Objects.equals(pickup,com.hexvane.aetherhaven.workplace.NativeExcavation.bufferPoint(town,site))&&com.hexvane.aetherhaven.workplace.NativeExcavation.observe(world,pickup).loaded()?new TownWarehouse.ProductionStock(plotId,pickup,output):null;}
+        var harvest=com.hexvane.aetherhaven.workplace.GrowerOutput.find(town,plotId);
+        if(harvest!=null)return Objects.equals(pickup,harvest.pickup())&&simulated(world,pickup)?new TownWarehouse.ProductionStock(plotId,pickup,harvest):null;
         var plot = plotId == null ? null : town.findPlotById(plotId);
         var inventory = inventory(town, plugin, plot);
         return inventory != null && ProductionStorageLocator.valid(world, plot, pickup)
             ? new TownWarehouse.ProductionStock(plotId, pickup, inventory) : null;
+    }
+
+    private static boolean simulated(World world, WarehouseBatch.Point point) {
+        return point!=null&&com.hexvane.aetherhaven.world.ChunkSectionBlockUtil.worldChunkIfTicking(world,
+            com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(point.x(),point.z()))!=null;
     }
 
     private static ProductionInventory inventory(TownRecord town, AetherhavenPlugin plugin, PlotInstance plot) {

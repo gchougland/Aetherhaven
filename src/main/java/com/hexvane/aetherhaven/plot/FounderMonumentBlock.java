@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.plot;
 
+import com.hexvane.aetherhaven.monument.FounderStatueLoadout;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -27,6 +28,12 @@ public final class FounderMonumentBlock implements Component<ChunkStore> {
         .add()
         .append(new KeyedCodec<>("Roll", Codec.FLOAT), (s, v) -> s.roll = v != null ? v : 0f, s -> s.roll)
         .add()
+        .append(
+            new KeyedCodec<>("Loadout", FounderStatueLoadout.CODEC),
+            (s, v) -> s.loadout = v != null ? v : new FounderStatueLoadout(),
+            s -> s.loadout
+        )
+        .add()
         .build();
 
     @Nullable
@@ -34,6 +41,11 @@ public final class FounderMonumentBlock implements Component<ChunkStore> {
 
     public static void register(@Nonnull ComponentRegistryProxy<ChunkStore> registry) {
         componentType = registry.registerComponent(FounderMonumentBlock.class, "AetherhavenFounderMonumentBlock", CODEC);
+    }
+
+    /** False when the construction part of the mod is not loaded, in which case no pedestal can exist. */
+    public static boolean isRegistered() {
+        return componentType != null;
     }
 
     @Nonnull
@@ -53,6 +65,9 @@ public final class FounderMonumentBlock implements Component<ChunkStore> {
     private float pitch;
     private float yaw;
     private float roll;
+    /** Real armor pieces on the statue and its pose. Never null; saved with the pedestal block. */
+    @Nonnull
+    private FounderStatueLoadout loadout = new FounderStatueLoadout();
 
     public FounderMonumentBlock() {}
 
@@ -114,6 +129,54 @@ public final class FounderMonumentBlock implements Component<ChunkStore> {
         return roll;
     }
 
+    /** The statue's armor and pose. The returned object is live: changes are saved with this block. */
+    @Nonnull
+    public FounderStatueLoadout getLoadout() {
+        return loadout;
+    }
+
+    /**
+     * Hands this block's armor and pose to the block that replaces it in the component store. This block keeps an
+     * empty loadout afterwards, so the pieces have one owner.
+     */
+    public void moveLoadoutTo(@Nonnull FounderMonumentBlock replacement) {
+        if (replacement == this) {
+            return;
+        }
+        replacement.loadout.takeOver(this.loadout);
+    }
+
+    /**
+     * Carries a placed monument over to the block entity the game is about to put in its place (for example when the
+     * pillar's shape changes because a neighbour was placed). The new block only takes what it does not already
+     * have, and the armor moves instead of being copied.
+     */
+    public void moveStatueTo(@Nonnull FounderMonumentBlock replacement) {
+        if (replacement == this) {
+            return;
+        }
+        if (replacement.townId.isBlank()) {
+            replacement.townId = this.townId;
+        }
+        if (replacement.statueEntityUuid == null || replacement.statueEntityUuid.isBlank()) {
+            replacement.statueEntityUuid = this.statueEntityUuid;
+        }
+        if (replacement.getSkinJson().isBlank()) {
+            replacement.skinJson = this.skinJson;
+        }
+        if (replacement.getLabel().isBlank()) {
+            replacement.label = this.label;
+        }
+        if (replacement.pitch == 0f && replacement.yaw == 0f && replacement.roll == 0f) {
+            replacement.pitch = this.pitch;
+            replacement.yaw = this.yaw;
+            replacement.roll = this.roll;
+        }
+        moveLoadoutTo(replacement);
+        // The statue now belongs to the replacement; removing this block must not take the statue with it.
+        this.statueEntityUuid = null;
+    }
+
     @Nonnull
     public FounderMonumentBlock withStatue(
         @Nullable String statueEntityUuid,
@@ -123,12 +186,16 @@ public final class FounderMonumentBlock implements Component<ChunkStore> {
         float yaw,
         float roll
     ) {
-        return new FounderMonumentBlock(this.townId, statueEntityUuid, skinJson, label, pitch, yaw, roll);
+        FounderMonumentBlock next = new FounderMonumentBlock(this.townId, statueEntityUuid, skinJson, label, pitch, yaw, roll);
+        next.loadout = this.loadout.copy();
+        return next;
     }
 
     @Nullable
     @Override
     public Component<ChunkStore> clone() {
-        return new FounderMonumentBlock(townId, statueEntityUuid, skinJson, label, pitch, yaw, roll);
+        FounderMonumentBlock copy = new FounderMonumentBlock(townId, statueEntityUuid, skinJson, label, pitch, yaw, roll);
+        copy.loadout = this.loadout.copy();
+        return copy;
     }
 }

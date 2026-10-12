@@ -47,7 +47,7 @@ public final class PathToolStyleUi {
         return activeSession(ref, store) != null;
     }
 
-    /** E (Ability2) in style designer while the chest is open: save and close the chest. */
+    /** Second extra tool key in style designer while the chest is open: save and close the chest. */
     public static boolean tryFinishEditing(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,

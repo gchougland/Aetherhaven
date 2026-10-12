@@ -33,7 +33,7 @@
       }
     },
     "InitialAnimationFrame": {
-      "Scale": { "X": { "Min": 0.55, "Max": 0.95 } },
+      "Scale": { "X": { "Min": 0.367, "Max": 0.633 } },
       "Opacity": 0.32,
       "FrameIndex": { "Min": 0, "Max": 0 },
       "Color": "#aacfff"

@@ -58,7 +58,7 @@ public final class MarketFestivalMechanic implements FestivalMechanic {
         @Nonnull FestivalDefinition festival
     ) {
         UUID townId = town.getTownId();
-        MarketStallService.dropLeftovers(world, townId);
+        MarketStallService.returnLeftovers(world, town);
         MarketStallService.despawnAll(world, townId);
         MarketSessionIndex.remove(townId);
     }

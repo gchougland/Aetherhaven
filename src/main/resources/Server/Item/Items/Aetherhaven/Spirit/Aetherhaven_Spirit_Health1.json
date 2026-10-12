@@ -1,0 +1,124 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Plant_Crop_Health1.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Plant_Flower_Blood_Rose.png",
+  "IconProperties": {
+    "Scale": 0.735,
+    "Translation": [
+      -5.1,
+      -19.5
+    ],
+    "Rotation": [
+      14.065,
+      169.315,
+      12.935
+    ]
+  },
+  "BlockType": {
+    "DrawType": "Model",
+    "Material": "Empty",
+    "Opacity": "Transparent",
+    "CustomModel": "Resources/Plants/Seeds.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Resources/Plants/Seeds_Textures/Blood_Rose.png",
+        "Weight": 1
+      }
+    ],
+    "CustomModelScale": 0.9,
+    "HitboxType": "Plant_Seed",
+    "BlockSoundSetId": "Seeds",
+    "PhysicalMaterialId": "Foliage",
+    "BlockParticleSetId": "Dust",
+    "ParticleColor": "#cb374f",
+    "Flags": {
+      "IsStackable": false
+    },
+    "Gathering": {
+      "Soft": {
+        "DropList": "Empty",
+        "IsWeaponBreakable": false
+      }
+    },
+    "Support": {
+      "Down": [
+        {
+          "BlockTypeId": "Aetherhaven_Spirit_Planter"
+        }
+      ]
+    },
+    "SupportDropType": "Destroy",
+    "State": {
+      "Definitions": {
+        "Stage1": {
+          "CustomModel": "Blocks/Foliage/Flowers/Health_T1_Blood_Rose/Blood_Rose_01.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Flowers/Health_T1_Blood_Rose/Blood_Rose_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.9,
+          "HitboxType": "Plant_Small",
+          "Opacity": "Semitransparent",
+          "Light": {
+            "Color": "#422"
+          },
+          "BlockParticleSetId": "Flower",
+          "ParticleColor": "#ef706c"
+        },
+        "Stage2": {
+          "CustomModel": "Blocks/Foliage/Flowers/Health_T1_Blood_Rose/Blood_Rose_02.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Flowers/Health_T1_Blood_Rose/Blood_Rose_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.9,
+          "HitboxType": "Plant_Large",
+          "Light": {
+            "Color": "#522"
+          },
+          "BlockParticleSetId": "Flower",
+          "ParticleColor": "#bd2b8d"
+        },
+        "Ripe": {
+          "CustomModel": "Blocks/Foliage/Flowers/Health_T1_Blood_Rose/Blood_Rose.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Flowers/Health_T1_Blood_Rose/Blood_Rose_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.9,
+          "HitboxType": "Plant_Full",
+          "Opacity": "Transparent",
+          "Light": {
+            "Color": "#622"
+          },
+          "Particles": [
+            {
+              "SystemId": "Plant_Health_Tier1",
+              "Color": "#ed1010",
+              "Scale": 1
+            }
+          ],
+          "BlockParticleSetId": "Flower",
+          "ParticleColor": "#ce2d6a"
+        }
+      }
+    }
+  },
+  "PlayerAnimationsId": "Item",
+  "Tags": {
+    "Type": [
+      "Plant"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Items_Foliage"
+}

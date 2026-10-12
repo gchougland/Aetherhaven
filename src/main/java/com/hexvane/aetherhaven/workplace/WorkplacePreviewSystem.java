@@ -123,11 +123,15 @@ public final class WorkplacePreviewSystem extends EntityTickingSystem<EntityStor
                 com.hexvane.aetherhaven.ui.ToolKeybindSlot.PRIMARY, com.hexvane.aetherhaven.ui.ToolKeybindSlot.SECONDARY,
                 com.hexvane.aetherhaven.ui.ToolKeybindSlot.USE, com.hexvane.aetherhaven.ui.ToolKeybindSlot.ABILITY1,
                 com.hexvane.aetherhaven.ui.ToolKeybindSlot.PICK};
-            String[] labels = {"Choose corner or workplace", "Cancel selection", "Open workplace", "Change mode", "Choose mode"};
-            if (state.mode == WorkplaceToolState.Mode.BUILD) labels = new String[]{"Find building work", "Hold to build", "Choose mode", "Change mode", "Choose mode"};
-            if (state.mode == WorkplaceToolState.Mode.MINESHAFT) labels = new String[]{"Open mine planner", "Cancel selection", "Open workplace", "Change mode", "Choose mode"};
+            // The use key reaches the staff only when the block or entity in view has no use of its own.
+            String[] labels = {"Choose corner or workplace", "Cancel selection", "Use, or open workplace", "Change mode", "Choose mode"};
+            if (state.mode == WorkplaceToolState.Mode.BUILD) labels = new String[]{"Find building work", "Hold to build", "Use, or choose mode", "Change mode", "Choose mode"};
+            if (state.mode == WorkplaceToolState.Mode.MINESHAFT) labels = new String[]{"Open mine planner", "Cancel selection", "Use, or open workplace", "Change mode", "Choose mode"};
+            // Rows carry the staff's action names. The game lists the player's own keys for them at the bottom right.
             for (int i = 0; i < slots.length; i++) com.hexvane.aetherhaven.ui.ToolHudHotkeyRows.appendRow(b,
-                "#Controls", i, slots[i], com.hypixel.hytale.server.core.Message.raw(labels[i]), viewer);
+                "#Controls", i, com.hexvane.aetherhaven.ui.ToolKeyPrompts.BUILDING_STAFF, slots[i],
+                com.hypixel.hytale.server.core.Message.raw(labels[i]));
+            com.hexvane.aetherhaven.ui.ToolHudHotkeyRows.appendWhereKeysRow(b, "#Controls", slots.length);
             update(false, b);
         }
     }

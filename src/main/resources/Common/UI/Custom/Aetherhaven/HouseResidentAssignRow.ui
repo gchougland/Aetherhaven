@@ -1,6 +1,6 @@
 $C = "../Common.ui";
 
-Group #HouseResidentRow {
+Group #HouseResidentEntry {
   LayoutMode: Left;
   Anchor: (Bottom: 8);
   Padding: (Horizontal: 6, Vertical: 4);

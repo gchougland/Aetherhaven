@@ -7,7 +7,10 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import java.util.*;
 import org.bson.*;
 
-/** Item-local charges and mixture. Uninitialized crafted or creative flasks are always empty. */
+/**
+ * Item-local charges, mixture and brew quality. Uninitialized crafted or creative flasks are always empty, and a
+ * flask filled before brew quality existed is a Good one.
+ */
 public final class AlchemyFlask {
     public static final String ITEM = "Aetherhaven_Alchemy_Flask";
     private static final String KEY = "AetherhavenAlchemyFlask";
@@ -16,7 +19,7 @@ public final class AlchemyFlask {
     private static BsonDocument data(ItemStack stack) { return isFlask(stack) ? stack.getFromMetadataOrNull(KEY, AetherhavenBsonCodecs.BSON_DOCUMENT) : null; }
     public static boolean initialized(ItemStack stack) { return data(stack) != null; }
     public static boolean needsDisplayRefresh(ItemStack stack) { return isFlask(stack)&&number(data(stack),"displayVersion",0)<2; }
-    public static ItemStack refreshDisplay(ItemStack stack) { return write(stack,capacity(stack),charges(stack),ingredients(stack)); }
+    public static ItemStack refreshDisplay(ItemStack stack) { return write(stack,capacity(stack),charges(stack),ingredients(stack),quality(stack)); }
     private static int number(BsonDocument data, String key, int fallback) {
         var value = data == null ? null : data.get(key);
         return value != null && value.isNumber() ? value.asNumber().intValue() : fallback;
@@ -35,19 +38,39 @@ public final class AlchemyFlask {
         }
         return List.copyOf(result);
     }
-    public static ItemStack fill(ItemStack stack, List<String> ingredients) { return write(stack, capacity(stack), capacity(stack), ingredients); }
-    public static ItemStack upgrade(ItemStack stack) { return write(stack, Math.min(5, capacity(stack)+1), charges(stack), ingredients(stack)); }
-    public static ItemStack consume(ItemStack stack) { return write(stack, capacity(stack), Math.max(0, charges(stack)-1), ingredients(stack)); }
-    public static ItemStack empty(ItemStack stack) { return write(stack, capacity(stack), 0, List.of()); }
-    private static ItemStack write(ItemStack stack, int capacity, int charges, List<String> ingredients) {
+    /** How well the potion inside was brewed. An empty flask, or one filled before quality existed, is Good. */
+    public static AlchemyBrew.Quality quality(ItemStack stack) {
+        return charges(stack)==0?AlchemyBrew.Quality.GOOD:AlchemyBrew.Quality.of(number(data(stack),"quality",0));
+    }
+    public static ItemStack fill(ItemStack stack, List<String> ingredients) { return fill(stack, ingredients, AlchemyBrew.Quality.GOOD); }
+    public static ItemStack fill(ItemStack stack, List<String> ingredients, AlchemyBrew.Quality quality) {
+        return write(stack, capacity(stack), capacity(stack), ingredients, quality);
+    }
+    public static ItemStack upgrade(ItemStack stack) { return write(stack, Math.min(5, capacity(stack)+1), charges(stack), ingredients(stack), quality(stack)); }
+    public static ItemStack consume(ItemStack stack) { return write(stack, capacity(stack), Math.max(0, charges(stack)-1), ingredients(stack), quality(stack)); }
+    public static ItemStack empty(ItemStack stack) { return write(stack, capacity(stack), 0, List.of(), AlchemyBrew.Quality.GOOD); }
+    private static ItemStack write(ItemStack stack, int capacity, int charges, List<String> ingredients, AlchemyBrew.Quality brewed) {
         if (!isFlask(stack)) throw new IllegalArgumentException("Expected one Alchemy Flask");
+        // The quality belongs to the potion, so it leaves with the last charge.
+        var quality=charges==0||ingredients.isEmpty()||brewed==null?AlchemyBrew.Quality.GOOD:brewed;
         var data = new BsonDocument().append("capacity", new BsonInt32(capacity)).append("charges", new BsonInt32(charges))
             .append("displayVersion",new BsonInt32(2));
         data.append("ingredients", new BsonArray(ingredients.stream().map(s -> (BsonValue)new BsonString(s)).toList()));
+        if(quality!=AlchemyBrew.Quality.GOOD)data.append("quality",new BsonInt32(quality.ordinal()));
         Message description=Message.raw("Charges: "+charges+" / "+capacity).color("#E4C987").bold(true);
         if(charges==0)description.insert(Message.raw("\nEmpty. Refill at the Alchemist's cauldron.").color("#A9B6BD").bold(false));
-        else for(var ingredient:AlchemyIngredients.effects(ingredients))
-            description.insert(Message.raw("\n"+ingredient.description()).color(effectColor(ingredient.family())).bold(false));
+        else {
+            for(var ingredient:AlchemyIngredients.effects(ingredients))
+                description.insert(Message.raw("\n"+ingredient.description()).color(effectColor(ingredient.family())).bold(false));
+            if(quality!=AlchemyBrew.Quality.GOOD) {
+                var rules=AlchemyBrew.rules();
+                // The line break is its own piece so the translated line keeps its colour.
+                description.insert(Message.raw("\n"));
+                description.insert(Message.translation("aetherhaven_alchemy.aetherhaven.flask.quality."+quality.name().toLowerCase(java.util.Locale.ROOT))
+                    .param("duration",Integer.toString(AlchemyBrew.Rules.percent(rules.duration(quality))))
+                    .param("restore",Integer.toString(AlchemyBrew.Rules.percent(rules.restore(quality)))).color("#F2D58A").bold(false));
+            }
+        }
         return stack.withMetadata(KEY, data).withMaxDurability(capacity).withDurability(charges)
             .withMetadata(ItemDisplayMetadata.KEYED_CODEC,new ItemDisplayMetadata(Message.translation("aetherhaven_alchemy.flask.name").color("#C7B0EF"),description));
     }
@@ -58,6 +81,9 @@ public final class AlchemyFlask {
             case "Stamina" -> "#F0D47E";
             case "PoisonWard" -> "#AAD982";
             case "BlastWard" -> "#F3B579";
+            case "Regen" -> "#8EE0B0";
+            case "FireWard" -> "#FF8A5C";
+            case "Repellent" -> "#B79CF2";
             default -> "#D4C7ED";
         };
     }
@@ -71,4 +97,6 @@ public final class AlchemyFlask {
     }
     public static int upgradeMastery(int currentCapacity) { return Math.min(10, currentCapacity * 2); }
     public static int upgradeLeatherCount(int currentCapacity) { return currentCapacity * 5; }
+    /** Alchemist Mastery for one filled flask. Tuned so a level takes about eight fills at every Mastery. */
+    public static long bottlingXp(int ingredients, int capacity) { return 7L * (Math.max(1, ingredients) + Math.clamp(capacity, 1, 5)); }
 }

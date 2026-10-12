@@ -485,6 +485,7 @@ Unknown types fall through to Aetherhaven’s built-in conditions; registered ty
 | `town_has_building` | `constructionId` | Alias for `town_has_complete_plot` |
 | `player_recently_finished_quest_board_quest` | `withinDays` (default 3), optional `giverRoleId`, optional `configEntryId` | Player finished a town quest board quest recently |
 | `player_recently_failed_quest_board_quest` | `withinDays` (default 3) | Player failed or abandoned a town quest board quest recently |
+| `town_quest_auto_start_ready` | `questId` | A quest with `autoStart` could be handed to the town now: its condition holds and the town has neither the quest nor its completion. Lets a villager offer it again after it was abandoned |
 
 ## Quests
 
@@ -532,6 +533,31 @@ Minimal housing quest (match fields to your villager):
   ]
 }
 ```
+
+### Workplace objectives, quests that start by themselves, and the HUD pin
+
+Four objective kinds follow what a town does to get a working Apprentice workplace. Unlike the kinds above they may be done **in any order**: each is ticked by its own proof and never by a later step, and a step that was done stays done when the workplace is removed again.
+
+| Kind | Ticked when |
+| --- | --- |
+| `workplace_type_unlocked` | The town has unlocked a workplace type in a supervising villager's upgrades (also true for a type unlocked before the quest started) |
+| `workplace_marked` | A player marks out a new workplace area with a Building Staff, or the town has a saved workplace |
+| `workplace_type_chosen` | The town has a saved workplace (saving one on the workplace page gives it its type) |
+| `workplace_bench_placed` | A workplace has the station of its type standing inside it: its bench, a ranch's trough, or a bed of a grower site with no bench. Seen when the block is placed, when the workplace is saved, when the bench is used, and by a look at loaded chunks every few game minutes |
+
+Add `"workType": "smelting"` (a workplace type id) to any of them to count only that type. Leave it out and any type counts.
+
+Their text names things in the player's own town, so a `textLangKey` on these kinds is a **prefix**. The game appends a suffix for the wording that fits the town and fills the gaps. Copy the full set of lines from `aetherhaven_workplace_quest.lang` (every suffix is listed there with what its gaps are); a missing suffix shows as a bare key.
+
+Three optional fields work on any town quest:
+
+| Field | Meaning |
+| --- | --- |
+| `hudTextLangKey` (objective) | A shorter line for the HUD quest tracker. The journal keeps `textLangKey` |
+| `autoPin` (quest) | `true` pins the quest to the tracker of every town member once, however it started. A member who unpins it is not pinned again. A full tracker gives up a pin that is not showing, else its last row, and tells the player |
+| `autoStart` (quest) | `{ "when": "workplace_supervisor_ready", "skipWhenDone": true, "announceLangKey": "..." }` gives the town the quest the first time the condition holds, with nobody asking. `workplace_supervisor_ready` is the only condition today: a villager who supervises a workplace type lives in town and their building is finished. `skipWhenDone` marks the quest done, with no banner and no reward, for a town that has already done every step before the closing talk. `announceLangKey` is a chat line for the members in the world when it starts. A quest that starts this way cannot grant a plot token or blueprint, because nobody is there to take it |
+
+A quest is given by itself once per town. If the player leaves it, it does not come back by itself; offer it from a villager with the `town_quest_auto_start_ready` dialogue condition and a `start_quest` action, as Elder Lyren does for `q_first_workplace`.
 
 ## Quest board extensions
 

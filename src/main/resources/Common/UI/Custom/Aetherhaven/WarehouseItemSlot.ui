@@ -4,6 +4,7 @@ Group { Anchor: (Width: 58, Height: 58);
   Button #Cell { Anchor: (Width: 54, Height: 54); TextTooltipStyle: $C.@DefaultTextTooltipStyle;
     Style: (Default: (Background: $T.@Slot), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed), Disabled: (Background: $T.@Inset));
     ItemIcon #Icon { Anchor: (Left: 5, Top: 3, Width: 44, Height: 44); }
+    AssetImage #Art { Anchor: (Left: 5, Top: 3, Width: 44, Height: 44); FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png"; HitTestVisible: false; Visible: false; }
     Label #Quantity { Anchor: (Right: 4, Bottom: 2, Width: 48, Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, HorizontalAlignment: End); }
   }
 }

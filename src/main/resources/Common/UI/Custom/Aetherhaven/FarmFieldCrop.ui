@@ -1,0 +1,13 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+// One crop in the palette of a plan: its icon, the seeds in the seed store, and a star while the Almanac favours it.
+Button { Anchor: (Width: 58, Height: 58, Right: 4, Bottom: 4);
+ Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed), Disabled: (Background: $T.@CardLocked));
+ TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+ Group #Selected { Background: $T.@CardPressed; Visible: false; HitTestVisible: false; }
+ ItemIcon #Icon { Anchor: (Left: 9, Top: 5, Width: 40, Height: 40); HitTestVisible: false; }
+ Group #Dim { Anchor: (Full: 4); Background: #1b2028(0.72); Visible: false; HitTestVisible: false; }
+ AssetImage #Star { AssetPath: "UI/Custom/star.png"; Anchor: (Left: 4, Top: 4, Width: 16, Height: 16); Visible: false; HitTestVisible: false; }
+ AssetImage #Lock { AssetPath: "UI/Custom/padlock.png"; Anchor: (Right: 4, Bottom: 4, Width: 22, Height: 22); Visible: false; HitTestVisible: false; }
+ Label #SeedCount { Text: ""; Anchor: (Right: 5, Bottom: 2, Width: 48, Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, HorizontalAlignment: End); HitTestVisible: false; }
+}

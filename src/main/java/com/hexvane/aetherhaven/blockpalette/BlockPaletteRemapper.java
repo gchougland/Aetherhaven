@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -20,6 +21,9 @@ import javax.annotation.Nullable;
 public final class BlockPaletteRemapper {
     /** Same as {@code ExtraInfo.GENERATED_ID_PREFIX}; state-definition block keys use this. */
     private static final String GENERATED_ID_PREFIX = "*";
+
+    /** A brick palette whose family key starts with this stands a metal set in for the brick shapes. */
+    private static final String METAL_BLOCK_FAMILY_PREFIX = "metal:";
 
     /** Longest-first so GreyDark / RedDark / Sandstone_Red win over shorter prefixes. */
     private static final String[] WALL_COLORS = Arrays.stream(new String[] {
@@ -79,17 +83,37 @@ public final class BlockPaletteRemapper {
         if (def.getRemapGroupId() != null) {
             return blockTypeId;
         }
-        if (def.getFamilyKey().equals(parsed.familyKey)) {
+        return remapWithFamily(blockTypeId, def.getCategory(), def.getFamilyKey(), BlockPaletteRemapper::assetExists);
+    }
+
+    /**
+     * The built-in naming rule for one palette: swap {@code blockTypeId} into {@code familyKey} when it belongs to
+     * {@code category}, and return it unchanged when the target does not exist. {@code exists} answers for one exact
+     * block type id (the live asset map in game, a list of ids in tests).
+     */
+    @Nonnull
+    static String remapWithFamily(
+        @Nonnull String blockTypeId,
+        @Nonnull String category,
+        @Nonnull String familyKey,
+        @Nonnull Predicate<String> exists
+    ) {
+        String id = stripPrefabStar(blockTypeId);
+        ParsedBlock parsed = parse(id);
+        if (parsed == null || !parsed.category.equals(category)) {
+            return blockTypeId;
+        }
+        if (familyKey.equals(parsed.familyKey)) {
             // Still allow mossy → non-mossy when staying on same family but target lacks mossy
             if (!parsed.suffix.toLowerCase(Locale.ROOT).contains("mossy")) {
                 return blockTypeId;
             }
         }
-        String rebuilt = rebuild(parsed, def.getFamilyKey());
+        String rebuilt = rebuild(parsed, familyKey);
         if (rebuilt == null || rebuilt.equals(id)) {
             return blockTypeId;
         }
-        String resolved = resolveExisting(rebuilt);
+        String resolved = resolveExisting(rebuilt, exists);
         if (resolved == null && isHollowRoofShape(parsed.suffix)) {
             ParsedBlock withoutHollow =
                 new ParsedBlock(
@@ -98,9 +122,9 @@ public final class BlockPaletteRemapper {
                     stripHollowRoofShape(parsed.suffix),
                     parsed.roofKind,
                     parsed.wallForm);
-            String fallbackRebuilt = rebuild(withoutHollow, def.getFamilyKey());
+            String fallbackRebuilt = rebuild(withoutHollow, familyKey);
             if (fallbackRebuilt != null && !fallbackRebuilt.equals(id)) {
-                resolved = resolveExisting(fallbackRebuilt);
+                resolved = resolveExisting(fallbackRebuilt, exists);
             }
         }
         return resolved != null ? resolved : blockTypeId;
@@ -167,7 +191,12 @@ public final class BlockPaletteRemapper {
      */
     @Nullable
     private static String resolveExisting(@Nonnull String blockTypeId) {
-        String found = firstExistingForm(blockTypeId);
+        return resolveExisting(blockTypeId, BlockPaletteRemapper::assetExists);
+    }
+
+    @Nullable
+    static String resolveExisting(@Nonnull String blockTypeId, @Nonnull Predicate<String> exists) {
+        String found = firstExistingForm(blockTypeId, exists);
         if (found != null) {
             return found;
         }
@@ -175,34 +204,34 @@ public final class BlockPaletteRemapper {
         String bare = stripPrefabStar(blockTypeId);
         String withoutState = stripStateDefinitionSegments(bare);
         if (!withoutState.equals(bare)) {
-            found = firstExistingForm(withoutState);
+            found = firstExistingForm(withoutState, exists);
             if (found != null) {
                 return found;
             }
         }
         String withoutMossy = stripMossySegments(withoutState);
         if (!withoutMossy.equals(withoutState)) {
-            found = firstExistingForm(withoutMossy);
+            found = firstExistingForm(withoutMossy, exists);
             if (found != null) {
                 return found;
             }
         }
         String withoutBoth = stripStateDefinitionSegments(stripMossySegments(bare));
         if (!withoutBoth.equals(bare)) {
-            found = firstExistingForm(withoutBoth);
+            found = firstExistingForm(withoutBoth, exists);
             if (found != null) {
                 return found;
             }
         }
         String legacyNormalized = normalizeLegacyRoofBlockId(bare);
         if (!legacyNormalized.equals(bare)) {
-            found = firstExistingForm(legacyNormalized);
+            found = firstExistingForm(legacyNormalized, exists);
             if (found != null) {
                 return found;
             }
             String legacyWithoutState = stripStateDefinitionSegments(legacyNormalized);
             if (!legacyWithoutState.equals(legacyNormalized)) {
-                found = firstExistingForm(legacyWithoutState);
+                found = firstExistingForm(legacyWithoutState, exists);
                 if (found != null) {
                     return found;
                 }
@@ -268,19 +297,19 @@ public final class BlockPaletteRemapper {
      * Prefer the exact id, then the starred generated-state twin, then the bare parent id.
      */
     @Nullable
-    private static String firstExistingForm(@Nonnull String blockTypeId) {
-        if (assetExists(blockTypeId)) {
+    private static String firstExistingForm(@Nonnull String blockTypeId, @Nonnull Predicate<String> exists) {
+        if (exists.test(blockTypeId)) {
             return blockTypeId;
         }
         String bare = stripPrefabStar(blockTypeId);
         if (blockTypeId.startsWith(GENERATED_ID_PREFIX)) {
-            if (assetExists(bare)) {
+            if (exists.test(bare)) {
                 return bare;
             }
             return null;
         }
         String starred = GENERATED_ID_PREFIX + bare;
-        if (assetExists(starred)) {
+        if (exists.test(starred)) {
             return starred;
         }
         return null;
@@ -688,7 +717,7 @@ public final class BlockPaletteRemapper {
             case BlockPaletteConstants.CATEGORY_WALLS -> rebuildWalls(parsed, newFamilyKey);
             case BlockPaletteConstants.CATEGORY_CLOTH -> rebuildCloth(newFamilyKey, parsed.suffix);
             case BlockPaletteConstants.CATEGORY_COBBLE -> rebuildRock("Cobble", newFamilyKey, parsed.suffix);
-            case BlockPaletteConstants.CATEGORY_BRICKS -> rebuildRock("Brick", newFamilyKey, parsed.suffix);
+            case BlockPaletteConstants.CATEGORY_BRICKS -> rebuildBricks(newFamilyKey, parsed.suffix);
             case BlockPaletteConstants.CATEGORY_TRUNKS -> "Wood_" + newFamilyKey + "_" + parsed.suffix;
             case BlockPaletteConstants.CATEGORY_PLANKS -> "Wood_" + newFamilyKey + "_" + parsed.suffix;
             case BlockPaletteConstants.CATEGORY_ROOFS -> rebuildSolidRoof(parsed, newFamilyKey);
@@ -727,6 +756,21 @@ public final class BlockPaletteRemapper {
             return "Cloth_Block_Wool_" + familyKey;
         }
         return "Cloth_Block_Wool_" + familyKey + "_" + suffix;
+    }
+
+    /**
+     * Brick palettes are rock types ({@code Rock_<type>_Brick…}). A {@code metal:<set>} key swaps in a metal set
+     * instead ({@code Metal_<set>…}): the game builds its metal sets on the brick shapes (block, smooth, ornate,
+     * decorative, half, smooth half, stairs), so the tail carries over as it is. Shapes a metal set lacks (wall,
+     * beam, pillar) resolve to nothing and are left as the building has them.
+     */
+    @Nonnull
+    private static String rebuildBricks(@Nonnull String familyKey, @Nonnull String suffix) {
+        if (!familyKey.toLowerCase(Locale.ROOT).startsWith(METAL_BLOCK_FAMILY_PREFIX)) {
+            return rebuildRock("Brick", familyKey, suffix);
+        }
+        String set = familyKey.substring(METAL_BLOCK_FAMILY_PREFIX.length());
+        return suffix.isEmpty() ? "Metal_" + set : "Metal_" + set + "_" + suffix;
     }
 
     @Nonnull

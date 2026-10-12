@@ -1361,12 +1361,9 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         rowIndex++;
         // Whoever is waiting on a house quest goes first and is marked, then everyone else by name as before.
         Set<UUID> waiting = town == null || plugWork == null ? Set.of() : HouseResidentDirectory.housingQuestResidents(town, plugWork);
-        List<HouseResidentDirectory.HouseResidentRow> ordered = new ArrayList<>(assignable);
-        ordered.sort(Comparator.comparing((HouseResidentDirectory.HouseResidentRow r) -> !waiting.contains(r.entityUuid())));
-        for (HouseResidentDirectory.HouseResidentRow row : ordered) {
-            if (occupiedOtherSlots.contains(row.entityUuid()) || !ResidentSearch.matches(row.displayName(), houseResidentSearch)) {
-                continue;
-            }
+        // Each button carries its resident's own id, never a row number, so the order cannot change who is chosen.
+        for (HouseResidentDirectory.HouseResidentRow row
+            : HouseResidentDirectory.pickerRows(assignable, waiting, occupiedOtherSlots, houseResidentSearch)) {
             commandBuilder.append(HOUSE_RESIDENT_ROWS, "Aetherhaven/HouseResidentAssignRow.ui");
             String rowPath = HOUSE_RESIDENT_ROWS + "[" + rowIndex + "]";
             AetherhavenUiLocalization.applyHouseResidentAssignRow(commandBuilder, rowPath);
@@ -1385,6 +1382,23 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             rowIndex++;
         }
         commandBuilder.set("#HouseResidentSearchEmpty.Visible", rowIndex == 1);
+    }
+
+    @Nonnull
+    private static Message houseAssignmentMessage(
+        @Nonnull HouseResidentAssignment.Outcome outcome,
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        return switch (outcome) {
+            case ASSIGNED -> Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.updatedHome");
+            case CLEARED -> Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.clearedHome");
+            case NOT_ELIGIBLE -> Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.homeNeedsQuest");
+            case TOWN_TOO_SMALL -> Message.translation("aetherhaven_population.foodFirst");
+            case SHORT_FOOD -> Message.translation("aetherhaven_population.shortFood").param("points",
+                com.hexvane.aetherhaven.town.TownPopulation.snapshot(town, plugin.getConstructionCatalog()).foodShortfallForNextResident());
+            case HOUSE_UNAVAILABLE -> Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.homeUnavailable");
+        };
     }
 
     private void applyHouseResidentSelection(
@@ -1430,7 +1444,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         if (town == null) {
             return;
         }
-        HouseResidentAssignment.assignResident(
+        HouseResidentAssignment.Outcome outcome = HouseResidentAssignment.assignResident(
             town,
             plotId,
             activeHouseResidentSlot,
@@ -1442,11 +1456,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         );
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(
-                residentUuid == null
-                    ? Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.clearedHome")
-                    : Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.updatedHome")
-            );
+            // Say what really happened. A refused move used to be announced as a new home.
+            pr.sendMessage(houseAssignmentMessage(outcome, town, plugin));
         }
         UICommandBuilder cmd = new UICommandBuilder();
         UIEventBuilder ev = new UIEventBuilder();

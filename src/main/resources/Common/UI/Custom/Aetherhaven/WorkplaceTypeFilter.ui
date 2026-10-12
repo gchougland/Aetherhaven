@@ -1,0 +1,12 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+// One filter over the workplace type cards: every type, or the types of one skill.
+Button { Anchor: (Width: 42, Height: 40, Right: 6);
+  Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+  Group #Active { Background: $T.@CardPressed; Visible: false; HitTestVisible: false; }
+  Group { LayoutMode: Center; HitTestVisible: false;
+    AssetImage #Icon { Anchor: (Width: 26, Height: 26); }
+    Label #Text { Text: ""; Anchor: (Width: 42, Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 13, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #eee0bf); Visible: false; }
+  }
+}

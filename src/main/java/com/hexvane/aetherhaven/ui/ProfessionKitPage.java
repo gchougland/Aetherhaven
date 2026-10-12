@@ -23,7 +23,7 @@ public final class ProfessionKitPage extends AetherhavenInteractiveCustomUIPage<
     private final Map<String, Choice> choices = new HashMap<>();
     private record Choice(TownWarehouse.Page page, short slot, ItemStack stack) {}
     private ItemStack equipped;
-    private long warehouseRevision, frame;
+    private long frame;
     private boolean appended;
     private String hint = "Select a kit to equip it. Your previous kit returns to the same inventory slot.";
     public ProfessionKitPage(PlayerRef player, UUID townId, String characterId, UUID residentId) {
@@ -42,7 +42,7 @@ public final class ProfessionKitPage extends AetherhavenInteractiveCustomUIPage<
         var progress=TownsfolkProgressService.getOrCreate(town,manager,plugin,characterId);
         var definition=plugin.getTownsfolkCharacterCatalog().byId(characterId);
         c.set("#Portrait.AssetPath",NpcPortraitProvider.portraitPathForTownsfolk(definition));
-        c.set("#Name.Text",definition!=null&&definition.getDisplayName()!=null?definition.getDisplayName():characterId);
+        c.set("#VillagerName.Text",definition!=null&&definition.getDisplayName()!=null?definition.getDisplayName():characterId);
         equipped=progress.professionKit();
         var current=ItemStack.isEmpty(equipped)?null:plugin.getProfessionKits().find(equipped.getItemId());
         c.set("#CurrentIcon.Visible",!ItemStack.isEmpty(equipped));
@@ -50,7 +50,7 @@ public final class ProfessionKitPage extends AetherhavenInteractiveCustomUIPage<
         c.set("#CurrentName.Text",ItemStack.isEmpty(equipped)?"No profession kit":current==null?"Unavailable kit":current.name());
         c.set("#CurrentEffect.Text",current==null?"Choose equipment for the work this resident does most.":current.description());
         c.set("#Hint.Text",hint);
-        c.clear("#Kits"); choices.clear(); frame++; warehouseRevision=town.getWarehouse().revision();
+        c.clear("#Kits"); choices.clear(); frame++;
         var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.HOTBAR_STORAGE_BACKPACK);
         if(inventory!=null)for(short slot=0;slot<inventory.getCapacity();slot++)add(c,e,progress,plugin,new Choice(null,slot,inventory.getItemStack(slot)),"Your inventory");
         if(WarehouseAccess.canBrowse(town,playerRef.getUuid()))for(var page:TownWarehouse.Page.values()) {
@@ -81,20 +81,21 @@ public final class ProfessionKitPage extends AetherhavenInteractiveCustomUIPage<
         var town=manager.getTown(townId);if(!allowed(town)){close();return;}
         if("Back".equals(data.action)){store.getComponent(ref,Player.getComponentType()).getPageManager().openCustomPage(ref,store,new TownsfolkProfilePage(playerRef,townId,characterId,residentId));return;}
         var progress=TownsfolkProgressService.getOrCreate(town,manager,plugin,characterId);
-        if(!Long.toString(frame).equals(data.frame))hint="Equipment changed. Choose a kit again.";
+        // The frame only moves when this page itself was drawn again, never because the town was busy elsewhere.
+        if(!Long.toString(frame).equals(data.frame))hint="This list was drawn again while you chose. Choose a kit once more.";
         else if("Equip".equals(data.action)) {
             var choice=choices.get(data.choice);String error="Choose an available kit.";
             if(choice!=null) {
                 if(choice.page()==null) {
                     var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.HOTBAR_STORAGE_BACKPACK);
-                    if(inventory!=null)error=ProfessionKitService.equip(progress,plugin.getProfessionKits(),inventory,choice.slot(),choice.stack(),equipped);
-                } else if(WarehouseAccess.canBrowse(town,playerRef.getUuid())) error=town.getWarehouse().equipProfessionKit(choice.page(),choice.slot(),choice.stack(),warehouseRevision,progress,plugin.getProfessionKits(),equipped);
+                    if(inventory!=null)error=ProfessionKitService.equip(progress,plugin.getProfessionKits(),inventory,choice.slot(),choice.stack());
+                } else if(WarehouseAccess.canBrowse(town,playerRef.getUuid())) error=town.getWarehouse().equipProfessionKit(choice.page(),choice.slot(),choice.stack(),progress,plugin.getProfessionKits());
             }
             hint=error==null?"Kit equipped. Profession priorities and wages are unchanged.":error;
             if(error==null)manager.updateTown(town);
-        } else if("Unequip".equals(data.action)&&!ItemStack.isEmpty(equipped)) {
+        } else if("Unequip".equals(data.action)) {
             var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.HOTBAR_STORAGE_BACKPACK);
-            String error=ProfessionKitService.unequip(progress,inventory,equipped);
+            String error=ProfessionKitService.unequip(progress,inventory);
             hint=error==null?"Kit returned to your inventory.":error;
             if(error==null)manager.updateTown(town);
         }

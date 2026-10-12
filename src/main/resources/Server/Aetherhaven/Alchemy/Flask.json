@@ -1,0 +1,7 @@
+{
+  "CraftCost": [
+    { "ItemId": "Ingredient_Bar_Iron", "Quantity": 5 },
+    { "ItemId": "Ingredient_Leather_Light", "Quantity": 5 },
+    { "ItemId": "Ingredient_Tree_Sap", "Quantity": 5 }
+  ]
+}

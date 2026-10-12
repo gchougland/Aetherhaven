@@ -44,6 +44,8 @@ public final class BackpackPage extends AetherhavenInteractiveCustomUIPage<Backp
         c.set("#Rename.Value",pack==null?"":pack.name);c.set("#RenameButton.Disabled",pack==null);
         e.addEventBinding(CustomUIEventBindingType.Activating,"#RenameButton",event("Rename").append("@Name","#Rename.Value"),false);
         e.addEventBinding(CustomUIEventBindingType.Activating,"#ChooseBag",event("ChooseBag"),false);
+        c.set("#StoreMatching.Text",text("storeMatching"));c.set("#StoreMatching.Disabled",pack==null);
+        e.addEventBinding(CustomUIEventBindingType.Activating,"#StoreMatching",event("StoreMatching"),false);
         e.addEventBinding(CustomUIEventBindingType.Activating,"#PickerBack",event("Back"),false);
         if("bags".equals(picker)){
             c.set("#PickerTitle.Text","YOUR BACKPACKS");int index=0;
@@ -78,30 +80,38 @@ public final class BackpackPage extends AetherhavenInteractiveCustomUIPage<Backp
     private final Map<String,Integer> counts=new HashMap<>();
     private void cell(UICommandBuilder c,UIEventBuilder e,String host,int slot,ItemStack stack,boolean deposit){
         int index=counts.merge(host,1,Integer::sum)-1;c.append(host,"Aetherhaven/WarehouseItemSlot.ui");String at=host+"["+index+"]";
-        boolean empty=ItemStack.isEmpty(stack);c.set(at+" #Icon.Visible",!empty);c.set(at+" #Quantity.Text",empty?"":Integer.toString(stack.getQuantity()));c.set(at+" #Cell.Disabled",empty);
-        if(empty)return;c.set(at+" #Icon.ItemId",stack.getItemId());c.set(at+" #Cell.TooltipText",itemName(stack)+"\n"+stack.getQuantity()+(stack.getQuantity()==1?" item\n":" items\n")+(deposit?"Store in backpack":"Take from backpack"));
+        boolean empty=ItemStack.isEmpty(stack);if(empty)c.set(at+" #Icon.Visible",false);c.set(at+" #Quantity.Text",empty?"":Integer.toString(stack.getQuantity()));c.set(at+" #Cell.Disabled",empty);
+        // Props, plot tokens and block palettes carry their own picture, as they do in the inventory.
+        if(empty)return;com.hexvane.aetherhaven.ui.StackIcons.show(c,at,stack);c.set(at+" #Cell.TooltipText",itemName(stack)+"\n"+stack.getQuantity()+(stack.getQuantity()==1?" item\n":" items\n")+(deposit?"Store in backpack":"Take from backpack"));
         if(deposit&&Backpack.isBackpack(stack)){c.set(at+" #Cell.Disabled",true);return;}
         String id="r"+rows.size();rows.put(id,new Row(slot,stack,deposit));
         e.addEventBinding(CustomUIEventBindingType.Activating,at+" #Cell",event(id),false);
         e.addEventBinding(CustomUIEventBindingType.RightClicking,at+" #Cell",event(id).append("One","true"),false);
     }
-    private String itemName(ItemStack stack){var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();String s=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),stack.getItem().getTranslationKey());return s==null?stack.getItemId():s;}
+    /** Page text from {@code aetherhaven_backpack.lang}, in the player's language. */
+    private String text(String key){var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();String s=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),"aetherhaven_backpack.aetherhaven.backpack."+key);return s==null||s.isBlank()?key:s;}
+    private String itemName(ItemStack stack){String own=com.hexvane.aetherhaven.ui.StackIcons.instanceName(stack);if(own!=null)return own;var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();String s=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),stack.getItem().getTranslationKey());return s==null?stack.getItemId():s;}
     @Override public void handleDataEvent(Ref<EntityStore> ref,Store<EntityStore> store,Data data){
         if(!Long.toString(frame).equals(data.frame))return;
         var inv=InventoryComponent.getCombined(store,ref,InventoryComponent.HOTBAR_STORAGE_BACKPACK);if(inv==null){close();return;}
-        boolean ok=false;var row=rows.get(data.action);String action=actions.getOrDefault(data.action,data.action);
+        boolean ok=false;String message=null;var row=rows.get(data.action);String action=actions.getOrDefault(data.action,data.action);
         if(row!=null)ok=BackpackExchange.transfer(inv,selected,expected,row.slot(),row.stack(),row.deposit(),"true".equals(data.one));
         else if(action!=null&&action.startsWith("Select:")){selected=Short.parseShort(action.substring(7));picker="";ok=true;}
         else if("ChooseBag".equals(action)){picker="bags";ok=true;}
         else if("ChooseMusic".equals(action)){picker="music";ok=true;}
         else if("Back".equals(action)){picker="";ok=true;}
+        else if("StoreMatching".equals(action)){
+            // Everything carried except the hotbar, which holds what the player is using.
+            int moved=BackpackExchange.storeMatching(inv,selected,expected,com.hexvane.aetherhaven.ui.PlayerInventoryLayout.hotbarSlots(store,ref),inv.getCapacity());
+            ok=true;message=moved>0?text("storedMatching").replace("{count}",Integer.toString(moved)):text("matchingNone");
+        }
         else if("Rename".equals(action))ok=BackpackExchange.change(inv,selected,expected,Map.of(),p->p.rename(data.name));
         else if("Magnet".equals(action))ok=BackpackExchange.change(inv,selected,expected,Map.of(),p->{if(!p.magnet)return false;p.magnetOn=!p.magnetOn;return true;});
         else if(action!=null&&action.startsWith("Song:")){
             String song=action.substring(5);if(song.isEmpty()||AetherhavenPlugin.get().getBardSongCatalog().byId(song)!=null)ok=BackpackExchange.change(inv,selected,expected,Map.of(),p->{if(!p.jukebox)return false;p.song=song;return true;});
             if(ok)picker="";
         }
-        hint=ok?"Ready. Left click moves a stack. Right click moves one item.":"Unable to do that. Check materials and free space. If the backpack moved, select it again.";
+        hint=message!=null?message:ok?"Ready. Left click moves a stack. Right click moves one item.":"Unable to do that. Check materials and free space. If the backpack moved, select it again.";
         var c=new UICommandBuilder();var e=new UIEventBuilder();build(ref,c,e,store);sendUpdate(c,e,false);
     }
     public static final class Data {

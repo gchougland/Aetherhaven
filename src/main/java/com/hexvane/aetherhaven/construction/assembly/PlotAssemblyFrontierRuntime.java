@@ -167,6 +167,25 @@ public final class PlotAssemblyFrontierRuntime {
         return best;
     }
 
+    /**
+     * The smallest frontier index that is not in {@code skip}: the next piece to try when the ones before it are
+     * waiting for someone to step out of them. {@code -1} when every frontier piece is skipped, or none is left.
+     */
+    public int smallestPlacementIndex(@Nullable IntSet skip) {
+        if (skip == null || skip.isEmpty()) {
+            return smallestPlacementIndex();
+        }
+        int best = Integer.MAX_VALUE;
+        IntIterator it = frontier.iterator();
+        while (it.hasNext()) {
+            int v = it.nextInt();
+            if (v < best && !skip.contains(v)) {
+                best = v;
+            }
+        }
+        return best == Integer.MAX_VALUE ? -1 : best;
+    }
+
     @Nonnull
     public IntIterator frontierIterator() {
         return frontier.iterator();

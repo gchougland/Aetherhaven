@@ -89,7 +89,8 @@ public final class MarketDialogueHandlers {
             return;
         }
         MarketSession session = MarketSessionIndex.getOrCreate(town.getTownId());
-        session.snapshotFromContainer(session.getLiveContainer());
+        // After a restart the stall's goods are read back from the town here, so they are judged and not forgotten.
+        session.snapshotFromContainer(MarketStallService.stall(store.getExternalData().getWorld(), town.getTownId(), session));
         if (!session.tryBeginJudging(System.currentTimeMillis())) {
             out.setCloseDialogue(true);
             return;

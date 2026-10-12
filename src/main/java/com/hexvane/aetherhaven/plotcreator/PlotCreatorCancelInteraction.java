@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -16,13 +17,13 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Plot creator staff: R / Ability3 — open cancel confirmation. */
+/** Plot creator staff: third extra action (first extra key while crouching) — open cancel confirmation. */
 public final class PlotCreatorCancelInteraction extends SimpleInstantInteraction {
     @Nonnull
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<PlotCreatorCancelInteraction> CODEC =
         com.hypixel.hytale.codec.builder.BuilderCodec
             .builder(PlotCreatorCancelInteraction.class, PlotCreatorCancelInteraction::new, SimpleInstantInteraction.CODEC)
-            .documentation("Plot creator staff: Ability3 — confirm cancel of the active session.")
+            .documentation("Plot creator staff: third extra action — confirm cancel of the active session.")
             .build();
 
     @Nonnull
@@ -46,7 +47,7 @@ public final class PlotCreatorCancelInteraction extends SimpleInstantInteraction
             return;
         }
         CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
-        if (commandBuffer == null || type != InteractionType.Ability3) {
+        if (commandBuffer == null || type != ToolAbilityKeys.THIRD) {
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -56,6 +57,15 @@ public final class PlotCreatorCancelInteraction extends SimpleInstantInteraction
             context.getState().state = InteractionState.Failed;
             return;
         }
+        cancel(ref, commandBuffer, context);
+    }
+
+    /** Opens the cancel confirmation for the session of the staff in hand. Shared with the step back key's crouch action. */
+    static void cancel(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull InteractionContext context
+    ) {
         ItemStack hand = context.getHeldItem();
         if (PlotCreatorStaffBoundsSwap.isEditorBoundsStaff(hand)) {
             BuildingEditorInteractions.handleCancel(ref, commandBuffer, context);

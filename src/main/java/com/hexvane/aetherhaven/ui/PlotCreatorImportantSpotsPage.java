@@ -78,7 +78,7 @@ public final class PlotCreatorImportantSpotsPage
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
-            "#CloseButton",
+            "#PageCloseButton",
             EventData.of("Action", "Close"),
             false
         );
@@ -114,7 +114,7 @@ public final class PlotCreatorImportantSpotsPage
         b.set("#StepHint.TextSpans", Message.translation(MSG + (needsMining
             ? ".hint.miningCurrentRules" : ".step.IMPORTANT_SPOTS.hint")));
         b.set("#ConfirmButton.TextSpans", Message.translation(MSG + ".button.done"));
-        b.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
+        b.set("#PageCloseButton.TextSpans", Message.translation(MSG + ".button.close"));
 
         List<PlotCreatorSpotEntry> choosable = choosableSpots();
         b.clear(SPOT_ROWS);
@@ -240,6 +240,9 @@ public final class PlotCreatorImportantSpotsPage
                 continue;
             }
             if(type==PlotCreatorSubstepType.BARN_PEN&&!PlotCreatorProductionRules.requiresBarnPens(session.getDraft(),AetherhavenPlugin.get()))continue;
+            // Only a shop that townsfolk can staff has a clerk to place.
+            if (type == PlotCreatorSubstepType.CLERK_STAND
+                && !com.hexvane.aetherhaven.plotcreator.PlotCreatorClerkStand.offered(session.getDraft(), AetherhavenPlugin.get())) continue;
             if (type == PlotCreatorSubstepType.MINING_NODE && !PlotCreatorProductionRules.requiresMiningNodes(
                     session.getDraft(),AetherhavenPlugin.get())) continue;
             if (type == PlotCreatorSubstepType.WORK_POI) {

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -23,7 +24,7 @@ public final class BuildingEditorStepBackInteraction extends SimpleInstantIntera
                 BuildingEditorStepBackInteraction::new,
                 SimpleInstantInteraction.CODEC
             )
-            .documentation("Building editor staff: Ability1 — previous step.")
+            .documentation("Building editor staff: Ability1 — previous step. While crouching: cancel the active session.")
             .build();
 
     @Nonnull
@@ -55,6 +56,10 @@ public final class BuildingEditorStepBackInteraction extends SimpleInstantIntera
         Ref<EntityStore> ref = context.getEntity();
         if (ref == null) {
             context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (ToolAbilityKeys.thirdActionHeld(commandBuffer, ref)) {
+            BuildingEditorInteractions.handleCancel(ref, commandBuffer, context);
             return;
         }
         BuildingEditorInteractions.handleStepBack(ref, commandBuffer, context);

@@ -52,6 +52,7 @@
       }
     ],
     "HitboxType": "Aetherhaven_Warehouse_Ledger_Desk",
+    "InteractionHitboxType": "Aetherhaven_Warehouse_Ledger_Desk_Interaction",
     "Gathering": {
       "Breaking": {
         "GatherType": "Benches"
@@ -81,7 +82,8 @@
           }
         ]
       }
-    }
+    },
+    "InteractionHint": "aetherhaven_warehouse.items.ledger.hint"
   },
   "PlayerAnimationsId": "Block",
   "IconProperties": {

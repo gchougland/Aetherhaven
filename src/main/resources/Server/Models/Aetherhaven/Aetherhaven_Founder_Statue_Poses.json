@@ -1,0 +1,57 @@
+{
+  "Parent": "Player",
+  "MinScale": 1,
+  "MaxScale": 1,
+  "AnimationSets": {
+    "StatueProud": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/Statue/Proud.blockyanim",
+          "Looping": true,
+          "Speed": 1,
+          "BlendingDuration": 0
+        }
+      ]
+    },
+    "StatueRally": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/Statue/Rally.blockyanim",
+          "Looping": true,
+          "Speed": 1,
+          "BlendingDuration": 0
+        }
+      ]
+    },
+    "StatueWave": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/Statue/Wave.blockyanim",
+          "Looping": true,
+          "Speed": 1,
+          "BlendingDuration": 0
+        }
+      ]
+    },
+    "StatueCheer": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/Statue/Cheer.blockyanim",
+          "Looping": true,
+          "Speed": 1,
+          "BlendingDuration": 0
+        }
+      ]
+    },
+    "StatueSit": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/Statue/Sit.blockyanim",
+          "Looping": true,
+          "Speed": 1,
+          "BlendingDuration": 0
+        }
+      ]
+    }
+  }
+}

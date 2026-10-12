@@ -50,8 +50,10 @@ public final class RtsMoveOrderVisualSystem extends EntityTickingSystem<EntitySt
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
+        // No session check: an order given with the Command Flag in hand has a marker too. Leaving the command post
+        // clears its marker itself, so an inactive session with a destination can only be a flag order.
         RtsCommandPlayerComponent session = chunk.getComponent(index, RtsCommandPlayerComponent.getComponentType());
-        if (session == null || !session.isActive()) {
+        if (session == null) {
             return;
         }
         UUIDComponent commanderUuid = chunk.getComponent(index, UUIDComponent.getComponentType());
@@ -62,6 +64,10 @@ public final class RtsMoveOrderVisualSystem extends EntityTickingSystem<EntitySt
         Ref<EntityStore> commanderRef = chunk.getReferenceTo(index);
         RtsMoveOrderVisuals.ActiveDestination destination = RtsMoveOrderVisuals.getActive(commanderId);
         if (destination == null) {
+            return;
+        }
+        if (destination.expired(store.getExternalData().getWorld().getTick())) {
+            RtsMoveOrderVisuals.clear(commanderId);
             return;
         }
 

@@ -474,6 +474,9 @@ public final class PlotCreatorSpotMarkerCollector {
     @Nullable
     private static PlotCreatorSubstepType resolvePoiType(@Nonnull PlotCreatorPoiDraft poi) {
         if(poi.getTags().contains("BARN_PEN"))return PlotCreatorSubstepType.BARN_PEN;
+        if (poi.getTags().contains(com.hexvane.aetherhaven.shop.ShopClerkStand.TAG)) {
+            return PlotCreatorSubstepType.CLERK_STAND;
+        }
         if (PlotCreatorGaiaStatueSupport.isGaiaStatueBlockTypeId(poi.getBlockTypeId())) {
             return null;
         }

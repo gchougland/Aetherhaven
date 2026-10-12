@@ -1,7 +1,8 @@
 $C = "../Common.ui";
 
-@BoardPanelHeight = 670;
-@BoardPanelWidth = 980;
+// Sized so the card row is exactly one quest card tall (QuestBoardCard.ui @QuestCardHeight).
+@BoardPanelHeight = 714;
+@BoardPanelWidth = 1112;
 @BoardContentHeight = @BoardPanelHeight - $C.@TitleHeight - 32;
 @BoardRankBarHeight = 72;
 @BoardCardRowHeight = @BoardContentHeight - @BoardRankBarHeight - 12;

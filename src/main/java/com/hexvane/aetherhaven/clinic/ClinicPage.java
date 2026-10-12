@@ -24,7 +24,6 @@ public final class ClinicPage extends AetherhavenInteractiveCustomUIPage<ClinicP
     private final UUID townId;
     private final Ref<EntityStore> doctor;
     private boolean appended;
-    private long seenRevision;
     private boolean liveRefreshStarted;
     private String hint = "Injured civilians visit after danger passes. Guards can follow you here and wait while they recover.";
     public ClinicPage(PlayerRef player, UUID town, Ref<EntityStore> doctor) {
@@ -32,6 +31,15 @@ public final class ClinicPage extends AetherhavenInteractiveCustomUIPage<ClinicP
         this.townId = town; this.doctor = doctor;
     }
     @Override public void build(Ref<EntityStore> ref, UICommandBuilder c, UIEventBuilder e, Store<EntityStore> store) {
+        fill(ref, c, e, store);
+        // What the client receives whole. The timer below is compared with it and sends only what moved.
+        opened(c, e);
+        if (!liveRefreshStarted) {
+            liveRefreshStarted = true;
+            scheduleRefresh(store.getExternalData().getWorld());
+        }
+    }
+    private void fill(Ref<EntityStore> ref, UICommandBuilder c, UIEventBuilder e, Store<EntityStore> store) {
         if (!appended) { c.append("Aetherhaven/ClinicPage.ui"); appended = true; }
         var plugin = AetherhavenPlugin.get(); if (plugin == null) return;
         var manager = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
@@ -52,7 +60,7 @@ public final class ClinicPage extends AetherhavenInteractiveCustomUIPage<ClinicP
             c.set("#Refresh.Disabled", true);
             return;
         }
-        var state = town.getClinic(); seenRevision = state.revision();
+        var state = town.getClinic();
         c.set("#Supply.Text", state.medicine() + " / " + TownClinic.CAPACITY + " medicine");
         bar(c, "#StockFill", 250 * state.medicine() / TownClinic.CAPACITY, 12);
         c.set("#Toggle.Text", state.paused() ? "Resume care" : "Pause care");
@@ -76,18 +84,32 @@ public final class ClinicPage extends AetherhavenInteractiveCustomUIPage<ClinicP
             String path = "#Patients[" + i + "]";
             c.set(path + " #Name.Text", character == null ? npc.getRoleName().replace("Aetherhaven_", "").replace('_', ' ') : character.getDisplayName());
             c.set(path + " #Health.Text", String.format(java.util.Locale.ROOT, "%.0f / %.0f health", health.get(), health.getMax()));
-            bar(c, path + " #HealthFill", Math.round(330 * Math.clamp(health.get() / health.getMax(), 0, 1)), 10);
+            // The page sends an update for every step it shows, and every update can cost the player a press, so
+            // nothing here moves in steps too small to matter: health in twentieths, a course of care in quarters.
+            bar(c, path + " #HealthFill", (int) Math.round(330 * steps(health.get() / health.getMax(), 20)), 10);
             double progress = availability == ClinicCareSystem.Availability.READY ? ClinicCareSystem.progress(doctor, patient, store) : 0;
-            c.set(path + " #Course.Text", progress > 0 ? "Receiving care   " + (int)Math.ceil(TownClinic.TREATMENT_SECONDS * (1 - progress)) + "s remaining" : "Waiting for care");
-            bar(c, path + " #CourseFill", (int)Math.round(330 * progress), 5);
+            c.set(path + " #Course.Text", progress > 0 ? "Receiving care   about " + remaining(progress) + "s remaining" : "Waiting for care");
+            bar(c, path + " #CourseFill", progress > 0 ? (int) Math.round(330 * Math.max(.05, courseShown(progress))) : 0, 5);
         }
         c.set("#Empty.Visible", patients.isEmpty());
-        for (String action : new String[]{"SupplyOne", "SupplyFive", "Toggle", "Refresh"})
+        // The pause button names the state it asks for, so a press seen late can never undo itself.
+        e.addEventBinding(CustomUIEventBindingType.Activating, "#Toggle", new EventData().append("Action", state.paused() ? "Resume" : "Pause"), false);
+        for (String action : new String[]{"SupplyOne", "SupplyFive", "Refresh"})
             e.addEventBinding(CustomUIEventBindingType.Activating, "#" + action, new EventData().append("Action", action), false);
-        if (!liveRefreshStarted) {
-            liveRefreshStarted = true;
-            scheduleRefresh(store.getExternalData().getWorld());
-        }
+    }
+    /** How many times the course bar and its seconds move during one treatment. */
+    static final int COURSE_STEPS = 4;
+    /** A share from 0 to 1 rounded to one of {@code count} equal steps. */
+    static double steps(double share, int count) {
+        return Math.round(count * Math.clamp(share, 0, 1)) / (double) count;
+    }
+    /** The part of a course of care the page shows as done: the last whole quarter reached. */
+    static double courseShown(double progress) {
+        return Math.floor(COURSE_STEPS * Math.clamp(progress, 0, 1) + 1e-9) / COURSE_STEPS;
+    }
+    /** Seconds of treatment left as the page shows them. They change with the bar, four times in a course. */
+    static int remaining(double progress) {
+        return (int) Math.ceil(TownClinic.TREATMENT_SECONDS * (1 - courseShown(progress)));
     }
     private void scheduleRefresh(com.hypixel.hytale.server.core.universe.world.World world) {
         var plugin = AetherhavenPlugin.get();
@@ -101,8 +123,9 @@ public final class ClinicPage extends AetherhavenInteractiveCustomUIPage<ClinicP
             if (player == null || player.getPageManager().getCustomPage() != this) return;
             var commands = new UICommandBuilder();
             var events = new UIEventBuilder();
-            build(ref, commands, events, store);
-            sendUpdate(commands, events, false);
+            fill(ref, commands, events, store);
+            // Nothing is sent while the page looks the same; when it does not, only the values that moved are.
+            sendChanges(commands, events);
             var town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
             if (town != null && valid(ref, store, town)) scheduleRefresh(world);
         }, 1000);
@@ -128,17 +151,35 @@ public final class ClinicPage extends AetherhavenInteractiveCustomUIPage<ClinicP
         var manager = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
         var town = manager.getTown(townId); if (town == null || !valid(ref, store, town)) { close(); return; }
         var state = town.getClinic();
-        if (!"Refresh".equals(data.action) && state.revision() != seenRevision) hint = "The medicine supply changed. Choose again.";
-        else if ("Toggle".equals(data.action)) { state.toggle(); manager.updateTown(town); }
-        else if ("SupplyOne".equals(data.action) || "SupplyFive".equals(data.action)) {
+        // The supply drops every time the Doctor treats someone. That is no reason to refuse a press: each one is
+        // judged by what the cabinet and the player hold at this moment.
+        if ("Pause".equals(data.action) || "Resume".equals(data.action)) {
+            if (state.paused() != "Pause".equals(data.action)) { state.toggle(); manager.updateTown(town); }
+        } else if ("SupplyOne".equals(data.action) || "SupplyFive".equals(data.action)) {
             int amount = "SupplyOne".equals(data.action) ? 1 : 5;
             var inventory = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-            if (!state.canSupply(amount)) hint = "There is not enough room in the medicine cabinet.";
-            else if (inventory == null || !inventory.removeItemStack(new ItemStack(TownClinic.SUPPLY_ITEM, amount), true, true).succeeded())
-                hint = "Carry enough Lesser Health Potions to supply the clinic.";
+            String refused = supplyIssue(state, amount, inventory == null ? 0
+                : com.hexvane.aetherhaven.inventory.InventoryMaterials.count(inventory, TownClinic.SUPPLY_ITEM));
+            if (refused != null) hint = refused;
+            else if (!inventory.removeItemStack(new ItemStack(TownClinic.SUPPLY_ITEM, amount), true, true).succeeded())
+                hint = "The potions could not be taken from your inventory. Nothing was stocked.";
             else { state.supply(amount); manager.updateTown(town); hint = "Medicine stocked. One point restores one health."; }
         }
-        var c = new UICommandBuilder(); var e = new UIEventBuilder(); build(ref, c, e, store); sendUpdate(c, e, false);
+        var c = new UICommandBuilder(); var e = new UIEventBuilder(); fill(ref, c, e, store); sendUpdate(c, e, false);
+    }
+    /**
+     * Why this many potions cannot be stocked right now, or null when they can. Says exactly what is short: room in
+     * the cabinet or potions carried.
+     */
+    public static String supplyIssue(TownClinic state, int bottles, int carried) {
+        if (!state.canSupply(bottles)) {
+            int room = (TownClinic.CAPACITY - state.medicine()) / TownClinic.SUPPLY_VALUE;
+            return room <= 0 ? "The medicine cabinet is full. Nothing was taken."
+                : "The medicine cabinet only has room for " + room + " more. Nothing was taken.";
+        }
+        if (carried < bottles) return "You need " + bottles + " Lesser Health " + (bottles == 1 ? "Potion" : "Potions")
+            + " and carry " + carried + ". Nothing was taken.";
+        return null;
     }
     public static final class Data {
         public static final BuilderCodec<Data> CODEC = BuilderCodec.builder(Data.class, Data::new)

@@ -100,20 +100,93 @@ public final class MarketStallService {
         @Nonnull MarketSession session,
         @Nonnull UUID townId
     ) {
-        SimpleItemContainer container = session.getLiveContainer();
-        if (container == null) {
-            container = new SimpleItemContainer((short) MarketIds.SLOT_COUNT);
-            for (short i = 0; i < MarketIds.SLOT_COUNT; i++) {
-                String id = session.slotItemId(i);
-                int qty = session.slotQuantity(i);
-                if (id != null && !id.isBlank() && qty > 0) {
-                    container.setItemStackForSlot(i, new ItemStack(id, qty));
-                }
-            }
-            session.setLiveContainer(container);
+        SimpleItemContainer container = stall(store.getExternalData().getWorld(), townId, session);
+        UUIDComponent opener = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (opener != null) {
+            // Whoever last opened the stall keeps it: what nobody collects goes back to them when the market ends.
+            session.setStallKeeper(opener.getUuid());
+            persist(store.getExternalData().getWorld(), townId, container);
         }
         player.getPageManager().setPageWithWindows(playerRef, store, Page.Bench, true, new MarketStallWindow(container, townId));
         return true;
+    }
+
+    /**
+     * The stall's goods. They live in this one container, as the stacks the players put in, for as long as the market
+     * runs. Every change is saved with the town at once, and after a restart the container is read back from the
+     * town here, on first use. Nothing ever rebuilds these stacks from an item id.
+     */
+    @Nonnull
+    public static SimpleItemContainer stall(@Nonnull World world, @Nonnull UUID townId, @Nonnull MarketSession session) {
+        SimpleItemContainer live = session.getLiveContainer();
+        if (live != null) {
+            return live;
+        }
+        TownRecord town = town(world, townId);
+        SimpleItemContainer restored =
+            town != null && town.hasFestivalHeldItems()
+                ? town.festivalHeldItems().restoreMarketStall((short) MarketIds.SLOT_COUNT)
+                : new SimpleItemContainer((short) MarketIds.SLOT_COUNT);
+        if (session.getStallKeeper() == null && town != null && town.hasFestivalHeldItems()) {
+            session.setStallKeeper(town.festivalHeldItems().marketKeeper());
+        }
+        attach(world, townId, session, restored);
+        return restored;
+    }
+
+    /** Makes the container the session's stall and saves the town whenever a slot changes. */
+    static void attach(
+        @Nonnull World world,
+        @Nonnull UUID townId,
+        @Nonnull MarketSession session,
+        @Nonnull SimpleItemContainer stall
+    ) {
+        session.setLiveContainer(stall);
+        session.snapshotFromContainer(stall);
+        stall.registerChangeEvent(event -> persist(world, townId, stall));
+    }
+
+    private static void persist(@Nonnull World world, @Nonnull UUID townId, @Nonnull SimpleItemContainer stall) {
+        MarketSession session = MarketSessionIndex.get(townId);
+        TownRecord town = town(world, townId);
+        if (town == null) {
+            return;
+        }
+        if (session == null || session.getLiveContainer() != stall) {
+            // No longer the stall (the market ended, or the square was set up again), so it must not write over what
+            // the town holds. But a window may still be open on it: anything put in now is set aside for the stall's
+            // keeper instead of vanishing when that window closes.
+            if (stall.isEmpty()) {
+                return;
+            }
+            var held = town.festivalHeldItems();
+            UUID keeper = held.marketKeeper() != null ? held.marketKeeper() : town.getOwnerUuid();
+            List<ItemStack> strays = new ArrayList<>();
+            for (short i = 0; i < stall.getCapacity(); i++) {
+                if (!ItemStack.isEmpty(stall.getItemStack(i))) {
+                    strays.add(stall.getItemStack(i));
+                }
+            }
+            stall.clear();
+            for (ItemStack stray : strays) {
+                held.owe(keeper, stray);
+            }
+            com.hexvane.aetherhaven.festival.FestivalHeldItemsService.saved(world, town);
+            return;
+        }
+        if (stall.isEmpty() && !town.hasFestivalHeldItems()) {
+            return;
+        }
+        town.festivalHeldItems().saveMarketStall(stall, session.getStallKeeper());
+        com.hexvane.aetherhaven.festival.FestivalHeldItemsService.saved(world, town);
+    }
+
+    @Nullable
+    private static TownRecord town(@Nonnull World world, @Nonnull UUID townId) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        return plugin == null
+            ? null
+            : com.hexvane.aetherhaven.town.AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
     }
 
     /** Hands the town stall goods back to the player who collects judging rewards. Once only. */
@@ -127,25 +200,16 @@ public final class MarketStallService {
         if (session.isGoodsReturned()) {
             return;
         }
-        session.snapshotFromContainer(session.getLiveContainer());
-        SimpleItemContainer container = session.getLiveContainer();
-        if (container != null) {
-            for (short i = 0; i < container.getCapacity(); i++) {
-                ItemStack stack = container.getItemStack(i);
-                if (stack == null || ItemStack.isEmpty(stack)) {
-                    continue;
-                }
-                player.giveItem(stack, playerRef, store);
-                container.setItemStackForSlot(i, ItemStack.EMPTY);
+        SimpleItemContainer container = stall(store.getExternalData().getWorld(), townId, session);
+        for (short i = 0; i < container.getCapacity(); i++) {
+            ItemStack stack = container.getItemStack(i);
+            if (stack == null || ItemStack.isEmpty(stack)) {
+                continue;
             }
-        } else {
-            for (int i = 0; i < MarketIds.SLOT_COUNT; i++) {
-                String id = session.slotItemId(i);
-                int qty = session.slotQuantity(i);
-                if (id == null || id.isBlank() || qty <= 0) {
-                    continue;
-                }
-                player.giveItem(new ItemStack(id, qty), playerRef, store);
+            // The stack itself goes back. What does not fit the inventory lands at the player's feet. A stack that
+            // could not be handed over at all stays in the stall and is dropped there when the market ends.
+            if (com.hexvane.aetherhaven.festival.FestivalHeldItemsService.handBack(store, playerRef, stack)) {
+                container.setItemStackForSlot(i, ItemStack.EMPTY);
             }
         }
         session.snapshotFromContainer(session.getLiveContainer());
@@ -190,36 +254,57 @@ public final class MarketStallService {
         });
     }
 
-    public static void dropLeftovers(@Nonnull World world, @Nonnull UUID townId) {
+    /**
+     * The market is over. Goods still in the stall are set aside with the town for the member who kept the stall
+     * (the town's owner when nobody is recorded) and are handed to them, as the stacks they are, the next time they
+     * are in this world: at once when they are here now. Nothing is dropped at the stall, because the square is
+     * cleared of loose items when the festival is packed away. This also covers a market that ended while the server
+     * was down: then there is no live stall, only what the town saved.
+     */
+    public static void returnLeftovers(@Nonnull World world, @Nonnull TownRecord town) {
+        UUID townId = town.getTownId();
         MarketSession session = MarketSessionIndex.get(townId);
-        if (session == null || session.isGoodsReturned()) {
+        SimpleItemContainer live = session != null ? session.getLiveContainer() : null;
+        if ((live == null || live.isEmpty()) && !(town.hasFestivalHeldItems() && town.festivalHeldItems().hasMarketStall())) {
             return;
         }
-        session.snapshotFromContainer(session.getLiveContainer());
-        List<ItemStack> stacks = new ArrayList<>();
-        for (int i = 0; i < MarketIds.SLOT_COUNT; i++) {
-            String id = session.slotItemId(i);
-            int qty = session.slotQuantity(i);
-            if (id != null && !id.isBlank() && qty > 0) {
-                stacks.add(new ItemStack(id, qty));
-            }
+        var held = town.festivalHeldItems();
+        if (live != null) {
+            // The last word on what the stall holds. From here on the container is no longer the stall, and it is
+            // emptied so a window still open on it cannot hand the same goods out a second time.
+            held.saveMarketStall(live, session.getStallKeeper());
+            session.setLiveContainer(null);
+            live.clear();
         }
-        Vector3d pos = session.getStallDropPos();
-        if (pos == null) {
-            pos = new Vector3d();
+        held.endMarketStall(town.getOwnerUuid());
+        com.hexvane.aetherhaven.festival.FestivalHeldItemsService.saved(world, town);
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            world.execute(() -> com.hexvane.aetherhaven.festival.FestivalHeldItemsService.settle(world, plugin, townId));
         }
-        Vector3d dropPos = pos;
-        world.execute(() -> {
-            Store<EntityStore> store = world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
-            if (store == null || stacks.isEmpty()) {
-                return;
-            }
-            Holder<EntityStore>[] holders =
-                ItemComponent.generateItemDrops(store, stacks, dropPos, Rotation3f.ZERO);
-            for (Holder<EntityStore> holder : holders) {
-                store.addEntity(holder, AddReason.SPAWN);
-            }
-        });
+    }
+
+    /**
+     * Minute check: a stall the town still holds although no market is running (the festival was ended some way that
+     * did not reach {@link #returnLeftovers}) is settled the same way. World thread, outside a store tick.
+     *
+     * @return true when the town's held items changed
+     */
+    public static boolean settleHeld(@Nonnull World world, @Nonnull TownRecord town) {
+        if (!town.hasFestivalHeldItems()
+            || !town.festivalHeldItems().hasMarketStall()
+            || MarketIds.FESTIVAL_ID.equals(town.getActiveFestivalId())) {
+            return false;
+        }
+        MarketSession session = MarketSessionIndex.get(town.getTownId());
+        SimpleItemContainer live = session != null ? session.getLiveContainer() : null;
+        var held = town.festivalHeldItems();
+        if (live != null) {
+            held.saveMarketStall(live, session.getStallKeeper());
+            session.setLiveContainer(null);
+            live.clear();
+        }
+        return held.endMarketStall(town.getOwnerUuid()) > 0;
     }
 
     private static void spawnPadNow(
@@ -288,11 +373,13 @@ public final class MarketStallService {
         List<Vector3d> slots = session.displayPositionsView();
         int n = Math.min(MarketIds.SLOT_COUNT, slots.size());
         for (int i = 0; i < n; i++) {
-            String id = session.slotItemId(i);
-            if (id == null || id.isBlank()) {
+            SimpleItemContainer live = session.getLiveContainer();
+            ItemStack shown = live != null && i < live.getCapacity() ? live.getItemStack((short) i) : null;
+            if (ItemStack.isEmpty(shown)) {
                 continue;
             }
-            UUID uuid = spawnDisplayNow(store, id, slots.get(i));
+            // The display shows the very stack in the slot, one of it, so what stands on the stall is what is in it.
+            UUID uuid = spawnDisplayNow(store, shown.withQuantity(1) == shown ? shown.cleanCopy() : shown.withQuantity(1), slots.get(i));
             if (uuid != null) {
                 spawned.add(uuid);
             }
@@ -303,10 +390,10 @@ public final class MarketStallService {
     @Nullable
     private static UUID spawnDisplayNow(
         @Nonnull Store<EntityStore> store,
-        @Nonnull String itemId,
+        @Nonnull ItemStack shown,
         @Nonnull Vector3d pos
     ) {
-        Item item = Item.getAssetMap().getAsset(itemId);
+        Item item = Item.getAssetMap().getAsset(shown.getItemId());
         if (item == null) {
             return null;
         }
@@ -315,7 +402,7 @@ public final class MarketStallService {
         holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
         holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(new Vector3d(pos), rot));
         holder.addComponent(Intangible.getComponentType(), Intangible.INSTANCE);
-        holder.addComponent(ItemComponent.getComponentType(), new ItemComponent(new ItemStack(itemId, 1)));
+        holder.addComponent(ItemComponent.getComponentType(), new ItemComponent(shown));
         holder.addComponent(PreventPickup.getComponentType(), PreventPickup.INSTANCE);
         holder.addComponent(PreventItemMerging.getComponentType(), PreventItemMerging.INSTANCE);
         holder.addComponent(HeadRotation.getComponentType(), new HeadRotation(rot));

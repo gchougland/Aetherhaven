@@ -128,8 +128,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private com.hexvane.aetherhaven.equipment.GuardKitCatalog guardKits = new com.hexvane.aetherhaven.equipment.GuardKitCatalog(java.util.List.of());
     public com.hexvane.aetherhaven.equipment.GuardKitCatalog getGuardKits() { return guardKits; }
     public com.hexvane.aetherhaven.equipment.ProfessionKitCatalog getProfessionKits() { return professionKits; }
+    private com.hexvane.aetherhaven.restaurant.RestaurantMenuCatalog restaurantMenu = com.hexvane.aetherhaven.restaurant.RestaurantMenuCatalog.empty();
+    public com.hexvane.aetherhaven.restaurant.RestaurantMenuCatalog getRestaurantMenu() { return restaurantMenu; }
     private com.hexvane.aetherhaven.workplace.WorkplaceFurnishingCatalog workplaceFurnishings = new com.hexvane.aetherhaven.workplace.WorkplaceFurnishingCatalog(java.util.List.of());
     public com.hexvane.aetherhaven.workplace.WorkplaceFurnishingCatalog getWorkplaceFurnishings() { return workplaceFurnishings; }
+    private com.hexvane.aetherhaven.workplace.GrowerCatalog growerPlans = com.hexvane.aetherhaven.workplace.GrowerCatalog.empty();
+    public com.hexvane.aetherhaven.workplace.GrowerCatalog getGrowerPlans() { return growerPlans; }
     private TownsfolkCharacterCatalog townsfolkCharacterCatalog = TownsfolkCharacterCatalog.empty();
     private SpeechVoiceCatalog speechVoiceCatalog = SpeechVoiceCatalog.empty();
     private EquipmentProfileCatalog equipmentProfileCatalog = EquipmentProfileCatalog.empty();
@@ -185,7 +189,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nullable
     private com.hexvane.aetherhaven.blockpalette.BlockPaletteIconPacketAdapter blockPaletteIconPacketAdapter;
 
-    private ShopPriceCatalog shopPriceCatalog = ShopPriceCatalog.empty();
+    /** Replaced whole when prices are reloaded or changed by command; read from every world thread. */
+    private volatile ShopPriceCatalog shopPriceCatalog = ShopPriceCatalog.empty();
 
     private final CommunityCatalogService communityCatalogService = new CommunityCatalogService(this);
     private final CommunityModerationService communityModerationService = new CommunityModerationService(this);
@@ -573,7 +578,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.loadFromAssetPacksOrClasspath(cl);
         this.apprenticeRecipes = com.hexvane.aetherhaven.workplace.WorkplaceRecipeCatalog.load(cl);
         this.professionKits = com.hexvane.aetherhaven.equipment.ProfessionKitCatalog.load(cl);
+        this.restaurantMenu = com.hexvane.aetherhaven.restaurant.RestaurantMenuCatalog.load(cl);
         this.workplaceFurnishings = com.hexvane.aetherhaven.workplace.WorkplaceFurnishingCatalog.load(cl);
+        this.growerPlans = com.hexvane.aetherhaven.workplace.GrowerCatalog.load(cl);
         this.guardKits = com.hexvane.aetherhaven.equipment.GuardKitCatalog.load(cl);
         this.townsfolkCharacterCatalog =
             TownsfolkCharacterCatalog.loadFromAssetPacksOrClasspath(cl, this.townsfolkPersonalityCatalog);
@@ -602,6 +609,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.townNameCatalog = TownNameCatalog.loadFromClasspath();
         this.productionCatalog = ProductionCatalog.loadFromClasspath(cl);
         this.workplaceUnlockCatalog = WorkplaceUnlockCatalog.loadFromClasspath(cl);
+        com.hexvane.aetherhaven.production.SpiritGardenRules.reload(cl);
+        com.hexvane.aetherhaven.production.FarmFieldRules.reload(cl);
         this.bardSongCatalog = BardSongCatalog.loadFromAssetPacksOrClasspath(cl);
         GuideTopicRepository.clearCache();
         LOGGER.atInfo().log(

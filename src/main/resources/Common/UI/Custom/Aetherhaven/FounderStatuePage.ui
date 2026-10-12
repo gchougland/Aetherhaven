@@ -1,0 +1,19 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+// 38 title + 48 content padding + 520 body. Armor cards and pose buttons are appended by FounderStatuePage.
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer #StatueWindow { Anchor: (Width: 920, Height: 606);
+  #Title { Label #TitleText { Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 24);
+   Label #Intro { Anchor: (Height: 24, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #b7c9bb); }
+   Label #ArmorHeading { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 13, RenderBold: true, TextColor: #dec68d); }
+   Group #ArmorRow { LayoutMode: Left; Anchor: (Height: 290, Bottom: 14); }
+   Label #PoseHeading { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 13, RenderBold: true, TextColor: #dec68d); }
+   Group #PoseRow { LayoutMode: Left; Anchor: (Height: 70, Bottom: 12); }
+   Group { Anchor: (Height: 52); Background: $T.@Inset; Padding: (Horizontal: 14, Vertical: 6);
+    Label #Hint { Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #dec68d, Wrap: true, VerticalAlignment: Center); }
+   }
+  }
+ }
+}
+$C.@BackButton {}

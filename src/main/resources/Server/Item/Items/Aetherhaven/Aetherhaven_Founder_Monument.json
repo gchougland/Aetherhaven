@@ -37,7 +37,20 @@
       "Components": {
         "AetherhavenFounderMonumentBlock": {}
       }
-    }
+    },
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AetherhavenFounderStatue"
+            }
+          }
+        ]
+      }
+    },
+    "InteractionHint": "aetherhaven_monument.aetherhaven.monument.statueHint"
   },
   "Tags": {
     "Type": ["Rock"],

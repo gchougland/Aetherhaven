@@ -1,23 +1,44 @@
 $C = "../Common.ui";
+$T = "TownUiTheme.ui";
+@Gold = #e0c891;
+@Soft = #becadb;
+// Inner width 1020. The card grid sits in a panel with 6 of padding and keeps 12 free for its scrollbar, which leaves 996:
+// three 326 wide cards and two 9 wide gaps.
 $C.@PageOverlay {
   LayoutMode: Middle;
   $C.@DecoratedContainer {
-    Anchor: (Width: 780, Height: 750);
+    Anchor: (Width: 1060, Height: 840);
     #Title { Label { Text: "WORKPLACE"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
     #Content {
       LayoutMode: Top; Padding: (Full: 20);
-      $C.@TextField #Name { Anchor: (Height: 40, Bottom: 10); PlaceholderText: "Workplace name"; }
-      Label #Area { Anchor: (Height: 30, Bottom: 8); Style: (...$C.@DefaultLabelStyle, TextColor: #a5cabc); }
-      Label #MainBench { Anchor: (Height: 36, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true, TextColor: #e0c891); }
-      Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; FlexWeight: 1;
-        Label #NoTypes { Text: "No workplace types are unlocked yet. Speak to a supervising villager to unlock one."; Anchor: (Height: 64); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true, TextColor: #becadb); Visible: false; }
-        Group #Types { LayoutMode: Top; }
+      Group { LayoutMode: Left; Anchor: (Height: 40, Bottom: 12);
+        $C.@TextField #NameField { FlexWeight: 1; Anchor: (Right: 14); PlaceholderText: "Workplace name"; }
+        Label #Area { Anchor: (Width: 330); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #a5cabc, HorizontalAlignment: End, VerticalAlignment: Center); }
       }
-      Label #Hint { Anchor: (Height: 60, Top: 12); Style: (...$C.@DefaultLabelStyle, Wrap: true, FontSize: 14, TextColor: #becadb); }
-      $C.@SecondaryTextButton #Tasks { Text: "Tasks for saved workplace"; Anchor: (Height: 38, Bottom: 10); Visible: false; }
-      Group { LayoutMode: Left; Anchor: (Height: 44);
-        $C.@SecondaryTextButton #Remove { Text: "Remove workplace"; Visible: false; Padding: (Horizontal: 10); Anchor: (Width: 210, Right: 10); }
-        $C.@TextButton #Save { Text: "Save workplace"; FlexWeight: 1; Padding: (Horizontal: 10); Anchor: (Right: 10); }
+      Group { LayoutMode: Left; Anchor: (Height: 40, Bottom: 10);
+        $C.@TextField #TypeSearch { Anchor: (Width: 260, Right: 12); PlaceholderText: "Find a type"; }
+        Group #Filters { LayoutMode: Left; FlexWeight: 1; }
+        Label #Shown { Text: ""; Anchor: (Width: 150); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #9cb1b8, HorizontalAlignment: End, VerticalAlignment: Center); }
+      }
+      Group { FlexWeight: 1; Background: $T.@Panel; Padding: (Full: 6);
+        Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; Anchor: (Full: 0);
+          Label #NoTypes { Text: ""; Anchor: (Height: 64, Top: 12, Left: 12, Right: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true, TextColor: @Soft); Visible: false; }
+          Group #Types { LayoutMode: Top; }
+        }
+      }
+      Group { LayoutMode: Top; Anchor: (Height: 80, Top: 10); Padding: (Horizontal: 14, Vertical: 8); Background: $T.@Inset;
+        Group { LayoutMode: Left; Anchor: (Height: 24);
+          Label #DetailTitle { Text: ""; Anchor: (Width: 300); Style: (...$C.@DefaultLabelStyle, FontSize: 16, RenderBold: true, TextColor: #eee0bf); }
+          Label #MainBench { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: @Gold, HorizontalAlignment: End); }
+        }
+        Label #Description { Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b6c6d3); }
+      }
+      Label #Hint { Anchor: (Height: 40, Top: 8); Style: (...$C.@DefaultLabelStyle, Wrap: true, FontSize: 14, TextColor: @Soft); }
+      Group { LayoutMode: Left; Anchor: (Height: 44, Top: 6);
+        $C.@SecondaryTextButton #Remove { Text: "Remove workplace"; Visible: false; Padding: (Horizontal: 10); Anchor: (Width: 220, Right: 10); }
+        $C.@SecondaryTextButton #Tasks { Text: "Tasks for saved workplace"; Visible: false; Padding: (Horizontal: 10); Anchor: (Width: 300, Right: 10); }
+        Group { FlexWeight: 1; }
+        $C.@TextButton #Save { Text: "Save workplace"; Padding: (Horizontal: 10); Anchor: (Width: 260, Right: 10); }
         $C.@SecondaryTextButton #Cancel { Text: "Cancel"; Anchor: (Width: 150); }
       }
     }

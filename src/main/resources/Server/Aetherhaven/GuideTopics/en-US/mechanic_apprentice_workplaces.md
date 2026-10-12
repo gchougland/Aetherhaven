@@ -18,6 +18,8 @@ The blacksmith starts with two shared workplace slots for Smelting, Blacksmithin
 
 **Tobin**, the Crafter, also supervises Salvaging. Mark a workplace around a **Salvager's Workbench** (the Blacksmith sells one) and Apprentices take apart old weapons, armor and tools using their Crafting skill. The recovered materials go to Crafted Goods.
 
+The **Builder** supervises two kinds of workplace, and both use a **Builder's Workbench**. A **Builder's Yard** sends Apprentices out to build the town's construction projects. A **Block Workshop** stays at the bench and cuts planks, bricks, stairs, slabs, roofs and other building blocks to order using the Building skill. The bench opens the right page for the workplace it stands in.
+
 The task page of every crafting workplace shows the finished goods waiting in Crafted Goods for its tasks. Click a stack to collect it there.
 
 A courier brings the materials for several crafts of a task in one trip, and the Apprentice makes them all in one visit. A task set to keep crafting is supplied a few crafts at a time, so it never empties the warehouse. Furnaces are loaded with a whole stack of ore and enough fuel for it, and the Apprentice returns when the furnace stops. A smelting workplace's task page shows what each furnace holds.
@@ -34,6 +36,14 @@ Seed and sapling recipes use a Crafting workplace and the worker's **Farming** s
 
 Herb Garden workplaces have been removed. The Druid grows ingredients directly in the Conservatory. Existing plants remain in the world. Unused supplies stay in storage, and couriers return supplies that were already picked up.
 
+The **Druid** supervises two growing workplaces that use the Farming skill. Unlock them on the Druid's upgrade screen.
+
+A **Mycologist** grows one kind of mushroom at a time. Craft **Mushroom Logs** at the Town Planning Desk, place up to six inside the workplace and use any log to open it. Choose a mushroom, and an Apprentice seeds each log, tends it twice as it grows and picks it. Common mushrooms for cooking need little skill. Mushrooms for mixtures, glowing mushrooms and boomshrooms need more. Changing the mushroom clears every log.
+
+A **Berry Patch** needs a Farmer's Workbench and berry bushes from the Florist. An Apprentice waters up to eight bushes and picks the ripe ones, and the bushes grow their berries back.
+
+Both keep their harvest in the workplace store. Collect it on the workplace screen or from the warehouse Production page. Couriers take it to kitchens that need it, and the Alchemist's cauldron brews with it directly. A full store pauses work until some is collected.
+
 The Laboratory, Clinic, Conservatory, Hunter's Lodge and Warehouse are also available in the Core style. **Simple Workplace** is a decoration building for your own benches and furnishings; place and mark an Apprentice workplace there using the normal staff controls.
 
 ## Mark an area
@@ -44,7 +54,7 @@ The first corner sets the floor. The site reaches five blocks above that floor. 
 
 Use **Manage workplace** to open a saved workplace. Use **Resize workplace**, select a workplace, then choose its new corners. A Mining base uses the same corners. Plan its tunnels through the Workbench map. The original area stays unchanged until you save. Cancel clears the selection.
 
-Use the tool's mode key to cycle modes, or middle click to open the mode menu. The overlay shows your configured keys. Choose **Build structures** to return to construction. Switching modes clears unfinished corner selections but keeps saved workplaces.
+Use **Next mode** to cycle modes, or **Mode menu** to open the mode menu. The game shows your own keys for the staff at the bottom right of the screen. Choose **Build structures** to return to construction. Switching modes clears unfinished corner selections but keeps saved workplaces.
 
 ## Plan your workforce
 
@@ -66,16 +76,16 @@ Wages and Apprentice work pause when no town member is in the town's world. Food
 
 ## Bench recipes
 
-Crafting workplaces discover recipes from their matching benches: Workbench, Blacksmith's Anvil, Armorer's Workbench, Furnace, Tanning Rack, Chef's Stove, Alchemist's Workbench and Salvager's Workbench. Added pack recipes appear in the same list. Costs, outputs, required bench tiers, bench upgrades and Memories requirements come from those recipes. Town recipe unlocks still apply. Search updates as you type. Recipes that need a higher skill, bench tier or unlock are grey and appear below available recipes. Select one to see its requirements.
+Crafting workplaces discover recipes from their matching benches: Workbench, Blacksmith's Anvil, Armorer's Workbench, Furnace, Tanning Rack, Chef's Stove, Alchemist's Workbench, Salvager's Workbench and Builder's Workbench. Added pack recipes appear in the same list. Costs, outputs, required bench tiers, bench upgrades and Memories requirements come from those recipes. Town recipe unlocks still apply. Search updates as you type. Recipes that need a higher skill, bench tier or unlock are grey and appear below available recipes. Select one to see its requirements.
 
 ## Plan a mineshaft
 
 Create a **Mining** base workplace around a regular **Workbench**. Use that bench to open the **Mineshaft planner**. The staff's **Manage mineshafts** mode reopens existing bases.
 
-Each map square covers three blocks. Click a blue base cell or green passage, choose a direction, then set a length in three block steps. Choose a level tunnel, stairs or a 9 by 9 room with five blocks of height. New stairs span seven blocks vertically and need at least nine blocks of length. Use the floor buttons to inspect stairs and connected branches. Review terrain before adding an order. Adding an order authorizes permanent excavation.
+Each map square covers three blocks. Click a blue base cell or green passage, choose a direction, then set a length in three block steps. Choose a level tunnel, stairs or a 9 by 9 room with five blocks of height. New stairs span seven blocks vertically and need at least nine blocks of length. Use the floor buttons to inspect stairs and connected branches. Violet squares with arrows show where stairs pass through the floor you are viewing, and a route cannot go through them. Review terrain before adding an order. Adding an order authorizes permanent excavation.
 
-Choose beams, wall torches and ceiling lanterns separately. Workers take their materials from town storage. Employed townsfolk need Mining enabled, sufficient skill and paid wages. Higher skilled available workers get first choice. Miners carry 25 items at Mining 1 and 10 more per additional level before returning to their base. Short finished orders can continue into another ready tunnel at the same base without emptying a partial bag.
+Turn support beams, wall torches, ceiling lanterns and rails on or off separately. Each one takes a single item: **Hardwood - Beam**, **Crude Torch**, **Lantern** or **Rail**. The planner shows how many the route needs and how many town storage holds. Put them in **General storage** at the **Warehouse Ledger Desk**. Miners take one for each piece they place, after the digging is done. Employed townsfolk need Mining enabled, sufficient skill and paid wages. Higher skilled available workers get first choice. Miners carry 25 items at Mining 1 and 10 more per additional level before returning to their base. Short finished orders can continue into another ready tunnel at the same base without emptying a partial bag.
 
 Choose **Open output storage** in the planner or use **Building Outputs** in the Warehouse to collect mined resources. Couriers collect supplies directly from the base. No core mine is required. Keep routes and entrances clear. Only the base shows border particles. Pause or remove saved orders in the planner. Stored output stays at the base. Removing an order does not restore excavated terrain.
 
-The mineshaft planner remembers direction, length, passage type and fitting choices for each base. New stairs have four blocks of headroom. Finished digging opens connected orders even when beams or lights still need supplies. Removing a tunnel order keeps its stored output at the base and leaves excavated terrain as it is. Remove connected branches first and let miners deposit carried materials.
+The mineshaft planner remembers direction, length, passage type and fitting choices for each base. New stairs have four blocks of headroom. Finished digging opens connected orders even when beams or lights still need supplies. A tunnel can leave any landing or passage at that passage's height, and two tunnels may cross at the same height. Miners dig whatever they find in a planned tunnel, so placing or breaking blocks there never stops it. They leave a chest or other furnishing standing, dig the rest and finish once it is moved. Removing a tunnel order keeps its stored output at the base and leaves excavated terrain as it is. Remove connected branches first and let miners deposit carried materials.

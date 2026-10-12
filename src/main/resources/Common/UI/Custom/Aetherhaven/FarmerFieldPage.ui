@@ -1,30 +1,83 @@
 $C = "../Common.ui";
 $T = "TownUiTheme.ui";
+@Gold = #dec68d;
+@Leaf = #b7c9bb;
 $C.@PageOverlay { LayoutMode: Middle;
- $C.@DecoratedContainer { Anchor: (Width: 880, Height: 610);
-  #Title { Label #TitleText { Text: "FARM FIELDS"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
-  #Content { LayoutMode: Top; Padding: (Full: 24);
-   Label #Mode { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: #dec68d); }
-   Label #Intro { Text: "Plant crops in the farm's beds, select their outputs in storage, then let the Farmer tend them."; Anchor: (Height: 42, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
-   Group { LayoutMode: Left; Anchor: (Height: 270, Bottom: 14);
-    Group { LayoutMode: Top; Anchor: (Width: 424, Right: 18);
-     Label { Text: "PLANTED BEDS   |   NORTH AT TOP"; Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
-     Group #Map { FlexWeight: 1; Background: $T.@Inset; }
+ $C.@DecoratedContainer #FieldWindow { Anchor: (Width: 1016, Height: 746);
+  #Title { Label #TitleText { Text: ""; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 22);
+   Group { LayoutMode: Left; Anchor: (Height: 26);
+    Label #Summary { Text: ""; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 16, RenderBold: true, TextColor: @Gold); }
+    Label #Mastery { Text: ""; Anchor: (Width: 320); Style: (...$C.@DefaultLabelStyle, FontSize: 13, RenderBold: true, TextColor: @Leaf, HorizontalAlignment: End, VerticalAlignment: Center); }
+   }
+   Group #Tabs { LayoutMode: Left; Anchor: (Height: 36, Top: 6, Bottom: 10);
+    $C.@SecondaryTextButton #Tab0 { Text: ""; Anchor: (Width: 142, Height: 36, Right: 6); }
+    $C.@SecondaryTextButton #Tab1 { Text: ""; Anchor: (Width: 142, Height: 36, Right: 6); Visible: false; }
+    $C.@SecondaryTextButton #Tab2 { Text: ""; Anchor: (Width: 142, Height: 36, Right: 6); Visible: false; }
+    $C.@SecondaryTextButton #Tab3 { Text: ""; Anchor: (Width: 142, Height: 36, Right: 6); Visible: false; }
+    $C.@SecondaryTextButton #TabNew { Text: ""; Anchor: (Width: 170, Height: 36, Right: 6); Visible: false; }
+    Group { FlexWeight: 1; }
+    $C.@SecondaryTextButton #Almanac { Text: ""; Anchor: (Width: 170, Height: 36); }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 480, Bottom: 10);
+    Group { LayoutMode: Top; Anchor: (Width: 456, Right: 16);
+     Group #MapFrame { Anchor: (Height: 444); Background: $T.@Inset;
+      Group #Map { Anchor: (Full: 0); }
+      Label #MapNote { Text: ""; Anchor: (Left: 40, Right: 40, Top: 180, Height: 96); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, HorizontalAlignment: Center, TextColor: @Leaf); Visible: false; }
+     }
+     Label #Legend { Text: ""; Anchor: (Height: 34, Top: 2); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, TextColor: @Leaf, HorizontalAlignment: Center); }
     }
-    Group { FlexWeight: 1; LayoutMode: Top; Background: $T.@Panel; Padding: (Full: 18);
-     Label { Text: "CROP BEDS"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
-     Label #BedCount { Anchor: (Height: 54, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 42, RenderBold: true, TextColor: #dec68d); }
-     Label #ActiveCount { Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true); }
-     Label #RipeCount { Anchor: (Height: 32); Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #b7c9bb); }
-     Label #Cargo { Anchor: (Height: 64); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true); }
+    Group { FlexWeight: 1;
+     Group #PlanPanel { LayoutMode: Top; Anchor: (Full: 0);
+      Group { LayoutMode: Left; Anchor: (Height: 22);
+       Label #PaletteTitle { Text: ""; Anchor: (Width: 120); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: @Gold); }
+       Label #BrushName { Text: ""; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, RenderBold: true, HorizontalAlignment: End); }
+      }
+      Group #Palette { LayoutMode: LeftCenterWrap; Anchor: (Height: 126, Bottom: 4); }
+      Group { LayoutMode: Left; Anchor: (Height: 34, Bottom: 6);
+       $C.@SecondaryTextButton #Fill { Text: ""; Anchor: (Width: 160, Height: 34, Right: 6); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+       $C.@SecondaryTextButton #Clear { Text: ""; Anchor: (Width: 160, Height: 34, Right: 6); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+       $C.@SecondaryTextButton #Rotate { Text: ""; Anchor: (Width: 160, Height: 34); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+      }
+      Group #MoreTools { LayoutMode: Left; Anchor: (Height: 34, Bottom: 6); Visible: false;
+       $C.@SecondaryTextButton #Adopt { Text: ""; Anchor: (Width: 243, Height: 34, Right: 6); TextTooltipStyle: $C.@DefaultTextTooltipStyle; Visible: false; }
+       $C.@SecondaryTextButton #Copy { Text: ""; Anchor: (Width: 243, Height: 34); TextTooltipStyle: $C.@DefaultTextTooltipStyle; Visible: false; }
+      }
+      Group { LayoutMode: Left; Anchor: (Height: 94, Top: 4, Bottom: 6); Background: $T.@Panel; Padding: (Full: 13);
+       Group { LayoutMode: Top; Anchor: (Width: 180);
+        Label #FavouredTitle { Text: ""; Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: @Gold); }
+        Label #FavouredWhen { Text: ""; Anchor: (Height: 32); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, TextColor: @Leaf); }
+       }
+       Group #Favoured { LayoutMode: Left; FlexWeight: 1; }
+      }
+      Label #SoilNote { Text: ""; Anchor: (Height: 38, Bottom: 4); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: @Leaf); }
+      Group { LayoutMode: Left; Anchor: (Height: 22);
+       Label #StoresTitle { Text: ""; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: @Gold); }
+       Label #SeedsNote { Text: ""; Anchor: (Width: 300); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: @Leaf, HorizontalAlignment: End); }
+      }
+      Group { LayoutMode: Left; Anchor: (Height: 78); Background: $T.@Panel; Padding: (Full: 10);
+       Group #Stock { FlexWeight: 1; LayoutMode: Left; }
+       Label #StockEmpty { Text: ""; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: @Leaf, VerticalAlignment: Center); Visible: false; }
+       Group { LayoutMode: Middle; Anchor: (Width: 156);
+        $C.@TextButton #Collect { Text: ""; Anchor: (Width: 150, Height: 40); }
+       }
+      }
+     }
+     Group #AlmanacPanel { LayoutMode: Top; Anchor: (Full: 0); Visible: false;
+      Label #AlmanacTitle { Text: ""; Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: @Gold); }
+      Label #AlmanacIntro { Text: ""; Anchor: (Height: 44, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+      Group #Weeks { LayoutMode: Top; FlexWeight: 1; }
+     }
     }
    }
-   Label #Status { Anchor: (Height: 44, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #dec68d); }
-   Group { LayoutMode: Left; Anchor: (Height: 38, Bottom: 10);
-    $C.@TextButton #Save { FlexWeight: 1; Anchor: (Right: 12); Text: "Start field work"; }
-    $C.@SecondaryTextButton #Refresh { Anchor: (Width: 150); Text: "Refresh"; }
+   Label #Status { Text: ""; Anchor: (Height: 40, Bottom: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: @Gold, Wrap: true, VerticalAlignment: Center); }
+   Group { LayoutMode: Left; Anchor: (Height: 40);
+    Group { FlexWeight: 1; }
+    $C.@SecondaryTextButton #Refresh { Text: ""; Anchor: (Width: 130, Height: 40, Right: 6); }
+    $C.@SecondaryTextButton #Seeds { Text: ""; Anchor: (Width: 150, Height: 40, Right: 6); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+    $C.@SecondaryTextButton #Storage { Text: ""; Anchor: (Width: 230, Height: 40, Right: 6); }
+    $C.@TextButton #Upgrades { Text: ""; Anchor: (Width: 200, Height: 40); }
    }
-   Label #Warning { Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, TextColor: #b7c9bb); }
   }
  }
 }

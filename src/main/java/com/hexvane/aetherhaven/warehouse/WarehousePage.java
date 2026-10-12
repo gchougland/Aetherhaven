@@ -24,6 +24,8 @@ import java.util.*;
 public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<WarehousePage.Data> {
     private enum Tab { GENERAL, OUTPUT, PRODUCTION }
     private enum Sort { NAME, QUANTITY, SOURCE }
+    /** The item grid fills its panel: 18 slots of 58 across the 1056 it is given. */
+    static final int GRID_COLUMNS=18,GRID_ROWS=3;
     private record Building(UUID plot,String name,String location,List<Entry> slots,List<Long> capacities,int unlockedSlots) {}
     private record Entry(boolean player,short slot,ItemStack stack,UUID plot,String location,long amount,long reserved) {}
     private final UUID townId;
@@ -33,8 +35,8 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
     private boolean grid=true,appended;
     private String search="",hint="Stored items keep their original properties.";
     private int page;
-    private long frame,revision;
-    private long huntRevision;
+    /** Counts this page's own redraws. Town stock moving elsewhere never changes it and never refuses a press. */
+    private long frame;
     private final Map<String,Entry> entries=new HashMap<>();
     public WarehousePage(PlayerRef player,UUID townId) { super(player,CustomPageLifetime.CanDismiss,Data.CODEC);this.townId=townId; }
     public WarehousePage(PlayerRef player,UUID townId,UUID localPlot) {this(player,townId);this.localPlot=Objects.requireNonNull(localPlot);tab=Tab.PRODUCTION;}
@@ -59,13 +61,12 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         var plugin=AetherhavenPlugin.get();if(plugin==null)return;
         var manager=AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(),plugin);
         var town=manager.getTown(townId);if(!access(town)){close();return;}
-        var warehouse=town.getWarehouse();revision=warehouse.revision();frame++;entries.clear();
-        huntRevision=town.getHunts().revision();
+        var warehouse=town.getWarehouse();frame++;entries.clear();
         c.set("#TitleText.Text",localPlot==null?"TOWN WAREHOUSE":com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,localPlot)!=null?"MINESHAFT OUTPUT":"LODGE SPOILS");
         c.set("#TownName.Text",town.getDisplayName());
         var capacityPage=tab==Tab.GENERAL?TownWarehouse.Page.GENERAL:TownWarehouse.Page.OUTPUT;
         c.set("#CapacityPanel.Visible",tab!=Tab.PRODUCTION);
-        c.set("#Capacity.Text",warehouse.used(capacityPage)+" / "+warehouse.slots(capacityPage)+" "+(tab==Tab.GENERAL?"general slots":"output slots"));
+        c.set("#CapacityText.Text",warehouse.used(capacityPage)+" / "+warehouse.slots(capacityPage)+" "+(tab==Tab.GENERAL?"general slots":"output slots"));
         var capacityFill = new Anchor();
         capacityFill.setLeft(Value.of(0));
         capacityFill.setTop(Value.of(0));
@@ -73,7 +74,8 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         capacityFill.setWidth(Value.of(210*warehouse.used(capacityPage)/warehouse.slots(capacityPage)));
         c.setObject("#CapacityFill.Anchor",capacityFill);
         c.set("#InventoryHint.Text",tab==Tab.GENERAL?"Click to deposit into General storage.":"Collect town output into your inventory. Use General storage for deposits.");c.set("#Hint.Text",hint);
-        c.set("#Description.Text",switch(tab){case GENERAL->"General storage accepts deposits. "+warehouse.used(TownWarehouse.Page.GENERAL)+" / "+warehouse.capacity()+" slots used.";case OUTPUT->"Finished crafting output. Collect items to make room for more work. Deposits are not allowed.";case PRODUCTION->"Resources remain in their original buildings and keep those storage limits. Deposits are not allowed.";});
+        c.set("#Description.Text",switch(tab){case GENERAL->"General storage accepts deposits. "+warehouse.used(TownWarehouse.Page.GENERAL)+" / "+warehouse.capacity()+" slots used."
+            +(warehouse.stacksPerSlot()>1?" "+text("stacksPerSlot").replace("{count}",Integer.toString(warehouse.stacksPerSlot())):"");case OUTPUT->"Finished crafting output. Collect items to make room for more work. Deposits are not allowed.";case PRODUCTION->"Resources remain in their original buildings and keep those storage limits. Deposits are not allowed.";});
         for(var t:Tab.values()) {c.set("#"+t.name()+".Disabled",tab==t);e.addEventBinding(CustomUIEventBindingType.Activating,"#"+t.name(),event(t.name()),false);}
         if(localPlot!=null) {
             for(var t:Tab.values())c.set("#"+t.name()+".Visible",false);
@@ -100,26 +102,23 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
                     String translated=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),definition.getDisplayNameLangKey());
                     if(translated!=null&&!translated.isBlank())name=translated;
                 }
-                List<Entry> slots=new ArrayList<>();List<Long> capacities=new ArrayList<>();Set<String> shown=new HashSet<>();
-                int unlockedSlots=WorkplaceProductionUpgrades.slotCount(state);
-                if("plot_barn".equals(type)) {
-                    unlockedSlots=Integer.MAX_VALUE;
-                    for(String item:BarnAnimalCatalog.storageItems(state))if(Item.getAssetMap().getAsset(item)!=null){
-                        slots.add(new Entry(false,(short)-1,new ItemStack(item,1),plot.getPlotId(),name,state.getAmount(item),warehouse.reservedProduction(plot.getPlotId(),item)));
-                        capacities.add(WorkplaceProductionUpgrades.barnCapacity(state));shown.add(item);
-                    }
-                } else
-                // Only the output slots this building has unlocked. Its own page still shows the locked ones.
-                for(int i=0;i<visibleSlots(unlockedSlots);i++) {
-                    String item=catalog.itemAtCursor(state.getSlotCursor(i));
-                    var stack=item==null||Item.getAssetMap().getAsset(item)==null?null:new ItemStack(item,1);
-                    slots.add(new Entry(false,(short)i,stack,plot.getPlotId(),name,item==null?0:state.getAmount(item),item==null?0:warehouse.reservedProduction(plot.getPlotId(),item)));
-                    capacities.add(item==null?0:WorkplaceProductionUpgrades.effectiveMaxStorage(state,catalog,item));shown.add(item);
-                }
-                // Switching production must not hide resources already held in the building.
-                for(var held:state.getAmounts().entrySet()) if(held.getValue()>0&&!shown.contains(held.getKey())&&Item.getAssetMap().getAsset(held.getKey())!=null) {
-                    slots.add(new Entry(false,(short)-1,new ItemStack(held.getKey(),1),plot.getPlotId(),name,held.getValue(),warehouse.reservedProduction(plot.getPlotId(),held.getKey())));
-                    capacities.add(WorkplaceProductionUpgrades.effectiveMaxStorage(state,catalog,held.getKey()));
+                List<Entry> slots=new ArrayList<>();List<Long> capacities=new ArrayList<>();
+                boolean barn="plot_barn".equals(type);
+                int unlockedSlots=barn?Integer.MAX_VALUE:WorkplaceProductionUpgrades.slotCount(state);
+                // A barn lists what its animals give. Other buildings list the output slots they have unlocked;
+                // their own page still shows the locked ones.
+                List<String> chosen=new ArrayList<>();
+                if(barn)chosen.addAll(BarnAnimalCatalog.storageItems(state));
+                else for(int i=0;i<visibleSlots(unlockedSlots);i++)chosen.add(catalog.itemAtCursor(state.getSlotCursor(i)));
+                // One row per resource: slots set to the same output share one store, and switching production
+                // must not hide resources already held in the building.
+                for(var row:ProductionOutputRows.rows(chosen,state,item->Item.getAssetMap().getAsset(item)!=null)) {
+                    String item=row.item();boolean exists=item!=null&&Item.getAssetMap().getAsset(item)!=null;
+                    if(barn&&!exists)continue;
+                    slots.add(new Entry(false,(short)(barn?-1:row.slot()),exists?new ItemStack(item,1):null,plot.getPlotId(),name,row.amount(),
+                        item==null?0:warehouse.reservedProduction(plot.getPlotId(),item)));
+                    capacities.add(item==null?0:barn&&row.slot()>=0?WorkplaceProductionUpgrades.barnCapacity(state)
+                        :WorkplaceProductionUpgrades.effectiveMaxStorage(state,catalog,item));
                 }
                 String query=search.toLowerCase(Locale.ROOT);
                 if(query.isBlank()||name.toLowerCase(Locale.ROOT).contains(query)||slots.stream().anyMatch(row->matches(row,query)))
@@ -145,6 +144,19 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
                 String query=search.toLowerCase(Locale.ROOT);var point=com.hexvane.aetherhaven.workplace.NativeExcavation.bufferPoint(town,site);
                 if(query.isBlank()||site.name().toLowerCase(Locale.ROOT).contains(query)||slots.stream().anyMatch(row->matches(row,query)))
                     buildings.add(new Building(site.id(),site.name()+" mineshaft output",point.x()+", "+point.y()+", "+point.z(),slots,capacities,Integer.MAX_VALUE));
+            }
+            for(var site:town.getApprenticeWorkplaces().sites()) {
+                var harvest=com.hexvane.aetherhaven.workplace.GrowerOutput.find(town,site.id());if(harvest==null)continue;
+                List<Entry> slots=new ArrayList<>();List<Long> capacities=new ArrayList<>();
+                var plan=com.hexvane.aetherhaven.workplace.GrowerSiteService.plan(site.type());
+                for(var held:harvest.getAmounts().entrySet())if(held.getValue()>0&&Item.getAssetMap().getAsset(held.getKey())!=null){
+                    slots.add(new Entry(false,(short)-1,new ItemStack(held.getKey(),1),site.id(),site.name(),held.getValue(),warehouse.reservedProduction(site.id(),held.getKey())));
+                    capacities.add(plan==null?-1L:(long)plan.storeCapacity());
+                }
+                if(slots.isEmpty())continue;
+                String query=search.toLowerCase(Locale.ROOT);var point=harvest.pickup();
+                if(query.isBlank()||site.name().toLowerCase(Locale.ROOT).contains(query)||slots.stream().anyMatch(row->matches(row,query)))
+                    buildings.add(new Building(site.id(),site.name()+" harvest",point==null?"":point.x()+", "+point.y()+", "+point.z(),slots,capacities,Integer.MAX_VALUE));
             }
             for(var origin:warehouse.smelting().origins()) {
                 var point=origin.location();
@@ -174,7 +186,7 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         Comparator<Entry> order=switch(sort){case NAME->Comparator.comparing(row->displayName(row.stack()));case QUANTITY->Comparator.comparingLong(Entry::amount).reversed();case SOURCE->Comparator.comparing(Entry::location);};
         stock.sort(order.thenComparing(row->row.stack().getItemId()).thenComparingInt(Entry::slot));
         buildings.sort(sort==Sort.QUANTITY?Comparator.<Building>comparingLong(b->b.slots().stream().mapToLong(Entry::amount).sum()).reversed().thenComparing(Building::name):Comparator.comparing(Building::name).thenComparing(Building::location));
-        int limit=tab==Tab.PRODUCTION?8:grid?36:5,total=tab==Tab.PRODUCTION?buildings.size():stock.size();
+        int limit=tab==Tab.PRODUCTION?8:grid?GRID_COLUMNS*GRID_ROWS:5,total=tab==Tab.PRODUCTION?buildings.size():stock.size();
         int pages=Math.max(1,(total+limit-1)/limit);page=Math.clamp(page,0,pages-1);
         c.set("#Page.Text",(page+1)+" / "+pages);c.set("#Previous.Disabled",page==0);c.set("#Next.Disabled",page==pages-1);
         if(tab==Tab.PRODUCTION) {
@@ -207,8 +219,8 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
             String host=grid?"#Grid":"#List";int index=0;
             for(var row:stock.subList(Math.min(page*limit,stock.size()),Math.min((page+1)*limit,stock.size()))) {
                 if(grid) {
-                    if(index%12==0)c.append(host,"Aetherhaven/WarehouseGridRow.ui");
-                    render(c,e,host+"["+(index/12)+"]",index%12,row,false);
+                    if(index%GRID_COLUMNS==0)c.append(host,"Aetherhaven/WarehouseGridRow.ui");
+                    render(c,e,host+"["+(index/GRID_COLUMNS)+"]",index%GRID_COLUMNS,row,false);
                 } else render(c,e,host,index,row,true);
                 index++;
             }
@@ -224,7 +236,8 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         c.set("#Return.Visible",localPlot!=null&&com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,localPlot)!=null);
         c.set("#Upgrade.Visible",localPlot==null);
         c.set("#Upgrade.Text","Building upgrades");
-        for(String action:List.of("View","Sort","Refresh","SearchButton","Previous","Next","Upgrade","Return")) e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,event(action),false);
+        c.set("#QuickStack.Visible",localPlot==null&&tab==Tab.GENERAL);c.set("#QuickStack.Text",text("storeMatching"));
+        for(String action:List.of("View","Sort","Refresh","SearchButton","Previous","Next","Upgrade","Return","QuickStack")) e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,event(action),false);
     }
     /** How many of a production building's output slots the Warehouse lists: the unlocked ones, never a placeholder. */
     static int visibleSlots(int unlocked) {
@@ -241,10 +254,12 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
     private void render(UICommandBuilder c,UIEventBuilder e,String host,int index,Entry entry,boolean list,String template) {
         c.append(host,template);String at=host+"["+index+"]";
         var stack=entry.stack();boolean filled=!ItemStack.isEmpty(stack),known=filled&&Item.getAssetMap().getAsset(stack.getItemId())!=null;
-        c.set(at+" #Icon.Visible",known);c.set(at+" #Quantity.Text",filled?Long.toString(entry.amount()):"");
+        c.set(at+" #Quantity.Text",filled?Long.toString(entry.amount()):"");
         c.set(at+" #Cell.Disabled",!known);
+        if(!known)c.set(at+" #Icon.Visible",false);
         if(known) {
-            c.set(at+" #Icon.ItemId",stack.getItemId());
+            // Props, plot tokens and block palettes carry their own picture, as they do in the inventory.
+            StackIcons.show(c,at,stack);
             String details=com.hexvane.aetherhaven.jewelry.JewelryItemIds.isJewelry(stack.getItemId())
                 ?com.hexvane.aetherhaven.jewelry.JewelryTooltipMessages.toPlainEnglishDescription(stack):"";
             c.set(at+" #Cell.TooltipText",displayName(stack)+"\n"+entry.location()+"\n"+(entry.amount()-entry.reserved())+" available"+(entry.reserved()>0?"\n"+entry.reserved()+" reserved for workplaces":"")+(details.isBlank()?"":"\n"+details));
@@ -255,7 +270,26 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         e.addEventBinding(CustomUIEventBindingType.Activating,at+" #Cell",event("Transfer").append("Entry",id).append("Amount","STACK"),false);
         e.addEventBinding(CustomUIEventBindingType.RightClicking,at+" #Cell",event("Transfer").append("Entry",id).append("Amount","ONE"),false);
     }
+    /** Says exactly what stopped a transfer: which item, and where it is missing or has no room. */
+    private String refusal(Entry row,TownWarehouse.Refusal why) {
+        return refusalText(why,displayName(row.stack()),row.player(),row.location());
+    }
+    public static String refusalText(TownWarehouse.Refusal why,String name,boolean deposit,String place) {
+        return switch(why) {
+            case GONE -> deposit?"You no longer carry "+name+" in that slot. Nothing was moved.":"No "+name+" is left in "+place+". Nothing was moved.";
+            case RESERVED -> "Every "+name+" in "+place+" is set aside for a workplace delivery. Nothing was moved.";
+            case NO_ROOM -> deposit?"General storage has no room for "+name+". Nothing was moved.":"Your inventory has no room for "+name+". Nothing was moved.";
+            case OUTPUT_ONLY -> "Crafted goods only take what the town makes. Use General storage to store "+name+".";
+        };
+    }
+    /** Page text from {@code aetherhaven_warehouse.lang}, in the player's language. */
+    private String text(String key) {
+        var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
+        String value=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),"aetherhaven_warehouse.aetherhaven.warehouse."+key);
+        return value==null||value.isBlank()?key:value;
+    }
     private String displayName(ItemStack stack) {
+        String own=StackIcons.instanceName(stack);if(own!=null)return own;
         var item=Item.getAssetMap().getAsset(stack.getItemId());
         if(item==null)return stack.getItemId();
         var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
@@ -266,13 +300,16 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         var plugin=AetherhavenPlugin.get();if(plugin==null)return;
         var manager=AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(),plugin);
         var town=manager.getTown(townId);if(!access(town)){close();return;}
-        if(localPlot!=null&&("GENERAL".equals(data.action)||"OUTPUT".equals(data.action)||"Upgrade".equals(data.action)))return;
+        if(localPlot!=null&&("GENERAL".equals(data.action)||"OUTPUT".equals(data.action)||"Upgrade".equals(data.action)||"QuickStack".equals(data.action)))return;
         boolean stale=!Long.toString(frame).equals(data.frame);
         if(data.search!=null)search=data.search.strip().substring(0,Math.min(80,data.search.strip().length()));
         if("Return".equals(data.action)&&localPlot!=null&&com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,localPlot)!=null){store.getComponent(ref,Player.getComponentType()).getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.MineshaftPlannerPage(playerRef,townId,localPlot));return;}
         if("Transfer".equals(data.action)) {
+            // The press names one drawn entry: an inventory slot, a storage slot or a building's resource, each with
+            // its item. Whether it can be done is decided from what is there now, never from whether anything in
+            // the town moved since the page was drawn.
             var row=entries.get(data.entry);var warehouse=town.getWarehouse();
-            if(stale||row==null||warehouse.revision()!=revision||town.getHunts().revision()!=huntRevision)hint="Storage changed. The view has been refreshed. Try again.";
+            if(stale||row==null)hint="This list was drawn again while you chose. Choose the item once more.";
             else {
                 var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.HOTBAR_STORAGE_BACKPACK);
                 var amount="ONE".equals(data.amount)?TownWarehouse.Amount.ONE:TownWarehouse.Amount.STACK;
@@ -280,39 +317,61 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
                 else if(inventory!=null&&row.plot()!=null) {
                     var origin=warehouse.smelting().origin(row.plot());
                     var plot=town.findPlotById(row.plot());
-                    var mining=com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,row.plot());
+                    ProductionInventory mining=com.hexvane.aetherhaven.workplace.MineshaftOutput.find(town,row.plot());
+                    // A grower's store is collected the same way as a mine's: whatever no workplace has set aside.
+                    if(mining==null)mining=com.hexvane.aetherhaven.workplace.GrowerOutput.find(town,row.plot());
                     if(mining!=null) {
-                        String item=row.stack().getItemId();int count=(int)Math.min(amount==TownWarehouse.Amount.ONE?1:row.stack().getItem().getMaxStack(),Math.max(0,mining.getAmount(item)-warehouse.reservedProduction(row.plot(),item)));
+                        String item=row.stack().getItemId();long stored=mining.getAmount(item);
+                        int count=(int)Math.min(amount==TownWarehouse.Amount.ONE?1:row.stack().getItem().getMaxStack(),Math.max(0,stored-warehouse.reservedProduction(row.plot(),item)));
                         if(count>0&&inventory.addItemStack(new ItemStack(item,count),true,false,true).succeeded()){
                             mining.removeAmountUpTo(item,count);warehouse.markProductionWithdrawal();manager.updateTown(town);hint="Collected "+count+" items.";
-                        }else hint=count==0?"Those supplies are reserved for a workplace.":"Your inventory is full.";
+                        }else hint=refusal(row,stored<=0?TownWarehouse.Refusal.GONE:count==0?TownWarehouse.Refusal.RESERVED:TownWarehouse.Refusal.NO_ROOM);
                     } else if(origin!=null) {
-                        int count=Math.min(amount==TownWarehouse.Amount.ONE?1:row.stack().getQuantity(),Math.max(0,row.stack().getQuantity()-warehouse.reservedSmelting(origin.id(),row.slot())));
-                        int moved=warehouse.smelting().withdraw(origin.id(),row.slot(),row.stack(),count,inventory,warehouse.smelting().revision());
-                        hint=moved>0?"Collected "+moved+" items.":"Storage changed or your inventory is full.";
+                        // The furnace may have added to this pile, or the pile may sit in another slot now.
+                        short at=warehouse.smelting().locate(origin.id(),row.slot(),row.stack());
+                        var held=at<0?null:origin.stack(at);
+                        int count=held==null?0:Math.min(amount==TownWarehouse.Amount.ONE?1:held.getQuantity(),Math.max(0,held.getQuantity()-warehouse.reservedSmelting(origin.id(),at)));
+                        int moved=count==0?0:warehouse.smelting().withdraw(origin.id(),at,held,count,inventory);
+                        hint=moved>0?"Collected "+moved+" items.":refusal(row,held==null?TownWarehouse.Refusal.GONE:count==0?TownWarehouse.Refusal.RESERVED:TownWarehouse.Refusal.NO_ROOM);
                         if(moved>0){warehouse.markProductionWithdrawal();manager.updateTown(town);}
                     } else if(plot!=null&&plot.getState()==PlotInstanceState.COMPLETE&&com.hexvane.aetherhaven.hunter.HuntService.CONSTRUCTION.equals(plugin.getConstructionCatalog().resolveGameplayConstructionId(plot.getConstructionId()))) {
                         var hunts=town.getHunts();String item=row.stack().getItemId();
                         int count=(int)Math.min(amount==TownWarehouse.Amount.ONE?1:row.stack().getItem().getMaxStack(),ProductionStockSources.availableSpoils(town,plugin,item));
                         if(count>0&&inventory.addItemStack(new ItemStack(item,count),true,false,true).succeeded()) {
                             hunts.withdraw(item,count);warehouse.markProductionWithdrawal();manager.updateTown(town);hint="Collected "+count+" items.";
-                        } else hint=count==0?"Those supplies are reserved for a workplace.":"There is no room for those spoils.";
+                        } else hint=refusal(row,hunts.stock().getOrDefault(item,0)<=0?TownWarehouse.Refusal.GONE:count==0?TownWarehouse.Refusal.RESERVED:TownWarehouse.Refusal.NO_ROOM);
                     } else if(plot!=null&&plot.getState()==PlotInstanceState.COMPLETE) {
                         var state=town.getOrCreatePlotProduction(row.plot());String type=plugin.getConstructionCatalog().resolveGameplayConstructionId(plot.getConstructionId());
                         var catalog=ProductionEffectiveCatalog.effective(plugin.getProductionCatalog(),plugin.getWorkplaceUnlockCatalog(),type,state);
-                        long count=amount==TownWarehouse.Amount.ONE?1:Math.min(row.amount(),Math.max(1,row.stack().getItem().getMaxStack()));
-                        count=Math.min(count,Math.max(0,state.getAmount(row.stack().getItemId())-warehouse.reservedProduction(row.plot(),row.stack().getItemId())));
+                        // Up to one stack of what the building holds now. It may have made more since the page was drawn.
+                        long stored=state.getAmount(row.stack().getItemId());
+                        long count=amount==TownWarehouse.Amount.ONE?1:Math.max(1,row.stack().getItem().getMaxStack());
+                        count=Math.min(count,Math.max(0,stored-warehouse.reservedProduction(row.plot(),row.stack().getItemId())));
                         var result=new ProductionWithdrawal.ResultSink();
                         long moved=catalog==null?0:ProductionWithdrawal.withdrawToPlayer(ref,store,store.getComponent(ref,Player.getComponentType()),state,catalog,row.stack().getItemId(),count,result);
-                        hint=moved>0?"Collected "+moved+" items.":result.needEmptyBuckets?"Bring empty buckets to collect milk.":count==0?"Those supplies are reserved for a workplace.":"There is no room for that item.";
+                        hint=moved>0?"Collected "+moved+" items.":result.needEmptyBuckets?"Bring empty buckets to collect milk."
+                            :refusal(row,stored<=0?TownWarehouse.Refusal.GONE:count==0?TownWarehouse.Refusal.RESERVED:TownWarehouse.Refusal.NO_ROOM);
                         if(moved>0){warehouse.markProductionWithdrawal();manager.updateTown(town);}
                     }
                 } else if(inventory!=null) {
                     var section=tab==Tab.GENERAL?TownWarehouse.Page.GENERAL:TownWarehouse.Page.OUTPUT;
-                    var result=row.player()?warehouse.deposit(section,inventory,row.slot(),row.stack(),amount,revision):warehouse.withdraw(section,inventory,row.slot(),row.stack(),amount,revision);
-                    hint=result.error()!=null?result.error():"Transferred "+result.moved()+(result.moved()==1?" item.":" items.");
+                    var result=row.player()?warehouse.deposit(section,inventory,row.slot(),row.stack(),amount):warehouse.withdraw(section,inventory,row.slot(),row.stack(),amount);
+                    hint=result.refusal()!=null?refusal(row,result.refusal()):"Transferred "+result.moved()+(result.moved()==1?" item.":" items.");
                     if(result.moved()>0)manager.updateTown(town);
                 }
+            }
+        } else if("QuickStack".equals(data.action)) {
+            var warehouse=town.getWarehouse();
+            var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.HOTBAR_STORAGE_BACKPACK);
+            if(tab!=Tab.GENERAL)hint="Use General storage to deposit items. Output storage is for collection only.";
+            else if(inventory==null)hint="Your inventory is unavailable.";
+            else {
+                // Everything carried except the hotbar, which holds what the player is using. What is in storage
+                // at this moment decides what matches, so a busy town cannot refuse it.
+                var result=warehouse.depositMatching(inventory,PlayerInventoryLayout.hotbarSlots(store,ref),inventory.getCapacity());
+                hint=result.moved()>0?text("storedMatching").replace("{count}",Integer.toString(result.moved()))
+                    :text(result.matched()?"matchingNoRoom":"matchingNone");
+                if(result.moved()>0)manager.updateTown(town);
             }
         } else if("Upgrade".equals(data.action)) {
             var player=store.getComponent(ref,com.hypixel.hytale.server.core.entity.entities.Player.getComponentType());

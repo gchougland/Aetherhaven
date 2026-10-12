@@ -7,7 +7,7 @@ import java.util.function.BooleanSupplier;
 public final class HerdProductionState {
     public static final String FEED="Plant_Crop_Wheat_Item";
     public static final int FEED_CAPACITY=75, MAX_OWNED=75, MAX_SLOTS=5;
-    public static final int MAX_HEARTS=5, POINTS_PER_HEART=100, FEED_POINTS=20, PET_POINTS=5;
+    public static final int MAX_HEARTS=5, POINTS_PER_HEART=100, FEED_POINTS=20, PET_POINTS=10;
     public static final long DAY_MINUTES=1440, PRODUCT_MINUTES=360, POOP_MINUTES=1440;
     public static final class Animal {
         private UUID id; private String species,name; private int friendship;
@@ -35,24 +35,27 @@ public final class HerdProductionState {
     public Animal animal(UUID id){return id==null?null:animals.stream().filter(a->id.equals(a.id)).findFirst().orElse(null);}
     public Animal slot(int slot){return slot>=0&&slot<MAX_SLOTS?animal(slots[slot]):null;}
     public int assignedSlot(UUID id){for(int i=0;i<MAX_SLOTS;i++)if(id!=null&&id.equals(slots[i]))return i;return -1;}
-    public String buy(long expected,String species,int mastery,BooleanSupplier pay) {
+    /**
+     * Each press on this barn names what it acts on (a species, an animal, a pen) and is judged by the barn as it
+     * is now. Another change made since the page was drawn is no reason to refuse.
+     */
+    public String buy(String species,int mastery,BooleanSupplier pay) {
         var kind=BarnAnimalCatalog.get(species);
-        if(expected!=revision)return "The animal list changed. Choose again.";
         if(kind==null)return "Choose an animal from the shop.";
         if(mastery<kind.rarity().mastery)return "Requires Rancher Mastery "+kind.rarity().mastery+".";
         if(animals.size()>=MAX_OWNED)return "This barn already owns 75 animals.";
         if(!pay.getAsBoolean())return "You need "+kind.rarity().gold+" gold.";
         animals.add(new Animal(species));revision++;return null;
     }
-    public boolean assign(long expected,int slot,UUID id,int unlocked) {
-        if(expected!=revision||slot<0||slot>=Math.min(MAX_SLOTS,unlocked)||id!=null&&animal(id)==null)return false;
+    public boolean assign(int slot,UUID id,int unlocked) {
+        if(slot<0||slot>=Math.min(MAX_SLOTS,unlocked)||id!=null&&animal(id)==null)return false;
         if(Objects.equals(slots[slot],id))return false;
         // One animal can occupy only one pen. Choosing an already active animal swaps the two occupants.
         int prior=assignedSlot(id);if(prior>=0)slots[prior]=slots[slot];
         slots[slot]=id;revision++;return true;
     }
-    public boolean rename(long expected,UUID id,String name) {
-        var animal=animal(id);if(expected!=revision||animal==null||name==null)return false;
+    public boolean rename(UUID id,String name) {
+        var animal=animal(id);if(animal==null||name==null)return false;
         String clean=name.strip().replaceAll("[\\p{Cntrl}<>]", "");
         if(clean.isEmpty()||clean.codePointCount(0,clean.length())>24)return false;
         if(clean.equals(animal.name()))return false;
@@ -75,8 +78,9 @@ public final class HerdProductionState {
     public boolean takeFeed(String item,BooleanSupplier give){if(feed(item)<1||!give.getAsBoolean())return false;foodBin.put(item,feed(item)-1);return true;}
     public int courierFeedTarget(){return courierFeedTarget<=0?0:courierFeedTarget<=10?10:courierFeedTarget<=25?25:courierFeedTarget<=50?50:75;}
     public long feedOrderRevision(){return feedOrderRevision;}
-    public boolean configureCourierFeed(long expected,int target) {
-        if(expected!=feedOrderRevision||!Set.of(0,10,25,50,75).contains(target)||target==courierFeedTarget())return false;
+    /** Sets the amount the press named. False when it is not an offered amount or is already the setting. */
+    public boolean configureCourierFeed(int target) {
+        if(!Set.of(0,10,25,50,75).contains(target)||target==courierFeedTarget())return false;
         courierFeedTarget=target;feedOrderRevision++;return true;
     }
     public Set<String> requestedFoods(int unlocked) {

@@ -17,21 +17,24 @@
         {
           "Type": "AetherhavenPoiToolSelect"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.poiTool.primary"
     },
     "Secondary": {
       "Interactions": [
         {
           "Type": "AetherhavenPoiToolSecondary"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.poiTool.secondary"
     },
     "Ability1": {
       "Interactions": [
         {
           "Type": "AetherhavenPoiToolModeCycle"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.poiTool.ability1"
     }
   },
   "InteractionConfig": {

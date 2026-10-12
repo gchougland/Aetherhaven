@@ -4,20 +4,10 @@ import com.hexvane.aetherhaven.ui.ToolKeybindSlot;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /** Step-specific HUD control rows (key slot + lang key for description). */
 public final class PlotCreatorHudControls {
-    public record Row(
-        @Nonnull ToolKeybindSlot slot,
-        @Nonnull String descriptionLangKey,
-        boolean infoOnly,
-        @Nullable String modifierLabel
-    ) {
-        public Row(@Nonnull ToolKeybindSlot slot, @Nonnull String descriptionLangKey, boolean infoOnly) {
-            this(slot, descriptionLangKey, infoOnly, null);
-        }
-    }
+    public record Row(@Nonnull ToolKeybindSlot slot, @Nonnull String descriptionLangKey, boolean infoOnly) {}
 
     private PlotCreatorHudControls() {}
 
@@ -165,15 +155,6 @@ public final class PlotCreatorHudControls {
     @Nonnull
     private static Row row(@Nonnull ToolKeybindSlot slot, @Nonnull String langKey) {
         return new Row(slot, langKey, false);
-    }
-
-    @Nonnull
-    private static Row modifierRow(
-        @Nonnull String modifierLabel,
-        @Nonnull ToolKeybindSlot slot,
-        @Nonnull String langKey
-    ) {
-        return new Row(slot, langKey, false, modifierLabel);
     }
 
     @Nonnull

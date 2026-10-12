@@ -36,8 +36,12 @@ final class AetherhavenMiningTestCommand extends AbstractPlayerCommand {
         var plugin=AetherhavenPlugin.get(); if(plugin==null) return;
         if("assets".equals(ctx.get(action))){
             var catalog=plugin.getProductionCatalog().get(AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT);
-            for(int i=0;i<catalog.catalogSize();i++)if(!MiningNodeBlocks.supported(catalog.itemAtCursor(i)))throw new IllegalStateException("Missing native mining block for "+catalog.itemAtCursor(i));
-            report(ctx,"All "+catalog.catalogSize()+" core mining outputs resolve to regular native blocks.");return;
+            var outputs=new LinkedHashSet<String>();
+            for(int i=0;i<catalog.catalogSize();i++)outputs.add(catalog.itemAtCursor(i));
+            // Ores and Stone Rubble are listed as unlock lines, not in the base catalog.
+            for(var line:plugin.getWorkplaceUnlockCatalog().linesForWorkplace(AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT))outputs.add(line.itemId());
+            for(String output:outputs)if(!MiningNodeBlocks.supported(output))throw new IllegalStateException("Missing native mining block for "+output);
+            report(ctx,"All "+outputs.size()+" core mining outputs resolve to regular native blocks.");return;
         }
         if("editor".equals(ctx.get(action))) {
             var session=com.hexvane.aetherhaven.plotcreator.PlotCreatorSessions.get(pr.getUuid());

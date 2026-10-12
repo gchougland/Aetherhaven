@@ -86,38 +86,189 @@ public final class NativeExcavation {
         return review(world,town,site,entrance,ExcavationPlan.Layout.STRAIGHT);
     }
     public static Review review(World world,TownRecord town,ApprenticeWorkplace site,ExcavationPlan.Entrance entrance,ExcavationPlan.Layout layout) {
+        return review(world,town,site,entrance,layout,Set.of());
+    }
+    /**
+     * @param left cells that belong to passages already there. They are not this tunnel's to dig, so whatever stands in
+     *             them, a wall torch of the passage being left for one, is no reason to refuse it.
+     */
+    public static Review review(World world,TownRecord town,ApprenticeWorkplace site,ExcavationPlan.Entrance entrance,ExcavationPlan.Layout layout,
+        Set<WarehouseBatch.Point> left) {
         var tunnel=ExcavationPlan.tunnel(site.area(),entrance,layout);
-        if(tunnel.isEmpty())return new Review(List.of(),"Choose Direction and length to size this tunnel, or use the Building Staff's Plan mineshaft mode to choose its entrance.");
+        if(tunnel.isEmpty())return new Review(List.of(),"Choose a direction and a length for this tunnel.");
         var cells=new ArrayList<ExcavationPlan.Cell>();
         for(var p:tunnel) {
-            if(!allowed(world,town,site,p))return new Review(cells,"Keep the tunnel inside town and outside building plots.");
-            var ground=observe(world,p);if(!ground.loaded())return new Review(cells,"This tunnel reaches beyond nearby loaded ground. Shorten it or move closer to review it.");
-            if(ground.protectedCell()||ground.filler()!=0)return new Review(cells,"The tunnel contains water, a furnishing or part of another block.");
+            if(left.contains(p))continue;
+            String where=" at "+p.x()+", "+p.y()+", "+p.z();
+            if(!allowed(world,town,site,p))return new Review(cells,protection(town,site,p)+where+" is in this tunnel's way. Shorten the tunnel or choose another direction.");
+            var ground=observe(world,p);if(!ground.loaded())return new Review(cells,"The ground"+where+" is too far away to see. Shorten the tunnel or stand closer to it.");
+            if(ground.protectedCell()||ground.filler()!=0)return new Review(cells,(ground.empty()?"Water":label(ground.block()))+where+" is in this tunnel's way. Move it, shorten the tunnel or choose another direction.");
             if(ground.empty())continue;
             int skill=skill(ground.block());
             cells.add(new ExcavationPlan.Cell(p,ground.block(),ground.rotation(),skill));
         }
-        return new Review(cells,cells.isEmpty()?"There are no blocks left to excavate in this tunnel.":null);
+        return new Review(cells,cells.isEmpty()?NOTHING_LEFT:null);
+    }
+    public static final String NOTHING_LEFT="There are no blocks left to excavate in this tunnel.";
+    /** The item a dug tunnel is waiting for because the town has none to spare, or null. */
+    public static String awaitedFitting(TownRecord town,ApprenticeWorkplace site) {
+        var plan=site.excavation();var fitting=plan.id()==null||plan.paused()||plan.next()!=null?null:plan.nextFitting();
+        return fitting==null||town.getWarehouse().hasUnreservedStock(fitting.item())?null:fitting.item();
+    }
+    /** A block's or item's name as players see it. */
+    public static String label(String id) {
+        if(id==null)return "Something";
+        var store=com.hypixel.hytale.server.core.asset.type.item.config.Item.getAssetStore();
+        var item=store==null?null:store.getAssetMap().getAsset(id);
+        var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
+        String name=item==null||i18n==null||item.getTranslationKey()==null?null:i18n.getMessage("en-US",item.getTranslationKey());
+        return name==null||name.isBlank()?id.replace('_',' '):name;
+    }
+    private static String protection(TownRecord town,ApprenticeWorkplace site,WarehouseBatch.Point p) {
+        if(!site.area().contains(p.x(),p.y(),p.z()))return "Ground outside this tunnel";
+        if(!TownTerritoryClaims.contains(town,ChunkUtil.chunkCoordinate(p.x()),ChunkUtil.chunkCoordinate(p.z())))return "Ground outside the town border";
+        if(town.getPlotInstances().stream().anyMatch(plot->plot.toFootprint().containsBlock(p.x(),p.y(),p.z())))return "A building plot";
+        return "Protected ground";
+    }
+    private static boolean furnished(World world,WarehouseBatch.Point p) {
+        var components=ChunkSectionBlockUtil.blockComponentSectionAt(world,p.x(),p.y(),p.z());
+        int index=ChunkUtil.indexBlock(p.x(),p.y(),p.z());
+        return components!=null&&(components.getBlockReference(index)!=null||components.getBlockHolder(index)!=null);
+    }
+    /**
+     * What a planned cell holds right now. Open space, with or without water, is nothing to dig. Anything else is dug as
+     * what it is, except what the planner would never have accepted: ground outside the town or inside a building plot,
+     * and a block that keeps things, such as a chest or a bench. A cell that is part of a larger block is cleared by
+     * breaking that block, when the whole of it may be broken.
+     */
+    public static ExcavationPlan.Found found(World world,TownRecord town,ApprenticeWorkplace site,WarehouseBatch.Point p) {
+        var g=observe(world,p);
+        if(!g.loaded())return ExcavationPlan.Found.UNLOADED;
+        if(g.empty())return ExcavationPlan.Found.EMPTY;
+        if(!allowed(world,town,site,p))return ExcavationPlan.Found.obstacle(protection(town,site,p));
+        var base=p;
+        if(g.filler()!=0) {
+            base=new WarehouseBatch.Point(p.x()-com.hypixel.hytale.server.core.util.FillerBlockUtil.unpackX(g.filler()),
+                p.y()-com.hypixel.hytale.server.core.util.FillerBlockUtil.unpackY(g.filler()),p.z()-com.hypixel.hytale.server.core.util.FillerBlockUtil.unpackZ(g.filler()));
+            var whole=observe(world,base);
+            if(!whole.loaded())return ExcavationPlan.Found.UNLOADED;
+            if(!g.block().equals(whole.block())||!allowed(world,town,site,base))return ExcavationPlan.Found.obstacle(label(g.block()));
+        }
+        if(furnished(world,base))return ExcavationPlan.Found.obstacle(label(g.block()));
+        return ExcavationPlan.Found.rock(g.block(),g.rotation(),skill(g.block()),base,g.naturalTerrain());
+    }
+    /**
+     * Brings a tunnel's order up to date with the ground before anyone judges or works it, so a block that was
+     * swapped, removed or added since planning never stops the dig. World thread only.
+     */
+    public static void refresh(World world,TownRecord town,ApprenticeWorkplace site) {
+        var plan=site.excavation();
+        if(plan.id()==null||plan.pending()||plan.paused()||site.type()!=TownsfolkWorkType.MINING||!site.area().equals(plan.area()))return;
+        long now=System.currentTimeMillis();
+        java.util.function.Function<WarehouseBatch.Point,ExcavationPlan.Found> look=p->found(world,town,site,p);
+        var sites=town.getApprenticeWorkplaces();var base=sites.mineBase(site);
+        // Openings made before posts were kept out of doorways are put right once, the first time the passage is looked at.
+        if(base!=null&&plan.claimDoorwayCheck())MineshaftNetwork.openDoorways(sites,base,site);
+        // A built piece that now stands in a doorway is taken down, if it is still there.
+        for(var piece:List.copyOf(plan.unbuild())) {
+            var standing=observe(world,piece.point());
+            if(standing.loaded())plan.resolveUnbuild(piece,piece.block().equals(standing.block()));
+        }
+        // Rock that has turned up where this passage meets another is cleared first, whichever of the two is at work.
+        if(base!=null&&plan.unfinished()&&plan.junctionCheckDue(now)) {
+            for(var p:ordered(plan,MineshaftNetwork.junction(sites,base,site))) {
+                var found=found(world,town,site,p);
+                if(found.kind()==ExcavationPlan.Found.Kind.ROCK&&found.terrain())plan.requeueFirst(new ExcavationPlan.Cell(p,found.block(),found.rotation(),found.skill()));
+            }
+        }
+        plan.survey(look,now);
+        if(plan.sweepDue()) {
+            var arrived=arrivedRock(world,town,site);
+            if(arrived!=null){plan.sweep(arrived);plan.survey(look,now);}
+        }
+        if(plan.next()==null)settleFittings(world,town,site);
+    }
+    /**
+     * Blocks this tunnel never digs, however the ground changes: the one under each place someone walks in another
+     * passage of its mine. The open space it shares with them is its own to keep clear as much as theirs.
+     */
+    private static Set<WarehouseBatch.Point> kept(TownRecord town,ApprenticeWorkplace site) {
+        var sites=town.getApprenticeWorkplaces();var base=sites.mineBase(site);
+        return base==null?Set.of():MineshaftNetwork.walkwaysFor(sites,base,site.id());
+    }
+    /** The given cells in the order the passage is dug, last first, so that queueing each at the front leaves the nearest in front. */
+    private static List<WarehouseBatch.Point> ordered(ExcavationPlan plan,Set<WarehouseBatch.Point> cells) {
+        var result=new ArrayList<WarehouseBatch.Point>();
+        if(cells.isEmpty())return result;
+        for(var p:ExcavationPlan.tunnel(plan.area(),plan.entrance(),plan.layout()))if(cells.contains(p))result.add(p);
+        Collections.reverse(result);return result;
+    }
+    /** Rock, ore or soil now standing in the passage that the order does not list. Null while part of it is unloaded. */
+    private static List<ExcavationPlan.Cell> arrivedRock(World world,TownRecord town,ApprenticeWorkplace site) {
+        var plan=site.excavation();var kept=kept(town,site);
+        var waiting=new HashSet<WarehouseBatch.Point>();for(var cell:plan.blocked())waiting.add(cell.point());
+        var arrived=new ArrayList<ExcavationPlan.Cell>();
+        for(var p:ExcavationPlan.tunnel(plan.area(),plan.entrance(),plan.layout())) {
+            if(kept.contains(p)||waiting.contains(p))continue;
+            var found=found(world,town,site,p);
+            if(found.kind()==ExcavationPlan.Found.Kind.UNLOADED)return null;
+            if(found.kind()==ExcavationPlan.Found.Kind.ROCK&&found.terrain())arrived.add(new ExcavationPlan.Cell(p,found.block(),found.rotation(),found.skill()));
+        }
+        return arrived;
+    }
+    /**
+     * Passes over fittings that cannot go in: one already standing, a position something else occupies, or one with no
+     * floor, wall or ceiling to hold it. Rock that has fallen into a position is queued to be dug first.
+     */
+    private static void settleFittings(World world,TownRecord town,ApprenticeWorkplace site) {
+        var plan=site.excavation();
+        for(var fitting=plan.nextFitting();fitting!=null&&plan.next()==null;fitting=plan.nextFitting()) {
+            var p=fitting.point();
+            if(!allowed(world,town,site,p)){plan.passFitting(fitting,false);continue;}
+            var ground=observe(world,p);if(!ground.loaded())return;
+            if(!ground.empty()) {
+                if(fitting.block().equals(ground.block())){plan.passFitting(fitting,true);continue;}
+                var found=found(world,town,site,p);
+                if(found.kind()==ExcavationPlan.Found.Kind.UNLOADED)return;
+                if(found.kind()==ExcavationPlan.Found.Kind.ROCK&&found.terrain()&&!kept(town,site).contains(p)
+                    &&plan.requeue(new ExcavationPlan.Cell(p,found.block(),found.rotation(),found.skill())))return;
+                plan.passFitting(fitting,false);continue;
+            }
+            if(ground.protectedCell()||BlockType.getAssetMap().getAsset(fitting.block())==null){plan.passFitting(fitting,false);continue;}
+            var support=observe(world,fitting.support()!=null?fitting.support():new WarehouseBatch.Point(p.x(),p.y()-1,p.z()));
+            if(!support.loaded())return;
+            var supportType=support.block()==null?null:BlockType.getAssetMap().getAsset(support.block());
+            if((fitting.support()!=null||fitting.rotation()==0)&&(support.empty()||supportType==null||supportType.getMaterial()!=com.hypixel.hytale.protocol.BlockMaterial.Solid)){plan.passFitting(fitting,false);continue;}
+            return;
+        }
+    }
+    /** What is in the way of the cells the miners had to leave, and how the tunnel carries on. Null when nothing is. */
+    public static String obstruction(World world,TownRecord town,ApprenticeWorkplace site) {
+        var plan=site.excavation();
+        if(plan.id()==null||plan.blocked().isEmpty())return null;
+        var first=plan.blocked().getFirst().point();var found=found(world,town,site,first);
+        return ExcavationFittings.obstructionLine(found.kind()==ExcavationPlan.Found.Kind.OBSTACLE?found.obstacle():"A block that will not break",first,plan.blocked().size());
     }
     public static String issue(World world,TownRecord town,ApprenticeWorkplace site,int workerSkill) {
-        var plan=site.excavation();var cell=plan.next();
-        if(plan.id()==null)return "Review a tunnel before starting work.";
+        var plan=site.excavation();
+        if(plan.id()==null)return "Plan a tunnel on the map before starting work.";
         String connectionIssue=MineshaftNetwork.connectionIssue(town.getApprenticeWorkplaces(),site);if(connectionIssue!=null)return connectionIssue;
-        if(plan.edited())return "The tunnel was edited. Review its remaining blocks again.";
-        if(plan.paused())return "Excavation paused.";
-        if(!site.area().equals(plan.area())||site.type()!=TownsfolkWorkType.MINING)return "The workplace changed. Review the tunnel again.";
+        plan.resumeAfterEdit();
+        if(plan.paused())return "This tunnel is paused. Choose Resume tunnel in the planner to carry on.";
+        if(!site.area().equals(plan.area())||site.type()!=TownsfolkWorkType.MINING)return "This workplace was resized after its tunnel was planned. Give it its old corners again with the Building Staff and the miners carry on.";
         if(!town.hasMemberOrOwner(plan.author())||!town.playerCanManageConstructions(plan.author())||!town.playerCanBreakBlocks(plan.author()))return "The player who planned this tunnel no longer has permission to excavate.";
+        refresh(world,town,site);
+        var cell=plan.next();
         if(cell==null)return fittingIssue(world,town,site);
-        if(workerSkill<cell.skill())return "Needs Mining skill "+cell.skill()+" for the next block.";
-        if(!allowed(world,town,site,cell.point()))return "The next block is inside a building plot or outside town borders.";
-        var g=observe(world,cell.point());if(!g.loaded())return "The next tunnel section is not being simulated.";
-        if(g.protectedCell()||g.filler()!=0||!cell.block().equals(g.block())||cell.rotation()!=g.rotation())return "The next block changed. Review the tunnel again.";
+        var at=cell.point();
+        if(found(world,town,site,at).kind()==ExcavationPlan.Found.Kind.UNLOADED)return "Waiting for a town member to come near this tunnel.";
+        if(workerSkill<cell.skill())return "Needs Mining "+cell.skill()+" to dig the "+label(cell.block())+" at "+at.x()+", "+at.y()+", "+at.z()+".";
         return null;
     }
     /** The same dispatch gates are used by workers, the journal and the tunnel review. */
     public static String workIssue(World world,TownRecord town,ApprenticeWorkplace site,AetherhavenPlugin plugin,int workerSkill) {
         var plan=site.excavation();
-        if(plan.id()==null)return "Start the reviewed tunnel before assigning work.";
+        if(plan.id()==null)return "Plan a tunnel on the map before assigning work.";
         if(plan.pending())return null;
         if(!plan.cargo().isEmpty())return null; // Cargo can always return to the workplace buffer.
 
@@ -149,24 +300,29 @@ public final class NativeExcavation {
     public static boolean outputAvailable(World world,TownRecord town,AetherhavenPlugin plugin,ExcavationPlan plan){
         return !plan.output().isEmpty()&&ProductionStorageLocator.find(world,town.findPlotById(plan.mine()),System.currentTimeMillis())!=null&&!availableOutput(town,plugin,plan).isEmpty();
     }
+    /** The fitting next in line has already been checked by {@link #refresh}: it has room and something to hold it. */
     private static String fittingIssue(World world,TownRecord town,ApprenticeWorkplace site) {
         var plan=site.excavation();var fitting=plan.nextFitting();
-        if(fitting==null)return "Tunnel complete. Review another tunnel to continue.";
-        if(!town.playerCanPlaceBlocks(plan.author())||!town.playerCanOpenContainers(plan.author()))return "Fittings need building and town storage permission.";
+        if(fitting==null) {
+            String obstruction=obstruction(world,town,site);if(obstruction!=null)return obstruction;
+            return "Tunnel complete."+(plan.fittingsSkipped()>0?" "+plan.fittingsSkipped()+(plan.fittingsSkipped()==1?" fitting was":" fittings were")+" left out where something was in the way.":"")+" Plan another tunnel on the map to keep digging.";
+        }
+        if(!town.playerCanPlaceBlocks(plan.author())||!town.playerCanOpenContainers(plan.author()))return "The player who planned this tunnel needs building and town storage permission before miners can fit it out.";
         var p=fitting.point();
-        if(!allowed(world,town,site,p))return "Keep fittings inside town and outside building plots.";
-        var ground=observe(world,p);if(!ground.loaded())return "Visit the tunnel before adding fittings.";
-        if(!ground.empty()||ground.protectedCell()||ground.filler()!=0)return "Clear the next fitting position before continuing.";
-        var support=observe(world,fitting.support()!=null?fitting.support():new WarehouseBatch.Point(p.x(),p.y()-1,p.z()));
-        var supportType=support.block()==null?null:BlockType.getAssetMap().getAsset(support.block());
-        if(!support.loaded()||(fitting.support()!=null||fitting.rotation()==0)&&(support.empty()||supportType==null||supportType.getMaterial()!=com.hypixel.hytale.protocol.BlockMaterial.Solid))return "The next fitting needs its supporting floor, wall or ceiling.";
-        if(!town.getWarehouse().hasUnreservedStock(fitting.item()))return "Digging complete. Supply "+(ExcavationFittings.BEAM.equals(fitting.item())?"Hardwood Beams":ExcavationFittings.LANTERN.equals(fitting.item())?"Lanterns":ExcavationFittings.RAIL.equals(fitting.item())?"Rails":"Crude Torches")+" in town storage for the remaining fittings.";
-        return BlockType.getAssetMap().getAsset(fitting.block())==null?"The fitting is unavailable.":null;
+        var ground=observe(world,p);if(!ground.loaded())return "Waiting for a town member to come near this tunnel.";
+        if(!town.getWarehouse().hasUnreservedStock(fitting.item())) {
+            var stock=town.getWarehouse().craftingStock();
+            return ExcavationFittings.waitingLine(fitting.item(),plan.fittingsNeeded(),stock::count,NativeExcavation::label);
+        }
+        return null;
     }
     public static boolean placeFitting(World world,TownRecord town,ApprenticeWorkplace site,org.joml.Vector3d worker) {
-        var plan=site.excavation();var fitting=plan.nextFitting();
+        var plan=site.excavation();
+        // Judge the tunnel first: doing so passes over fittings that have nowhere to go.
+        if(worker==null||issue(world,town,site,1)!=null)return false;
+        var fitting=plan.nextFitting();
         // Use the same reach as approach selection and arrival, including taller stairs.
-        if(worker==null||fitting==null||issue(world,town,site,1)!=null||!plan.withinWorkReach(ExcavationApproach.feet(worker),fitting.point()))return false;
+        if(fitting==null||plan.next()!=null||!plan.withinWorkReach(ExcavationApproach.feet(worker),fitting.point()))return false;
         var p=fitting.point();var type=BlockType.getAssetMap().getAsset(fitting.block());
         var boxes=com.hypixel.hytale.server.core.asset.type.blockhitbox.BlockBoundingBoxes.getAssetMap().getAsset(type.getHitboxTypeIndex());
         if(boxes==null)return false;
@@ -193,6 +349,9 @@ public final class NativeExcavation {
         if(breaking!=null&&breaking.getDropListId()!=null)rolled=ItemModule.get().getRandomItemDrops(breaking.getDropListId());
         else {String item=breaking==null?type.getItem()==null?null:type.getItem().getId():breaking.getItemId();if(item==null&&type.getItem()!=null)item=type.getItem().getId();if(item==null)return Map.of();rolled=List.of(new ItemStack(item,breaking==null?1:Math.max(1,breaking.getQuantity())));}
         var result=new LinkedHashMap<String,Integer>();if(rolled!=null)for(var item:rolled)if(!ItemStack.isEmpty(item))result.merge(item.getItemId(),item.getQuantity(),Math::addExact);
+        // Miners now dig whatever is in the way. A block with an unusually large haul must not be one they can never start.
+        result.replaceAll((item,count)->Math.clamp(count,1,64));
+        while(result.size()>8)result.remove(result.lastEntry().getKey());
         return result;
     }
     public static PlotInstance mine(TownRecord town,AetherhavenPlugin plugin){return town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(),AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT);}
@@ -211,14 +370,17 @@ public final class NativeExcavation {
     }
     private static boolean excavate(World world,TownRecord town,ApprenticeWorkplace site,int skill,WarehouseBatch.Point standing,
         org.joml.Vector3d position,com.hypixel.hytale.math.shape.Box bounds,Runnable changed){
-        var plan=site.excavation();var plugin=AetherhavenPlugin.get();if(issue(world,town,site,skill)!=null||plugin==null)return false;
+        var plan=site.excavation();var plugin=AetherhavenPlugin.get();if(issue(world,town,site,skill)!=null||plugin==null||plan.next()==null)return false;
         var id=plan.id();var p=plan.next().point();
+        // The order now names the block that is really there. A part of a larger block is cleared by breaking its base.
+        var found=found(world,town,site,p);if(found.kind()!=ExcavationPlan.Found.Kind.ROCK)return false;
+        var at=found.breakAt();
         boolean supported=position!=null&&bounds!=null
             ?ExcavationApproach.supported(position,bounds.min.x,bounds.max.x,bounds.min.z,bounds.max.z,
                 cell->com.hexvane.aetherhaven.autonomy.VillagerBlockUtil.isNpcStandColumn(world,cell.x(),cell.y(),cell.z()))
             :com.hexvane.aetherhaven.autonomy.VillagerBlockUtil.isNpcStandColumn(world,standing.x(),standing.y(),standing.z());
         if(!plan.withinWorkReach(standing,p)||!supported||!clearReach(world,position==null?new org.joml.Vector3d(standing.x()+.5,standing.y(),standing.z()+.5):position,p))return false;
-        if(!plan.begin(id,duration(plan.next()),standing,()->ChunkSectionBlockUtil.breakBlock(world,p.x(),p.y(),p.z(),0)))return false;
+        if(!plan.begin(id,duration(plan.next()),standing,()->ChunkSectionBlockUtil.breakBlock(world,at.x(),at.y(),at.z(),0)))return false;
         // The block mutation is synchronous. Settle before releasing this worker's assignment.
         settle(world,site);repairFloors(world,town,site,standing);changed.run();return true;
     }
@@ -240,6 +402,7 @@ public final class NativeExcavation {
     public static void repairFloors(World world,TownRecord town,ApprenticeWorkplace site,WarehouseBatch.Point worker){
         var plan=site.excavation();
         if(plan.id()==null||plan.paused()||plan.edited()||!town.playerCanPlaceBlocks(plan.author()))return;
+        Set<WarehouseBatch.Point> open=null;
         for(var p:ExcavationPlan.floors(plan.area(),plan.entrance(),plan.layout())){
             var air=new WarehouseBatch.Point(p.x(),p.y()+1,p.z());
             if(!plan.withinWorkReach(worker,air)||!allowed(world,town,site,air)
@@ -250,9 +413,13 @@ public final class NativeExcavation {
             var type=g.block()==null?null:BlockType.getAssetMap().getAsset(g.block());
             if(!g.empty()&&(type==null||type.getGathering()==null||!type.getGathering().isSoft()))continue;
             if(!clearReach(world,new org.joml.Vector3d(worker.x()+.5,worker.y(),worker.z()+.5),air))continue;
+            // Where this floor would be the open space of another passage, such as the step beside a landing, it stays open.
+            if(open==null){open=new HashSet<>();for(var other:town.getApprenticeWorkplaces().tunnels(mineId(town,site)))if(other!=site)open.addAll(ExcavationPlan.tunnel(other.area(),other.excavation().entrance(),other.excavation().layout()));}
+            if(open.contains(p))continue;
             ChunkSectionBlockUtil.setBlockByKey(world,p.x(),p.y(),p.z(),"Rock_Stone_Cobble",0,0);
         }
     }
+    private static UUID mineId(TownRecord town,ApprenticeWorkplace site){var base=town.getApprenticeWorkplaces().mineBase(site);return (base==null?site:base).id();}
     public static boolean settle(World world,ApprenticeWorkplace site) {
         var plan=site.excavation();if(!plan.pending()||plan.next()==null)return false;
         var g=observe(world,plan.next().point());return plan.settle(plan.id(),g.loaded()?g.empty():null);

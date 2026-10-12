@@ -65,6 +65,8 @@ public final class BarnAnimalCatalog {
         return List.copyOf(items);
     }
     public static Species get(String id) { return SPECIES.get(id); }
+    /** True for the roles that exist only to show an owned animal in its pen. */
+    public static boolean displayRole(String role) { return role!=null&&SPECIES.values().stream().anyMatch(s->s.role().equals(role)); }
     public static List<Species> all() { return List.copyOf(SPECIES.values()); }
     public static boolean food(String item) { return SPECIES.values().stream().anyMatch(s->s.food().equals(item)); }
     public static boolean output(String item) { return "Ingredient_Poop".equals(item)||SPECIES.values().stream().anyMatch(s->s.products.containsKey(item)); }

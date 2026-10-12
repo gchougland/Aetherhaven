@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -14,7 +15,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Plot creator staff: E / Ability2 — next step (or save on review). */
+/** Plot creator staff: second extra key (Ability4) — next step (or save on review). */
 public final class PlotCreatorStepForwardInteraction extends SimpleInstantInteraction {
     @Nonnull
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<PlotCreatorStepForwardInteraction> CODEC =
@@ -24,7 +25,7 @@ public final class PlotCreatorStepForwardInteraction extends SimpleInstantIntera
                 PlotCreatorStepForwardInteraction::new,
                 SimpleInstantInteraction.CODEC
             )
-            .documentation("Plot creator staff: Ability2 — advance to the next step.")
+            .documentation("Plot creator staff: second extra key (Ability4) — advance to the next step.")
             .build();
 
     @Nonnull
@@ -48,7 +49,7 @@ public final class PlotCreatorStepForwardInteraction extends SimpleInstantIntera
             return;
         }
         CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
-        if (commandBuffer == null || type != InteractionType.Ability2) {
+        if (commandBuffer == null || type != ToolAbilityKeys.SECOND) {
             context.getState().state = InteractionState.Failed;
             return;
         }

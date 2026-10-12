@@ -15,6 +15,7 @@ public final class WarehouseBootstrap {
         CourierTravelState.register(plugin.getEntityStoreRegistry());
         com.hexvane.aetherhaven.shopspot.ShopClerkState.register(plugin.getEntityStoreRegistry());
         com.hexvane.aetherhaven.workplace.ApprenticeWorkState.register(plugin.getEntityStoreRegistry());
+        com.hexvane.aetherhaven.workplace.GrowerSitePage.register(plugin);
         OpenCustomUIInteraction.registerCustomPageSupplier(plugin, com.hexvane.aetherhaven.workplace.WorkplaceOrdersPage.class, "AetherhavenWorkplaceBench",
             (ref,accessor,player,context)->{
                 var pos=context.getTargetBlock();if(pos==null)return null;

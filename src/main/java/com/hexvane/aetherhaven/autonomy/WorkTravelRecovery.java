@@ -115,6 +115,12 @@ public final class WorkTravelRecovery {
                 !NativeExcavation.observe(world, new WarehouseBatch.Point(cell.x(), cell.y() + 1, cell.z())).protectedCell())) {
             return false;
         }
+        // Never into a cell of a building site that is still to be filled: the next piece would go where they stand.
+        if (com.hexvane.aetherhaven.construction.assembly.SiteCells.bodyIn(
+                com.hexvane.aetherhaven.construction.assembly.SiteCells.unbuiltSolid(world), stand.x, stand.y, stand.z,
+                com.hexvane.aetherhaven.construction.assembly.SiteBodies.localBox(store, ref))) {
+            return false;
+        }
         watch.brought = true;
         watch.since = now;
         NpcStandStill.clearResidualMotion(store, ref, buffer);

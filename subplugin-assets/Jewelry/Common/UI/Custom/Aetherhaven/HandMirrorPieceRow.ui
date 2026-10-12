@@ -1,0 +1,2 @@
+// Two bag cards side by side.
+Group { LayoutMode: Left; Anchor: (Height: 124, Bottom: 8); }

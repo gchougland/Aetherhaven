@@ -53,29 +53,26 @@
             "ClearAnimationOnFinish": true
           }
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.buildingStaff.primary"
     },
     "Secondary": "Aetherhaven_BuildingStaff_Secondary_Root",
-    "Use": {
-      "Interactions": [
-        {
-          "Type": "AetherhavenWorkplaceTool"
-        }
-      ]
-    },
+    "Use": "Aetherhaven_BuildingStaff_Use_Root",
     "Ability1": {
       "Interactions": [
         {
           "Type": "AetherhavenWorkplaceTool"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.buildingStaff.ability1"
     },
     "Pick": {
       "Interactions": [
         {
           "Type": "AetherhavenWorkplaceTool"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.buildingStaff.pick"
     }
   },
   "InteractionConfig": {

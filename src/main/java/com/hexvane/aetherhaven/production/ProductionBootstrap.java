@@ -88,6 +88,11 @@ public final class ProductionBootstrap {
                 }
                 if (!AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION)) return null;
                 if(NativeHerdService.barn(p,plot))return new com.hexvane.aetherhaven.workplace.RancherHerdPage(playerRef,town.getTownId(),plot.getPlotId());
+                // The Conservatory keeps its stores and its Spirit Garden on one screen.
+                if(SpiritGarden.isPlot(plot))return new com.hexvane.aetherhaven.workplace.SpiritGardenPage(playerRef,town.getTownId(),plot.getPlotId(),null);
+                // A farm with a crop plan keeps its stores and its Scarecrow Fields on one screen.
+                if(FarmFields.isPlot(plot)&&FarmFields.production(town,plot).usesFarmFields())
+                    return new com.hexvane.aetherhaven.workplace.FarmerFieldPage(playerRef,town.getTownId(),plot.getPlotId(),null);
                 // A lumbermill that tends Rootstones keeps its stores and its grove on one screen.
                 if(town.playerCanManageConstructions(uc.getUuid())&&town.getOrCreatePlotProduction(plot.getPlotId()).usesPhysicalTimber()
                     &&p.getConstructionCatalog().matchesGameplayConstruction(plot.getConstructionId(),AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL))
@@ -128,6 +133,52 @@ public final class ProductionBootstrap {
                 return new com.hexvane.aetherhaven.workplace.GrovePage(playerRef, town.getTownId(), mill.getPlotId(), block);
             }
         );
+        OpenCustomUIInteraction.registerCustomPageSupplier(core, com.hexvane.aetherhaven.workplace.SpiritGardenPage.class, SpiritGarden.PAGE,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition target = context.getTargetBlock();
+                AetherhavenPlugin p = AetherhavenPlugin.get();
+                if (target == null || p == null || !AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION)) return null;
+                World world = ref.getStore().getExternalData().getWorld();
+                BlockType bt = ChunkSectionBlockUtil.blockType(world, target.x, target.y, target.z);
+                if (bt == null || !SpiritGarden.is(bt.getId())) return null;
+                TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, p).findTownContainingBlock(world.getName(), target.x, target.z);
+                if (town == null) {
+                    playerRef.sendMessage(com.hypixel.hytale.server.core.Message.translation(SpiritGarden.LANG + "message.outside"));
+                    return null;
+                }
+                if (TownMemberBlockAccess.denyIfNotMember(playerRef, town, playerRef.getUuid())) return null;
+                var block = new com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point(target.x, target.y, target.z);
+                PlotInstance conservatory = com.hexvane.aetherhaven.workplace.SpiritGardenPage.gardenFor(p, town, block);
+                if (conservatory == null) {
+                    playerRef.sendMessage(com.hypixel.hytale.server.core.Message.translation(SpiritGarden.LANG + "message.noConservatory"));
+                    return null;
+                }
+                return new com.hexvane.aetherhaven.workplace.SpiritGardenPage(playerRef, town.getTownId(), conservatory.getPlotId(), block);
+            }
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(core, com.hexvane.aetherhaven.workplace.FarmerFieldPage.class, FarmFields.PAGE,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition target = context.getTargetBlock();
+                AetherhavenPlugin p = AetherhavenPlugin.get();
+                if (target == null || p == null || !AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION)) return null;
+                World world = ref.getStore().getExternalData().getWorld();
+                BlockType bt = ChunkSectionBlockUtil.blockType(world, target.x, target.y, target.z);
+                if (bt == null || !FarmFields.is(bt.getDefaultStateKey() != null ? bt.getDefaultStateKey() : bt.getId())) return null;
+                TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, p).findTownContainingBlock(world.getName(), target.x, target.z);
+                if (town == null) {
+                    playerRef.sendMessage(com.hypixel.hytale.server.core.Message.translation(FarmFields.LANG + "message.outside"));
+                    return null;
+                }
+                if (TownMemberBlockAccess.denyIfNotMember(playerRef, town, playerRef.getUuid())) return null;
+                var block = new com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point(target.x, target.y, target.z);
+                PlotInstance farm = com.hexvane.aetherhaven.workplace.FarmerFieldPage.farmFor(p, town, block);
+                if (farm == null) {
+                    playerRef.sendMessage(com.hypixel.hytale.server.core.Message.translation(FarmFields.LANG + "message.noFarm"));
+                    return null;
+                }
+                return new com.hexvane.aetherhaven.workplace.FarmerFieldPage(playerRef, town.getTownId(), farm.getPlotId(), block);
+            }
+        );
         OpenCustomUIInteraction.registerCustomPageSupplier(
             core,
             ProductionStorageUnlocksPage.class,
@@ -140,9 +191,12 @@ public final class ProductionBootstrap {
         plugin.getChunkStoreRegistry().registerSystem(new MiningNodeLegacyBlocks());
         RanchCaptureCompatibility.register(plugin);
         ProductionCargoDisplays.register(plugin.getEntityStoreRegistry(),core);
+        plugin.getEntityStoreRegistry().registerSystem(new BarnDisplayLoadCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new TimberPlayerEditSystems.Breaking(core));
         plugin.getEntityStoreRegistry().registerSystem(new TimberPlayerEditSystems.Placing(core));
+        plugin.getEntityStoreRegistry().registerSystem(new SpiritGardenEditSystems.Breaking(core));
+        plugin.getEntityStoreRegistry().registerSystem(new FarmFieldEditSystems.Breaking(core));
     }
 
     @Nonnull

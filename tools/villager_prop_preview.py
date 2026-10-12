@@ -11,7 +11,7 @@ def geometry_points(shape):
     v=np.array([0,1,0] if axis!='Y' else [0,0,1],dtype=float)
     return np.array([u*x*size['x']+v*y*size['y'] for x,y in [(-.5,-.5),(.5,-.5),(.5,.5),(-.5,.5)]])*np.array([stretch.get(k,1) for k in 'xyz'])
 
-def textured_faces(points, shape, texture):
+def textured_faces(points, shape, texture, strict=True):
     sx,sy=[int(shape['settings']['size'][k]) for k in 'xy']
     sz=int(shape['settings']['size'].get('z',1))
     # Image row zero is the top edge, while geometric +Y points upward.
@@ -31,7 +31,10 @@ def textured_faces(points, shape, texture):
                 u=-(x+.5) if layout.get('mirror',{}).get('x') else x+.5
                 v=-(y+.5) if layout.get('mirror',{}).get('y') else y+.5
                 tx,ty=np.floor(offset+rotation@np.array([u,v])+1e-7).astype(int)
-                assert 0<=tx<texture.width and 0<=ty<texture.height,(side,tx,ty)
+                if not (0<=tx<texture.width and 0<=ty<texture.height):
+                    # Native cosmetics carry a few stray faces mapped off the sheet (Robe_Wizard Sleeve3).
+                    if strict:raise AssertionError((side,tx,ty))
+                    continue
                 pixel=texture.getpixel((tx,ty))
                 if pixel[3]<128:continue
                 rgb=tuple(min(255,int(c*shade)) for c in pixel[:3])

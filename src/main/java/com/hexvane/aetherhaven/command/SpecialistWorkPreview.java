@@ -46,12 +46,12 @@ record SpecialistWorkPreview(UUID siteId, String recipeId, String worker, String
             .sorted(Comparator.comparing(WorkplaceRecipe::id)).findFirst().orElseThrow(()->new IllegalStateException("No eligible native Workbench recipe."));
         require(sites.save(town,null,TownsfolkWorkType.CRAFTING,area,"Preview Crafting")==null,"Workplace creation failed.");
         var site=sites.sites().getLast();
-        require(site.orders().add(0,recipe.id(),WorkplaceOrders.Mode.COUNT,1)==null,"Order creation failed.");
+        require(site.orders().add(recipe.id(),WorkplaceOrders.Mode.COUNT,1)==null,"Order creation failed.");
         var inputs=recipe.source().getInput();
         var inventory=new SimpleItemContainer((short)inputs.length);
         for(short i=0;i<inputs.length;i++) {
             var stack=inputs[i].toItemStack();inventory.setItemStackForSlot(i,stack,false);
-            var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,stack,TownWarehouse.Amount.STACK,town.getWarehouse().revision());
+            var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,stack,TownWarehouse.Amount.STACK);
             require(moved.moved()==stack.getQuantity(),"Preview input deposit failed.");
         }
         String worker=spawn(world,town,manager,new Vector3d(x+.5,y,z+3.5),false);
@@ -87,6 +87,7 @@ record SpecialistWorkPreview(UUID siteId, String recipeId, String worker, String
             case SMELTING -> "Bench_Furnace";
             case LEATHERWORKING -> "Bench_Tannery";
             case SALVAGING -> "Bench_Salvage";
+            case BLOCK_WORKSHOP -> "Bench_Builders";
             case COOKING -> "Bench_Cooking";
             case ALCHEMY -> "Bench_Alchemy";
             default -> throw new IllegalArgumentException("Choose one of the seven native crafting professions.");
@@ -114,15 +115,15 @@ record SpecialistWorkPreview(UUID siteId, String recipeId, String worker, String
         require(town.getApprenticeWorkplaces().validate(town,siteId,type,area,"Preview "+type.id)==null,"Invalid fixture workplace.");
         require(ChunkSectionBlockUtil.setBlockByKey(world,x,y,z-2,block,0,0),"Native bench placement failed.");
         require(town.getApprenticeWorkplaces().save(town,siteId,type,area,"Preview "+type.id)==null,"Could not change fixture workplace.");
-        for(var order:List.copyOf(site.orders().list()))require(site.orders().change(site.orders().revision(),order.id(),"Remove")==null,"Could not remove completed order.");
-        require(site.orders().add(site.orders().revision(),recipe.id(),WorkplaceOrders.Mode.COUNT,1)==null,"Could not add next order.");
+        for(var order:List.copyOf(site.orders().list()))require(site.orders().change(order.id(),"Remove")==null,"Could not remove completed order.");
+        require(site.orders().add(recipe.id(),WorkplaceOrders.Mode.COUNT,1)==null,"Could not add next order.");
         var inputs=new ArrayList<ItemStack>();
         for(var input:recipe.source().getInput())inputs.add(input.toItemStack());
         if(type==TownsfolkWorkType.SMELTING){site.setCharcoalFuel(true);inputs.add(new ItemStack("Ingredient_Charcoal",4));}
         var inventory=new SimpleItemContainer((short)inputs.size());
         for(short i=0;i<inputs.size();i++) {
             var stack=inputs.get(i);inventory.setItemStackForSlot(i,stack,false);
-            var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,stack,TownWarehouse.Amount.STACK,town.getWarehouse().revision());
+            var moved=town.getWarehouse().deposit(TownWarehouse.Page.GENERAL,inventory,i,stack,TownWarehouse.Amount.STACK);
             require(moved.moved()==stack.getQuantity(),"Fixture input deposit failed.");
         }
         var progress=town.getTownsfolkProgress().get(worker);

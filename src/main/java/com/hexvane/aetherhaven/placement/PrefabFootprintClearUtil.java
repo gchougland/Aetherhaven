@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
+import com.hexvane.aetherhaven.entity.OwnCreatures;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorSpotPreview;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -25,7 +26,13 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.BlockEntity;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.entity.component.FromPrefab;
+import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
+import com.hypixel.hytale.server.core.modules.entity.component.PropComponent;
+import com.hypixel.hytale.server.core.modules.entity.item.ItemComponent;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
@@ -62,13 +69,14 @@ public final class PrefabFootprintClearUtil {
     private PrefabFootprintClearUtil() {}
 
     /**
-     * Removes entities inside {@code fp} so the old building site can be cleared. Prefab decor sometimes lacks
-     * {@link com.hypixel.hytale.server.core.modules.entity.component.FromPrefab}, so we match any entity with a
-     * transform instead of only prefab-tagged entities. Trigger volumes are not entities once pasted, so they are
-     * cleared through {@link PrefabTriggerVolumeCleanup}.
+     * Removes what a building left inside {@code fp} so the old site can be cleared: the decoration its prefab placed
+     * and this mod's own creatures. Nothing else is touched. It used to take out every entity standing in the box, so
+     * a player's pet, a mount, wildlife or dropped loot inside a plot vanished when the building was moved, a town was
+     * dissolved or a festival changed the square. Trigger volumes are not entities once pasted, so they are cleared
+     * through {@link PrefabTriggerVolumeCleanup}.
      *
-     * <p>Safety: does not remove {@link Player}s; does not remove entities with {@link TownVillagerBinding}; does not
-     * remove UUIDs listed by {@link TownRecord#collectTrackedNpcEntityUuids}.
+     * <p>Never removed: {@link Player}s, entities with {@link TownVillagerBinding}, UUIDs listed by
+     * {@link TownRecord#collectTrackedNpcEntityUuids}, and anything {@link #belongsToBuilding} does not name.
      */
     /** @return how many entities were removed */
     public static int removePrefabOnlyEntitiesInFootprint(
@@ -131,6 +139,9 @@ public final class PrefabFootprintClearUtil {
                     if (!footprintContainsEntityBlockColumn(fp, p.x, p.y, p.z)) {
                         continue;
                     }
+                    if (!belongsToBuilding(store, r)) {
+                        continue;
+                    }
                     toRemove.add(r);
                 }
             };
@@ -144,6 +155,46 @@ public final class PrefabFootprintClearUtil {
         }
         PrefabTriggerVolumeCleanup.removeVolumesInFootprint(store, fp);
         return removed;
+    }
+
+    /** Reads what {@link #belongsToBuilding(boolean, boolean, boolean, boolean, boolean, boolean, boolean)} needs. */
+    private static boolean belongsToBuilding(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        var archetype = store.getArchetype(ref);
+        boolean npc = archetype.contains(NPCEntity.getComponentType());
+        return belongsToBuilding(
+            npc,
+            npc && OwnCreatures.isOwnNpc(ref, store),
+            archetype.contains(FromPrefab.getComponentType()),
+            archetype.contains(BlockEntity.getComponentType()),
+            archetype.contains(PropComponent.getComponentType()),
+            archetype.contains(ItemComponent.getComponentType()) && archetype.contains(Invulnerable.getComponentType()),
+            !npc && OwnCreatures.carriesModComponent(archetype)
+        );
+    }
+
+    /**
+     * Whether clearing a building site may take an entity out.
+     *
+     * @param npc              it is a creature
+     * @param ownNpc           it is one of this mod's own creatures ({@link OwnCreatures})
+     * @param pastedWithPrefab it still carries the mark the game puts on what a prefab placed (lost when its chunk
+     *                         is saved and loaded again)
+     * @param blockEntity      it is a block shown as an entity, which is how prefabs hold loose decoration
+     * @param prop             it is a prop
+     * @param displayItem      it is an item made invulnerable, which this mod does to every item its prefabs lay
+     *                         out. An item a player dropped can still be destroyed, so it never matches
+     * @param modEntity        it is not a creature and carries a component this mod registered (a place marker, a
+     *                         festival piece, a display)
+     */
+    static boolean belongsToBuilding(boolean npc, boolean ownNpc, boolean pastedWithPrefab, boolean blockEntity, boolean prop,
+                                     boolean displayItem, boolean modEntity) {
+        if (pastedWithPrefab || modEntity) {
+            return true;
+        }
+        if (npc) {
+            return ownNpc;
+        }
+        return blockEntity || prop || displayItem;
     }
 
     private static boolean footprintContainsEntityBlockColumn(
@@ -259,6 +310,31 @@ public final class PrefabFootprintClearUtil {
             }
         }
         scrubProductionStorageInFootprint(world, fp);
+    }
+
+    /**
+     * Force-clears exactly the given prefab cells at {@code anchor}: the block, its block entity and its fluid, the
+     * way {@link #clearFootprint(World, PlotFootprintRecord, boolean)} does for a whole box. For ground a paste is
+     * about to overwrite without owning the box around it (a festival layout's foundation under the square): cells the
+     * prefab does not list are not touched.
+     */
+    public static void clearListedCells(
+        @Nonnull World world,
+        @Nonnull Vector3i anchor,
+        @Nonnull List<PendingBlock> cells,
+        boolean discardContainerContents
+    ) {
+        if (cells.isEmpty()) {
+            return;
+        }
+        Store<ChunkStore> fluidStore = world.getChunkStore().getStore();
+        for (PendingBlock cell : cells) {
+            int x = anchor.x + cell.x();
+            int y = anchor.y + cell.y();
+            int z = anchor.z + cell.z();
+            forceClearBlockCell(world, x, y, z, discardContainerContents);
+            clearFluidAtColumn(fluidStore, world, x, y, z);
+        }
     }
 
     /**

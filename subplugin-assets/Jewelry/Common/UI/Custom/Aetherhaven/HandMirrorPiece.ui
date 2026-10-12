@@ -1,0 +1,24 @@
+$C = "../Common.ui";
+$T = "HandMirrorTheme.ui";
+// One piece of jewelry in the bag: 276 by 124, with an 8 gap to the next card in its row.
+// Padding 12, then the 20 high name over the whole card, a 6 gap, and the 60 wide picture beside 16 of rarity and three 17 high lines.
+// The whole card is one button; choosing it wears the piece in the slot chosen on the left.
+Button { Anchor: (Width: 276, Height: 124, Right: 8);
+  Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+  Group { LayoutMode: Top; Padding: (Full: 12); HitTestVisible: false;
+    Group { LayoutMode: Left; Anchor: (Height: 20, Bottom: 6);
+      Label #PieceName { Text: ""; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, RenderBold: true, TextColor: #eee0bf); }
+      Label #PieceCount { Text: ""; Anchor: (Width: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, HorizontalAlignment: End, TextColor: #9cb1b8); Visible: false; }
+    }
+    Group { LayoutMode: Left; FlexWeight: 1;
+      Group { Anchor: (Width: 60, Height: 60, Right: 10, Top: 2); Background: $T.@Slot;
+        ItemIcon #PieceIcon { Anchor: (Width: 44, Height: 44); }
+      }
+      Group { LayoutMode: Top; FlexWeight: 1;
+        Label #PieceRarity { Text: ""; Anchor: (Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 11, RenderBold: true, RenderUppercase: true, TextColor: #9ba0aa); Visible: false; }
+        Label #PieceDetail { Text: ""; Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, TextColor: #d8d0c8); }
+      }
+    }
+  }
+}

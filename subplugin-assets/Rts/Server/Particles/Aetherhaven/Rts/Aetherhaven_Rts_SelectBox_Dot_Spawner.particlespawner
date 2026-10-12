@@ -19,8 +19,8 @@
       "Scale": { "X": { "Min": 0.14, "Max": 0.14 }, "Y": { "Min": 0.14, "Max": 0.14 } }
     },
     "Animation": {
-      "0": { "Opacity": 0.9, "Color": "#88ccff", "Scale": { "X": { "Min": 0.14, "Max": 0.14 }, "Y": { "Min": 0.14, "Max": 0.14 } } },
-      "100": { "Opacity": 0.85, "Color": "#88ccff", "Scale": { "X": { "Min": 0.14, "Max": 0.14 }, "Y": { "Min": 0.14, "Max": 0.14 } } }
+      "0": { "Opacity": 0.9, "Color": "#88ccff", "Scale": { "X": { "Min": 1, "Max": 1 }, "Y": { "Min": 1, "Max": 1 } } },
+      "100": { "Opacity": 0.85, "Color": "#88ccff", "Scale": { "X": { "Min": 1, "Max": 1 }, "Y": { "Min": 1, "Max": 1 } } }
     }
   }
 }

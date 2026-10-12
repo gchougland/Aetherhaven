@@ -1,0 +1,9 @@
+# Things the Custom UI selector audit could not decide and a person has looked at.
+# One name per line, exactly as the audit prints it; a line that starts with # is a note.
+# The build fails on any undecided name that is not here. Before adding one, try to make the Java readable
+# instead (a literal, a constant, a loop over a literal list): then the audit checks it and nothing is taken on trust.
+
+# Nothing in the sources calls these (checked 2026-10-11), so there is no page to check their selectors against.
+NO PAGE | AetherhavenUiLocalization.applyCharterAmendmentsChrome
+NO PAGE | ProductionUpgradeTreeUi
+NO PAGE | RestaurantUpgradeTreeUi

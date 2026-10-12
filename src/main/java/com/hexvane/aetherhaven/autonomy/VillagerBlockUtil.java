@@ -265,6 +265,27 @@ public final class VillagerBlockUtil {
         return null;
     }
 
+    /**
+     * True when a point of the world is inside the shape of a solid block: not air, a plant, a doorway, or anywhere in a
+     * column that is not loaded. A block with a shape of its own (stairs, a fence, a slab) counts only where it really is.
+     * The far cells of furniture are left out: they carry no shape of their own.
+     */
+    public static boolean isInsideSolidBlock(@Nonnull World world, double px, double py, double pz) {
+        int x = (int) Math.floor(px), y = (int) Math.floor(py), z = (int) Math.floor(pz);
+        BlockType type = blockTypeNoLoad(world, x, y, z);
+        if (type == null || isPassable(world, x, y, z, type)) {
+            return false;
+        }
+        if (ChunkSectionBlockUtil.filler(world, x, y, z) != com.hypixel.hytale.server.core.util.FillerBlockUtil.NO_FILLER) {
+            return false;
+        }
+        BlockBoundingBoxes hitboxAsset = BlockBoundingBoxes.getAssetMap().getAsset(type.getHitboxTypeIndex());
+        if (hitboxAsset == null) {
+            return true;
+        }
+        return hitboxAsset.get(rotationIndexForLoadedChunk(world, x, y, z)).containsPosition(px - x, py - y, pz - z);
+    }
+
     /** True when an NPC can stand at feet Y in this column (passable feet/head, solid ground below). */
     public static boolean isNpcStandColumn(@Nonnull World world, int bx, int feetY, int bz) {
         return walkableColumn(world, bx, feetY, bz);

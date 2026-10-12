@@ -4,7 +4,8 @@ $C = "../Common.ui";
 
 Group #QuestBoardItemSlot {
   LayoutMode: Middle;
-  Anchor: (Width: @QuestBoardItemSlotSize, Height: @QuestBoardItemSlotSize, Right: 8);
+  // Bottom is the gap between rows when a card's item row wraps.
+  Anchor: (Width: @QuestBoardItemSlotSize, Height: @QuestBoardItemSlotSize, Right: 8, Bottom: 6);
 
   ItemGrid #ItemIcon {
     Anchor: (Width: @QuestBoardItemSlotSize, Height: @QuestBoardItemSlotSize);

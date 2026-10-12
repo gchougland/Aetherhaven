@@ -126,6 +126,42 @@ public final class ConstructionAnimator {
         @Nullable Runnable onComplete,
         @Nullable Map<String, String> blockPaletteSelections
     ) {
+        start(
+            plugin,
+            world,
+            origin,
+            yaw,
+            force,
+            preserveWater,
+            bufferAccess,
+            entityAccessor,
+            blocksPerBatch,
+            batchDelayMs,
+            onComplete,
+            blockPaletteSelections,
+            null
+        );
+    }
+
+    /**
+     * @param beforeFirstBlock runs on the world thread once the paste is certain to go ahead and before it touches any
+     *     block: the last moment to read state off the blocks that are about to be replaced
+     */
+    public static void start(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        boolean force,
+        boolean preserveWater,
+        @Nonnull IPrefabBuffer bufferAccess,
+        @Nonnull ComponentAccessor<EntityStore> entityAccessor,
+        int blocksPerBatch,
+        long batchDelayMs,
+        @Nullable Runnable onComplete,
+        @Nullable Map<String, String> blockPaletteSelections,
+        @Nullable Runnable beforeFirstBlock
+    ) {
         world.execute(
             () ->
                 startOnWorldThread(
@@ -140,7 +176,8 @@ public final class ConstructionAnimator {
                     blocksPerBatch,
                     batchDelayMs,
                     onComplete,
-                    blockPaletteSelections
+                    blockPaletteSelections,
+                    beforeFirstBlock
                 )
         );
     }
@@ -157,7 +194,8 @@ public final class ConstructionAnimator {
         int blocksPerBatch,
         long batchDelayMs,
         @Nullable Runnable onComplete,
-        @Nullable Map<String, String> blockPaletteSelections
+        @Nullable Map<String, String> blockPaletteSelections,
+        @Nullable Runnable beforeFirstBlock
     ) {
         ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(bufferAccess, yaw, blockPaletteSelections);
         int prefabId = PrefabUtil.getNextPrefabId();
@@ -165,6 +203,9 @@ public final class ConstructionAnimator {
         entityAccessor.invoke(start);
         if (start.isCancelled()) {
             return;
+        }
+        if (beforeFirstBlock != null) {
+            beforeFirstBlock.run();
         }
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         ConstructionPasteOps.prepAssemblySite(
@@ -204,12 +245,24 @@ public final class ConstructionAnimator {
         job.runBatch();
     }
 
+    private void clearTheWay(int from, int to) {
+        if (world.getEntityStore() == null) {
+            return;
+        }
+        com.hexvane.aetherhaven.construction.assembly.SiteRefuge.clearTheWay(
+            world, world.getEntityStore().getStore(), origin, pendingBlocks, from, to, null, "standing where a building is being pasted"
+        );
+    }
+
     private void runBatch() {
         if (finished.get()) {
             return;
         }
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         int placed = 0;
+        // A paste writes whatever stands there: a rebuild, a moved building, a festival swap. Villagers standing where
+        // this batch puts something solid are sent to the nearest safe spot first. Players are left alone.
+        clearTheWay(index, (int) Math.min((long) pendingBlocks.size(), (long) index + blocksPerBatch));
         while (index < pendingBlocks.size() && placed < blocksPerBatch) {
             PendingBlock pb = pendingBlocks.get(index);
             if (!ConstructionPasteOps.placeOne(world, origin, pb, force, preserveWater, blockTypeMap)) {
@@ -223,6 +276,8 @@ public final class ConstructionAnimator {
             plugin.scheduleOnWorld(world, this::runBatch, batchDelayMs);
             return;
         }
+        // The last pass also sets the furniture, which the batches above left out.
+        clearTheWay(0, pendingBlocks.size());
         ConstructionPasteOps.forcePasteAllSolids(
             world,
             origin,

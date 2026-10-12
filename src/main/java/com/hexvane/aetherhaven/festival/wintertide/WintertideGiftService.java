@@ -223,12 +223,28 @@ public final class WintertideGiftService {
         if (ItemStack.isEmpty(inHand) || !removeOneFromActiveHotbar(giverRef, store, inHand)) {
             return;
         }
-        session.setPendingPlayerGift(
-            new WintertideSession.PendingPlayerGift(
-                giverUuid.getUuid(), receiverUuid.getUuid(), inHand.getItemId(), 1
-            )
-        );
+        // The gift is the very item that left the giver's hand, kept whole. It is also saved with the town until it
+        // is answered, so neither a restart nor the festival ending can lose it.
+        ItemStack gift = inHand.withQuantity(1) != null ? inHand.withQuantity(1) : inHand;
+        holdGift(world, town, session, giverUuid.getUuid(), receiverUuid.getUuid(), gift);
         openDialogue(receiverRef, store, null, WintertideIds.DIALOGUE_PLAYER_RATE, "rate");
+    }
+
+    /**
+     * One item has left the giver's hand. It waits in the session for the receiver's answer and is saved with the
+     * town at once.
+     */
+    public static void holdGift(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull WintertideSession session,
+        @Nonnull UUID giver,
+        @Nonnull UUID receiver,
+        @Nonnull ItemStack gift
+    ) {
+        session.setPendingPlayerGift(new WintertideSession.PendingPlayerGift(giver, receiver, gift));
+        town.festivalHeldItems().holdWintertideGift(giver, receiver, gift);
+        com.hexvane.aetherhaven.festival.FestivalHeldItemsService.saved(world, town);
     }
 
     public static void applyPlayerRating(
@@ -254,14 +270,19 @@ public final class WintertideGiftService {
             ? store.getComponent(giverRef, Player.getComponentType())
             : null;
         Player receiver = store.getComponent(receiverRef, Player.getComponentType());
-        if (receiver != null) {
-            FestivalRewardNotify.giveGift(
-                receiver,
-                receiverRef,
-                store,
-                new ItemStack(pending.itemId(), Math.max(1, pending.quantity()))
-            );
+        // The receiver takes the item itself. With a full inventory it lands at their feet, and if they cannot take
+        // it at all it goes back to the giver.
+        World giftWorld = store.getExternalData().getWorld();
+        town.festivalHeldItems().clearWintertideGift();
+        if (receiver != null && com.hexvane.aetherhaven.festival.FestivalHeldItemsService.handBack(store, receiverRef, pending.stack())) {
+            com.hexvane.aetherhaven.festival.FestivalRewardQueue.queueOutcome(
+                receiverUuid.getUuid(), com.hexvane.aetherhaven.festival.FestivalRewardQueue.Outcome.GIFTED);
+            FestivalRewardNotify.notify(store, receiverRef, pending.stack());
+        } else {
+            com.hexvane.aetherhaven.festival.FestivalHeldItemsService.giveOrOwe(
+                giftWorld, store, town.festivalHeldItems(), pending.giverUuid(), pending.stack());
         }
+        com.hexvane.aetherhaven.festival.FestivalHeldItemsService.saved(giftWorld, town);
         if (giver != null && giverRef != null) {
             awardTickets(giver, giverRef, store, WintertideIds.ticketCount(preference));
         }
@@ -291,7 +312,8 @@ public final class WintertideGiftService {
         if (!WintertideIds.DIALOGUE_PLAYER_RATE.equals(treeId)) {
             return;
         }
-        TownRecord town = resolveTownByPlayer(store, playerUuid);
+        // The receiver may be a visitor from another town, so the town is found by the gift that waits for them.
+        TownRecord town = townAwaitingAnswerFrom(store, playerUuid);
         if (town == null) {
             return;
         }
@@ -303,14 +325,63 @@ public final class WintertideGiftService {
         if (pending == null || !pending.receiverUuid().equals(playerUuid)) {
             return;
         }
-        Ref<EntityStore> giverRef = store.getExternalData().getRefFromUUID(pending.giverUuid());
-        if (giverRef != null && giverRef.isValid()) {
-            Player giver = store.getComponent(giverRef, Player.getComponentType());
-            if (giver != null) {
-                giver.giveItem(new ItemStack(pending.itemId(), Math.max(1, pending.quantity())), giverRef, store);
-            }
+        returnPendingGift(store.getExternalData().getWorld(), store, town, session);
+        com.hexvane.aetherhaven.festival.FestivalHeldItemsService.saved(store.getExternalData().getWorld(), town);
+    }
+
+    /**
+     * A gift that will not be answered goes back to its giver: at once when they are in this world, otherwise it is
+     * set aside with the town and handed over the next time they are. Never dropped unseen and never deleted. The
+     * caller saves the town.
+     *
+     * @param session the live session, or null when there is none (after a restart, or once the festival is over)
+     */
+    public static void returnPendingGift(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nullable WintertideSession session
+    ) {
+        WintertideSession.PendingPlayerGift pending = session != null ? session.getPendingPlayerGift() : null;
+        if (session != null) {
+            session.setPendingPlayerGift(null);
         }
-        session.setPendingPlayerGift(null);
+        if (pending == null && !town.hasFestivalHeldItems()) {
+            return;
+        }
+        var held = town.festivalHeldItems();
+        var saved = held.wintertideGift();
+        // The session's gift and the town's saved one are the same gift: it is handed back once.
+        UUID giver = pending != null ? pending.giverUuid() : saved != null ? saved.giver() : null;
+        ItemStack stack = pending != null ? pending.stack() : saved != null ? saved.stack() : null;
+        if (giver == null || ItemStack.isEmpty(stack)) {
+            // Nothing readable to hand over. Saved text that cannot be read is left for a later version, not deleted.
+            return;
+        }
+        held.clearWintertideGift();
+        com.hexvane.aetherhaven.festival.FestivalHeldItemsService.giveOrOwe(world, store, held, giver, stack);
+    }
+
+    /**
+     * Minute check for a gift saved with the town. One that a receiver who is here is still answering is left alone;
+     * any other (the server restarted, the festival ended, the receiver left) goes back to its giver.
+     *
+     * @return true when the town's held items changed
+     */
+    public static boolean settleHeldGift(@Nonnull World world, @Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {
+        if (!town.hasFestivalHeldItems() || town.festivalHeldItems().wintertideGift() == null) {
+            return false;
+        }
+        WintertideSession session = WintertideSessionIndex.get(town.getTownId());
+        WintertideSession.PendingPlayerGift pending = session != null ? session.getPendingPlayerGift() : null;
+        if (pending != null
+            && com.hexvane.aetherhaven.festival.FestivalHeldItemsService.onlineRef(world, pending.receiverUuid()) != null
+            && System.currentTimeMillis() - session.getPendingSinceMs() < ANSWER_MS) {
+            return false;
+        }
+        var before = town.festivalHeldItems().wintertideGift();
+        returnPendingGift(world, store, town, session);
+        return town.festivalHeldItems().wintertideGift() != before;
     }
 
     public static void giveIncomingGift(
@@ -472,7 +543,9 @@ public final class WintertideGiftService {
         session.clearGiven(playerUuid);
         WintertideSession.PendingPlayerGift pending = session.getPendingPlayerGift();
         if (pending != null && playerUuid.equals(pending.giverUuid())) {
-            session.setPendingPlayerGift(null);
+            // Their unanswered gift is theirs again, not gone.
+            returnPendingGift(store.getExternalData().getWorld(), store, town, session);
+            com.hexvane.aetherhaven.festival.FestivalHeldItemsService.saved(store.getExternalData().getWorld(), town);
         }
         if (target.isVillager()) {
             FestivalAttendanceService.interruptVillagerUuids(store, List.of(target.getUuid()));
@@ -692,8 +765,8 @@ public final class WintertideGiftService {
             ItemStack dec = inHand.withQuantity(q - 1);
             replacement = dec != null ? dec : ItemStack.EMPTY;
         }
-        container.replaceItemStackInSlot(slot, inHand, replacement);
-        return true;
+        // Only an item that really left the hand becomes a gift. Otherwise it would exist twice.
+        return container.replaceItemStackInSlot(slot, inHand, replacement).succeeded();
     }
 
     @Nullable
@@ -758,6 +831,29 @@ public final class WintertideGiftService {
     public static TownRecord resolveTownByPlayerUuid(@Nonnull Store<EntityStore> store, @Nonnull UUID playerUuid) {
         return resolveTownByPlayer(store, playerUuid);
     }
+
+    @Nullable
+    private static TownRecord townAwaitingAnswerFrom(@Nonnull Store<EntityStore> store, @Nonnull UUID receiver) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
+        for (TownRecord candidate : tm.allTowns()) {
+            WintertideSession session = WintertideSessionIndex.get(candidate.getTownId());
+            WintertideSession.PendingPlayerGift pending = session != null ? session.getPendingPlayerGift() : null;
+            if (pending != null && receiver.equals(pending.receiverUuid())) {
+                return candidate;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * How long a receiver who is here may take to answer. After that the gift goes back to its giver, so a dialogue
+     * that never opened or was left open cannot hold the gift, or block the town's other gifts, for the whole festival.
+     */
+    private static final long ANSWER_MS = 3L * 60L * 1000L;
 
     @Nullable
     private static TownRecord resolveTownByPlayer(@Nonnull Store<EntityStore> store, @Nonnull UUID playerUuid) {

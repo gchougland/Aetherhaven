@@ -90,7 +90,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             );
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
-                "#CloseButton",
+                "#PageCloseButton",
                 EventData.of("Action", "Close"),
                 false
             );
@@ -155,7 +155,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
                         : showPropsEmpty ? MSG + ".emptyProps" : MSG + ".emptyMine"
             )
         );
-        commandBuilder.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
+        commandBuilder.set("#PageCloseButton.TextSpans", Message.translation(MSG + ".button.close"));
         commandBuilder.set("#SearchInput.Value", searchQuery);
         commandBuilder.set(
             "#SearchInput.PlaceholderText",

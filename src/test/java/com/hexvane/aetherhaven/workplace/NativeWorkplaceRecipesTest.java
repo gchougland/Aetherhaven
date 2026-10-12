@@ -46,6 +46,29 @@ class NativeWorkplaceRecipesTest {
         assertFalse(WorkplaceBenchAccess.matches(com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.CRAFTING,"Salvagebench","Bench_Salvage"));
         assertEquals("crafter",WorkplaceRules.supervisor(com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.SALVAGING));
     }
+    @Test void buildersWorkbenchRecipesGoToTheBlockWorkshopAndNowhereElse() {
+        var stairs=recipe(WorkplaceEquipment.BUILDERS_BENCH,1);
+        stairs.getBenchRequirement()[0].type=BenchType.StructuralCrafting;
+        var result=NativeWorkplaceRecipes.merge(Map.of(),Map.of("Wood_Oak_Stairs",stairs));
+        assertEquals(1,result.size());
+        var discovered=result.values().iterator().next();
+        assertEquals("blockWorkshop",discovered.workplace());
+        assertEquals("native/blockWorkshop/Wood_Oak_Stairs/Builders",discovered.id());
+        assertEquals(com.hexvane.aetherhaven.townsfolk.TownsfolkSkill.BUILDING,discovered.skill());
+        assertEquals(1,discovered.skillLevel());
+        // The recipe is the game's own: nothing about its cost or output is restated.
+        assertNull(discovered.inputs());assertNull(discovered.output());
+        assertTrue(WorkplaceRecipe.acceptsNativeBench(stairs,new WorkplaceEquipment.Bench(WorkplaceEquipment.BUILDERS_BENCH,1,0,0,0)));
+        assertFalse(WorkplaceRecipe.acceptsNativeBench(stairs,new WorkplaceEquipment.Bench("Workbench",3,0,0,0)));
+        // A structural recipe never leaks onto an ordinary bench, and the yard's bench takes no ordinary recipes.
+        var misplaced=recipe("Workbench",1);misplaced.getBenchRequirement()[0].type=BenchType.StructuralCrafting;
+        assertTrue(NativeWorkplaceRecipes.merge(Map.of(),Map.of("odd",misplaced)).isEmpty());
+        assertTrue(NativeWorkplaceRecipes.merge(Map.of(),Map.of("legacy",recipe(WorkplaceEquipment.BUILDERS_BENCH,1))).isEmpty());
+        assertTrue(NativeWorkplaceRecipes.merge(Map.of(),Map.of("diagram",diagram())).isEmpty());
+    }
+    private CraftingRecipe diagram() {
+        var source=recipe("Workbench",1);source.getBenchRequirement()[0].type=BenchType.DiagramCrafting;return source;
+    }
     @Test void smeltingSkillClimbsWithTheMetal() {
         var bars=new LinkedHashMap<String,CraftingRecipe>();
         for(String metal:List.of("Silver","Gold","Cobalt","Adamantite","Mithril","Onyxium"))

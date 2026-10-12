@@ -29,7 +29,7 @@ class CoreFriendshipRewardsTest {
     @Test void villagersHaveDistinctClaimableRewardsWithoutReplacingReleasedMilestones() throws Exception {
         Map<String,Set<String>> legacy=Map.ofEntries(
             Map.entry("Chef",Set.of("rep_chef_50")),Map.entry("Merchant",Set.of("rep_merchant_50","rep_merchant_100")),
-            Map.entry("Rancher",Set.of("rep_rancher_50","rep_rancher_100")),Map.entry("Blacksmith",Set.of("rep_blacksmith_25","rep_blacksmith_50")),
+            Map.entry("Rancher",Set.of("rep_rancher_50","rep_rancher_100")),Map.entry("Blacksmith",Set.of("rep_blacksmith_50")),
             Map.entry("Crafter",Set.of()),Map.entry("Leatherworker",Set.of()),
             Map.entry("Elder_Lyren",Set.of("rep_elder_50","rep_elder_100")),
             Map.entry("Logger",Set.of("rep_logger_50","rep_logger_100")),
@@ -43,7 +43,7 @@ class CoreFriendshipRewardsTest {
             var villager=read("Server/Aetherhaven/Villagers/Aetherhaven_"+role+".json");
             var nodes=read("Server/Aetherhaven/Dialogue/"+villager.get("residentTreeId").getAsString()+".json").getAsJsonObject("nodes");
             var rewards=villager.getAsJsonArray("reputationMilestones");
-            assertEquals(Set.of("Chef","Crafter","Leatherworker").contains(role)?2:3,rewards.size(),role);
+            assertEquals(Set.of("Chef","Crafter","Leatherworker","Blacksmith").contains(role)?2:3,rewards.size(),role);
             Set<String> recipes=new HashSet<>();
             for(var value:rewards){var learn=value.getAsJsonObject().get("learnRecipeItemId");if(learn!=null&&!learn.isJsonNull()&&!learn.getAsString().isBlank())assertTrue(recipes.add(learn.getAsString()),"Do not repeat recipe rewards for "+role);}
             Set<String> own=new HashSet<>();
@@ -59,6 +59,39 @@ class CoreFriendshipRewardsTest {
             }
             assertTrue(own.containsAll(legacy.get(role)),role+" must retain existing claim IDs");
         }
+    }
+
+    @Test void blacksmithNoLongerHandsOutStoneAndLeavesNoRewardDialogueBehind() throws Exception {
+        var villager=read("Server/Aetherhaven/Villagers/Aetherhaven_Blacksmith.json");
+        Set<String> milestoneIds=new HashSet<>();Set<String> milestoneNodes=new HashSet<>();
+        for(var value:villager.getAsJsonArray("reputationMilestones")) {
+            var reward=value.getAsJsonObject();
+            assertNotEquals("Rock_Stone",reward.get("itemId").getAsString(),"Stone is not a friendship reward");
+            milestoneIds.add(reward.get("rewardId").getAsString());milestoneNodes.add(reward.get("dialogueNodeId").getAsString());
+        }
+        assertEquals(Set.of("rep_blacksmith_50","rep_blacksmith_75"),milestoneIds);
+        var nodes=read("Server/Aetherhaven/Dialogue/"+villager.get("residentTreeId").getAsString()+".json").getAsJsonObject("nodes");
+        for(var node:nodes.entrySet()) {
+            var actions=node.getValue().getAsJsonObject().getAsJsonArray("actions");
+            boolean grants=false;
+            if(actions!=null)for(var action:actions) {
+                var a=action.getAsJsonObject();
+                if(!"reputation_reward_grant".equals(a.get("type").getAsString()))continue;
+                grants=true;assertTrue(milestoneIds.contains(a.get("rewardId").getAsString()),node.getKey()+" grants a reward with no milestone");
+            }
+            if(grants||node.getKey().startsWith("rep_reward_"))assertTrue(milestoneNodes.contains(node.getKey()),node.getKey()+" is a reward dialogue with no milestone");
+        }
+        for(String file:List.of("aetherhaven_ui_town","aetherhaven_dialogue_blacksmith")) {
+            String lang=Files.readString(ROOT.resolve("Server/Languages/en-US/"+file+".lang"));
+            assertFalse(lang.contains("reward.blacksmith.25=")||lang.contains("aetherhaven_blacksmith.rep_reward_25."),file+" keeps text for the removed reward");
+        }
+        assertTrue(com.hexvane.aetherhaven.reputation.ReputationRewardCatalog.allDefinitions().stream()
+            .noneMatch(d->"Rock_Stone".equals(d.itemId())||"rep_blacksmith_25".equals(d.rewardId())),"The built in fallback must not bring the stone back");
+        var entry=new com.hexvane.aetherhaven.reputation.VillagerReputationEntry();
+        entry.setReputation(40);entry.getPendingRewardIds().add("rep_blacksmith_25");entry.getClaimedRewardIds().add("rep_blacksmith_50");
+        entry.migrateIfNeeded();
+        assertFalse(entry.getPendingRewardIds().contains("rep_blacksmith_25"),"An unclaimed stone reward must not stay queued");
+        assertTrue(entry.getClaimedRewardIds().contains("rep_blacksmith_50"));
     }
 
     @Test void professionRewardsConnectToTownRecipesAndOriginalItemArtwork() throws Exception {

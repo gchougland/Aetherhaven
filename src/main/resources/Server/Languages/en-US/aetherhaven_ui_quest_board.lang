@@ -29,6 +29,7 @@ aetherhaven.ui.questBoard.raidObjectiveCard=Defeat {count} {target} approaching 
 aetherhaven.ui.questBoard.raidObjectiveCardProgress={current} of {count} {target} defeated ({direction})
 aetherhaven.ui.questBoard.raidSpawnedToast=Raid forces spotted approaching from the {direction}!
 aetherhaven.ui.questBoard.raidSpawnFailedToast=Could not start the raid. Try again.
+aetherhaven.ui.questBoard.raidNoGroundToast=The raiders found no open ground near town. Walk toward the edge of town and try again.
 aetherhaven.ui.questBoard.abandonedToast=Quest abandoned.
 aetherhaven.ui.questBoard.abandonFailedToast=Could not abandon that quest.
 aetherhaven.ui.questBoard.raidDirection.north=north

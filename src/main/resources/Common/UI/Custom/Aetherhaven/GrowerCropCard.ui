@@ -1,0 +1,15 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Button { Anchor: (Width: 118, Height: 100, Right: 8, Bottom: 8); Background: $T.@Card;
+ TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+ Group #LockedShade { Background: $T.@CardLocked; Visible: false; HitTestVisible: false; }
+ Group #Selected { Background: $T.@CardPressed; Visible: false; HitTestVisible: false; }
+ Group { LayoutMode: Top; Padding: (Full: 6); HitTestVisible: false;
+  Group { LayoutMode: Center; Anchor: (Height: 40);
+   ItemIcon #Icon { Anchor: (Width: 40, Height: 40); }
+   AssetImage #Lock { AssetPath: "UI/Custom/padlock.png"; Anchor: (Width: 24, Height: 24, Left: 4, Top: 8); Visible: false; }
+  }
+  Label #Name { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 11, Wrap: true, HorizontalAlignment: Center, VerticalAlignment: Center); }
+  Label #Need { Anchor: (Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 11, RenderBold: true, HorizontalAlignment: Center, TextColor: #dec68d); }
+ }
+}

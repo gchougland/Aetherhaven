@@ -1,0 +1,85 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Wood_Hardwood_Beam.name"
+  },
+  "ItemLevel": 15,
+  "MaxStack": 100,
+  "Icon": "Icons/ItemsGenerated/Wood_Hardwood_Beam.png",
+  "Categories": [
+    "Blocks.Wood"
+  ],
+  "SubCategory": "BlockSets",
+  "FuelQuality": 3,
+  "PlayerAnimationsId": "Item",
+  "Interactions": {
+    "Primary": "Block_Primary",
+    "Secondary": "Block_Secondary"
+  },
+  "Set": "Wood_Hardwood_Planks",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Aetherhaven/Aetherhaven_Mine_Ceiling_Beam_Cross.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Structures/Tubes/Long_Thin_Textures/Hardwood.png",
+        "Weight": 1
+      }
+    ],
+    "Group": "Wood",
+    "HitboxType": "Aetherhaven_Mine_Ceiling_Beam_Cross",
+    "Flags": {},
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Woods",
+        "ItemId": "Wood_Hardwood_Beam"
+      }
+    },
+    "VariantRotation": "NESW",
+    "BlockParticleSetId": "Wood",
+    "Supporting": {
+      "Down": [
+        {
+          "FaceType": "Wood_Beam"
+        }
+      ],
+      "Up": [
+        {
+          "FaceType": "Wood_Beam"
+        }
+      ]
+    },
+    "ParticleColor": "#693e2a",
+    "BlockSoundSetId": "Branch",
+    "PhysicalMaterialId": "Wood",
+    "TextureComputedColor": "#572F1D"
+  },
+  "ResourceTypes": [
+    {
+      "Id": "Fuel"
+    },
+    {
+      "Id": "Charcoal"
+    }
+  ],
+  "Tags": {
+    "Type": [
+      "Wood"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "IconProperties": {
+    "Scale": 0.58823,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -13.5
+    ]
+  },
+  "Variant": true
+}

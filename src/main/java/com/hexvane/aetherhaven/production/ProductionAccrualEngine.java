@@ -34,7 +34,7 @@ public final class ProductionAccrualEngine {
         int plotBlockZ,
         int entityTicksToApply
     ) {
-        if (entityTicksToApply <= 0 || entry.catalogSize() <= 0 || NativeDruidCrops.CONSTRUCTION.equals(gameplayPlotId)) {
+        if (entityTicksToApply <= 0 || entry.catalogSize() <= 0 || SpiritGarden.CONSTRUCTION.equals(gameplayPlotId)) {
             return false;
         }
         state.migrateIfNeeded();

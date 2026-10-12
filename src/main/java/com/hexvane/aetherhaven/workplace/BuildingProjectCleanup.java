@@ -14,7 +14,10 @@ public final class BuildingProjectCleanup {
     /** The executor must queue onto the owning world thread, never run inline inside ConstructionCompleter. */
     public static void afterCompletion(Executor worldThread, TownRecord town, UUID plot, Runnable onChanged) {
         worldThread.execute(() -> {
-            if (remove(town, Set.of(plot))) onChanged.run();
+            boolean changed = remove(town, Set.of(plot));
+            // The finished project may have freed room on a full board for one that was waiting.
+            changed |= BuildingProjectAutoQueue.offerWaiting(town);
+            if (changed) onChanged.run();
         });
     }
 

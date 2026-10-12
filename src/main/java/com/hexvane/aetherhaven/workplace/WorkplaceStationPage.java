@@ -72,14 +72,19 @@ public final class WorkplaceStationPage extends AetherhavenInteractiveCustomUIPa
             station.block().getBench().getUpgradeRequirement(station.bench().getTierLevel());
     }
     @Override public void build(Ref<EntityStore> ref,UICommandBuilder c,UIEventBuilder e,Store<EntityStore> store) {
-        var station=station(ref,store);if(station==null){close();return;}
+        // What the client receives whole. The upgrade timer is compared with it and sends only what moved.
+        if(fill(ref,c,e,store))opened(c,e);
+    }
+    /** Draws the whole page. False when the page had to close instead. */
+    private boolean fill(Ref<EntityStore> ref,UICommandBuilder c,UIEventBuilder e,Store<EntityStore> store) {
+        var station=station(ref,store);if(station==null){close();return false;}
         if(!appended) {
             c.append("Aetherhaven/WorkplaceStationPage.ui");appended=true;
             for(String action:List.of("Back","Upgrade"))e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,EventData.of("Action",action),false);
         }
         var req=requirement(station);var item=station.block().getItem();
-        c.set("#Icon.Visible",item!=null);if(item!=null)c.set("#Icon.ItemId",item.getId());
-        c.set("#Name.Text",WorkplaceEquipment.label(WorkplaceEquipment.benchId(station.block())));
+        c.set("#StationIcon.Visible",item!=null);if(item!=null)c.set("#StationIcon.ItemId",item.getId());
+        c.set("#StationName.Text",WorkplaceEquipment.label(WorkplaceEquipment.benchId(station.block())));
         int tier=station.bench()==null?1:station.bench().getTierLevel();
         c.set("#Tier.Text","TIER "+tier+(req==null?"":"   >   TIER "+(tier+1)));
         c.set("#Site.Text",station.target().site().name());
@@ -87,9 +92,13 @@ public final class WorkplaceStationPage extends AetherhavenInteractiveCustomUIPa
         if(renderedTier!=tier){WorkplaceOrdersPage.materials(c,"#Materials",req==null?null:req.getInput());renderedTier=tier;}
         c.set("#Hint.Text",hint);c.set("#Upgrade.Disabled",req==null||upgradingBench!=null||station.info()==null);
         c.set("#Upgrade.Text",upgradingBench==null?"Upgrade station":"Upgrading...");
-        c.set("#Progress.Value",upgradingBench==null?0f:(float)Math.clamp((System.nanoTime()-started)/1e9/Math.max(.001,upgradingRequirement.getTimeSeconds()),0,1));
+        // The bar moves in twentieths: the timer looks four times a second, and a bar that crept would send an
+        // update each time and swallow presses on Back.
+        c.set("#Progress.Value",upgradingBench==null?0f:com.hexvane.aetherhaven.ui.PageDelta.stepped((System.nanoTime()-started)/1e9/Math.max(.001,upgradingRequirement.getTimeSeconds()),PROGRESS_STEPS));
         if(!refreshing){refreshing=true;schedule(store.getExternalData().getWorld());}
+        return true;
     }
+    static final int PROGRESS_STEPS=20;
     @Override public void handleDataEvent(Ref<EntityStore> ref,Store<EntityStore> store,Data data) {
         var station=station(ref,store);if(station==null){close();return;}
         if("Back".equals(data.action)) {WorkplaceBenchAccess.open(ref,store,playerRef,pos);return;}
@@ -120,7 +129,9 @@ public final class WorkplaceStationPage extends AetherhavenInteractiveCustomUIPa
                     ||requirement(station)!=upgradingRequirement||!station.bench().getWindows().isEmpty()) {
                     upgradingBench=null;hint="The station changed. No materials were spent.";
                 } else if((System.nanoTime()-started)/1e9>=upgradingRequirement.getTimeSeconds())finish(ref,store,station);
-                refresh(ref,store);
+                // Looked at four times a second so the upgrade ends on time; sent only when the bar reaches a step
+                // or the words change.
+                var c=new UICommandBuilder();var e=new UIEventBuilder();if(fill(ref,c,e,store))sendChanges(c,e);
             }
             if(!isDismissed())schedule(world);
         },250);
@@ -149,7 +160,7 @@ public final class WorkplaceStationPage extends AetherhavenInteractiveCustomUIPa
         hint="Station upgraded to tier "+(upgradingTier+1)+". Your task list is unchanged.";
     }
     private void refresh(Ref<EntityStore> ref,Store<EntityStore> store) {
-        var c=new UICommandBuilder();var e=new UIEventBuilder();build(ref,c,e,store);sendUpdate(c,e,false);
+        var c=new UICommandBuilder();var e=new UIEventBuilder();if(fill(ref,c,e,store))sendUpdate(c,e,false);
     }
     public static final class Data {
         public static final BuilderCodec<Data> CODEC=BuilderCodec.builder(Data.class,Data::new)

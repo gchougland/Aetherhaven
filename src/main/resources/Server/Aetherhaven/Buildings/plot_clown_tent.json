@@ -35,7 +35,6 @@
       "blockTypeId": "Soil_Pathway",
       "interactionKind": "WORK_SURFACE",
       "interactionTargetYawDegrees": 104.29804,
-      "equipmentProfileId": "work_bard",
       "workResidentKind": "clown"
     }
   ],

@@ -56,6 +56,16 @@ Group #ShopSpotStatusRoot {
             Anchor: (Width: 380);
           }
         }
+        Group #DetailRow {
+          LayoutMode: Center;
+          Anchor: (Bottom: 6, Horizontal: 0);
+          Visible: false;
+          Label #DetailLine {
+            Text: " ";
+            Style: (...$C.@DefaultLabelStyle, TextColor: #c9d6e2, FontSize: 15, Wrap: true, HorizontalAlignment: Center);
+            Anchor: (Width: 380);
+          }
+        }
         Group {
           LayoutMode: Center;
           Anchor: (Bottom: 4, Horizontal: 0);

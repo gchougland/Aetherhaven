@@ -88,6 +88,18 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                                         .param("fun", String.format(Locale.US, "%.1f", vn.getFun()))
                                         .param("max", String.valueOf((int) VillagerNeeds.MAX))
                                 );
+                                // Restaurant meal perks still running, so a playtest can see a dish take effect and end.
+                                for (com.hexvane.aetherhaven.restaurant.MealPerk perk : com.hexvane.aetherhaven.restaurant.MealPerk.values()) {
+                                    if (vn.mealPerkBonus(perk) <= 0f) {
+                                        continue;
+                                    }
+                                    playerRef.sendMessage(
+                                        Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.mealPerkLine")
+                                            .param("perk", perk.id)
+                                            .param("percent", String.valueOf(Math.round(vn.mealPerkBonus(perk) * 100)))
+                                            .param("seconds", String.valueOf(vn.mealPerkRemainingMs(perk) / 1000L))
+                                    );
+                                }
                             }
                         }
                     );

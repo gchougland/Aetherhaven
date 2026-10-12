@@ -49,7 +49,7 @@ public final class PlotCreatorResourceTypePickerPage
             templateAppended = true;
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
-                "#CloseButton",
+                "#PageCloseButton",
                 EventData.of("Action", "Close"),
                 false
             );
@@ -57,7 +57,7 @@ public final class PlotCreatorResourceTypePickerPage
 
         commandBuilder.set("#PickerTitleText.TextSpans", Message.translation(MSG + ".resourceTypePicker.title"));
         commandBuilder.set("#PickerHint.TextSpans", Message.translation(MSG + ".resourceTypePicker.hint"));
-        commandBuilder.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
+        commandBuilder.set("#PageCloseButton.TextSpans", Message.translation(MSG + ".button.close"));
 
         List<ResourceTypeCatalog.Entry> entries = ResourceTypeCatalog.listForPicker();
         commandBuilder.clear(ROWS);

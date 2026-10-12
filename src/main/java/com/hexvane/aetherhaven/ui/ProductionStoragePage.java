@@ -45,6 +45,8 @@ import javax.annotation.Nullable;
 /** Withdraw items from per plot workplace production storage (wardrobe block). */
 public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIPage<ProductionStoragePage.PageData> {
     private static final long LIVE_REFRESH_INTERVAL_MS = 1000L;
+    /** How many steps an output slot's progress bar has. */
+    static final int PROGRESS_STEPS = 10;
     private static final int MAX_UI_SLOTS = WorkplaceProductionUpgrades.MAX_SLOT_COUNT;
     private static final String SLOT_FRAGMENT = "[0]";
     private static final int SLOT_WIDTH_PX = 180;
@@ -83,6 +85,17 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
 
     @Override
     public void build(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull Store<EntityStore> store
+    ) {
+        fill(ref, commandBuilder, eventBuilder, store);
+        // What the client receives whole. The live refresh is compared with it and sends only what moved.
+        opened(commandBuilder, eventBuilder);
+    }
+
+    private void fill(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull UICommandBuilder commandBuilder,
         @Nonnull UIEventBuilder eventBuilder,
@@ -168,8 +181,8 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         commandBuilder.set("#BottomUnlockRow.Visible", true);
         commandBuilder.set("#GroveRow.Visible",com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(gameplayConstructionId));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,"#OpenGrove",EventData.of("Action","OpenGrove"),false);
-        commandBuilder.set("#FieldRow.Visible",com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(gameplayConstructionId)||"plot_druid".equals(gameplayConstructionId));
-        commandBuilder.set("#OpenField.Text","plot_druid".equals(gameplayConstructionId)?"Review ingredient beds":"Review planted beds");
+        commandBuilder.set("#FieldRow.Visible",com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(gameplayConstructionId));
+        commandBuilder.set("#OpenField.TextSpans",Message.translation(com.hexvane.aetherhaven.production.FarmFields.LANG+"storage.open"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,"#OpenField",EventData.of("Action","OpenField"),false);
         commandBuilder.set("#HerdRow.Visible",com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(gameplayConstructionId));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,"#OpenHerd",EventData.of("Action","OpenHerd"),false);
@@ -244,13 +257,15 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
                 boolean herd=state.usesPhysicalHerd();
                 boolean field=state.usesPhysicalField();
                 boolean grove=state.usesPhysicalTimber();
-                boolean needsIngredientReview="plot_druid".equals(gameplayConstructionId) && !field;
+                boolean needsIngredientReview="plot_druid".equals(gameplayConstructionId);
                 commandBuilder.set(base + " #Prog.Visible", !grove && !field && !herd && !needsIngredientReview);
                 boolean physical=!grove && !field && !herd && !needsIngredientReview && !plot.getProductionLayout().legacy() && plot.getProductionLayout().validationError()==null;
                 var miningCycle=physical?state.mining().cycle(col):null;
                 float progress = grove || field || herd || needsIngredientReview ? 0f : physical ? (float)miningCycle.progress()
                     : ticks > 0 ? Math.min(1f, state.getSlotTickAccum(col) / (float) ticks) : 0f;
-                commandBuilder.set(base + " #Prog.Value", progress);
+                // The bar moves in tenths. Every step shown is an update sent, and an update can cost a press on
+                // the Take buttons beside it.
+                commandBuilder.set(base + " #Prog.Value", PageDelta.stepped(progress, PROGRESS_STEPS));
                 String requirement = com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issue(town,gameplayConstructionId,itemId);
                 commandBuilder.set(base + " #RequirementLock.Visible", requirement != null);
                 commandBuilder.setObject(base + ".Background", new PatchStyle().setColor(Value.of(requirement == null ? "#1a2932" : "#2b3038")));
@@ -285,10 +300,10 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
 
     private static String fieldStatus(PlotProductionState state,String item,long capacity) {
         if(state.getAmount(item)>=capacity)return "Storage full";
-        var cargo=state.field().cargo();
-        if(cargo!=null&&cargo.output().equals(item))return cargo.quantity()+" being carried to storage";
-        long beds=state.field().beds().stream().filter(bed->bed.output().equals(item)).count();
-        return beds==0?"Plant and review crop beds":beds+" beds in the field";
+        var farm=state.farm();
+        if(farm.basket().getOrDefault(item,0)>0)return farm.basket().get(item)+" being carried to storage";
+        long cells=farm.fields().values().stream().flatMap(field->field.cells().stream()).filter(cell->item.equals(cell.crop())).count();
+        return cells==0?"Paint it in the field plan":cells+" cells in the fields";
     }
 
     private static String groveStatus(PlotProductionState state,int slot,String item,long capacity) {
@@ -311,7 +326,9 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             if (com.hexvane.aetherhaven.production.MiningNodeBlocks.intact(world,plot,state.mining(),n)) { intact=true; break; }
         }
         if (!intact) return "Check mining cells";
-        if (cycle.remaining()>0) return "Vein returns in "+(int)Math.ceil(cycle.remaining())+"s";
+        // Counted in fives for the same reason the bar moves in steps: a line that changes every second is an
+        // update every second.
+        if (cycle.remaining()>0) return "Vein returns in about "+(int)(Math.ceil(cycle.remaining()/5.0)*5)+"s";
         if (cycle.progress()>0) return "Mining progress";
         // Say why, when the Miner himself knows: he cannot reach the rock, has nowhere to stand, and so on.
         String reason=com.hexvane.aetherhaven.autonomy.MiningWorkService.waitingReason(plot.getPlotId());
@@ -389,7 +406,11 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
                     liveRefreshActive = false;
                     return;
                 }
-                refresh(r, st);
+                // Looked at on every beat, sent only when it differs from what the player already sees.
+                UICommandBuilder cmd = new UICommandBuilder();
+                UIEventBuilder ev = new UIEventBuilder();
+                fill(r, cmd, ev, st);
+                sendChanges(cmd, ev);
                 scheduleLiveRefreshTick(world);
             },
             LIVE_REFRESH_INTERVAL_MS
@@ -472,9 +493,9 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             return;
         }
         if (action.equalsIgnoreCase("OpenField")
-                && (com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(gameplayConstructionId)||"plot_druid".equals(gameplayConstructionId))) {
+                && com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(gameplayConstructionId)) {
             liveRefreshActive = false;
-            player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.FarmerFieldPage(playerRef,townId,plotId));
+            player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.FarmerFieldPage(playerRef,townId,plotId,null));
             return;
         }
         if (action.equalsIgnoreCase("OpenGrove")
@@ -635,7 +656,7 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         UICommandBuilder cmd = new UICommandBuilder();
         UIEventBuilder ev = new UIEventBuilder();
-        build(ref, cmd, ev, store);
+        fill(ref, cmd, ev, store);
         sendUpdate(cmd, ev, false);
     }
 

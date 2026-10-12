@@ -1,5 +1,5 @@
 $C = "../Common.ui";
 Group { LayoutMode: Top; Anchor: (Width: 76, Height: 58);
   ItemIcon #Item { Anchor: (Width: 36, Height: 36); }
-  Label #Count { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d7c6a3); }
+  Label #Count { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d7c6a3, HorizontalAlignment: Center); }
 }

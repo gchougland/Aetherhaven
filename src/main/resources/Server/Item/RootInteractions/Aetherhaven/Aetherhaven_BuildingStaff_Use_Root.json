@@ -1,0 +1,32 @@
+{
+  "Settings": {
+    "Adventure": {
+      "Cooldown": {
+        "Id": "BlockInteraction",
+        "Cooldown": 0.35
+      }
+    },
+    "Creative": {
+      "Cooldown": {
+        "Id": "BlockInteraction_Creative",
+        "Cooldown": 0.35,
+        "ClickBypass": true
+      }
+    }
+  },
+  "Interactions": [
+    {
+      "Type": "Simple",
+      "Next": {
+        "Type": "UseBlock",
+        "Failed": {
+          "Type": "UseEntity",
+          "Failed": {
+            "Type": "AetherhavenWorkplaceTool"
+          }
+        }
+      }
+    }
+  ],
+  "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.buildingStaff.use"
+}

@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.poi.tool;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
 import com.hexvane.aetherhaven.ui.ToolHudHotkeyRows;
+import com.hexvane.aetherhaven.ui.ToolKeyPrompts;
 import com.hexvane.aetherhaven.ui.ToolKeybindSlot;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
@@ -45,7 +46,8 @@ public final class PoiToolLegendHud extends CustomUIHud {
         b.set("#ModeName.TextSpans", Message.translation(nameKey));
         b.set("#ModeHelp.TextSpans", Message.translation(helpKey));
         b.clear(HINT_ROWS);
-        ToolHudHotkeyRows.appendHotkeyRow(b, HINT_ROWS, 0, ToolKeybindSlot.ABILITY1, HINT_DESC, getPlayerRef());
+        int next = ToolHudHotkeyRows.appendHotkeyRow(b, HINT_ROWS, 0, ToolKeyPrompts.POI_TOOL, ToolKeybindSlot.ABILITY1, HINT_DESC);
+        ToolHudHotkeyRows.appendWhereKeysRow(b, HINT_ROWS, next);
         this.update(false, b);
     }
 }

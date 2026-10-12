@@ -156,7 +156,20 @@ public final class QuestCatalog {
     }
 
     private static void validateQuest(@Nonnull QuestDefinition def, @Nonnull String resourcePath) {
+        if (def.autoStart() != null && !QuestAutoStartService.isKnownCondition(def.autoStart().whenOrEmpty())) {
+            LOGGER.atWarning().log(
+                "Quest %s autoStart names an unknown condition \"%s\" and will never start by itself (%s)",
+                def.idOrEmpty(),
+                def.autoStart().whenOrEmpty(),
+                resourcePath
+            );
+        }
         for (QuestObjective o : def.objectivesOrEmpty()) {
+            if (o.workType() != null && com.hexvane.aetherhaven.workplace.WorkplaceQuestSteps.type(o.workType()) == null) {
+                LOGGER.atWarning().log(
+                    "Quest %s objective names an unknown workType \"%s\" (%s)", def.idOrEmpty(), o.workType(), resourcePath
+                );
+            }
             String k = o.kind();
             if (k == null || k.isBlank()) {
                 LOGGER.atWarning().log("Quest %s has objective missing kind (%s)", def.idOrEmpty(), resourcePath);
@@ -204,6 +217,10 @@ public final class QuestCatalog {
                 "tourist_move_in_items",
                 "item_crafted",
                 "charter_placed",
+                "workplace_type_unlocked",
+                "workplace_marked",
+                "workplace_type_chosen",
+                "workplace_bench_placed",
                 "custom",
                 "entity_kills" -> true;
             default -> false;
@@ -464,7 +481,7 @@ public final class QuestCatalog {
         String targetName = def.assignByEntity()
             ? QuestAssigneeDisplay.targetName(def, town, store, plugin)
             : null;
-        Message out = objectiveLineMessage(objective, targetName, town, store, plugin, questId);
+        Message out = objectiveLineMessage(objective, targetName, town, store, plugin, questId, true);
         if (objective.kind() != null
             && "entity_kills".equalsIgnoreCase(objective.kind().trim())
             && objective.id() != null
@@ -496,7 +513,10 @@ public final class QuestCatalog {
         }
         QuestObjective current = QuestProgressionService.currentObjective(def, town, questId);
         if (current != null) {
-            return objectiveProgressKey(questId, town, current);
+            // A line that names things in the town changes when the town does, while the step stays the same.
+            String words = WorkplaceObjectiveText.signature(current, town, plugin);
+            String key = objectiveProgressKey(questId, town, current);
+            return words.isEmpty() ? key : key + '|' + words;
         }
         for (QuestObjective objective : def.objectivesOrEmpty()) {
             if (objective.kind() != null && "entity_kills".equalsIgnoreCase(objective.kind().trim())) {
@@ -593,7 +613,7 @@ public final class QuestCatalog {
         for (QuestObjective o : def.objectivesOrEmpty()) {
             if (o.kind() != null && "dialogue_turn_in".equalsIgnoreCase(o.kind().trim())) {
                 if (!QuestProgressionService.isObjectiveComplete(town, questId, o)) {
-                    return objectiveLineMessage(o, targetName, town, store, plugin, questId);
+                    return objectiveLineMessage(o, targetName, town, store, plugin, questId, true);
                 }
             }
         }
@@ -626,8 +646,31 @@ public final class QuestCatalog {
         @Nullable AetherhavenPlugin plugin,
         @Nonnull String questId
     ) {
+        return objectiveLineMessage(o, targetName, town, store, plugin, questId, false);
+    }
+
+    /**
+     * @param hud true for the HUD quest tracker, which has room for less: an objective's {@code hudTextLangKey} is
+     *     used when it has one
+     */
+    @Nonnull
+    private static Message objectiveLineMessage(
+        @Nonnull QuestObjective o,
+        @Nullable String targetName,
+        @Nullable TownRecord town,
+        @Nullable Store<EntityStore> store,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull String questId,
+        boolean hud
+    ) {
+        Message workplace = WorkplaceObjectiveText.line(o, town, plugin, questId, hud);
+        if (workplace != null) {
+            return workplace;
+        }
         Message lineMsg;
-        if (o.textLangKey() != null && !o.textLangKey().isBlank()) {
+        if (hud && o.hudTextLangKey() != null && !o.hudTextLangKey().isBlank()) {
+            lineMsg = Message.translation(o.hudTextLangKey().trim());
+        } else if (o.textLangKey() != null && !o.textLangKey().isBlank()) {
             lineMsg = Message.translation(o.textLangKey().trim());
         } else {
             lineMsg = Message.raw(o.text() != null ? o.text().trim() : "");

@@ -48,8 +48,7 @@
       "blockTypeId": "Cloth_Block_Wool_Purple",
       "interactionKind": "WORK_SURFACE",
       "workResidentKind": "alchemist",
-      "interactionTargetYawDegrees": 90.0,
-      "equipmentProfileId": "work_bard"
+      "interactionTargetYawDegrees": 90.0
     }
   ],
   "styleId": "core",

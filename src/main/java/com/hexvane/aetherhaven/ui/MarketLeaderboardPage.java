@@ -47,7 +47,7 @@ public final class MarketLeaderboardPage
             commandBuilder.append("Aetherhaven/MarketLeaderboardPage.ui");
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
-                "#CloseButton",
+                "#PageCloseButton",
                 EventData.of("Action", "Close"),
                 false
             );
@@ -62,7 +62,7 @@ public final class MarketLeaderboardPage
             Message.translation("aetherhaven_festivals.aetherhaven.festival.market.leaderboard.hint")
         );
         commandBuilder.set(
-            "#CloseButton.TextSpans",
+            "#PageCloseButton.TextSpans",
             Message.translation("aetherhaven_festivals.aetherhaven.festival.market.leaderboard.close")
         );
 

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.pathtool;
 
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -24,7 +25,7 @@ public final class PathToolModeCycleInteraction extends SimpleInstantInteraction
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<PathToolModeCycleInteraction> CODEC =
         com.hypixel.hytale.codec.builder.BuilderCodec
             .builder(PathToolModeCycleInteraction.class, PathToolModeCycleInteraction::new, SimpleInstantInteraction.CODEC)
-            .documentation("Path tool: Q / Ability1 — cycle move, rotate, commit placement.")
+            .documentation("Path tool: Q / Ability1 — cycle move, rotate, commit placement. While crouching: choose the path style.")
             .build();
 
     @Nonnull
@@ -64,6 +65,10 @@ public final class PathToolModeCycleInteraction extends SimpleInstantInteraction
             || h.isEmpty()
             || !com.hexvane.aetherhaven.AetherhavenConstants.PATH_TOOL_ITEM_ID.equals(h.getItemId())) {
             context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (ToolAbilityKeys.thirdActionHeld(commandBuffer, playerRef)) {
+            PathToolInteractions.handleCyclePathStyle(playerRef, commandBuffer, context);
             return;
         }
         PathToolInteractions.handleCycleGizmoMode(playerRef, commandBuffer, context);

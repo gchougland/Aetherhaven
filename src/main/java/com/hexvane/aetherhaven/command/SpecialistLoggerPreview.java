@@ -82,7 +82,7 @@ record SpecialistLoggerPreview(UUID plotId, WarehouseBatch.Point heat) {
         // Exercise the ordinary equipment exchange against fixture inventory, never the player's bag.
         var bag=new com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer((short)1);
         var tool=new ItemStack(next,1);bag.setItemStackForSlot((short)0,tool);
-        String issue=CoreVillagerMasteryService.equip(progress,"logger",bag,(short)0,tool,progress.tool());
+        String issue=CoreVillagerMasteryService.equip(progress,"logger",bag,(short)0,tool);
         require(issue==null,issue);manager.updateTown(town);
         return "Preview Logger equipped "+next+". Work and cargo were not changed.";
     }

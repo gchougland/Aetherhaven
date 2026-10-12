@@ -39,6 +39,8 @@ public final class HuntService extends TickingSystem<EntityStore> {
         HuntFamily family;
         Map<String,Integer> spoils=Map.of();
         Vector3d center,loot;
+        /** How the lodge was turned when it was placed. The arena's pieces turn with it. */
+        com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation turn=com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation.None;
         boolean collecting,down,secondWind;
         boolean standard,brazier,sigil;
         Set<Integer> previousEffects=Set.of();
@@ -46,6 +48,7 @@ public final class HuntService extends TickingSystem<EntityStore> {
         float lastFoeHealth,lastHunterHealth;
         long lastTick,searchCursor,planningUntil;
         String status="Choose creatures, then start a run.";
+        HuntArenaLayout layout() {return HuntArenaLayout.of(center,turn);}
     }
     private static Map<UUID,Run> runs(World world) { synchronized(RUNS){return RUNS.computeIfAbsent(world,w->new HashMap<>());} }
     private static Run run(Store<EntityStore> store,UUID town) { return runs(store.getExternalData().getWorld()).get(town); }
@@ -87,11 +90,11 @@ public final class HuntService extends TickingSystem<EntityStore> {
         var plugin=AetherhavenPlugin.get();var world=store.getExternalData().getWorld();var state=town.getHunts();
         var plot=town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(),CONSTRUCTION);
         var r=runs(world).computeIfAbsent(town.getTownId(),id->new Run());
-        r.hunter=new WeakReference<>(hunter);r.plot=plot.getPlotId();
+        r.hunter=new WeakReference<>(hunter);r.plot=plot.getPlotId();r.turn=plot.resolvePrefabYaw();
         if(r.center==null||!beacon(world,r.center)||!insidePoint(r.center,plot))r.center=findBeacon(world,plot,r);
         if(r.center==null)return "Finding the Hunt Beacon. Try again in a moment.";
         if(!clearArena(world,plot,r.center))return "Keep a clear 9 by 9 floor around the Hunt Beacon.";
-        for(var id:state.unlocked()) {var family=HuntFamily.get(id);if(family==null||NPCPlugin.get().getIndex(family.role())<0)return "An unlocked creature is unavailable.";}
+        for(var id:state.chosen()) {var family=HuntFamily.get(id);if(family==null||NPCPlugin.get().getIndex(family.role())<0)return "A chosen creature is unavailable.";}
         if(NPCPlugin.get().getIndex("Aetherhaven_Hunt_Portal")<0)return "The hunt portal is unavailable.";
         var furnishing=furnishings(world,plot);
         r.standard=furnishing.contains("Aetherhaven_Hunt_Practice_Standard");
@@ -141,6 +144,7 @@ public final class HuntService extends TickingSystem<EntityStore> {
             var r=map.computeIfAbsent(entry.getKey(),id->new Run());r.hunter=new WeakReference<>(hunter);
             if(r.id==null&&state.run()!=null) {state.end("Run interrupted by a restart.");save(town,store);}
             var plot=town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(),CONSTRUCTION);
+            if(plot!=null)r.turn=plot.resolvePrefabYaw();
             if(r.id==null) {
                 if(now<r.planningUntil)NpcSupportUtil.setState(hunter,"AetherhavenStandStill",null,store);
                 if(plot!=null&&(r.center==null||!beacon(world,r.center)))r.center=findBeacon(world,plot,r);
@@ -156,13 +160,15 @@ public final class HuntService extends TickingSystem<EntityStore> {
             if(!beacon(world,r.center)) {finish(r,town,store,"The Hunt Beacon was removed.",false);continue;}
             r.elapsed+=dt;
             var portal=r.portal.get();var foe=r.foe.get();
+            // The Hunter's mark, the portal and the creature's first step turn with the lodge.
+            var layout=r.layout();
             if(portal==null) {
-                var stand=new Vector3d(r.center).add(0,0,-3);
+                var stand=layout.hunterStand();
                 if(position(hunter,store).distanceSquared(stand)>2.25) {
                     if(r.elapsed>90)finish(r,town,store,"The Hunter could not reach the arena.",false);else travel(hunter,stand,store);
                     continue;
                 }
-                var pair=NPCPlugin.get().spawnNPC(store,"Aetherhaven_Hunt_Portal",null,new Vector3d(r.center).add(0,0,4),Rotation3f.ZERO);
+                var pair=NPCPlugin.get().spawnNPC(store,"Aetherhaven_Hunt_Portal",null,layout.portal(),layout.facing());
                 if(pair==null) {finish(r,town,store,"The portal could not open.",false);continue;}
                 portal=pair.first();var tag=new HuntOpponent(town.getTownId(),r.id,store.getComponent(hunter,UUIDComponent.getComponentType()).getUuid());tag.portal=true;
                 store.putComponent(portal,HuntOpponent.getComponentType(),tag);r.portal=new WeakReference<>(portal);
@@ -192,8 +198,8 @@ public final class HuntService extends TickingSystem<EntityStore> {
             r.interval-=dt;if(r.interval>0) {r.status="Next wave in "+(int)Math.ceil(r.interval)+"s.";continue;}
             if(!clearArena(world,plot,r.center)) {r.status="Clear the arena floor to continue.";continue;}
             r.family=state.next();if(r.family==null) {finish(r,town,store,"The next creature is unavailable.",false);continue;}
-            var spawn=new Vector3d(r.center).add(0,0,3);
-            var pair=NPCPlugin.get().spawnNPC(store,r.family.role(),null,spawn,Rotation3f.ZERO);
+            var spawn=layout.creatureSpawn();
+            var pair=NPCPlugin.get().spawnNPC(store,r.family.role(),null,spawn,layout.facing());
             if(pair==null) {finish(r,town,store,"The creature could not enter the arena.",false);continue;}
             foe=pair.first();store.putComponent(foe,HuntOpponent.getComponentType(),new HuntOpponent(town.getTownId(),r.id,store.getComponent(hunter,UUIDComponent.getComponentType()).getUuid()));
             var hp=health(foe,store);if(hp!=null) {applyMaxHealth(foe,(float)(hp.getMax()*TownHunts.enemyHealthScale(state.defeated())),store);heal(foe,Float.MAX_VALUE,store);}
@@ -271,9 +277,9 @@ public final class HuntService extends TickingSystem<EntityStore> {
             RtsGuardCombatSupport.clearCombatTarget(store.getComponent(hunter,NPCEntity.getComponentType()),store);NpcSupportUtil.setState(hunter,"Idle",null,store);
             if(restore) {
                 heal(hunter,Float.MAX_VALUE,store);
-                var to=new Vector3d(r.center).add(0,0,-3);
+                var layout=r.layout();var to=layout.hunterStand();
                 if(VillagerBlockUtil.isNpcStandColumn(store.getExternalData().getWorld(),(int)Math.floor(to.x),(int)Math.floor(to.y),(int)Math.floor(to.z)))
-                    AetherhavenNpcTeleport.apply(hunter,store,Teleport.createExact(to,Rotation3f.ZERO));
+                    AetherhavenNpcTeleport.apply(hunter,store,Teleport.createExact(to,layout.facing()));
             }
         }
     }

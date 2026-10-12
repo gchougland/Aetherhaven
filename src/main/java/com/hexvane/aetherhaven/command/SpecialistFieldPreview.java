@@ -65,7 +65,7 @@ final class SpecialistFieldPreview {
         var state=town.peekPlotProduction(plotId);
         return "Preview Farmer: wheat "+state.getAmount(OUTPUT)+" (initial "+startingStock+"), ripe beds "+beds.stream().filter(b->NativeFarmCrops.ripe(world,b)).count()
             +" / "+beds.size()+", beds needing water "+beds.stream().filter(b->NativeFarmCrops.needsWater(world,b)).count()
-            +", held "+state.field().heldQuantity()+", pending "+(state.field().pending()!=null)+". Initial ripening supplied: "+ripened+". Harvests and delivery are ordinary worker actions.";
+            +", held "+state.farm().carried()+", planned cells "+state.farm().plannedCount()+". Initial ripening supplied: "+ripened+". Harvests and delivery are ordinary worker actions.";
     }
     private static void require(boolean value,String issue){if(!value)throw new IllegalStateException(issue);}
 }

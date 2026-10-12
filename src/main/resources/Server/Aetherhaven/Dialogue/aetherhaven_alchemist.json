@@ -28,7 +28,7 @@
         },
         {
           "text": "aetherhaven_alchemist.how",
-          "icon": "UI/Custom/alchemy.png",
+          "icon": "UI/Custom/dialogue.png",
           "next": "how",
           "condition": {
             "type": "not",
@@ -40,7 +40,7 @@
         },
         {
           "text": "aetherhaven_alchemist.offer",
-          "icon": "home",
+          "icon": "UI/Custom/alchemy.png",
           "next": "offer",
           "condition": {
             "type": "not",

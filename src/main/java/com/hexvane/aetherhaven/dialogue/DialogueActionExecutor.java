@@ -189,17 +189,6 @@ public final class DialogueActionExecutor {
                         new com.hexvane.aetherhaven.inn.InnOutreachPage(pr, townId));
                 });
             }
-            case "learn_alchemy_flask" -> {
-                if (npcRef == null || !npcRef.isValid()) return;
-                var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
-                var viewer = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                if (binding == null || plugin == null || viewer == null || !"alchemist".equals(binding.getKind())) return;
-                var town = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin).getTown(binding.getTownId());
-                if (town == null || !town.hasMemberOrOwner(viewer.getUuid())
-                    || !com.hexvane.aetherhaven.workplace.TownWorkplaces.hasSupervisor(town,"alchemist")) return;
-                CraftingPlugin.learnRecipe(playerRef,"Aetherhaven_Alchemy_Flask",store);
-                viewer.sendMessage(Message.raw("You learned how to make an Alchemy Flask. Bring it to the laboratory cauldron."));
-            }
             case "open_core_mastery" -> {
                 if (npcRef == null || !npcRef.isValid()) return;
                 var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
@@ -513,6 +502,14 @@ public final class DialogueActionExecutor {
         }
         InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
         tm.updateTown(town);
+        if (qdef != null && qdef.autoStart() != null) {
+            // Taken from a villager before the town was given it: it must not be pushed on the town a second time.
+            town.markQuestAutoStarted(qid);
+            tm.updateTown(town);
+        }
+        if (qdef != null && qdef.autoPin()) {
+            com.hexvane.aetherhaven.quest.QuestAutoPin.applyToOnlineMembers(world, plugin, town);
+        }
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
             sendEventTitleBanner(
@@ -728,6 +725,8 @@ public final class DialogueActionExecutor {
             InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
             InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
         }
+        // Finishing a quest is when a villager moves in, which may be what a quest that starts by itself waits for.
+        com.hexvane.aetherhaven.quest.QuestAutoStartService.evaluateSoon(world, plugin, town.getTownId());
         if (rewardPlayerRef != null && beneficiaryNpcUuid != null && store != null) {
             UUIDComponent pu = store.getComponent(rewardPlayerRef, UUIDComponent.getComponentType());
             Ref<EntityStore> npcRef = store.getExternalData().getRefFromUUID(beneficiaryNpcUuid);

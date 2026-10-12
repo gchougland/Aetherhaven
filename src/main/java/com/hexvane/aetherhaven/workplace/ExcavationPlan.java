@@ -19,6 +19,148 @@ public final class ExcavationPlan {
         Layout(String label,String description){this.label=label;this.description=description;}
     }
     public record Cell(Point point,String block,int rotation,int skill) {}
+    /**
+     * What a planned cell holds when the work reaches it. The order was written from the ground as it was on the day it
+     * was planned; the ground a miner meets is the one that counts.
+     *
+     * @param breakAt  the block to break to clear the cell: the cell itself, or the base of a larger block it is part of
+     * @param terrain  plain rock, ore or soil, as opposed to something a player built or furnished
+     * @param obstacle what must not be broken there, in words a player can read
+     */
+    public record Found(Kind kind,String block,int rotation,int skill,Point breakAt,boolean terrain,String obstacle) {
+        public enum Kind { UNLOADED, EMPTY, ROCK, OBSTACLE }
+        public static final Found UNLOADED=new Found(Kind.UNLOADED,null,0,0,null,false,null);
+        public static final Found EMPTY=new Found(Kind.EMPTY,null,0,0,null,false,null);
+        public static Found rock(String block,int rotation,int skill,Point breakAt,boolean terrain){return new Found(Kind.ROCK,block,rotation,skill,breakAt,terrain,null);}
+        public static Found obstacle(String what){return new Found(Kind.OBSTACLE,null,0,0,null,false,what);}
+    }
+    // Cells a miner had to leave because something there must not be broken. They are dug once it is gone.
+    private List<Cell> blocked=new ArrayList<>();
+    // Set by any progress made under these rules, so an order finished long ago is never swept again.
+    private boolean sweepArmed;
+    private int fittingsSkipped;
+    private transient long blockedCheckedAt;
+    private transient int failedBreaks;
+    private List<Cell> blockedCells(){if(blocked==null)blocked=new ArrayList<>();return blocked;}
+    public List<Cell> blocked(){return Collections.unmodifiableList(blockedCells());}
+    /** Every cell this order has still to dig, including the ones waiting for an obstruction to go. */
+    public Set<Point> pendingPoints() {
+        var points=new HashSet<Point>();
+        for(int i=cursor;i<cells.size();i++)points.add(cells.get(i).point());
+        for(var cell:blockedCells())points.add(cell.point());
+        for(var cell:unbuildCells())points.add(cell.point());
+        return points;
+    }
+    public int fittingsSkipped(){return fittingsSkipped;}
+    // Frame pieces and wall torches already built where another passage now opens. They are taken down again.
+    private List<Cell> unbuild=new ArrayList<>();
+    private transient boolean doorwaysChecked;
+    private transient long junctionCheckedAt;
+    private List<Cell> unbuildCells(){if(unbuild==null)unbuild=new ArrayList<>();return unbuild;}
+    public List<Cell> unbuild(){return Collections.unmodifiableList(unbuildCells());}
+    /** True the first time it is asked in a session: openings made before this rule existed are checked once. */
+    public boolean claimDoorwayCheck(){if(doorwaysChecked)return false;doorwaysChecked=true;return true;}
+    /** Anything left for a miner to do here: digging, something set aside, a piece to take down or a fitting to place. */
+    public boolean unfinished(){return id!=null&&(next()!=null||nextFitting()!=null||!blockedCells().isEmpty()||!unbuildCells().isEmpty());}
+    /** The shared ground where this passage meets another is looked over every few seconds while work goes on. */
+    public boolean junctionCheckDue(long now){if(now<junctionCheckedAt)return false;junctionCheckedAt=now+3000;return true;}
+    /**
+     * Keeps posts out of doorways. A frame with any piece standing in an opening another passage makes here is left
+     * out whole, so no half frame remains, and so is a wall torch on the wall that is opened. Pieces not yet placed
+     * simply leave the order. Pieces already placed are listed to be taken down, and their beams come back.
+     *
+     * @param opening the other passage's open space
+     * @return whether anything changed
+     */
+    public boolean openDoorways(Set<Point> opening) {
+        if(id==null||fittings==null||fittings.isEmpty()||opening==null||opening.isEmpty())return false;
+        var doomed=ExcavationFittings.inDoorways(fittings,entrance,opening);
+        if(doomed.isEmpty())return false;
+        var kept=new ArrayList<ExcavationFittings.Fitting>();int placed=fitted;
+        for(int i=0;i<fittings.size();i++) {
+            var fitting=fittings.get(i);
+            if(!doomed.contains(fitting)){kept.add(fitting);continue;}
+            if(i<fitted){placed--;unbuildCells().add(new Cell(fitting.point(),fitting.block(),fitting.rotation(),1));}
+        }
+        fittings=kept;fitted=placed;work=0;revision++;return true;
+    }
+    /** A piece listed to be taken down is queued once the ground shows it still stands. One that has gone is forgotten. */
+    public void resolveUnbuild(Cell cell,boolean standing) {
+        if(!unbuildCells().remove(cell)||!standing)return;
+        requeue(cell);
+    }
+    /**
+     * Puts rock found in the way at the front of the order, so it is cleared before anything behind it. Used where
+     * this passage meets another: rock that turns up there would otherwise close the junction.
+     */
+    public boolean requeueFirst(Cell cell) {
+        if(pending||!requeue(cell))return false;
+        cells.add(cursor,cells.removeLast());forgetPreparedWork();return true;
+    }
+    private void forgetPreparedWork(){drops.clear();dropsPrepared=false;work=0;failedBreaks=0;}
+    /**
+     * An order paused by the old rule, which stopped a tunnel for good when a block in it was placed or broken, carries
+     * on by itself. Nothing in the planner could review such a tunnel again.
+     */
+    public boolean resumeAfterEdit(){if(!edited)return false;edited=false;paused=false;revision++;return true;}
+    /**
+     * Brings the order up to date with the ground. A cell that is already open is passed over, a cell that holds a
+     * different block is dug as that block, and a cell holding something that must not be broken is set aside so the
+     * rest of the tunnel is still dug. Cells set aside come back once the obstruction has gone.
+     *
+     * @return whether the order changed
+     */
+    public boolean survey(java.util.function.Function<Point,Found> look,long now) {
+        if(id==null||pending)return false;
+        boolean changed=false;
+        next(); // A legacy room settles its digging order before any cell is judged.
+        if(cursor>=cells.size()&&!blockedCells().isEmpty()&&now>=blockedCheckedAt) {
+            blockedCheckedAt=now+2000;
+            for(var waiting=blocked.iterator();waiting.hasNext();) {
+                var cell=waiting.next();var found=look.apply(cell.point());
+                if(found.kind()==Found.Kind.UNLOADED||found.kind()==Found.Kind.OBSTACLE)continue;
+                waiting.remove();changed=true;
+                if(found.kind()==Found.Kind.ROCK)cells.add(new Cell(cell.point(),found.block(),found.rotation(),found.skill()));
+            }
+        }
+        while(cursor<cells.size()) {
+            var cell=cells.get(cursor);var found=look.apply(cell.point());
+            if(found.kind()==Found.Kind.UNLOADED)break;
+            if(found.kind()==Found.Kind.EMPTY){cursor++;forgetPreparedWork();sweepArmed=true;changed=true;continue;}
+            if(found.kind()==Found.Kind.OBSTACLE){blockedCells().add(cells.remove(cursor));forgetPreparedWork();changed=true;continue;}
+            if(!cell.block().equals(found.block())||cell.rotation()!=found.rotation()||cell.skill()!=found.skill()) {
+                cells.set(cursor,new Cell(cell.point(),found.block(),found.rotation(),found.skill()));forgetPreparedWork();sweepArmed=true;changed=true;
+            }
+            break;
+        }
+        return changed;
+    }
+    /** True once, when the listed cells are done: the passage is checked for rock that arrived after planning. */
+    public boolean sweepDue(){return sweepArmed&&id!=null&&!pending&&next()==null;}
+    public void sweep(List<Cell> arrived) {
+        if(!sweepDue())return;
+        sweepArmed=false;
+        for(var cell:arrived)requeue(cell);
+    }
+    /** Adds rock found in the passage to the end of the order. Used for a fitting position that has filled in. */
+    public boolean requeue(Cell cell) {
+        if(id==null||cell==null||cell.point()==null||cell.block()==null||cell.block().isBlank()||cell.skill()<1||cell.skill()>10||area==null
+            ||!area.contains(cell.point().x(),cell.point().y(),cell.point().z()))return false;
+        for(int i=cursor;i<cells.size();i++)if(cells.get(i).point().equals(cell.point()))return false;
+        if(blockedCells().stream().anyMatch(c->c.point().equals(cell.point())))return false;
+        cells.add(cell);return true;
+    }
+    /** A fitting that is already there, or that has nowhere to go, is passed over rather than holding up the rest. */
+    public boolean passFitting(ExcavationFittings.Fitting fitting,boolean present) {
+        if(fitting==null||!fitting.equals(nextFitting())||next()!=null)return false;
+        fitted++;if(!present)fittingsSkipped++;work=0;revision++;return true;
+    }
+    /** What the remaining fittings will take from town storage, by item, in the order they are fitted. */
+    public Map<String,Integer> fittingsNeeded() {
+        var needed=new LinkedHashMap<String,Integer>();
+        for(int i=fitted;i<fittingsTotal();i++)needed.merge(fittings.get(i).item(),1,Integer::sum);
+        return needed;
+    }
     private UUID id,author,mine;
     private Point cargoPoint,pendingCargoPoint;private String carrier;
     private WorkplaceArea area;
@@ -98,7 +240,7 @@ public final class ExcavationPlan {
     public WorkplaceArea area(){return area;}public Entrance entrance(){return entrance;}
     public Layout layout(){return layout==null?Layout.STRAIGHT:layout;}
     /** Unfinished decorations do not block access to a fully excavated passage. */
-    public boolean passageReady(){return id()!=null&&next()==null&&!pending()&&!heldCargo();}
+    public boolean passageReady(){return id()!=null&&next()==null&&!pending()&&!heldCargo()&&unbuildCells().isEmpty();}
     public int floorAt(Point point){return floorAt(area,entrance,layout(),point);}
     /**
      * Where a worker's feet belong in this passage: the three approach rows in front of it, and every planned column at
@@ -114,7 +256,7 @@ public final class ExcavationPlan {
     }
     public long revision(){return revision;}public boolean paused(){return paused;}public boolean edited(){return edited;}
     public boolean pending(){return pending;}public boolean held(){return heldCargo()||!output().isEmpty();}
-    public int total(){return cells.size();}public int completed(){return cursor;}
+    public int total(){return cells.size()+blockedCells().size();}public int completed(){return cursor;}
     public Cell next(){normalizeRoomOrder();return cursor<cells.size()?cells.get(cursor):null;}public double work(){return Math.max(0,work);}
     private void normalizeRoomOrder(){
         if(roomOrderChecked||pending||layout()!=Layout.ROOM||area==null||cursor>=cells.size())return;
@@ -144,19 +286,17 @@ public final class ExcavationPlan {
         return start(expected,author,mine,area,entrance,layout,reviewed,ExcavationFittings.Mode.NONE);
     }
     public String start(long expected,UUID author,UUID mine,WorkplaceArea area,Entrance entrance,Layout layout,List<Cell> reviewed,ExcavationFittings.Mode fittingsMode) {
-        if(expected!=revision)return "The tunnel changed. Review it again.";
+        if(expected!=revision)return "A miner worked on this tunnel while the page was open. Choose the same button again.";
         if(held())return "Let the Apprentice deliver the collected material first.";
-        if(author==null||mine==null||area==null||!area.valid()||entrance==null||layout==null||reviewed==null||reviewed.isEmpty()||reviewed.size()>900)return "Review a tunnel with blocks left to excavate.";
+        if(author==null||mine==null||area==null||!area.valid()||entrance==null||layout==null||reviewed==null||reviewed.isEmpty()||reviewed.size()>900)return "Choose a tunnel with blocks left to excavate.";
         var points=new HashSet<Point>();
-        for(var cell:reviewed)if(cell==null||cell.point()==null||cell.block()==null||cell.block().isBlank()||cell.skill()<1||cell.skill()>10||!points.add(cell.point())||!area.contains(cell.point().x(),cell.point().y(),cell.point().z()))return "The tunnel review is invalid.";
+        for(var cell:reviewed)if(cell==null||cell.point()==null||cell.block()==null||cell.block().isBlank()||cell.skill()<1||cell.skill()>10||!points.add(cell.point())||!area.contains(cell.point().x(),cell.point().y(),cell.point().z()))return "This tunnel could not be read. Choose its start on the map again.";
         this.id=UUID.randomUUID();this.author=author;this.mine=mine;this.area=area;this.entrance=entrance;this.layout=layout;cells=new ArrayList<>(reviewed);cursor=0;work=0;drops.clear();dropsPrepared=false;paused=false;edited=false;
+        blocked=new ArrayList<>();unbuild=new ArrayList<>();sweepArmed=true;fittingsSkipped=0;failedBreaks=0;blockedCheckedAt=0;junctionCheckedAt=0;
         deferredRoomCell=null;roomOrderChecked=false;normalizeRoomOrder();
         this.fittingsMode=fittingsMode==null?ExcavationFittings.Mode.NONE:fittingsMode;fittings=new ArrayList<>(ExcavationFittings.plan(area,entrance,layout,this.fittingsMode));fitted=0;revision++;return null;
     }
-    public boolean pause(long expected,boolean value){if(expected!=revision||id==null||!value&&edited)return false;paused=value;revision++;return true;}
-    // Rock edits invalidate the reviewed drop order. Fittings only fill empty cells and recheck each
-    // position at placement, so a temporary obstruction can be cleared without losing the plan.
-    public boolean markEdited(Point p){if(id==null||edited||cells.stream().skip(cursor).noneMatch(c->c.point().equals(p)))return false;edited=true;paused=true;revision++;return true;}
+    public boolean pause(long expected,boolean value){if(expected!=revision||id==null)return false;if(!value)edited=false;paused=value;revision++;return true;}
     public boolean prepare(Map<String,Integer> rolled) {
         if(next()==null||!canWork()||paused||dropsPrepared()||rolled==null||rolled.size()>8)return false;
         if(rolled.entrySet().stream().anyMatch(e->e.getKey()==null||e.getKey().isBlank()||e.getValue()==null||e.getValue()<1||e.getValue()>64))return false;
@@ -174,13 +314,19 @@ public final class ExcavationPlan {
         try{if(remove.getAsBoolean())return true;}catch(RuntimeException error){pending=false;pendingCargoPoint=null;throw error;}
         pending=false;pendingCargoPoint=null;return false;
     }
-    /** Null means unavailable. A changed solid cell suspends the order with no payout. */
+    /**
+     * Null means unavailable. A cell that is still solid pays nothing and is simply dug again: something may have fallen
+     * into it. A cell that will not break after three tries is set aside so it cannot hold up the rest of the tunnel.
+     */
     public boolean settle(UUID expected,Boolean empty) {
         if(!Objects.equals(id,expected)||!pending||empty==null)return false;
         var confirmed=next(); // Do not reorder a legacy room until its in-flight cell has settled.
         pending=false;
-        if(empty){cargoPoint=pendingCargoPoint!=null?pendingCargoPoint:new Point(confirmed.point().x(),floorAt(confirmed.point()),confirmed.point().z());if(cargo.isEmpty())carrier=null;for(var e:drops.entrySet())cargo.merge(e.getKey(),e.getValue(),Math::addExact);cargoWork++;cursor++;work=0;drops.clear();dropsPrepared=false;}
-        else {paused=true;edited=true;revision++;}
+        if(empty){cargoPoint=pendingCargoPoint!=null?pendingCargoPoint:new Point(confirmed.point().x(),floorAt(confirmed.point()),confirmed.point().z());if(cargo.isEmpty())carrier=null;for(var e:drops.entrySet())cargo.merge(e.getKey(),e.getValue(),Math::addExact);cargoWork++;cursor++;work=0;drops.clear();dropsPrepared=false;sweepArmed=true;failedBreaks=0;}
+        else {
+            work=0;
+            if(++failedBreaks>=3){blockedCells().add(cells.remove(cursor));forgetPreparedWork();}
+        }
         pendingCargoPoint=null;
         return true;
     }
@@ -263,6 +409,10 @@ public final class ExcavationPlan {
         int z=!alongZ?a.minZ()+(a.maxZ()-a.minZ()-1)/2+offset:side==Entrance.NORTH?a.minZ()+depth:a.maxZ()-1-depth;
         var horizontal=new Point(x,a.floorY(),z);
         return new Point(x,floorAt(a,side,layout,horizontal)+height,z);
+    }
+    /** How far into the workplace a point lies from its entrance edge. The first row that is dug is three. */
+    public static int depthOf(WorkplaceArea a,Entrance side,Point point) {
+        return switch(side){case NORTH->point.z()-a.minZ();case SOUTH->a.maxZ()-1-point.z();case WEST->point.x()-a.minX();case EAST->a.maxX()-1-point.x();};
     }
     /** Feet height, not the supporting block. All steps stay inside the workplace's five block band. */
     public static int floorAt(WorkplaceArea a,Entrance side,Layout layout,Point point) {

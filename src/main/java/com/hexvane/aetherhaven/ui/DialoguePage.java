@@ -1115,12 +1115,6 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 mastery.setId("core_mastery"); mastery.setText("aetherhaven_mastery.dialogue");
                 JsonObject action = new JsonObject(); action.addProperty("type", "open_core_mastery");
                 mastery.setActions(List.of(action)); choices.add(0, mastery);
-                if ("alchemist".equals(supervisor.getKind())) {
-                    DialogueChoiceDefinition flask = new DialogueChoiceDefinition();
-                    flask.setId("alchemy_flask_recipe"); flask.setText("aetherhaven_mastery.flaskRecipe");
-                    JsonObject teach = new JsonObject(); teach.addProperty("type", "learn_alchemy_flask");
-                    flask.setActions(List.of(teach)); choices.add(0, flask);
-                }
             }
             if (supervisor != null && town != null && town.getTownId().equals(supervisor.getTownId())
                 && com.hexvane.aetherhaven.workplace.WorkplaceUpgradesPage.supports(supervisor.getKind())) {
@@ -1534,8 +1528,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         return TownPlayerResolution.resolveActiveTown(world, store, playerRef, tm);
     }
 
+    /** The icon a choice row shows. Package visible so a test can hold every shop choice to the shop icon. */
     @Nullable
-    private static String choiceIconPath(@Nonnull DialogueChoiceDefinition ch) {
+    static String choiceIconPath(@Nonnull DialogueChoiceDefinition ch) {
         String explicit = resolveChoiceIcon(ch.getIcon());
         if (explicit != null) {
             return explicit;
@@ -1543,7 +1538,6 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (ch.isGiftChoice()) {
             return ICON_GIFT;
         }
-        if (ch.hasAction("learn_alchemy_flask")) return ICON_UPGRADES;
         if (ch.hasAction("open_core_mastery")) return ICON_PROFILE;
         if (ch.hasAction("open_townsfolk_profile")) return ICON_PROFILE;
         if (ch.hasAction("open_workplace_upgrades")) return ICON_UPGRADES;
@@ -1581,7 +1575,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (ch.hasAction("open_geode_ui")) {
             return ICON_GEODE_OPEN;
         }
-        if (ch.hasAction("open_prop_shop") || ch.hasAction("open_barter_shop")) {
+        if (ch.hasAction("open_prop_shop") || ch.hasAction("open_barter_shop") || ch.hasAction("open_barn_shop")) {
             return ICON_MARKET;
         }
         if (ch.hasAction("play_bard_song")

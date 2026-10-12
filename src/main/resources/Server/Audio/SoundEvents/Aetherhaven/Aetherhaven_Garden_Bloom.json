@@ -1,0 +1,47 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Items/Crops/Crops_Grow_02.ogg",
+        "Sounds/Items/Crops/Crops_Grow_05.ogg",
+        "Sounds/Items/Crops/Crops_Grow_09.ogg",
+        "Sounds/Items/Crops/Crops_Grow_12.ogg"
+      ],
+      "RandomSettings": {
+        "MinPitch": -3.0,
+        "MaxPitch": 2.0,
+        "MinVolume": -1.0
+      },
+      "StartDelay": 0,
+      "Volume": 0
+    },
+    {
+      "Files": [
+        "Sounds/Deployables/Totem_Heal/Deployable_Totem_Heal_Despawn_01.ogg",
+        "Sounds/Deployables/Totem_Heal/Deployable_Totem_Heal_Despawn_02.ogg",
+        "Sounds/Deployables/Totem_Heal/Deployable_Totem_Heal_Despawn_03.ogg"
+      ],
+      "RandomSettings": {
+        "MinPitch": 0.0,
+        "MaxPitch": 4.0
+      },
+      "StartDelay": 0.05,
+      "Volume": -4
+    },
+    {
+      "Files": [
+        "Sounds/Items/Gem/Gem_Emit_Shimmer_02.ogg",
+        "Sounds/Items/Gem/Gem_Emit_Shimmer_04.ogg"
+      ],
+      "RandomSettings": {
+        "MinPitch": 0.0,
+        "MaxPitch": 4.0
+      },
+      "StartDelay": 0.1,
+      "Volume": -6
+    }
+  ],
+  "Volume": -3.0,
+  "PreventSoundInterruption": false,
+  "Parent": "SFX_Attn_Moderate"
+}

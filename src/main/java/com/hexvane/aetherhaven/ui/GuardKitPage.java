@@ -24,7 +24,7 @@ public final class GuardKitPage extends AetherhavenInteractiveCustomUIPage<Guard
     private record Choice(TownWarehouse.Page page, short slot, ItemStack stack) {}
     private ItemStack equipped;
     private String guardClass;
-    private long warehouseRevision, frame;
+    private long frame;
     private boolean appended;
     private String hint = "Select a kit to equip it. Your previous kit returns to the same inventory slot.";
     public GuardKitPage(PlayerRef player, UUID townId, String characterId, UUID residentId) {
@@ -43,7 +43,7 @@ public final class GuardKitPage extends AetherhavenInteractiveCustomUIPage<Guard
         var progress=TownsfolkProgressService.getOrCreate(town,manager,plugin,characterId);
         var definition=plugin.getTownsfolkCharacterCatalog().byId(characterId);
         c.set("#Portrait.AssetPath",NpcPortraitProvider.portraitPathForTownsfolk(definition));
-        c.set("#Name.Text",definition!=null&&definition.getDisplayName()!=null?definition.getDisplayName():characterId);
+        c.set("#VillagerName.Text",definition!=null&&definition.getDisplayName()!=null?definition.getDisplayName():characterId);
         var duty=town.getHiredGuardRecords().stream().filter(g->characterId.equals(g.getCharacterId())).findFirst().orElse(null);
         guardClass=duty==null?null:GuardKitService.classFor(duty.getEquipmentProfileId(),plugin.getGuardKits());
         equipped=progress.guardKit();
@@ -53,7 +53,7 @@ public final class GuardKitPage extends AetherhavenInteractiveCustomUIPage<Guard
         c.set("#CurrentName.Text",ItemStack.isEmpty(equipped)?"Standard equipment":current==null?"Unavailable kit":current.name());
         c.set("#CurrentEffect.Text",current==null?guardClass==null?"Assign guard duty before equipping a kit.":"Starter gear is included with guard duty.":current.description()+(current.guardClass().equals(guardClass)?"":" Saved until this class is on duty."));
         c.set("#Hint.Text",hint);
-        c.clear("#Kits"); choices.clear(); frame++; warehouseRevision=town.getWarehouse().revision();
+        c.clear("#Kits"); choices.clear(); frame++;
         var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.HOTBAR_STORAGE_BACKPACK);
         if(inventory!=null)for(short slot=0;slot<inventory.getCapacity();slot++)add(c,e,progress,plugin,new Choice(null,slot,inventory.getItemStack(slot)),"Your inventory");
         if(WarehouseAccess.canBrowse(town,playerRef.getUuid()))for(var page:TownWarehouse.Page.values()) {
@@ -84,7 +84,8 @@ public final class GuardKitPage extends AetherhavenInteractiveCustomUIPage<Guard
         var town=manager.getTown(townId);if(!allowed(town)){close();return;}
         if("Back".equals(data.action)){store.getComponent(ref,Player.getComponentType()).getPageManager().openCustomPage(ref,store,new TownsfolkProfilePage(playerRef,townId,characterId,residentId));return;}
         var progress=TownsfolkProgressService.getOrCreate(town,manager,plugin,characterId);
-        if(!Long.toString(frame).equals(data.frame))hint="Equipment changed. Choose a kit again.";
+        // The frame only moves when this page itself was drawn again, never because the town was busy elsewhere.
+        if(!Long.toString(frame).equals(data.frame))hint="This list was drawn again while you chose. Choose a kit once more.";
         else if("Equip".equals(data.action)) {
             var choice=choices.get(data.choice);String error="Choose an available kit.";
             var duty=town.getHiredGuardRecords().stream().filter(g->characterId.equals(g.getCharacterId())).findFirst().orElse(null);
@@ -96,18 +97,20 @@ public final class GuardKitPage extends AetherhavenInteractiveCustomUIPage<Guard
                 error="That inventory is unavailable.";
                 if(choice.page()==null) {
                     var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.HOTBAR_STORAGE_BACKPACK);
-                    if(inventory!=null)error=GuardKitService.equip(progress,plugin.getGuardKits(),guardClass,inventory,choice.slot(),choice.stack(),equipped);
-                } else if(WarehouseAccess.canBrowse(town,playerRef.getUuid())) error=town.getWarehouse().equipGuardKit(choice.page(),choice.slot(),choice.stack(),warehouseRevision,progress,plugin.getGuardKits(),guardClass,equipped);
+                    if(inventory!=null)error=GuardKitService.equip(progress,plugin.getGuardKits(),guardClass,inventory,choice.slot(),choice.stack());
+                } else if(WarehouseAccess.canBrowse(town,playerRef.getUuid())) error=town.getWarehouse().equipGuardKit(choice.page(),choice.slot(),choice.stack(),progress,plugin.getGuardKits(),guardClass);
             }
             hint=error==null?"Guard kit equipped. Attributes and equipment updated.":error;
             if(error==null){GuardKitService.apply(store,town,characterId,plugin,chosen.equipmentProfile());manager.updateTown(town);}
-        } else if("Unequip".equals(data.action)&&!ItemStack.isEmpty(equipped)) {
+        } else if("Unequip".equals(data.action)) {
             var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.HOTBAR_STORAGE_BACKPACK);
             var duty=town.getHiredGuardRecords().stream().filter(g->characterId.equals(g.getCharacterId())).findFirst().orElse(null);
-            var saved=plugin.getGuardKits().find(equipped.getItemId());
+            // The kit worn at this moment, which is the one that comes off.
+            var worn=progress.guardKit();
+            var saved=ItemStack.isEmpty(worn)?null:plugin.getGuardKits().find(worn.getItemId());
             String fallback=duty==null?(saved==null?"guard_knight":saved.guardClass()):GuardKitService.classFor(duty.getEquipmentProfileId(),plugin.getGuardKits());
-            String error=GuardKitService.blocked(store,town,residentId,characterId,plugin,fallback);
-            if(error==null)error=GuardKitService.unequip(progress,inventory,equipped);
+            String error=ItemStack.isEmpty(worn)?com.hexvane.aetherhaven.equipment.ProfessionKitService.NONE_WORN:GuardKitService.blocked(store,town,residentId,characterId,plugin,fallback);
+            if(error==null)error=GuardKitService.unequip(progress,inventory);
             hint=error==null?"Kit returned to your inventory.":error;
             if(error==null){GuardKitService.apply(store,town,characterId,plugin,fallback);manager.updateTown(town);}
         }

@@ -1,0 +1,23 @@
+$C = "../Common.ui";
+$T = "HandMirrorTheme.ui";
+// One worn slot (Ring I, Ring II or Necklace): 158 high, as wide as the column, with a 10 gap to the next.
+// Padding 14, then the 92 wide picture frame and the text: 16 slot name, 26 piece name, 16 rarity and up to three 18 high lines
+// with room to spare for a line that wraps in a longer language.
+// The whole card is one button; choosing it shows the pieces in the bag that fit this slot.
+Button { Anchor: (Height: 158, Bottom: 10);
+  Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+  Group #SlotSelected { Background: $T.@CardPressed; Visible: false; HitTestVisible: false; }
+  Group { LayoutMode: Left; Padding: (Full: 14); HitTestVisible: false;
+    Group { Anchor: (Width: 92, Height: 92, Right: 14); Background: $T.@Slot;
+      ItemIcon #SlotIcon { Anchor: (Width: 72, Height: 72); Visible: false; }
+      Group #SlotRarityBar { Anchor: (Left: 12, Right: 12, Bottom: 6, Height: 3); Background: #9ba0aa; Visible: false; }
+    }
+    Group { LayoutMode: Top; FlexWeight: 1;
+      Label #SlotTitle { Text: ""; Anchor: (Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 11, RenderBold: true, RenderUppercase: true, TextColor: #dec68d); }
+      Label #SlotName { Text: ""; Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 18, RenderBold: true, TextColor: #eee0bf); }
+      Label #SlotRarity { Text: ""; Anchor: (Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 11, RenderBold: true, RenderUppercase: true, TextColor: #9ba0aa); Visible: false; }
+      Label #SlotDetail { Text: ""; Anchor: (Top: 2); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #d8d0c8); }
+    }
+  }
+}

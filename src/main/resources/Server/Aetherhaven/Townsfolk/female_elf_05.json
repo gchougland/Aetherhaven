@@ -19,8 +19,8 @@
   "speechVoiceId": "MellowFemaleLower",
   "moveInRequirements": [
     {
-      "itemId": "Ingredient_Motes_Light",
-      "count": 2
+      "itemId": "Ingredient_Life_Essence",
+      "count": 20
     },
     {
       "itemId": "Food_Cheese",

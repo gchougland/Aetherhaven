@@ -20,6 +20,36 @@ public final class TownsfolkWorkRoster {
             && TownVillagerBinding.KIND_TOWNSFOLK.equals(kind) && TownAdmission.isMember(town,resident);
     }
 
+    /**
+     * A townsfolk has just been counted as a resident: they start with priorities for the work they are good at, so they
+     * can be put to work without a visit to the priority grid. Safe to call again, it only ever acts once per resident.
+     *
+     * @return whether the town changed
+     */
+    public static boolean startResidentWork(TownRecord town, TownManager manager, AetherhavenPlugin plugin, String characterId) {
+        if (town == null || manager == null || plugin == null || characterId == null || characterId.isBlank()) return false;
+        if (!TownsfolkProgressService.getOrCreate(town, manager, plugin, characterId).applyStartingPriorities()) return false;
+        manager.updateTown(town);
+        return true;
+    }
+
+    /**
+     * Residents of a save made before starting priorities existed get them once, when the town is loaded. Only residents
+     * who already have a record are touched here; one with no record yet gets theirs the first time they are listed.
+     *
+     * @return whether the town changed
+     */
+    public static boolean applyStartingPriorities(TownRecord town) {
+        boolean changed = false;
+        for (var row : town.getResidentNpcRecords()) {
+            var identity = row.getTownsfolkIdentity();
+            if (identity == null || identity.getCharacterId() == null || !TownAdmission.isMember(town, row.getLastEntityUuid())) continue;
+            var progress = town.getTownsfolkProgress().get(identity.getCharacterId().trim().toLowerCase(Locale.ROOT));
+            if (progress != null) changed |= progress.applyStartingPriorities();
+        }
+        return changed;
+    }
+
     /** Snapshot identity while living so missing residents can also be recovered through Gaia. */
     public static List<Worker> list(TownRecord town, TownManager manager, Store<EntityStore> store, AetherhavenPlugin plugin) {
         boolean[] changed = {false};
@@ -45,6 +75,7 @@ public final class TownsfolkWorkRoster {
         });
         if (changed[0]) manager.updateTown(town);
         Map<String, Worker> roster = new TreeMap<>();
+        boolean started = false;
         for (var row : town.getResidentNpcRecords()) {
             var identity = row.getTownsfolkIdentity();
             if (identity == null || !TownAdmission.isMember(town, row.getLastEntityUuid())) continue;
@@ -52,8 +83,11 @@ public final class TownsfolkWorkRoster {
             var definition = plugin.getTownsfolkCharacterCatalog().byId(id);
             String name = definition != null && definition.getDisplayName() != null ? definition.getDisplayName() : id;
             var progress = TownsfolkProgressService.getOrCreate(town, manager, plugin, id);
+            // Every resident the journal lists has starting priorities by now, whichever way they joined the town.
+            started |= progress.applyStartingPriorities();
             roster.put(id, new Worker(id, name, row.getLastEntityUuid(), TownVillagerBinding.KIND_GUARD.equals(row.getKind()), !row.isPendingDawnRevival(), progress));
         }
+        if (started) manager.updateTown(town);
         return new ArrayList<>(roster.values());
     }
 }

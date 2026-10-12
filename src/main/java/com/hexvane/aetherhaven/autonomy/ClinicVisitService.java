@@ -151,7 +151,7 @@ public final class ClinicVisitService {
     }
     private static void begin(Ref<EntityStore> ref,Store<EntityStore> store,CommandBuffer<EntityStore> buffer,NPCEntity npc,
             VillagerNeeds needs,VillagerAutonomyState autonomy,AetherhavenPlugin plugin,Visit v) {
-        MiningWorkService.interrupt(ref,store,npc,buffer);TimberWorkService.interrupt(ref,store,npc,buffer);FieldWorkService.interrupt(ref,store,npc,buffer);ShopClerkWorkService.interrupt(ref,store,npc,buffer);
+        MiningWorkService.interrupt(ref,store,npc,buffer);TimberWorkService.interrupt(ref,store,npc,buffer);FieldWorkService.interrupt(ref,store,npc,buffer);GardenWorkService.interrupt(ref,store,npc,buffer);ShopClerkWorkService.interrupt(ref,store,npc,buffer);
         ApprenticeWorkService.interrupt(ref,store,npc,buffer);CourierWorkService.interrupt(ref,store,npc,buffer);
         VillagerAutonomySystem.abortActivePoiUseAndDismount(ref,store,buffer,autonomy,needs,
             AetherhavenWorldRegistries.getOrCreatePoiRegistry(store.getExternalData().getWorld(),plugin),false);

@@ -12,6 +12,10 @@ public final class ApprenticeWorkplace {
     private WorkplaceOrders orders;
     private boolean charcoalFuel;
     private WorkplaceFood food;
+    private GrowerSite grower;
+    /** Null until the site has been worked or configured as a grower. */
+    public GrowerSite existingGrower(){return grower;}
+    public GrowerSite grower(){if(grower==null)grower=new GrowerSite();return grower;}
     private BuildingOrders building;
     public BuildingOrders existingBuilding(){return building;}
     public BuildingOrders building(){if(building==null)building=new BuildingOrders();return building;}
@@ -58,6 +62,8 @@ public final class ApprenticeWorkplace {
     public WorkplaceOrders orders() { if (orders == null) orders = new WorkplaceOrders(); return orders; }
     void configure(String name, TownsfolkWorkType type, WorkplaceArea area) {
         if (type() != type || !java.util.Objects.equals(this.area, area)) food = new WorkplaceFood(food().ranch());
+        // Another kind of site starts with nothing growing. Resizing keeps the beds that are still inside.
+        if (type() != type) grower = null;
         this.name = name;
         this.type = type.id;
         this.area = area;

@@ -1,0 +1,10 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; Anchor: (Width: 103, Height: 104, Right: 8); Background: $T.@Card; Padding: (Full: 8);
+ TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+ Group { LayoutMode: Center; Anchor: (Height: 44);
+  ItemIcon #Icon { Anchor: (Width: 44, Height: 44); }
+ }
+ $C.@ProgressBar #Growth { Anchor: (Height: 10, Top: 4, Bottom: 4); Value: 0.0; }
+ Label #Status { Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 11, Wrap: true, HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #b7c9bb); }
+}

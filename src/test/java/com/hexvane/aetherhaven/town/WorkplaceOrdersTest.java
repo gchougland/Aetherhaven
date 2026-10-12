@@ -75,20 +75,32 @@ class WorkplaceOrdersTest {
         assertFalse(new WorkplaceRecipe("bad","Bad","blacksmithing","workplace:bad","Weapon_Bench",1,1,
             List.of(new WorkplaceRecipe.Ingredient("iron","wood",2)),"kit",1,20).valid());
     }
-    @Test void staleAddCannotDuplicateAnOrderAndStaleMoveCannotReorderIt() {
+    /**
+     * The list's revision moves every time a townsfolk finishes a craft. A press drawn before that is still
+     * honoured, on the task it names, and refused only when it truly cannot be done.
+     */
+    @Test void tasksAreAddedAndMovedWhateverElseHappenedOnTheList() {
         var tasks=new WorkplaceOrders();
-        assertNull(tasks.add(0,"iron",COUNT,3));
-        assertNotNull(tasks.add(0,"iron",COUNT,3));
-        assertEquals(1,tasks.list().size());
-        assertNull(tasks.add(1,"copper",MAINTAIN,20));
-        var id=tasks.list().getLast().id();
-        assertNotNull(tasks.change(1,id,"Up"));
-        assertEquals("iron",tasks.list().getFirst().recipeId());
-        assertNull(tasks.change(2,id,"Up"));
-        assertEquals(id,tasks.list().getFirst().id());
+        assertNull(tasks.add("iron",COUNT,3));
+        assertNull(tasks.add("copper",MAINTAIN,20));
+        var iron=tasks.list().getFirst();var copper=tasks.list().getLast();
+        long drawn=tasks.revision();
+        tasks.recordCompletion(iron.id());assertNotEquals(drawn,tasks.revision(),"Finished work moves the revision");
+        // Presses from the page drawn earlier.
+        assertNull(tasks.add("gold",FOREVER,1));
+        assertNull(tasks.change(copper.id(),"Up"));
+        assertEquals(List.of("copper","iron","gold"),tasks.list().stream().map(WorkplaceOrders.Order::recipeId).toList());
+        assertEquals(1,iron.completed(),"The finished craft is kept");
+        // What cannot be done is refused with its reason and changes nothing.
+        long before=tasks.revision();
+        assertEquals("That task is already first.",tasks.change(copper.id(),"Up"));
+        assertEquals("That task is already last.",tasks.change(tasks.list().getLast().id(),"Down"));
+        assertEquals("That task is no longer on the list. Nothing was changed.",tasks.change(UUID.randomUUID(),"Remove"));
+        assertEquals(before,tasks.revision());
+        assertEquals(List.of("copper","iron","gold"),tasks.list().stream().map(WorkplaceOrders.Order::recipeId).toList());
     }
     @Test void maintainCountsItemsAndAlreadyIncomingBatchesWithoutOverflow() {
-        var tasks=new WorkplaceOrders(); tasks.add(0,"supplies",MAINTAIN,10);
+        var tasks=new WorkplaceOrders(); tasks.add("supplies",MAINTAIN,10);
         var order=tasks.list().getFirst();
         assertEquals(3,order.batchesNeeded(0,0,4));
         assertEquals(1,order.batchesNeeded(4,4,4));
@@ -97,28 +109,46 @@ class WorkplaceOrdersTest {
         assertEquals(10,order.batchesNeeded(-3,-7,1));
         assertEquals(0,order.batchesNeeded(0,0,0));
     }
+    @Test void aMaintainTaskSaysHowManyAreInStockNow() {
+        var tasks=new WorkplaceOrders(); tasks.add("bars",MAINTAIN,20); tasks.add("bars",COUNT,3); tasks.add("bars",FOREVER,1);
+        var keep=tasks.list().get(0);
+        assertEquals("Keep 20 in stock (12 now)",keep.amountText(false,12,0));
+        assertEquals("Keep 20 in stock (0 now)",keep.amountText(false,0,0));
+        assertEquals("Keep 20 in stock (31 now)",keep.amountText(true,31,0),"More than the target is still the real count");
+        assertEquals("Keep 20 in stock (12 now, 8 on the way)",keep.amountText(false,12,8));
+        assertEquals("Keep 20 in stock",keep.amountText(false,-1,0),"A recipe that cannot be read has nothing to count");
+        // Pausing does not hide the count.
+        assertNull(tasks.change(keep.id(),"Pause")); assertEquals("Keep 20 in stock (12 now)",keep.amountText(false,12,0));
+        // The other kinds of task read as they did.
+        assertEquals("Craft 3 batches | 0 complete",tasks.list().get(1).amountText(false,12,4));
+        assertEquals("Grow 3 plants | 0 harvested",tasks.list().get(1).amountText(true,12,4));
+        assertEquals("Keep crafting while resources are available",tasks.list().get(2).amountText(false,12,4));
+        assertEquals("Keep growing while seeds are available",tasks.list().get(2).amountText(true,12,4));
+    }
     @Test void pauseAndResumePreserveOrderIdentityAndQuantityForEveryMode() {
         for(var mode:WorkplaceOrders.Mode.values()) {
-            var tasks=new WorkplaceOrders(); tasks.add(0,"recipe",mode,5);
+            var tasks=new WorkplaceOrders(); tasks.add("recipe",mode,5);
             var order=tasks.list().getFirst(); var id=order.id();
             int needed=order.batchesNeeded(0,0,1);
-            assertNull(tasks.change(1,id,"Pause")); assertEquals(0,order.batchesNeeded(0,0,1));
-            assertNull(tasks.change(2,id,"Pause")); assertEquals(needed,order.batchesNeeded(0,0,1));
+            assertNull(tasks.change(id,"Pause")); assertEquals(0,order.batchesNeeded(0,0,1));
+            // The press names the state it asks for, so one seen twice cannot undo itself.
+            assertNull(tasks.change(id,"Pause")); assertTrue(order.paused()); assertEquals(0,order.batchesNeeded(0,0,1));
+            assertNull(tasks.change(id,"Resume")); assertEquals(needed,order.batchesNeeded(0,0,1));
             assertEquals(5,order.quantity()); assertEquals(id,order.id());
         }
     }
     @Test void limitsRejectBadOrExcessiveTasksWithoutChangingRevision() {
         var tasks=new WorkplaceOrders();
-        assertNotNull(tasks.add(0,"iron",COUNT,0)); assertNotNull(tasks.add(0,"iron",MAINTAIN,10001));
-        assertNotNull(tasks.add(0,"",FOREVER,1)); assertNotNull(tasks.add(0,"iron",null,1));
+        assertNotNull(tasks.add("iron",COUNT,0)); assertNotNull(tasks.add("iron",MAINTAIN,10001));
+        assertNotNull(tasks.add("",FOREVER,1)); assertNotNull(tasks.add("iron",null,1));
         assertEquals(0,tasks.revision());
-        for(int i=0;i<35;i++) assertNull(tasks.add(i,"iron",COUNT,1));
-        assertNotNull(tasks.add(35,"iron",COUNT,1)); assertEquals(35,tasks.revision());
+        for(int i=0;i<35;i++) assertNull(tasks.add("iron",COUNT,1));
+        assertNotNull(tasks.add("iron",COUNT,1)); assertEquals(35,tasks.revision());
     }
     @Test void removedTasksCannotBeChangedThroughAnOldMenu() {
-        var tasks=new WorkplaceOrders(); tasks.add(0,"iron",COUNT,1);
-        UUID id=tasks.list().getFirst().id(); tasks.change(1,id,"Remove");
-        assertNotNull(tasks.change(2,id,"Pause")); assertEquals(2,tasks.revision()); assertTrue(tasks.list().isEmpty());
+        var tasks=new WorkplaceOrders(); tasks.add("iron",COUNT,1);
+        UUID id=tasks.list().getFirst().id(); tasks.change(id,"Remove");
+        assertNotNull(tasks.change(id,"Pause")); assertEquals(2,tasks.revision()); assertTrue(tasks.list().isEmpty());
     }
     @Test void savesRetainUnknownRecipesAndQueueOrderAcrossWorkplaceTypeAndAreaChanges() {
         var town=new TownRecord(); town.setTownId(UUID.randomUUID());
@@ -126,7 +156,7 @@ class WorkplaceOrdersTest {
         town.getResidentNpcRecords().add(new ResidentNpcRecord("Smith","blacksmith",null,UUID.randomUUID()));
         var sites=town.getApprenticeWorkplaces(); sites.unlock(town,SMELTING); sites.unlock(town,BLACKSMITHING);
         sites.save(town,null,SMELTING,WorkplaceArea.corners(1,100,1,4,4),"Smeltery");
-        var site=sites.sites().getFirst(); site.orders().add(0,"another_mod:missing_recipe",MAINTAIN,16);
+        var site=sites.sites().getFirst(); site.orders().add("another_mod:missing_recipe",MAINTAIN,16);
         var order=site.orders().list().getFirst();
         sites.save(town,site.id(),BLACKSMITHING,WorkplaceArea.corners(2,100,2,5,5),"Forge");
         var restored=new Gson().fromJson(new Gson().toJson(town),TownRecord.class).getApprenticeWorkplaces().find(site.id());
@@ -149,7 +179,7 @@ class WorkplaceOrdersTest {
     @Test void changedSiteTypeOrMissingEquipmentBlocksRecipeWithoutDeletingItsOrder() {
         var recipe=new WorkplaceRecipe("iron","Iron","smelting","native_recipe","Furnace",2,3);
         var site=new ApprenticeWorkplace("Forge",BLACKSMITHING,WorkplaceArea.corners(1,100,1,3,3));
-        site.orders().add(0,recipe.id(),COUNT,2);
+        site.orders().add(recipe.id(),COUNT,2);
         assertNotNull(recipe.equipmentIssue(site,new WorkplaceEquipment.Snapshot(true,List.of(new WorkplaceEquipment.Bench("Furnace",2,1,100,1)))));
         assertEquals(1,site.orders().list().size());
         assertFalse(new WorkplaceRecipe("bad","Bad","invalid","x","Furnace",1,1).valid());

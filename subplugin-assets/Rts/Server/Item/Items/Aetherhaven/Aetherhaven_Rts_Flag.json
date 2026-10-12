@@ -3,18 +3,22 @@
     "Name": "aetherhaven_rts.items.Aetherhaven_Rts_Flag.name",
     "Description": "aetherhaven_rts.items.Aetherhaven_Rts_Flag.description"
   },
-  "Categories": ["Items.Weapons", "Aetherhaven.All"],
+  "Categories": ["Items.Tools", "Aetherhaven.All"],
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Rts_Flag.png",
-  "Model": "Items/Aetherhaven/Patrol_Wand.blockymodel",
-  "Texture": "Items/Aetherhaven/Patrol_Wand.png",
+  "Model": "Items/Aetherhaven/Command_Flag.blockymodel",
+  "Texture": "Items/Aetherhaven/Command_Flag.png",
   "PlayerAnimationsId": "Staff",
   "MaxStack": 1,
   "Set": "Aetherhaven",
   "Interactions": {
-    "Primary": { "Interactions": [{ "Type": "AetherhavenRtsToolPrimary" }] },
-    "Secondary": { "Interactions": [{ "Type": "AetherhavenRtsToolSecondary" }] },
-    "Ability1": { "Interactions": [{ "Type": "AetherhavenRtsFlagOrderCycle" }] },
-    "Ability2": { "Interactions": [{ "Type": "AetherhavenRtsFlagStop" }] }
+    "Primary": { "Interactions": [{ "Type": "AetherhavenRtsToolPrimary" }],
+    "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.rtsFlag.primary" },
+    "Secondary": { "Interactions": [{ "Type": "AetherhavenRtsToolSecondary" }],
+    "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.rtsFlag.secondary" },
+    "Ability1": { "Interactions": [{ "Type": "AetherhavenRtsFlagOrderCycle" }],
+    "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.rtsFlag.ability1" },
+    "Ability4": { "Interactions": [{ "Type": "AetherhavenRtsFlagStop" }],
+    "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.rtsFlag.ability4" }
   },
   "InteractionConfig": {
     "AllEntities": true,

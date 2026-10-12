@@ -1,0 +1,61 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+@Heading = (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #dec68d);
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer #GrowerWindow { Anchor: (Width: 940, Height: 764);
+  #Title { Label #GrowerTitle { Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 24);
+   Group { LayoutMode: Left; Anchor: (Height: 96, Bottom: 10);
+    Group { LayoutMode: Left; FlexWeight: 1; Anchor: (Right: 12); Background: $T.@Panel; Padding: (Full: 14);
+     Group { LayoutMode: Middle; Anchor: (Width: 64, Right: 14);
+      ItemIcon #CropIcon { Anchor: (Width: 64, Height: 64); }
+     }
+     Group { FlexWeight: 1; LayoutMode: Top;
+      Label #SiteName { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #dec68d); }
+      Label #CropName { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 18, RenderBold: true); }
+      Label #CropUse { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #b7c9bb); }
+     }
+    }
+    Group { LayoutMode: Top; Anchor: (Width: 340); Background: $T.@Inset; Padding: (Horizontal: 14, Vertical: 10);
+     Label #SiteStatus { Anchor: (Height: 38); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #d7e4cc); }
+     Label #Care { Anchor: (Height: 19); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
+     Label #Picks { Anchor: (Height: 19); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
+    }
+   }
+   Group #Picker { LayoutMode: Top; Anchor: (Height: 244);
+    Label #ChooseTitle { Anchor: (Height: 22); Style: @Heading; }
+    Group #Crops { LayoutMode: LeftCenterWrap; Anchor: (Height: 216); }
+   }
+   Group #About { LayoutMode: Left; Anchor: (Height: 84, Bottom: 10); Background: $T.@Panel; Padding: (Full: 14); Visible: false;
+    Label #AboutText { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #b7c9bb, VerticalAlignment: Center); }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 22);
+    Label #BedsTitle { Anchor: (Width: 220); Style: @Heading; }
+    Label #BedCount { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb, HorizontalAlignment: End); }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 104, Bottom: 10);
+    Group #Beds { LayoutMode: Left; }
+    Group #BedsEmptyPanel { FlexWeight: 1; Background: $T.@Inset; Padding: (Full: 14); Visible: false;
+     Label #BedsEmpty { Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #b7c9bb, VerticalAlignment: Center); }
+    }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 22);
+    Label #StoreTitle { Anchor: (Width: 220); Style: @Heading; }
+    Label #StoreCount { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb, HorizontalAlignment: End); }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 78, Bottom: 8); Background: $T.@Panel; Padding: (Full: 10);
+    Group #Stock { FlexWeight: 1; LayoutMode: Left; }
+    Label #StockEmpty { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb, VerticalAlignment: Center); Visible: false; }
+    Group { LayoutMode: Middle; Anchor: (Width: 170);
+     $C.@TextButton #Collect { Text: ""; Anchor: (Width: 160, Height: 40); }
+    }
+   }
+   Label #Note { Anchor: (Height: 38, Bottom: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #dec68d); }
+   Group { LayoutMode: Left; Anchor: (Height: 40);
+    $C.@SecondaryTextButton #Back { Text: ""; FlexWeight: 1; Anchor: (Right: 12); }
+    $C.@SecondaryTextButton #Refresh { Text: ""; Anchor: (Width: 180); }
+   }
+  }
+ }
+}
+$C.@BackButton {}

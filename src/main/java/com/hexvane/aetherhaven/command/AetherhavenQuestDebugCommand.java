@@ -138,6 +138,9 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
             tm.updateTown(town);
+            if (def != null && def.autoPin()) {
+                com.hexvane.aetherhaven.quest.QuestAutoPin.applyToOnlineMembers(world, plugin, town);
+            }
             playerRef.sendMessage(
                 Message.translation("aetherhaven_quests_portals.aetherhaven.questdebug.granted")
                     .param("name", plugin.getQuestCatalog().displayName(qid))

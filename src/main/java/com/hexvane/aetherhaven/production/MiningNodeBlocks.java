@@ -12,6 +12,9 @@ import org.joml.Vector3i;
 public final class MiningNodeBlocks {
     public static final String PREFIX = "Aetherhaven_Mining_Node_";
     public static final String DEPLETED = "Rock_Stone";
+    /** Stone Rubble, the item native gravel drops. It is not a full block, so it is mined out of a gravel vein. */
+    public static final String RUBBLE = "Rubble_Stone";
+    public static final String RUBBLE_VEIN = "Soil_Gravel";
     private MiningNodeBlocks() {}
 
     public static Vector3i point(PlotInstance plot, int node) {
@@ -36,6 +39,8 @@ public final class MiningNodeBlocks {
             case "Ore_Thorium" -> "Ore_Thorium_Sandstone";
             case "Ore_Cobalt" -> "Ore_Cobalt_Slate";
             case "Ore_Adamantite" -> "Ore_Adamantite_Magma";
+            // Rubble is what native gravel breaks into, so the vein shows as gravel.
+            case RUBBLE -> RUBBLE_VEIN;
             // These native ingredients have no placeable ore block yet.
             case "Ore_Prisma", "Ore_Onyxium", "Depleted" -> DEPLETED;
             default -> output.startsWith("Ore_")&&output.indexOf('_',4)<0?output+"_Stone":output;

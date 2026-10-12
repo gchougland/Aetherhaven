@@ -457,7 +457,35 @@ public final class QuestBoardService {
         return out;
     }
 
+    /** How accepting an offer ended. Anything but {@link #ACCEPTED} leaves the offer as it was. */
+    public enum AcceptOutcome {
+        ACCEPTED,
+        /** Not an offer the player may accept. */
+        REFUSED,
+        /** The raid found nowhere to put its raiders. */
+        RAID_NO_GROUND,
+        /** The raid cannot start yet, and the player has already been told why. */
+        RAID_NOT_READY,
+        RAID_FAILED;
+
+        public boolean accepted() {
+            return this == ACCEPTED;
+        }
+    }
+
     public static boolean acceptOffer(
+        @Nonnull TownRecord town,
+        @Nonnull UUID playerUuid,
+        int slotIndex,
+        @Nonnull QuestBoardCatalog catalog,
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store
+    ) {
+        return acceptOfferOutcome(town, playerUuid, slotIndex, catalog, world, store).accepted();
+    }
+
+    @Nonnull
+    public static AcceptOutcome acceptOfferOutcome(
         @Nonnull TownRecord town,
         @Nonnull UUID playerUuid,
         int slotIndex,
@@ -467,14 +495,14 @@ public final class QuestBoardService {
     ) {
         town.ensureQuestBoardSlotCount(catalog.slotCount());
         if (slotIndex < 0 || slotIndex >= catalog.slotCount()) {
-            return false;
+            return AcceptOutcome.REFUSED;
         }
         if (!town.playerCanAcceptQuests(playerUuid)) {
-            return false;
+            return AcceptOutcome.REFUSED;
         }
         QuestBoardSlotRecord slot = town.getQuestBoardSlots().get(slotIndex);
         if (slot.stateEnum() != QuestBoardSlotState.OFFER) {
-            return false;
+            return AcceptOutcome.REFUSED;
         }
         slot.setState(QuestBoardSlotState.ACCEPTED);
         slot.setAcceptedByPlayerUuid(playerUuid.toString());
@@ -486,13 +514,18 @@ public final class QuestBoardService {
         if (slot.isRaidQuest()) {
             slot.setRaidKillProgress(0);
             slot.setRaidSpawnedEntityUuids(new ArrayList<>());
-            if (!RaidQuestSpawnService.startRaid(town, slot, world, store, playerUuid)) {
+            RaidQuestSpawnService.RaidStart start = RaidQuestSpawnService.startRaid(town, slot, world, store, playerUuid);
+            if (!start.started()) {
                 RaidQuestSpawnService.cleanupRaid(slot, world, store, town.getTownId());
                 slot.revertAcceptance();
-                return false;
+                return switch (start) {
+                    case NO_GROUND -> AcceptOutcome.RAID_NO_GROUND;
+                    case NOT_READY -> AcceptOutcome.RAID_NOT_READY;
+                    default -> AcceptOutcome.RAID_FAILED;
+                };
             }
         }
-        return true;
+        return AcceptOutcome.ACCEPTED;
     }
 
     public static boolean abandonOffer(

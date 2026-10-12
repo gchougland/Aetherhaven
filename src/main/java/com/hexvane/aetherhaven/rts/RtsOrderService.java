@@ -19,7 +19,12 @@ import org.joml.Vector3d;
 public final class RtsOrderService {
     private RtsOrderService() {}
 
-    public static void issueMoveOrder(
+    /**
+     * Sends the session's selected guards to a point.
+     *
+     * @return how many guards took the order (a selected guard that is not in the world takes none)
+     */
+    public static int issueMoveOrder(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull ComponentAccessor<EntityStore> accessor,
         @Nonnull RtsCommandPlayerComponent session,
@@ -30,11 +35,14 @@ public final class RtsOrderService {
         Store<EntityStore> store = playerRef.getStore();
         List<UUID> selected = new ArrayList<>(session.getSelectedGuardUuids());
         if (selected.isEmpty()) {
-            return;
+            return 0;
         }
         UUID commander = commanderUuid(playerRef, accessor);
+        // An order given outside the command post belongs to the flag, and outlives no session.
+        boolean fieldOrder = !session.isActive();
         RtsFocusTargetVisuals.clear(commander);
         List<Vector3d> offsets = RtsFormationMath.lineOffsets(selected.size());
+        List<UUID> ordered = new ArrayList<>(selected.size());
         for (int i = 0; i < selected.size(); i++) {
             Ref<EntityStore> guardRef = RtsGuardDirectory.findByUuid(store, selected.get(i));
             if (guardRef == null) {
@@ -45,14 +53,18 @@ public final class RtsOrderService {
             if (cmd == null) {
                 cmd = new GuardRtsCommandState();
             }
-            cmd.setOrderMode(session.getOrderMode());
-            cmd.setCombatStance(session.getStanceMode());
-            cmd.setHold(groundX + off.x, groundY + off.y, groundZ + off.z);
-            cmd.setPhase(RtsCommandPhase.TRAVELING);
-            cmd.setFocusFire(false);
-            cmd.setTargetEntityUuid(null);
-            cmd.setCommanderPlayerUuid(commander);
+            applyMoveOrder(
+                cmd,
+                session.getOrderMode(),
+                session.getStanceMode(),
+                groundX + off.x,
+                groundY + off.y,
+                groundZ + off.z,
+                commander,
+                fieldOrder
+            );
             accessor.putComponent(guardRef, GuardRtsCommandState.getComponentType(), cmd);
+            ordered.add(selected.get(i));
             NPCEntity guardNpc = accessor.getComponent(guardRef, NPCEntity.getComponentType());
             if (guardNpc != null) {
                 RtsGuardCombatSupport.resumeTravel(
@@ -65,16 +77,63 @@ public final class RtsOrderService {
                 );
             }
         }
+        if (ordered.isEmpty()) {
+            return 0;
+        }
+        long worldTick = store.getExternalData().getWorld().getTick();
         RtsMoveOrderVisuals.spawn(
             store,
             playerRef,
             groundX,
             groundY,
             groundZ,
-            selected,
-            store.getExternalData().getWorld().getTick()
+            ordered,
+            worldTick,
+            fieldOrder ? worldTick + RtsMoveOrderVisuals.FIELD_MARKER_TICKS : Long.MAX_VALUE
         );
         RtsCommandFeedback.playMoveOrder(playerRef, accessor, groundX, groundY, groundZ);
+        return ordered.size();
+    }
+
+    /** Writes a move order onto a guard's command state. No world needed, so the rules can be tested alone. */
+    static void applyMoveOrder(
+        @Nonnull GuardRtsCommandState cmd,
+        @Nonnull RtsOrderMode orderMode,
+        @Nonnull RtsCombatStance stance,
+        double holdX,
+        double holdY,
+        double holdZ,
+        @Nonnull UUID commander,
+        boolean fieldOrder
+    ) {
+        cmd.setOrderMode(orderMode);
+        cmd.setCombatStance(stance);
+        cmd.setHold(holdX, holdY, holdZ);
+        cmd.setPhase(RtsCommandPhase.TRAVELING);
+        cmd.setFocusFire(false);
+        cmd.setTargetEntityUuid(null);
+        cmd.setCommanderPlayerUuid(commander);
+        cmd.setFieldOrder(fieldOrder);
+    }
+
+    /** Writes a stop order: hold where the guard stands and defend that spot. */
+    static void applyStopOrder(
+        @Nonnull GuardRtsCommandState cmd,
+        @Nonnull RtsOrderMode orderMode,
+        double standX,
+        double standY,
+        double standZ,
+        @Nonnull UUID commander,
+        boolean fieldOrder
+    ) {
+        cmd.setHold(standX, standY, standZ);
+        cmd.setPhase(RtsCommandPhase.HOLDING);
+        cmd.setOrderMode(orderMode);
+        cmd.setCombatStance(RtsCombatStance.AGGRESSIVE);
+        cmd.setFocusFire(false);
+        cmd.setTargetEntityUuid(null);
+        cmd.setCommanderPlayerUuid(commander);
+        cmd.setFieldOrder(fieldOrder);
     }
 
     public static boolean issueFocusAttack(
@@ -130,6 +189,7 @@ public final class RtsOrderService {
             cmd.setTargetEntityUuid(targetUuid);
             cmd.setHold(targetPos.x + off.x, targetPos.y, targetPos.z + off.z);
             cmd.setCommanderPlayerUuid(commander);
+            cmd.setFieldOrder(!session.isActive());
             double engageRange = RtsGuardCombatRanges.attackEngageRange(guardNpc);
             if (guardTc != null && withinHorizontalRange(guardTc.getPosition(), targetPos, engageRange * 1.25)) {
                 cmd.setPhase(RtsCommandPhase.ENGAGING);
@@ -164,14 +224,21 @@ public final class RtsOrderService {
         return true;
     }
 
-    public static void stopSelected(
+    /**
+     * Stops the session's selected guards where they stand.
+     *
+     * @return how many guards were stopped
+     */
+    public static int stopSelected(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull ComponentAccessor<EntityStore> accessor,
         @Nonnull RtsCommandPlayerComponent session
     ) {
         Store<EntityStore> store = playerRef.getStore();
         UUID commander = commanderUuid(playerRef, accessor);
+        boolean fieldOrder = !session.isActive();
         RtsFocusTargetVisuals.clear(commander);
+        int stopped = 0;
         for (UUID guardId : session.getSelectedGuardUuids()) {
             Ref<EntityStore> guardRef = RtsGuardDirectory.findByUuid(store, guardId);
             if (guardRef == null) {
@@ -186,15 +253,11 @@ public final class RtsOrderService {
             if (cmd == null) {
                 cmd = new GuardRtsCommandState();
             }
-            cmd.setHold(p.x, p.y, p.z);
-            cmd.setPhase(RtsCommandPhase.HOLDING);
-            cmd.setOrderMode(session.getOrderMode());
-            cmd.setCombatStance(RtsCombatStance.AGGRESSIVE);
-            cmd.setFocusFire(false);
-            cmd.setTargetEntityUuid(null);
-            cmd.setCommanderPlayerUuid(commander);
+            applyStopOrder(cmd, session.getOrderMode(), p.x, p.y, p.z, commander, fieldOrder);
             accessor.putComponent(guardRef, GuardRtsCommandState.getComponentType(), cmd);
+            stopped++;
         }
+        return stopped;
     }
 
     public static void applyStanceToSelected(

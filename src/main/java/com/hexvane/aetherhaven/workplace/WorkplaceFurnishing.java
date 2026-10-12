@@ -10,7 +10,7 @@ public record WorkplaceFurnishing(String blockId, String name, String workplace,
         return blockId!=null&&!blockId.isBlank()&&name!=null&&!name.isBlank()&&type!=null
             && type!=TownsfolkWorkType.SMELTING&&type!=TownsfolkWorkType.LOGISTICS
             && type!=TownsfolkWorkType.FARMING&&type!=TownsfolkWorkType.RANCHING
-            && type!=TownsfolkWorkType.CULTIVATION&&type!=TownsfolkWorkType.MINING
+            && type!=TownsfolkWorkType.CULTIVATION&&type!=TownsfolkWorkType.MINING&&!GrowerPlan.supports(type)
             && Double.isFinite(workSpeedBonus)&&workSpeedBonus>0&&workSpeedBonus<=.25;
     }
 }

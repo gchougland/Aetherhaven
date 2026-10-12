@@ -3,7 +3,7 @@
     "Name": "aetherhaven_rts.items.Aetherhaven_Rts_Select_Knight.name",
     "Description": "aetherhaven_rts.items.Aetherhaven_Rts_Select_Knight.description"
   },
-  "Categories": ["Items.Weapons", "Aetherhaven.All"],
+  "Categories": ["Items.Tools", "Aetherhaven.All"],
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Rts_Select_Knight.png",
   "Model": "Items/Aetherhaven/Patrol_Wand.blockymodel",
   "Texture": "Items/Aetherhaven/Patrol_Wand.png",
@@ -11,7 +11,8 @@
   "MaxStack": 1,
   "Set": "Aetherhaven",
   "Interactions": {
-    "Primary": { "Interactions": [{ "Type": "AetherhavenRtsToolPrimary" }] },
+    "Primary": { "Interactions": [{ "Type": "AetherhavenRtsToolPrimary" }],
+    "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.rtsSelect.primary" },
     "Secondary": { "Interactions": [{ "Type": "AetherhavenRtsToolSecondary" }] }
   },
   "InteractionConfig": { "AllEntities": true },

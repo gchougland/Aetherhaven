@@ -121,7 +121,8 @@
         { "id": "bricks_runic_teal", "displayName": "Teal Runic", "familyKey": "Runic_Teal", "iconBlockId": "Rock_Runic_Teal_Brick" },
         { "id": "bricks_sandstone_white", "displayName": "White Sandstone", "familyKey": "Sandstone_White", "iconBlockId": "Rock_Sandstone_White_Brick" },
         { "id": "bricks_shale", "displayName": "Shale", "familyKey": "Shale", "iconBlockId": "Rock_Shale_Brick" },
-        { "id": "bricks_volcanic", "displayName": "Volcanic", "familyKey": "Volcanic", "iconBlockId": "Rock_Volcanic_Brick" }
+        { "id": "bricks_volcanic", "displayName": "Volcanic", "familyKey": "Volcanic", "iconBlockId": "Rock_Volcanic_Brick" },
+        { "id": "bricks_goblin_iron", "displayName": "Goblin Iron", "familyKey": "metal:Goblin_Iron", "iconBlockId": "Metal_Goblin_Iron" }
       ]
     },
     {
@@ -193,7 +194,8 @@
         { "id": "roofs_bronze_metal", "displayName": "Bronze", "familyKey": "metal_roof:Bronze", "iconBlockId": "Metal_Bronze_Roof" },
         { "id": "roofs_copper_metal", "displayName": "Copper", "familyKey": "metal_roof:Copper", "iconBlockId": "Metal_Copper_Roof" },
         { "id": "roofs_iron_metal", "displayName": "Iron", "familyKey": "metal_roof:Iron", "iconBlockId": "Metal_Iron_Roof" },
-        { "id": "roofs_zinc_metal", "displayName": "Zinc", "familyKey": "metal_roof:Zinc", "iconBlockId": "Metal_Zinc_Roof" }
+        { "id": "roofs_zinc_metal", "displayName": "Zinc", "familyKey": "metal_roof:Zinc", "iconBlockId": "Metal_Zinc_Roof" },
+        { "id": "roofs_goblin_iron_metal", "displayName": "Goblin Iron", "familyKey": "metal_roof:Goblin_Iron", "iconBlockId": "Metal_Goblin_Iron_Roof" }
       ]
     },
     {

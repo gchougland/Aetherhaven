@@ -25,6 +25,21 @@ public final class FieldProductionState {
     public Cargo cargo(){return cargo;}
     public Pending pending(){return pending;}
     public int heldQuantity(){return (cargo==null?0:cargo.quantity())+(remainingCargo==null?0:remainingCargo.stream().mapToInt(Cargo::quantity).sum());}
+    /**
+     * Hands over everything the Farmer was carrying or had just cut, and forgets it here, so the Scarecrow Fields
+     * can put it in her basket exactly once. The beds stay recorded as they were.
+     */
+    public Map<String,Integer> retire() {
+        var held=new LinkedHashMap<String,Integer>();
+        if(cargo!=null)held.merge(cargo.output(),cargo.quantity(),Integer::sum);
+        if(remainingCargo!=null)for(var part:remainingCargo)held.merge(part.output(),part.quantity(),Integer::sum);
+        if(pending!=null) {
+            var yields=pending.yields()==null?Map.of(pending.bed().output(),pending.quantity()):pending.yields();
+            for(var part:yields.entrySet())held.merge(part.getKey(),part.getValue(),Integer::sum);
+        }
+        cargo=null;remainingCargo=new ArrayList<>();pending=null;
+        return held;
+    }
     public int firstBed(){return beds().isEmpty()?0:Math.floorMod(nextBed,beds().size());}
     public void rotateAfter(int index){nextBed=index+1;}
 
@@ -65,6 +80,24 @@ public final class FieldProductionState {
             cargo=remainingCargo.isEmpty()?null:remainingCargo.removeFirst();
         }
         pending=null;return true;
+    }
+    /**
+     * One trip empties the worker's hands, as at the lumbermill: every carried product is stored up to its own
+     * room and whatever does not fit is left behind. A full store can therefore never hold up the field.
+     *
+     * @return how many items were stored, or -1 when {@code expected} is not the harvest being carried
+     */
+    public int deliverAll(PlotProductionState production,UUID expected,java.util.function.ToLongFunction<String> capacity) {
+        if(cargo==null||!cargo.id().equals(expected))return -1;
+        var all=new ArrayList<Cargo>();all.add(cargo);if(remainingCargo!=null)all.addAll(remainingCargo);
+        int total=0;
+        for(var held:all) {
+            long cap=Math.min(capacity.applyAsLong(held.output()),ProductionCatalog.MAX_STORAGE_PER_OUTPUT);
+            int count=(int)Math.max(0,Math.min(held.quantity(),cap-production.getAmount(held.output())));
+            if(count>0){production.addAmount(held.output(),count,cap);total+=count;}
+        }
+        cargo=null;remainingCargo=new ArrayList<>();
+        return total;
     }
     public int deliver(PlotProductionState production,UUID expected,long capacity) {
         if(cargo==null||!cargo.id().equals(expected))return 0;

@@ -91,19 +91,21 @@ class CoreVillagerMasteryTest {
         assertEquals(new CoreProductionRequirements.Requirement(8,4),CoreProductionRequirements.wood(8));
         assertEquals(-1,CoreVillagerMasteryService.toolTier("logger","Tool_Pickaxe_Adamantite"));
     }
-    @Test void exactToolExchangeKeepsMetadataAndRejectsStaleOrWrongItems() {
+    @Test void exactToolExchangeKeepsMetadataSwapsWithTheToolHeldNowAndRejectsWrongOrMissingItems() {
         var p=new CoreVillagerMastery(); var bag=new SimpleItemContainer((short)1);
         var copper=new ItemStack("Tool_Pickaxe_Copper",1).withMetadata("custom",new org.bson.BsonString("keep"));
         bag.setItemStackForSlot((short)0,copper);
-        assertNull(CoreVillagerMasteryService.equip(p,"miner",bag,(short)0,copper,null));
+        assertNull(CoreVillagerMasteryService.equip(p,"miner",bag,(short)0,copper));
         assertTrue(ItemStack.isEmpty(bag.getItemStack((short)0))); assertEquals(copper,p.tool());
         var iron=new ItemStack("Tool_Pickaxe_Iron",1); bag.setItemStackForSlot((short)0,iron);
-        assertNotNull(CoreVillagerMasteryService.equip(p,"miner",bag,(short)0,iron,null));
-        assertEquals(iron,bag.getItemStack((short)0));
-        assertNull(CoreVillagerMasteryService.equip(p,"miner",bag,(short)0,iron,copper));
-        assertEquals(copper,bag.getItemStack((short)0));
+        // The page may have drawn the villager without a tool. The copper pickaxe held now comes back all the same.
+        assertNull(CoreVillagerMasteryService.equip(p,"miner",bag,(short)0,iron));
+        assertEquals(copper,bag.getItemStack((short)0)); assertEquals(iron,p.tool());
+        // The same press again: the iron pickaxe is no longer carried, so nothing changes and the reason is given.
+        assertEquals(CoreVillagerMasteryService.TOOL_GONE,CoreVillagerMasteryService.equip(p,"miner",bag,(short)0,iron));
+        assertEquals(copper,bag.getItemStack((short)0)); assertEquals(iron,p.tool());
         assertEquals(iron,new Gson().fromJson(new Gson().toJson(p),CoreVillagerMastery.class).tool());
-        assertNotNull(CoreVillagerMasteryService.equip(p,"logger",bag,(short)0,copper,iron));
+        assertNotNull(CoreVillagerMasteryService.equip(p,"logger",bag,(short)0,copper));
         assertEquals(copper,bag.getItemStack((short)0)); assertEquals(iron,p.tool());
     }
 }

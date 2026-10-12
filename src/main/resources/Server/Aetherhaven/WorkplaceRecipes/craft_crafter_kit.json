@@ -10,7 +10,7 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Iron",
-      "count": 5
+      "count": 10
     },
     {
       "itemId": "Ingredient_Leather_Light",
@@ -18,7 +18,7 @@
     },
     {
       "itemId": "Wood_Beech_Trunk",
-      "count": 10
+      "count": 15
     }
   ],
   "output": "Aetherhaven_Crafter_Kit",

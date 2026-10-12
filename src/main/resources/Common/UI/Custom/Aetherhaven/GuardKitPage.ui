@@ -7,7 +7,7 @@ $C.@PageOverlay { LayoutMode: Middle;
    Group { LayoutMode: Left; FlexWeight: 1;
     Group { LayoutMode: Top; Anchor: (Width: 236, Right: 18); Padding: (Full: 16); Background: $T.@Panel;
      AssetImage #Portrait { Anchor: (Width: 184, Height: 184, Left: 10); }
-     Label #Name { Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 20, HorizontalAlignment: Center, Wrap: true, RenderBold: true); }
+     Label #VillagerName { Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 20, HorizontalAlignment: Center, Wrap: true, RenderBold: true); }
      Label { Text: "EQUIPPED"; Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d2bc85, HorizontalAlignment: Center, RenderBold: true); }
      Group { Anchor: (Height: 76); Background: $T.@Inset;
       ItemIcon #CurrentIcon { Anchor: (Width: 68, Height: 68, Left: 68, Top: 4); }

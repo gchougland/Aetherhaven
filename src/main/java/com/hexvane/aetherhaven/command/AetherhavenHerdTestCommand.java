@@ -17,8 +17,8 @@ final class AetherhavenHerdTestCommand extends AbstractCommandCollection {
                 require(ModelAsset.getAssetMap().getAsset(species.model())!=null,"Missing model "+species.model());
                 require(Item.getAssetMap().getAsset(species.food())!=null,"Missing food "+species.food());
                 for(String product:species.products().keySet())require(Item.getAssetMap().getAsset(product)!=null,"Missing product "+product);
-                var herd=new HerdProductionState();require(herd.buy(0,species.id(),10,()->true)==null,"Purchase failed");
-                var animal=herd.animals().getFirst();require(herd.assign(1,0,animal.id(),1),"Assignment failed");
+                var herd=new HerdProductionState();require(herd.buy(species.id(),10,()->true)==null,"Purchase failed");
+                var animal=herd.animals().getFirst();require(herd.assign(0,animal.id(),1),"Assignment failed");
                 require(herd.supply(species.food(),()->true)&&herd.feedAnimal(animal.id(),1,1),"Feeding failed");
                 require(!herd.feedAnimal(animal.id(),1,1),"Duplicate feeding");
             }

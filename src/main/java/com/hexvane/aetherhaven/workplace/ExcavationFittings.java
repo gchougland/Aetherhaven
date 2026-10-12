@@ -11,6 +11,12 @@ public final class ExcavationFittings {
     /** Supports were softwood before. Fittings still queued in older saves are built in hardwood like the rest. */
     static final String LEGACY_BEAM="Wood_Softwood_Beam";
     public static final String CORNER="Aetherhaven_Mine_Beam_Corner",CEILING="Aetherhaven_Mine_Ceiling_Beam";
+    /**
+     * The same joining pieces lying the other way, for a frame across a tunnel that runs east to west. The posts are
+     * native beams, which never turn, and the native beam texture is lit on two faces only: a turned joining piece shows
+     * its lit faces where the posts under it show their shaded ones. These are placed unturned instead.
+     */
+    public static final String CORNER_CROSS="Aetherhaven_Mine_Beam_Corner_Cross",CEILING_CROSS="Aetherhaven_Mine_Ceiling_Beam_Cross";
     public enum Mode {
         NONE("No fittings",false,false,false),SUPPORTS("Beams",true,false,false),LIGHTS("Wall torches",false,true,false),BOTH("Beams and wall torches",true,true,false),
         LANTERNS("Ceiling lanterns",false,false,true),SUPPORTS_LANTERNS("Beams and lanterns",true,false,true),LIGHTS_LANTERNS("Torches and lanterns",false,true,true),ALL("Beams, torches and lanterns",true,true,true),
@@ -25,16 +31,80 @@ public final class ExcavationFittings {
     public record Fitting(Point point,String item,int rotation,String block,Point support) {
         public Fitting(Point point,String item,int rotation){this(point,item,rotation,null,null);}
         @Override public String item(){return LEGACY_BEAM.equals(item)?BEAM:item;}
-        @Override public String block(){String placed=block==null?item:block;return LEGACY_BEAM.equals(placed)?BEAM:placed;}
+        @Override public String block(){
+            String placed=block==null?item:block;
+            if(turnedJoint())return CORNER.equals(placed)?CORNER_CROSS:CEILING_CROSS;
+            return LEGACY_BEAM.equals(placed)?BEAM:placed;
+        }
         @Override public int rotation(){
             // Native Wood_Torch_Wall attaches on local North. Derive the yaw from
             // the actual support so queued fittings in existing saves are fixed too.
             if(TORCH.equals(item)&&"Wood_Torch_Wall".equals(block())&&support!=null)
                 return wallTorchRotation(support.x()-point.x(),support.z()-point.z());
-            return rotation;
+            return turnedJoint()?yaw(0):rotation;
         }
+        /** Planned and saved orders turn a joining piece a quarter for a frame across an east to west tunnel. */
+        private boolean turnedJoint(){return (CORNER.equals(block)||CEILING.equals(block))&&(rotation==yaw(90)||rotation==yaw(270));}
     }
     private ExcavationFittings(){}
+    /** Every item a tunnel can be fitted with, in the order the planner lists them. No other item is accepted. */
+    public static final List<String> ITEMS=List.of(BEAM,TORCH,LANTERN,RAIL);
+    /** Where miners take fittings from, in the warehouse page's own words. */
+    public static final String STORAGE="General storage at the Warehouse Ledger Desk";
+    /** How many of each item a route takes. Posts, corners and ceiling pieces are all cut from the one beam item. */
+    public static Map<String,Integer> needs(WorkplaceArea a,ExcavationPlan.Entrance side,ExcavationPlan.Layout layout,Mode mode) {
+        return needs(a,side,layout,mode,Set.of());
+    }
+    /** @param opening the open space of the passages already there: frames that would stand in it are not counted */
+    public static Map<String,Integer> needs(WorkplaceArea a,ExcavationPlan.Entrance side,ExcavationPlan.Layout layout,Mode mode,Set<Point> opening) {
+        var needed=new LinkedHashMap<String,Integer>();
+        for(var item:ITEMS)needed.put(item,0);
+        var planned=plan(a,side,layout,mode);var doorways=inDoorways(planned,side,opening);
+        for(var fitting:planned)if(!doorways.contains(fitting))needed.merge(fitting.item(),1,Integer::sum);
+        return needed;
+    }
+    /**
+     * The pieces that must not be built because another passage opens where they would stand. A post in a doorway
+     * takes its whole frame with it: the other post, both corners and the ceiling piece, so no half frame is left
+     * hanging. A wall torch goes when its own cell is part of the opening. Lanterns and rails never block a doorway.
+     */
+    public static Set<Fitting> inDoorways(List<Fitting> fittings,ExcavationPlan.Entrance side,Set<Point> opening) {
+        if(fittings==null||opening==null||opening.isEmpty())return Set.of();
+        boolean alongZ=side==ExcavationPlan.Entrance.NORTH||side==ExcavationPlan.Entrance.SOUTH;
+        var rows=new HashSet<Integer>();
+        for(var fitting:fittings)if(BEAM.equals(fitting.item())&&opening.contains(fitting.point()))rows.add(alongZ?fitting.point().z():fitting.point().x());
+        var doomed=new HashSet<Fitting>();
+        for(var fitting:fittings) {
+            if(BEAM.equals(fitting.item())?rows.contains(alongZ?fitting.point().z():fitting.point().x()):TORCH.equals(fitting.item())&&opening.contains(fitting.point()))doomed.add(fitting);
+        }
+        return doomed;
+    }
+    /** One fitting's line in the planner: what the route takes and what the town holds. */
+    public static String countLine(boolean chosen,int needed,long stored) {
+        if(!chosen)return "Not used. Town storage has "+stored+".";
+        return "Needs "+needed+". Town storage has "+stored+".";
+    }
+    /** Shown when a dug tunnel waits for a fitting the town has run out of. Names the item, the count and the place. */
+    public static String waitingLine(String item,Map<String,Integer> needed,java.util.function.ToLongFunction<String> stored,
+        java.util.function.Function<String,String> name) {
+        var also=new ArrayList<String>();
+        for(var entry:needed.entrySet())if(!entry.getKey().equals(item)&&entry.getValue()>stored.applyAsLong(entry.getKey()))
+            also.add((entry.getValue()-stored.applyAsLong(entry.getKey()))+" "+name.apply(entry.getKey()));
+        long have=stored.applyAsLong(item);
+        return "Digging is done. Waiting for "+needed.getOrDefault(item,1)+" "+name.apply(item)+": town storage has "+(have<=0?"none":Long.toString(have))+"."
+            +(also.isEmpty()?"":" Also short: "+String.join(", ",also)+".")+" Put them in "+STORAGE+".";
+    }
+    /** Shown while miners fit out a dug tunnel: what is still to place, and whether the town holds enough of it. */
+    public static String fittingLine(Map<String,Integer> needed,java.util.function.ToLongFunction<String> stored,java.util.function.Function<String,String> name) {
+        var parts=new ArrayList<String>();
+        for(var entry:needed.entrySet())parts.add(entry.getValue()+" "+name.apply(entry.getKey())+" ("+stored.applyAsLong(entry.getKey())+" in town storage)");
+        return "Digging is done. Still to fit: "+String.join(", ",parts)+". Miners take them from "+STORAGE+".";
+    }
+    /** Shown while miners work round something they must not break. Says what it is, where, and how the tunnel carries on. */
+    public static String obstructionLine(String what,Point at,int cells) {
+        return what+" at "+at.x()+", "+at.y()+", "+at.z()+" is in the way"+(cells>1?", with "+(cells-1)+" more blocked "+(cells==2?"block":"blocks")+" near it":"")
+            +". Miners dig the rest of the tunnel and finish here once it is gone.";
+    }
     public static List<Fitting> plan(WorkplaceArea a,ExcavationPlan.Entrance side,ExcavationPlan.Layout layout,Mode mode){
         if(mode==null||mode==Mode.NONE)return List.of();
         var air=new HashSet<>(ExcavationPlan.tunnel(a,side,layout));if(air.isEmpty())return List.of();

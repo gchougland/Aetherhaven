@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.RootDependency;
@@ -17,6 +18,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -81,7 +83,17 @@ public final class RaidQuestMarchSystem extends EntityTickingSystem<EntityStore>
         }
 
         QuestBoardSlotRecord slot = town.findBoardSlotByInstanceId(binding.getBoardInstanceId());
-        if (slot == null || !slot.isAccepted() || !slot.isRaidQuest()) {
+        boolean raidRunning = slot != null && slot.isAccepted() && slot.isRaidQuest();
+        boolean counted = raidRunning && slot.raidSpawnedEntityUuidsOrEmpty().contains(mobUuid.getUuid().toString());
+        Ref<EntityStore> self = chunk.getReferenceTo(index);
+        // A raider whose raid never started, was abandoned or has ended, or that its raid does not count, may have
+        // been asleep in stored terrain when the others were removed. It is taken out as soon as it wakes.
+        if (RaidWaveStart.isLeftover(raidRunning, counted, store.getComponent(self, DeathComponent.getComponentType()) != null)) {
+            RaidQuestCompassCache.removeMob(worldName, mobUuid.getUuid());
+            commandBuffer.tryRemoveEntity(self, RemoveReason.REMOVE);
+            return;
+        }
+        if (!raidRunning) {
             RaidQuestCompassCache.removeMob(worldName, mobUuid.getUuid());
             return;
         }

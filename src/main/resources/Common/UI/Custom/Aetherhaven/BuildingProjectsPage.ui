@@ -21,11 +21,12 @@ $C.@PageOverlay { LayoutMode: Middle;
      Group #Available { FlexWeight: 1; LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
     }
    }
-   Label #Status { Anchor: (Height: 40, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #dec68d); }
+   Label #YardStatus { Anchor: (Height: 40, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #dec68d); }
    Group { LayoutMode: Left; Anchor: (Height: 38, Bottom: 12);
     $C.@TextButton #Pause { Text: "Pause yard"; FlexWeight: 1; Anchor: (Right: 12); }
     $C.@SecondaryTextButton #Refresh { Text: "Refresh projects"; Anchor: (Width: 200, Right: 12); }
-    $C.@SecondaryTextButton #Station { Text: "Station details"; Anchor: (Width: 200); }
+    $C.@SecondaryTextButton #Bench { Text: "Craft at this bench"; Anchor: (Width: 210, Right: 12); Visible: false; }
+    $C.@SecondaryTextButton #Station { Text: "Station details"; Anchor: (Width: 190); }
    }
    Label { Text: "Each yard needs a Builder's Workbench. One Apprentice works for each yard. Building skill and equipment improve their pace. Ordinary construction and the core Builder's help continue as usual."; Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb); }
   }

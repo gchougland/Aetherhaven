@@ -1,0 +1,3071 @@
+{
+ "about": "The official Custom UI type documentation (Hypixel Studios), as read through its mirror at hytalemodding.dev/en/docs/official-documentation/custom-ui/type-documentation on 2026-10-10 for game 0.6.8 and recorded, table by table, in the hytale-modding skill (references/research/custom-ui-format.md, sections 2.1 to 2.4). A property marked documented false is one that file measured in the release game's documents but the documentation leaves out. Converted by a script, not retyped. This is the only part of the property table that is not read from the installed game.",
+ "common": {
+  "Visible": {
+   "type": "Boolean",
+   "documented": true
+  },
+  "HitTestVisible": {
+   "type": "Boolean",
+   "documented": true
+  },
+  "TooltipText": {
+   "type": "String",
+   "documented": true
+  },
+  "TooltipTextSpans": {
+   "type": "List<LabelSpan>",
+   "documented": true
+  },
+  "TextTooltipStyle": {
+   "type": "TextTooltipStyle",
+   "documented": true
+  },
+  "TextTooltipShowDelay": {
+   "type": "Float",
+   "documented": true
+  },
+  "Anchor": {
+   "type": "Anchor",
+   "documented": true
+  },
+  "Padding": {
+   "type": "Padding",
+   "documented": true
+  },
+  "FlexWeight": {
+   "type": "Integer",
+   "documented": true
+  },
+  "ContentWidth": {
+   "type": "Integer",
+   "documented": true
+  },
+  "ContentHeight": {
+   "type": "Integer",
+   "documented": true
+  },
+  "AutoScrollDown": {
+   "type": "Boolean",
+   "documented": true
+  },
+  "KeepScrollPosition": {
+   "type": "Boolean",
+   "documented": true
+  },
+  "MouseWheelScrollBehaviour": {
+   "type": "MouseWheelScrollBehaviourType",
+   "documented": true
+  },
+  "Background": {
+   "type": "PatchStyle / String",
+   "documented": true
+  },
+  "MaskTexturePath": {
+   "type": "UI Path (String)",
+   "documented": true
+  },
+  "OutlineColor": {
+   "type": "Color",
+   "documented": true
+  },
+  "OutlineSize": {
+   "type": "Float",
+   "documented": true
+  },
+  "Overscroll": {
+   "type": "Boolean",
+   "documented": true
+  }
+ },
+ "elements": {
+  "Group": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "ScrollbarStyle": {
+     "type": "ScrollbarStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "Validating",
+    "Dismissing",
+    "Scrolled"
+   ]
+  },
+  "Label": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Text": {
+     "type": "String",
+     "documented": true
+    },
+    "TextSpans": {
+     "type": "List<LabelSpan>",
+     "documented": true
+    },
+    "Style": {
+     "type": "LabelStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "LinkActivating",
+    "TagMouseEntered"
+   ]
+  },
+  "TextButton": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Text": {
+     "type": "String",
+     "documented": true
+    },
+    "TextSpans": {
+     "type": "List<LabelSpan>",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "TextButtonStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "Activating",
+    "DoubleClicking",
+    "RightClicking",
+    "MouseEntered",
+    "MouseExited"
+   ]
+  },
+  "Button": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "ButtonStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "Activating",
+    "DoubleClicking",
+    "RightClicking",
+    "MouseEntered",
+    "MouseExited"
+   ]
+  },
+  "TextField": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Value": {
+     "type": "String",
+     "documented": true
+    },
+    "PlaceholderText": {
+     "type": "String",
+     "documented": true
+    },
+    "PasswordChar": {
+     "type": "Char",
+     "documented": true
+    },
+    "Style": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "PlaceholderStyle": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "Decoration": {
+     "type": "InputFieldDecorationStyle",
+     "documented": true
+    },
+    "AutoFocus": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "AutoSelectAll": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "IsReadOnly": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "MaxLength": {
+     "type": "Integer",
+     "documented": true
+    }
+   },
+   "events": [
+    "RightClicking",
+    "Validating",
+    "Dismissing",
+    "FocusLost",
+    "FocusGained",
+    "ValueChanged"
+   ]
+  },
+  "DropdownBox": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "Entries": {
+     "type": "IReadOnlyList<DropdownEntryInfo>",
+     "documented": true
+    },
+    "SelectedValues": {
+     "type": "List<String>",
+     "documented": true
+    },
+    "Value": {
+     "type": "String",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "DropdownBoxStyle",
+     "documented": true
+    },
+    "PanelTitleText": {
+     "type": "String",
+     "documented": true
+    },
+    "IsReadOnly": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "MaxSelection": {
+     "type": "Integer",
+     "documented": true
+    },
+    "ShowSearchInput": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "ShowLabel": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "ForcedLabel": {
+     "type": "String",
+     "documented": true
+    },
+    "NoItemsText": {
+     "type": "String",
+     "documented": true
+    },
+    "DisplayNonExistingValue": {
+     "type": "Boolean",
+     "documented": true
+    }
+   },
+   "events": [
+    "ValueChanged",
+    "DropdownToggled"
+   ]
+  },
+  "CheckBox": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Value": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "CheckBoxStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "ValueChanged"
+   ]
+  },
+  "NumberField": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Value": {
+     "type": "Decimal",
+     "documented": true
+    },
+    "PasswordChar": {
+     "type": "Char",
+     "documented": true
+    },
+    "Format": {
+     "type": "NumberFieldFormat",
+     "documented": true
+    },
+    "Style": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "PlaceholderStyle": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "Decoration": {
+     "type": "InputFieldDecorationStyle",
+     "documented": true
+    },
+    "AutoFocus": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "AutoSelectAll": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "IsReadOnly": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "MaxLength": {
+     "type": "Integer",
+     "documented": true
+    }
+   },
+   "events": [
+    "RightClicking",
+    "Validating",
+    "Dismissing",
+    "FocusLost",
+    "FocusGained",
+    "ValueChanged"
+   ]
+  },
+  "ProgressBar": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Value": {
+     "type": "Float",
+     "documented": true
+    },
+    "Bar": {
+     "type": "PatchStyle / String",
+     "documented": true
+    },
+    "BarTexturePath": {
+     "type": "UI Path (String)",
+     "documented": true
+    },
+    "EffectTexturePath": {
+     "type": "UI Path (String)",
+     "documented": true
+    },
+    "EffectWidth": {
+     "type": "Integer",
+     "documented": true
+    },
+    "EffectHeight": {
+     "type": "Integer",
+     "documented": true
+    },
+    "EffectOffset": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Alignment": {
+     "type": "ProgressBarAlignment",
+     "documented": true
+    },
+    "Direction": {
+     "type": "ProgressBarDirection",
+     "documented": true
+    }
+   },
+   "events": []
+  },
+  "ActionButton": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "ActionName": {
+     "type": "String",
+     "documented": true
+    },
+    "KeyBindingLabel": {
+     "type": "String",
+     "documented": true
+    },
+    "BindingModifier1Label": {
+     "type": "String",
+     "documented": true
+    },
+    "BindingModifier2Label": {
+     "type": "String",
+     "documented": true
+    },
+    "IsAvailable": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "IsHoldBinding": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Alignment": {
+     "type": "ActionButtonAlignment",
+     "documented": true
+    },
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "ButtonStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "Activating",
+    "DoubleClicking",
+    "RightClicking",
+    "MouseEntered",
+    "MouseExited"
+   ]
+  },
+  "TabButton": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Text": {
+     "type": "String",
+     "documented": true
+    },
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "Icon": {
+     "type": "PatchStyle / String",
+     "documented": true
+    },
+    "IconSelected": {
+     "type": "PatchStyle / String",
+     "documented": true
+    },
+    "IconAnchor": {
+     "type": "Anchor",
+     "documented": true
+    },
+    "Id": {
+     "type": "String",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "ButtonStyle",
+     "documented": true
+    },
+    "Shown": {
+     "type": "*undocumented* (bool)",
+     "documented": false
+    }
+   },
+   "events": [
+    "Activating",
+    "DoubleClicking",
+    "RightClicking",
+    "MouseEntered",
+    "MouseExited"
+   ]
+  },
+  "ItemGrid": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "ScrollbarStyle": {
+     "type": "ScrollbarStyle",
+     "documented": true
+    },
+    "ItemStacks": {
+     "type": "ClientItemStack[]",
+     "documented": true
+    },
+    "SlotsPerRow": {
+     "type": "Integer",
+     "documented": true
+    },
+    "ShowScrollbar": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "ItemGridStyle",
+     "documented": true
+    },
+    "RenderItemQualityBackground": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "InfoDisplay": {
+     "type": "ItemGridInfoDisplayMode",
+     "documented": true
+    },
+    "AdjacentInfoPaneGridWidth": {
+     "type": "Integer",
+     "documented": true
+    },
+    "AreItemsDraggable": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "InventorySectionId": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Slots": {
+     "type": "ItemGridSlot[]",
+     "documented": true
+    },
+    "AllowMaxStackDraggableItems": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "DisplayItemQuantity": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "RenderEmptySlots": {
+     "type": "*undocumented* (bool)",
+     "documented": false
+    }
+   },
+   "events": [
+    "SlotDoubleClicking",
+    "DragCancelled",
+    "SlotMouseEntered",
+    "SlotMouseExited"
+   ]
+  },
+  "TabNavigation": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "Tabs": {
+     "type": "Tab[]",
+     "documented": true
+    },
+    "Style": {
+     "type": "TabNavigationStyle",
+     "documented": true
+    },
+    "SelectedTab": {
+     "type": "String",
+     "documented": true
+    },
+    "AllowUnselection": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "OverflowPaging": {
+     "type": "*undocumented* (bool)",
+     "documented": false
+    }
+   },
+   "events": [
+    "SelectedTabChanged"
+   ]
+  },
+  "SliderNumberField": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Min": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Max": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Step": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Value": {
+     "type": "Integer",
+     "documented": true
+    },
+    "NumberFieldMaxDecimalPlaces": {
+     "type": "Integer",
+     "documented": true
+    },
+    "NumberFieldDefaultValue": {
+     "type": "Decimal",
+     "documented": true
+    },
+    "NumberFieldSuffix": {
+     "type": "String",
+     "documented": true
+    },
+    "SliderStyle": {
+     "type": "SliderStyle",
+     "documented": true
+    },
+    "NumberFieldStyle": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "NumberFieldContainerAnchor": {
+     "type": "Anchor",
+     "documented": true
+    }
+   },
+   "events": [
+    "ValueChanged",
+    "SliderMouseButtonReleased",
+    "NumberFieldValidating",
+    "NumberFieldDismissing",
+    "NumberFieldBlurred",
+    "NumberFieldFocused"
+   ]
+  },
+  "Sprite": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Frame": {
+     "type": "SpriteFrame",
+     "documented": true
+    },
+    "IsPlaying": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "AutoPlay": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "TexturePath": {
+     "type": "UI Path (String)",
+     "documented": true
+    },
+    "FramesPerSecond": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Angle": {
+     "type": "Float",
+     "documented": true
+    },
+    "RepeatCount": {
+     "type": "Integer",
+     "documented": true
+    }
+   },
+   "events": []
+  },
+  "ToggleButton": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "IsChecked": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "CheckedStyle": {
+     "type": "ToggleButtonStyle",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "ToggleButtonStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "ValueChanged",
+    "Activating",
+    "DoubleClicking",
+    "RightClicking",
+    "MouseEntered",
+    "MouseExited"
+   ]
+  },
+  "BlockSelector": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Capacity": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Value": {
+     "type": "String",
+     "documented": true
+    },
+    "Style": {
+     "type": "BlockSelectorStyle",
+     "documented": true
+    },
+    "PreserveSlotPositions": {
+     "type": "*undocumented* (bool)",
+     "documented": false
+    }
+   },
+   "events": [
+    "ValueChanged"
+   ]
+  },
+  "Slider": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Value": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Min": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Max": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Step": {
+     "type": "Integer",
+     "documented": true
+    },
+    "IsReadOnly": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "SliderStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "MouseButtonReleased",
+    "ValueChanged"
+   ]
+  },
+  "MultilineTextField": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "ScrollbarStyle": {
+     "type": "ScrollbarStyle",
+     "documented": true
+    },
+    "Value": {
+     "type": "String",
+     "documented": true
+    },
+    "Style": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "PlaceholderStyle": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "Decoration": {
+     "type": "InputFieldDecorationStyle",
+     "documented": true
+    },
+    "AutoFocus": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "AutoSelectAll": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "IsReadOnly": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "MaxLength": {
+     "type": "Integer",
+     "documented": true
+    },
+    "MaxLines": {
+     "type": "Integer",
+     "documented": true
+    },
+    "MaxVisibleLines": {
+     "type": "Integer",
+     "documented": true
+    },
+    "AutoGrow": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "ContentPadding": {
+     "type": "Padding",
+     "documented": true
+    },
+    "PlaceholderText": {
+     "type": "String",
+     "documented": true
+    }
+   },
+   "events": [
+    "Validating",
+    "Dismissing",
+    "Blurred",
+    "Focused",
+    "ValueChanged"
+   ]
+  },
+  "CircularProgressBar": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Value": {
+     "type": "Float",
+     "documented": true
+    },
+    "Color": {
+     "type": "Color",
+     "documented": true
+    }
+   },
+   "events": []
+  },
+  "ColorPickerDropdownBox": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Color": {
+     "type": "Color",
+     "documented": true
+    },
+    "Format": {
+     "type": "ColorFormat",
+     "documented": true
+    },
+    "ResetTransparencyWhenChangingColor": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "DisplayTextField": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "IsReadOnly": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "ColorPickerDropdownBoxStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "RightClicking",
+    "ValueChanged"
+   ]
+  },
+  "DynamicPane": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "ScrollbarStyle": {
+     "type": "ScrollbarStyle",
+     "documented": true
+    },
+    "MinSize": {
+     "type": "Integer",
+     "documented": true
+    },
+    "ResizeAt": {
+     "type": "ResizeType",
+     "documented": true
+    },
+    "ResizerSize": {
+     "type": "Integer",
+     "documented": true
+    },
+    "ResizerBackground": {
+     "type": "PatchStyle / String",
+     "documented": true
+    }
+   },
+   "events": [
+    "MouseButtonReleased",
+    "Validating",
+    "Dismissing",
+    "Scrolled"
+   ]
+  },
+  "ItemPreviewComponent": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "ItemScale": {
+     "type": "Float",
+     "documented": true
+    },
+    "ItemId": {
+     "type": "String",
+     "documented": true
+    }
+   },
+   "events": []
+  },
+  "MenuItem": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "Text": {
+     "type": "String",
+     "documented": true
+    },
+    "TextSpans": {
+     "type": "List<LabelSpan>",
+     "documented": true
+    },
+    "PopupStyle": {
+     "type": "PopupStyle",
+     "documented": true
+    },
+    "SelectedStyle": {
+     "type": "TextButtonStyle",
+     "documented": true
+    },
+    "IsSelected": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "IconAnchor": {
+     "type": "Anchor",
+     "documented": true
+    },
+    "Icon": {
+     "type": "PatchStyle / String",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "TextButtonStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "Activating",
+    "DoubleClicking",
+    "RightClicking",
+    "MouseEntered",
+    "MouseExited"
+   ]
+  },
+  "AssetImage": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "AssetPath": {
+     "type": "String",
+     "documented": true
+    },
+    "FallbackTexturePath": {
+     "type": "*undocumented* (str)",
+     "documented": false
+    }
+   },
+   "events": []
+  },
+  "HotkeyLabel": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "InputBindingKey": {
+     "type": "String",
+     "documented": true
+    },
+    "InputBindingKeyPrefix": {
+     "type": "String",
+     "documented": true
+    },
+    "InputBindingKeyPrefixBinding": {
+     "type": "String",
+     "documented": true
+    }
+   },
+   "events": []
+  },
+  "SceneBlur": {
+   "documented": true,
+   "children": "no",
+   "properties": {},
+   "events": []
+  },
+  "DynamicPaneContainer": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "ScrollbarStyle": {
+     "type": "ScrollbarStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "Validating",
+    "Dismissing",
+    "Scrolled"
+   ]
+  },
+  "FloatSlider": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Value": {
+     "type": "Float",
+     "documented": true
+    },
+    "Min": {
+     "type": "Float",
+     "documented": true
+    },
+    "Max": {
+     "type": "Float",
+     "documented": true
+    },
+    "Step": {
+     "type": "Float",
+     "documented": true
+    },
+    "Style": {
+     "type": "SliderStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "MouseButtonReleased",
+    "ValueChanged"
+   ]
+  },
+  "BackButton": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "ActionName": {
+     "type": "String",
+     "documented": true
+    },
+    "KeyBindingLabel": {
+     "type": "String",
+     "documented": true
+    },
+    "BindingModifier1Label": {
+     "type": "String",
+     "documented": true
+    },
+    "BindingModifier2Label": {
+     "type": "String",
+     "documented": true
+    },
+    "IsAvailable": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "IsHoldBinding": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Alignment": {
+     "type": "ActionButtonAlignment",
+     "documented": true
+    },
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "ButtonStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "Activating",
+    "DoubleClicking",
+    "RightClicking",
+    "MouseEntered",
+    "MouseExited"
+   ]
+  },
+  "CheckBoxContainer": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "ScrollbarStyle": {
+     "type": "ScrollbarStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "Validating",
+    "Dismissing",
+    "Scrolled"
+   ]
+  },
+  "CodeEditor": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "ScrollbarStyle": {
+     "type": "ScrollbarStyle",
+     "documented": true
+    },
+    "Value": {
+     "type": "String",
+     "documented": true
+    },
+    "Language": {
+     "type": "CodeEditorLanguage",
+     "documented": true
+    },
+    "LineNumberWidth": {
+     "type": "Integer",
+     "documented": true
+    },
+    "LineNumberBackground": {
+     "type": "PatchStyle / String",
+     "documented": true
+    },
+    "LineNumberTextColor": {
+     "type": "Color",
+     "documented": true
+    },
+    "LineNumberPadding": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Style": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "PlaceholderStyle": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "Decoration": {
+     "type": "InputFieldDecorationStyle",
+     "documented": true
+    },
+    "AutoFocus": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "AutoSelectAll": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "IsReadOnly": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "MaxLength": {
+     "type": "Integer",
+     "documented": true
+    },
+    "MaxLines": {
+     "type": "Integer",
+     "documented": true
+    },
+    "MaxVisibleLines": {
+     "type": "Integer",
+     "documented": true
+    },
+    "AutoGrow": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "ContentPadding": {
+     "type": "Padding",
+     "documented": true
+    },
+    "PlaceholderText": {
+     "type": "String",
+     "documented": true
+    }
+   },
+   "events": [
+    "Validating",
+    "Dismissing",
+    "Blurred",
+    "Focused",
+    "ValueChanged"
+   ]
+  },
+  "CompactTextField": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Value": {
+     "type": "String",
+     "documented": true
+    },
+    "PlaceholderText": {
+     "type": "String",
+     "documented": true
+    },
+    "PasswordChar": {
+     "type": "Char",
+     "documented": true
+    },
+    "CollapsedWidth": {
+     "type": "Integer",
+     "documented": true
+    },
+    "ExpandedWidth": {
+     "type": "Integer",
+     "documented": true
+    },
+    "ExpandSound": {
+     "type": "SoundStyle",
+     "documented": true
+    },
+    "CollapseSound": {
+     "type": "SoundStyle",
+     "documented": true
+    },
+    "Style": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "PlaceholderStyle": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "Decoration": {
+     "type": "InputFieldDecorationStyle",
+     "documented": true
+    },
+    "AutoFocus": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "AutoSelectAll": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "IsReadOnly": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "MaxLength": {
+     "type": "Integer",
+     "documented": true
+    }
+   },
+   "events": [
+    "RightClicking",
+    "Validating",
+    "Dismissing",
+    "FocusLost",
+    "FocusGained",
+    "ValueChanged"
+   ]
+  },
+  "DropdownEntry": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Text": {
+     "type": "String",
+     "documented": true
+    },
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "Value": {
+     "type": "String",
+     "documented": true
+    },
+    "Selected": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "ButtonStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "Activating",
+    "DoubleClicking",
+    "RightClicking",
+    "MouseEntered",
+    "MouseExited"
+   ]
+  },
+  "FloatSliderNumberField": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Min": {
+     "type": "Float",
+     "documented": true
+    },
+    "Max": {
+     "type": "Float",
+     "documented": true
+    },
+    "Step": {
+     "type": "Float",
+     "documented": true
+    },
+    "Value": {
+     "type": "Float",
+     "documented": true
+    },
+    "NumberFieldMaxDecimalPlaces": {
+     "type": "Integer",
+     "documented": true
+    },
+    "NumberFieldDefaultValue": {
+     "type": "Decimal",
+     "documented": true
+    },
+    "NumberFieldSuffix": {
+     "type": "String",
+     "documented": true
+    },
+    "SliderStyle": {
+     "type": "SliderStyle",
+     "documented": true
+    },
+    "NumberFieldStyle": {
+     "type": "InputFieldStyle",
+     "documented": true
+    },
+    "NumberFieldContainerAnchor": {
+     "type": "Anchor",
+     "documented": true
+    }
+   },
+   "events": [
+    "ValueChanged",
+    "SliderMouseButtonReleased",
+    "NumberFieldValidating",
+    "NumberFieldDismissing",
+    "NumberFieldBlurred",
+    "NumberFieldFocused"
+   ]
+  },
+  "ItemSlot": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "ItemId": {
+     "type": "String",
+     "documented": true
+    },
+    "Quantity": {
+     "type": "Integer",
+     "documented": true
+    },
+    "ShowQuantity": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "ShowQualityBackground": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "ShowDurabilityBar": {
+     "type": "Boolean",
+     "documented": true
+    }
+   },
+   "events": []
+  },
+  "Panel": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "ScrollbarStyle": {
+     "type": "ScrollbarStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "Validating",
+    "Dismissing",
+    "Scrolled"
+   ]
+  },
+  "ColorPicker": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Value": {
+     "type": "Color",
+     "documented": true
+    },
+    "Format": {
+     "type": "ColorFormat",
+     "documented": true
+    },
+    "DisplayTextField": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "ColorPickerStyle",
+     "documented": true
+    },
+    "ResetTransparencyWhenChangingColor": {
+     "type": "Boolean",
+     "documented": true
+    }
+   },
+   "events": [
+    "ValueChanged"
+   ]
+  },
+  "PlayerPreviewComponent": {
+   "documented": false,
+   "children": "?",
+   "properties": {
+    "Scale": {
+     "type": "*undocumented* (float)",
+     "documented": false
+    }
+   },
+   "events": []
+  },
+  "PrefabPreviewComponent": {
+   "documented": false,
+   "children": "?",
+   "properties": {
+    "AllowDragYaw": {
+     "type": "*undocumented* (bool)",
+     "documented": false
+    },
+    "AllowDragPitch": {
+     "type": "*undocumented* (bool)",
+     "documented": false
+    },
+    "AllowZoom": {
+     "type": "*undocumented* (bool)",
+     "documented": false
+    },
+    "AllowPan": {
+     "type": "*undocumented* (bool)",
+     "documented": false
+    },
+    "ShowAnchor": {
+     "type": "*undocumented* (bool)",
+     "documented": false
+    }
+   },
+   "events": []
+  },
+  "CharacterPreviewComponent": {
+   "documented": true,
+   "children": "yes",
+   "properties": {},
+   "events": []
+  },
+  "ItemIcon": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "ItemId": {
+     "type": "String",
+     "documented": true
+    },
+    "ShowItemTooltip": {
+     "type": "Boolean",
+     "documented": true
+    }
+   },
+   "events": []
+  },
+  "ItemSlotButton": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "ButtonStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "Activating",
+    "DoubleClicking",
+    "RightClicking",
+    "MouseEntered",
+    "MouseExited"
+   ]
+  },
+  "LabeledCheckBox": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Value": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Disabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "LabeledCheckBoxStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "ValueChanged"
+   ]
+  },
+  "ReorderableListGrip": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "ScrollbarStyle": {
+     "type": "ScrollbarStyle",
+     "documented": true
+    },
+    "IsDragEnabled": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "HoveredBackground": {
+     "type": "*undocumented* (color)",
+     "documented": false
+    },
+    "HoveredIconColor": {
+     "type": "*undocumented* (color)",
+     "documented": false
+    }
+   },
+   "events": [
+    "Validating",
+    "Dismissing",
+    "Scrolled"
+   ]
+  },
+  "TimerLabel": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "Seconds": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Text": {
+     "type": "String",
+     "documented": true
+    },
+    "TextSpans": {
+     "type": "List<LabelSpan>",
+     "documented": true
+    },
+    "Direction": {
+     "type": "TimerDirection",
+     "documented": true
+    },
+    "Paused": {
+     "type": "Boolean",
+     "documented": true
+    },
+    "Style": {
+     "type": "LabelStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "LinkActivating",
+    "TagMouseEntered"
+   ]
+  },
+  "ColorOptionGrid": {
+   "documented": true,
+   "children": "no",
+   "properties": {
+    "ColorOptions": {
+     "type": "List<ColorOption>",
+     "documented": true
+    },
+    "ColorsPerRow": {
+     "type": "Integer",
+     "documented": true
+    },
+    "Selected": {
+     "type": "ColorOption",
+     "documented": true
+    },
+    "Style": {
+     "type": "ColorOptionGridStyle",
+     "documented": true
+    }
+   },
+   "events": [
+    "ColorSelected"
+   ]
+  },
+  "ReorderableList": {
+   "documented": true,
+   "children": "yes",
+   "properties": {
+    "ScrollbarStyle": {
+     "type": "ScrollbarStyle",
+     "documented": true
+    },
+    "LayoutMode": {
+     "type": "LayoutMode",
+     "documented": true
+    },
+    "DropIndicatorAnchor": {
+     "type": "Anchor",
+     "documented": true
+    },
+    "DropIndicatorBackground": {
+     "type": "PatchStyle / String",
+     "documented": true
+    }
+   },
+   "events": []
+  }
+ },
+ "dataTypes": {
+  "Anchor": {
+   "Left": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Right": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Top": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Bottom": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Height": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Full": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Horizontal": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Vertical": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Width": {
+    "type": "Integer",
+    "documented": true
+   },
+   "MinWidth": {
+    "type": "Integer",
+    "documented": true
+   },
+   "MaxWidth": {
+    "type": "Integer",
+    "documented": true
+   }
+  },
+  "BlockSelectorStyle": {
+   "ItemGridStyle": {
+    "type": "ItemGridStyle",
+    "documented": true
+   },
+   "SlotDropIcon": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "SlotDeleteIcon": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "SlotHoverOverlay": {
+    "type": "PatchStyle / String",
+    "documented": true
+   }
+  },
+  "ButtonSounds": {
+   "Activate": {
+    "type": "SoundStyle",
+    "documented": true
+   },
+   "Context": {
+    "type": "SoundStyle",
+    "documented": true
+   },
+   "MouseHover": {
+    "type": "SoundStyle",
+    "documented": true
+   }
+  },
+  "ButtonStyle": {
+   "Default": {
+    "type": "ButtonStyleState",
+    "documented": true
+   },
+   "Hovered": {
+    "type": "ButtonStyleState",
+    "documented": true
+   },
+   "Pressed": {
+    "type": "ButtonStyleState",
+    "documented": true
+   },
+   "Disabled": {
+    "type": "ButtonStyleState",
+    "documented": true
+   },
+   "Sounds": {
+    "type": "ButtonSounds",
+    "documented": true
+   }
+  },
+  "ButtonStyleState": {
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   }
+  },
+  "CheckBoxStyle": {
+   "Checked": {
+    "type": "CheckBoxStyleState",
+    "documented": true
+   },
+   "Unchecked": {
+    "type": "CheckBoxStyleState",
+    "documented": true
+   }
+  },
+  "CheckBoxStyleState": {
+   "DefaultBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "HoveredBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "PressedBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "DisabledBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "ChangedSound": {
+    "type": "SoundStyle",
+    "documented": true
+   },
+   "HoveredSound": {
+    "type": "SoundStyle",
+    "documented": true
+   }
+  },
+  "ClientItemStack": {
+   "Id": {
+    "type": "String",
+    "documented": true
+   },
+   "Quantity": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Durability": {
+    "type": "Double",
+    "documented": true
+   },
+   "MaxDurability": {
+    "type": "Double",
+    "documented": true
+   },
+   "OverrideDroppedItemAnimation": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "Metadata": {
+    "type": "ClientItemMetadata",
+    "documented": true
+   }
+  },
+  "ColorOptionGridStyle": {
+   "OptionSize": {
+    "type": "Integer",
+    "documented": true
+   },
+   "OptionSpacingHorizontal": {
+    "type": "Integer",
+    "documented": true
+   },
+   "OptionSpacingVertical": {
+    "type": "Integer",
+    "documented": true
+   },
+   "HighlightSize": {
+    "type": "Integer",
+    "documented": true
+   },
+   "HighlightOffsetLeft": {
+    "type": "Integer",
+    "documented": true
+   },
+   "HighlightOffsetTop": {
+    "type": "Integer",
+    "documented": true
+   },
+   "HighlightBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "MaskTexturePath": {
+    "type": "UI Path (String)",
+    "documented": true
+   },
+   "FrameBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Sounds": {
+    "type": "ButtonSounds",
+    "documented": true
+   }
+  },
+  "ColorPickerDropdownBoxStateBackground": {
+   "Default": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Hovered": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Pressed": {
+    "type": "PatchStyle / String",
+    "documented": true
+   }
+  },
+  "ColorPickerDropdownBoxStyle": {
+   "Background": {
+    "type": "ColorPickerDropdownBoxStateBackground",
+    "documented": true
+   },
+   "ColorPickerStyle": {
+    "type": "ColorPickerStyle",
+    "documented": true
+   },
+   "Overlay": {
+    "type": "ColorPickerDropdownBoxStateBackground",
+    "documented": true
+   },
+   "ArrowBackground": {
+    "type": "ColorPickerDropdownBoxStateBackground",
+    "documented": true
+   },
+   "ArrowAnchor": {
+    "type": "Anchor",
+    "documented": true
+   },
+   "Sounds": {
+    "type": "ButtonSounds",
+    "documented": true
+   },
+   "PanelBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "PanelWidth": {
+    "type": "Integer",
+    "documented": true
+   },
+   "PanelHeight": {
+    "type": "Integer",
+    "documented": true
+   },
+   "PanelPadding": {
+    "type": "Padding",
+    "documented": true
+   },
+   "PanelOffset": {
+    "type": "Integer",
+    "documented": true
+   }
+  },
+  "ColorPickerStyle": {
+   "ButtonBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "ButtonFill": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "OpacitySelectorBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "TextFieldDecoration": {
+    "type": "InputFieldDecorationStyle",
+    "documented": true
+   },
+   "TextFieldInputStyle": {
+    "type": "InputFieldStyle",
+    "documented": true
+   },
+   "TextFieldPadding": {
+    "type": "Padding",
+    "documented": true
+   },
+   "TextFieldHeight": {
+    "type": "Integer",
+    "documented": true
+   }
+  },
+  "DropdownBoxSearchInputStyle": {
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Icon": {
+    "type": "InputFieldIcon",
+    "documented": true
+   },
+   "Style": {
+    "type": "InputFieldStyle",
+    "documented": true
+   },
+   "PlaceholderStyle": {
+    "type": "InputFieldStyle",
+    "documented": true
+   },
+   "Anchor": {
+    "type": "Anchor",
+    "documented": true
+   },
+   "Padding": {
+    "type": "Padding",
+    "documented": true
+   },
+   "PlaceholderText": {
+    "type": "String",
+    "documented": true
+   },
+   "ClearButtonStyle": {
+    "type": "InputFieldButtonStyle",
+    "documented": true
+   }
+  },
+  "DropdownBoxSounds": {
+   "Activate": {
+    "type": "SoundStyle",
+    "documented": true
+   },
+   "MouseHover": {
+    "type": "SoundStyle",
+    "documented": true
+   },
+   "Close": {
+    "type": "SoundStyle",
+    "documented": true
+   }
+  },
+  "DropdownBoxStyle": {
+   "DefaultBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "HoveredBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "PressedBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "DisabledBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "IconTexturePath": {
+    "type": "UI Path (String)",
+    "documented": true
+   },
+   "IconWidth": {
+    "type": "Integer",
+    "documented": true
+   },
+   "IconHeight": {
+    "type": "Integer",
+    "documented": true
+   },
+   "DefaultArrowTexturePath": {
+    "type": "UI Path (String)",
+    "documented": true
+   },
+   "HoveredArrowTexturePath": {
+    "type": "UI Path (String)",
+    "documented": true
+   },
+   "PressedArrowTexturePath": {
+    "type": "UI Path (String)",
+    "documented": true
+   },
+   "DisabledArrowTexturePath": {
+    "type": "UI Path (String)",
+    "documented": true
+   },
+   "ArrowWidth": {
+    "type": "Integer",
+    "documented": true
+   },
+   "ArrowHeight": {
+    "type": "Integer",
+    "documented": true
+   },
+   "HorizontalPadding": {
+    "type": "Integer",
+    "documented": true
+   },
+   "LabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "DisabledLabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "Sounds": {
+    "type": "DropdownBoxSounds",
+    "documented": true
+   },
+   "PanelTitleLabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "EntryHeight": {
+    "type": "Integer",
+    "documented": true
+   },
+   "EntriesInViewport": {
+    "type": "Integer",
+    "documented": true
+   },
+   "HorizontalEntryPadding": {
+    "type": "Integer",
+    "documented": true
+   },
+   "EntryIconHeight": {
+    "type": "Integer",
+    "documented": true
+   },
+   "EntryIconWidth": {
+    "type": "Integer",
+    "documented": true
+   },
+   "EntryIconBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "SelectedEntryIconBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "EntryLabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "SelectedEntryLabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "NoItemsLabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "HoveredEntryBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "PressedEntryBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "FocusOutlineSize": {
+    "type": "Integer",
+    "documented": true
+   },
+   "FocusOutlineColor": {
+    "type": "Color",
+    "documented": true
+   },
+   "EntrySounds": {
+    "type": "ButtonSounds",
+    "documented": true
+   },
+   "PanelScrollbarStyle": {
+    "type": "ScrollbarStyle",
+    "documented": true
+   },
+   "PanelBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "PanelPadding": {
+    "type": "Integer",
+    "documented": true
+   },
+   "PanelAlign": {
+    "type": "DropdownBoxAlign",
+    "documented": true
+   },
+   "PanelOffset": {
+    "type": "Integer",
+    "documented": true
+   },
+   "PanelWidth": {
+    "type": "Integer",
+    "documented": true
+   },
+   "SearchInputStyle": {
+    "type": "DropdownBoxSearchInputStyle",
+    "documented": true
+   },
+   "EntryTooltipStyle": {
+    "type": "*undocumented* (object)",
+    "documented": false
+   }
+  },
+  "InputFieldButtonStyle": {
+   "Texture": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "HoveredTexture": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "PressedTexture": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Width": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Height": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Offset": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Side": {
+    "type": "InputFieldButtonSide",
+    "documented": true
+   }
+  },
+  "InputFieldDecorationStyle": {
+   "Default": {
+    "type": "InputFieldDecorationStyleState",
+    "documented": true
+   },
+   "Focused": {
+    "type": "InputFieldDecorationStyleState",
+    "documented": true
+   }
+  },
+  "InputFieldDecorationStyleState": {
+   "OutlineSize": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "OutlineColor": {
+    "type": "Color",
+    "documented": true
+   },
+   "Icon": {
+    "type": "InputFieldIcon",
+    "documented": true
+   },
+   "ClearButtonStyle": {
+    "type": "InputFieldButtonStyle",
+    "documented": true
+   },
+   "ToggleVisibilityButtonStyle": {
+    "type": "InputFieldButtonStyle",
+    "documented": true
+   }
+  },
+  "InputFieldIcon": {
+   "Texture": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Width": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Height": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Offset": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Side": {
+    "type": "InputFieldIconSide",
+    "documented": true
+   }
+  },
+  "InputFieldStyle": {
+   "FontName": {
+    "type": "Font Name (String)",
+    "documented": true
+   },
+   "FontSize": {
+    "type": "Float",
+    "documented": true
+   },
+   "TextColor": {
+    "type": "Color",
+    "documented": true
+   },
+   "RenderUppercase": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "RenderBold": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "RenderItalics": {
+    "type": "Boolean",
+    "documented": true
+   }
+  },
+  "ItemGridSlot": {
+   "ItemStack": {
+    "type": "ClientItemStack",
+    "documented": true
+   },
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "ExtraOverlays": {
+    "type": "List<PatchStyle>",
+    "documented": true
+   },
+   "Overlay": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Icon": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "IsItemIncompatible": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "Name": {
+    "type": "String",
+    "documented": true
+   },
+   "Description": {
+    "type": "String",
+    "documented": true
+   },
+   "InventorySlotIndex": {
+    "type": "Integer",
+    "documented": true
+   },
+   "SkipItemQualityBackground": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "IsActivatable": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "IsItemUncraftable": {
+    "type": "Boolean",
+    "documented": true
+   }
+  },
+  "ItemGridStyle": {
+   "SlotSize": {
+    "type": "Integer",
+    "documented": true
+   },
+   "SlotIconSize": {
+    "type": "Integer",
+    "documented": true
+   },
+   "SlotSpacing": {
+    "type": "Integer",
+    "documented": true
+   },
+   "DurabilityBarBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "DurabilityBar": {
+    "type": "UI Path (String)",
+    "documented": true
+   },
+   "DurabilityBarAnchor": {
+    "type": "Anchor",
+    "documented": true
+   },
+   "DurabilityBarColorStart": {
+    "type": "Color",
+    "documented": true
+   },
+   "DurabilityBarColorEnd": {
+    "type": "Color",
+    "documented": true
+   },
+   "CursedIconPatch": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "CursedIconAnchor": {
+    "type": "Anchor",
+    "documented": true
+   },
+   "SlotBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "QuantityPopupSlotOverlay": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "BrokenSlotBackgroundOverlay": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "BrokenSlotIconOverlay": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "DefaultItemIcon": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "ItemStackActivateSound": {
+    "type": "SoundStyle",
+    "documented": true
+   },
+   "ItemStackHoveredSound": {
+    "type": "SoundStyle",
+    "documented": true
+   }
+  },
+  "LabelSpan": {
+   "Text": {
+    "type": "String",
+    "documented": true
+   },
+   "IsUppercase": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "IsBold": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "IsItalics": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "IsMonospace": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "IsUnderlined": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "Color": {
+    "type": "Color",
+    "documented": true
+   },
+   "OutlineColor": {
+    "type": "Color",
+    "documented": true
+   },
+   "Link": {
+    "type": "String",
+    "documented": true
+   },
+   "Params": {
+    "type": "Dictionary<String, String>",
+    "documented": true
+   }
+  },
+  "LabelStyle": {
+   "HorizontalAlignment": {
+    "type": "LabelAlignment",
+    "documented": true
+   },
+   "VerticalAlignment": {
+    "type": "LabelAlignment",
+    "documented": true
+   },
+   "Wrap": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "FontName": {
+    "type": "Font Name (String)",
+    "documented": true
+   },
+   "FontSize": {
+    "type": "Float",
+    "documented": true
+   },
+   "TextColor": {
+    "type": "Color",
+    "documented": true
+   },
+   "OutlineColor": {
+    "type": "Color",
+    "documented": true
+   },
+   "LetterSpacing": {
+    "type": "Float",
+    "documented": true
+   },
+   "RenderUppercase": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "RenderBold": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "RenderItalics": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "RenderUnderlined": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "Alignment": {
+    "type": "LabelAlignment",
+    "documented": true
+   },
+   "ShrinkTextToFit": {
+    "type": "*undocumented* (bool)",
+    "documented": false
+   },
+   "MinShrinkTextToFitFontSize": {
+    "type": "*undocumented* (int)",
+    "documented": false
+   },
+   "WrapMaxLines": {
+    "type": "*undocumented* (int)",
+    "documented": false
+   }
+  },
+  "LabeledCheckBoxStyle": {
+   "Checked": {
+    "type": "LabeledCheckBoxStyleState",
+    "documented": true
+   },
+   "Unchecked": {
+    "type": "LabeledCheckBoxStyleState",
+    "documented": true
+   }
+  },
+  "LabeledCheckBoxStyleState": {
+   "DefaultLabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "HoveredLabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "PressedLabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "DisabledLabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "Text": {
+    "type": "String",
+    "documented": true
+   },
+   "DefaultBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "HoveredBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "PressedBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "DisabledBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "ChangedSound": {
+    "type": "SoundStyle",
+    "documented": true
+   },
+   "HoveredSound": {
+    "type": "SoundStyle",
+    "documented": true
+   }
+  },
+  "NumberFieldFormat": {
+   "MaxDecimalPlaces": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Step": {
+    "type": "Decimal",
+    "documented": true
+   },
+   "MinValue": {
+    "type": "Decimal",
+    "documented": true
+   },
+   "MaxValue": {
+    "type": "Decimal",
+    "documented": true
+   },
+   "DefaultValue": {
+    "type": "Decimal",
+    "documented": true
+   },
+   "Suffix": {
+    "type": "String",
+    "documented": true
+   },
+   "Placeholder": {
+    "type": "*undocumented* (string)",
+    "documented": false
+   }
+  },
+  "Padding": {
+   "Left": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Right": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Top": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Bottom": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Full": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Horizontal": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Vertical": {
+    "type": "Integer",
+    "documented": true
+   }
+  },
+  "PatchStyle": {
+   "Area": {
+    "type": "Padding",
+    "documented": true
+   },
+   "Color": {
+    "type": "Color",
+    "documented": true
+   },
+   "Anchor": {
+    "type": "Anchor",
+    "documented": true
+   },
+   "HorizontalBorder": {
+    "type": "Integer",
+    "documented": true
+   },
+   "VerticalBorder": {
+    "type": "Integer",
+    "documented": true
+   },
+   "TexturePath": {
+    "type": "UI Path (String)",
+    "documented": true
+   },
+   "Border": {
+    "type": "Integer",
+    "documented": true
+   }
+  },
+  "PopupStyle": {
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Padding": {
+    "type": "Padding",
+    "documented": true
+   },
+   "Width": {
+    "type": "Integer",
+    "documented": true
+   },
+   "ButtonPadding": {
+    "type": "Padding",
+    "documented": true
+   },
+   "ButtonStyle": {
+    "type": "SubMenuItemStyle",
+    "documented": true
+   },
+   "SelectedButtonStyle": {
+    "type": "SubMenuItemStyle",
+    "documented": true
+   },
+   "TooltipStyle": {
+    "type": "TextTooltipStyle",
+    "documented": true
+   }
+  },
+  "ScrollbarStyle": {
+   "Size": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Spacing": {
+    "type": "Integer",
+    "documented": true
+   },
+   "OnlyVisibleWhenHovered": {
+    "type": "Boolean",
+    "documented": true
+   },
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Handle": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "HoveredHandle": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "DraggedHandle": {
+    "type": "PatchStyle / String",
+    "documented": true
+   }
+  },
+  "SliderStyle": {
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Fill": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Handle": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "HandleWidth": {
+    "type": "Integer",
+    "documented": true
+   },
+   "HandleHeight": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Sounds": {
+    "type": "ButtonSounds",
+    "documented": true
+   }
+  },
+  "SoundStyle": {
+   "SoundPath": {
+    "type": "UI Path (String)",
+    "documented": true
+   },
+   "Volume": {
+    "type": "Float",
+    "documented": true
+   },
+   "MinPitch": {
+    "type": "Float",
+    "documented": true
+   },
+   "MaxPitch": {
+    "type": "Float",
+    "documented": true
+   },
+   "StopExistingPlayback": {
+    "type": "Boolean",
+    "documented": true
+   }
+  },
+  "SpriteFrame": {
+   "Width": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Height": {
+    "type": "Integer",
+    "documented": true
+   },
+   "PerRow": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Count": {
+    "type": "Integer",
+    "documented": true
+   }
+  },
+  "SubMenuItemStyle": {
+   "Default": {
+    "type": "SubMenuItemStyleState",
+    "documented": true
+   },
+   "Hovered": {
+    "type": "SubMenuItemStyleState",
+    "documented": true
+   },
+   "Pressed": {
+    "type": "SubMenuItemStyleState",
+    "documented": true
+   },
+   "Disabled": {
+    "type": "SubMenuItemStyleState",
+    "documented": true
+   },
+   "Sounds": {
+    "type": "ButtonSounds",
+    "documented": true
+   }
+  },
+  "SubMenuItemStyleState": {
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "LabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "BindingLabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "LabelMaskTexturePath": {
+    "type": "UI Path (String)",
+    "documented": true
+   }
+  },
+  "Tab": {
+   "Id": {
+    "type": "String",
+    "documented": true
+   },
+   "Icon": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "IconSelected": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "IconAnchor": {
+    "type": "Anchor",
+    "documented": true
+   },
+   "Text": {
+    "type": "String",
+    "documented": true
+   },
+   "TooltipText": {
+    "type": "String",
+    "documented": true
+   }
+  },
+  "TabNavigationStyle": {
+   "TabStyle": {
+    "type": "TabStyle",
+    "documented": true
+   },
+   "SelectedTabStyle": {
+    "type": "TabStyle",
+    "documented": true
+   },
+   "SeparatorAnchor": {
+    "type": "Anchor",
+    "documented": true
+   },
+   "SeparatorBackground": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "TabSounds": {
+    "type": "ButtonSounds",
+    "documented": true
+   }
+  },
+  "TabStyle": {
+   "Default": {
+    "type": "TabStyleState",
+    "documented": true
+   },
+   "Hovered": {
+    "type": "TabStyleState",
+    "documented": true
+   },
+   "Pressed": {
+    "type": "TabStyleState",
+    "documented": true
+   }
+  },
+  "TabStyleState": {
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Overlay": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "Anchor": {
+    "type": "Anchor",
+    "documented": true
+   },
+   "Padding": {
+    "type": "Padding",
+    "documented": true
+   },
+   "IconAnchor": {
+    "type": "Anchor",
+    "documented": true
+   },
+   "IconOpacity": {
+    "type": "Float",
+    "documented": true
+   },
+   "LabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "FlexWeight": {
+    "type": "Integer",
+    "documented": true
+   },
+   "ContentMaskTexturePath": {
+    "type": "UI Path (String)",
+    "documented": true
+   },
+   "TooltipStyle": {
+    "type": "TextTooltipStyle",
+    "documented": true
+   }
+  },
+  "TextButtonStyle": {
+   "Default": {
+    "type": "TextButtonStyleState",
+    "documented": true
+   },
+   "Hovered": {
+    "type": "TextButtonStyleState",
+    "documented": true
+   },
+   "Pressed": {
+    "type": "TextButtonStyleState",
+    "documented": true
+   },
+   "Disabled": {
+    "type": "TextButtonStyleState",
+    "documented": true
+   },
+   "Sounds": {
+    "type": "ButtonSounds",
+    "documented": true
+   }
+  },
+  "TextButtonStyleState": {
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "LabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "LabelMaskTexturePath": {
+    "type": "UI Path (String)",
+    "documented": true
+   }
+  },
+  "TextTooltipStyle": {
+   "LabelStyle": {
+    "type": "LabelStyle",
+    "documented": true
+   },
+   "Padding": {
+    "type": "Padding",
+    "documented": true
+   },
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   },
+   "MaxWidth": {
+    "type": "Integer",
+    "documented": true
+   },
+   "Alignment": {
+    "type": "TooltipAlignment",
+    "documented": true
+   }
+  },
+  "ToggleButtonStyle": {
+   "Default": {
+    "type": "ToggleButtonStyleState",
+    "documented": true
+   },
+   "Hovered": {
+    "type": "ToggleButtonStyleState",
+    "documented": true
+   },
+   "Pressed": {
+    "type": "ToggleButtonStyleState",
+    "documented": true
+   },
+   "Disabled": {
+    "type": "ToggleButtonStyleState",
+    "documented": true
+   },
+   "Sounds": {
+    "type": "ButtonSounds",
+    "documented": true
+   }
+  },
+  "ToggleButtonStyleState": {
+   "Background": {
+    "type": "PatchStyle / String",
+    "documented": true
+   }
+  }
+ }
+}

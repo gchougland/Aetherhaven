@@ -46,15 +46,19 @@ public final class PoiPersistence {
         try {
             PoiWorldFile file = PoiWorldFile.readOrEmpty(path);
             java.util.List<PoiEntry> loaded = PoiWorldFile.toEntries(file);
-            java.util.List<PoiEntry> migrated = ShopBrowsePoiMigration.migrate(loaded);
+            java.util.List<PoiEntry> shopMigrated = ShopBrowsePoiMigration.migrate(loaded);
+            // Older buildings saved the bard's lute on other residents' work spots.
+            java.util.List<PoiEntry> migrated =
+                PoiEquipmentProfiles.migrate(shopMigrated, plugin.getEquipmentProfileCatalog());
             registry.replaceAll(migrated);
             if (migrated != loaded) {
                 save(world, plugin, registry);
                 LOGGER.atInfo().log(
-                    "Aetherhaven migrated shop browse POIs for world %s (%s -> %s entries)",
+                    "Aetherhaven migrated saved POIs for world %s (%s -> %s entries, held items corrected: %s)",
                     world.getName(),
                     loaded.size(),
-                    migrated.size()
+                    migrated.size(),
+                    migrated != shopMigrated
                 );
             }
             LOGGER.atInfo().log("Aetherhaven loaded %s POIs for world %s from %s", registry.allEntries().size(), world.getName(), path);

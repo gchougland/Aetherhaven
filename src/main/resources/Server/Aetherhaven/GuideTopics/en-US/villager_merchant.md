@@ -7,7 +7,7 @@ npcRoleId: Aetherhaven_Merchant
 
 ![](wiki/villager_merchant.png)
 
-**Vex Sunderlane** runs a **general store** through **shop spots** in the market stall once it is built. Stock restocks at dawn; press **F** on a spot to buy. See **Player shop and shop spots** under Mechanics.
+**Vex Sunderlane** runs a **general store** through **shop spots** in the market stall once it is built. Stock restocks at dawn; use a spot to buy. See **Player shop and shop spots** under Mechanics.
 
 ### Quests
 

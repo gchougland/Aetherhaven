@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 15
+      "count": 20
     },
     {
       "itemId": "Ingredient_Bar_Iron",
-      "count": 5
+      "count": 10
     },
     {
       "itemId": "Ingredient_Fibre",
-      "count": 10
+      "count": 15
     }
   ],
   "output": "Aetherhaven_CourierPack_Kit",

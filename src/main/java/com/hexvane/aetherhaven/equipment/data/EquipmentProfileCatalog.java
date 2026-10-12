@@ -85,6 +85,30 @@ public final class EquipmentProfileCatalog {
         return byId.get(id.trim());
     }
 
+    /** Builds a catalog from already parsed profiles, for tools and tests. */
+    @Nonnull
+    public static EquipmentProfileCatalog of(@Nonnull Iterable<EquipmentProfileDefinition> profiles) {
+        Map<String, EquipmentProfileDefinition> byId = new LinkedHashMap<>();
+        for (EquipmentProfileDefinition def : profiles) {
+            if (def != null && !def.getId().isEmpty()) {
+                byId.put(def.getId(), def);
+            }
+        }
+        return new EquipmentProfileCatalog(Collections.unmodifiableMap(byId));
+    }
+
+    /**
+     * Whether a resident of this kind may hold the profile. Unknown profiles are not refused here;
+     * applying one already logs and does nothing.
+     */
+    public boolean permits(@Nullable String profileId, @Nullable String residentKind) {
+        if (profileId == null || profileId.isBlank()) {
+            return true;
+        }
+        EquipmentProfileDefinition def = byId(profileId);
+        return def == null || def.permitsResidentKind(residentKind);
+    }
+
     @Nonnull
     public Map<String, EquipmentProfileDefinition> allById() {
         return byId;

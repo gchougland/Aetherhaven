@@ -30,11 +30,11 @@ public final class WorkplaceBenchAccess {
             case SMELTING -> "Furnace".equals(bench);
             case BLACKSMITHING -> "Weapon_Bench".equals(bench);
             case ARMOR_CRAFTING -> "Armor_Bench".equals(bench);
-            case FARMING,CULTIVATION -> "Farmingbench".equals(bench)&&!"Bench_Trough".equals(block);
+            case FARMING,CULTIVATION,BERRIES -> "Farmingbench".equals(bench)&&!"Bench_Trough".equals(block);
             case RANCHING -> "Bench_Trough".equals(block);
             case ALCHEMY -> "Alchemybench".equals(bench);
             case CRAFTING,MINING -> "Workbench".equals(bench);
-            case BUILDING -> WorkplaceEquipment.BUILDERS_BENCH.equals(bench);
+            case BUILDING,BLOCK_WORKSHOP -> WorkplaceEquipment.BUILDERS_BENCH.equals(bench);
             case LEATHERWORKING -> "Tannery".equals(bench);
             case SALVAGING -> "Salvagebench".equals(bench);
             case COOKING -> "Cookingbench".equals(bench);
@@ -60,7 +60,7 @@ public final class WorkplaceBenchAccess {
     public static boolean allowed(Target target,UUID player) {
         return target!=null&&target.town().hasMemberOrOwner(player)&&target.town().playerCanManageConstructions(player);
     }
-    public static boolean inReach(Ref<EntityStore> ref,Store<EntityStore> store,Vector3i pos) {
+    public static boolean inReach(Ref<EntityStore> ref,ComponentAccessor<EntityStore> store,Vector3i pos) {
         var transform=store.getComponent(ref,TransformComponent.getComponentType());
         return transform!=null&&transform.getPosition().distanceSquared(pos.x+.5,pos.y+.5,pos.z+.5)<=64;
     }
@@ -68,12 +68,25 @@ public final class WorkplaceBenchAccess {
         var target=find(store.getExternalData().getWorld(),pos);
         if(!allowed(target,player.getUuid())||!inReach(ref,store,pos))return;
         var entity=store.getComponent(ref,Player.getComponentType());if(entity==null)return;
-        entity.getPageManager().openCustomPage(ref,store,target.site().type()==TownsfolkWorkType.BUILDING
-            ?new BuildingProjectsPage(player,target.town().getTownId(),target.site().id(),target.pos())
-            :target.site().type()==TownsfolkWorkType.MINING
-            ?new MineshaftPlannerPage(player,target.town().getTownId(),target.site().id())
-            :WorkplaceFood.supports(target.site().type())
-            ?new FoodSitePage(player,target.town().getTownId(),target.site().id(),target.pos())
-            :new WorkplaceOrdersPage(player,target.town().getTownId(),target.site().id(),target.pos()));
+        // A bench that opens its workplace's page is the station of that workplace, standing inside it.
+        var world=store.getExternalData().getWorld();var plugin=AetherhavenPlugin.get();
+        if(plugin!=null)com.hexvane.aetherhaven.quest.WorkplaceQuestHooks.stationSeen(world,
+            AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin),target.town(),target.site().type());
+        var town=target.town().getTownId();var site=target.site().id();
+        entity.getPageManager().openCustomPage(ref,store,switch(screen(target.site().type())) {
+            case BUILDING_PROJECTS -> new BuildingProjectsPage(player,town,site,target.pos());
+            case MINESHAFT -> new MineshaftPlannerPage(player,town,site,target.pos());
+            case FOOD -> new FoodSitePage(player,town,site,target.pos());
+            case GROWER -> new GrowerSitePage(player,town,site,target.pos());
+            case ORDERS -> new WorkplaceOrdersPage(player,town,site,target.pos());
+        });
+    }
+    /** Which page a site's bench opens. Two types may share a bench, so the site's own type decides. */
+    public enum Screen { BUILDING_PROJECTS, MINESHAFT, FOOD, GROWER, ORDERS }
+    public static Screen screen(TownsfolkWorkType type) {
+        if(type==TownsfolkWorkType.BUILDING)return Screen.BUILDING_PROJECTS;
+        if(type==TownsfolkWorkType.MINING)return Screen.MINESHAFT;
+        if(GrowerPlan.supports(type))return Screen.GROWER;
+        return WorkplaceFood.supports(type)?Screen.FOOD:Screen.ORDERS;
     }
 }

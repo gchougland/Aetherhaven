@@ -10,7 +10,7 @@ $C.@PageOverlay { LayoutMode: Middle;
           Group { Anchor: (Height: 136, Bottom: 8); Background: $T.@Inset;
             AssetImage #Portrait { Anchor: (Width: 128, Height: 128, Top: 4, Left: 63); FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png"; }
           }
-          Label #Name { Anchor: (Height: 42); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true, Wrap: true, HorizontalAlignment: Center); }
+          Label #VillagerName { Anchor: (Height: 42); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true, Wrap: true, HorizontalAlignment: Center); }
           Label #Town { Anchor: (Height: 24, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #9ab8ae, Wrap: true, HorizontalAlignment: Center); }
           Group { Anchor: (Height: 1, Bottom: 14); Background: #3b5153; }
           Label #Reputation { Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 15, RenderBold: true, TextColor: #d9b1b5); }
@@ -29,8 +29,9 @@ $C.@PageOverlay { LayoutMode: Middle;
             Group #Pip8 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
             Group #Pip9 { FlexWeight: 1; Background: #30434a; }
           }
-          Label #MasteryXp { Anchor: (Height: 22); TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Earn XP when production reaches storage or a potion is bottled. Catalysts grant one level and keep your earned XP."; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #99c7b5); }
+          Label #MasteryXp { Anchor: (Height: 22); TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Earn XP when production reaches storage, a potion is bottled or the Builder places a block. Catalysts grant one level and keep your earned XP."; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #99c7b5); }
           $C.@ProgressBar #MasteryXpBar { Anchor: (Height: 12, Bottom: 12); Value: 0.0; }
+          Label #MasteryPerk { Visible: false; Anchor: (Bottom: 4); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, TextColor: #e0c891, Wrap: true); }
           $C.@TextButton #Train { Text: "Train +1 Mastery"; Anchor: (Height: 38, Bottom: 6); }
           Group { LayoutMode: Left; Anchor: (Height: 38);
             ItemIcon { ItemId: "Aetherhaven_Verdant_Catalyst"; Anchor: (Width: 28, Height: 28, Right: 6); }

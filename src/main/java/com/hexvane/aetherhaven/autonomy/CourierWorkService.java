@@ -37,6 +37,9 @@ public final class CourierWorkService {
         var route=store.getComponent(ref,CourierTravelState.getComponentType());
         long now=System.currentTimeMillis();
         if(route!=null&&now<route.nextCheck)return route.active;
+        // A builder still gathering loose items on a site keeps the part load in hand. They come here when done.
+        var gathering=store.getComponent(ref,ApprenticeWorkState.getComponentType());
+        if(gathering!=null&&now<gathering.salvageHold){stop(ref,npc,buffer,route);return false;}
         var identity=store.getComponent(ref,TownsfolkCharacterBinding.getComponentType());
         var uuid=store.getComponent(ref,UUIDComponent.getComponentType());
         String courier=identity==null?null:identity.getCharacterId();
@@ -114,9 +117,13 @@ public final class CourierWorkService {
                     stock.pickupSmeltingAt(route.batchId,courier,limit,trip.sourcePlot(),trip.endpoint())>0:
                     stock.pickupAt(route.batchId,courier,limit,trip.sourcePlot()==null?null:
                     ProductionStockSources.at(world,town,plugin,trip.sourcePlot(),trip.endpoint()),trip.endpoint())>0;
-                case "deliver" -> trip.batch().herdFeed()?HerdFeedSupplyPlanner.deliver(world,town,plugin,trip.batch(),courier):stock.deliver(route.batchId,courier);
+                case "deliver" -> trip.batch().herdFeed()?HerdFeedSupplyPlanner.deliver(world,town,plugin,trip.batch(),courier)
+                    :trip.batch().siteSupply()?com.hexvane.aetherhaven.construction.SiteSupplyPlanner.deliver(world,town,plugin,trip.batch(),courier)
+                    :stock.deliver(route.batchId,courier);
                 case "collect" -> stock.collectReturn(route.batchId,courier,limit)>0;
-                case "return" -> stock.returnCargo(route.batchId,courier);
+                // Site salvage that no longer fits is put on the ground at the desk; other returns wait for room.
+                case "return" -> trip.batch().salvage()?com.hexvane.aetherhaven.construction.SiteSalvage.unload(stock,route.batchId,courier,pos,buffer)
+                    :stock.returnCargo(route.batchId,courier);
                 default -> false;
             };
             if(moved) {
@@ -194,6 +201,7 @@ public final class CourierWorkService {
     }
     static boolean destinationReady(World world,TownRecord town,AetherhavenPlugin plugin,WarehouseBatch batch) {
         if(batch.herdFeed())return HerdFeedSupplyPlanner.destinationReady(world,town,plugin,batch);
+        if(batch.siteSupply())return com.hexvane.aetherhaven.construction.SiteSupplyPlanner.destinationReady(world,town,plugin,batch);
         var site=town.getApprenticeWorkplaces().find(batch.workplaceId());
         var recipe=plugin.getApprenticeRecipes().find(batch.recipeId());var point=batch.destination();
         if(point==null||!loaded(world,point))return false;
@@ -228,7 +236,14 @@ public final class CourierWorkService {
     static Vector3d approach(World world,WarehouseBatch.Point point,Vector3d from,int attempt,int minDy,int maxDy) {
         return approach(world,point,from,attempt,minDy,maxDy,2);
     }
+    /** As {@link #approach(World,WarehouseBatch.Point,Vector3d,int)}, choosing only among stands the caller accepts. */
+    public static Vector3d approach(World world,WarehouseBatch.Point point,Vector3d from,int attempt,java.util.function.Predicate<Vector3d> acceptable) {
+        return approach(world,point,from,attempt,-1,0,2,acceptable);
+    }
     static Vector3d approach(World world,WarehouseBatch.Point point,Vector3d from,int attempt,int minDy,int maxDy,int radius) {
+        return approach(world,point,from,attempt,minDy,maxDy,radius,null);
+    }
+    static Vector3d approach(World world,WarehouseBatch.Point point,Vector3d from,int attempt,int minDy,int maxDy,int radius,java.util.function.Predicate<Vector3d> acceptable) {
         List<Vector3d> options=new ArrayList<>();
         for(int distance=1;distance<=radius;distance++)for(int[] offset:new int[][]{{distance,0},{-distance,0},{0,distance},{0,-distance}}) {
             int x=point.x()+offset[0],z=point.z()+offset[1];
@@ -238,6 +253,7 @@ public final class CourierWorkService {
                 if(VillagerBlockUtil.isNpcStandColumn(world,x,y,z))options.add(new Vector3d(x+.5,VillagerBlockUtil.resolveFeetYForStandCell(world,x,y,z),z+.5));
             }
         }
+        if(acceptable!=null)options.removeIf(option->!acceptable.test(option));
         options.sort(Comparator.comparingDouble(from::distanceSquared));
         return options.isEmpty()?null:options.get(Math.floorMod(attempt,options.size()));
     }

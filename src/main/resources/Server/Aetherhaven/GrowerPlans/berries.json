@@ -1,0 +1,26 @@
+{
+  "workplace": "berries",
+  "bedBlocks": [
+    "Plant_Crop_Berry_Block",
+    "Plant_Crop_Berry_Wet_Block",
+    "Plant_Crop_Berry_Winter_Block"
+  ],
+  "bench": "Farmingbench",
+  "logBeds": false,
+  "maxBeds": 8,
+  "storeCapacity": 60,
+  "tends": 1,
+  "stageMinutes": 120,
+  "seedSeconds": 0,
+  "tendSeconds": 6,
+  "pickSeconds": 5,
+  "crops": [
+    {
+      "id": "red",
+      "item": "Plant_Fruit_Berries_Red",
+      "skill": 1,
+      "yield": 2,
+      "use": "berries"
+    }
+  ]
+}

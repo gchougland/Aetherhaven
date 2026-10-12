@@ -1,17 +1,31 @@
-$LegendCommon = "../Hud/ToolsLegends/ToolsLegendsCommon.ui";
+// One tool hint row: the name of an action, then what it does in the current mode.
+// The row never shows a key. The game lists the player's own key beside the same action name
+// at the bottom right of the screen (HudInputBindingEntry on the tool's root interactions).
+// #KeyLabel keeps its old id because Java and tests address it. It holds the action name.
 
 Group #ControlRow {
   LayoutMode: Left;
-  Anchor: (Vertical: 4);
+  Anchor: (Vertical: 3);
 
-  $LegendCommon.@RowHintContainer {
+  Group #ActionWrap {
+    LayoutMode: Top;
+    Anchor: (Width: 152, Right: 10);
+
     Label #KeyLabel {
-      Style: $LegendCommon.@RowHintTextStyle;
+      Style: (
+        FontSize: 14,
+        RenderBold: true,
+        TextColor: #e6edf5,
+        Wrap: true
+      );
       Text: "";
     }
   }
 
-  $LegendCommon.@RowLabelContainer {
+  Group #DescWrap {
+    FlexWeight: 1;
+    LayoutMode: Top;
+
     Label #DescLabel {
       Style: (
         FontSize: 14,

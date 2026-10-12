@@ -18,33 +18,6 @@
     "Items.Potions",
     "Aetherhaven.All"
   ],
-  "Recipe": {
-    "TimeSeconds": 3,
-    "KnowledgeRequired": true,
-    "Input": [
-      {
-        "ItemId": "Ingredient_Bar_Iron",
-        "Quantity": 5
-      },
-      {
-        "ItemId": "Ingredient_Leather_Light",
-        "Quantity": 5
-      },
-      {
-        "ItemId": "Ingredient_Tree_Sap",
-        "Quantity": 5
-      }
-    ],
-    "BenchRequirement": [
-      {
-        "Id": "Aetherhaven_TownPlanningDesk",
-        "Type": "Crafting",
-        "Categories": [
-          "Aetherhaven_TownPlanning_Misc"
-        ]
-      }
-    ]
-  },
   "IconProperties": {
     "Scale": 0.8,
     "Rotation": [

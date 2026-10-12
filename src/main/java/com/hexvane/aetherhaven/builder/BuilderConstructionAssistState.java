@@ -17,7 +17,11 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
     public static final int PHASE_TRAVEL = 1;
     public static final int PHASE_ASSIST = 2;
 
-    public static final int BUILDER_PASSIVE_BOOST = 4;
+    /**
+     * How many times as often a site steps while the Builder stands at it. How many blocks each of those steps places
+     * comes from his Mastery level, see {@link com.hexvane.aetherhaven.mastery.BuilderMastery}.
+     */
+    public static final int BUILDER_PASSIVE_BOOST = com.hexvane.aetherhaven.mastery.BuilderMastery.STEP_DIVISOR;
 
     private static final double ASSIST_RANGE_HORIZONTAL_SQ = 5.0 * 5.0;
     private static final double ASSIST_RANGE_VERTICAL = 16.0;
@@ -52,6 +56,9 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
     private transient int ticksSincePlotRescan;
     private transient boolean boostAppliedForTarget;
     private transient int travelStuckTicks;
+    /** Whether the target is a stand picked by {@link BuilderSiteStand}. False after a load: an older save holds the plot sign. */
+    private transient boolean standChosen;
+    private transient int ticksSinceStandCheck;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         if (componentType != null) {
@@ -111,12 +118,36 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
         }
     }
 
+    /** A stand was picked for the current site, or picked again. Does not disturb the work already going on there. */
+    public void setStand(double x, double y, double z) {
+        this.targetX = x;
+        this.targetY = y;
+        this.targetZ = z;
+        this.standChosen = true;
+        this.ticksSinceStandCheck = 0;
+    }
+
+    public boolean isStandChosen() {
+        return standChosen;
+    }
+
+    /** @return true every {@code everyTicks} ticks, when the stand should be looked at again */
+    public boolean standCheckDue(int everyTicks) {
+        if (++ticksSinceStandCheck < everyTicks) {
+            return false;
+        }
+        ticksSinceStandCheck = 0;
+        return true;
+    }
+
     public void clearTarget() {
         this.targetPlotId = null;
         this.phase = PHASE_OFF;
         boostAppliedForTarget = false;
         ticksSincePlotRescan = 0;
         travelStuckTicks = 0;
+        standChosen = false;
+        ticksSinceStandCheck = 0;
     }
 
     public int getTravelStuckTicks() {
@@ -188,6 +219,8 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
         c.targetY = targetY;
         c.targetZ = targetZ;
         c.lastSwingNs = lastSwingNs;
+        c.standChosen = standChosen;
+        c.ticksSinceStandCheck = ticksSinceStandCheck;
         return c;
     }
 }

@@ -44,7 +44,7 @@ public final class RtsCommandHotbarSlotSync {
 
     private static boolean isToolInteractionChain(@Nonnull SyncInteractionChain update) {
         return switch (update.interactionType) {
-            case Primary, Secondary, Use, Ability1, Ability2, Ability3, Pick, Pickup, Held, HeldOffhand -> true;
+            case Primary, Secondary, Use, Ability1, Ability2, Ability3, Ability4, Pick, Pickup, Held, HeldOffhand -> true;
             default -> false;
         };
     }

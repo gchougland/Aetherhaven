@@ -65,6 +65,23 @@ class AlchemyFlaskTest {
         var empty=AlchemyFlask.empty(flask).getFromMetadataOrNull(com.hypixel.hytale.server.core.asset.type.item.config.metadata.ItemDisplayMetadata.KEYED_CODEC);
         assertFalse(com.hypixel.hytale.server.core.util.MessageUtil.formatMessageToPlainString(empty.getDescription().getFormattedMessage()).contains("Explosion immunity"));
     }
+    @Test void regenerationFireWardAndRepellentBottleLikeAnyOtherMixture() {
+        var ingredients=List.of("Plant_Crop_Mushroom_Glowing_Green","Plant_Flower_Flax_Orange","Plant_Flower_Tall_Purple");
+        assertTrue(AlchemyIngredients.validMix(ingredients,3));
+        var flask=AlchemyFlask.consume(AlchemyFlask.fill(AlchemyFlask.upgrade(fresh()),ingredients));
+        assertEquals(1,AlchemyFlask.charges(flask));assertEquals(ingredients,AlchemyFlask.ingredients(flask));
+        var display=flask.getFromMetadataOrNull(com.hypixel.hytale.server.core.asset.type.item.config.metadata.ItemDisplayMetadata.KEYED_CODEC);
+        var description=display.getDescription().getFormattedMessage();
+        String plain=com.hypixel.hytale.server.core.util.MessageUtil.formatMessageToPlainString(description);
+        assertTrue(plain.contains("Regeneration 3"));assertTrue(plain.contains("Fire and lava immunity"));assertTrue(plain.contains("Bug repellent"));
+        var colours=Arrays.stream(description.children).map(m->m.color).toList();
+        assertEquals(3,new HashSet<>(colours).size(),"Each new property has its own tooltip colour");
+        assertFalse(colours.contains("#D4C7ED"),"A new property fell back to the default colour");
+        // The weaker aloe in the same mixture is hidden by the stronger mushroom, as with every other family.
+        var mixed=AlchemyIngredients.effects(List.of("Plant_Flower_Common_Blue2","Plant_Crop_Mushroom_Cap_Green"));
+        assertEquals(1,mixed.size());assertEquals("Aetherhaven_Alchemy_Regen2",mixed.getFirst().effect());
+        assertEquals(Map.of("Plant_Flower_Flax_Orange",4),AlchemyInventory.brewCosts(List.of("Plant_Flower_Flax_Orange"),4));
+    }
     @Test void upgradingLegacyTooltipPreservesPaidCapacityAndRemainingMixture() {
         var flask=AlchemyFlask.consume(AlchemyFlask.fill(AlchemyFlask.upgrade(AlchemyFlask.upgrade(fresh())),List.of("Plant_Crop_Mana2")));
         var metadata=BsonDocument.parse(com.hexvane.aetherhaven.inventory.ItemStackData.metadata(flask).toJson());metadata.getDocument("AetherhavenAlchemyFlask").remove("displayVersion");
@@ -118,5 +135,15 @@ class AlchemyFlaskTest {
         lab=gson.fromJson(gson.toJson(lab),AlchemyLaboratoryState.class);
         assertEquals(2,lab.ingredientSlots());assertTrue(lab.discovered("Plant_Crop_Health1"));
         assertTrue(lab.upgrade(1));assertFalse(lab.upgrade(2));assertEquals(3,lab.ingredientSlots());
+    }
+    @Test void aMasteryLevelTakesAboutEightFilledFlasksAllTheWayUp() {
+        for(int mastery=1;mastery<10;mastery++) {
+            // The best flask and mixture a town can have at this Mastery: capacity grows at 2, 4, 6 and 8, slots at 3 and 6.
+            int capacity=1;while(capacity<5&&AlchemyFlask.upgradeMastery(capacity)<=mastery)capacity++;
+            int ingredients=mastery>=6?3:mastery>=3?2:1;
+            long cost=100L+50L*(mastery-1),fills=Math.ceilDiv(cost,AlchemyFlask.bottlingXp(ingredients,capacity));
+            assertTrue(fills>=7&&fills<=9,"Mastery "+mastery+" takes "+fills+" fills");
+        }
+        assertEquals(8,Math.ceilDiv(100L,AlchemyFlask.bottlingXp(1,1)),"The first level with a new flask and one ingredient");
     }
 }

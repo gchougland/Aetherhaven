@@ -1,10 +1,12 @@
 $C = "../Common.ui";
 $T = "TownUiTheme.ui";
-Group { LayoutMode: Left; Anchor: (Height: 64, Bottom: 6); Background: $T.@Card; Padding: (Full: 9);
+Group { LayoutMode: Left; Anchor: (Height: 64, Bottom: 6); Background: $T.@Card; Padding: (Horizontal: 9, Vertical: 6);
   ItemIcon #Icon { Anchor: (Width: 44, Height: 44, Right: 10); }
-  Group { LayoutMode: Top; FlexWeight: 1;
-    Label #Threshold { Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #99c7b5); }
-    Label #Reward { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 14, RenderBold: true, TextColor: #e1ddca, Wrap: true); }
+  // Two lines, or three when a learned recipe says where it is made: the lines stay centred in the same row height.
+  Group { LayoutMode: Middle; FlexWeight: 1;
+    Label #Threshold { Anchor: (Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #99c7b5); }
+    Label #Reward { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 14, RenderBold: true, TextColor: #e1ddca); }
+    Label #Crafted { Visible: false; Anchor: (Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #a9b8b2); }
   }
   Label #Status { Anchor: (Width: 86); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #bfcaaa, HorizontalAlignment: End, VerticalAlignment: Center, Wrap: true); }
 }

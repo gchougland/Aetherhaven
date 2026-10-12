@@ -53,7 +53,18 @@ public final class PlotCreatorDraftLoader {
             p.setInteractionKind(row.getInteractionKind().name());
             p.setWorkResidentKind(row.getWorkResidentKind());
             p.setInteractionTargetYawDegrees(row.getInteractionTargetYawDegrees());
-            p.setEquipmentProfileId(row.getEquipmentProfileId());
+            // Editing an older building must not carry another profession's prop back into the saved file.
+            AetherhavenPlugin loaded = AetherhavenPlugin.get();
+            p.setEquipmentProfileId(
+                loaded == null
+                    ? row.getEquipmentProfileId()
+                    : com.hexvane.aetherhaven.poi.PoiEquipmentProfiles.permitted(
+                        loaded.getEquipmentProfileCatalog(),
+                        row.getEquipmentProfileId(),
+                        row.getWorkResidentKind(),
+                        row.getTags()
+                    )
+            );
             draft.getPois().add(p);
         }
         copyPos(def.getManagementBlockLocalPos(), draft::setManagementBlockLocalPos);
@@ -120,6 +131,11 @@ public final class PlotCreatorDraftLoader {
             if (!draft.getSelectedSpots().contains(entry)) {
                 draft.getSelectedSpots().add(entry);
             }
+        }
+        // A shop that already marks its Clerk Stand keeps that step, so the stand can be moved or removed.
+        PlotCreatorSpotEntry clerkStand = PlotCreatorSpotEntry.of(PlotCreatorSubstepType.CLERK_STAND, 1);
+        if (com.hexvane.aetherhaven.shop.ShopClerkStand.marker(def) != null && !draft.getSelectedSpots().contains(clerkStand)) {
+            draft.getSelectedSpots().add(clerkStand);
         }
         PlotCreatorProductionRules.enforceSelectedSpots(draft);
         if (!draft.getSelectedSpots().isEmpty()) {

@@ -28,7 +28,7 @@ public final class ShopSpotUseInteraction extends SimpleBlockInteraction {
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<ShopSpotUseInteraction> CODEC =
         com.hypixel.hytale.codec.builder.BuilderCodec
             .builder(ShopSpotUseInteraction.class, ShopSpotUseInteraction::new, SimpleBlockInteraction.CODEC)
-            .documentation("Shop spot: F opens buy UI, or lists on player spots when holding an item.")
+            .documentation("Shop spot: use opens the buy UI, or lists on player spots when holding an item.")
             .build();
 
     private static final String MSG = "aetherhaven_shop.aetherhaven.shop";

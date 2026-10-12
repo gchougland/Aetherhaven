@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.pathtool;
 
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -17,14 +18,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * {@link InteractionType#Ability2}: cycles path width 1..{@link com.hexvane.aetherhaven.config.PathToolStyleDefinition#MAX_PATH_WIDTH_BLOCKS}.
+ * Second extra tool key ({@link InteractionType#Ability4}): cycles path width 1..{@link com.hexvane.aetherhaven.config.PathToolStyleDefinition#MAX_PATH_WIDTH_BLOCKS}.
  */
 public final class PathToolWidthCycleInteraction extends SimpleInstantInteraction {
     @Nonnull
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<PathToolWidthCycleInteraction> CODEC =
         com.hypixel.hytale.codec.builder.BuilderCodec
             .builder(PathToolWidthCycleInteraction.class, PathToolWidthCycleInteraction::new, SimpleInstantInteraction.CODEC)
-            .documentation("Path tool: second ability — cycle path width (1-9).")
+            .documentation("Path tool: second extra key (Ability4) — cycle path width (1-9).")
             .build();
 
     @Nonnull
@@ -48,7 +49,7 @@ public final class PathToolWidthCycleInteraction extends SimpleInstantInteractio
             context.getState().state = InteractionState.Failed;
             return;
         }
-        if (type != InteractionType.Ability2) {
+        if (type != ToolAbilityKeys.SECOND) {
             context.getState().state = InteractionState.Failed;
             return;
         }

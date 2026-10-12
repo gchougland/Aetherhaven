@@ -8,10 +8,10 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.inventory.*;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /** Native furnaces own fuel consumption and processing. Apprentices only load and collect at arrival. */
@@ -43,6 +43,27 @@ public final class NativeFurnaceService {
         for(var output:outputs)if(!ItemStack.isEmpty(output))limit=Math.min(limit,Math.max(1,Math.max(1,output.getItem().getMaxStack())/output.getQuantity()));
         return Math.max(1,limit);
     }
+    /** Fuel already in a furnace's slot that a load can burn: how many pieces, and how long they last. */
+    record SlotFuel(int pieces,double burnSeconds) {}
+    /**
+     * Reads a furnace's fuel slot for a load that burns {@code id}.
+     *
+     * @param setAside true when the Apprentice may take a different fuel out of the slot before loading
+     * @return null when the slot holds a different fuel that has to stay where it is
+     */
+    static SlotFuel slotFuel(ItemContainer fuel,String id,boolean setAside) {
+        int pieces=0;double seconds=0;
+        for(short slot=0;slot<fuel.getCapacity();slot++) {
+            var held=fuel.getItemStack(slot);if(ItemStack.isEmpty(held))continue;
+            if(!id.equals(held.getItemId())) {
+                // A slot holds one kind of fuel. The old kind is taken out when the load goes in, so it is not counted.
+                if(!setAside)return null;
+                continue;
+            }
+            pieces+=held.getQuantity();seconds+=held.getQuantity()*held.getItem().getFuelQuality();
+        }
+        return new SlotFuel(pieces,seconds);
+    }
     /**
      * @param need crafts the task still wants
      * @param forever true for a task with no end
@@ -67,17 +88,17 @@ public final class NativeFurnaceService {
         for(short slot=0;slot<fuel.getCapacity();slot++){var held=fuel.getItemStack(slot);if(!ItemStack.isEmpty(held))candidates.add(held.getItemId());}
         var outputs=Arrays.stream(source.getOutputs()).map(m->m==null?null:m.toItemStack()).toList();
         if(outputs.stream().anyMatch(s->ItemStack.isEmpty(s)))return null;
-        for(String id:candidates) {
+        // First a fuel that fits what the slot already holds. Failing that, any chosen fuel: a furnace last fed wood keeps
+        // a spare log, and one last fed charcoal keeps charcoal, which used to stop it taking the other fuel for good.
+        // The Apprentice sets the old fuel with the furnace's goods when loading (TownWarehouse.loadFurnace).
+        for(boolean setAside:new boolean[]{false,true})for(String id:candidates) {
             var item=Item.getAssetMap().getAsset(id);if(item==null||item.getFuelQuality()<=0)continue;
             boolean selected=!recipe.nativeCharcoal()&&site.charcoalFuel()?"Ingredient_Charcoal".equals(id):CraftingManager.matches(new MaterialQuantity(null,"Wood_Trunk",null,1,null),new ItemStack(id,1));
             if(!selected)continue;
-            double available=furnace.processing.getFuelTime();boolean compatible=true;boolean hasFuel=false;int existingFuel=0;
-            for(short slot=0;slot<fuel.getCapacity();slot++) {
-                var held=fuel.getItemStack(slot);if(ItemStack.isEmpty(held))continue;
-                if(!id.equals(held.getItemId())){compatible=false;break;}
-                available+=held.getQuantity()*held.getItem().getFuelQuality();hasFuel=true;existingFuel+=held.getQuantity();
-            }
-            if(!compatible)continue;
+            var inSlot=slotFuel(fuel,id,setAside);
+            // The second pass is only for fuels the first one could not try.
+            if(inSlot==null||setAside&&slotFuel(fuel,id,false)!=null)continue;
+            double available=furnace.processing.getFuelTime()+inSlot.burnSeconds();boolean hasFuel=inSlot.pieces()>0;int existingFuel=inSlot.pieces();
             // Two logs produce one native charcoal byproduct. Do not add them to recipe input as well.
             if(recipe.nativeCharcoal()&&existingFuel>2)continue;
             var materials=recipe.nativeCharcoal()||source.getInput()==null?List.<MaterialQuantity>of():Arrays.asList(source.getInput());
@@ -119,7 +140,7 @@ public final class NativeFurnaceService {
             if(!stock.loadFurnace(batch.id(),nativeBench.getInputContainer(),nativeBench.getFuelContainer(),nativeBench.getOutputContainer()))return false;
             nativeBench.setActive(true,furnace.bench,furnace.info);furnace.info.markNeedsSaving();return true;
         }
-        UUID origin=UUID.nameUUIDFromBytes((batch.workplaceId()+":"+batch.destination()).getBytes(StandardCharsets.UTF_8));
+        UUID origin=SmeltingOutputStore.originId(batch.workplaceId(),batch.destination());
         int collected=stock.smelting().collect(batch.id(),origin,batch.destination(),nativeBench.getOutputContainer());
         if(collected>0){furnace.info.markNeedsSaving();stock.markProductionWithdrawal();collectedWork.run();}
         if(nativeBench.getInputContainer().isEmpty()&&!nativeBench.isActive()&&nativeBench.getOutputContainer().isEmpty()) {

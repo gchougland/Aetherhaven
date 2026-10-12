@@ -338,6 +338,19 @@ public interface DialogueWorldView {
         return false;
     }
 
+    /**
+     * True when a quest that starts by itself could be handed to the player's town now: its {@code autoStart}
+     * condition holds and the town has neither the quest nor its completion. Lets a villager offer it again after
+     * it was abandoned.
+     */
+    default boolean townQuestAutoStartReady(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String questId
+    ) {
+        return false;
+    }
+
     /** True when another loaded town villager is within {@code radiusBlocks} of the speaking NPC. */
     default boolean npcOtherVillagerNearby(
         @Nonnull Ref<EntityStore> playerRef,

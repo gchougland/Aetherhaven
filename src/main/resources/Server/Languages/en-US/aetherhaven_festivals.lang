@@ -89,6 +89,7 @@ aetherhaven.festival.hallows_eve.leaderboard.your_best_none=You have not collect
 
 aetherhaven.festival.market.stall.locked=Judging has started. The stall is closed for now.
 aetherhaven.festival.market.stall.notMember=Only town members can set out goods at this stall.
+aetherhaven.festival.heldItemReturned=An item a festival was keeping for you is back in your inventory.
 aetherhaven.festival.market.banner.winner.title={winner} wins the market!
 aetherhaven.festival.market.banner.winner.subtitle=Talk to Elder Lyren for your prizes
 aetherhaven.festival.market.banner.place.1=Your town took first place

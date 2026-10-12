@@ -208,6 +208,31 @@ public final class FurnitureMerchantShopService {
         return UUID.nameUUIDFromBytes(stock.toString().getBytes(StandardCharsets.UTF_8)).toString();
     }
 
+    /**
+     * Which offers the merchant has, without how many of each are left. A press is tied to this, not to the stock
+     * counts: another customer buying something does not change what this press asked for, a new set of offers does.
+     */
+    public static String offersToken(TownRecord town) {
+        StringBuilder offers = new StringBuilder().append(town.getFurnitureMerchantShopLastRerollEpochDay()).append('|');
+        for (var slot : town.getFurnitureMerchantShopSlots()) offers.append(slot.getPropId().length()).append(':').append(slot.getPropId()).append(';');
+        offers.append('|');
+        for (var slot : town.getFurnitureMerchantPaletteShopSlots())
+            offers.append(slot.getPaletteId().length()).append(':').append(slot.getPaletteId()).append(';');
+        return UUID.nameUUIDFromBytes(offers.toString().getBytes(StandardCharsets.UTF_8)).toString();
+    }
+
+    /** The prop or palette offered in a slot, or null when the slot does not exist. */
+    @Nullable
+    public static String offerAt(TownRecord town, boolean palettes, int slotIndex) {
+        if (slotIndex < 0) return null;
+        if (palettes) {
+            var slots = town.getFurnitureMerchantPaletteShopSlots();
+            return slotIndex < slots.size() ? slots.get(slotIndex).getPaletteId() : null;
+        }
+        var slots = town.getFurnitureMerchantShopSlots();
+        return slotIndex < slots.size() ? slots.get(slotIndex).getPropId() : null;
+    }
+
     public static BuyResult tryReroll(AetherhavenPlugin plugin, TownRecord shopTown, TownManager tm,
         PlayerRef playerRef, Ref<EntityStore> ref, Store<EntityStore> store, long epochDay, String expectedToken) {
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerRef.getUuid());
@@ -224,7 +249,9 @@ public final class FurnitureMerchantShopService {
 
     static BuyResult tryReroll(TownRecord shopTown, @Nullable TownRecord payerTown, CombinedItemContainer inv,
         boolean allowTreasury, long epochDay, String expectedToken, List<String> propIds, List<String> paletteIds) {
-        if (!inventoryToken(shopTown).equals(expectedToken)) {
+        // The press asked to replace the offers it saw. If they have already been replaced, paying again would
+        // replace offers the player never looked at. Someone buying one of them is no reason to refuse.
+        if (!offersToken(shopTown).equals(expectedToken)) {
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.stockChanged");
         }
         if (propIds.isEmpty() && paletteIds.isEmpty()) {

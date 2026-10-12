@@ -25,20 +25,27 @@ public final class WorkplaceOrders {
         var order=find(id);if(order==null)throw new IllegalStateException("Completed work lost its order");
         order.completed=(int)Math.min(Integer.MAX_VALUE,(long)order.completed+Math.max(1,crafts));revision++;
     }
-    public String add(long expected, String recipeId, Mode mode, int quantity) {
-        if (expected != revision) return "The task list changed. Review it and try again.";
+    /**
+     * A new task goes at the end of the list as it is now. The list changes every time a townsfolk finishes a craft,
+     * and that is no reason to refuse: only a full list or a bad amount is.
+     */
+    public String add(String recipeId, Mode mode, int quantity) {
         if (orders.size() >= MAX_ORDERS) return "A workplace can keep up to 35 tasks.";
         if (recipeId == null || recipeId.isBlank() || mode == null || quantity < 1 || quantity > MAX_QUANTITY) return "Choose a recipe and an amount from 1 to 9999.";
         orders.add(new Order(recipeId, mode, quantity)); revision++; return null;
     }
-    public String change(long expected, UUID id, String action) {
-        if (expected != revision) return "The task list changed. Review it and try again.";
-        Order order = find(id); if (order == null) return "This task no longer exists.";
+    /**
+     * Acts on the task the press named by its id, wherever it sits in the list now. Work finishing elsewhere in the
+     * list never refuses it. "Pause" and "Resume" say which state is wanted, so a press seen late cannot undo itself.
+     */
+    public String change(UUID id, String action) {
+        Order order = find(id); if (order == null) return "That task is no longer on the list. Nothing was changed.";
         int index = orders.indexOf(order);
         switch (action) {
-            case "Up" -> { if (index > 0) Collections.swap(orders, index, index - 1); }
-            case "Down" -> { if (index + 1 < orders.size()) Collections.swap(orders, index, index + 1); }
-            case "Pause" -> order.paused = !order.paused;
+            case "Up" -> { if (index == 0) return "That task is already first."; Collections.swap(orders, index, index - 1); }
+            case "Down" -> { if (index + 1 >= orders.size()) return "That task is already last."; Collections.swap(orders, index, index + 1); }
+            case "Pause" -> order.paused = true;
+            case "Resume" -> order.paused = false;
             case "Remove" -> orders.remove(order);
             default -> { return "Choose a task action."; }
         }
@@ -57,6 +64,20 @@ public final class WorkplaceOrders {
         public int quantity() { return quantity; }
         public int completed() { return completed; }
         public boolean paused() { return paused; }
+        /**
+         * The amount line of this task's row.
+         *
+         * @param cultivation true for a garden task, which counts plants
+         * @param stored items of the output in town stores now, or a negative number when that cannot be counted
+         * @param incoming items of the output already promised by work that is prepared or under way
+         */
+        public String amountText(boolean cultivation,long stored,long incoming) {
+            return switch(mode) {
+                case COUNT -> cultivation?"Grow "+quantity+(quantity==1?" plant | ":" plants | ")+completed+" harvested":"Craft "+quantity+" batches | "+completed+" complete";
+                case FOREVER -> cultivation?"Keep growing while seeds are available":"Keep crafting while resources are available";
+                case MAINTAIN -> "Keep "+quantity+" in stock"+(stored<0?"":" ("+stored+" now"+(incoming>0?", "+incoming+" on the way":"")+")");
+            };
+        }
         /** Include reserved/in transit output to prevent parallel sites from overfilling a maintain target. */
         public int batchesNeeded(long stored, long incoming, int outputPerBatch) {
             return batchesNeeded(stored,incoming,outputPerBatch,0);

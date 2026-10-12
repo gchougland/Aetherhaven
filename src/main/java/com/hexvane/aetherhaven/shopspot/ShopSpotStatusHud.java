@@ -3,7 +3,6 @@ package com.hexvane.aetherhaven.shopspot;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hexvane.aetherhaven.ui.UiMaterialLabels;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
@@ -76,9 +75,16 @@ public final class ShopSpotStatusHud extends CustomUIHud {
         }
         String itemId = record.getItemId();
         if (itemId != null) {
-            Message itemName = UiMaterialLabels.itemNameMessage(itemId);
+            // The stack's own name and details, as its inventory tooltip gives them: what is in a flask, a ring's
+            // stats, how worn a tool is.
+            Message itemName = ShopListingText.name(record);
             b.set("#ItemLine.TextSpans", Message.translation(MSG + ".item").param("item", itemName));
-            ShopPriceEntry entry = ShopSpotPricing.catalogEntry(plugin, itemId);
+            Message details = ShopListingText.details(record);
+            b.set("#DetailRow.Visible", details != null);
+            if (details != null) {
+                b.set("#DetailLine.TextSpans", details);
+            }
+            ShopPriceEntry entry = ShopSpotPricing.entry(plugin, record);
             long gold = ShopSpotPricing.goldPerBatch(plugin, record, itemId);
             if (entry.isBatched()) {
                 b.set(

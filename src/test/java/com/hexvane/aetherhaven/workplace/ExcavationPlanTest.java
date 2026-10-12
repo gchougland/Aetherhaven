@@ -67,11 +67,14 @@ class ExcavationPlanTest {
         assertFalse(copy.delivered(copy.id(),()->false));assertFalse(copy.delivered(UUID.randomUUID(),()->fail("Wrong order cannot deliver")));
         assertTrue(copy.delivered(copy.id(),()->true));assertFalse(copy.delivered(copy.id(),()->fail("Cannot deliver twice")));
     }
-    @Test void ChangedTerrainStopsWithoutPayoutAndPlayerEditsCannotResumeSilently() {
+    @Test void ACellThatIsStillSolidPaysNothingAndIsDugAgainWithoutStoppingTheTunnel() {
         var p=plan();ready(p);assertTrue(p.begin(p.id(),6,new Point(10,100,10),()->true));assertTrue(p.settle(p.id(),false));
-        assertTrue(p.edited());assertTrue(p.paused());assertTrue(p.cargo().isEmpty());assertFalse(p.pause(p.revision(),false));
-        p=plan();assertFalse(p.markEdited(new Point(0,0,0)));assertTrue(p.markEdited(cell.point()));assertTrue(p.paused());
-        assertFalse(p.begin(p.id(),6,new Point(10,100,10),()->fail("Edited terrain cannot be mined")));
+        assertFalse(p.edited());assertFalse(p.paused());assertFalse(p.pending());assertTrue(p.cargo().isEmpty());
+        assertEquals(0,p.completed());assertEquals(cell,p.next());assertEquals(0,p.work());
+        // The same miner simply works the block again. Nothing was paid for the first attempt.
+        for(int i=0;i<12;i++)p.attend(.5,true,1);
+        assertTrue(p.begin(p.id(),6,new Point(10,100,10),()->true));assertTrue(p.settle(p.id(),true));
+        assertEquals(Map.of("Rock_Stone_Cobble",1),p.cargo());assertEquals(1,p.completed());
     }
     @Test void PendingOrCarriedMaterialSurvivesAReplacementAttempt() {
         var p=plan();ready(p);assertTrue(p.begin(p.id(),6,new Point(10,100,10),()->true));

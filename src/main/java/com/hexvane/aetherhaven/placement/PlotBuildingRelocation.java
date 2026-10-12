@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCompleter;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
+import com.hexvane.aetherhaven.construction.RebuildBenchCarry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
@@ -26,6 +28,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
@@ -35,6 +38,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.nio.file.Path;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
@@ -141,6 +145,15 @@ public final class PlotBuildingRelocation {
 
         PropPlotTeardown.packageIntersecting(world, plugin, oldFootprint, ref, store);
 
+        // Clearing the old site removes its workbenches. Their upgrades travel with the building instead.
+        List<RebuildBenchCarry.Saved<ItemStack[]>> benchUpgrades =
+            RebuildBenchCarry.capture(
+                world,
+                oldAnchor,
+                oldYaw,
+                ConstructionPasteOps.buildSequence(buffer, oldYaw, plot.getBlockPaletteSelections()).pendingBlocks()
+            );
+
         PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(store, oldFootprint, town);
         PrefabFootprintClearUtil.clearPrefabCellsAtAnchor(
             world, oldAnchor, oldYaw, buffer, def.isPreserveWater()
@@ -155,6 +168,16 @@ public final class PlotBuildingRelocation {
             () -> {
                 // Moving places no destination sign. This cell now belongs to the rebuilt prefab,
                 // and can contain furniture (the Laboratory cauldron sits at its center).
+                RebuildBenchCarry.restore(
+                    world,
+                    store,
+                    benchUpgrades,
+                    prefabOrigin,
+                    session.getPrefabYaw(),
+                    ConstructionPasteOps.buildSequence(buffer, session.getPrefabYaw(), plot.getBlockPaletteSelections())
+                        .pendingBlocks(),
+                    ref.isValid() ? ref : null
+                );
                 ConstructionCompleter.finishBuild(world, plugin, playerUuid, movePlotId, prefabOrigin, session.getPrefabYaw());
             };
         ConstructionAnimator.start(

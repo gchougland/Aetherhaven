@@ -58,8 +58,7 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetYawDegrees": -166.16687,
-      "equipmentProfileId": "work_bard"
+      "interactionTargetYawDegrees": -166.16687
     },
     {
       "localX": 5,

@@ -138,7 +138,9 @@ public final class PlacedMineNodeEditing {
             var c=new UICommandBuilder();c.set("#Count.Text",count+" mining cells selected");c.set("#Hint.Text",hint);c.clear("#Controls");
             var slots=new com.hexvane.aetherhaven.ui.ToolKeybindSlot[]{com.hexvane.aetherhaven.ui.ToolKeybindSlot.PRIMARY,com.hexvane.aetherhaven.ui.ToolKeybindSlot.SECONDARY,com.hexvane.aetherhaven.ui.ToolKeybindSlot.USE,com.hexvane.aetherhaven.ui.ToolKeybindSlot.ABILITY3};
             String[] labels={"Select mining cell","Remove mining cell","Review and apply","Discard selection"};
-            for(int i=0;i<slots.length;i++)com.hexvane.aetherhaven.ui.ToolHudHotkeyRows.appendRow(c,"#Controls",i,slots[i],Message.raw(labels[i]),viewer);
+            // The Building Editor Staff is held here, so rows carry its action names (the game lists the keys).
+            for(int i=0;i<slots.length;i++)com.hexvane.aetherhaven.ui.ToolHudHotkeyRows.appendRow(c,"#Controls",i,com.hexvane.aetherhaven.ui.ToolKeyPrompts.PLOT_CREATOR,slots[i],Message.raw(labels[i]));
+            com.hexvane.aetherhaven.ui.ToolHudHotkeyRows.appendWhereKeysRow(c,"#Controls",slots.length);
             update(false,c);
         }
     }

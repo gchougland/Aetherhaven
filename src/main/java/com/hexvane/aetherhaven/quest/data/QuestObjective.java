@@ -22,6 +22,19 @@ public final class QuestObjective {
     @Nullable
     private String textLangKey;
 
+    /** A shorter line for the HUD quest tracker. The journal keeps {@link #textLangKey}. */
+    @SerializedName("hudTextLangKey")
+    @Nullable
+    private String hudTextLangKey;
+
+    /**
+     * For the {@code workplace_*} kinds: the one workplace type that counts, by its id (for example {@code smelting}).
+     * Leave it out and any type counts.
+     */
+    @SerializedName("workType")
+    @Nullable
+    private String workType;
+
     @SerializedName("constructionId")
     @Nullable
     private String constructionId;
@@ -77,6 +90,16 @@ public final class QuestObjective {
     @Nullable
     public String textLangKey() {
         return textLangKey;
+    }
+
+    @Nullable
+    public String hudTextLangKey() {
+        return hudTextLangKey;
+    }
+
+    @Nullable
+    public String workType() {
+        return workType != null && !workType.isBlank() ? workType.trim() : null;
     }
 
     @Nullable

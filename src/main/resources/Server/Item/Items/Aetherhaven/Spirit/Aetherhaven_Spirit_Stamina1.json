@@ -1,0 +1,124 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Plant_Crop_Stamina1.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Plant_Flower_Storm_Thistle.png",
+  "IconProperties": {
+    "Scale": 0.59,
+    "Translation": [
+      -3.9,
+      -20.7
+    ],
+    "Rotation": [
+      7.315,
+      101.815,
+      1.69
+    ]
+  },
+  "BlockType": {
+    "DrawType": "Model",
+    "Material": "Empty",
+    "Opacity": "Transparent",
+    "CustomModel": "Resources/Plants/Seeds.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Resources/Plants/Seeds_Textures/Storm_Thistle.png",
+        "Weight": 1
+      }
+    ],
+    "CustomModelScale": 0.9,
+    "HitboxType": "Plant_Seed",
+    "BlockSoundSetId": "Seeds",
+    "PhysicalMaterialId": "Foliage",
+    "BlockParticleSetId": "Dust",
+    "ParticleColor": "#ff960a",
+    "Flags": {
+      "IsStackable": false
+    },
+    "Gathering": {
+      "Soft": {
+        "DropList": "Empty",
+        "IsWeaponBreakable": false
+      }
+    },
+    "Support": {
+      "Down": [
+        {
+          "BlockTypeId": "Aetherhaven_Spirit_Planter"
+        }
+      ]
+    },
+    "SupportDropType": "Destroy",
+    "State": {
+      "Definitions": {
+        "Stage1": {
+          "CustomModel": "Blocks/Foliage/Flowers/Stamina_T1_Storm_Thistle/Storm_Thistle_01.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Flowers/Stamina_T1_Storm_Thistle/Storm_Thistle_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.9,
+          "HitboxType": "Plant_Small",
+          "Light": {
+            "Color": "#331"
+          },
+          "BlockParticleSetId": "Flower",
+          "ParticleColor": "#ffb72d"
+        },
+        "Stage2": {
+          "CustomModel": "Blocks/Foliage/Flowers/Stamina_T1_Storm_Thistle/Storm_Thistle_02.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Flowers/Stamina_T1_Storm_Thistle/Storm_Thistle_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.9,
+          "HitboxType": "Plant_Large",
+          "Light": {
+            "Color": "#552"
+          },
+          "BlockParticleSetId": "Flower",
+          "ParticleColor": "#ffb72d"
+        },
+        "Ripe": {
+          "CustomModel": "Blocks/Foliage/Flowers/Stamina_T1_Storm_Thistle/Storm_Thistle.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Flowers/Stamina_T1_Storm_Thistle/Storm_Thistle_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.9,
+          "HitboxType": "Plant_Full",
+          "Opacity": "Transparent",
+          "Light": {
+            "Color": "#662"
+          },
+          "Particles": [
+            {
+              "SystemId": "Plant_Stamina_Tier1",
+              "Color": "#c8942a",
+              "Scale": 1,
+              "TargetNodeName": "Flower-Emitter"
+            }
+          ],
+          "BlockParticleSetId": "Flower",
+          "ParticleColor": "#ffb72d"
+        }
+      }
+    }
+  },
+  "PlayerAnimationsId": "Item",
+  "Tags": {
+    "Type": [
+      "Plant"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Items_Foliage"
+}

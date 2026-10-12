@@ -26,6 +26,19 @@ public final class ShopSpotRecord {
     /** Serialized {@link com.hexvane.aetherhaven.jewelry.JewelryMetadata#BSON_KEY} for appraised jewelry listings. */
     @Nullable
     private String jewelryMetaJson;
+    /**
+     * The whole stack that is for sale, exactly as the engine saves one in a container (see {@link ShopListing}).
+     * Null for rolled NPC stock and for listings saved before stacks were kept whole.
+     */
+    @Nullable
+    private String stackData;
+    /** {@link #stackData} decoded once; never persisted. Hand out copies, see {@link ShopListing#stack}. */
+    @Nullable
+    private transient Object stackCache;
+    /** Catalog price this listing went up at, per lot. Only meaningful while {@link #quoteBatch} is positive. */
+    private long quoteGold;
+    /** Lot size this listing went up with. Zero means no price was recorded and the live catalog is used. */
+    private int quoteBatch;
     /** Last item+metadata signature used for the floating display prop (not persisted). */
     @Nullable
     private transient String listingDisplaySignature;
@@ -139,11 +152,51 @@ public final class ShopSpotRecord {
     }
 
     public void setItemId(@Nullable String itemId) {
-        this.itemId = itemId != null && !itemId.isBlank() ? itemId.trim() : null;
+        String next = itemId != null && !itemId.isBlank() ? itemId.trim() : null;
+        // A kept stack and a recorded price describe one item. They never outlive it or pass to another.
+        if (next == null || !next.equals(this.itemId)) {
+            this.stackData = null;
+            this.stackCache = null;
+            this.quoteGold = 0L;
+            this.quoteBatch = 0;
+        }
+        this.itemId = next;
         if (this.itemId == null) {
             this.jewelryMetaJson = null;
             this.listingDisplaySignature = null;
         }
+    }
+
+    /** The stack for sale in the engine's own saved form, or null when only the item id is known. */
+    @Nullable
+    public String getStackData() {
+        return stackData != null && !stackData.isBlank() ? stackData : null;
+    }
+
+    public void setStackData(@Nullable String stackData) {
+        this.stackData = stackData != null && !stackData.isBlank() ? stackData : null;
+        this.stackCache = null;
+        this.listingDisplaySignature = null;
+    }
+
+    @Nullable
+    Object getStackCache() {
+        return stackCache;
+    }
+
+    void setStackCache(@Nullable Object stackCache) {
+        this.stackCache = stackCache;
+    }
+
+    /** The catalog price recorded when this was listed, or null to use today's catalog price. */
+    @Nullable
+    public ShopPriceEntry getQuote() {
+        return quoteBatch > 0 && getItemId() != null ? new ShopPriceEntry(quoteGold, quoteBatch) : null;
+    }
+
+    public void setQuote(@Nullable ShopPriceEntry quote) {
+        this.quoteGold = quote != null ? quote.getGoldPerBatch() : 0L;
+        this.quoteBatch = quote != null ? quote.getBatchSize() : 0;
     }
 
     public int getStock() {

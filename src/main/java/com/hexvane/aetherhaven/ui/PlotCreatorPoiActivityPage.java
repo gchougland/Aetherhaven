@@ -73,7 +73,7 @@ public final class PlotCreatorPoiActivityPage extends AetherhavenInteractiveCust
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
-            "#CloseButton",
+            "#PageCloseButton",
             EventData.of("Action", "Cancel"),
             false
         );
@@ -84,7 +84,7 @@ public final class PlotCreatorPoiActivityPage extends AetherhavenInteractiveCust
         b.set("#IntroHint.TextSpans", Message.translation(MSG + ".hint"));
         b.set("#ActivityLabel.TextSpans", Message.translation(MSG + ".activityLabel"));
         b.set("#ConfirmButton.TextSpans", Message.translation(MSG + ".confirm"));
-        b.set("#CloseButton.TextSpans", Message.translation(MSG + ".close"));
+        b.set("#PageCloseButton.TextSpans", Message.translation(MSG + ".close"));
     }
 
     private void applyActivityDropdown(@Nonnull UICommandBuilder b) {

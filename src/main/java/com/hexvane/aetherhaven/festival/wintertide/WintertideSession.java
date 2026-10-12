@@ -32,6 +32,7 @@ public final class WintertideSession {
     private final Map<UUID, GiftPreference> lastOutgoingPreference = new LinkedHashMap<>();
     @Nullable
     private PendingPlayerGift pendingPlayerGift;
+    private long pendingSinceMs;
 
     public long getYear() {
         return year;
@@ -128,6 +129,12 @@ public final class WintertideSession {
 
     public void setPendingPlayerGift(@Nullable PendingPlayerGift pendingPlayerGift) {
         this.pendingPlayerGift = pendingPlayerGift;
+        this.pendingSinceMs = pendingPlayerGift != null ? System.currentTimeMillis() : 0L;
+    }
+
+    /** When the pending gift began to wait for its answer, in real milliseconds; zero when none waits. */
+    public long getPendingSinceMs() {
+        return pendingSinceMs;
     }
 
     public boolean isLivePlayerGiftTarget(@Nonnull UUID receiverUuid) {
@@ -257,11 +264,15 @@ public final class WintertideSession {
         pendingPlayerGift = null;
     }
 
+    /**
+     * A gift between two players that the receiver has not answered yet.
+     *
+     * @param stack the very item that left the giver's hand, whole: its metadata, durability and quality
+     */
     public record PendingPlayerGift(
         @Nonnull UUID giverUuid,
         @Nonnull UUID receiverUuid,
-        @Nonnull String itemId,
-        int quantity
+        @Nonnull com.hypixel.hytale.server.core.inventory.ItemStack stack
     ) {}
 }
 

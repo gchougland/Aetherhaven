@@ -11,7 +11,7 @@ aetherhaven.dialogue.festival_wintertide_merchant.main_hub.c_goodbye=Maybe later
 aetherhaven.dialogue.festival_wintertide_merchant.assigned.body=You should give a gift to {name}. Keep it a surprise for everyone else.
 aetherhaven.dialogue.festival_wintertide_merchant.assigned.c_back=Got it.
 
-aetherhaven.dialogue.festival_wintertide_merchant.about.body=Ask me who you should give a gift to. Find something they might like, then give it in person. If they live in town, talk to them while holding the gift and choose the Wintertide gift. If they are a town member who is here, press F on them while holding the gift. They will say how they feel, and you get winter festival tickets. After you give your gift, a villager will bring you one too.
+aetherhaven.dialogue.festival_wintertide_merchant.about.body=Ask me who you should give a gift to. Find something they might like, then give it in person. If they live in town, talk to them while holding the gift and choose the Wintertide gift. If they are a town member who is here, interact with them while holding the gift. They will say how they feel, and you get winter festival tickets. After you give your gift, a villager will bring you one too.
 aetherhaven.dialogue.festival_wintertide_merchant.about.c_back=Got it.
 
 aetherhaven.dialogue.festival_wintertide_merchant.already_given.body=You already gave your Wintertide gift. Enjoy the square, and spend your tickets with me if you like.

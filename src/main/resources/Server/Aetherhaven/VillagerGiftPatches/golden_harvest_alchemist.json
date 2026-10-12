@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "targetNpcRoleId": "Aetherhaven_Alchemist",
+  "addGiftLoves": [
+    "Aetherhaven_Golden_Harvest"
+  ]
+}

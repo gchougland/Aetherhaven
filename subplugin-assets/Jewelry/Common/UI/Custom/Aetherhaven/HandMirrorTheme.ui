@@ -1,0 +1,7 @@
+// Frames for the Hand Mirror: the game's own panel and input box textures, the same ones the town screens use
+// (TownUiTheme.ui in the main pack). They are repeated here so this pack's screens load without the main pack's files.
+@Panel = PatchStyle(TexturePath: "../Common/ContainerFullPatch.png", Border: 16);
+@Card = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 12);
+@CardHovered = PatchStyle(TexturePath: "../Common/InputBoxHovered.png", Border: 12);
+@CardPressed = PatchStyle(TexturePath: "../Common/InputBoxSelected.png", Border: 12);
+@Slot = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 8);

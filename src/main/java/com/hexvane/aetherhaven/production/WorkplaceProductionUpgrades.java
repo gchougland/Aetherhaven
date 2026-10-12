@@ -60,6 +60,7 @@ public final class WorkplaceProductionUpgrades {
 
     public static long effectiveMaxStorage(@Nonnull PlotProductionState state, @Nonnull ProductionCatalog.Entry entry, @Nonnull String itemId) {
         if(state.usesPhysicalHerd())return barnCapacity(state);
+        if(state.usesSpiritGarden())return GardenUpgrades.capacity(state,entry,itemId);
         double mul = capacityMultiplier(state);
         long base = state.usesPhysicalHerd() && BarnAnimalCatalog.output(itemId) ? 10 : entry.maxStorageForItem(itemId);
         // A grove stores whatever its Rootstones grow, without buying a separate output unlock.

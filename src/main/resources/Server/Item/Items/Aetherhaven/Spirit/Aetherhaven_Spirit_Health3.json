@@ -1,0 +1,124 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Plant_Crop_Health3.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Plant_Crop_Health3.png",
+  "IconProperties": {
+    "Scale": 0.45,
+    "Translation": [
+      12.3,
+      -49.5
+    ],
+    "Rotation": [
+      20.8,
+      321.2,
+      1.7
+    ]
+  },
+  "BlockType": {
+    "DrawType": "Model",
+    "Material": "Empty",
+    "Opacity": "Transparent",
+    "CustomModel": "Resources/Plants/Seeds.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Resources/Plants/Seeds_Textures/Blood_Leaf.png",
+        "Weight": 1
+      }
+    ],
+    "CustomModelScale": 0.9,
+    "HitboxType": "Plant_Seed",
+    "BlockSoundSetId": "Seeds",
+    "PhysicalMaterialId": "Foliage",
+    "BlockParticleSetId": "Dust",
+    "ParticleColor": "#cb374f",
+    "Flags": {
+      "IsStackable": false
+    },
+    "Gathering": {
+      "Soft": {
+        "DropList": "Empty",
+        "IsWeaponBreakable": false
+      }
+    },
+    "Support": {
+      "Down": [
+        {
+          "BlockTypeId": "Aetherhaven_Spirit_Planter"
+        }
+      ]
+    },
+    "SupportDropType": "Destroy",
+    "State": {
+      "Definitions": {
+        "Stage1": {
+          "CustomModel": "Blocks/Aetherhaven/Spirit_Plants/Blood_Leaf_Stage1.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Flowers/Health_T3_Blood_Leaf/Blood_Leaf_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.9,
+          "HitboxType": "Plant_Small",
+          "Opacity": "Semitransparent",
+          "Light": {
+            "Color": "#733"
+          },
+          "BlockParticleSetId": "Flower",
+          "ParticleColor": "#ff5e68"
+        },
+        "Stage2": {
+          "CustomModel": "Blocks/Aetherhaven/Spirit_Plants/Blood_Leaf_Stage2.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Flowers/Health_T3_Blood_Leaf/Blood_Leaf_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.9,
+          "HitboxType": "Plant_Large",
+          "Light": {
+            "Color": "#944"
+          },
+          "BlockParticleSetId": "Flower",
+          "ParticleColor": "#ff5e68"
+        },
+        "Ripe": {
+          "CustomModel": "Blocks/Aetherhaven/Spirit_Plants/Blood_Leaf_Ripe.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Flowers/Health_T3_Blood_Leaf/Blood_Leaf_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.9,
+          "HitboxType": "Plant_Full",
+          "Opacity": "Transparent",
+          "Light": {
+            "Color": "#a55"
+          },
+          "Particles": [
+            {
+              "SystemId": "Plant_Health_Tier3",
+              "Color": "#ed1010",
+              "Scale": 1
+            }
+          ],
+          "BlockParticleSetId": "Flower",
+          "ParticleColor": "#ff4259"
+        }
+      }
+    }
+  },
+  "PlayerAnimationsId": "Item",
+  "Tags": {
+    "Type": [
+      "Plant"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Items_Foliage"
+}

@@ -15,8 +15,13 @@ $C.@PageOverlay { LayoutMode: Middle;
         Group #Options { FlexWeight: 1; LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
       }
       Group { FlexWeight: 1; Background: $T.@Inset; Padding: (Full: 12); LayoutMode: Top;
-        Label { Text: "BACKPACK CONTENTS"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, RenderBold: true); }
-        Label { Text: "Click an item to take it."; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 13); }
+        Group { LayoutMode: Left; Anchor: (Height: 54);
+          Group { LayoutMode: Top; FlexWeight: 1;
+            Label { Text: "BACKPACK CONTENTS"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, RenderBold: true); }
+            Label { Text: "Click an item to take it."; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 13); }
+          }
+          $C.@SmallSecondaryTextButton #StoreMatching { Text: "Store matching items"; Anchor: (Width: 240, Height: 36); }
+        }
         Group { FlexWeight: 1; LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle;
           Group #Contents { LayoutMode: LeftCenterWrap; }
         }

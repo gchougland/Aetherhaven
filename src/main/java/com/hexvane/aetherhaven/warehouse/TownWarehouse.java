@@ -7,6 +7,7 @@ import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hexvane.aetherhaven.inventory.AtomicMaterialExchange;
+import com.hexvane.aetherhaven.inventory.StackedSlots;
 import org.bson.BsonDocument;
 import java.util.*;
 
@@ -15,7 +16,24 @@ public final class TownWarehouse {
     public record ProductionStock(UUID plot,WarehouseBatch.Point pickup,ProductionInventory state) {}
     public enum Page { GENERAL, OUTPUT }
     public enum Amount { STACK, ONE, ALL_MATCHING }
-    public record Transfer(int moved, String error) {}
+    /** Why nothing moved. Each one is something truly missing or in the way at the moment of the press. */
+    public enum Refusal {
+        /** The item the press named is not there any more. */
+        GONE,
+        /** Every one of them is set aside for a workplace delivery. */
+        RESERVED,
+        /** The side receiving the items has no room for even one. */
+        NO_ROOM,
+        /** Crafted Goods only takes what the town makes. */
+        OUTPUT_ONLY
+    }
+    /** {@code error} is a plain sentence for callers that do not name the item themselves. */
+    public record Transfer(int moved, String error, Refusal refusal) {
+        static Transfer moved(int count) { return new Transfer(count,null,null); }
+        static Transfer refused(Refusal why,String error) { return new Transfer(0,error,why); }
+    }
+    /** What a quick stack did. {@code matched} is false when nothing carried is already stored here. */
+    public record Matching(int moved, boolean matched) {}
     public record CraftingSlot(Page page,short slot,ItemStack stack,int reserved) {
         public int available(){return ItemStack.isEmpty(stack)?0:Math.max(0,stack.getQuantity()-reserved);}
     }
@@ -29,6 +47,8 @@ public final class TownWarehouse {
     private SmeltingOutputStore smelting;
     public SmeltingOutputStore smelting() { if(smelting==null)smelting=new SmeltingOutputStore();return smelting; }
     private int storageUpgrades;
+    /** Bought tiers of deeper shelves. Saves from before the upgrade have none and keep one stack per slot. */
+    private int stackUpgrades;
     private long revision;
     private String generalData, outputData;
     private transient SimpleItemContainer general, output;
@@ -37,6 +57,9 @@ public final class TownWarehouse {
     private List<WarehouseBatch> batches = new ArrayList<>();
     public static final int BASE_GENERAL_SLOTS = 40, UPGRADE_SLOTS = 20, MAX_UPGRADES = 8;
     public static final int OUTPUT_SLOTS = 40;
+    /** Each tier lets every general storage slot hold one more native stack of its item. */
+    public static final int MAX_STACK_UPGRADES = 4;
+    public static final long STACK_UPGRADE_GOLD = 200;
     /** Natural growth can overlap; seed delivery and attended planting remain serial. */
     public static final int CULTIVATION_BEDS = 6;
 
@@ -45,6 +68,20 @@ public final class TownWarehouse {
     public long revision() { return revision; }
     public long upgradeCost() { return 150L * (upgrades()+1); }
     public int upgradeTownLevel() { return Math.min(6, 2+upgrades()); }
+    public int stackUpgrades() { return Math.clamp(stackUpgrades,0,MAX_STACK_UPGRADES); }
+    /** Native stacks of one item a general storage slot holds. Crafted goods always hold a single stack. */
+    public int stacksPerSlot() { return 1+stackUpgrades(); }
+    public long stackUpgradeCost() { return STACK_UPGRADE_GOLD * (stackUpgrades()+1); }
+    /** Most of this item one slot of the page holds. */
+    public int slotLimit(Page page,ItemStack stack) { return StackedSlots.limit(stack,page==Page.GENERAL?stacksPerSlot():1); }
+    /**
+     * Buys the tier after {@code ownedTiers}. The press names the tier it saw, so a second press on the same offer
+     * buys nothing, while couriers and crafts moving stock in the meantime change nothing about the offer.
+     */
+    public boolean upgradeStacks(int ownedTiers) {
+        if(ownedTiers!=stackUpgrades()||stackUpgrades()>=MAX_STACK_UPGRADES) return false;
+        stackUpgrades=stackUpgrades()+1; changed(); return true;
+    }
     private SimpleItemContainer inventory(Page page) {
         if(page==Page.GENERAL) {
             if(general==null) general=decode(generalData,capacity());
@@ -125,39 +162,123 @@ public final class TownWarehouse {
         if(accepted&&!snapshot.equals(craftingStock()))changed();
         return accepted;
     }
-    public Transfer deposit(Page page,ItemContainer player,short slot,ItemStack expected,Amount amount,long seenRevision) {
-        if(page!=Page.GENERAL) return new Transfer(0,"Finished output only accepts items made by the town.");
-        if(seenRevision!=revision) return stale();
-        return transfer(player,inventory(page),slot,expected,amount);
-    }
-    public Transfer withdraw(Page page,ItemContainer player,short slot,ItemStack expected,Amount amount,long seenRevision) {
-        if(seenRevision!=revision) return stale();
-        var from=inventory(page);
-        if(slot<0||slot>=from.getCapacity()||ItemStack.isEmpty(expected)||!expected.equals(from.getItemStack(slot))) return stale();
+    /**
+     * Stores what the player pointed at: the item {@code expected} in inventory slot {@code slot}.
+     *
+     * <p>Nothing here asks whether storage changed since the page was drawn. Couriers and crafts change it every few
+     * seconds, and that is no reason to refuse. The press is honoured when that slot still holds that item, however
+     * many of it there are now, and there is room for at least one. A different item in the slot is a different
+     * request and is refused, so a list that moved can never store the wrong thing.
+     */
+    public Transfer deposit(Page page,ItemContainer player,short slot,ItemStack expected,Amount amount) {
+        if(page!=Page.GENERAL) return Transfer.refused(Refusal.OUTPUT_ONLY,"Finished output only accepts items made by the town.");
+        var carried=player==null||slot<0||slot>=player.getCapacity()?null:player.getItemStack(slot);
+        if(ItemStack.isEmpty(expected)||ItemStack.isEmpty(carried)||!expected.isStackableWith(carried))
+            return Transfer.refused(Refusal.GONE,"That item is no longer in that inventory slot. Nothing was moved.");
         int moved=0;
-        boolean held=false;
+        if(amount==Amount.ALL_MATCHING) {
+            for(short i=0;i<player.getCapacity();i++) {
+                var stack=player.getItemStack(i);
+                if(!ItemStack.isEmpty(stack)&&expected.isStackableWith(stack)) moved+=store(player,i,stack.getQuantity());
+            }
+        } else moved=store(player,slot,amount==Amount.ONE?1:carried.getQuantity());
+        if(moved>0) changed();
+        return moved>0?Transfer.moved(moved):Transfer.refused(Refusal.NO_ROOM,"General storage has no room for that item. Nothing was moved.");
+    }
+    /**
+     * Quick stack. Moves every stack in player slots {@code from} (inclusive) to {@code to} (exclusive) that general
+     * storage already holds some of. What does not fit stays with the player and nothing is ever discarded.
+     * Courier reservations only limit what leaves storage, so adding to a reserved slot is safe.
+     */
+    public Matching depositMatching(ItemContainer player,int from,int to) {
+        if(player==null) return new Matching(0,false);
+        int moved=0;boolean matched=false;
+        for(int i=Math.max(0,from);i<Math.min(to,player.getCapacity());i++) {
+            var stack=player.getItemStack((short)i);
+            var stored=generalSlots();
+            if(ItemStack.isEmpty(stack)||!StackedSlots.holds(stored,stored.length,stack)) continue;
+            matched=true;moved+=store(player,(short)i,stack.getQuantity());
+        }
+        if(moved>0) changed();
+        return new Matching(moved,matched);
+    }
+    /**
+     * Where the item a press named is now: the slot it was drawn in while that still holds it, otherwise the first
+     * slot of the page that does, otherwise -1. Stock is compared without its amount, which moves all the time.
+     */
+    public short locate(Page page,short slot,ItemStack expected) {
+        if(ItemStack.isEmpty(expected)) return -1;
+        var held=inventory(page);
+        if(slot>=0&&slot<held.getCapacity()&&expected.isStackableWith(held.getItemStack(slot))) return slot;
+        for(short i=0;i<held.getCapacity();i++) if(expected.isStackableWith(held.getItemStack(i))) return i;
+        return -1;
+    }
+    /**
+     * Hands over what the player pointed at: the item {@code expected}, drawn in slot {@code slot}.
+     *
+     * <p>Nothing here asks whether storage changed since the page was drawn. If the item is still in storage the
+     * press is honoured from wherever it sits now, with however many are there now. It is refused only when none is
+     * left, when every one is set aside for a workplace, or when the player has no room, and the refusal says which.
+     */
+    public Transfer withdraw(Page page,ItemContainer player,short slot,ItemStack expected,Amount amount) {
+        var from=inventory(page);
+        short at=player==null?-1:locate(page,slot,expected);
+        if(at<0) return Transfer.refused(Refusal.GONE,"None of that item is left in storage. Nothing was moved.");
+        int moved=0;
+        boolean held=false,free=false;
         for(short i=0;i<from.getCapacity();i++) {
             var current=from.getItemStack(i);
-            if(ItemStack.isEmpty(current)||(amount==Amount.ALL_MATCHING?!expected.isStackableWith(current):i!=slot)) continue;
+            if(ItemStack.isEmpty(current)||(amount==Amount.ALL_MATCHING?!expected.isStackableWith(current):i!=at)) continue;
             int reserved=reserved(page,i);
             held|=reserved>0;
             int available=current.getQuantity()-reserved;
-            if(available>0) moved+=move(from,player,i,amount==Amount.ONE?1:available);
+            free|=available>0;
+            // A click takes one native stack at most, however deep the shelf is.
+            if(available>0) moved+=give(from,player,i,amount==Amount.ONE?1:amount==Amount.STACK?Math.min(available,StackedSlots.oneStack(current)):available);
         }
         if(moved>0) changed();
-        return new Transfer(moved,moved>0?null:held?"Those supplies are reserved for a workplace.":"There is no room for that item.");
+        return moved>0?Transfer.moved(moved):held&&!free?Transfer.refused(Refusal.RESERVED,"Those supplies are reserved for a workplace.")
+            :Transfer.refused(Refusal.NO_ROOM,"Your inventory has no room for that item. Nothing was moved.");
     }
-    private Transfer transfer(ItemContainer from,ItemContainer to,short slot,ItemStack expected,Amount amount) {
-        if(slot<0||slot>=from.getCapacity()||ItemStack.isEmpty(expected)||!expected.equals(from.getItemStack(slot))) return stale();
-        int moved=0;
-        if(amount==Amount.ALL_MATCHING) {
-            for(short i=0;i<from.getCapacity();i++) {
-                var stack=from.getItemStack(i);
-                if(!ItemStack.isEmpty(stack)&&expected.isStackableWith(stack)) moved+=move(from,to,i,stack.getQuantity());
-            }
-        } else moved=move(from,to,slot,amount==Amount.ONE?1:expected.getQuantity());
-        if(moved>0) changed();
-        return new Transfer(moved,moved==0?"There is no room for that item.":null);
+    /** General storage as plain slots, for planning an insert before anything changes. */
+    private ItemStack[] generalSlots() {
+        var inv=inventory(Page.GENERAL);var slots=new ItemStack[inv.getCapacity()];
+        for(short i=0;i<slots.length;i++) {var held=inv.getItemStack(i);slots[i]=ItemStack.isEmpty(held)?null:held;}
+        return slots;
+    }
+    private void applyGeneral(ItemStack[] plan) {
+        var inv=inventory(Page.GENERAL);
+        for(short i=0;i<plan.length;i++) if(!Objects.equals(inv.getItemStack(i),plan[i])) inv.setItemStackForSlot(i,plan[i],false);
+    }
+    /** Fits every stack into general storage at its slots' real limits, or changes nothing. */
+    private boolean storeAll(List<ItemStack> stacks) {
+        var plan=generalSlots();
+        for(var stack:stacks) if(StackedSlots.insert(plan,plan.length,stack,stacksPerSlot())!=stack.getQuantity()) return false;
+        applyGeneral(plan);return true;
+    }
+    /** Moves up to {@code count} of a player's stack into general storage, filling slots to their real limit. */
+    private int store(ItemContainer from,short slot,int count) {
+        var stack=from.getItemStack(slot);
+        if(ItemStack.isEmpty(stack)||count<=0) return 0;
+        var plan=generalSlots();
+        int accepted=StackedSlots.insert(plan,plan.length,stack.withQuantity(Math.min(count,stack.getQuantity())),stacksPerSlot());
+        if(accepted==0) return 0;
+        // Take the items first. A refused removal leaves both sides exactly as they were.
+        if(!from.removeItemStackFromSlot(slot,stack,accepted,true,true).succeeded()) return 0;
+        applyGeneral(plan);return accepted;
+    }
+    /**
+     * Hands up to {@code count} of a stored stack to the player. The player's inventory decides how much fits and
+     * only that much leaves storage: a native move would discard the overflow of a slot holding several stacks.
+     */
+    private static int give(ItemContainer from,ItemContainer to,short slot,int count) {
+        var stack=from.getItemStack(slot);
+        if(ItemStack.isEmpty(stack)||count<=0) return 0;
+        int offered=Math.min(count,stack.getQuantity());
+        var rest=to.addItemStack(stack.withQuantity(offered),false,false,true).getRemainder();
+        int moved=offered-(ItemStack.isEmpty(rest)?0:rest.getQuantity());
+        if(moved>0) from.setItemStackForSlot(slot,stack.withQuantity(stack.getQuantity()-moved),false);
+        return moved;
     }
     private static int move(ItemContainer from,ItemContainer to,short slot,int count) {
         int before=from.getItemStack(slot).getQuantity();
@@ -165,8 +286,9 @@ public final class TownWarehouse {
         var remaining=from.getItemStack(slot);
         return before-(ItemStack.isEmpty(remaining)?0:remaining.getQuantity());
     }
-    public boolean upgrade(long seenRevision) {
-        if(seenRevision!=revision||upgrades()>=MAX_UPGRADES) return false;
+    /** Buys the tier after {@code ownedTiers}; see {@link #upgradeStacks}. */
+    public boolean upgrade(int ownedTiers) {
+        if(ownedTiers!=upgrades()||upgrades()>=MAX_UPGRADES) return false;
         var old=inventory(Page.GENERAL);
         var expanded=new SimpleItemContainer((short)(capacity()+UPGRADE_SLOTS));
         for(short i=0;i<old.getCapacity();i++) {
@@ -187,30 +309,34 @@ public final class TownWarehouse {
     /** Patrol guards deliver only after physically reaching a town storage desk. */
     public boolean acceptGuardSpoils(ItemStack stack) {
         if(ItemStack.isEmpty(stack))return false;
-        var next=WarehouseBatch.copy(inventory(Page.GENERAL));
-        if(!next.addItemStack(stack,true,false,true).succeeded())return false;
-        general=next;changed();return true;
+        if(!storeAll(List.of(stack)))return false;
+        changed();return true;
     }
     /** Only exchanges validated, single item equipment. This is not a general output deposit path. */
-    public String equipProfessionKit(Page page, short slot, ItemStack expected, long seenRevision,
+    /**
+     * The kit is the exact item the press named. Stock moving elsewhere in storage is no reason to refuse; the kit
+     * itself having been taken is, and so is a courier having set it aside.
+     */
+    public String equipProfessionKit(Page page, short slot, ItemStack expected,
             com.hexvane.aetherhaven.townsfolk.TownsfolkProgress progress,
-            com.hexvane.aetherhaven.equipment.ProfessionKitCatalog catalog, ItemStack expectedEquipped) {
-        if (seenRevision != revision) return "Storage changed. Choose a kit again.";
-        if (reserved(page, slot) > 0) return "That kit is reserved for a workplace.";
-        String error = com.hexvane.aetherhaven.equipment.ProfessionKitService.equip(progress, catalog, inventory(page), slot, expected, expectedEquipped);
+            com.hexvane.aetherhaven.equipment.ProfessionKitCatalog catalog) {
+        short at = com.hexvane.aetherhaven.equipment.ProfessionKitService.locate(inventory(page), slot, expected);
+        if (at < 0) return com.hexvane.aetherhaven.equipment.ProfessionKitService.TAKEN;
+        if (reserved(page, at) > 0) return "That kit is reserved for a workplace.";
+        String error = com.hexvane.aetherhaven.equipment.ProfessionKitService.equip(progress, catalog, inventory(page), at, expected);
         if (error == null) changed();
         return error;
     }
-    public String equipGuardKit(Page page,short slot,ItemStack expected,long seenRevision,
+    public String equipGuardKit(Page page,short slot,ItemStack expected,
             com.hexvane.aetherhaven.townsfolk.TownsfolkProgress progress,
-            com.hexvane.aetherhaven.equipment.GuardKitCatalog catalog,String guardClass,ItemStack previous) {
-        if(seenRevision!=revision)return "Storage changed. Choose a kit again.";
-        if(reserved(page,slot)>0)return "That kit is reserved for a workplace.";
-        String error=com.hexvane.aetherhaven.equipment.GuardKitService.equip(progress,catalog,guardClass,inventory(page),slot,expected,previous);
+            com.hexvane.aetherhaven.equipment.GuardKitCatalog catalog,String guardClass) {
+        short at=com.hexvane.aetherhaven.equipment.ProfessionKitService.locate(inventory(page),slot,expected);
+        if(at<0)return com.hexvane.aetherhaven.equipment.ProfessionKitService.TAKEN;
+        if(reserved(page,at)>0)return "That kit is reserved for a workplace.";
+        String error=com.hexvane.aetherhaven.equipment.GuardKitService.equip(progress,catalog,guardClass,inventory(page),at,expected);
         if(error==null)changed();
         return error;
     }
-    private static Transfer stale() { return new Transfer(0,"Storage changed. The view has been refreshed. Try again."); }
     private void changed() {
         // Encode before the owning TownRecord is saved. Gson never touches native container locks.
         if(general!=null) generalData=SimpleItemContainer.CODEC.encode(general,new ExtraInfo()).asDocument().toJson();
@@ -343,6 +469,19 @@ public final class TownWarehouse {
         var batch=reserve(plot,plot,"aetherhaven:barn_feed/"+food,List.of(new MaterialQuantity(
             food,null,null,quantity,null)),List.of(),sources,null,0,false,true);
         if(batch!=null){batch.markHerdFeed();batch.destination(destination);batch.save();changed();}
+        return batch;
+    }
+    public static final String SITE_SUPPLY_RECIPE="aetherhaven:site_supply";
+    /**
+     * A physical supply trip to a planned building: one material, taken only from stock nothing else has reserved.
+     * One trip at a time per building.
+     *
+     * @param maxStacks refused when the material needs more stacks than one courier carries, so the caller can ask for less
+     */
+    public WarehouseBatch reserveSiteSupply(UUID plot,WarehouseBatch.Point destination,MaterialQuantity material,List<ProductionStock> sources,int maxStacks) {
+        if(plot==null||destination==null||material==null||material.getQuantity()<1||sources==null)return null;
+        var batch=reserve(plot,plot,SITE_SUPPLY_RECIPE,List.of(material),List.of(),sources,null,0,false,true,Math.max(1,maxStacks),0);
+        if(batch!=null){batch.markSiteSupply();batch.destination(destination);batch.save();changed();}
         return batch;
     }
     private WarehouseBatch reserve(UUID workplace,UUID order,String recipe,List<MaterialQuantity> materials,List<ItemStack> results,List<ProductionStock> production,String fuelItem,int fuelQuantity) {
@@ -504,7 +643,7 @@ public final class TownWarehouse {
     /** Recheck prepared output after inventory changes without cloning an inventory on every work tick. */
     public boolean hasOutputRoom(UUID id) {
         var batch=batch(id);
-        if(batch==null||batch.cancelled()||batch.smelting()||batch.herdFeed())return false;
+        if(batch==null||batch.cancelled()||batch.smelting()||batch.herdFeed()||batch.siteSupply())return false;
         if(outputRoomRevision!=revision) {outputRoomCache.clear();outputRoomRevision=revision;}
         return outputRoomCache.computeIfAbsent(id,unused->addAll(WarehouseBatch.copy(inventory(Page.OUTPUT)),batch.outputItems()));
     }
@@ -564,7 +703,7 @@ public final class TownWarehouse {
     /** Only call at the workplace. A stale arrival or another courier cannot deliver the same cargo twice. */
     public boolean deliver(UUID id,String courier) {
         var batch=batch(id);
-        if(batch==null||batch.herdFeed()||batch.cancelled()||courier==null||!courier.equals(batch.courierId())||batch.cargoItems().isEmpty()) return false;
+        if(batch==null||batch.herdFeed()||batch.siteSupply()||batch.cancelled()||courier==null||!courier.equals(batch.courierId())||batch.cargoItems().isEmpty()) return false;
         var delivered=WarehouseBatch.copy(batch.delivered());
         if(!addAll(delivered,batch.cargoItems())) return false;
         batch.delivered(delivered); batch.cargo(new SimpleItemContainer(WarehouseBatch.CARGO_SLOTS),null); batch.save(); changed(); return true;
@@ -592,13 +731,36 @@ public final class TownWarehouse {
         else if(batch.pendingItems().isEmpty()&&batch.cargoItems().isEmpty())batches.remove(batch);
         batch.save();changed();return true;
     }
+    /**
+     * Only after arrival at the building's plot sign. The site takes what it still needs from each carried stack;
+     * anything it no longer needs stays with the courier and is walked back to storage, never discarded.
+     *
+     * @param accept takes one carried stack and returns how many of it the site kept
+     */
+    public boolean deliverSiteSupply(UUID id,String courier,WarehouseBatch.Point reached,java.util.function.ToIntFunction<ItemStack> accept) {
+        var batch=batch(id);
+        if(batch==null||!batch.siteSupply()||batch.cancelled()||reached==null||!reached.equals(batch.destination())||accept==null
+            ||courier==null||!courier.equals(batch.courierId())||batch.cargoItems().isEmpty())return false;
+        var remainder=WarehouseBatch.copy(batch.cargo());int kept=0;
+        for(short slot=0;slot<remainder.getCapacity();slot++) {
+            var stack=remainder.getItemStack(slot);if(ItemStack.isEmpty(stack))continue;
+            int taken=Math.clamp(accept.applyAsInt(stack),0,stack.getQuantity());
+            if(taken==0)continue;
+            remainder.setItemStackForSlot(slot,taken==stack.getQuantity()?null:stack.withQuantity(stack.getQuantity()-taken),false);kept+=taken;
+        }
+        if(kept==0)return cancel(id);
+        batch.cargo(remainder,remainder.isEmpty()?null:courier);
+        if(!remainder.isEmpty()){batch.cancel();removeReturned(batch);}
+        else if(batch.pendingItems().isEmpty())batches.remove(batch);
+        batch.save();changed();return true;
+    }
     /** Called only by the physical work executor when the batch finishes. Consumption and output commit together. */
     public boolean finish(UUID id) {
         return finish(id,java.util.function.UnaryOperator.identity());
     }
     private boolean finish(UUID id,java.util.function.UnaryOperator<ItemStack> decorate) {
         var batch=batch(id);
-        if(batch==null||batch.smelting()||batch.cultivation()||batch.herdFeed()||batch.state()!=WarehouseBatch.State.READY) return false;
+        if(batch==null||batch.smelting()||batch.cultivation()||batch.herdFeed()||batch.siteSupply()||batch.state()!=WarehouseBatch.State.READY) return false;
         // Do not roll or appraise anything until ordinary output space is available.
         if(!addAll(WarehouseBatch.copy(inventory(Page.OUTPUT)),batch.outputItems()))return false;
         var results=new ArrayList<ItemStack>();
@@ -669,6 +831,14 @@ public final class TownWarehouse {
             if(!removed.succeeded()||removed.getList().isEmpty()||removed.getList().getLast().getRemainder()!=0)return false;
         }
         var nextInput=input.clone();var nextFuel=fuel.clone();
+        // The fuel slot holds one kind of fuel. A furnace last fed the other kind still has some, so the Apprentice sets
+        // it with the goods kept at this furnace and loads what the player chose. Nothing is thrown away.
+        var aside=new ArrayList<ItemStack>();
+        if(batch.fuelQuantity()>0)for(short slot=0;slot<nextFuel.getCapacity();slot++) {
+            var held=nextFuel.getItemStack(slot);
+            if(ItemStack.isEmpty(held)||batch.fuelItem().equals(held.getItemId()))continue;
+            aside.add(held);nextFuel.setItemStackForSlot(slot,null,false);
+        }
         for(var stack:WarehouseBatch.items(supplies)) {
             var added=nextInput.addItemStack(stack,true,false,true);
             if(!added.succeeded()||!ItemStack.isEmpty(added.getRemainder()))return false;
@@ -682,6 +852,9 @@ public final class TownWarehouse {
                 if(!added.succeeded()||!ItemStack.isEmpty(added.getRemainder()))return false;
             }
         }
+        // Last check, and the only one that changes anything before the furnace itself: a full pile keeps the load waiting.
+        if(!aside.isEmpty()&&(batch.destination()==null||!smelting().setAside(
+            SmeltingOutputStore.originId(batch.workplaceId(),batch.destination()),batch.destination(),aside)))return false;
         for(short slot=0;slot<input.getCapacity();slot++)input.setItemStackForSlot(slot,nextInput.getItemStack(slot),false);
         for(short slot=0;slot<fuel.getCapacity();slot++)fuel.setItemStackForSlot(slot,nextFuel.getItemStack(slot),false);
         batch.markNativeLoaded();batch.save();changed();return true;
@@ -720,10 +893,90 @@ public final class TownWarehouse {
     public boolean returnCargo(UUID id,String courier) {
         var batch=batch(id);
         if(batch==null||!batch.cancelled()||courier==null||!courier.equals(batch.courierId())||batch.cargoItems().isEmpty()) return false;
-        var nextGeneral=WarehouseBatch.copy(inventory(Page.GENERAL));
-        if(!addAll(nextGeneral,batch.cargoItems())) return false;
-        general=nextGeneral; batch.cargo(new SimpleItemContainer(WarehouseBatch.CARGO_SLOTS),null);
+        // Returned supplies use the same shelf limits as a player's deposit, all or nothing.
+        if(!storeAll(batch.cargoItems())) return false;
+        batch.cargo(new SimpleItemContainer(WarehouseBatch.CARGO_SLOTS),null);
         removeReturned(batch); batch.save(); changed(); return true;
+    }
+    public static final String SALVAGE_RECIPE="aetherhaven:site_salvage";
+    /**
+     * What one worker could still carry home as site salvage: room in their hands, and room in general storage that
+     * nothing already walking back will need. A dry run; nothing changes until {@link #carrySalvage}.
+     */
+    public final class SalvageRoom {
+        private final ItemStack[] storage,hands;private final int handSlots;
+        private SalvageRoom(ItemStack[] storage,ItemStack[] hands,int handSlots){this.storage=storage;this.hands=hands;this.handSlots=handSlots;}
+        /** How many of this stack would be taken: never more than the hands hold or storage has promised. */
+        public int accepts(ItemStack stack) {
+            if(ItemStack.isEmpty(stack))return 0;
+            return Math.min(StackedSlots.insert(storage.clone(),storage.length,stack,stacksPerSlot()),StackedSlots.insert(hands.clone(),handSlots,stack,1));
+        }
+        private int take(ItemStack stack) {
+            int count=accepts(stack);if(count==0)return 0;
+            var part=stack.withQuantity(count);
+            StackedSlots.insert(storage,storage.length,part,stacksPerSlot());StackedSlots.insert(hands,handSlots,part,1);return count;
+        }
+        public boolean carrying(){for(var held:hands)if(held!=null)return true;return false;}
+        /** Every stack this worker may carry is in use. */
+        public boolean handsFull(){for(int slot=0;slot<handSlots;slot++)if(hands[slot]==null)return false;return true;}
+    }
+    /** Null when this worker cannot carry salvage: no name, no allowance, or their hands hold a delivery. */
+    public SalvageRoom salvageRoom(String courier,int stackLimit) {
+        if(courier==null||courier.isBlank()||stackLimit<1||stackLimit>WarehouseBatch.CARGO_SLOTS)return null;
+        var storage=generalSlots();var hands=new ItemStack[WarehouseBatch.CARGO_SLOTS];
+        for(var batch:batches) {
+            if(courier.equals(batch.courierId())) {
+                if(!batch.salvage())return null;
+                for(short slot=0;slot<hands.length;slot++){var held=batch.cargo().getItemStack(slot);hands[slot]=ItemStack.isEmpty(held)?null:held;}
+            }
+            // Everything already on its way back keeps its room: other salvage and ordinary returned supplies.
+            if(batch.cancelled()) {
+                for(var stack:batch.cargoItems())StackedSlots.insert(storage,storage.length,stack,stacksPerSlot());
+                for(var stack:batch.deliveredItems())StackedSlots.insert(storage,storage.length,stack,stacksPerSlot());
+            }
+        }
+        return new SalvageRoom(storage,hands,stackLimit);
+    }
+    /**
+     * A builder takes loose items from a building site into their hands, to be stored by the ordinary return trip.
+     * Each stack is taken only as far as the worker's hands and the room promised in general storage allow. Storage
+     * itself and every reservation are untouched. The caller removes exactly the returned amounts from the ground.
+     *
+     * @return how many of each offered stack were taken, in the same order
+     */
+    public int[] carrySalvage(String courier,List<ItemStack> offered,int stackLimit) {
+        var taken=new int[offered==null?0:offered.size()];
+        var room=offered==null?null:salvageRoom(courier,stackLimit);
+        var batch=room==null?null:batches.stream().filter(b->courier.equals(b.courierId())).findFirst().orElse(null);
+        if(room==null||batch==null&&batches.size()>=256)return taken;
+        boolean any=false;
+        for(int i=0;i<taken.length;i++){taken[i]=room.take(offered.get(i));any|=taken[i]>0;}
+        if(!any)return taken;
+        if(batch==null) {
+            batch=new WarehouseBatch(UUID.randomUUID(),UUID.randomUUID(),SALVAGE_RECIPE,List.of(),
+                new SimpleItemContainer(WarehouseBatch.BUFFER_SLOTS),new SimpleItemContainer(WarehouseBatch.BUFFER_SLOTS));
+            batch.cancel();batches.add(batch);
+        }
+        var cargo=new SimpleItemContainer(WarehouseBatch.CARGO_SLOTS);
+        for(short slot=0;slot<room.hands.length;slot++)if(room.hands[slot]!=null)cargo.setItemStackForSlot(slot,room.hands[slot],false);
+        batch.cargo(cargo,courier);batch.save();changed();return taken;
+    }
+    /**
+     * Only call at the warehouse. Stores what fits in general storage and empties the worker's hands. Whatever is
+     * returned did not fit and is in no inventory any more: the caller must put it on the ground.
+     *
+     * @return null when this worker carries no such load
+     */
+    public List<ItemStack> unloadSalvage(UUID id,String courier) {
+        var batch=batch(id);
+        if(batch==null||!batch.salvage()||courier==null||!courier.equals(batch.courierId()))return null;
+        var plan=generalSlots();var left=new ArrayList<ItemStack>();
+        for(var stack:batch.cargoItems()) {
+            int stored=StackedSlots.insert(plan,plan.length,stack,stacksPerSlot());
+            if(stored<stack.getQuantity())left.add(stack.withQuantity(stack.getQuantity()-stored));
+        }
+        applyGeneral(plan);batch.cargo(new SimpleItemContainer(WarehouseBatch.CARGO_SLOTS),null);
+        removeReturned(batch);batch.save();changed();return left;
     }
     private void removeReturned(WarehouseBatch batch) {
         if(!batch.nativeLoaded()&&batch.cancelled()&&batch.cargoItems().isEmpty()&&batch.deliveredItems().isEmpty()) batches.remove(batch);

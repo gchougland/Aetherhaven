@@ -31,6 +31,66 @@ class TownHuntsTest {
         assertEquals(2,s.amount("Ingredient_Bone_Fragment"));assertEquals(1,s.amount("Ingredient_Sac_Venom"));
         assertEquals(2,s.best());assertEquals(2,s.lastDefeated());assertNull(s.next());
     }
+    @Test void onlyTickedCreaturesEverEnterTheArena() {
+        var s=new TownHunts();for(String id:List.of("bone","web","goblin","swarm"))assertTrue(s.unlock(id));
+        assertEquals(List.of("bone","web","goblin","swarm"),s.chosen(),"a newly unlocked creature is in until the player says otherwise");
+        assertTrue(s.choose("web",false));assertTrue(s.choose("swarm",false));
+        assertFalse(s.choose("web",false),"already out");assertFalse(s.choose("bone",true),"already in");
+        assertEquals(List.of("bone","goblin"),s.chosen());assertTrue(s.chosen("goblin"));assertFalse(s.chosen("web"));
+        var run=s.begin();var seen=new ArrayList<String>();
+        for(int wave=0;wave<12;wave++){var f=s.next();seen.add(f.id());assertTrue(s.collect(run,wave,f,Map.of()));}
+        assertEquals(Set.of("bone","goblin"),new HashSet<>(seen),"twelve waves, never a creature that was left out");
+        assertEquals(List.of("bone","goblin","bone","goblin"),seen.subList(0,4),"they still take turns in unlock order");
+        assertFalse(s.choose("web",true),"the line-up is fixed while a run is under way");
+        s.end("Retired");assertTrue(s.choose("web",true));assertEquals(List.of("bone","web","goblin"),s.chosen());
+        var next=s.begin();assertEquals("bone",s.next().id());assertTrue(s.collect(next,0,s.next(),Map.of()));assertEquals("web",s.next().id());
+    }
+    @Test void anEmptyLineUpCannotBeSaved() {
+        var one=new TownHunts();one.unlock("bone");long before=one.revision();
+        assertFalse(one.choose("bone",false),"the only unlocked creature cannot be taken out");
+        assertEquals(before,one.revision(),"a refused change saves nothing");assertEquals(List.of("bone"),one.chosen());
+        var s=new TownHunts();s.unlock("bone");s.unlock("web");s.unlock("goblin");
+        assertTrue(s.choose("bone",false));assertTrue(s.choose("goblin",false));
+        assertFalse(s.choose("web",false),"the last creature in cannot be taken out");
+        assertEquals(List.of("web"),s.chosen());
+        var copy=new Gson().fromJson(new Gson().toJson(s),TownHunts.class);
+        assertEquals(List.of("web"),copy.chosen(),"the choice is saved with the town");
+        assertNotNull(copy.begin());assertEquals("web",copy.next().id());
+    }
+    @Test void lockedAndUnknownCreaturesCannotBeTicked() {
+        var s=new TownHunts();s.unlock("bone");s.unlock("web");
+        assertFalse(s.choose("goblin",true),"locked");assertFalse(s.choose("goblin",false));assertFalse(s.chosen("goblin"));
+        assertFalse(s.choose("missing",true));assertFalse(s.choose(null,false));
+        assertEquals(List.of("bone","web"),s.chosen());
+        assertTrue(s.choose("web",false));assertTrue(s.unlock("goblin"));
+        assertEquals(List.of("bone","goblin"),s.chosen(),"unlocking one creature does not bring back another that was left out");
+    }
+    @Test void savesFromBeforeTheChoiceExistedLoadWithEveryUnlockedCreatureIn() {
+        var old=new Gson().fromJson("{\"unlocked\":[\"bone\",\"web\",\"goblin\"],\"upgrades\":{\"power\":2}}",TownHunts.class);
+        assertEquals(List.of("bone","web","goblin"),old.chosen());
+        var run=old.begin();var seen=new ArrayList<String>();
+        for(int wave=0;wave<6;wave++){seen.add(old.next().id());assertTrue(old.collect(run,wave,old.next(),Map.of()));}
+        assertEquals(List.of("bone","web","goblin","bone","web","goblin"),seen,"exactly the order such a save had before");
+        var blank=new Gson().fromJson("{\"unlocked\":[\"bone\",\"web\"],\"benched\":null}",TownHunts.class);
+        assertEquals(List.of("bone","web"),blank.chosen());assertTrue(blank.choose("bone",false));assertEquals(List.of("web"),blank.chosen());
+        // A save that somehow leaves everything out is read as everything in, and can be changed from there.
+        var damaged=new Gson().fromJson("{\"unlocked\":[\"bone\",\"web\"],\"benched\":[\"bone\",\"web\"]}",TownHunts.class);
+        assertEquals(List.of("bone","web"),damaged.chosen());assertNotNull(damaged.begin());damaged.end("Retired");
+        assertTrue(damaged.choose("web",false));assertEquals(List.of("bone"),damaged.chosen());
+        // The retired fire family still stands for its replacement.
+        var fire=new Gson().fromJson("{\"unlocked\":[\"incandescent\",\"bone\"],\"benched\":[\"incandescent\"]}",TownHunts.class);
+        assertEquals(List.of("bone"),fire.chosen());assertTrue(fire.choose("cinder",true));assertEquals(List.of("cinder","bone"),fire.chosen());
+    }
+    @Test void theRunTabSaysWhoIsInTheArena() {
+        var s=new TownHunts();
+        assertTrue(HuntPage.lineup(s).contains("Unlock a creature"));
+        s.unlock("bone");assertEquals("In the arena: Restless Bones.",HuntPage.lineup(s));
+        for(var f:HuntFamily.all())s.unlock(f.id());
+        assertEquals("In the arena: all 9 unlocked creatures.",HuntPage.lineup(s));
+        s.choose("web",false);assertEquals("In the arena: 8 of 9 unlocked creatures. Sitting out: Silken Hollows.",HuntPage.lineup(s));
+        for(String id:List.of("goblin","swarm","frost","cinder","outlander","void"))s.choose(id,false);
+        assertEquals("In the arena: Restless Bones, Greater Voidspawn.",HuntPage.lineup(s));
+    }
     @Test void staleAndDuplicateKillsCannotGrantOutput() {
         var s=new TownHunts();s.unlock("bone");var id=s.begin();var f=s.next();
         assertFalse(s.collect(UUID.randomUUID(),0,f));assertFalse(s.collect(id,1,f));

@@ -1,0 +1,133 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Plant_Crop_Mana2.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Plant_Crop_Mana2.png",
+  "IconProperties": {
+    "Scale": 0.595,
+    "Translation": [
+      4.5,
+      -15.3
+    ],
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ]
+  },
+  "BlockType": {
+    "DrawType": "Model",
+    "Material": "Empty",
+    "Opacity": "Transparent",
+    "CustomModel": "Resources/Plants/Seeds.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Resources/Plants/Seeds_Textures/Spore_Blue.png",
+        "Weight": 1
+      }
+    ],
+    "CustomModelScale": 0.7,
+    "HitboxType": "Plant_Seed",
+    "BlockSoundSetId": "Seeds",
+    "PhysicalMaterialId": "Foliage",
+    "BlockParticleSetId": "Dust",
+    "ParticleColor": "#43c3cf",
+    "Flags": {
+      "IsStackable": false
+    },
+    "Gathering": {
+      "Soft": {
+        "DropList": "Empty",
+        "IsWeaponBreakable": false
+      }
+    },
+    "Support": {
+      "Down": [
+        {
+          "BlockTypeId": "Aetherhaven_Spirit_Planter"
+        }
+      ]
+    },
+    "SupportDropType": "Destroy",
+    "State": {
+      "Definitions": {
+        "Stage1": {
+          "CustomModel": "Blocks/Foliage/Plants/Mana_T2_Azure_Cap/Azure_Cap_01.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Plants/Mana_T2_Azure_Cap/Azure_Cap_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.7,
+          "HitboxType": "Plant_Small",
+          "Light": {
+            "Color": "#246"
+          }
+        },
+        "Stage2": {
+          "CustomModel": "Blocks/Foliage/Plants/Mana_T2_Azure_Cap/Azure_Cap_02.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Plants/Mana_T2_Azure_Cap/Azure_Cap_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.7,
+          "HitboxType": "Plant_Large",
+          "Light": {
+            "Color": "#368"
+          }
+        },
+        "Ripe": {
+          "CustomModel": "Blocks/Foliage/Plants/Mana_T2_Azure_Cap/Azure_Cap.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Plants/Mana_T2_Azure_Cap/Azure_Cap_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 1,
+          "HitboxType": "Plant_Full",
+          "Opacity": "Transparent",
+          "Light": {
+            "Color": "#369"
+          },
+          "Particles": [
+            {
+              "SystemId": "Plant_Mana_Tier2",
+              "PositionOffset": {
+                "X": -0.5
+              },
+              "Color": "#5930cc",
+              "TargetNodeName": "Cap2",
+              "Scale": 1
+            },
+            {
+              "SystemId": "Plant_Mana_Tier2",
+              "TargetNodeName": "Cap2",
+              "PositionOffset": {
+                "Z": 0.3,
+                "Y": 0.25
+              },
+              "Color": "#a18cff",
+              "Scale": 1.2
+            }
+          ],
+          "BlockParticleSetId": "Dust",
+          "ParticleColor": "#43c3cf"
+        }
+      }
+    }
+  },
+  "PlayerAnimationsId": "Item",
+  "Tags": {
+    "Type": [
+      "Plant"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Items_Foliage"
+}

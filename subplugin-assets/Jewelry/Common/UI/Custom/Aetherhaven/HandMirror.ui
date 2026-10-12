@@ -1,188 +1,43 @@
 $C = "../Common.ui";
-
+$T = "HandMirrorTheme.ui";
+@Gold = #dec68d;
+@Soft = #becadb;
+@Heading = (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, RenderUppercase: true, TextColor: @Gold, VerticalAlignment: Center);
+// Inner width 1000: the worn slots are 400 wide, then a 16 gap, then 584 for the bag.
+// The bag's panel has 6 of padding and keeps 12 free for its scrollbar, which leaves 560: two 276 wide cards and an 8 gap.
+// The left column is a 26 heading over three 158 high slot cards with 10 between them: 520, the height the window leaves it.
 $C.@PageOverlay {
   LayoutMode: Middle;
-
-  $C.@DecoratedContainer {
-    Anchor: (Width: 920);
-
-    #Title {
-      Label #HandMirrorTitleText {
-        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
-        Padding: (Horizontal: 19);
-        Text: "";
-      }
-    }
-
+  $C.@DecoratedContainer #MirrorWindow {
+    Anchor: (Width: 1040, Height: 658);
+    #Title { Label #MirrorTitle { Text: ""; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
     #Content {
-      LayoutMode: Left;
-      Padding: (Full: 16);
-
-      Group #LeftColumn {
-        LayoutMode: Top;
-        FlexWeight: 1;
-
-      Label #EquipSection {
-        Anchor: (Bottom: 6);
-        Style: (...$C.@DefaultLabelStyle, TextColor: #c8b8a0, Wrap: true);
-        Text: "";
-      }
-
-      Group #EquippedRow {
-        LayoutMode: Left;
-        Anchor: (Bottom: 14);
-
-        Group #Ring1Column {
-          LayoutMode: Top;
-          Label #Ring1Label {
-            Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
-            Text: "";
-            Anchor: (Bottom: 4);
+      LayoutMode: Top; Padding: (Full: 20);
+      Group { LayoutMode: Left; FlexWeight: 1;
+        Group #WornColumn { LayoutMode: Top; Anchor: (Width: 400, Right: 16);
+          Label #WornHeading { Text: ""; Anchor: (Height: 26); Style: @Heading; }
+          Group #WornSlots { LayoutMode: Top; }
+        }
+        Group #BagColumn { LayoutMode: Top; FlexWeight: 1;
+          Group { LayoutMode: Left; Anchor: (Height: 26);
+            Label #BagHeading { Text: ""; FlexWeight: 1; Style: @Heading; }
+            Label #BagCount { Text: ""; Anchor: (Width: 160); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #9cb1b8, HorizontalAlignment: End, VerticalAlignment: Center); }
           }
-          Group #Ring1SlotBox {
-            Anchor: (Width: 56, Height: 56);
-            LayoutMode: Full;
-            Background: #1a2530;
-            Padding: 2;
-            Group #Ring1Slot {
-              LayoutMode: Full;
-              ItemGrid #Ring1Icon {
-                Anchor: (Full: 0);
-                SlotsPerRow: 1;
-                Style: (
-                  SlotSize: 52,
-                  SlotIconSize: 52,
-                  SlotSpacing: 0,
-                  SlotBackground: "../Common/BlockSelectorSlotBackground.png"
-                );
-              }
+          Label #BagHint { Text: ""; Anchor: (Height: 22, Bottom: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: @Soft); }
+          Group { FlexWeight: 1; Background: $T.@Panel; Padding: (Full: 6);
+            Group #BagScroll { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; Anchor: (Full: 0);
+              Label #BagEmpty { Text: ""; Anchor: (Height: 64, Top: 12, Left: 12, Right: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true, TextColor: @Soft); Visible: false; }
+              Group #BagRows { LayoutMode: Top; }
             }
           }
-          Button #UnequipRing1 {
-            Anchor: (Top: 4, Width: 28, Height: 24);
-            Visible: false;
-            Style: (
-              Default: (Background: (TexturePath: "../eject.png")),
-              Hovered: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.18))),
-              Pressed: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.38))),
-            );
-          }
-        }
-
-        Group #Ring2Column {
-          LayoutMode: Top;
-          Label #Ring2Label {
-            Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
-            Text: "";
-            Anchor: (Bottom: 4);
-          }
-          Group #Ring2SlotBox {
-            Anchor: (Width: 56, Height: 56);
-            LayoutMode: Full;
-            Background: #1a2530;
-            Padding: 2;
-            Group #Ring2Slot {
-              LayoutMode: Full;
-              ItemGrid #Ring2Icon {
-                Anchor: (Full: 0);
-                SlotsPerRow: 1;
-                Style: (
-                  SlotSize: 52,
-                  SlotIconSize: 52,
-                  SlotSpacing: 0,
-                  SlotBackground: "../Common/BlockSelectorSlotBackground.png"
-                );
-              }
-            }
-          }
-          Button #UnequipRing2 {
-            Anchor: (Top: 4, Width: 28, Height: 24);
-            Visible: false;
-            Style: (
-              Default: (Background: (TexturePath: "../eject.png")),
-              Hovered: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.18))),
-              Pressed: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.38))),
-            );
-          }
-        }
-
-        Group #NeckColumn {
-          LayoutMode: Top;
-          Label #NeckLabel {
-            Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
-            Text: "";
-            Anchor: (Bottom: 4);
-          }
-          Group #NeckSlotBox {
-            Anchor: (Width: 56, Height: 56);
-            LayoutMode: Full;
-            Background: #1a2530;
-            Padding: 2;
-            Group #NeckSlot {
-              LayoutMode: Full;
-              ItemGrid #NeckIcon {
-                Anchor: (Full: 0);
-                SlotsPerRow: 1;
-                Style: (
-                  SlotSize: 52,
-                  SlotIconSize: 52,
-                  SlotSpacing: 0,
-                  SlotBackground: "../Common/BlockSelectorSlotBackground.png"
-                );
-              }
-            }
-          }
-          Button #UnequipNeck {
-            Anchor: (Top: 4, Width: 28, Height: 24);
-            Visible: false;
-            Style: (
-              Default: (Background: (TexturePath: "../eject.png")),
-              Hovered: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.18))),
-              Pressed: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.38))),
-            );
-          }
         }
       }
-
-      Label #ListSection {
-        Anchor: (Bottom: 6);
-        Style: (...$C.@DefaultLabelStyle, TextColor: #c8b8a0, Wrap: true);
-        Text: "";
-      }
-
-      Group #JewelryListScroll {
-        LayoutMode: TopScrolling;
-        ScrollbarStyle: $C.@DefaultScrollbarStyle;
-        Anchor: (Height: 280, Bottom: 10);
-
-        Group #Rows {
-          LayoutMode: Top;
-        }
-      }
-
-      Label #Hint {
-        Anchor: (Top: 8);
-        Style: (...$C.@DefaultLabelStyle, TextColor: #8a7a60, Wrap: true);
-        Text: "";
-      }
-      }
-
-      Group #TraitColumn {
-        LayoutMode: Top;
-        Anchor: (Width: 300, Left: 12);
-        Padding: (Left: 8);
-        Label #TraitTitle {
-          Style: (...$C.@DefaultLabelStyle, TextColor: #c8b8a0, Wrap: true);
-          Text: "";
-        }
-        Label #TraitBody {
-          Anchor: (Top: 6);
-          Style: (...$C.@DefaultLabelStyle, TextColor: #d8d0c8, Wrap: true, FontSize: 13);
-          Text: "";
-        }
+      Group { LayoutMode: Left; Anchor: (Height: 44, Top: 12);
+        Label #MirrorNote { Text: ""; FlexWeight: 1; Anchor: (Right: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: @Gold, Wrap: true, VerticalAlignment: Center); }
+        $C.@SecondaryTextButton #TakeOff { Text: ""; Anchor: (Width: 180, Height: 40, Right: 10); }
+        $C.@TextButton #Done { Text: ""; Anchor: (Width: 160, Height: 40); }
       }
     }
   }
 }
-
 $C.@BackButton {}

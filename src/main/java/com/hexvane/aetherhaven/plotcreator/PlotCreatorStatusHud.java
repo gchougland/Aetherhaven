@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
 import com.hexvane.aetherhaven.ui.ToolHudHotkeyRows;
+import com.hexvane.aetherhaven.ui.ToolKeyPrompts;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -83,26 +84,19 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
                     base + " #InfoLabel.TextSpans",
                     Message.translation(LANG_PREFIX + row.descriptionLangKey())
                 );
-            } else if (row.modifierLabel() != null) {
-                ToolHudHotkeyRows.appendModifierRow(
-                    b,
-                    CONTROL_ROWS,
-                    i,
-                    row.modifierLabel(),
-                    row.slot(),
-                    LANG_PREFIX + row.descriptionLangKey(),
-                    getPlayerRef()
-                );
             } else {
                 ToolHudHotkeyRows.appendRow(
                     b,
                     CONTROL_ROWS,
                     i,
+                    ToolKeyPrompts.PLOT_CREATOR,
                     row.slot(),
-                    LANG_PREFIX + row.descriptionLangKey(),
-                    getPlayerRef()
+                    LANG_PREFIX + row.descriptionLangKey()
                 );
             }
+        }
+        if (!rows.isEmpty()) {
+            ToolHudHotkeyRows.appendWhereKeysRow(b, CONTROL_ROWS, rows.size());
         }
         this.update(false, b);
     }

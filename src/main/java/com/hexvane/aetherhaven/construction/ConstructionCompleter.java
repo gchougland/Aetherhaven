@@ -219,6 +219,8 @@ public final class ConstructionCompleter {
             }
         }
         retireYardProjectAfterPlacement(world, tm, town, plotId);
+        // A finished building, and the villager who has just moved into it, may be what a quest was waiting for.
+        com.hexvane.aetherhaven.quest.QuestAutoStartService.evaluateSoon(world, plugin, town.getTownId());
     }
 
     private static void retireYardProjectAfterPlacement(World world, TownManager manager, TownRecord town, UUID plotId) {

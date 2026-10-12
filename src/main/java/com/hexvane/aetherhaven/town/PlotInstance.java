@@ -196,6 +196,22 @@ public final class PlotInstance {
     @SerializedName("blockPaletteSelections")
     private LinkedHashMap<String, String> blockPaletteSelections;
 
+    /**
+     * Set once this project has been put on a Builder's yard for the player. An order the player then removes from
+     * the project board is not added again.
+     */
+    @Nullable
+    @SerializedName("builderYardOffered")
+    private Boolean builderYardOffered;
+
+    public boolean isBuilderYardOffered() {
+        return Boolean.TRUE.equals(builderYardOffered);
+    }
+
+    public void setBuilderYardOffered(boolean offered) {
+        this.builderYardOffered = offered ? Boolean.TRUE : null;
+    }
+
     public PlotInstance() {}
 
     public PlotInstance(

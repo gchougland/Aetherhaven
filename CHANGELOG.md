@@ -1,76 +1,73 @@
 # Changelog
 
-## [4.0.0] - Unreleased
+## [4.0.0] - 10/12/2026
+
+Aetherhaven 4.0 puts your townsfolk to work. Hire residents as apprentices, give them workplaces, and meet new specialist villagers who bring the trades your town was missing.
+
+- **New villagers** Eight new core villagers can join your town. Seven bring a building and a trade: the Alchemist, Druid, Doctor, Warehouse Manager, Crafter, Leatherworker and Monster Hunter. The eighth, Jack Hollow, is recruited at Halloween and stays year round.
+- **Apprentice workplaces** Mark out 16 kinds of workplace, from smelting and smithing to farming, mining, building, cooking and brewing. Employed townsfolk work there for a weekly wage, following the priorities you set, while couriers carry supplies.
+- **Townsfolk that grow** Every townsfolk has skills, attributes and Mastery that improve with work, along with a profile, profession equipment and guard kits.
+- **Production reworked** The Farmer works Scarecrow Fields to your plan, the lumbermill sings trees tall in the Singing Grove, the Druid tends a Spirit Garden and the Miner digs real rock. Core villagers earn Mastery of their own.
+- **Storage and gear** A town warehouse, backpacks you can upgrade, and Alchemy Flasks you brew at the cauldron.
+- **More to do** 22 raids, rescue and mining contracts on the quest board, barn animals to raise and more friendship rewards.
 
 ### Added
 
 - **Halloween resident preview** Meet Jack Hollow by opening a coffin during October and build his temporary Pumpkin Shelter. Once recruited, he stays year round. Find his hidden pumpkin head in town and return it for five Halloween candies and five gold, once per player each game day. Rescue, appearance and gameplay are still being tested.
 
-- **Apprentice mineshafts preview** Mark a Mining base around a Workbench, then use its map to plan connected tunnels, seven block stairs and 9 by 9 rooms. Each map square covers three blocks, with lengths in three block steps. Choose joined beams, wall torches, ceiling lanterns and rails separately. Rails follow tunnels and stairs, with no rails in rooms. Miners can clear ordinary blocks of any kind and replace floor gaps and soft plants with cobblestone. Stair entrances match the adjoining tunnel height. Higher skilled available apprentices get first choice of work and keep their tunnel assignment while delivering each load. Miners carry 25 items plus 10 per additional Mining level to the mine's own output storage, available from its planner, Warehouse Building Outputs and courier deliveries. Only the base shows border particles. Existing tunnels remain available.
+- **Apprentice mineshafts preview** Mark a Mining base around a Workbench, then use its map to plan connected tunnels, seven block stairs and 9 by 9 rooms. Each map square covers three blocks, with lengths in three block steps. Choose joined beams, wall torches, ceiling lanterns and rails separately. Rails follow tunnels and stairs, with no rails in rooms. Miners can clear ordinary blocks of any kind and replace floor gaps and soft plants with cobblestone. Stair entrances match the adjoining tunnel height. Higher skilled available apprentices get first choice of work and keep their tunnel assignment while delivering each load. Miners carry 25 items plus 10 per additional Mining level to the mine's own output storage, available from its planner, Warehouse Building Outputs and courier deliveries. Only the base shows border particles. The planner names each fitting, how many the tunnel needs and how many are stored, and shows where stairs pass through a floor. Miners keep digging when blocks in a tunnel change and work around chests. Existing tunnels remain available.
 
 - **Barn animals** Visit the Rancher's card based Animal Shop to buy and name 15 farm animals, costing 100, 250 or 500 gold by rarity. Choose animals for up to five pens from a picture and hearts card picker. Rounded panels show small food badges on animal portraits. Resource storage starts at 10 and gains 10 per storage upgrade. Supply food in bulk, feed each species its preferred crop or meat, and pet them daily for hearts and better yields. Animals idle and show heart particles. Couriers deliver foods; the Rancher provides building upgrades.
 
-- **Farmer field work preview** Review planted crop beds from farm storage and choose physical field work. The Farmer waters, harvests and carries selected crops and Life Essence to local storage. Existing stock stays available, and Apprentice farms still provide food support only. Worker paths, visuals and balance are still being tested.
+- **Scarecrow Fields** Irienne now farms to your plan. Paint which crop grows in each square of a field map and she tills, sows, waters, harvests and sows again. Craft Farmer's Scarecrows to claim more fields anywhere in town. Changing crops keeps soil rich for double harvests and a rare Golden Harvest, spare crops become compost, and the Almanac favours two crops each week. Farm upgrades add scarecrows, reach, watering, seed saving, richer compost and a longer Almanac. A farm keeps producing by itself until you paint a plan, and Apprentice farms still provide food support only.
 
-- **Goblin hunts** Kael can now fight Goblin Scrappers in his arena for Scraps, the metal Tobin's props are built from.
 - **Rescue contracts** A new kind of quest board job. A townsfolk is tied up at a temporary camp outside town, held by goblins, trorks or outlanders. The camp is marked on your compass. Defeat the captors, cut the ropes by interacting with the captive, then talk to them and they move into your town with no move in gift to pay. They arrive a level better than usual at two skills, rising to five skills for the highest rank contracts. You can check who it is from the quest board first.
 - **Mining contracts** The Miner and Blacksmith now post jobs to mine ore yourself, from copper up to adamantite. You keep everything you dig.
 - **Salvaging workplace** Mark a workplace around a Salvager's Workbench and the Crafter's apprentices take apart old weapons, armor and tools for you. Recovered materials go to Crafted Goods.
-- **Craft from your backpacks** Crafting benches now use materials inside the backpacks you are carrying.
-- **Upgrades from the warehouse** Building, restaurant, backpack and bench upgrades take missing materials from the town warehouse when you are allowed to use it.
-- **Finished goods at the workplace** The workplace task page shows what its tasks have finished and lets you collect it there.
 - **Appraise worn jewelry** Rings and necklaces can be appraised while you are wearing them.
-- **Work list portraits** The journal's Work tab shows each townsfolk's portrait.
 - **House quest marker** When assigning a house, residents waiting on their house quest are listed first with a quest mark.
-- **Smelting skill** Smelting an ingot now needs the same Blacksmithing skill as mining its ore. Cobalt, Adamantite, Silver, Gold and Mithril were far too easy.
 - **Shop displays** Player shops keep their goods on show while closed.
-- **Shop clerks** Clerks stand on the staff side of the counter.
-- **Idle crafters** A crafter no longer waits forever for a more skilled townsfolk who is busy elsewhere.
-- **Faster workplaces** A courier now brings the materials for several crafts in one trip, and the Apprentice makes them all in one visit. Furnaces are loaded with a whole stack of ore at once.
-- **Furnace contents** A smelting workplace's task page shows what each furnace holds and the ingots waiting at it.
-- **Commerce priority** The journal's Work tab has a Commerce column. It decides when a shop's clerk staffs the counter and when other work comes first.
-- **Work tab** Smelting, Armor Crafting and Jewelry have their own icons, and the list keeps its place when you click a priority.
-- **Armory tiers** Equipment tiers the town cannot make yet are greyed out, and the requirement text stays inside its panel.
-- **Feeding trough recipe** The Feeding Trough can now be crafted at the Workbench from 5 tree trunks and 10 Plant Fiber.
 - **Life Essence from farming** Every crop the Farmer harvests brings back Life Essence while the farm has room for it. You no longer need to choose it as an output.
-- **Hardwood mine supports** Mineshaft beams and their joining pieces are hardwood.
-- **Warehouse outputs** Building Outputs no longer shows output slots a building has not unlocked.
-- **Right building for the job** Couriers fetch each material from one place that holds it: the production building or furnace that has it, otherwise the warehouse. A pickup that is emptied before they arrive is planned again.
-- **Miners in the passage** Apprentice miners stand on the mineshaft's own floor, not on the ground above it.
-- **Core Miner** The Miner waits beside the rock between veins and no longer stands on it. The mine's storage page says why he is waiting.
-- **Stuck workers** A townsfolk who gets stuck on the way to work is brought to where they were going after a few seconds, the way villagers already were. This covers workplaces, mineshafts, farms, deliveries, shop counters and the clinic.
-- **Nameless residents** A townsfolk could be listed in the journal by an internal name with no portrait. They are now recorded properly and never shown that way.
-- **Ranch workplaces** A ranch with too little room for its animals still feeds the town.
 - **Harder contracts** The quest board now sometimes posts very large delivery orders and elite raids. They give a week to finish and are the contracts that pay Shards of Gaia and Verdant Catalysts. Every town rank has at least one.
 - **Bigger, better raids** The quest board now offers 22 raids instead of 6, with at least two to choose from at every town rank. Face goblin scouts, restless graves, the Frozen Host, scarak swarms, a trork chieftain's warhost, outlander cults, void surges and the Feastmaster's horde. Higher rank raids bring leaders and more enemies, and every raid now pays far more gold plus a bundle of themed materials.
 - **Tobin's Pattern Book** The Crafter now makes props. Show Tobin any prop once and he keeps its pattern for the whole town. Commission copies with sticks, stone rubble, scraps and linen scraps from your pack or the town warehouse, which Crafting Apprentices can now make. No gold is needed. Tobin builds commissions at his bench during work hours and keeps finished props on his shelf. Salvage spare props for materials. Collecting patterns earns a longer bench queue, better salvage and faster work.
+- **Restaurant menu and provisions** The restaurant has two new upgrade paths. Chef's menu adds dishes that give residents who eat there a short perk, and Town provisions add food so the town can welcome more residents.
+- **Founder statue armor and poses** Use your founder statue to dress it in armor from your pack and pick one of six poses. The armor comes back when you take it off or the statue is broken.
+- **Stone Rubble from the mine** The Miner can now dig Stone Rubble. Choose it as an output at the mine.
 - **The Singing Grove** The lumbermill has a new way to work. Place Rootstones anywhere in town and give each one a sapling. Seren plants the tree, sings it tall with nature magic, fells it and carries home its wood, a sapling, sap and sticks. The stone then regrows the same tree for free. Any of 32 trees works once you own its sapling. Bless a Rootstone with Life Essence for double wood from its next tree. Lumbermill upgrades let Seren tend more Rootstones. You can also ask her to gather fibre or char one kind of spare log into Burnt wood beside a lit campfire. Seren gives two Rootstones when her lumbermill is finished, and more can be crafted at the Town Planning Desk.
 
 - **More friendship rewards** Earn training supplies, tools, resident cosmetics, and Apprentice crafting plans through friendship. New plans include fireworks, decorative flags, balloons, garden arches, terrariums, streetlights, weapon racks, and both Glow Rings. Profession equipment rewards teach town crafting plans.
 
 - **Crafter and Leatherworker preview** Meet Tobin Reedwright at Town Level 3 and Hazel Brindle at Level 4. Their Core workshop and tannery unlock apprentice crafting and leatherworking. More skilled leatherworkers can prepare medium and heavy leather. Earn profession tool recipes and plans for a Pattern Cabinet or Stitching Frame through friendship. Hazel crafts portable backpacks with five distinct appearances, branched metal upgrades, extra stack capacity, an item magnet and a travelling jukebox. Buildings, recruitment and rewards are still being tested.
 
-- **Monster Hunter preview** Build Kael Thorne's lodge and start paid survival runs from his dialogue. Unlock creatures with gold and their drops, including frost and fire undead, Outlanders and Void creatures. Spoils follow their normal material drop chances. Train him between runs and collect spoils through the required lodge storage or warehouse. Couriers bring lodge supplies to workplaces, including venom for apprentice brewed antidotes. Defeat ends the run and restores him immediately. Each new run needs your order. Creature balance and building polish are still being tested.
+- **Monster Hunter preview** Build Kael Thorne's lodge and start paid survival runs from his dialogue. Unlock creatures with gold and their drops, including Goblin Scrappers for Scraps, frost and fire undead, Outlanders and Void creatures. Spoils follow their normal material drop chances. Train him between runs and collect spoils through the required lodge storage or warehouse. Couriers bring lodge supplies to workplaces, including venom for apprentice brewed antidotes. Defeat ends the run and restores him immediately. Each new run needs your order. Choose which unlocked creatures take turns in the arena. Creature balance and building polish are still being tested.
 
 - **Mining nodes preview** Core miners work marked locations using regular rock and ore blocks. The Building Editor requires mining nodes before saving an old mine, with one click per location and an ore preview. Existing placed mines keep their current setup until updated. Use the Building Editor Staff on an old mine to choose local node locations or review an updated design while keeping the building, storage and upgrades.
 
-- **Doctor and clinic preview** Recruit Elara Willowmere and build her Core clinic. Injured civilians visit for care, while guards can follow you there. Donate Lesser Health Potions and earn three friendship care packages. Residents recover slowly on their own. Treatment and building polish are still being tested.
+- **Doctor and clinic preview** Recruit Elara Willowmere from Town Level 4 and build her Core clinic. Injured civilians visit for care, while guards can follow you there. Donate Lesser Health Potions and earn three friendship care packages. Residents recover slowly on their own. Treatment and building polish are still being tested.
 
 - **Guard equipment** Assign resident townsfolk to guard classes through their profile. Craft complete Copper, Iron, Thorium, Cobalt and Adamantite kits at armor workplaces and equip them from carried items or town storage. Attributes and equipment bonuses shape guard combat stats.
 
 - **Profession equipment** Equip townsfolk with delivery packs and tools for smithing, farming, brewing, cooking, jewelry and ranching from their profile. Earn specialized equipment recipes through friendship with core villagers.
-- **Alchemist and Druid** Recruit Orin Glasswick and Rowan Mossweald and build their Core laboratory and conservatory. The Druid tends alchemical plants on crystal soil and carries ingredients to conservatory storage. Each specialist offers friendship rewards with profession equipment recipes and advanced town crafting plans.
-- **Alchemy Flasks** Learn the Alchemist's flask recipe, then choose available ingredients from your inventory or town storage, including collected production, to discover combined potion effects. Brewing keeps delivery supplies reserved and takes materials only when the complete mixture can be made. Upgrade the laboratory to mix up to three ingredients. Better leather and Alchemist Mastery let each flask hold up to five charges. A custom flask model, new effect icons and colored tooltips show every saved effect and remaining charge.
+- **Alchemist and Druid** Recruit Orin Glasswick and Rowan Mossweald and build their Core laboratory and conservatory. Each specialist offers friendship rewards with profession equipment recipes and advanced town crafting plans.
+- **Spirit Garden** Rowan grows potion plants in Spirit Planters you place anywhere in town. Give a planter one seed and he plants it, grows it with his rite and brings home plants and petals, again and again. Bless a planter with Life Essence to double its next harvest.
+- **Garden upgrades** Rowan's Conservatory has its own upgrades paid with Life Essence and the plants he grows: more planters, a stronger rite, bigger harvests and wider stores.
+- **Mycologist** The Druid can oversee a mushroom yard where townsfolk seed Mushroom Logs, tend them and pick one kind of mushroom at a time for your cooks and the cauldron.
+- **Berry Patch** The Druid can oversee a berry patch where townsfolk water your berry bushes and pick them as they ripen.
+- **Goblin Iron palettes** Restyle a building's roof or its brickwork with goblin iron from the palette picker.
+- **Price command** Server operators can set, change and remove item prices in game with /ah price.
+- **Block Workshop** The Builder can run a workshop where townsfolk cut planks, bricks, stairs, slabs and roofs to order at a Builder's Workbench.
+- **Alchemy Flasks** Craft a flask at the Laboratory cauldron, then choose available ingredients from your inventory or town storage, including collected production, to discover combined potion effects. Hold the brew steady over ten beats for a Great or Perfect potion that lasts longer or restores more, or fill the flask straight away for a Good one. Brewing keeps delivery supplies reserved and takes materials only when the complete mixture can be made. Upgrade the laboratory to mix up to three ingredients. Better leather and Alchemist Mastery let each flask hold up to five charges. A custom flask model, new effect icons and colored tooltips show every saved effect and remaining charge. Blue Aloe and green mushrooms heal you slowly over time, a Fire Flower keeps fire and lava from harming you, and Lavender or Chrysanthemum makes a repellent that keeps scaraks, spiders and scorpions away.
 - **Core villager profiles** Open profiles from dialogue or the Town Journal to view portraits, needs, reputation, friendship milestones and discovered gift preferences. Rewards stay hidden until unlocked. Production work and bottling potions earn Mastery XP for specialists up to level 10. Separate bars show the level and XP progress, and each Verdant Catalyst adds exactly one level. Other named villagers show friendship without Mastery. Townsfolk profiles show their skills and attributes without reputation. Return directly to the Journal from profiles opened there. Rarer resources need higher Mastery. Equip the Miner and Logger with stronger tools to gather higher tier ore and wood.
 - **Seed crafting** Craft seeds and saplings from Life Essence at crafting workplaces. Higher tier plants require greater Farming skill.
 - **Core buildings** New designs for the laboratory, clinic, conservatory, monster arena and warehouse include their working stations and Town Records Shelves. A Simple Workplace decoration provides a starting space for an Apprentice workplace.
-- **Warehouse Manager** Recruit Mara Finch and build her warehouse. Earn Warehouse Supply Link and Quartermaster Pack crafting plans, and a Field Ledger through friendship. Place a Supply Link near ordinary workbenches to craft with general storage, crafted goods and building outputs. The Field Ledger opens town storage while inside town.
+- **Warehouse Manager** Recruit Mara Finch from Town Level 2 and build her warehouse. Earn Warehouse Supply Link and Quartermaster Pack crafting plans, and a Field Ledger through friendship. Place a Supply Link near ordinary workbenches to craft with general storage, crafted goods and building outputs. The Field Ledger opens town storage while inside town.
 
-- **Warehouse storage preview** General storage offers grid and list views with search results that update as you type. Crafted goods stay separate, and production buildings show all five output slots on individual cards. Locked slots and unavailable production choices appear grey with padlocks and show their requirements. Deliveries are still in development.
-- **Apprentice workplaces** Mark, resize and name workplaces using new Building Staff modes, with a framed display showing the current mode and controls. Unlock types and individual upgrades in illustrated skill trees through supervising villagers, with clean framed nodes, connected paths and clear Town Level requirements. Locked building upgrades appear grey with padlocks and explain what is needed. Upgrades with satisfied prerequisites stand out. Production, restaurant and warehouse storage upgrades are collected here. Choose from unlocked workplace types, with each required bench clearly named. Workplace screens allow safe removal after carried supplies are returned. Recipe search updates as you type, and locked recipes appear beneath available ones with their requirements.
-- **Builder's yard preview** Queue started construction at a Builder's Workbench. Apprentices travel to the building and help place reachable pieces, with stronger Building skills and better equipment improving their pace. A project board shows progress and lets you reorder or pause the yard. Completed projects leave the queue automatically, keeping the worker's final contribution and XP. Movement, appearance and balance are still being tested.
+- **Warehouse storage preview** General storage offers grid and list views with search results that update as you type. Crafted goods stay separate, and production buildings show all five output slots on individual cards. Locked slots and unavailable production choices appear grey with padlocks and show their requirements. One button in the warehouse and in a backpack stores everything you carry that is already kept there, and Deep shelves upgrades let each warehouse slot hold several stacks. Deliveries are still in development.
+- **Apprentice workplaces** Mark, resize and name workplaces using new Building Staff modes, with a framed display showing the current mode and controls. Unlock types and individual upgrades in illustrated skill trees through supervising villagers, with clean framed nodes, connected paths and clear Town Level requirements. Locked building upgrades appear grey with padlocks and explain what is needed. Upgrades with satisfied prerequisites stand out. Production, restaurant and warehouse storage upgrades are collected here. Choose a workplace type from cards you can filter by skill or search, with each required bench clearly named. Elder Lyren's quest A Place to Work starts and pins itself when a villager who can supervise a workplace moves in, and walks you through your first one. Workplace screens allow safe removal after carried supplies are returned. Recipe search updates as you type, and locked recipes appear beneath available ones with their requirements.
+- **Builder's yard preview** New buildings are added to a yard at a Builder's Workbench by themselves. Apprentices travel to the building and help place reachable pieces, and several can build the same project at once, with stronger Building skills and better equipment improving their pace. Couriers bring a planned building's materials from the warehouse to its plot sign, and builders carry loose items left on the site back to the warehouse. A project board shows progress and lets you reorder or pause the yard. Completed projects leave the queue automatically, keeping the worker's final contribution and XP. Movement, appearance and balance are still being tested.
 
-- **Work planning** The town journal has icon tabs and a profession priority grid showing skill levels beside each choice. Toggle guard duty from the same page. Logistics uses the same grid, so townsfolk can deliver supplies and perform other enabled work without a separate courier assignment. Smelting, blacksmithing, and armor crafting have separate priorities. Open task planning at a workplace's main bench, with station upgrades available from the same screen. Workplaces can save and reorder crafting plans with recipe icons, material costs, skill requirements, and options to craft an amount, craft forever, or maintain stock. Workplaces discover recipes from their matching crafting benches and respect bench tiers, upgrades and recipe unlocks. Apprentices craft at their benches once supplies arrive and load and collect from furnaces using your chosen fuel.
+- **Work planning** The town journal has icon tabs and a profession priority grid showing skill levels beside each choice. New residents start with priorities already set for the skills they are good at. Toggle guard duty from the same page. Logistics uses the same grid, so townsfolk can deliver supplies and perform other enabled work without a separate courier assignment. Smelting, blacksmithing, and armor crafting have separate priorities. Open task planning at a workplace's main bench, with station upgrades available from the same screen. Workplaces can save and reorder crafting plans with recipe icons, material costs, skill requirements, and options to craft an amount, craft forever, or maintain stock. Workplaces discover recipes from their matching crafting benches and respect bench tiers, upgrades and recipe unlocks. Apprentices craft at their benches once supplies arrive and load and collect from furnaces using your chosen fuel.
 - **Apprentice wages** Employ townsfolk for a flat weekly wage. Review and pay their bills from the town journal or treasury, with a warning before payment is overdue. See treasury funds, unpaid bills and weekly wages together to plan spending.
 - **Guard escort orders** Following guards can wait in place, defend you when attacked, or engage nearby hostile creatures. Through dialogue, patrolling guards can collect drops from their own kills once danger has passed and deliver them to general storage. Following guards do not collect spoils.
 - **Townsfolk profiles** Open a character screen with a portrait, attributes and a profession skill grid through dialogue or the Town Journal. Each Gaia Shard or Verdant Catalyst raises its chosen attribute or profession by one. Townsfolk earn Mastery XP through completed work, up to level 20, with separate level and XP bars. Each Mastery level grants a profession point, and every fifth level grants two attribute points to spend. Townsfolk do not have reputation.
@@ -81,6 +78,14 @@
 
 ### Changed
 
+- **Tool keys** Tools now use H where they used E, and crouch with Q where they used R, because the game keeps E and R for rune abilities. Each tool's actions are listed at the bottom right of the screen with the keys you have bound.
+- **Building Staff** The use key now uses the bench, door, chest or villager you are looking at, and opens mode selection only when there is nothing to use.
+- **Command Flag** The Command Flag has its own model and icon, and now works in your hand anywhere: send every guard to a spot, switch order mode, stop them or release them.
+- **Builder** The Builder earns Mastery from building. He places one block at a time at level 1 and one more for each level, up to ten.
+- **Farm storage** Farms hold 25 of each crop to start, and upgrades add more.
+- **Hand Mirror** The jewelry screen has a new card layout. Choose a worn slot, then a piece from your bag.
+- **Shop spots** The Plot Creator and shop messages now call the block a shop spot everywhere.
+- **Shop prices** Small crude chests sell for less, and energy potions have proper prices.
 - **Bard recruitment** Invite Elias to stay through his own guild hall welcome quest.
 - **Prowl** Asks for corn when moving in and holds corn while eating.
 - **Gaia revival** A roomier revival screen with framed resident cards and clearer controls.
@@ -93,11 +98,24 @@
 - **Guild deliveries** New supply jobs include the goods' listed value and a delivery bonus. Posted jobs keep their quoted payment.
 - **Guild Hall recruitment** Invite visiting adventurers with the same move in items they request as tourists, then choose their work or guard duty.
 
-- **Player shop staffing** Assign a paid clerk at the shop's Town Records Shelf. Sales require the clerk to be at the counter, and Commerce skill improves visitor purchase chances.
+- **Player shop staffing** Assign a paid clerk at the shop's Town Records Shelf. Sales require the clerk to be at the counter, and Commerce skill improves visitor purchase chances. Shop buildings can mark where the clerk stands.
 - **Jewelry crafting** Apprentices now craft jewelry at Merchant workplaces. Higher qualities require more skill, and an Appraisal Bench reveals finished pieces automatically.
+- **Improved UI Icons** Edited UI Icons so they have a little more depth/detail to them.
 
 ### Fixed
 
+- **Guards and other creatures** Town guards no longer strike a creature that spawns just after a fight, and no longer attack tamed or summoned creatures from other mods. They still fight raiders, wild monsters and anything that attacks.
+- **Player shop items** Items put up for sale keep their details, such as a flask's contents, jewelry stats and wear, and worn items can be listed.
+- **Festival items** Wintertide gifts and Autumn Market goods keep their details and are not lost in a restart.
+- **Builder** The Builder no longer places blocks on himself or other villagers, and stands outside the building while he works.
+- **Festival square** Building the Festival Square no longer asks you to dig out the ground beneath it. Festival layouts lay their own foundations when a festival starts.
+- **Raids** Raids find a place to start far more reliably, including in forests, on coasts and in large towns. A raid that cannot start no longer leaves raiders behind.
+- **Quest board** Quest cards are larger and make room for long titles, descriptions and item lists instead of overlapping.
+- **Rebuilding buildings** Rebuilding, moving or removing a player shop no longer deletes items listed for sale, and workbenches keep their upgrade levels.
+- **Inn guests** Empty rooms at the Inn are filled even when you were away in the morning.
+- **House assignment** The house screen says why a resident cannot move in instead of reporting success.
+- **Move in requests** Townsfolk who asked for Motes of Light, which cannot be found, now ask for Life Essence.
+- **HUD text** Removed the dark boxes that appeared behind HUD letters.
 - **Residents at home** House shelves show saved residents while they are away or awaiting revival, with a teleport button beside each resident. House assignments survive revival.
 - **Villager visits** Residents pause briefly after being brought to you and stay still during conversations.
 
@@ -117,17 +135,7 @@
 - **Building placement** Placement errors appear inside the building preview controls, where they remain visible. Plot signs sit above the higher ground when their width spans a slope. Movement arrows follow where you look, even when your body faces another direction. Moving a building preserves furniture at the original plot marker position. The Building Staff guide prioritizes the building you are standing in.
 - **Building editor** Resize existing buildings through the bounds step. Saved air cells appear as Editor Empty markers when loaded for editing. The selection tool works normally outside the bounds selection step.
 - **Town journal** Bills include an estimate of tomorrow's taxes. Reuses unchanged page content when switching tabs and fetches marketplace thumbnails without blocking the Town page. The resident list includes Townsfolk and their current activity, with separate filters and pages. Every villager Guide begins with a portrait. The refreshed Town Records Shelf has the same combined resident list and a teleport button beside the assigned worker. Home resident and workplace worker pickers support name search as you type.
-- **New villager models** New human villagers use the shared villager animation set.
 - **Villager models** Corrected human ear attachment points so residents can wear their earrings.
-
-## [3.2.2] - Unreleased
-
-### Changed
-
-- **Improved UI Icons** Edited UI Icons so they have a little more depth/detail to them.
-
-### Fixed
-
 - **Villager memories** Villager memories from other mods remain visible at the memory bench after their assets reload.
 - **Town backups** Closing a world or server no longer interrupts a backup and fills the log with archive errors.
 

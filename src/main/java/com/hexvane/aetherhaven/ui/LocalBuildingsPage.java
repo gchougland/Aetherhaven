@@ -68,7 +68,7 @@ public final class LocalBuildingsPage extends AetherhavenInteractiveCustomUIPage
         commandBuilder.set("#StepHint.Visible", !empty && !modalBlocking);
         commandBuilder.set("#EmptyLabel.Visible", empty && !modalBlocking);
         commandBuilder.set("#EmptyLabel.TextSpans", Message.translation(MSG + ".empty"));
-        commandBuilder.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
+        commandBuilder.set("#PageCloseButton.TextSpans", Message.translation(MSG + ".button.close"));
         commandBuilder.set("#SearchInput.Value", searchQuery);
         commandBuilder.set("#SearchInput.PlaceholderText", Message.translation(MSG + ".searchPlaceholder"));
 
@@ -80,7 +80,7 @@ public final class LocalBuildingsPage extends AetherhavenInteractiveCustomUIPage
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
-            "#CloseButton",
+            "#PageCloseButton",
             EventData.of("Action", "Close"),
             false
         );

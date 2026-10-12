@@ -1,0 +1,122 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Plant_Crop_Health2.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Plant_Crop_Health2.png",
+  "IconProperties": {
+    "Scale": 0.66,
+    "Translation": [
+      3.3,
+      -19.5
+    ],
+    "Rotation": [
+      3.935,
+      83.3,
+      29.815
+    ]
+  },
+  "BlockType": {
+    "DrawType": "Model",
+    "Material": "Empty",
+    "Opacity": "Transparent",
+    "CustomModel": "Resources/Plants/Seeds.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Resources/Plants/Seeds_Textures/Spore_Red.png",
+        "Weight": 1
+      }
+    ],
+    "CustomModelScale": 0.7,
+    "HitboxType": "Plant_Seed",
+    "BlockSoundSetId": "Seeds",
+    "PhysicalMaterialId": "Foliage",
+    "BlockParticleSetId": "Dust",
+    "ParticleColor": "#ee2957",
+    "Flags": {
+      "IsStackable": false
+    },
+    "Gathering": {
+      "Soft": {
+        "DropList": "Empty",
+        "IsWeaponBreakable": false
+      }
+    },
+    "Support": {
+      "Down": [
+        {
+          "BlockTypeId": "Aetherhaven_Spirit_Planter"
+        }
+      ]
+    },
+    "SupportDropType": "Destroy",
+    "State": {
+      "Definitions": {
+        "Stage1": {
+          "CustomModel": "Blocks/Foliage/Plants/Health_T2_Blood_Cap/Blood_Cap_01.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Plants/Health_T2_Blood_Cap/Blood_Cap_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.7,
+          "HitboxType": "Plant_Small",
+          "Opacity": "Semitransparent",
+          "Light": {
+            "Color": "#533"
+          }
+        },
+        "Stage2": {
+          "CustomModel": "Blocks/Foliage/Plants/Health_T2_Blood_Cap/Blood_Cap_02.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Plants/Health_T2_Blood_Cap/Blood_Cap_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 0.7,
+          "HitboxType": "Plant_Large",
+          "Light": {
+            "Color": "#744"
+          }
+        },
+        "Ripe": {
+          "CustomModel": "Blocks/Foliage/Plants/Health_T2_Blood_Cap/Blood_Cap.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Foliage/Plants/Health_T2_Blood_Cap/Blood_Cap_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "CustomModelScale": 1,
+          "HitboxType": "Plant_Full",
+          "Opacity": "Transparent",
+          "Light": {
+            "Color": "#955"
+          },
+          "Particles": [
+            {
+              "SystemId": "Plant_Health_Tier2",
+              "PositionOffset": {},
+              "Color": "#d12929",
+              "TargetNodeName": "Cap1",
+              "Scale": 1.3
+            }
+          ],
+          "BlockParticleSetId": "Dust",
+          "ParticleColor": "#ee2957"
+        }
+      }
+    }
+  },
+  "PlayerAnimationsId": "Item",
+  "Tags": {
+    "Type": [
+      "Plant"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Items_Foliage"
+}

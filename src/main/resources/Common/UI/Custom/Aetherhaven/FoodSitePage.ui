@@ -25,8 +25,9 @@ $C.@PageOverlay { LayoutMode: Middle;
    Label { Text: "This workplace supports your residents. It does not produce inventory items. Time away from an unloaded town does not cause neglect."; Anchor: (Height: 48, Bottom: 4); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #b7c9bb); }
    Group { LayoutMode: Left; Anchor: (Height: 40);
     $C.@SecondaryTextButton #Back { Text: "Workplace settings"; FlexWeight: 1; Anchor: (Right: 12); }
-    $C.@SecondaryTextButton #Station { Text: "Station upgrades"; Anchor: (Width: 190, Right: 12); Visible: false; }
-    $C.@TextButton #Refresh { Text: "Refresh"; Anchor: (Width: 160); }
+    $C.@SecondaryTextButton #Bench { Text: "Craft at this bench"; Anchor: (Width: 200, Right: 12); Visible: false; }
+    $C.@SecondaryTextButton #Station { Text: "Station upgrades"; Anchor: (Width: 180, Right: 12); Visible: false; }
+    $C.@TextButton #Refresh { Text: "Refresh"; Anchor: (Width: 120); }
    }
   }
  }

@@ -1,5 +1,5 @@
 {
-  "$Comment": "Shared convention group for town allies. Other mods can add IncludeGroups: [\"Friendly\"] on their villager groups, or list roles here.",
+  "$Comment": "Shared convention group for town allies. Other mods can add IncludeGroups: [\"Friendly\"] on their villager groups, or list roles here. Town guards never start a fight with a creature whose role is in this group, so a pack can also list pets, mounts and tame animals that the game spawns naturally.",
   "IncludeGroups": [
     "Aetherhaven_Townsfolk"
   ]

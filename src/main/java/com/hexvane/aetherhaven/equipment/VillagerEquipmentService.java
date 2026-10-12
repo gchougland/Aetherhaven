@@ -36,18 +36,40 @@ public final class VillagerEquipmentService {
         @Nonnull EquipmentProfileCatalog catalog,
         @Nonnull String profileId
     ) {
-        // Legacy plots saved the bard profile on nonmusical residents' work spots.
-        var binding=store.getComponent(npcRef,com.hexvane.aetherhaven.villager.TownVillagerBinding.getComponentType());
-        if ("work_bard".equals(profileId)&&binding!=null&&("halloween".equals(binding.getKind()) || "monster_hunter".equals(binding.getKind()))) {
-            clearHotbar(npcRef,store,commandBuffer);
-            return;
-        }
         EquipmentProfileDefinition def = catalog.byId(profileId);
         if (def == null) {
             LOGGER.atWarning().log("Unknown equipment profile %s", profileId);
             return;
         }
+        // Saved towns and older buildings can still name a profession's own prop, such as the bard's lute,
+        // on another resident's work spot. The profile says who may hold it; everyone else holds nothing.
+        if (def.isResidentRestricted() && !mayHold(def, residentKind(npcRef, store))) {
+            clearHotbar(npcRef, store, commandBuffer);
+            return;
+        }
         applyProfile(npcRef, store, commandBuffer, def);
+    }
+
+    /** Whether this resident may be given the profile at all. Unknown profiles are left to the caller. */
+    public static boolean mayHold(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull EquipmentProfileCatalog catalog,
+        @Nonnull String profileId
+    ) {
+        EquipmentProfileDefinition def = catalog.byId(profileId);
+        return def == null || !def.isResidentRestricted() || mayHold(def, residentKind(npcRef, store));
+    }
+
+    /** A restricted profile needs a known resident kind; an entity with no town binding never qualifies. */
+    static boolean mayHold(@Nonnull EquipmentProfileDefinition def, @Nullable String residentKind) {
+        return def.permitsResidentKind(residentKind);
+    }
+
+    @Nullable
+    private static String residentKind(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
+        var binding = store.getComponent(npcRef, com.hexvane.aetherhaven.villager.TownVillagerBinding.getComponentType());
+        return binding != null ? binding.getKind() : null;
     }
 
     public static void applyProfile(

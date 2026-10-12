@@ -71,13 +71,21 @@ final class AetherhavenCrafterTestCommand extends AbstractAsyncCommand {
             && recipes.stream().filter(r -> r.type() == com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.SALVAGING)
                 .allMatch(r -> r.name().startsWith("Salvage ") && !r.sourceRecipe().startsWith("Salvage_Aetherhaven_") && r.source() != null);
         if (salvaging) passed++; else { failed++; report(ctx, "Salvaging workplace recipes: FAILED (" + salvage + " found)."); }
+        // The Builder's Workbench is a structural bench. Its recipes must reach the Block Workshop and nothing else.
+        long blocks = recipes.stream().filter(r -> r.type() == com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.BLOCK_WORKSHOP).count();
+        boolean workshop = blocks >= 100
+            && recipes.stream().filter(r -> r.type() == com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.BLOCK_WORKSHOP)
+                .allMatch(r -> com.hexvane.aetherhaven.workplace.WorkplaceEquipment.BUILDERS_BENCH.equals(r.bench()) && r.source() != null)
+            && recipes.stream().filter(r -> com.hexvane.aetherhaven.workplace.WorkplaceEquipment.BUILDERS_BENCH.equals(r.bench()))
+                .allMatch(r -> r.type() == com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.BLOCK_WORKSHOP);
+        if (workshop) passed++; else { failed++; report(ctx, "Block Workshop recipes: FAILED (" + blocks + " found)."); }
         var smelting = new java.util.TreeMap<String, Integer>();
         for (var recipe : recipes) if (recipe.type() == com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.SMELTING)
             for (String metal : java.util.List.of("Copper", "Iron", "Silver", "Gold", "Thorium", "Cobalt", "Adamantite"))
                 if (recipe.sourceRecipe().contains("_Bar_" + metal + "_")) smelting.put(metal, recipe.skillLevel());
         boolean ladder = java.util.Map.of("Copper", 1, "Iron", 3, "Silver", 4, "Gold", 4, "Thorium", 5, "Cobalt", 7, "Adamantite", 9).equals(smelting);
         if (ladder) passed++; else { failed++; report(ctx, "Smelting skill ladder: FAILED " + smelting + "."); }
-        report(ctx, "Workplace recipes: " + salvage + " salvaging, smelting skills " + smelting + ".");
+        report(ctx, "Workplace recipes: " + salvage + " salvaging, " + blocks + " block workshop, smelting skills " + smelting + ".");
         // The feeding trough has no recipe in the base game, so the mod supplies one at the Workbench.
         var trough = com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe.getAssetMap().getAsset("Bench_Trough_Recipe");
         boolean troughCraftable = trough != null && trough.getPrimaryOutput() != null && "Bench_Trough".equals(trough.getPrimaryOutput().getItemId())

@@ -830,6 +830,8 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             );
             town.addPlotInstance(miniPlot);
         }
+        // The new project appears on a Builder's yard without the player adding it by hand.
+        com.hexvane.aetherhaven.workplace.BuildingProjectAutoQueue.offer(town, town.findPlotById(plotId), uc.getUuid());
         QuestProgressionService.onConstructionPlaced(plugin, town, session.getConstructionId());
         tm.updateTown(town);
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());

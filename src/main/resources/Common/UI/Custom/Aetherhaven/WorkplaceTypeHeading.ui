@@ -1,0 +1,5 @@
+$C = "../Common.ui";
+// A caption over a run of workplace type cards.
+Group { LayoutMode: Left; Anchor: (Height: 26, Bottom: 4); Padding: (Horizontal: 4);
+  Label #Title { Text: ""; Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, TextColor: #e0c891, VerticalAlignment: Center); }
+}

@@ -4,5 +4,10 @@
   "hireGoldCost": 0,
   "hotbar": [
     { "slot": 0, "itemId": "Tool_Hammer_Iron" }
-  ]
+  ],
+  "workAnimation": {
+    "animationsId": "Aetherhaven_Work_Actions",
+    "animationId": "Hammer",
+    "intervalMs": 1000
+  }
 }

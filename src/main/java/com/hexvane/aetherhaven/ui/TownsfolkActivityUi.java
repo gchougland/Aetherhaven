@@ -28,7 +28,8 @@ final class TownsfolkActivityUi {
         if (courier != null && courier.active) return Message.raw(delivery(courier.action));
         var work = store.getComponent(npc, ApprenticeWorkState.getComponentType());
         if (work != null && work.active) {
-            UUID siteId = work.buildingSite != null ? work.buildingSite : work.excavationSite != null ? work.excavationSite : work.foodSite;
+            UUID siteId = work.buildingSite != null ? work.buildingSite : work.excavationSite != null ? work.excavationSite
+                : work.growerSite != null ? work.growerSite : work.foodSite;
             if (siteId == null && work.batch != null) {
                 var batch = town.getWarehouse().batch(work.batch);
                 if (batch != null) siteId = batch.workplaceId();
@@ -66,6 +67,15 @@ final class TownsfolkActivityUi {
         };
     }
 
+    private static String growing(com.hexvane.aetherhaven.workplace.GrowerSite.Job job, TownsfolkWorkType type) {
+        boolean logs = type == TownsfolkWorkType.MYCOLOGY;
+        return switch (job) {
+            case SEED -> "Seeding a log";
+            case TEND -> logs ? "Tending mushrooms" : "Watering bushes";
+            case PICK -> logs ? "Picking mushrooms" : "Picking berries";
+        };
+    }
+
     static String work(ApprenticeWorkState state, TownsfolkWorkType type, String site) {
         if (state.excavationSite != null) {
             if (state.excavationDelivery || state.excavationCarrying) return "Delivering mined material";
@@ -75,7 +85,8 @@ final class TownsfolkActivityUi {
         if (!state.working) return "Walking to " + location;
         String action = state.buildingSite != null ? "Building" : state.excavationSite != null ? "Mining"
             : state.foodSite != null && type == TownsfolkWorkType.FARMING ? state.foodHarvest ? "Harvesting crops" : "Watering crops"
-            : state.foodSite != null && type == TownsfolkWorkType.RANCHING ? "Tending animals" : "Working";
+            : state.foodSite != null && type == TownsfolkWorkType.RANCHING ? "Tending animals"
+            : state.growerSite != null && state.growerJob != null ? growing(state.growerJob, type) : "Working";
         return action + " at " + location;
     }
 }

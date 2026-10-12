@@ -53,6 +53,23 @@ public record TimberPlantingReceipt(UUID id, String sapling, String output, Posi
         return null;
     }
 
+    /**
+     * Whether two predictions describe the same tree: the same stages from the same prefabs, with the same cells and
+     * the same clearance. The cells are compared as sets. The engine hands a prefab's columns over in hash table
+     * order, and that order is different once it has reloaded the prefab from its binary cache, so two predictions
+     * of an unchanged tree can list the same cells in a different order.
+     */
+    public boolean sameGrowth(TimberPlantingReceipt other) {
+        if (other == null || stages.size() != other.stages.size() || !clearance.equals(other.clearance)) return false;
+        for (int index = 0; index < stages.size(); index++) {
+            Stage mine = stages.get(index), theirs = other.stages.get(index);
+            if (mine == null || theirs == null || mine.index() != theirs.index()
+                    || !Objects.equals(mine.source(), theirs.source()) || mine.cells().size() != theirs.cells().size()
+                    || !new HashSet<>(mine.cells()).equals(new HashSet<>(theirs.cells()))) return false;
+        }
+        return true;
+    }
+
     /** Includes underground roots and intermediate canopies, not just the final tree. */
     public Set<Position> footprint() {
         Set<Position> result = new LinkedHashSet<>(clearance);

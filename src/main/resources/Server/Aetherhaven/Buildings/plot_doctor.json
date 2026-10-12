@@ -44,8 +44,7 @@
       "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "WORK_SURFACE",
       "workResidentKind": "doctor",
-      "interactionTargetYawDegrees": -168.49023,
-      "equipmentProfileId": "work_bard"
+      "interactionTargetYawDegrees": -168.49023
     }
   ],
   "styleId": "core",

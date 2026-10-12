@@ -109,4 +109,49 @@ class PatternBookTest {
         var blank = new Gson().fromJson("{\"known\":null,\"queue\":null,\"shelf\":null}", PatternBook.class);
         assertTrue(blank.learn("a")); assertTrue(blank.commission("a", PAID)); assertEquals(1, blank.work(100, prop -> 100));
     }
+
+    /**
+     * The bench is a list that moves by itself: when Tobin finishes the first prop every other commission moves up.
+     * A cancel that only knew its place on the page would then cancel the wrong prop.
+     */
+    @Test void cancellingFollowsTheCommissionThatWasChosenWhenTheBenchMovedUnderThePlayer() {
+        // Five known patterns give the bench its third place.
+        var book = new PatternBook(); for (String prop : List.of("chair", "table", "lamp", "stool", "shelf")) book.learn(prop);
+        var paidChair = Map.of(Kind.WOOD.item(), 10); var paidTable = Map.of(Kind.WOOD.item(), 20); var paidLamp = Map.of(Kind.METAL.item(), 5);
+        assertTrue(book.commission("chair", paidChair)); assertTrue(book.commission("table", paidTable)); assertTrue(book.commission("lamp", paidLamp));
+        // The page is drawn: chair 0, table 1, lamp 2. The player goes to cancel the table.
+        assertEquals(1, book.locate(1, "table"));
+        // Tobin finishes the chair before the press arrives. The table is now first and the lamp is where the table was.
+        assertEquals(1, book.work(100, prop -> 100));
+        assertEquals("lamp", book.queue().get(1).prop(), "A press that only knew place 1 would cancel the lamp");
+        int now = book.locate(1, "table");
+        assertEquals(0, now);
+        assertEquals(paidTable, book.cancel(now), "Exactly what the table cost is handed back");
+        assertEquals(List.of("lamp"), book.queue().stream().map(PatternBook.Commission::prop).toList());
+        assertEquals(1, book.shelf().get("chair"), "The finished chair is on the shelf, not lost and not refunded");
+        // The same press again, or a press for a prop that has been finished: nothing is cancelled.
+        assertEquals(-1, book.locate(1, "table"));
+        assertEquals(-1, book.locate(0, "chair"));
+        assertEquals(1, book.queue().size());
+        // Two commissions of one prop: the one chosen, or the one that moved up into reach, never one further back.
+        var twins = new PatternBook(); for (String prop : List.of("chair", "table", "lamp", "stool", "shelf")) twins.learn(prop);
+        twins.commission("chair", paidChair); twins.commission("lamp", paidLamp); twins.commission("chair", paidChair);
+        assertEquals(0, twins.locate(0, "chair")); assertEquals(2, twins.locate(2, "chair")); assertEquals(0, twins.locate(1, "chair"));
+        assertEquals(-1, twins.locate(0, "lamp"), "A commission is never looked for behind the place it was drawn at");
+        assertEquals(-1, twins.locate(2, null)); assertEquals(-1, new PatternBook().locate(0, "chair"));
+        assertEquals(2, twins.locate(9, "chair"), "A place past the end of the bench starts from the last commission");
+    }
+
+    @Test void theBenchBarMovesInTwentiethsSoAnOpenPageSendsLittle() {
+        int changes = 0; float last = -1;
+        // Ten minutes of bench work looked at once a second.
+        for (int second = 0; second <= 600; second++) {
+            float shown = PatternBookPage.shownProgress(second / 600.0);
+            if (shown != last) changes++;
+            last = shown;
+        }
+        assertEquals(21, changes, "Twenty steps and the start, not six hundred updates");
+        assertEquals(0f, PatternBookPage.shownProgress(-1)); assertEquals(1f, PatternBookPage.shownProgress(2));
+        assertEquals(.95f, PatternBookPage.shownProgress(.999));
+    }
 }

@@ -1,0 +1,120 @@
+{
+  "workplace": "mycology",
+  "bedBlocks": [
+    "Aetherhaven_Mushroom_Log"
+  ],
+  "logBeds": true,
+  "maxBeds": 6,
+  "storeCapacity": 40,
+  "tends": 2,
+  "stageMinutes": 180,
+  "seedSeconds": 6,
+  "tendSeconds": 6,
+  "pickSeconds": 5,
+  "crops": [
+    {
+      "id": "common_brown",
+      "item": "Plant_Crop_Mushroom_Common_Brown",
+      "skill": 1,
+      "yield": 2,
+      "grownState": "Grown_Common_Brown",
+      "use": "cooking"
+    },
+    {
+      "id": "cap_brown",
+      "item": "Plant_Crop_Mushroom_Cap_Brown",
+      "skill": 1,
+      "yield": 2,
+      "grownState": "Grown_Cap_Brown",
+      "use": "cooking"
+    },
+    {
+      "id": "cap_white",
+      "item": "Plant_Crop_Mushroom_Cap_White",
+      "skill": 2,
+      "yield": 2,
+      "grownState": "Grown_Cap_White",
+      "use": "cooking"
+    },
+    {
+      "id": "flatcap_green",
+      "item": "Plant_Crop_Mushroom_Flatcap_Green",
+      "skill": 2,
+      "yield": 2,
+      "grownState": "Grown_Flatcap_Green",
+      "use": "regen"
+    },
+    {
+      "id": "cap_red",
+      "item": "Plant_Crop_Mushroom_Cap_Red",
+      "skill": 3,
+      "yield": 2,
+      "grownState": "Grown_Cap_Red",
+      "use": "healthBoost"
+    },
+    {
+      "id": "common_blue",
+      "item": "Plant_Crop_Mushroom_Common_Blue",
+      "skill": 3,
+      "yield": 2,
+      "grownState": "Grown_Common_Blue",
+      "use": "manaBoost"
+    },
+    {
+      "id": "common_lime",
+      "item": "Plant_Crop_Mushroom_Common_Lime",
+      "skill": 4,
+      "yield": 2,
+      "grownState": "Grown_Common_Lime",
+      "use": "poisonWard"
+    },
+    {
+      "id": "cap_green",
+      "item": "Plant_Crop_Mushroom_Cap_Green",
+      "skill": 5,
+      "yield": 1,
+      "grownState": "Grown_Cap_Green",
+      "use": "regenStrong"
+    },
+    {
+      "id": "boomshroom_small",
+      "item": "Plant_Crop_Mushroom_Boomshroom_Small",
+      "skill": 5,
+      "yield": 1,
+      "grownState": "Grown_Boomshroom_Small",
+      "use": "blastWard"
+    },
+    {
+      "id": "boomshroom_large",
+      "item": "Plant_Crop_Mushroom_Boomshroom_Large",
+      "skill": 6,
+      "yield": 1,
+      "grownState": "Grown_Boomshroom_Large",
+      "use": "blastWard"
+    },
+    {
+      "id": "glowing_blue",
+      "item": "Plant_Crop_Mushroom_Glowing_Blue",
+      "skill": 6,
+      "yield": 1,
+      "grownState": "Grown_Glowing_Blue",
+      "use": "manaBoostStrong"
+    },
+    {
+      "id": "glowing_red",
+      "item": "Plant_Crop_Mushroom_Glowing_Red",
+      "skill": 7,
+      "yield": 1,
+      "grownState": "Grown_Glowing_Red",
+      "use": "healthBoostStrong"
+    },
+    {
+      "id": "glowing_green",
+      "item": "Plant_Crop_Mushroom_Glowing_Green",
+      "skill": 9,
+      "yield": 1,
+      "grownState": "Grown_Glowing_Green",
+      "use": "regenStrongest"
+    }
+  ]
+}

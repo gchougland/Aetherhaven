@@ -18,12 +18,11 @@
   "MaxConcurrentParticles": 8,
   "Particle": {
     "Texture": "Particles/Textures/Basic/Star2.png",
-    "FrameSize": { "Width": 32, "Height": 32 },
     "ScaleRatioConstraint": "OneToOne",
     "Animation": {
       "0": {
         "FrameIndex": { "Min": 0, "Max": 0 },
-        "Scale": { "X": { "Min": 0.25, "Max": 0.42 } },
+        "Scale": { "X": { "Min": 1.25, "Max": 1.105263 } },
         "Opacity": 0.5,
         "Color": "#77ddff"
       },
@@ -42,7 +41,7 @@
         "Y": { "Min": 0, "Max": 360 },
         "Z": { "Min": 0, "Max": 0 }
       },
-      "Scale": { "X": { "Min": 0.2, "Max": 0.38 } },
+      "Scale": { "X": { "Min": 0.05, "Max": 0.095 } },
       "Opacity": 0.45,
       "FrameIndex": { "Min": 0, "Max": 0 },
       "Color": "#66ccff"

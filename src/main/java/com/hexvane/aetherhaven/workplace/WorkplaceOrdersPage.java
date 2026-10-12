@@ -63,6 +63,11 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
         c.set("#TitleText.Text",site.name()+" | TASKS");
         c.set("#Station.Visible",station!=null);
         e.addEventBinding(CustomUIEventBindingType.Activating,"#Station",event("Station",site),false);
+        // Using this bench opens these tasks, so its own crafting screen is offered here.
+        String ownScreen=WorkplaceNativeBench.label(store.getExternalData().getWorld(),station);
+        c.set("#Bench.Visible",ownScreen!=null);
+        if(ownScreen!=null)c.set("#Bench.Text",ownScreen);
+        e.addEventBinding(CustomUIEventBindingType.Activating,"#Bench",event("Bench",site),false);
         c.set("#FuelRow.Visible",site.type()==com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.SMELTING);
         c.set("#Fuel.Text",site.charcoalFuel()?"Fuel: charcoal":"Fuel: wood");
         e.addEventBinding(CustomUIEventBindingType.Activating,"#Fuel",event("Fuel",site).append("Id",Boolean.toString(!site.charcoalFuel())),false);
@@ -101,7 +106,7 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
         if(brewing)buildAlchemy(c,e,site,equipment,town,workers,plugin);
         if(cropSheet)buildCultivation(c,e,site,town,plugin);
         if(equipmentSheet)buildArmory(c,e,site,equipment,town,workers,plugin);
-        buildFurnaces(c,store.getExternalData().getWorld(),site,equipment);
+        buildFurnaces(c,e,store.getExternalData().getWorld(),site,equipment);
         buildStored(c,e,site,town,plugin);
         c.clear("#Recipes"); int index=0;
         boolean recipeList=!designer&&!brewing&&!cropSheet&&!equipmentSheet;
@@ -140,11 +145,10 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
             var recipe=plugin.getApprenticeRecipes().find(order.recipeId());
             outputIcon(c,row,recipe);
             c.set(row+" #Name.Text",index+". "+(recipe==null?"Unavailable recipe":recipe.name()));
-            c.set(row+" #Amount.Text",switch(order.mode()) {
-                case COUNT -> cultivation?"Grow "+order.quantity()+(order.quantity()==1?" plant | ":" plants | ")+order.completed()+" harvested":"Craft "+order.quantity()+" batches | "+order.completed()+" complete";
-                case FOREVER -> cultivation?"Keep growing while seeds are available":"Keep crafting while resources are available";
-                case MAINTAIN -> "Maintain "+order.quantity()+" items in town storage";
-            });
+            // A maintain task shows the same count the town compares with its target before preparing more.
+            var made=order.mode()==WorkplaceOrders.Mode.MAINTAIN?primaryOutput(recipe):null;
+            c.set(row+" #Amount.Text",order.amountText(cultivation,
+                made==null?-1:recipe.stored(town.getWarehouse(),made),made==null?0:recipe.incoming(town.getWarehouse(),made)));
             var batch=town.getWarehouse().batches().stream().filter(b->b.workplaceId().equals(siteId)&&b.orderId().equals(order.id())).findFirst().orElse(null);
             String delivery=batch==null||!batch.orderId().equals(order.id())?null:switch(batch.state()) {
                 case AWAITING_PICKUP -> "Supplies reserved. Waiting for a courier.";
@@ -184,7 +188,9 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
             c.set(row+" #Status.Text",order.mode()==WorkplaceOrders.Mode.COUNT&&order.completed()>=order.quantity()?"Completed":order.paused()?"Paused":recipe==null?"Recipe unavailable. This task is kept for later.":delivery!=null&&recipe.unlocked(town)&&recipe.source()!=null&&recipe.equipmentIssue(site,equipment)==null&&recipe.nativeUnlockIssue(town,equipment.memoriesLevel())==null?delivery:status(recipe,site,equipment,town,workers));
             c.set(row+" #Up.Disabled",index==1); c.set(row+" #Down.Disabled",index==site.orders().list().size());
             c.set(row+" #Pause.Text",order.paused()?"Resume":"Pause");
-            for(String action:List.of("Up","Down","Pause","Remove")) e.addEventBinding(CustomUIEventBindingType.Activating,row+" #"+action,event(action,site).append("Id",order.id().toString()),false);
+            // Every button names its task by id, and the pause button names the state it asks for.
+            for(String action:List.of("Up","Down","Pause","Remove")) e.addEventBinding(CustomUIEventBindingType.Activating,row+" #"+action,
+                event("Pause".equals(action)&&order.paused()?"Resume":action,site).append("Id",order.id().toString()),false);
         }
         var recipe=selected==null?null:plugin.getApprenticeRecipes().find(selected);
         c.set("#Selected.Text",recipe==null?"Choose a recipe to see its materials.":recipe.name());
@@ -352,12 +358,15 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
         }
         return items;
     }
+    /** Furnace rows on screen at once. A workplace with more shows them all in a list this tall that scrolls. */
     private static final int FURNACES_SHOWN=3;
+    private static final int FURNACE_ROW_HEIGHT=64;
     /** One furnace as the game holds it right now: what is waiting to be smelted, its fuel, and what has come out. */
     record FurnaceView(boolean active,List<com.hypixel.hytale.server.core.inventory.ItemStack> in,List<com.hypixel.hytale.server.core.inventory.ItemStack> out) {
-        String status(int number) {
+        /** @param here whether this is the furnace the player used to open the page */
+        String status(int number,boolean here) {
             int waiting=in.stream().mapToInt(com.hypixel.hytale.server.core.inventory.ItemStack::getQuantity).sum();
-            return "Furnace "+number+"\n"+(active?"Smelting":waiting>0||!out.isEmpty()?"Stopped":"Empty");
+            return "Furnace "+number+(here?" (this bench)":"")+"\n"+(active?"Smelting":waiting>0||!out.isEmpty()?"Stopped":"Empty");
         }
     }
     private static List<com.hypixel.hytale.server.core.inventory.ItemStack> stacks(com.hypixel.hytale.server.core.inventory.container.ItemContainer container) {
@@ -377,19 +386,26 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
         return new FurnaceView(processing.isActive(),in,stacks(processing.getOutputContainer()));
     }
     /** A smelting workplace shows what each of its furnaces holds, so a stalled or empty furnace can be seen at a glance. */
-    private void buildFurnaces(UICommandBuilder c,com.hypixel.hytale.server.core.universe.world.World world,ApprenticeWorkplace site,WorkplaceEquipment.Snapshot equipment) {
+    private void buildFurnaces(UICommandBuilder c,UIEventBuilder e,com.hypixel.hytale.server.core.universe.world.World world,ApprenticeWorkplace site,WorkplaceEquipment.Snapshot equipment) {
         boolean smelting=site.type()==com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.SMELTING;
-        c.clear("#Furnaces");c.set("#Furnaces.Visible",smelting);
-        if(!smelting)return;
-        int row=0;
-        for(var bench:equipment.benches()) {
-            if(!"Furnace".equals(bench.id())||row>=FURNACES_SHOWN)continue;
-            var view=furnace(world,bench);if(view==null)continue;
-            c.append("#Furnaces","Aetherhaven/WorkplaceFurnaceRow.ui");String at="#Furnaces["+row+++"]";
-            c.set(at+" #Name.Text",view.status(row));
+        c.clear("#Furnaces");
+        int shown=0;
+        if(smelting)for(var row:WorkplaceBenchRows.rows(equipment.benches(),"Furnace")) {
+            var view=furnace(world,row.bench());if(view==null)continue;
+            c.append("#Furnaces","Aetherhaven/WorkplaceFurnaceRow.ui");String at="#Furnaces["+shown+++"]";
+            // A furnace keeps its number even when another one is not loaded, and its button names its own block.
+            c.set(at+" #Name.Text",view.status(row.number(),row.position().equals(station)));
             furnaceCells(c,at+" #In",view.in(),"In the furnace");
             furnaceCells(c,at+" #Out",view.out(),"Smelted. An Apprentice collects it when the furnace stops.");
+            // Offered wherever the bench button above is: on a page opened at one of this workplace's benches.
+            c.set(at+" #Open.Visible",station!=null&&WorkplaceNativeBench.label(world,row.position())!=null);
+            c.set(at+" #Open.TooltipTextSpans",Message.raw("Open furnace "+row.number()+" to add or take items yourself."));
+            e.addEventBinding(CustomUIEventBindingType.Activating,at+" #Open",event("BenchAt",site).append("Id",row.key()),false);
         }
+        c.set("#FurnaceList.Visible",shown>0);
+        var height=new com.hypixel.hytale.server.core.ui.Anchor();
+        height.setHeight(com.hypixel.hytale.server.core.ui.Value.of(Math.min(shown,FURNACES_SHOWN)*FURNACE_ROW_HEIGHT));
+        c.setObject("#FurnaceList.Anchor",height);
     }
     private static void furnaceCells(UICommandBuilder c,String group,List<com.hypixel.hytale.server.core.inventory.ItemStack> stacks,String tooltip) {
         int cell=0;
@@ -416,7 +432,7 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
                 c.set(cell+" #Cell.Disabled",!collect||free<=0);
                 c.set(cell+" #Cell.TooltipText",stack.getQuantity()+" stored at the furnace"+(reserved>0?"\n"+reserved+" kept for a workplace":"")
                     +(!collect?"\nYou may not take from the town stores.":free>0?"\nClick to collect":""));
-                e.addEventBinding(CustomUIEventBindingType.Activating,cell+" #Cell",event("CollectSmelted",site).append("Id",origin.id()+"|"+slot),false);
+                e.addEventBinding(CustomUIEventBindingType.Activating,cell+" #Cell",event("CollectSmelted",site).append("Id",origin.id()+"|"+slot+"|"+stack.getItemId()),false);
             }
         }
         c.set("#StoredEmpty.Visible",shown==0);
@@ -439,14 +455,34 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
             c.set(cell+" #Cell.Disabled",!collect||free<=0);
             c.set(cell+" #Cell.TooltipText",stack.getQuantity()+" in Crafted Goods"+(reserved>0?"\n"+reserved+" kept for a workplace":"")
                 +(!collect?"\nYou may not take from the town stores.":free>0?"\nClick to collect":""));
-            e.addEventBinding(CustomUIEventBindingType.Activating,cell+" #Cell",event("Collect",site).append("Id",Short.toString(slot)),false);
+            e.addEventBinding(CustomUIEventBindingType.Activating,cell+" #Cell",event("Collect",site).append("Id",slot+"|"+stack.getItemId()),false);
         }
         c.set("#StoredEmpty.Visible",shown==0);
         c.set("#StoredTitle.Text","FINISHED GOODS IN STORE ("+warehouse.used(page)+" / "+warehouse.slots(page)+" slots)");
     }
     private static final int STORED_SHOWN=12;
+    /**
+     * The slot that holds the named item now: the slot it was drawn in while that still holds it, otherwise the
+     * first slot that does, otherwise -1. A slot that now holds something else is never returned.
+     */
+    public static short heldSlot(int slots,short drawn,String item,java.util.function.Function<Short,com.hypixel.hytale.server.core.inventory.ItemStack> stackAt) {
+        if(item==null)return -1;
+        if(drawn>=0&&drawn<slots&&holds(stackAt.apply(drawn),item))return drawn;
+        for(short slot=0;slot<slots;slot++)if(holds(stackAt.apply(slot),item))return slot;
+        return -1;
+    }
+    private static boolean holds(com.hypixel.hytale.server.core.inventory.ItemStack stack,String item) {
+        return !com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(stack)&&item.equals(stack.getItemId());
+    }
+    /** The item's name in the player's language, for a sentence. */
+    private String itemName(String id) {
+        var item=com.hypixel.hytale.server.core.asset.type.item.config.Item.getAssetMap().getAsset(id);
+        var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
+        String name=item==null||i18n==null?null:i18n.getMessage(playerRef.getLanguage(),item.getTranslationKey());
+        return name==null||name.isBlank()?id.replace('_',' '):name;
+    }
     private EventData event(String action,ApprenticeWorkplace site) {
-        return new EventData().append("Action",action).append("Revision",Long.toString(site.orders().revision()))
+        return new EventData().append("Action",action)
             .append("@Quantity","#OrderQuantity.Value").append("@Search","#Search.Value");
     }
     private static String modeLabel(WorkplaceOrders.Mode mode) {
@@ -468,6 +504,13 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
         return recipe.source()==null || recipe.equipmentIssue(site,equipment)!=null || !recipe.unlocked(town)
             || recipe.nativeUnlockIssue(town,equipment.memoriesLevel())!=null
             || workers.stream().noneMatch(w->w.progress().skill(recipe.skill())>=recipe.skillLevel());
+    }
+    /** The item a recipe is counted by, as the supply planner counts it. Null when the recipe cannot be read. */
+    private static String primaryOutput(WorkplaceRecipe rule) {
+        var source=rule==null?null:rule.source();
+        var output=source==null?null:source.getPrimaryOutput();
+        if(output==null && source!=null && source.getOutputs()!=null && source.getOutputs().length>0) output=source.getOutputs()[0];
+        return output==null?null:output.getItemId();
     }
     private static void outputIcon(UICommandBuilder c,String row,WorkplaceRecipe rule) {
         var source=rule==null?null:rule.source();
@@ -508,6 +551,14 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
             store.getComponent(ref,Player.getComponentType()).getPageManager().openCustomPage(ref,store,
                 new WorkplaceStationPage(playerRef,townId,siteId,station));return;
         }
+        if(("Bench".equals(data.action)||"BenchAt".equals(data.action))&&station!=null) {
+            // A furnace row names its own block. The button at the top opens the bench this page was opened at.
+            var bench="Bench".equals(data.action)?station:WorkplaceBenchRows.position(data.id);
+            var opened=bench==null?WorkplaceNativeBench.Outcome.GONE:WorkplaceNativeBench.open(ref,store,station,bench);
+            // The bench's own screen has replaced this page. Otherwise say why nothing happened.
+            if(opened==WorkplaceNativeBench.Outcome.OPENED||isDismissed())return;
+            hint=opened.message();
+        }
         if(data.quantity!=null) quantity=data.quantity.strip();
         if(data.search!=null) {
             String query=data.search.strip().substring(0,Math.min(data.search.strip().length(),80));
@@ -519,36 +570,46 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
             var inventory=com.hypixel.hytale.server.core.inventory.InventoryComponent.getCombined(store,ref,
                 com.hypixel.hytale.server.core.inventory.InventoryComponent.HOTBAR_STORAGE_BACKPACK);
             try {
-                int bar=data.id.lastIndexOf('|');
-                var origin=bar<0?null:warehouse.smelting().origin(UUID.fromString(data.id.substring(0,bar)));
-                short slot=bar<0?-1:Short.parseShort(data.id.substring(bar+1));
+                // The press names a furnace, the slot it was drawn in and the item. The item decides: the same
+                // goods are taken from wherever they sit at that furnace now, and another item never is.
+                String[] named=data.id.split("\\|",3);
+                var origin=named.length<3?null:warehouse.smelting().origin(UUID.fromString(named[0]));
                 var at=origin==null?null:origin.location();
-                var stack=origin==null||slot<0||slot>=origin.slots()?null:origin.stack(slot);
+                short slot=named.length<3?-1:heldSlot(origin==null?(short)0:origin.slots(),Short.parseShort(named[1]),named[2],origin==null?s->null:origin::stack);
+                var stack=slot<0?null:origin.stack(slot);
                 if(inventory==null||!com.hexvane.aetherhaven.warehouse.WarehouseAccess.canBrowse(town,playerRef.getUuid()))hint="You may not take from the town stores.";
-                else if(com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(stack)||at==null||!site.area().contains(at.x()+.5,at.y()+.5,at.z()+.5))hint="Those goods are no longer there.";
+                else if(named.length<3||at==null||!site.area().contains(at.x()+.5,at.y()+.5,at.z()+.5))hint="That furnace no longer belongs to this workplace. Nothing was moved.";
+                else if(stack==null)hint="No "+itemName(named[2])+" is left at that furnace. Nothing was moved.";
                 else {
                     int count=Math.max(0,stack.getQuantity()-warehouse.reservedSmelting(origin.id(),slot));
-                    int moved=count==0?0:warehouse.smelting().withdraw(origin.id(),slot,stack,count,inventory,warehouse.smelting().revision());
-                    hint=moved>0?"Collected "+moved+(moved==1?" item.":" items."):count==0?"Those supplies are reserved for a workplace.":"Storage changed or your inventory is full.";
+                    int moved=count==0?0:warehouse.smelting().withdraw(origin.id(),slot,stack,count,inventory);
+                    hint=moved>0?"Collected "+moved+(moved==1?" item.":" items."):count==0?"Every "+itemName(named[2])+" at that furnace is set aside for a workplace delivery."
+                        :"Your inventory has no room for "+itemName(named[2])+". Nothing was moved.";
                     if(moved>0){warehouse.markProductionWithdrawal();manager.updateTown(town);}
                 }
-            } catch(IllegalArgumentException invalid) { hint="Those goods are no longer there."; }
+            } catch(IllegalArgumentException invalid) { hint="Those goods could not be read. Nothing was moved."; }
         }
         if("Collect".equals(data.action)&&data.id!=null) {
             var warehouse=town.getWarehouse();var page=com.hexvane.aetherhaven.warehouse.TownWarehouse.Page.OUTPUT;
             var inventory=com.hypixel.hytale.server.core.inventory.InventoryComponent.getCombined(store,ref,
                 com.hypixel.hytale.server.core.inventory.InventoryComponent.HOTBAR_STORAGE_BACKPACK);
             try {
-                short slot=Short.parseShort(data.id);
-                var stack=slot<0||slot>=warehouse.slots(page)?null:warehouse.stack(page,slot);
+                // The press names a Crafted Goods slot and the item drawn in it. Couriers move that store all the
+                // time, so the item decides: it is taken from wherever it sits now, and another item never is.
+                String[] named=data.id.split("\\|",2);
+                String item=named.length<2?null:named[1];
+                short slot=item==null?-1:heldSlot(warehouse.slots(page),Short.parseShort(named[0]),item,s->warehouse.stack(page,s));
+                var stack=slot<0?null:warehouse.stack(page,slot);
                 if(inventory==null||!com.hexvane.aetherhaven.warehouse.WarehouseAccess.canBrowse(town,playerRef.getUuid()))hint="You may not take from the town stores.";
-                else if(com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(stack)||!produced(site,plugin).contains(stack.getItemId()))hint="Those goods are no longer there.";
+                else if(item==null||!produced(site,plugin).contains(item))hint="This workplace does not make those goods. Nothing was moved.";
+                else if(stack==null)hint="No "+itemName(item)+" is left in Crafted Goods. Nothing was moved.";
                 else {
-                    var result=warehouse.withdraw(page,inventory,slot,stack,com.hexvane.aetherhaven.warehouse.TownWarehouse.Amount.STACK,warehouse.revision());
-                    hint=result.error()!=null?result.error():"Collected "+result.moved()+(result.moved()==1?" item.":" items.");
+                    var result=warehouse.withdraw(page,inventory,slot,stack,com.hexvane.aetherhaven.warehouse.TownWarehouse.Amount.STACK);
+                    hint=result.refusal()==null?"Collected "+result.moved()+(result.moved()==1?" item.":" items.")
+                        :com.hexvane.aetherhaven.warehouse.WarehousePage.refusalText(result.refusal(),itemName(item),false,"Crafted Goods");
                     if(result.moved()>0)manager.updateTown(town);
                 }
-            } catch(NumberFormatException invalid) { hint="Those goods are no longer there."; }
+            } catch(NumberFormatException invalid) { hint="Those goods could not be read. Nothing was moved."; }
         }
         if("RecipePrevious".equals(data.action))recipePage--;
         if("RecipeNext".equals(data.action))recipePage++;
@@ -583,13 +644,13 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
             var recipe=selected==null?null:plugin.getApprenticeRecipes().find(selected);
             if(recipe==null || recipe.type()!=site.type()) hint="Choose a recipe for this workplace.";
             else try {
-                String error=site.orders().add(Long.parseLong(data.revision),recipe.id(),mode,mode==WorkplaceOrders.Mode.FOREVER?1:Integer.parseInt(quantity));
+                String error=site.orders().add(recipe.id(),mode,mode==WorkplaceOrders.Mode.FOREVER?1:Integer.parseInt(quantity));
                 hint=error==null?"Task added. Enable a skilled Apprentice in the journal.":error;
                 if(error==null) manager.updateTown(town);
             } catch(RuntimeException error) { hint="Enter a whole amount from 1 to 9999."; }
-        } else if(data.action!=null && List.of("Up","Down","Pause","Remove").contains(data.action)) {
+        } else if(data.action!=null && List.of("Up","Down","Pause","Resume","Remove").contains(data.action)) {
             try {
-                String error=site.orders().change(Long.parseLong(data.revision),UUID.fromString(data.id),data.action);
+                String error=site.orders().change(UUID.fromString(data.id),data.action);
                 hint=error==null?"Task list updated.":error;
                 if(error==null) {
                     if("Remove".equals(data.action)) {
@@ -598,7 +659,7 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
                     }
                     manager.updateTown(town);
                 }
-            } catch(RuntimeException error) { hint="Refresh the task list and try again."; }
+            } catch(RuntimeException error) { hint="That task could not be read. Nothing was changed."; }
         }
         var c=new UICommandBuilder();var e=new UIEventBuilder();build(ref,c,e,store);sendUpdate(c,e,false);
     }
@@ -606,7 +667,6 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
         public static final BuilderCodec<Data> CODEC=BuilderCodec.builder(Data.class,Data::new)
             .append(new KeyedCodec<>("Action",Codec.STRING),(d,v)->d.action=v,d->d.action).add()
             .append(new KeyedCodec<>("Id",Codec.STRING),(d,v)->d.id=v,d->d.id).add()
-            .append(new KeyedCodec<>("Revision",Codec.STRING),(d,v)->d.revision=v,d->d.revision).add()
             .append(new KeyedCodec<>("@Quantity",Codec.STRING),(d,v)->d.quantity=v,d->d.quantity).add()
             .append(new KeyedCodec<>("@Search",Codec.STRING),(d,v)->d.search=v,d->d.search).add().build();
         String action,id,revision,quantity,search;

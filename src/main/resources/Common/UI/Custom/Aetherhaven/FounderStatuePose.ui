@@ -1,0 +1,11 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+// One pose a founder statue can hold. The pose in use shows the pressed card and a small mark.
+Button { Anchor: (Width: 135, Height: 70, Right: 10); TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+ Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed), Disabled: (Background: $T.@Inset));
+ Group #Selected { Background: $T.@CardPressed; Visible: false; }
+ Group { LayoutMode: Top; Padding: (Horizontal: 8, Vertical: 9);
+  Label #PoseName { Anchor: (Height: 34); Style: (...$C.@DefaultLabelStyle, FontSize: 14, RenderBold: true, Wrap: true, HorizontalAlignment: Center, VerticalAlignment: Center); }
+  Label #Chosen { Anchor: (Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 11, HorizontalAlignment: Center, TextColor: #dec68d); Visible: false; }
+ }
+}

@@ -29,25 +29,41 @@ public final class FoodSitePage extends AetherhavenInteractiveCustomUIPage<FoodS
         this.station=station==null?null:new org.joml.Vector3i(station);
     }
     @Override public void build(Ref<EntityStore> ref, UICommandBuilder c, UIEventBuilder e, Store<EntityStore> store) {
-        var plugin=AetherhavenPlugin.get();if(plugin==null)return;
+        // What the client receives whole. The refresh below is compared with it and sends only what moved.
+        if(fill(ref,c,e,store))opened(c,e);
+    }
+    /** How many game minutes one step of the care clock is. A clock that moved every minute would send an update every minute. */
+    static final long CARE_STEP_MINUTES=10;
+    /** The care time the page shows: whole steps left, never less than one step while any care is left. */
+    static long shownCare(long minutes) {
+        if(minutes<=0)return 0;
+        return Math.max(CARE_STEP_MINUTES,minutes-minutes%CARE_STEP_MINUTES);
+    }
+    /** Draws what changed since the last draw. False when the page had to close instead. */
+    private boolean fill(Ref<EntityStore> ref, UICommandBuilder c, UIEventBuilder e, Store<EntityStore> store) {
+        var plugin=AetherhavenPlugin.get();if(plugin==null)return false;
         var world=store.getExternalData().getWorld();var manager=AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin);
         var town=manager.getTown(townId);
-        if(town==null||!town.hasMemberOrOwner(playerRef.getUuid())){close();return;}
+        if(town==null||!town.hasMemberOrOwner(playerRef.getUuid())){close();return false;}
         var site=town.getApprenticeWorkplaces().find(siteId);
-        if(site==null||!WorkplaceFood.supports(site.type())){close();return;}
+        if(site==null||!WorkplaceFood.supports(site.type())){close();return false;}
         if(!appended){
             c.append("Aetherhaven/FoodSitePage.ui");appended=true;
             c.set("#Station.Visible",station!=null);
-            for(String action:new String[]{"Back","Refresh","Station"})e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,EventData.of("Action",action),false);
+            // Using this bench opens this page, so its own crafting screen is offered here to those who manage the site.
+            String ownScreen=town.playerCanManageConstructions(playerRef.getUuid())?WorkplaceNativeBench.label(world,station):null;
+            c.set("#Bench.Visible",ownScreen!=null);
+            if(ownScreen!=null)c.set("#Bench.Text",ownScreen);
+            for(String action:new String[]{"Back","Refresh","Station","Bench"})e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,EventData.of("Action",action),false);
         }
         var habitat=FoodSiteService.inspect(world,site);var food=site.food();
         int points=habitat.simulated()&&!habitat.ready()?0:food.foodPoints();
-        long remaining=food.minutesUntilNeglected();
+        long remaining=shownCare(food.minutesUntilNeglected());
         long workers=TownsfolkWorkRoster.list(town,manager,store,plugin).stream()
             .filter(w->w.progress().canPerform(site.type(),w.guard(),town.getPayroll().overdue(w.characterId()),w.alive())).count();
         var view=new View(site.name(),points,
             food.completedVisits()==0?"Awaiting first visit":points==0?"Food support paused":food.needsTending()?"Ready for tending":"Well tended",
-            remaining,food.completedVisits()==0?"Care begins when an Apprentice works here.":remaining/60+"h "+remaining%60+"m of care remaining",
+            remaining,food.completedVisits()==0?"Care begins when an Apprentice works here.":"About "+remaining/60+"h "+remaining%60+"m of care remaining",
             food.lastCare(),!habitat.ready()?habitat.issue():food.careIssue()!=null?food.careIssue():
                 site.type()==com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.RANCHING?RanchWorkService.herdStatus(world,site):"The workplace has the equipment and growing area it needs.",
             workers==0?"No available Apprentice has this profession enabled.":workers+" eligible "+(workers==1?"Apprentice":"Apprentices")+" | "+food.completedVisits()+" tending "+(food.completedVisits()==1?"visit":"visits")+" completed",
@@ -61,6 +77,7 @@ public final class FoodSitePage extends AetherhavenInteractiveCustomUIPage<FoodS
             rendered=view;
         }
         if(!refreshing){refreshing=true;scheduleRefresh(world);}
+        return true;
     }
     private void scheduleRefresh(com.hypixel.hytale.server.core.universe.world.World world) {
         var plugin=AetherhavenPlugin.get();if(plugin==null)return;
@@ -70,9 +87,9 @@ public final class FoodSitePage extends AetherhavenInteractiveCustomUIPage<FoodS
             if(ref==null||!ref.isValid()||ref.getStore().getExternalData().getWorld()!=world)return;
             var store=ref.getStore();var player=store.getComponent(ref,Player.getComponentType());
             if(player==null||player.getPageManager().getCustomPage()!=this)return;
-            var previous=rendered;var c=new UICommandBuilder();var e=new UIEventBuilder();
-            build(ref,c,e,store);
-            if(!java.util.Objects.equals(previous,rendered))sendUpdate(c,e,false);
+            // Looked at once a second; only the values that differ from what the player sees are sent.
+            var c=new UICommandBuilder();var e=new UIEventBuilder();
+            if(fill(ref,c,e,store))sendChanges(c,e);
             if(!isDismissed())scheduleRefresh(world);
         },1000);
     }
@@ -85,10 +102,15 @@ public final class FoodSitePage extends AetherhavenInteractiveCustomUIPage<FoodS
             store.getComponent(ref,Player.getComponentType()).getPageManager().openCustomPage(ref,store,
                 new WorkplaceStationPage(playerRef,townId,siteId,station));return;
         }
+        if("Bench".equals(data.action)&&station!=null&&town.playerCanManageConstructions(playerRef.getUuid())) {
+            var opened=WorkplaceNativeBench.open(ref,store,station);
+            if(opened==WorkplaceNativeBench.Outcome.OPENED||isDismissed())return;
+            playerRef.sendMessage(com.hypixel.hytale.server.core.Message.raw(opened.message()));
+        }
         if("Back".equals(data.action)&&town.playerCanManageConstructions(playerRef.getUuid())){
             store.getComponent(ref,Player.getComponentType()).getPageManager().openCustomPage(ref,store,new WorkplacePage(playerRef,townId,siteId,site.area()));return;
         }
-        var c=new UICommandBuilder();var e=new UIEventBuilder();build(ref,c,e,store);sendUpdate(c,e,false);
+        var c=new UICommandBuilder();var e=new UIEventBuilder();if(fill(ref,c,e,store))sendUpdate(c,e,false);
     }
     public static final class Data {
         public static final BuilderCodec<Data> CODEC=BuilderCodec.builder(Data.class,Data::new)

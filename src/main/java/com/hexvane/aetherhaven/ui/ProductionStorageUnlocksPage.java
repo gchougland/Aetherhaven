@@ -435,7 +435,15 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             return;
         }
 
+        // A bought output joins the list ahead of later lines. Keep every slot on the material it was making.
+        ProductionCatalog.Entry outputsBefore = ProductionEffectiveCatalog.effective(
+            plugin.getProductionCatalog(), plugin.getWorkplaceUnlockCatalog(), constructionId, state);
         state.addWorkplaceOutputUnlock(itemId);
+        ProductionCatalog.Entry outputsAfter = ProductionEffectiveCatalog.effective(
+            plugin.getProductionCatalog(), plugin.getWorkplaceUnlockCatalog(), constructionId, state);
+        if (outputsBefore != null && outputsAfter != null) {
+            state.keepSlotItems(outputsBefore, outputsAfter);
+        }
         tm.updateTown(town);
         Item unlockedItem = Item.getAssetMap().getAsset(itemId);
         Message unlockedLabel =

@@ -1,0 +1,50 @@
+# Founder statue: the screen that dresses the statue in armor and sets its pose.
+# Runtime keys are this file name plus the key, for example aetherhaven_monument.aetherhaven.monument.title
+
+aetherhaven.monument.statueHint=Press [{key}] to dress the statue
+
+aetherhaven.monument.title=FOUNDER STATUE
+aetherhaven.monument.intro=Dress the statue of {name} and choose how it stands.
+aetherhaven.monument.introNoName=Dress the statue and choose how it stands.
+aetherhaven.monument.armorHeading=ARMOR
+aetherhaven.monument.poseHeading=POSE
+
+aetherhaven.monument.slot.head=HEAD
+aetherhaven.monument.slot.chest=CHEST
+aetherhaven.monument.slot.hands=HANDS
+aetherhaven.monument.slot.legs=LEGS
+aetherhaven.monument.empty=Nothing worn
+aetherhaven.monument.unknownPiece=Unknown piece
+aetherhaven.monument.takeOff=Take off
+aetherhaven.monument.fromPack=FROM YOUR PACK
+aetherhaven.monument.noneCarried=NOTHING IN YOUR PACK FITS
+aetherhaven.monument.moreCarried={shown} OF {count} FROM YOUR PACK
+aetherhaven.monument.wearTooltip=Select to put this on the statue. It comes back when you take it off.
+aetherhaven.monument.chosen=CHOSEN
+
+aetherhaven.monument.pose.standing.name=Standing
+aetherhaven.monument.pose.standing.description=Arms at the sides, the way the statue first stood.
+aetherhaven.monument.pose.proud.name=Standing Proud
+aetherhaven.monument.pose.proud.description=One fist held over the heart.
+aetherhaven.monument.pose.rally.name=Fist Raised
+aetherhaven.monument.pose.rally.description=One arm high, calling the town to rally.
+aetherhaven.monument.pose.wave.name=Waving
+aetherhaven.monument.pose.wave.description=A friendly wave to everyone who passes.
+aetherhaven.monument.pose.cheer.name=Cheering
+aetherhaven.monument.pose.cheer.description=Both fists up in celebration.
+aetherhaven.monument.pose.sit.name=Sitting
+aetherhaven.monument.pose.sit.description=Resting on top of the pedestal.
+
+aetherhaven.monument.hint.default=The armor on the statue is the real thing. Take it off here any time. If the statue is ever broken, the armor drops beside it.
+aetherhaven.monument.hint.worn={item} is now on the statue.
+aetherhaven.monument.hint.swapped={item} is now on the statue. {old} is back in your pack.
+aetherhaven.monument.hint.swappedSetDown={item} is now on the statue. Your pack is full, so {old} was set down beside the statue.
+aetherhaven.monument.hint.takenOff={item} is back in your pack.
+aetherhaven.monument.hint.setDown=Your pack is full. {item} was set down beside the statue.
+aetherhaven.monument.hint.packChanged=That piece is no longer where it was in your pack. Nothing changed.
+aetherhaven.monument.hint.wrongPiece=That piece does not fit this slot.
+aetherhaven.monument.hint.pose=The statue now holds this pose: {pose}.
+
+aetherhaven.monument.noPermission=You need permission to manage this town's buildings to change its statue.
+aetherhaven.monument.townGone=This statue's town is gone. It can no longer be changed.
+aetherhaven.monument.townGoneArmor=This statue's town is gone. Its armor has been set down beside it.

@@ -372,6 +372,16 @@ def collect_override_item_ids(overrides: OverrideTable) -> set[str]:
     return set(overrides.exact.keys())
 
 
+def collect_config_priced_item_ids(cfg: dict[str, Any]) -> set[str]:
+    """Items given an explicit price in the config are always written, even when no loot table lists them."""
+    ids: set[str] = set()
+    for section in ("consumables", "aetherhavenItems"):
+        for key in cfg.get(section, {}):
+            if isinstance(key, str) and key and not key.startswith("_"):
+                ids.add(key)
+    return ids
+
+
 def collect_item_ids(
     loot_dir: Path,
     extra_files: list[Path],
@@ -1215,6 +1225,7 @@ def main() -> int:
         block_catalog
         | gear_catalog
         | collect_configured_material_ids(cfg, item_data_index)
+        | collect_config_priced_item_ids(cfg)
         | collect_override_item_ids(overrides)
     )
     item_ids = collect_item_ids(args.loot_dir, extra, extra_ids=asset_ids)

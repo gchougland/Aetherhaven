@@ -6,6 +6,8 @@ import java.util.*;
 public final class TownHunts implements com.hexvane.aetherhaven.warehouse.ProductionInventory {
     public static final int ENTRY_GOLD=15;
     private Set<String> unlocked=new LinkedHashSet<>();
+    /** Unlocked creatures the player has left out of runs. Saves from before this existed have none, so all are in. */
+    private Set<String> benched=new LinkedHashSet<>();
     private Map<String,Integer> upgrades=new LinkedHashMap<>(), stock=new LinkedHashMap<>();
     private UUID run;
     private List<String> roster=new ArrayList<>();
@@ -21,6 +23,24 @@ public final class TownHunts implements com.hexvane.aetherhaven.warehouse.Produc
     public String lastResult() {return lastResult;}
     public boolean unlocked(String family) {return unlocked.stream().anyMatch(id->HuntFamily.activeId(id).equals(HuntFamily.activeId(family)));}
     public List<String> unlocked() {return unlocked.stream().map(HuntFamily::activeId).distinct().toList();}
+    private boolean benched(String family) {return benched!=null&&benched.stream().anyMatch(id->HuntFamily.activeId(id).equals(family));}
+    private List<String> available() {return unlocked().stream().filter(id->HuntFamily.get(id)!=null).toList();}
+    /** The unlocked creatures that take turns in the arena, in unlock order. Never empty while any creature is unlocked. */
+    public List<String> chosen() {
+        var all=available();var in=all.stream().filter(id->!benched(id)).toList();
+        // A save can never leave the arena empty. If one somehow says so, every unlocked creature is in again.
+        return in.isEmpty()?all:in;
+    }
+    public boolean chosen(String family) {return chosen().contains(HuntFamily.activeId(family));}
+    /** Puts an unlocked creature into future runs or takes it out. The last one in cannot be taken out. */
+    public boolean choose(String family,boolean in) {
+        String id=HuntFamily.activeId(family);
+        if(run!=null||id==null||HuntFamily.get(id)==null||!unlocked(id)||chosen(id)==in)return false;
+        if(!in&&chosen().size()<=1)return false;
+        if(benched==null||available().stream().allMatch(this::benched))benched=new LinkedHashSet<>();
+        if(in)benched.removeIf(old->HuntFamily.activeId(old).equals(id));else benched.add(id);
+        revision++;return true;
+    }
     public boolean unlock(String family) {family=HuntFamily.activeId(family);if(run!=null||HuntFamily.get(family)==null||unlocked(family)||!unlocked.add(family))return false;revision++;return true;}
     public int level(String upgrade) {return Math.clamp(upgrades.getOrDefault(upgrade,0),0,maxLevel(upgrade));}
     public static int maxLevel(String upgrade) {return switch(upgrade){case "vitality","power","dressing"->5;case "second_wind"->1;case "storage"->2;default->0;};}
@@ -43,7 +63,7 @@ public final class TownHunts implements com.hexvane.aetherhaven.warehouse.Produc
     public boolean room(HuntFamily family) {return family!=null&&family.drops().entrySet().stream().allMatch(e->(long)amount(e.getKey())+e.getValue()<=capacity());}
     public UUID begin() {
         if(run!=null)return null;
-        roster=new ArrayList<>(unlocked().stream().filter(id->HuntFamily.get(id)!=null).toList());
+        roster=new ArrayList<>(chosen());
         if(roster.isEmpty())return null;
         run=UUID.randomUUID();defeated=0;runs++;revision++;return run;
     }

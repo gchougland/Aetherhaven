@@ -56,6 +56,8 @@ public final class GuardRtsCommandState implements Component<EntityStore> {
             c -> c.commanderPlayerUuid
         )
         .add()
+        .append(new KeyedCodec<>("FieldOrder", Codec.BOOLEAN), (c, v) -> c.fieldOrder = Boolean.TRUE.equals(v), c -> c.fieldOrder)
+        .add()
         .build();
 
     @Nullable
@@ -75,6 +77,11 @@ public final class GuardRtsCommandState implements Component<EntityStore> {
     private boolean focusFire;
     @Nullable
     private UUID commanderPlayerUuid;
+    /**
+     * True for an order given with the Command Flag in hand, outside the command post. Such an order lasts while its
+     * commander is in the world; an order from the command post lasts while that session is open.
+     */
+    private boolean fieldOrder;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         componentType = registry.registerComponent(GuardRtsCommandState.class, "AetherhavenGuardRtsCommand", CODEC);
@@ -160,6 +167,14 @@ public final class GuardRtsCommandState implements Component<EntityStore> {
         this.commanderPlayerUuid = commanderPlayerUuid;
     }
 
+    public boolean isFieldOrder() {
+        return fieldOrder;
+    }
+
+    public void setFieldOrder(boolean fieldOrder) {
+        this.fieldOrder = fieldOrder;
+    }
+
     @Nonnull
     private static RtsOrderMode parseOrder(@Nullable String s) {
         if (s == null) {
@@ -209,6 +224,7 @@ public final class GuardRtsCommandState implements Component<EntityStore> {
         c.targetEntityUuid = targetEntityUuid;
         c.focusFire = focusFire;
         c.commanderPlayerUuid = commanderPlayerUuid;
+        c.fieldOrder = fieldOrder;
         return c;
     }
 }

@@ -44,19 +44,38 @@ public final class RtsOrphanedGuardRecoverySystem extends EntityTickingSystem<En
             return;
         }
         UUID commanderUuid = cmd.getCommanderPlayerUuid();
-        if (commanderUuid != null && isCommanderActivelyCommanding(store, commanderUuid)) {
+        if (commanderUuid != null && commanderStillCommands(store, commanderUuid, cmd.isFieldOrder())) {
             return;
         }
         Ref<EntityStore> guardRef = chunk.getReferenceTo(index);
         RtsGuardRelease.release(guardRef, store, commandBuffer);
     }
 
-    private static boolean isCommanderActivelyCommanding(@Nonnull Store<EntityStore> store, @Nonnull UUID commanderUuid) {
+    private static boolean commanderStillCommands(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID commanderUuid,
+        boolean fieldOrder
+    ) {
         Ref<EntityStore> commanderRef = store.getExternalData().getRefFromUUID(commanderUuid);
-        if (commanderRef == null || !commanderRef.isValid()) {
-            return false;
-        }
-        RtsCommandPlayerComponent session = store.getComponent(commanderRef, RtsCommandPlayerComponent.getComponentType());
-        return session != null && session.isActive();
+        boolean inWorld = commanderRef != null && commanderRef.isValid();
+        RtsCommandPlayerComponent session = inWorld
+            ? store.getComponent(commanderRef, RtsCommandPlayerComponent.getComponentType())
+            : null;
+        return keepsOrder(fieldOrder, inWorld, session != null && session.isActive());
+    }
+
+    /**
+     * Whether a commanded guard keeps its order this tick.
+     *
+     * <p>An order from the command post lasts while that session is open. An order given with the Command Flag in hand
+     * has no session, so it lasts while its commander is in this world, until they release the guards. Before the flag
+     * worked outside the command post every such order was dropped here on the next tick.
+     *
+     * @param fieldOrder the order was given with the Command Flag outside the command post
+     * @param commanderInWorld the commander is in this world
+     * @param commanderAtPost the commander has a command post session open
+     */
+    static boolean keepsOrder(boolean fieldOrder, boolean commanderInWorld, boolean commanderAtPost) {
+        return commanderInWorld && (fieldOrder || commanderAtPost);
     }
 }

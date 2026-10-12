@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.shopspot.ShopPriceEntry;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBuyerPayment;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlockInteractSupport;
+import com.hexvane.aetherhaven.shopspot.ShopListingText;
 import com.hexvane.aetherhaven.shopspot.ShopSpotHudRefresh;
 import com.hexvane.aetherhaven.shopspot.ShopSpotOpenService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPlayerComponent;
@@ -26,6 +27,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -114,12 +116,13 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
             b.set("#BuyBtn.Disabled", true);
             return;
         }
-        ShopPriceEntry entry = ShopSpotPricing.catalogEntry(plugin, itemId);
+        ShopPriceEntry entry = ShopSpotPricing.entry(plugin, record);
         batched = entry.isBatched();
         maxBatches = Math.max(1, entry.batchCountFromItemStock(record.getStock()));
         buyBatches = Math.max(1, Math.min(maxBatches, buyBatches));
-        Message itemName = UiMaterialLabels.itemNameMessage(itemId);
+        Message itemName = ShopListingText.name(record);
         b.set("#ItemLine.TextSpans", Message.translation(MSG + ".item").param("item", itemName));
+        showListedStack(b, record, itemName);
         long gold = ShopSpotPricing.goldPerBatch(plugin, record, itemId);
         long total = ShopSpotPricing.totalCost(gold, buyBatches);
         boolean canAfford = playerCanAfford(playerRef, store, record, total);
@@ -156,6 +159,27 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
         }
     }
 
+    /**
+     * The picture of the very stack on sale, and what its own tooltip says about it: a flask's mixture and charges, a
+     * ring's stats, a worn tool's durability. Shown in the page and again when the picture is hovered.
+     */
+    private static void showListedStack(@Nonnull UICommandBuilder b, @Nonnull ShopSpotRecord record, @Nonnull Message itemName) {
+        ItemStack listed = ShopListingText.listed(record);
+        boolean known = listed != null && AetherhavenUiItemGrids.isKnownItemId(listed.getItemId());
+        b.set("#ItemCell.Visible", known);
+        Message details = listed != null ? ShopListingText.details(listed) : null;
+        b.set("#DetailRow.Visible", details != null);
+        if (details != null) {
+            b.set("#DetailLine.TextSpans", details);
+        }
+        if (!known) {
+            return;
+        }
+        // Props, plot tokens and block palettes carry their own picture, as they do in the inventory.
+        StackIcons.show(b, "#ItemCell", listed);
+        b.set("#ItemCell.TooltipTextSpans", details == null ? itemName : Message.join(itemName, Message.raw("\n"), details));
+    }
+
     private int maxAffordableBatches(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
@@ -167,7 +191,7 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
         if (itemId == null) {
             return Math.max(1, buyBatches);
         }
-        ShopPriceEntry entry = ShopSpotPricing.catalogEntry(plugin, itemId);
+        ShopPriceEntry entry = ShopSpotPricing.entry(plugin, record);
         int stockCap = Math.max(1, entry.batchCountFromItemStock(record.getStock()));
         long goldPerBatch = ShopSpotPricing.goldPerBatch(plugin, record, itemId);
         if (goldPerBatch <= 0L) {

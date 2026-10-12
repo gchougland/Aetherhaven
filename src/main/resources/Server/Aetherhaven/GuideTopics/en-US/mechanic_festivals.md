@@ -31,7 +31,7 @@ The square is looked after by the town, so nobody can dig it up or build on it. 
 Early spring, from morning to evening. The **Springheart Lettuce** sits in the middle of the square.
 
 * Throw **life essence** at the Springheart Lettuce and it pulls the essence in as it grows. Concentrated life essence counts for a lot more.
-* When it is full, press **F** to pop it. It throws vegetable seeds and spring festival tickets, then the Springheart Lettuce itself is gone.
+* When it is full, interact with it to pop it. It throws vegetable seeds and spring festival tickets, then the Springheart Lettuce itself is gone.
 * You can keep feeding it after it is full. Extra essence makes the pop throw more seeds and tickets. Feed it a huge amount and it pops on its own.
 * It only pops once, so gather your life essence before the festival and share the moment with everyone.
 * The **Priestess**, **Farmer**, and **Elder** each have a place to stand, and a kweebec seed seller brings a cart for the day. Bring gold coins if you want to shop.
@@ -57,7 +57,7 @@ Late autumn, from mid afternoon until midnight. A hedge maze fills the square wi
 * Talk to the **Hallow's Eve merchant** to start the maze for ten gold coins. You are sent to the entrance, freeze for a short countdown, then the orbs appear.
 * Collect as many glowing orbs as you can before time runs out. The jack o lantern grows as you gather them.
 * Only one person can run the maze at a time. Wait if someone else is already inside.
-* When time is up, or when you have every orb, press **F** on the jack o lantern to pop autumn festival tickets and spooky candy. Then someone else can try.
+* When time is up, or when you have every orb, interact with the jack o lantern to pop autumn festival tickets and spooky candy. Then someone else can try.
 * The merchant takes autumn festival tickets for candy, decorations, and a jack o lantern hat pattern. Ask to see the scoreboard to compare maze runs. Most orbs wins, and a full clear ranks by how much time was left.
 * The **Priestess**, **Elder**, **Innkeeper**, and **Bard** each have a place to stand, and visitors watch from outside the hedges.
 * Every villager has their own thing to say about it, so make the rounds before the night is over.
@@ -66,7 +66,7 @@ Late autumn, from mid afternoon until midnight. A hedge maze fills the square wi
 
 Mid autumn, from morning until evening. Town members fill one shared stall at the square. Elder Lyren walks four stands, then names a winner.
 
-* Press **F** on the town stall to set out up to nine goods. Everyone in town shares that stall, so mix what you bring.
+* Interact with the town stall to set out up to nine goods. Everyone in town shares that stall, so mix what you bring.
 * Variety and rarer goods score better. Empty slots score nothing.
 * Talk to **Elder Lyren** when the stall is ready. Ask how the contest works if you want the scoring kinds. She walks the stands, then you can ask who won.
 * First, second, and third place earn extra autumn festival tickets. First place also earns a **Corin Plushie** and a **Heartberry** once for the town that year. Tickets can be collected once per person per year. Collecting also gives back the goods from the town stall.
@@ -93,7 +93,7 @@ Late winter, from morning until evening. Town members each give one gift to a ne
 * Talk to the **Wintertide merchant** to hear who you should give a gift to. They will not tell you who is giving to you.
 * Find a gift, then give it in person. You do not need to start anything with the merchant first.
 * If you were assigned a villager, talk to them while holding the item and choose **Give this Wintertide gift**. That gift counts twice as much toward friendship. Everyday gifts still work, but they do not count for Wintertide.
-* If you were assigned a town member, they need to be in the world. Press **F** on them while holding the item. They pick how they feel, and you get winter festival tickets.
+* If you were assigned a town member, they need to be in the world. Interact with them while holding the item. They pick how they feel, and you get winter festival tickets.
 * How much they like it changes how many tickets you get. After you give your gift, a villager walks up with a gift for you.
 * The merchant takes winter festival tickets for candy, lights, wreaths, a santa hat pattern, and other holiday goods.
 * Villagers who are giving or receiving a gift gather at the square until the festival is over. Visitors watch from around the square.

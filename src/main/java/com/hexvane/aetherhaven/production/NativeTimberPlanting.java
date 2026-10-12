@@ -35,7 +35,8 @@ public final class NativeTimberPlanting {
         if (species == null || !species.sapling().equals(tree.sapling()) || BlockType.getAssetMap().getAsset(tree.sapling()) == null)
             return "This sapling is no longer available.";
         var current = NativeTimberGrowth.capture(tree.output(), tree.root(), tree.initialGeneration(), withinGrove);
-        if (!current.ready() || !current.receipt().stages().equals(tree.stages()) || !current.receipt().clearance().equals(tree.clearance()))
+        // Compared by content: the same tree can be listed in a different order after the engine reloads its prefab.
+        if (!current.ready() || !current.receipt().sameGrowth(tree))
             return "This tree's growth has changed. Prepare its growing space again.";
         return production.timber().plant(slot, WorkplaceProductionUpgrades.stoneCount(production), prepared,
             withinGrove, p -> observe(world, p), () -> ChunkSectionBlockUtil.setBlockByKey(

@@ -146,6 +146,11 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
             .append(new KeyedCodec<>("HudPinnedQuests", Codec.STRING), (c, v) -> c.decodePinnedQuests(v), PlayerTownJournalState::encodePinnedQuests)
             .add()
             .append(
+                new KeyedCodec<>("HudAutoPinnedQuests", Codec.STRING),
+                (c, v) -> c.decodeAutoPinnedQuests(v),
+                c -> c.hudAutoPinnedQuests.isEmpty() ? null : String.join("\n", c.hudAutoPinnedQuests))
+            .add()
+            .append(
                 new KeyedCodec<>("DialogueSpeechEnabled", Codec.BOOLEAN),
                 (c, v) -> c.dialogueSpeechEnabled = valueOr(v, true),
                 c -> c.dialogueSpeechEnabled
@@ -268,6 +273,9 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     private int hudQuestY = 164;
     @Nonnull
     private final List<String> hudPinnedQuests = new ArrayList<>();
+    /** Quests the game has already pinned for this player once, as town id and quest id. They are not pinned again. */
+    @Nonnull
+    private final List<String> hudAutoPinnedQuests = new ArrayList<>();
 
     private boolean dialogueSpeechEnabled = true;
     /** 0–100; default 70. */
@@ -338,6 +346,7 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         c.hudQuestX = hudQuestX;
         c.hudQuestY = hudQuestY;
         c.hudPinnedQuests.addAll(hudPinnedQuests);
+        c.hudAutoPinnedQuests.addAll(hudAutoPinnedQuests);
         c.dialogueSpeechEnabled = dialogueSpeechEnabled;
         c.dialogueSpeechVolumePercent = dialogueSpeechVolumePercent;
         c.villagerSpeechVolumePercent = villagerSpeechVolumePercent;
@@ -688,6 +697,68 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         }
         hudPinnedQuests.add(id);
         return true;
+    }
+
+    /**
+     * Pins a quest the game wants the player to follow, making room when the tracker is full: a pin that is not
+     * showing goes first, else the last row.
+     *
+     * @param showing true for a pinned id the HUD is drawing now
+     * @return the pin that was given up for it, or null when there was room, the quest was already pinned, or the id
+     *     is blank
+     */
+    @Nullable
+    public String pinQuestMakingRoom(@Nullable String questId, @Nonnull java.util.function.Predicate<String> showing) {
+        if (questId == null) {
+            return null;
+        }
+        String id = questId.trim();
+        if (id.isEmpty() || hudPinnedQuests.contains(id)) {
+            return null;
+        }
+        if (hudPinnedQuests.size() < MAX_PINNED_QUESTS) {
+            hudPinnedQuests.add(id);
+            return null;
+        }
+        int give = hudPinnedQuests.size() - 1;
+        for (int i = 0; i < hudPinnedQuests.size(); i++) {
+            if (!showing.test(hudPinnedQuests.get(i))) {
+                give = i;
+                break;
+            }
+        }
+        return hudPinnedQuests.set(give, id);
+    }
+
+    /** How many auto pin marks are kept. Older ones are for quests long finished. */
+    private static final int MAX_AUTO_PIN_MARKS = 64;
+
+    public boolean wasQuestAutoPinned(@Nonnull String townAndQuestKey) {
+        return hudAutoPinnedQuests.contains(townAndQuestKey);
+    }
+
+    /** @return false when it was already marked */
+    public boolean markQuestAutoPinned(@Nonnull String townAndQuestKey) {
+        if (townAndQuestKey.isBlank() || hudAutoPinnedQuests.contains(townAndQuestKey)) {
+            return false;
+        }
+        hudAutoPinnedQuests.add(townAndQuestKey);
+        while (hudAutoPinnedQuests.size() > MAX_AUTO_PIN_MARKS) {
+            hudAutoPinnedQuests.removeFirst();
+        }
+        return true;
+    }
+
+    private void decodeAutoPinnedQuests(@Nullable String encoded) {
+        hudAutoPinnedQuests.clear();
+        if (encoded == null || encoded.isBlank()) {
+            return;
+        }
+        for (String line : encoded.split("\n")) {
+            if (!line.isBlank()) {
+                markQuestAutoPinned(line.trim());
+            }
+        }
     }
 
     public boolean unpinQuest(@Nullable String questId) {

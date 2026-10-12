@@ -1,0 +1,122 @@
+{
+  "RenderMode": "BlendLinear",
+  "ParticleRotationInfluence": "Billboard",
+  "LinearFiltering": true,
+  "LightInfluence": 0,
+  "ParticleRotateWithSpawner": false,
+  "MaxConcurrentParticles": 40,
+  "LifeSpan": 5.0,
+  "ParticleLifeSpan": {
+    "Min": 1.6,
+    "Max": 2.4
+  },
+  "SpawnRate": {
+    "Min": 10,
+    "Max": 13
+  },
+  "EmitOffset": {
+    "X": {
+      "Min": -0.55,
+      "Max": 0.55
+    },
+    "Y": {
+      "Min": 0.0,
+      "Max": 0.35
+    },
+    "Z": {
+      "Min": -0.55,
+      "Max": 0.55
+    }
+  },
+  "InitialVelocity": {
+    "Speed": {
+      "Min": 0.55,
+      "Max": 0.95
+    },
+    "Yaw": {
+      "Min": -180,
+      "Max": 180
+    },
+    "Pitch": {
+      "Min": 78,
+      "Max": 90
+    }
+  },
+  "Attractors": [
+    {
+      "RadialAxis": {
+        "X": 0,
+        "Y": 1,
+        "Z": 0
+      },
+      "RadialTangentImpulse": 1.1,
+      "RadialImpulse": -0.08,
+      "DampingMultiplier": {
+        "X": 0.96,
+        "Y": 0.98,
+        "Z": 0.96
+      }
+    }
+  ],
+  "Particle": {
+    "Texture": "Particles/Textures/Basic/Glow.png",
+    "FrameSize": {
+      "Width": 32,
+      "Height": 32
+    },
+    "ScaleRatioConstraint": "OneToOne",
+    "InitialAnimationFrame": {
+      "Scale": {
+        "X": {
+          "Min": 0.13,
+          "Max": 0.22
+        }
+      },
+      "Opacity": 1,
+      "Color": "#7fe060",
+      "FrameIndex": {
+        "Min": 0,
+        "Max": 0
+      }
+    },
+    "Animation": {
+      "0": {
+        "FrameIndex": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Opacity": 0,
+        "Color": "#7fe060",
+        "Scale": {
+          "X": {
+            "Min": 0.5,
+            "Max": 0.5
+          }
+        }
+      },
+      "15": {
+        "Opacity": 1,
+        "Scale": {
+          "X": {
+            "Min": 1,
+            "Max": 1
+          }
+        }
+      },
+      "60": {
+        "Opacity": 0.95,
+        "Color": "#ffd95e"
+      },
+      "100": {
+        "Opacity": 0,
+        "Color": "#fff2b0",
+        "Scale": {
+          "X": {
+            "Min": 0.35,
+            "Max": 0.35
+          }
+        }
+      }
+    }
+  }
+}

@@ -6,6 +6,8 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyPassiveBoostRegistry;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
+import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyJob;
+import com.hexvane.aetherhaven.construction.assembly.SiteBodies;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPhase;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
@@ -28,6 +30,7 @@ import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.RootDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
@@ -51,6 +54,7 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
     private static final long SWING_INTERVAL_NS = 900_000_000L;
     private static final int PLOT_RESCAN_INTERVAL_TICKS = 40;
     private static final int DOOR_UNJAM_STUCK_TICKS = 30;
+    private static final int STAND_CHECK_INTERVAL_TICKS = 40;
 
     private final AetherhavenPlugin plugin;
     @Nonnull
@@ -95,6 +99,17 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
             return;
         }
         if (NpcFaceVisuals.isInInteractionDialogue(npc)) {
+            // Talking to him at a site does not stop the work he is standing at, as before.
+            BuilderConstructionAssistState talking =
+                archetypeChunk.getComponent(index, BuilderConstructionAssistState.getComponentType());
+            UUID talkingAt = talking != null && talking.getPhase() == BuilderConstructionAssistState.PHASE_ASSIST
+                ? talking.getTargetPlotId()
+                : null;
+            if (talkingAt != null && talking.isBoostAppliedForTarget()) {
+                AssemblyPassiveBoostRegistry.setBoost(
+                    store.getExternalData().getWorld(), talkingAt, BuilderConstructionAssistState.BUILDER_PASSIVE_BOOST
+                );
+            }
             return;
         }
 
@@ -129,9 +144,6 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
 
         assist.incrementTicksSincePlotRescan();
 
-        double tx = targetPlot.getSignX() + 0.5;
-        double ty = targetPlot.getSignY() + 0.02;
-        double tz = targetPlot.getSignZ() + 0.5;
         UUID plotId = targetPlot.getPlotId();
 
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
@@ -141,9 +153,14 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
         Vector3d pos = tc.getPosition();
 
         if (!plotId.equals(assist.getTargetPlotId())) {
-            assist.setTargetPlot(plotId, tx, ty, tz);
+            // Until a stand is picked just below, the target is where the plot sign was, as it always used to be.
+            assist.setTargetPlot(plotId, targetPlot.getSignX() + 0.5, targetPlot.getSignY() + 0.02, targetPlot.getSignZ() + 0.5);
             assist.setPhase(BuilderConstructionAssistState.PHASE_TRAVEL);
         }
+        chooseStand(world, store, ref, targetPlot, pos, assist);
+        double tx = assist.getTargetX();
+        double ty = assist.getTargetY();
+        double tz = assist.getTargetZ();
 
         if (assist.isWithinAssistRange(pos.x, pos.y, pos.z)) {
             int prevPhase = assist.getPhase();
@@ -151,8 +168,11 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
             npc.setLeashPoint(new Vector3d(tx, ty, tz));
             commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
             BuilderConstructionVisuals.beginAssist(ref, store, commandBuffer, plugin, npc);
-            if (prevPhase != BuilderConstructionAssistState.PHASE_ASSIST || !assist.isBoostAppliedForTarget()) {
+            // Renewed every tick he is here: the site keeps his pace, and he earns Mastery, only while he really is.
+            boolean renewed =
                 AssemblyPassiveBoostRegistry.setBoost(world, plotId, BuilderConstructionAssistState.BUILDER_PASSIVE_BOOST);
+            // Not renewed: he was kept away long enough for his entry to run out. Bring the next step forward again.
+            if (prevPhase != BuilderConstructionAssistState.PHASE_ASSIST || !assist.isBoostAppliedForTarget() || !renewed) {
                 PlotAssemblyService.snapPassiveDueForBoost(
                     world, plugin, plotId, BuilderConstructionAssistState.BUILDER_PASSIVE_BOOST
                 );
@@ -172,6 +192,39 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
         tickAssistTravel(world, npc, pos, npc.getLeashPoint(), assist);
         applyAutonomySeek(ref, npc, commandBuffer);
         commandBuffer.putComponent(ref, BuilderConstructionAssistState.getComponentType(), assist);
+    }
+
+    /**
+     * Picks where he stands for this site, and looks at it again every {@link #STAND_CHECK_INTERVAL_TICKS}: beside the
+     * building, never in a cell that is still to be filled. The plot sign's old place, where he used to stand, is often
+     * inside the building.
+     */
+    private static void chooseStand(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull PlotInstance plot,
+        @Nonnull Vector3d pos,
+        @Nonnull BuilderConstructionAssistState assist
+    ) {
+        Box body = SiteBodies.localBox(store, ref);
+        if (assist.isStandChosen()) {
+            if (!assist.standCheckDue(STAND_CHECK_INTERVAL_TICKS)
+                || BuilderSiteStand.stillGood(world, assist.getTargetX(), assist.getTargetY(), assist.getTargetZ(), body)) {
+                return;
+            }
+        }
+        PlotAssemblyJob job = AssemblyWorldRegistry.get(world, plot.getPlotId());
+        Vector3d stand = job == null ? null : BuilderSiteStand.choose(world, job, pos, body);
+        if (stand == null) {
+            stand = BuilderSiteStand.nearSign(world, plot.getSignX(), plot.getSignY(), plot.getSignZ(), body);
+        }
+        if (stand != null) {
+            assist.setStand(stand.x, stand.y, stand.z);
+        } else {
+            // Nowhere safe was found. Keep the spot he has; the site itself still places no block into him.
+            assist.setStand(assist.getTargetX(), assist.getTargetY(), assist.getTargetZ());
+        }
     }
 
     private static void tickAssistTravel(

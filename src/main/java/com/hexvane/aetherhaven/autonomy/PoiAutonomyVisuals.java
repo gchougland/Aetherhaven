@@ -56,6 +56,12 @@ public final class PoiAutonomyVisuals {
         boolean equippedHeldItems = false;
         if (plugin != null) {
             String poiProfile = poi.getEquipmentProfileId();
+            // A spot naming another profession's prop (the bard's lute) counts as naming none,
+            // so the resident's own work tool still applies.
+            if (poiProfile != null
+                && !VillagerEquipmentService.mayHold(npcRef, store, plugin.getEquipmentProfileCatalog(), poiProfile)) {
+                poiProfile = null;
+            }
             if (poiProfile != null) {
                 VillagerEquipmentService.applyProfile(
                     npcRef,

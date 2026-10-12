@@ -12,7 +12,8 @@ Group { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 6); Background: $T.@Card
   Group { LayoutMode: Left; Anchor: (Height: 34, Bottom: 4);
     AssetImage #Icon { Anchor: (Width: 26, Height: 26, Right: 8); }
     Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, VerticalAlignment: Center); }
-    Label #Level { Anchor: (Width: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 22, TextColor: #a7d5bd, RenderBold: true, HorizontalAlignment: End); }
+    // Wide enough for two digits ("10" and "20" are 27 px at this size); 24 cut level 10 to an ellipsis.
+    Label #Level { Anchor: (Width: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 22, TextColor: #a7d5bd, RenderBold: true, HorizontalAlignment: End); }
   }
   Group { LayoutMode: Left; Anchor: (Height: 8, Bottom: 10);
     Group #Pip0 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }

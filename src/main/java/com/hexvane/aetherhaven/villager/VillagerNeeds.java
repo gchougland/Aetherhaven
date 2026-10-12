@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.villager;
 
+import com.hexvane.aetherhaven.restaurant.MealPerk;
+import com.hexvane.aetherhaven.restaurant.RestaurantDish;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -33,7 +35,23 @@ public final class VillagerNeeds implements Component<EntityStore> {
         .add()
         .append(new KeyedCodec<>("Schema", Codec.INTEGER), (v, x) -> v.schema = x, v -> v.schema)
         .add()
+        // Restaurant meal perks. Absent in older saves, which load with no perk.
+        .append(new KeyedCodec<>("MealWorkUntil", Codec.LONG), (v, x) -> v.mealPerkUntilMs[MealPerk.WORK.ordinal()] = x, v -> v.mealPerkUntilMs[MealPerk.WORK.ordinal()])
+        .add()
+        .append(new KeyedCodec<>("MealWorkBonus", Codec.FLOAT), (v, x) -> v.mealPerkBonus[MealPerk.WORK.ordinal()] = x, v -> v.mealPerkBonus[MealPerk.WORK.ordinal()])
+        .add()
+        .append(new KeyedCodec<>("MealEnergyUntil", Codec.LONG), (v, x) -> v.mealPerkUntilMs[MealPerk.ENERGY.ordinal()] = x, v -> v.mealPerkUntilMs[MealPerk.ENERGY.ordinal()])
+        .add()
+        .append(new KeyedCodec<>("MealEnergyBonus", Codec.FLOAT), (v, x) -> v.mealPerkBonus[MealPerk.ENERGY.ordinal()] = x, v -> v.mealPerkBonus[MealPerk.ENERGY.ordinal()])
+        .add()
+        .append(new KeyedCodec<>("MealCheerUntil", Codec.LONG), (v, x) -> v.mealPerkUntilMs[MealPerk.CHEER.ordinal()] = x, v -> v.mealPerkUntilMs[MealPerk.CHEER.ordinal()])
+        .add()
+        .append(new KeyedCodec<>("MealCheerBonus", Codec.FLOAT), (v, x) -> v.mealPerkBonus[MealPerk.CHEER.ordinal()] = x, v -> v.mealPerkBonus[MealPerk.CHEER.ordinal()])
+        .add()
         .build();
+
+    /** No meal perk may outlast one full day on the needs clock; a longer value in a save is treated as none. */
+    private static final long MEAL_PERK_MAX_MS = 24L * RestaurantDish.MS_PER_GAME_HOUR;
 
     @Nullable
     private static volatile ComponentType<EntityStore, VillagerNeeds> componentType;
@@ -60,8 +78,47 @@ public final class VillagerNeeds implements Component<EntityStore> {
     private long lastSimulatedEpochMs;
     /** 0 = legacy or unset on disk; 1 = 0..{@link #MAX} storage. */
     private int schema;
+    /** Per {@link MealPerk}: when it ends, on the same clock as {@link #lastSimulatedEpochMs}. 0 = none. */
+    private final long[] mealPerkUntilMs = new long[MealPerk.values().length];
+    /** Per {@link MealPerk}: strength as a fraction (0.1 = 10%). */
+    private final float[] mealPerkBonus = new float[MealPerk.values().length];
 
     public VillagerNeeds() {}
+
+    /**
+     * Starts a dish's perk from this villager's own clock. A weaker dish never replaces a stronger perk of the same
+     * kind that is still running; an equal or stronger one renews it.
+     *
+     * @return false when nothing changed (no clock yet, bad values, or a stronger perk is active)
+     */
+    public boolean grantMealPerk(@Nonnull MealPerk perk, float bonus, long durationMs) {
+        if (!(bonus > 0f) || durationMs <= 0L || lastSimulatedEpochMs <= 0L) {
+            return false;
+        }
+        float capped = Math.min(bonus, MealPerk.MAX_BONUS);
+        if (mealPerkBonus(perk) > capped) {
+            return false;
+        }
+        int i = perk.ordinal();
+        mealPerkBonus[i] = capped;
+        mealPerkUntilMs[i] = lastSimulatedEpochMs + Math.min(durationMs, MEAL_PERK_MAX_MS);
+        return true;
+    }
+
+    /** Time left on a meal perk, 0 when none is running. */
+    public long mealPerkRemainingMs(@Nonnull MealPerk perk) {
+        long left = mealPerkUntilMs[perk.ordinal()] - lastSimulatedEpochMs;
+        return lastSimulatedEpochMs > 0L && left > 0L && left <= MEAL_PERK_MAX_MS ? left : 0L;
+    }
+
+    /** Strength of a running meal perk as a fraction, 0 when none is running. */
+    public float mealPerkBonus(@Nonnull MealPerk perk) {
+        if (mealPerkRemainingMs(perk) <= 0L) {
+            return 0f;
+        }
+        float bonus = mealPerkBonus[perk.ordinal()];
+        return bonus > 0f ? Math.min(bonus, MealPerk.MAX_BONUS) : 0f;
+    }
 
     @Nonnull
     public static VillagerNeeds full() {
@@ -135,8 +192,8 @@ public final class VillagerNeeds implements Component<EntityStore> {
         lastSimulatedEpochMs = nowMs;
         float step = (float) (seconds * decayPerSecond);
         hunger = clampNeed(hunger - step);
-        energy = clampNeed(energy - step * 0.85f);
-        fun = clampNeed(fun - step * 0.7f);
+        energy = clampNeed(energy - step * 0.85f * (1f - mealPerkBonus(MealPerk.ENERGY)));
+        fun = clampNeed(fun - step * 0.7f * (1f - mealPerkBonus(MealPerk.CHEER)));
     }
 
     private void migrateStorageIfNeeded() {
@@ -168,6 +225,8 @@ public final class VillagerNeeds implements Component<EntityStore> {
         c.fun = fun;
         c.lastSimulatedEpochMs = lastSimulatedEpochMs;
         c.schema = schema;
+        System.arraycopy(mealPerkUntilMs, 0, c.mealPerkUntilMs, 0, mealPerkUntilMs.length);
+        System.arraycopy(mealPerkBonus, 0, c.mealPerkBonus, 0, mealPerkBonus.length);
         return c;
     }
 }

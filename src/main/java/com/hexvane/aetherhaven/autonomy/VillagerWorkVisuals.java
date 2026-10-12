@@ -209,6 +209,25 @@ public final class VillagerWorkVisuals {
         }
     }
 
+    /** The Druid's growing rite at a Spirit Planter: green and gold motes climbing around the plant, and a low chime. */
+    public static void gardenRite(@Nonnull Store<EntityStore> store, @Nonnull Vector3d at) {
+        gardenEffect(store, at, com.hexvane.aetherhaven.production.SpiritGarden.RITE_SOUND, com.hexvane.aetherhaven.production.SpiritGarden.RITE_PARTICLE);
+    }
+
+    /** The moment a rite or a harvest takes: a short burst of light and leaves as the plant changes. */
+    public static void gardenBloom(@Nonnull Store<EntityStore> store, @Nonnull Vector3d at) {
+        gardenEffect(store, at, com.hexvane.aetherhaven.production.SpiritGarden.BLOOM_SOUND, com.hexvane.aetherhaven.production.SpiritGarden.BLOOM_PARTICLE);
+    }
+
+    private static void gardenEffect(Store<EntityStore> store, Vector3d at, String sound, String particle) {
+        playSound3d(sound, at, 0.8F, store);
+        try {
+            ParticleUtil.spawnParticleEffect(particle, at, store);
+        } catch (RuntimeException ignored) {
+            // Particle asset may be absent on some packs; skip quietly.
+        }
+    }
+
     private static void playSound3d(
         @Nonnull String soundEventId,
         @Nonnull Vector3d pos,

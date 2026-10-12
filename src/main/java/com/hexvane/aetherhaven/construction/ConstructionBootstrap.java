@@ -25,6 +25,7 @@ import com.hexvane.aetherhaven.loot.PlayerBlockBreakBonusSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentBreakSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentPlaceSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentStatueRestoreSystem;
+import com.hexvane.aetherhaven.monument.FounderStatuePage;
 import com.hexvane.aetherhaven.placement.PlotBlockPreviewCleanupSystem;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
 import com.hexvane.aetherhaven.plot.CharterBlock;
@@ -107,6 +108,7 @@ public final class ConstructionBootstrap {
                 OpenTownPlanningBenchInteraction.class,
                 OpenTownPlanningBenchInteraction.CODEC
             );
+        FounderStatuePage.registerPageSupplier(core);
         OpenCustomUIInteraction.registerCustomPageSupplier(
             core,
             PlotConstructionPage.class,
@@ -312,6 +314,7 @@ public final class ConstructionBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new BuildingStaffManaRegenSystem());
         plugin.getEntityStoreRegistry().registerSystem(new BuildingStaffHotbarManaHudSystem.SlotChangeHandler());
         plugin.getEntityStoreRegistry().registerSystem(new BuilderConstructionAssistSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.construction.assembly.BuriedVillagerRescueSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new ManagementBreakBlockSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new PlotBlockPreviewCleanupSystem());
@@ -320,6 +323,8 @@ public final class ConstructionBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.quest.QuestMineProgressSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new FounderMonumentPlaceSystem(core));
         plugin.getChunkStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem.BlockLoad());
+        plugin.getChunkStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem.Replaced());
+        plugin.getChunkStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem.ReplacedParked());
         plugin.getEntityStoreRegistry().registerSystem(new FounderMonumentBreakSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new BuildingStaffPreviewPlayerRemoveSystem());
 

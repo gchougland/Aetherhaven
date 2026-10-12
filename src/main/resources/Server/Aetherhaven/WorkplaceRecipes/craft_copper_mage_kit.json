@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Copper",
-      "count": 20
+      "count": 30
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 10
+      "count": 15
     },
     {
       "itemId": "Ingredient_Fibre",
-      "count": 10
+      "count": 15
     }
   ],
   "output": "Aetherhaven_Copper_Mage_Kit",

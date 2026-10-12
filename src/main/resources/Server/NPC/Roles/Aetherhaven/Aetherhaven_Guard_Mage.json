@@ -271,13 +271,7 @@
                             },
                             "LockOnTarget": true,
                             "Filters": [
-                              {
-                                "Type": "NPCGroup",
-                                "IncludeGroups": [
-                                  "Aggressive",
-                                  "Aetherhaven_Raid"
-                                ]
-                              },
+                              { "Type": "AetherhavenGuardThreat" },
                               {
                                 "Type": "LineOfSight"
                               }

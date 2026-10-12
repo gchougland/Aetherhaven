@@ -152,7 +152,7 @@ public final class ProductionCatchUpService {
                 }
                 String gameplayPlotId = ccat.resolveGameplayConstructionId(plot.getConstructionId());
                 // Conservatory plants have always required physical harvest and delivery, including before adoption.
-                if (NativeDruidCrops.CONSTRUCTION.equals(gameplayPlotId) || com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(gameplayPlotId)) continue;
+                if (SpiritGarden.CONSTRUCTION.equals(gameplayPlotId) || com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(gameplayPlotId)) continue;
                 // A calendar jump cannot stand in for physically mining a node.
                 if (!plot.getProductionLayout().legacy()) continue;
                 if (!ProductionCatalog.isProductionWorkplaceConstruction(gameplayPlotId)) {

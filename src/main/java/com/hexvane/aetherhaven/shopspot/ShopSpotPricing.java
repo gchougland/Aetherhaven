@@ -17,6 +17,29 @@ public final class ShopSpotPricing {
         return plugin.getShopPriceCatalog().getEntry(itemId);
     }
 
+    /** The price and lot size this stall sells at, see {@link #entry(ShopPriceCatalog, ShopSpotRecord)}. */
+    @Nonnull
+    public static ShopPriceEntry entry(@Nonnull AetherhavenPlugin plugin, @Nonnull ShopSpotRecord record) {
+        return entry(plugin.getShopPriceCatalog(), record);
+    }
+
+    /**
+     * A listing's price belongs to the listing: one a player put up keeps the catalog price and lot size it was
+     * listed at, whatever the catalog says later. Rolled NPC stock and listings from older saves recorded no price
+     * and follow the catalog as it is now.
+     */
+    @Nonnull
+    public static ShopPriceEntry entry(@Nonnull ShopPriceCatalog catalog, @Nonnull ShopSpotRecord record) {
+        ShopPriceEntry quoted = record.getQuote();
+        if (quoted != null) {
+            return quoted;
+        }
+        String itemId = record.getItemId();
+        return itemId != null
+            ? catalog.getEntry(itemId)
+            : new ShopPriceEntry(catalog.getDefaultGoldPrice(), catalog.getDefaultBatchSize());
+    }
+
     /**
      * Gold per purchase lot after difficulty buy multiplier, jewelry scaling, and (for player spots) sell
      * margin percent.
@@ -26,7 +49,7 @@ public final class ShopSpotPricing {
         @Nonnull ShopSpotRecord record,
         @Nonnull String itemId
     ) {
-        ShopPriceEntry entry = catalogEntry(plugin, itemId);
+        ShopPriceEntry entry = itemId.equals(record.getItemId()) ? entry(plugin, record) : catalogEntry(plugin, itemId);
         long catalogGold = entry.getGoldPerBatch();
         catalogGold = ShopSpotJewelrySupport.scaleCatalogGold(plugin, itemId, record, catalogGold);
         TownDifficultySettings difficulty = DifficultyResolver.effectiveForTown(resolveTown(record));

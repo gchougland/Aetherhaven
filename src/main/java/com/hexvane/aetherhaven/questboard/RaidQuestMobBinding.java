@@ -44,6 +44,12 @@ public final class RaidQuestMobBinding implements Component<EntityStore>, Autono
         return t;
     }
 
+    /** The component type, or null on a server where the Quests feature is switched off. */
+    @Nullable
+    public static ComponentType<EntityStore, RaidQuestMobBinding> typeOrNull() {
+        return componentType;
+    }
+
     private String townId = "";
     private String boardInstanceId = "";
     private double marchLeashX;

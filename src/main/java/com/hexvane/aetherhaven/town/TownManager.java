@@ -72,19 +72,22 @@ public final class TownManager {
             TownWorldFile file = readTownFileWithBackupFallback(saveFile);
             Map<UUID, TownRecord> loaded = new LinkedHashMap<>();
             boolean completedProjectsRemoved = false;
+            boolean startingWorkSet = false;
             for (TownRecord t : file.getTowns()) {
                 t.migrateLegacyPlotFootprintsIfNeeded();
                 t.migrateInnFieldsIfNeeded();
                 t.migrateTownSocialFieldsIfNeeded();
                 t.migrateTerritoryClaimsIfNeeded();
                 completedProjectsRemoved |= com.hexvane.aetherhaven.workplace.BuildingProjectCleanup.reconcile(t);
+                // Residents saved before starting work priorities existed get them here, one time.
+                startingWorkSet |= com.hexvane.aetherhaven.townsfolk.TownsfolkWorkRoster.applyStartingPriorities(t);
                 loaded.put(t.getTownId(), t);
             }
             byTownId.clear();
             byTownId.putAll(loaded);
             retiredHalloweenGames = file.retiredHalloweenGames();
             dedupeDisplayNamesAfterLoad();
-            if (completedProjectsRemoved) {
+            if (completedProjectsRemoved || startingWorkSet) {
                 dirty = true;
                 TownSaveCoordinator.requestSave(this);
             }

@@ -60,7 +60,7 @@ $C.@PageOverlay {
 
             Group { FlexWeight: 1; }
 
-            $C.@SecondaryTextButton #CloseButton {
+            $C.@SecondaryTextButton #PageCloseButton {
               Text: "";
               Anchor: (Width: 140, Height: 36);
             }

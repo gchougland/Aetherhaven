@@ -25,12 +25,24 @@ public final class ShopSpotWorldFile {
     @SerializedName("spots")
     private List<Row> spots = new ArrayList<>();
 
+    /** Player listings waiting to be handed back to their seller; see {@link ShopSpotRegistry#heldReturns()}. */
+    @SerializedName("heldReturns")
+    private List<Row> heldReturns = new ArrayList<>();
+
     @Nonnull
     public List<Row> getSpots() {
         if (spots == null) {
             spots = new ArrayList<>();
         }
         return spots;
+    }
+
+    @Nonnull
+    public List<Row> getHeldReturns() {
+        if (heldReturns == null) {
+            heldReturns = new ArrayList<>();
+        }
+        return heldReturns;
     }
 
     public static final class Row {
@@ -57,6 +69,14 @@ public final class ShopSpotWorldFile {
         public long stockEpochDay;
         @Nullable
         public String jewelryMetaJson;
+        /** The whole stack for sale as the engine saves one. Left out for NPC stock; absent in older files. */
+        @Nullable
+        public String stack;
+        /** Catalog price the listing went up at, per lot. Left out when none was recorded. */
+        @Nullable
+        public Long quoteGold;
+        @Nullable
+        public Integer quoteBatch;
         @Nullable
         public String sellerUuid;
         @Nullable
@@ -94,7 +114,26 @@ public final class ShopSpotWorldFile {
 
     @Nonnull
     public static ShopSpotWorldFile fromRecords(@Nonnull List<ShopSpotRecord> records) {
+        return fromRecords(records, List.of());
+    }
+
+    @Nonnull
+    public static ShopSpotWorldFile fromRegistry(@Nonnull ShopSpotRegistry registry) {
+        return fromRecords(registry.allRecords(), registry.heldReturns());
+    }
+
+    @Nonnull
+    public static ShopSpotWorldFile fromRecords(
+        @Nonnull List<ShopSpotRecord> records,
+        @Nonnull List<ShopSpotRecord> held
+    ) {
         ShopSpotWorldFile f = new ShopSpotWorldFile();
+        appendRows(f.getSpots(), records);
+        appendRows(f.getHeldReturns(), held);
+        return f;
+    }
+
+    private static void appendRows(@Nonnull List<Row> rows, @Nonnull List<ShopSpotRecord> records) {
         for (ShopSpotRecord r : records) {
             Row row = new Row();
             row.spotId = r.getSpotId().toString();
@@ -112,20 +151,33 @@ public final class ShopSpotWorldFile {
             row.stock = r.getStock();
             row.stockEpochDay = r.getStockEpochDay();
             row.jewelryMetaJson = r.getJewelryMetaJson();
+            row.stack = r.getStackData();
+            ShopPriceEntry quote = r.getQuote();
+            row.quoteGold = quote != null ? quote.getGoldPerBatch() : null;
+            row.quoteBatch = quote != null ? quote.getBatchSize() : null;
             UUID seller = r.getSellerUuid();
             row.sellerUuid = seller != null ? seller.toString() : null;
             row.sellerName = r.getSellerName();
             UUID display = r.getDisplayEntityUuid();
             row.displayEntityUuid = display != null ? display.toString() : null;
-            f.getSpots().add(row);
+            rows.add(row);
         }
-        return f;
     }
 
     @Nonnull
     public static List<ShopSpotRecord> toRecords(@Nonnull ShopSpotWorldFile file) {
+        return toRecords(file.getSpots());
+    }
+
+    @Nonnull
+    public static List<ShopSpotRecord> toHeldReturns(@Nonnull ShopSpotWorldFile file) {
+        return toRecords(file.getHeldReturns());
+    }
+
+    @Nonnull
+    private static List<ShopSpotRecord> toRecords(@Nonnull List<Row> rows) {
         List<ShopSpotRecord> out = new ArrayList<>();
-        for (Row row : file.getSpots()) {
+        for (Row row : rows) {
             ShopSpotRecord r = rowToRecord(row);
             if (r != null) {
                 out.add(r);
@@ -161,6 +213,10 @@ public final class ShopSpotWorldFile {
             r.setStock(row.stock);
             r.setStockEpochDay(row.stockEpochDay);
             r.setJewelryMetaJson(row.jewelryMetaJson);
+            r.setStackData(row.stack);
+            if (row.quoteBatch != null && row.quoteBatch > 0 && row.quoteGold != null) {
+                r.setQuote(new ShopPriceEntry(row.quoteGold, row.quoteBatch));
+            }
             if (row.sellerUuid != null && !row.sellerUuid.isBlank()) {
                 r.setSellerUuid(UUID.fromString(row.sellerUuid.trim()));
             }

@@ -20,7 +20,8 @@ import org.joml.Vector3i;
 /** Project cards refer to existing paid assembly jobs. Opening this board never starts a construction. */
 public final class BuildingProjectsPage extends AetherhavenInteractiveCustomUIPage<BuildingProjectsPage.Data> {
     private final UUID townId,siteId;private final Vector3i station;
-    private boolean appended;private WorkplaceArea openedArea;private long revision;private String hint;
+    private static final String GONE="That project is no longer on the board. Nothing was changed.";
+    private boolean appended;private WorkplaceArea openedArea;private String hint;
     private final Map<String,Runnable> actions=new HashMap<>();
     private record Context(TownManager manager,TownRecord town,ApprenticeWorkplace site) {}
     public BuildingProjectsPage(PlayerRef player,UUID town,UUID site,Vector3i station){super(player,CustomPageLifetime.CanDismiss,Data.CODEC);townId=town;siteId=site;this.station=station==null?null:new Vector3i(station);}
@@ -32,26 +33,32 @@ public final class BuildingProjectsPage extends AetherhavenInteractiveCustomUIPa
         if(site==null||site.type()!=TownsfolkWorkType.BUILDING||transform==null)return null;
         var p=transform.getPosition();if(!TownTerritoryClaims.contains(town,com.hypixel.hytale.math.util.ChunkUtil.chunkCoordinate((int)Math.floor(p.x)),com.hypixel.hytale.math.util.ChunkUtil.chunkCoordinate((int)Math.floor(p.z))))return null;
         if(openedArea==null)openedArea=site.area();if(!openedArea.equals(site.area()))return null;
-        if(BuildingProjectCleanup.reconcile(town))manager.updateTown(town);
+        if(BuildingProjectCleanup.reconcile(town)|BuildingProjectAutoQueue.offerWaiting(town))manager.updateTown(town);
         return new Context(manager,town,site);
     }
     @Override public void build(Ref<EntityStore> ref,UICommandBuilder b,UIEventBuilder e,Store<EntityStore> store) {
         var c=current(ref,store);if(c==null){close();return;}
-        if(!appended){b.append("Aetherhaven/BuildingProjectsPage.ui");appended=true;for(String action:List.of("Pause","Refresh","Station"))e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,EventData.of("Action",action),false);}
-        var world=store.getExternalData().getWorld();var plan=c.site().building();revision=plan.revision();actions.clear();
+        if(!appended){b.append("Aetherhaven/BuildingProjectsPage.ui");appended=true;for(String action:List.of("Refresh","Station","Bench"))e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,EventData.of("Action",action),false);}
+        var world=store.getExternalData().getWorld();var plan=c.site().building();actions.clear();
+        // The button names the state it asks for, so a press seen late can never flip the yard back.
+        e.addEventBinding(CustomUIEventBindingType.Activating,"#Pause",EventData.of("Action",plan.paused()?"Resume":"Pause"),false);
         b.set("#TitleText.Text",c.site().name()+" | PROJECT BOARD");b.set("#Count.Text",plan.list().size()+" / 35 projects");
         b.set("#Contribution.Text",plan.contributions()+" pieces placed by this yard");
         b.set("#Pause.Text",plan.paused()?"Resume yard":"Pause yard");b.set("#Station.Visible",station!=null);
+        // Using this bench opens the project board, so its own crafting screen is offered here.
+        String ownScreen=WorkplaceNativeBench.label(world,station);b.set("#Bench.Visible",ownScreen!=null);if(ownScreen!=null)b.set("#Bench.Text",ownScreen);
         var equipment=WorkplaceEquipment.scan(world,c.site().area());
-        b.set("#Status.Text",hint!=null?hint:plan.paused()?"This yard is paused. Ordinary construction continues.":Objects.requireNonNullElse(equipment.requirement(WorkplaceEquipment.BUILDERS_BENCH,1),"Builder's Workbench ready. Enable Building for an Apprentice in the journal. Keep paths and scaffolding accessible."));
+        b.set("#YardStatus.Text",hint!=null?hint:plan.paused()?"This yard is paused. Ordinary construction continues.":Objects.requireNonNullElse(equipment.requirement(WorkplaceEquipment.BUILDERS_BENCH,1),"Builder's Workbench ready. Enable Building for an Apprentice in the journal. Keep paths and scaffolding accessible."));
         b.clear("#Queue");b.clear("#Available");int queued=0,available=0;
         for(var order:plan.list()) {
             var plot=c.town().findPlotById(order.plot());String path="#Queue["+(queued++)+"]";b.append("#Queue","Aetherhaven/BuildingProjectCard.ui");
             draw(b,path,plot,queued,store);String issue=NativeBuildingWork.issue(world,c.town(),order);
             b.set(path+" #Status.Text",Objects.requireNonNullElse(issue,"Ready for an Apprentice"));b.set(path+" #Add.Visible",false);
-            bind(e,path+" #Earlier","Earlier",order.id(),()->plan.move(revision,order.id(),-1));
-            bind(e,path+" #Later","Later",order.id(),()->plan.move(revision,order.id(),1));
-            bind(e,path+" #Remove","Remove",order.id(),()->plan.remove(revision,order.id()));
+            // Each button carries its own project. The board moving under the player never refuses a press and
+            // never lets one land on another project.
+            bind(e,path+" #Earlier","Earlier",order.id(),()->{if(!plan.move(order.id(),-1))hint=plan.find(order.id())==null?GONE:"That project is already first.";});
+            bind(e,path+" #Later","Later",order.id(),()->{if(!plan.move(order.id(),1))hint=plan.find(order.id())==null?GONE:"That project is already last.";});
+            bind(e,path+" #Remove","Remove",order.id(),()->{if(!plan.remove(order.id()))hint=GONE;});
             b.set(path+" #Earlier.Disabled",queued==1);b.set(path+" #Later.Disabled",queued==plan.list().size());
         }
         for(var plot:c.town().getPlotInstances()) {
@@ -59,8 +66,10 @@ public final class BuildingProjectsPage extends AetherhavenInteractiveCustomUIPa
             String path="#Available["+(available++)+"]";b.append("#Available","Aetherhaven/BuildingProjectCard.ui");draw(b,path,plot,0,store);
             b.set(path+" #Status.Text","Construction already started");b.set(path+" #Ordering.Visible",false);b.set(path+" #Add.Disabled",plan.list().size()>=35);
             bind(e,path+" #Add","Add",plot.getPlotId(),()->{
-                if(plot.getState()!=PlotInstanceState.ASSEMBLING||c.town().findPlotById(plot.getPlotId())!=plot)hint="This construction project changed. Review it again.";
-                else hint=plan.add(revision,plot.getPlotId(),playerRef.getUuid());
+                if(c.town().findPlotById(plot.getPlotId())!=plot)hint="That building plot was removed. Nothing was queued.";
+                else if(plot.getState()==PlotInstanceState.COMPLETE)hint="That building is already finished. Nothing was queued.";
+                else if(plot.getState()!=PlotInstanceState.ASSEMBLING)hint="That building is not under construction any more. Nothing was queued.";
+                else hint=plan.add(plot.getPlotId(),playerRef.getUuid());
             });
         }
         b.set("#QueueEmpty.Visible",queued==0);b.set("#AvailableEmpty.Visible",available==0);
@@ -83,9 +92,9 @@ public final class BuildingProjectsPage extends AetherhavenInteractiveCustomUIPa
     @Override public void handleDataEvent(Ref<EntityStore> ref,Store<EntityStore> store,Data data) {
         var c=current(ref,store);if(c==null){close();return;}var plan=c.site().building();hint=null;
         if("Station".equals(data.action)&&station!=null){store.getComponent(ref,Player.getComponentType()).getPageManager().openCustomPage(ref,store,new WorkplaceStationPage(playerRef,townId,siteId,station));return;}
-        if("Refresh".equals(data.action)){}
-        else if(revision!=plan.revision())hint="The project queue changed. Review it again.";
-        else if("Pause".equals(data.action)){plan.pause(revision,!plan.paused());c.manager().updateTown(c.town());}
+        if("Bench".equals(data.action)&&station!=null){var opened=WorkplaceNativeBench.open(ref,store,station);if(opened==WorkplaceNativeBench.Outcome.OPENED||isDismissed())return;hint=opened.message();}
+        else if("Refresh".equals(data.action)){}
+        else if("Pause".equals(data.action)||"Resume".equals(data.action)){if(plan.pause("Pause".equals(data.action)))c.manager().updateTown(c.town());}
         else {var action=actions.get(data.action);if(action==null)return;action.run();c.manager().updateTown(c.town());}
         var b=new UICommandBuilder();var e=new UIEventBuilder();build(ref,b,e,store);sendUpdate(b,e,false);
     }

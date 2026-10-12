@@ -1,0 +1,3070 @@
+{
+ "nodes": [
+  {
+   "id": "1",
+   "name": "Rest_Left",
+   "children": [],
+   "position": {
+    "x": -9,
+    "y": 2,
+    "z": 0
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.043619,
+    "z": 0.0,
+    "w": 0.999048
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 4,
+      "z": 16
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 0,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 0,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 28,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 33,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 33,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "2",
+   "name": "Rest_Right",
+   "children": [],
+   "position": {
+    "x": 9,
+    "y": 2,
+    "z": 0
+   },
+   "orientation": {
+    "x": -0.0,
+    "y": -0.034899,
+    "z": -0.0,
+    "w": 0.999391
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 4,
+      "z": 16
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 0,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 0,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 28,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 33,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 33,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "3",
+   "name": "Log",
+   "children": [],
+   "position": {
+    "x": 0,
+    "y": 9,
+    "z": 0
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 28,
+      "y": 12,
+      "z": 12
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 0,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 0,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 0,
+       "y": 36
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 28,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 28,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "4",
+   "name": "Stub",
+   "children": [],
+   "position": {
+    "x": 10.6382,
+    "y": 15.3244,
+    "z": -3.0976
+   },
+   "orientation": {
+    "x": -0.078762,
+    "y": 0.101424,
+    "z": -0.228742,
+    "w": 0.96498
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 4,
+      "y": 5,
+      "z": 4
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 33,
+       "y": 28
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 33,
+       "y": 28
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 33,
+       "y": 28
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 33,
+       "y": 28
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 33,
+       "y": 33
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "5",
+   "name": "Moss_Back",
+   "children": [],
+   "position": {
+    "x": -8.4,
+    "y": 15.2,
+    "z": -3.4
+   },
+   "orientation": {
+    "x": -0.0,
+    "y": -0.078459,
+    "z": -0.0,
+    "w": 0.996917
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 7,
+      "y": 1,
+      "z": 5
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 16,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "6",
+   "name": "Moss_Back_Tuft",
+   "children": [],
+   "position": {
+    "x": -11.4,
+    "y": 15.55,
+    "z": -0.6
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.147809,
+    "z": 0.0,
+    "w": 0.989016
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 4,
+      "y": 1,
+      "z": 4
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 28,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "7",
+   "name": "Moss_Front",
+   "children": [],
+   "position": {
+    "x": 7.6,
+    "y": 15.25,
+    "z": 4.3
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.095846,
+    "z": 0.0,
+    "w": 0.995396
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 1,
+      "z": 4
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 23,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "8",
+   "name": "Moss_Back_Fall",
+   "children": [],
+   "position": {
+    "x": -8.0,
+    "y": 13.3,
+    "z": -6.12
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.034899,
+    "w": 0.999391
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 4,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 37,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 37,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 32,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "9",
+   "name": "Moss_Front_Fall",
+   "children": [],
+   "position": {
+    "x": 7.8,
+    "y": 13.8,
+    "z": 6.14
+   },
+   "orientation": {
+    "x": -0.0,
+    "y": -0.0,
+    "z": -0.043619,
+    "w": 0.999048
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 4,
+      "y": 3,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 37,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 37,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 28,
+       "y": 40
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "10",
+   "name": "Plug_Top_0",
+   "children": [],
+   "position": {
+    "x": -6,
+    "y": 15.12,
+    "z": 4
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 1,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "11",
+   "name": "Plug_Top_1",
+   "children": [],
+   "position": {
+    "x": 3,
+    "y": 15.14,
+    "z": 4
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 1,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "12",
+   "name": "Plug_Top_2",
+   "children": [],
+   "position": {
+    "x": 12,
+    "y": 15.16,
+    "z": 2
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 1,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "13",
+   "name": "Plug_Front_0",
+   "children": [],
+   "position": {
+    "x": -11,
+    "y": 9,
+    "z": 6.1
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "14",
+   "name": "Plug_Front_1",
+   "children": [],
+   "position": {
+    "x": 2,
+    "y": 7,
+    "z": 6.12
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "15",
+   "name": "Plug_Front_2",
+   "children": [],
+   "position": {
+    "x": 8,
+    "y": 6,
+    "z": 6.14
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "16",
+   "name": "Plug_Back_0",
+   "children": [],
+   "position": {
+    "x": -2,
+    "y": 9,
+    "z": -6.1
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "17",
+   "name": "Plug_Back_1",
+   "children": [],
+   "position": {
+    "x": 9,
+    "y": 10,
+    "z": -6.12
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "18",
+   "name": "Stem_0",
+   "children": [],
+   "position": {
+    "x": -2.8695,
+    "y": 19.0694,
+    "z": -1.1709
+   },
+   "orientation": {
+    "x": -0.028661,
+    "y": 0.138914,
+    "z": 0.053903,
+    "w": 0.988421
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.7,
+     "y": 1.0,
+     "z": 0.7
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 10,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "19",
+   "name": "Cap_0",
+   "children": [],
+   "position": {
+    "x": -3.6139,
+    "y": 25.521,
+    "z": -1.4418
+   },
+   "orientation": {
+    "x": -0.028661,
+    "y": 0.138914,
+    "z": 0.053903,
+    "w": 0.988421
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 5,
+      "z": 5
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 40,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 52,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "20",
+   "name": "Ring_0",
+   "children": [],
+   "position": {
+    "x": -3.0757,
+    "y": 20.856,
+    "z": -1.2459
+   },
+   "orientation": {
+    "x": 0.031735,
+    "y": 0.141945,
+    "z": 0.045322,
+    "w": 0.988327
+   },
+   "shape": {
+    "type": "quad",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "size": {
+      "x": 5,
+      "y": 5
+     },
+     "normal": "+Y"
+    },
+    "visible": true,
+    "doubleSided": true,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 40,
+       "y": 30
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "21",
+   "name": "Ring_Low_0",
+   "children": [],
+   "position": {
+    "x": -2.8008,
+    "y": 18.4739,
+    "z": -1.1459
+   },
+   "orientation": {
+    "x": -0.039471,
+    "y": 0.136237,
+    "z": -0.023814,
+    "w": 0.989603
+   },
+   "shape": {
+    "type": "quad",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.8,
+     "y": 0.8,
+     "z": 0.8
+    },
+    "settings": {
+     "size": {
+      "x": 5,
+      "y": 5
+     },
+     "normal": "+Y"
+    },
+    "visible": true,
+    "doubleSided": true,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 40,
+       "y": 30
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "22",
+   "name": "Stem_1",
+   "children": [],
+   "position": {
+    "x": 5.2195,
+    "y": 18.0985,
+    "z": -1.0423
+   },
+   "orientation": {
+    "x": 0.038718,
+    "y": -0.172532,
+    "z": -0.106376,
+    "w": 0.978477
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.5599999999999999,
+     "y": 0.8,
+     "z": 0.5599999999999999
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 10,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "23",
+   "name": "Cap_1",
+   "children": [],
+   "position": {
+    "x": 6.2325,
+    "y": 23.1652,
+    "z": -0.4575
+   },
+   "orientation": {
+    "x": 0.038718,
+    "y": -0.172532,
+    "z": -0.106376,
+    "w": 0.978477
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.8,
+     "y": 0.8,
+     "z": 0.8
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 5,
+      "z": 5
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 40,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 52,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "24",
+   "name": "Ring_1",
+   "children": [],
+   "position": {
+    "x": 5.5,
+    "y": 19.5016,
+    "z": -0.8804
+   },
+   "orientation": {
+    "x": 0.09838,
+    "y": -0.178704,
+    "z": -0.095645,
+    "w": 0.974289
+   },
+   "shape": {
+    "type": "quad",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.8,
+     "y": 0.8,
+     "z": 0.8
+    },
+    "settings": {
+     "size": {
+      "x": 5,
+      "y": 5
+     },
+     "normal": "+Y"
+    },
+    "visible": true,
+    "doubleSided": true,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 40,
+       "y": 30
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "25",
+   "name": "Stem_2",
+   "children": [],
+   "position": {
+    "x": -10.0631,
+    "y": 17.2239,
+    "z": 2.7829
+   },
+   "orientation": {
+    "x": 0.035723,
+    "y": 0.296582,
+    "z": 0.161135,
+    "w": 0.940637
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.434,
+     "y": 0.62,
+     "z": 0.434
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 10,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "26",
+   "name": "Cap_2",
+   "children": [],
+   "position": {
+    "x": -11.1994,
+    "y": 21.0343,
+    "z": 3.4389
+   },
+   "orientation": {
+    "x": 0.035723,
+    "y": 0.296582,
+    "z": 0.161135,
+    "w": 0.940637
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.62,
+     "y": 0.62,
+     "z": 0.62
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 5,
+      "z": 5
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 40,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 52,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "27",
+   "name": "Ring_2",
+   "children": [],
+   "position": {
+    "x": -10.3778,
+    "y": 18.2791,
+    "z": 2.9645
+   },
+   "orientation": {
+    "x": 0.093081,
+    "y": 0.305866,
+    "z": 0.142729,
+    "w": 0.936702
+   },
+   "shape": {
+    "type": "quad",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.62,
+     "y": 0.62,
+     "z": 0.62
+    },
+    "settings": {
+     "size": {
+      "x": 5,
+      "y": 5
+     },
+     "normal": "+Y"
+    },
+    "visible": true,
+    "doubleSided": true,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 40,
+       "y": 30
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "28",
+   "name": "Stem_3",
+   "children": [],
+   "position": {
+    "x": 1.7914,
+    "y": 16.9514,
+    "z": 3.7258
+   },
+   "orientation": {
+    "x": 0.138644,
+    "y": 0.418505,
+    "z": 0.01213,
+    "w": 0.897488
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.385,
+     "y": 0.55,
+     "z": 0.385
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 10,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "29",
+   "name": "Cap_3",
+   "children": [],
+   "position": {
+    "x": 2.1284,
+    "y": 20.3879,
+    "z": 4.6518
+   },
+   "orientation": {
+    "x": 0.138644,
+    "y": 0.418505,
+    "z": 0.01213,
+    "w": 0.897488
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.55,
+     "y": 0.55,
+     "z": 0.55
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 5,
+      "z": 5
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 40,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 52,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "30",
+   "name": "Stem_4",
+   "children": [],
+   "position": {
+    "x": -4.1266,
+    "y": 12.5313,
+    "z": 7.4472
+   },
+   "orientation": {
+    "x": 0.335736,
+    "y": 0.098225,
+    "z": 0.065261,
+    "w": 0.934545
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.42,
+     "y": 0.6,
+     "z": 0.42
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 10,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "31",
+   "name": "Cap_4",
+   "children": [],
+   "position": {
+    "x": -4.3451,
+    "y": 15.5188,
+    "z": 9.9445
+   },
+   "orientation": {
+    "x": 0.335736,
+    "y": 0.098225,
+    "z": 0.065261,
+    "w": 0.934545
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.6,
+     "y": 0.6,
+     "z": 0.6
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 5,
+      "z": 5
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 40,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 52,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "32",
+   "name": "Stem_5",
+   "children": [],
+   "position": {
+    "x": 11.2738,
+    "y": 13.0562,
+    "z": 7.022
+   },
+   "orientation": {
+    "x": 0.267617,
+    "y": -0.246152,
+    "z": -0.154508,
+    "w": 0.91865
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.35,
+     "y": 0.5,
+     "z": 0.35
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 10,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 52,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "33",
+   "name": "Cap_5",
+   "children": [],
+   "position": {
+    "x": 11.7683,
+    "y": 15.6855,
+    "z": 8.8672
+   },
+   "orientation": {
+    "x": 0.267617,
+    "y": -0.246152,
+    "z": -0.154508,
+    "w": 0.91865
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.5,
+     "y": 0.5,
+     "z": 0.5
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 5,
+      "z": 5
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 40,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 40,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 52,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  }
+ ],
+ "lod": "auto"
+}

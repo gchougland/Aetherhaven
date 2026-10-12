@@ -55,11 +55,74 @@ public final class HouseResidentAssignment {
         assignResident(town, plotId, 0, residentUuid, tm, world, store, constructionCatalog);
     }
 
+    /** What a request to house (or unhouse) a resident came to. Only the first two change the town. */
+    public enum Outcome {
+        ASSIGNED,
+        CLEARED,
+        /** The plot is missing, is not a house, is not finished, or has no such bed. */
+        HOUSE_UNAVAILABLE,
+        /** A visitor or guard whose own house quest has not been accepted. */
+        NOT_ELIGIBLE,
+        /** A newcomer cannot join before Town Level 2. */
+        TOWN_TOO_SMALL,
+        /** A newcomer needs more food than the town has. */
+        SHORT_FOOD;
+
+        public boolean changed() { return this == ASSIGNED || this == CLEARED; }
+    }
+
+    /**
+     * Whether {@code residentUuid} may take the bed at {@code slotIndex}, without changing anything. A resident who
+     * already belongs to the town can always be moved; only a newcomer is held to the food and town level rules.
+     */
+    @Nonnull
+    public static Outcome check(
+        @Nonnull TownRecord town,
+        @Nonnull UUID plotId,
+        int slotIndex,
+        @Nullable UUID residentUuid,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        PlotInstance pi = town.findPlotById(plotId);
+        if (pi == null
+            || !constructionCatalog.matchesGameplayConstruction(
+                pi.getConstructionId(),
+                AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE
+            )
+            || pi.getState() != PlotInstanceState.COMPLETE
+            || slotIndex < 0) {
+            return Outcome.HOUSE_UNAVAILABLE;
+        }
+        ConstructionDefinition def = constructionCatalog.get(pi.getConstructionId());
+        int maxSlots = def != null ? def.getMaxHomeResidents() : 1;
+        if (slotIndex >= maxSlots) {
+            return Outcome.HOUSE_UNAVAILABLE;
+        }
+        if (residentUuid == null) {
+            return Outcome.CLEARED;
+        }
+        if (TownResidentEligibility.excludeFromHouseAssignmentPicker(town, residentUuid)) {
+            return Outcome.NOT_ELIGIBLE;
+        }
+        if (!TownAdmission.isMember(town, residentUuid)) {
+            if (TownPopulation.count(town) < 4) {
+                return Outcome.TOWN_TOO_SMALL;
+            }
+            if (!TownPopulation.snapshot(town, constructionCatalog).canAdmit()) {
+                return Outcome.SHORT_FOOD;
+            }
+        }
+        return Outcome.ASSIGNED;
+    }
+
     /**
      * Sets the plot's home resident at {@code slotIndex} (or clears when {@code residentUuid} is null). Updates town data.
      * When {@code world} and {@code store} are non-null, updates the resident NPC registry for revival UI.
+     *
+     * @return what happened, so the caller never reports a home that was not given
      */
-    public static void assignResident(
+    @Nonnull
+    public static Outcome assignResident(
         @Nonnull TownRecord town,
         @Nonnull UUID plotId,
         int slotIndex,
@@ -69,30 +132,13 @@ public final class HouseResidentAssignment {
         @Nullable Store<EntityStore> store,
         @Nonnull ConstructionCatalog constructionCatalog
     ) {
+        Outcome outcome = check(town, plotId, slotIndex, residentUuid, constructionCatalog);
+        if (!outcome.changed()) {
+            return outcome;
+        }
         PlotInstance pi = town.findPlotById(plotId);
-        if (pi == null
-            || !constructionCatalog.matchesGameplayConstruction(
-                pi.getConstructionId(),
-                AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE
-            )) {
-            return;
-        }
-        if (pi.getState() != PlotInstanceState.COMPLETE) {
-            return;
-        }
-        if (slotIndex < 0) {
-            return;
-        }
         ConstructionDefinition def = constructionCatalog.get(pi.getConstructionId());
         int maxSlots = def != null ? def.getMaxHomeResidents() : 1;
-        if (slotIndex >= maxSlots) {
-            return;
-        }
-        if (residentUuid != null && TownResidentEligibility.excludeFromHouseAssignmentPicker(town, residentUuid)) {
-            return;
-        }
-        if (residentUuid != null && !TownAdmission.isMember(town, residentUuid)
-            && (!TownPopulation.snapshot(town, constructionCatalog).canAdmit() || TownPopulation.count(town) < 4)) return;
         if (residentUuid != null) {
             town.clearHomeResidentFromOtherPlots(plotId, residentUuid);
             // Same house: clear other slots so a villager occupies at most one bed.
@@ -137,5 +183,6 @@ public final class HouseResidentAssignment {
                 ResidentRegistryService.syncHouseAssignment(town, tm, store, residentUuid);
             }
         }
+        return outcome;
     }
 }

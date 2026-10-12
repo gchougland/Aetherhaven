@@ -18,7 +18,6 @@
   "MaxConcurrentParticles": 14,
   "Particle": {
     "Texture": "Particles/Textures/Basic/Star2.png",
-    "FrameSize": { "Width": 32, "Height": 32 },
     "ScaleRatioConstraint": "OneToOne",
     "Animation": {
       "0": {
@@ -39,7 +38,7 @@
         "Y": { "Min": 0, "Max": 360 },
         "Z": { "Min": 0, "Max": 0 }
       },
-      "Scale": { "X": { "Min": 0.4, "Max": 0.7 } },
+      "Scale": { "X": { "Min": 0.1, "Max": 0.175 } },
       "Opacity": 0.7,
       "FrameIndex": { "Min": 0, "Max": 0 }
     }

@@ -62,19 +62,18 @@ public final class ProductionWithdrawal {
         long take,
         @Nonnull ResultSink result
     ) {
-        long maxCap = WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, itemId);
         state.removeAmountUpTo(itemId, take);
         ItemStack grant = new ItemStack(itemId, (int) Math.min(take, Integer.MAX_VALUE));
         ItemStackTransaction giveTx = player.giveItem(grant, ref, store);
         if (!giveTx.succeeded()) {
-            state.addAmount(itemId, take, maxCap);
+            state.restoreAmount(itemId, take);
             result.inventoryFull = true;
             return 0L;
         }
         ItemStack remainder = giveTx.getRemainder();
         long notAdded = ItemStack.isEmpty(remainder) ? 0L : Math.min(take, remainder.getQuantity());
         if (notAdded > 0L) {
-            state.addAmount(itemId, notAdded, maxCap);
+            state.restoreAmount(itemId, notAdded);
             result.inventoryPartial = true;
             if (notAdded == take) {
                 result.inventoryFull = true;
@@ -107,11 +106,10 @@ public final class ProductionWithdrawal {
             return 0L;
         }
         take = Math.min(take, emptyBuckets);
-        long maxCap = WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, itemId);
         state.removeAmountUpTo(itemId, take);
         ItemStackTransaction bucketTx = inv.removeItemStack(new ItemStack(EMPTY_BUCKET_ITEM_ID, (int) take));
         if (!bucketTx.succeeded()) {
-            state.addAmount(itemId, take, maxCap);
+            state.restoreAmount(itemId, take);
             result.needEmptyBuckets = true;
             result.emptyBucketsRequired = (int) take;
             result.emptyBucketsHeld = emptyBuckets;
@@ -120,7 +118,7 @@ public final class ProductionWithdrawal {
         ItemStack grant = new ItemStack(MILK_BUCKET_ITEM_ID, (int) take);
         ItemStackTransaction giveTx = player.giveItem(grant, ref, store);
         if (!giveTx.succeeded()) {
-            state.addAmount(itemId, take, maxCap);
+            state.restoreAmount(itemId, take);
             player.giveItem(new ItemStack(EMPTY_BUCKET_ITEM_ID, (int) take), ref, store);
             result.inventoryFull = true;
             return 0L;
@@ -128,7 +126,7 @@ public final class ProductionWithdrawal {
         ItemStack remainder = giveTx.getRemainder();
         long notAdded = ItemStack.isEmpty(remainder) ? 0L : Math.min(take, remainder.getQuantity());
         if (notAdded > 0L) {
-            state.addAmount(itemId, notAdded, maxCap);
+            state.restoreAmount(itemId, notAdded);
             player.giveItem(new ItemStack(EMPTY_BUCKET_ITEM_ID, (int) notAdded), ref, store);
             result.inventoryPartial = true;
             if (notAdded == take) {

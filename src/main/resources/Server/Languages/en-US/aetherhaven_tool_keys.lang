@@ -1,0 +1,68 @@
+# Names of tool actions.
+# The game shows each name beside the player's own key for it at the bottom right of the screen
+# (HudInputBindingEntry in the tool's item JSON), and tool overlays use the same names as row labels.
+# Never write a key name here. A player may have bound any key to any of these actions.
+
+aetherhaven.toolKeys.whereKeys = Your keys for these actions are shown at the bottom right of the screen.
+aetherhaven.toolKeys.crouchModifier = Crouch +
+
+aetherhaven.toolKeys.generic.primary = Primary action
+aetherhaven.toolKeys.generic.secondary = Secondary action
+aetherhaven.toolKeys.generic.use = Use
+aetherhaven.toolKeys.generic.ability1 = Ability 1
+aetherhaven.toolKeys.generic.ability4 = Ability 4
+aetherhaven.toolKeys.generic.pick = Pick block
+aetherhaven.toolKeys.generic.move = Move
+aetherhaven.toolKeys.generic.jump = Jump
+aetherhaven.toolKeys.generic.flyDown = Fly down
+aetherhaven.toolKeys.generic.sprint = Sprint
+aetherhaven.toolKeys.generic.crouch = Crouch
+aetherhaven.toolKeys.generic.cancel = Cancel
+
+aetherhaven.toolKeys.pathTool.primary = Select
+aetherhaven.toolKeys.pathTool.secondary = Add or remove
+aetherhaven.toolKeys.pathTool.use = Mode action
+aetherhaven.toolKeys.pathTool.ability1 = Next mode
+aetherhaven.toolKeys.pathTool.ability4 = Width or save
+aetherhaven.toolKeys.pathTool.pick = Mode menu
+
+aetherhaven.toolKeys.plotCreator.primary = Mark
+aetherhaven.toolKeys.plotCreator.secondary = Adjust or remove
+aetherhaven.toolKeys.plotCreator.use = Open or confirm
+aetherhaven.toolKeys.plotCreator.ability1 = Back
+aetherhaven.toolKeys.plotCreator.ability4 = Continue
+aetherhaven.toolKeys.plotCreator.pick = Step menu
+
+aetherhaven.toolKeys.patrolWand.primary = Select route
+aetherhaven.toolKeys.patrolWand.secondary = Add or remove point
+aetherhaven.toolKeys.patrolWand.use = Mode action
+aetherhaven.toolKeys.patrolWand.ability1 = Next mode
+aetherhaven.toolKeys.patrolWand.ability4 = Reset
+
+aetherhaven.toolKeys.buildingStaff.primary = Select or find work
+aetherhaven.toolKeys.buildingStaff.secondary = Build or cancel
+aetherhaven.toolKeys.buildingStaff.use = Staff menu
+aetherhaven.toolKeys.buildingStaff.ability1 = Next mode
+aetherhaven.toolKeys.buildingStaff.pick = Mode menu
+
+aetherhaven.toolKeys.poiTool.primary = Select
+aetherhaven.toolKeys.poiTool.secondary = Place or remove
+aetherhaven.toolKeys.poiTool.ability1 = Next mode
+
+aetherhaven.toolKeys.rtsFlag.primary = Select or count guards
+aetherhaven.toolKeys.rtsFlag.secondary = Send guards
+aetherhaven.toolKeys.rtsFlag.ability1 = Order mode
+aetherhaven.toolKeys.rtsFlag.ability4 = Stop guards
+
+aetherhaven.toolKeys.rtsSword.primary = Select guards
+aetherhaven.toolKeys.rtsSword.secondary = Focus target
+
+aetherhaven.toolKeys.rtsStance.primary = Select guards
+aetherhaven.toolKeys.rtsStance.ability1 = Next stance
+
+aetherhaven.toolKeys.rtsFree.primary = Select guards
+aetherhaven.toolKeys.rtsFree.secondary = Release guards
+
+aetherhaven.toolKeys.rtsSelect.primary = Select group
+
+aetherhaven.toolKeys.rtsExit.primary = Leave command mode

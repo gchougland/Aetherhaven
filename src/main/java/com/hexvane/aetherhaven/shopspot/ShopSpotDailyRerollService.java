@@ -144,6 +144,10 @@ public final class ShopSpotDailyRerollService {
                 : rolled;
         record.setItemId(itemId);
         record.setStock(stock);
+        // Rolled stock is new goods, even when the same item comes up again: nothing a player once listed here
+        // (its metadata, its recorded price) may leak into it.
+        record.setStackData(null);
+        record.setQuote(null);
         if (ShopSpotJewelrySupport.isJewelryListing(itemId)) {
             ShopSpotJewelrySupport.prepareNpcJewelryListing(record, itemId, plugin);
         } else {

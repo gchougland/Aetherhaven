@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "blessing": { "item": "Ingredient_Life_Essence", "cost": 5 },
+  "work": { "plantSeconds": 3, "riteSeconds": 8, "harvestSeconds": 4 },
+  "xp": { "plant": 6, "petal": 1 },
+  "plants": [
+    { "plant": "Plant_Crop_Health1", "seed": "Plant_Seeds_Health1", "block": "Aetherhaven_Spirit_Health1", "petal": "Plant_Petals_Blood", "plantDrops": "Plant_Crop_Health1_Harvest", "petalDrops": "Plant_Crop_Health1", "tier": 1, "mastery": 1 },
+    { "plant": "Plant_Crop_Stamina1", "seed": "Plant_Seeds_Stamina1", "block": "Aetherhaven_Spirit_Stamina1", "petal": "Plant_Petals_Storm", "plantDrops": "Plant_Crop_Stamina1_Harvest", "petalDrops": "Plant_Crop_Stamina1", "tier": 1, "mastery": 1 },
+    { "plant": "Plant_Crop_Mana1", "seed": "Plant_Seeds_Mana1", "block": "Aetherhaven_Spirit_Mana1", "petal": "Plant_Petals_Azure", "plantDrops": "Plant_Crop_Mana1_Harvest", "petalDrops": "Plant_Crop_Mana1", "tier": 1, "mastery": 1 },
+    { "plant": "Plant_Crop_Health2", "seed": "Plant_Seeds_Health2", "block": "Aetherhaven_Spirit_Health2", "petal": "Plant_Petals_Blood", "plantDrops": "Plant_Crop_Health2_Harvest", "petalDrops": "Plant_Crop_Health2", "tier": 2, "mastery": 4 },
+    { "plant": "Plant_Crop_Stamina2", "seed": "Plant_Seeds_Stamina2", "block": "Aetherhaven_Spirit_Stamina2", "petal": "Plant_Petals_Storm", "plantDrops": "Plant_Crop_Stamina2_Harvest", "petalDrops": "Plant_Crop_Stamina2", "tier": 2, "mastery": 4 },
+    { "plant": "Plant_Crop_Mana2", "seed": "Plant_Seeds_Mana2", "block": "Aetherhaven_Spirit_Mana2", "petal": "Plant_Petals_Azure", "plantDrops": "Plant_Crop_Mana2_Harvest", "petalDrops": "Plant_Crop_Mana2", "tier": 2, "mastery": 4 },
+    { "plant": "Plant_Crop_Health3", "seed": "Plant_Seeds_Health3", "block": "Aetherhaven_Spirit_Health3", "petal": "Plant_Petals_Blood", "plantDrops": "Plant_Crop_Health3_Harvest", "petalDrops": "Plant_Crop_Health3", "tier": 3, "mastery": 7 },
+    { "plant": "Plant_Crop_Stamina3", "seed": "Plant_Seeds_Stamina3", "block": "Aetherhaven_Spirit_Stamina3", "petal": "Plant_Petals_Storm", "plantDrops": "Plant_Crop_Stamina3_Harvest", "petalDrops": "Plant_Crop_Stamina3", "tier": 3, "mastery": 7 },
+    { "plant": "Plant_Crop_Mana3", "seed": "Plant_Seeds_Mana3", "block": "Aetherhaven_Spirit_Mana3", "petal": "Plant_Petals_Azure", "plantDrops": "Plant_Crop_Mana3_Harvest", "petalDrops": "Plant_Crop_Mana3", "tier": 3, "mastery": 7 }
+  ],
+  "tracks": {
+    "PLANTERS": {
+      "icon": "Aetherhaven_Spirit_Planter",
+      "base": 2,
+      "levels": [
+        { "value": 3, "cost": { "Ingredient_Life_Essence": 10, "Plant_Crop_Health1": 5 } },
+        { "value": 4, "cost": { "Ingredient_Life_Essence": 15, "Plant_Crop_Stamina1": 10, "Plant_Crop_Mana1": 10 } },
+        { "value": 6, "cost": { "Ingredient_Life_Essence": 25, "Plant_Crop_Health2": 10, "Plant_Crop_Stamina2": 10 } }
+      ]
+    },
+    "RITE": {
+      "icon": "Plant_Crop_Mana1",
+      "base": 4.0,
+      "levels": [
+        { "value": 3.0, "cost": { "Ingredient_Life_Essence": 10, "Plant_Petals_Azure": 10 } },
+        { "value": 2.5, "cost": { "Ingredient_Life_Essence": 20, "Plant_Crop_Mana2": 10 } },
+        { "value": 2.0, "cost": { "Ingredient_Life_Essence": 30, "Plant_Crop_Mana3": 10 } }
+      ]
+    },
+    "BOUNTY": {
+      "icon": "Plant_Crop_Health1",
+      "base": 2,
+      "petalRollsPerPlant": 3,
+      "levels": [
+        { "value": 3, "cost": { "Ingredient_Life_Essence": 10, "Plant_Petals_Blood": 10 } },
+        { "value": 4, "cost": { "Ingredient_Life_Essence": 20, "Plant_Crop_Health2": 10 } },
+        { "value": 5, "cost": { "Ingredient_Life_Essence": 30, "Plant_Crop_Health3": 10 } }
+      ]
+    },
+    "STORES": {
+      "icon": "Aetherhaven_Production_Storage",
+      "base": 1,
+      "levels": [
+        { "value": 2, "cost": { "Ingredient_Life_Essence": 10, "Plant_Petals_Storm": 10 } },
+        { "value": 3, "cost": { "Ingredient_Life_Essence": 15, "Plant_Crop_Stamina2": 10 } },
+        { "value": 4, "cost": { "Ingredient_Life_Essence": 20, "Plant_Crop_Stamina3": 10 } }
+      ]
+    }
+  }
+}

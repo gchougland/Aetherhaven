@@ -2,7 +2,9 @@ package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
+import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
 import com.hexvane.aetherhaven.map.TownMapMarkerCache;
 import com.hexvane.aetherhaven.map.TownMapMarkerProvider;
@@ -63,7 +65,11 @@ public final class TownDissolutionService {
             clearPlotFromWorld(world, plugin, town, p, entityStore, reg);
         }
 
+        // Statues outside any building stay standing; the armor players lent them is set down beside each pedestal.
+        com.hexvane.aetherhaven.monument.FounderMonumentStatueRestoreSystem.releaseArmorOfTown(world, townId);
         reg.unregisterAllForTown(townId);
+        // Players' items a festival was holding for this town are handed back or set down at the charter, not deleted.
+        com.hexvane.aetherhaven.festival.FestivalHeldItemsService.releaseAll(world, entityStore, town);
         tm.removeTown(townId);
         TownBorderMapOverlayService.onWorldTownsChanged(world);
         TownMapMarkerProvider.removeTownMarkerFromAllPlayers(world, townId);
@@ -129,6 +135,25 @@ public final class TownDissolutionService {
         @Nullable PrefabVolumeClearSpec sparseClear,
         @Nullable Ref<EntityStore> actingPlayer
     ) {
+        clearPlotFromWorld(world, plugin, town, p, entityStore, reg, blockClearMode, sparseClear, actingPlayer, false);
+    }
+
+    /**
+     * @param rebuildInPlace the same building is about to be pasted again where it stands, so its shop stalls keep
+     *     their saved rows and everything players have for sale on them
+     */
+    public static void clearPlotFromWorld(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance p,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull PoiRegistry reg,
+        @Nonnull PlotBlockClearMode blockClearMode,
+        @Nullable PrefabVolumeClearSpec sparseClear,
+        @Nullable Ref<EntityStore> actingPlayer,
+        boolean rebuildInPlace
+    ) {
         PropPlotTeardown.packageIntersecting(world, plugin, p.toFootprint(), actingPlayer, entityStore);
         if (p.getState() == PlotInstanceState.BLUEPRINTING) {
             ChunkSectionBlockUtil.breakBlock(world, p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
@@ -136,11 +161,15 @@ public final class TownDissolutionService {
             AssemblyWorldRegistry.remove(world, p.getPlotId());
             ChunkSectionBlockUtil.breakBlock(world, p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
             PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
-            clearPlotBlocks(world, p.toFootprint(), blockClearMode, sparseClear);
+            clearPlotBlocks(world, blockClearFootprint(plugin, p), blockClearMode, sparseClear);
         } else if (p.getState() == PlotInstanceState.COMPLETE) {
             reg.unregisterByPlotId(p.getPlotId());
             ShopSpotRegistry shopRegistry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
-            ShopSpotPlotRelocation.clearPlotSpots(world, plugin, entityStore, shopRegistry, p.getPlotId());
+            if (rebuildInPlace) {
+                ShopSpotPlotRelocation.beginInPlaceRebuild(world, plugin, entityStore, shopRegistry, p.getPlotId());
+            } else {
+                ShopSpotPlotRelocation.clearPlotSpots(world, plugin, entityStore, shopRegistry, p.getPlotId());
+            }
             TouristPortalRegistry touristRegistry =
                 AetherhavenWorldRegistries.getOrCreateTouristPortalRegistry(world, plugin);
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -148,8 +177,22 @@ public final class TownDissolutionService {
                 world, plugin, entityStore, touristRegistry, p.getPlotId(), town, tm
             );
             PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
-            clearPlotBlocks(world, p.toFootprint(), blockClearMode, sparseClear);
+            clearPlotBlocks(world, blockClearFootprint(plugin, p), blockClearMode, sparseClear);
         }
+    }
+
+    /**
+     * Box whose blocks a full teardown removes. A festival square stores its whole reserved box, five layers of it under
+     * the paved floor. What lies there is the ground the square was built on or the fill a festival laid over it, so
+     * the teardown stops at the floor and leaves it as ground instead of digging a pit.
+     */
+    @Nonnull
+    private static PlotFootprintRecord blockClearFootprint(@Nonnull AetherhavenPlugin plugin, @Nonnull PlotInstance p) {
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(p.getConstructionId());
+        if (def == null || !FestivalPrefabSize.usesReservedFootprint(def)) {
+            return p.toFootprint();
+        }
+        return FestivalPrefabSize.fromFloorUp(p.toFootprint(), p.resolvePrefabAnchorWorld(def).y);
     }
 
     private static void clearPlotBlocks(

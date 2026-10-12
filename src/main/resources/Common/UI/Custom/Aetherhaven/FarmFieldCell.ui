@@ -1,0 +1,14 @@
+$C = "../Common.ui";
+// One cell of a field map. Soil shows as a colour and a corner pip, and the state of the crop as a strip along the bottom.
+Button { Anchor: (Width: 36, Height: 36); Background: #1d1611; TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+ Group #Off { Anchor: (Full: 1); Background: #262b33; HitTestVisible: false; }
+ Group #Worn { Anchor: (Full: 1); Background: #8d8168; Visible: false; HitTestVisible: false; }
+ Group #Good { Anchor: (Full: 1); Background: #6b4a30; Visible: false; HitTestVisible: false; }
+ Group #Rich { Anchor: (Full: 1); Background: #3f2a1c; Visible: false; HitTestVisible: false; }
+ ItemIcon #Icon { Anchor: (Full: 3); Visible: false; HitTestVisible: false; }
+ Group #Waiting { Anchor: (Full: 1); Background: #1b2028(0.55); Visible: false; HitTestVisible: false; }
+ Group #Ripe { Anchor: (Left: 2, Right: 2, Bottom: 2, Height: 4); Background: #8be07a; Visible: false; HitTestVisible: false; }
+ Group #Need { Anchor: (Left: 2, Right: 2, Bottom: 2, Height: 4); Background: #e2705c; Visible: false; HitTestVisible: false; }
+ Group #PipRich { Anchor: (Right: 2, Top: 2, Width: 8, Height: 8); Background: #f2cf5b; Visible: false; HitTestVisible: false; }
+ Group #PipWorn { Anchor: (Right: 2, Top: 2, Width: 8, Height: 8); Background: #d9d2c2; Visible: false; HitTestVisible: false; }
+}

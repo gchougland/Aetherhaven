@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCompleter;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
+import com.hexvane.aetherhaven.construction.RebuildBenchCarry;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
@@ -20,11 +22,14 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -104,8 +109,9 @@ public final class PlotReconstructService {
         PoiRegistry poiReg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         PlotBuildingRelocation.relocateTownNpcsOutOfFootprint(entityStore, town, oldFootprint);
         Ref<EntityStore> actorRef = findPlayerRef(entityStore, actorUuid);
+        // rebuildInPlace: stalls keep their saved rows, so nothing a player has for sale is lost with the old blocks.
         TownDissolutionService.clearPlotFromWorld(
-            world, plugin, town, plot, entityStore, poiReg, PlotBlockClearMode.NONE, null, actorRef
+            world, plugin, town, plot, entityStore, poiReg, PlotBlockClearMode.NONE, null, actorRef, true
         );
         plot.clearAssemblyPersistence();
 
@@ -117,11 +123,27 @@ public final class PlotReconstructService {
         tm.updateTown(town);
 
         Vector3i finalAnchor = anchor;
+        // The paste swaps every workbench for a new tier one bench. Lift the upgrades off the old benches at the last
+        // moment before the paste and set them on the new ones when it finishes.
+        List<ConstructionPasteOps.PendingBlock> prefabCells =
+            ConstructionPasteOps.buildSequence(buffer, yaw, plot.getBlockPaletteSelections()).pendingBlocks();
+        List<RebuildBenchCarry.Saved<ItemStack[]>> benchUpgrades = new ArrayList<>();
+        Runnable beforeFirstBlock =
+            () -> benchUpgrades.addAll(RebuildBenchCarry.capture(world, finalAnchor, yaw, prefabCells));
         Runnable onComplete =
             () -> {
                 if (plot.getState() == PlotInstanceState.BLUEPRINTING) {
                     ChunkSectionBlockUtil.breakBlock(world, plot.getSignX(), plot.getSignY(), plot.getSignZ(), SIGN_BREAK_SETTINGS);
                 }
+                RebuildBenchCarry.restore(
+                    world,
+                    entityStore,
+                    benchUpgrades,
+                    finalAnchor,
+                    yaw,
+                    prefabCells,
+                    findPlayerRef(entityStore, actorUuid)
+                );
                 ConstructionCompleter.finishBuild(world, plugin, actorUuid, plotId, finalAnchor, yaw);
             };
         ConstructionAnimator.start(
@@ -136,7 +158,8 @@ public final class PlotReconstructService {
             INSTANT_BLOCKS_PER_BATCH,
             INSTANT_BATCH_DELAY_MS,
             onComplete,
-            plot.getBlockPaletteSelections()
+            plot.getBlockPaletteSelections(),
+            beforeFirstBlock
         );
         return ReconstructResult.OK;
     }

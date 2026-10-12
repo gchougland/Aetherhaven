@@ -13,18 +13,27 @@ import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.shape.Box;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.math.vector.Rotation3f;
+import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.protocol.MovementStates;
 import com.hypixel.hytale.protocol.PlayerSkin;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.Frozen;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.entity.component.ActiveAnimationComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
+import com.hypixel.hytale.server.core.modules.entity.component.Interactable;
 import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
@@ -32,10 +41,13 @@ import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.modules.entity.player.PlayerSkinComponent;
+import com.hypixel.hytale.server.core.modules.interaction.Interactions;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,6 +58,14 @@ import javax.annotation.Nullable;
  * No cosmetic meshes or textures are generated, substituted or assembled by Aetherhaven.
  */
 public final class FounderMonumentSpawnService {
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    /** Opens the statue screen when a player uses the statue itself rather than its pedestal. */
+    public static final String STATUE_USE_ROOT_INTERACTION = "Aetherhaven_Founder_Statue_Use";
+    /** Key prompt shown on the statue and on its pedestal. */
+    public static final String STATUE_USE_HINT = "aetherhaven_monument.aetherhaven.monument.statueHint";
+    /** Animation set the client plays on an entity that stands still. A statue's pose is bound to it. */
+    static final String POSE_ANIMATION_SET = "Idle";
+
     private FounderMonumentSpawnService() {}
 
     /**
@@ -62,8 +82,37 @@ public final class FounderMonumentSpawnService {
     /** Normal Player model for bounds and for the fallback when saved appearance data is missing. */
     @Nullable
     public static Model buildFallbackModel() {
+        return buildStatueModel(FounderStatuePose.STANDING);
+    }
+
+    /**
+     * Normal Player model that holds one still pose. The pose is the model's only animation set, bound as the
+     * animation of standing still, the same way the game's own posed showcase mannequins are built. The model id
+     * stays {@code Player}.
+     */
+    @Nullable
+    public static Model buildStatueModel(@Nonnull FounderStatuePose pose) {
         ModelAsset asset = ModelAsset.getAssetMap().getAsset("Player");
-        return asset != null ? toStaticModel(Model.createScaledModel(asset, 1.0f, null, null, true)) : null;
+        if (asset == null) {
+            return null;
+        }
+        ModelAsset poses =
+            pose.animationSetId() != null ? ModelAsset.getAssetMap().getAsset(FounderStatuePose.POSES_MODEL_ID) : null;
+        return toStaticModel(
+            Model.createScaledModel(asset, 1.0f, null, null, true),
+            poseAnimations(pose, poses != null ? poses.getAnimationSetMap() : null)
+        );
+    }
+
+    /** The animation sets of a posed statue: the pose's still clip as the standing animation, or none at all. */
+    @Nonnull
+    static Map<String, ModelAsset.AnimationSet> poseAnimations(
+        @Nonnull FounderStatuePose pose,
+        @Nullable Map<String, ModelAsset.AnimationSet> poseSets
+    ) {
+        String setId = pose.animationSetId();
+        ModelAsset.AnimationSet set = setId != null && poseSets != null ? poseSets.get(setId) : null;
+        return set != null ? Map.of(POSE_ANIMATION_SET, set) : Collections.emptyMap();
     }
 
     /**
@@ -101,7 +150,7 @@ public final class FounderMonumentSpawnService {
     /** Builds a transient preview using the configured villager's unchanged appearance. */
     @Nonnull
     public static Model buildStatuePreviewModel(@Nonnull ModelAsset appearanceAsset) {
-        return toStaticModel(Model.createScaledModel(appearanceAsset, 1.0f, null, null, true));
+        return toStaticModel(Model.createScaledModel(appearanceAsset, 1.0f, null, null, true), Collections.emptyMap());
     }
 
     /**
@@ -120,7 +169,26 @@ public final class FounderMonumentSpawnService {
         @Nonnull String displayNameForLabel,
         @Nonnull Rotation3f rotation
     ) {
-        Model monumentModel = buildFallbackModel();
+        return spawnFounderStatue(world, store, blockX, blockY, blockZ, skin, displayNameForLabel, rotation, null);
+    }
+
+    /**
+     * @param loadout the pedestal's armor and pose, or null for a bare standing statue. Only read: the statue is
+     *     given display copies, the real pieces stay on the pedestal block.
+     */
+    @Nullable
+    public static UUID spawnFounderStatue(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        int blockX,
+        int blockY,
+        int blockZ,
+        @Nonnull PlayerSkin skin,
+        @Nonnull String displayNameForLabel,
+        @Nonnull Rotation3f rotation,
+        @Nullable FounderStatueLoadout loadout
+    ) {
+        Model monumentModel = buildStatueModel(FounderStatuePose.byId(loadout != null ? loadout.getPoseId() : null));
         if (monumentModel == null) {
             return null;
         }
@@ -131,7 +199,8 @@ public final class FounderMonumentSpawnService {
             rotation,
             skin,
             displayNameForLabel,
-            monumentModel
+            monumentModel,
+            loadout
         );
     }
 
@@ -150,14 +219,30 @@ public final class FounderMonumentSpawnService {
         @Nonnull String displayNameForLabel,
         @Nonnull Rotation3f rotation
     ) {
+        return spawnStatueLikePlace(world, store, blockX, blockY, blockZ, skin, displayNameForLabel, rotation, null);
+    }
+
+    /** As above, wearing the pedestal's armor and holding its pose. */
+    @Nullable
+    public static UUID spawnStatueLikePlace(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        int blockX,
+        int blockY,
+        int blockZ,
+        @Nullable PlayerSkin skin,
+        @Nonnull String displayNameForLabel,
+        @Nonnull Rotation3f rotation,
+        @Nullable FounderStatueLoadout loadout
+    ) {
         if (skin != null) {
             UUID clothed =
-                spawnFounderStatue(world, store, blockX, blockY, blockZ, skin, displayNameForLabel, rotation);
+                spawnFounderStatue(world, store, blockX, blockY, blockZ, skin, displayNameForLabel, rotation, loadout);
             if (clothed != null) {
                 return clothed;
             }
         }
-        Model fallback = buildFallbackModel();
+        Model fallback = buildStatueModel(FounderStatuePose.byId(loadout != null ? loadout.getPoseId() : null));
         if (fallback == null) {
             return null;
         }
@@ -168,7 +253,8 @@ public final class FounderMonumentSpawnService {
             rotation,
             skin,
             displayNameForLabel,
-            fallback
+            fallback,
+            loadout
         );
     }
 
@@ -185,6 +271,23 @@ public final class FounderMonumentSpawnService {
         @Nullable PlayerSkin skin,
         @Nonnull String displayNameForLabel,
         @Nonnull Model monumentModel
+    ) {
+        return spawnFounderStatue(world, store, pos, rotation, skin, displayNameForLabel, monumentModel, null);
+    }
+
+    /**
+     * @param loadout the pedestal's armor, or null. The statue wears display copies; it never holds the real pieces.
+     */
+    @Nullable
+    public static UUID spawnFounderStatue(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Vector3d pos,
+        @Nonnull Rotation3f rotation,
+        @Nullable PlayerSkin skin,
+        @Nonnull String displayNameForLabel,
+        @Nonnull Model monumentModel,
+        @Nullable FounderStatueLoadout loadout
     ) {
         FounderMonumentStatueSkin storedSkin =
             skin != null ? FounderMonumentStatueSkin.fromProtocol(skin) : new FounderMonumentStatueSkin();
@@ -207,6 +310,20 @@ public final class FounderMonumentSpawnService {
         holder.ensureComponent(Frozen.getComponentType());
         holder.putComponent(Invulnerable.getComponentType(), Invulnerable.INSTANCE);
         holder.ensureComponent(UUIDComponent.getComponentType());
+        // A frozen entity never has its movement flags worked out, and a client that is told nothing about them may
+        // pick a moving animation. The game marks frozen living entities idle for the same reason.
+        holder.putComponent(MovementStatesComponent.getComponentType(), standingStill());
+        // Armor the client draws on the statue, exactly as it does for a player or a villager. A statue that cannot
+        // be given armor slots still spawns; its pieces stay safe on the pedestal either way.
+        try {
+            InventoryComponent.Armor worn = new InventoryComponent.Armor(InventoryComponent.DEFAULT_ARMOR_CAPACITY);
+            showArmor(worn, loadout);
+            holder.putComponent(InventoryComponent.Armor.getComponentType(), worn);
+        } catch (RuntimeException e) {
+            LOGGER.atWarning().withCause(e).log("Founder monument: statue spawned without armor slots");
+        }
+        holder.putComponent(Interactable.getComponentType(), Interactable.INSTANCE);
+        holder.putComponent(Interactions.getComponentType(), statueInteractions());
         Ref<EntityStore> ref = store.addEntity(holder, AddReason.SPAWN);
         if (ref == null || !ref.isValid()) {
             return null;
@@ -215,9 +332,93 @@ public final class FounderMonumentSpawnService {
         return uc != null ? uc.getUuid() : null;
     }
 
-    /** Same mesh as {@code dynamic} from cosmetics, but no animation sets (statue). */
     @Nonnull
-    private static Model toStaticModel(@Nonnull Model dynamic) {
+    static MovementStatesComponent standingStill() {
+        MovementStates states = new MovementStates();
+        states.idle = true;
+        states.horizontalIdle = true;
+        states.onGround = true;
+        MovementStatesComponent component = new MovementStatesComponent();
+        component.setMovementStates(states);
+        return component;
+    }
+
+    @Nonnull
+    static Interactions statueInteractions() {
+        Interactions interactions = new Interactions(Map.of(InteractionType.Use, STATUE_USE_ROOT_INTERACTION));
+        interactions.setInteractionHint(STATUE_USE_HINT);
+        return interactions;
+    }
+
+    /**
+     * Makes the statue's armor slots show what the pedestal holds. The stacks placed here are fresh single items made
+     * from the item id alone; the real pieces, with their wear and any extra data, never leave the pedestal block.
+     */
+    static void showArmor(@Nonnull InventoryComponent.Armor worn, @Nullable FounderStatueLoadout loadout) {
+        ItemContainer shown = worn.getInventory();
+        for (FounderStatueLoadout.Slot slot : FounderStatueLoadout.Slot.values()) {
+            short index = (short) slot.ordinal();
+            if (index >= shown.getCapacity()) {
+                continue;
+            }
+            ItemStack real = loadout != null ? loadout.get(slot) : null;
+            ItemStack current = shown.getItemStack(index);
+            String want = real != null ? real.getItemId() : null;
+            String have = ItemStack.isEmpty(current) ? null : current.getItemId();
+            if (Objects.equals(want, have)) {
+                continue;
+            }
+            try {
+                if (want == null) {
+                    shown.removeItemStackFromSlot(index);
+                } else {
+                    shown.setItemStackForSlot(index, new ItemStack(want, 1));
+                }
+            } catch (RuntimeException e) {
+                // An item another mod no longer provides cannot be drawn. It is still safe on the pedestal.
+            }
+        }
+        worn.setOutdatedEquipment(true);
+    }
+
+    /**
+     * Redraws the armor on a statue that is already standing.
+     *
+     * @return false when the statue is not in the world right now or was spawned without armor slots, in which case
+     *     the caller should respawn it
+     */
+    public static boolean refreshStatueArmor(
+        @Nonnull Store<EntityStore> store,
+        @Nullable String statueEntityUuid,
+        @Nonnull FounderStatueLoadout loadout
+    ) {
+        if (statueEntityUuid == null || statueEntityUuid.isBlank()) {
+            return false;
+        }
+        UUID id;
+        try {
+            id = UUID.fromString(statueEntityUuid.trim());
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(id);
+        if (ref == null || !ref.isValid()) {
+            return false;
+        }
+        InventoryComponent.Armor worn = store.getComponent(ref, InventoryComponent.Armor.getComponentType());
+        if (worn == null) {
+            return false;
+        }
+        showArmor(worn, loadout);
+        return true;
+    }
+
+    /** Same mesh as {@code dynamic} from cosmetics, with only the given animation sets (none for a plain statue). */
+    @Nonnull
+    private static Model toStaticModel(
+        @Nonnull Model dynamic,
+        @Nonnull Map<String, ModelAsset.AnimationSet> animationSets
+    ) {
         return new Model(
             dynamic.getModelAssetId(),
             safePersistScale(dynamic.getScale()),
@@ -232,7 +433,7 @@ public final class FounderMonumentSpawnService {
             dynamic.getCrouchOffset(),
             dynamic.getSittingOffset(),
             dynamic.getSleepingOffset(),
-            Collections.emptyMap(),
+            animationSets,
             dynamic.getCamera(),
             dynamic.getLight(),
             dynamic.getParticles(),
@@ -307,9 +508,7 @@ public final class FounderMonumentSpawnService {
                 ? new Rotation3f(existing.getPitch(), existing.getYaw(), existing.getRoll())
                 : rotation;
         String townId = firstNonBlank(existing.getTownId(), lookupTownId(world, statueX, statueZ));
-        cs.putComponent(
-            blockRef,
-            FounderMonumentBlock.getComponentType(),
+        FounderMonumentBlock next =
             new FounderMonumentBlock(
                 townId,
                 statueEntityUuid != null ? statueEntityUuid.toString() : existing.getStatueEntityUuid(),
@@ -318,8 +517,22 @@ public final class FounderMonumentSpawnService {
                 mergedRotation.pitch(),
                 mergedRotation.yaw(),
                 mergedRotation.roll()
-            )
-        );
+            );
+        // The armor and pose stay with the pedestal: the new record takes them from the one it replaces.
+        existing.moveLoadoutTo(next);
+        cs.putComponent(blockRef, FounderMonumentBlock.getComponentType(), next);
+    }
+
+    /** Flags the pedestal's saved data as changed so its armor and pose reach the disk with the chunk. */
+    public static void markPedestalNeedsSaving(@Nonnull Ref<ChunkStore> blockRef) {
+        if (!blockRef.isValid()) {
+            return;
+        }
+        BlockModule.BlockStateInfo info =
+            blockRef.getStore().getComponent(blockRef, BlockModule.BlockStateInfo.getComponentType());
+        if (info != null) {
+            info.markNeedsSaving();
+        }
     }
 
     @Nonnull

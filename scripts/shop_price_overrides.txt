@@ -23,6 +23,10 @@ Aetherhaven_Geode = 50
 
 Aetherhaven_Mining_Bomb = 20
 
+# A small crude chest is ten logs at a workbench. The furniture table (Chest_Small 38) priced it
+# above a crude door or table, so chests made from spare logs outsold everything else.
+Furniture_Crude_Chest_Small = 10
+
 # Spears (non-metal or special variants)
 Weapon_Spear_Crude = 4
 Weapon_Spear_Scrap = 6

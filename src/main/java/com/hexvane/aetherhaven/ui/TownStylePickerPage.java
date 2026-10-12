@@ -64,10 +64,10 @@ public final class TownStylePickerPage extends AetherhavenInteractiveCustomUIPag
         }
         commandBuilder.set("#PageTitleText.TextSpans", Message.translation(MSG + ".title"));
         commandBuilder.set("#StepHint.TextSpans", Message.translation(MSG + ".hint"));
-        commandBuilder.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
+        commandBuilder.set("#PageCloseButton.TextSpans", Message.translation(MSG + ".button.close"));
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
-            "#CloseButton",
+            "#PageCloseButton",
             EventData.of("Action", "Close"),
             false
         );
@@ -380,10 +380,10 @@ public final class TownStylePickerPage extends AetherhavenInteractiveCustomUIPag
         UIEventBuilder events = new UIEventBuilder();
         cmd.set("#PageTitleText.TextSpans", Message.translation(MSG + ".title"));
         cmd.set("#StepHint.TextSpans", Message.translation(MSG + ".hint"));
-        cmd.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
+        cmd.set("#PageCloseButton.TextSpans", Message.translation(MSG + ".button.close"));
         events.addEventBinding(
             CustomUIEventBindingType.Activating,
-            "#CloseButton",
+            "#PageCloseButton",
             EventData.of("Action", "Close"),
             false
         );

@@ -68,49 +68,48 @@
         {
           "Type": "AetherhavenPlotCreatorBlock"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.plotCreator.primary"
     },
     "Secondary": {
       "Interactions": [
         {
           "Type": "AetherhavenPlotCreatorBlock"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.plotCreator.secondary"
     },
     "Use": {
       "Interactions": [
         {
           "Type": "AetherhavenPlotCreatorUse"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.plotCreator.use"
     },
     "Ability1": {
       "Interactions": [
         {
           "Type": "AetherhavenPlotCreatorStepBack"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.plotCreator.ability1"
     },
-    "Ability2": {
+    "Ability4": {
       "Interactions": [
         {
           "Type": "AetherhavenPlotCreatorStepForward"
         }
-      ]
-    },
-    "Ability3": {
-      "Interactions": [
-        {
-          "Type": "AetherhavenPlotCreatorCancel"
-        }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.plotCreator.ability4"
     },
     "Pick": {
       "Interactions": [
         {
           "Type": "AetherhavenPlotCreatorStepJump"
         }
-      ]
+      ],
+      "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.plotCreator.pick"
     }
   },
   "InteractionConfig": {

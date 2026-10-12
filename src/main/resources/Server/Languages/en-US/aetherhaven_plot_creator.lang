@@ -16,7 +16,7 @@ aetherhaven.plotcreator.error.insufficientGold = You need 100 gold coins to turn
 aetherhaven.plotcreator.error.anchorOutsideBounds = The plot sign must be inside the build bounds.
 aetherhaven.plotcreator.error.outsideBounds = Click inside the marked bounds.
 aetherhaven.plotcreator.error.wrongBlock = That is not the block needed for this step.
-aetherhaven.plotcreator.error.shopSpotNotConfigured = Confirm the shop stall setup first, then click it with the plot creator staff.
+aetherhaven.plotcreator.error.shopSpotNotConfigured = Confirm the shop spot setup first, then click it with the plot creator staff.
 aetherhaven.plotcreator.error.tooManyVisitors = This building only needs two visitor spots.
 aetherhaven.plotcreator.error.editNotCustom = Only custom buildings saved in your server data folder can be edited.
 aetherhaven.plotcreator.error.editUnknown = No custom building found with id {id}.
@@ -30,15 +30,15 @@ aetherhaven.plotcreator.generateicon.error.loadFailed = Could not load prefab: {
 aetherhaven.plotcreator.generateicon.error.renderFailed = Icon render failed for {id}.
 aetherhaven.plotcreator.generateicon.ok = Icon saved for {id} at {path} (asset path: {asset})
 
-aetherhaven.plotcreator.hint.boundsReady = Build area ready. Stand inside the box and use secondary to grow it toward where you look, or drag a side panel. Press E to continue.
+aetherhaven.plotcreator.hint.boundsReady = Build area ready. Stand inside the box and use Adjust or remove to grow it toward where you look, or drag a side panel. Use Continue when ready.
 aetherhaven.plotcreator.hint.boundsSet = Build area set: {width} wide, {depth} deep, {height} tall.
 aetherhaven.plotcreator.hint.boundsHelp = Hold primary and drag to mark the build box. The plot sign is placed at the center when you continue.
 aetherhaven.plotcreator.hint.boundsExpanded = Build area expanded.
 aetherhaven.plotcreator.hint.boundsShrunk = Build area shrunk.
 aetherhaven.plotcreator.hint.anchorSet = Plot sign spot set.
 aetherhaven.plotcreator.hint.blockRecorded = Spot saved.
-aetherhaven.plotcreator.hint.shopSpotRecorded = Shop stall saved.
-aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded = That shop stall is already saved for this step.
+aetherhaven.plotcreator.hint.shopSpotRecorded = Shop spot saved.
+aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded = That shop spot is already saved for this step.
 aetherhaven.plotcreator.hint.touristPortalRecorded = Tourist portal saved.
 aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded = That tourist portal is already saved for this step.
 aetherhaven.plotcreator.hint.spawnRecorded = Spawn spot saved.
@@ -178,8 +178,8 @@ aetherhaven.plotcreator.hud.WELCOME.e = Begin
 
 aetherhaven.plotcreator.hud.BOUNDS.primary = Drag to mark the build box
 aetherhaven.plotcreator.hud.BOUNDS.secondary = Drag a side to resize the box
-aetherhaven.plotcreator.hud.BOUNDS.confirm = E to confirm build area
-aetherhaven.plotcreator.hud.BOUNDS.redo = Q to redo the build box
+aetherhaven.plotcreator.hud.BOUNDS.confirm = Confirm build area
+aetherhaven.plotcreator.hud.BOUNDS.redo = Back redoes the build box
 aetherhaven.plotcreator.hud.ANCHOR.primary = Click one of the four outside corners of the footprint
 
 aetherhaven.plotcreator.hud.PREFAB_SAVE.f = Export the build shape inside the bounds
@@ -205,7 +205,7 @@ aetherhaven.plotcreator.hint.clickBlock = Click a block in the world for this st
 
 aetherhaven.plotcreator.hint.kindCycled = Building type: {kind}
 
-aetherhaven.plotcreator.hint.prefabSaved = Prefab saved as {file}. Press E when ready for the next step.
+aetherhaven.plotcreator.hint.prefabSaved = Prefab saved as {file}. Use Continue when ready for the next step.
 
 aetherhaven.plotcreator.error.needBounds = Mark the build area before continuing.
 aetherhaven.plotcreator.error.noSession = Start plot creator or building editor first.
@@ -215,12 +215,12 @@ aetherhaven.plotcreator.error.boundsTooFlat = That box is only one block tall. D
 aetherhaven.plotcreator.error.boundsTooSmall = That box is too small. Drag a larger box.
 aetherhaven.plotcreator.error.boundsNudgeOutside = Stand inside the build box to resize it this way.
 
-aetherhaven.plotcreator.error.needKind = Open the building type picker with F and choose at least one type before continuing.
+aetherhaven.plotcreator.error.needKind = Open the building type picker with Open or confirm and choose at least one type before continuing.
 
 aetherhaven.plotcreator.error.decorationExclusive = Decorations cannot be mixed with other building types.
 
 aetherhaven.plotcreator.error.festivalExclusive = Festivals cannot be mixed with other building types.
-aetherhaven.plotcreator.error.needFestival = Press F and pick a festival to make or edit before continuing.
+aetherhaven.plotcreator.error.needFestival = Use Open or confirm and pick a festival to make or edit before continuing.
 aetherhaven.plotcreator.error.unknownFestival = That festival is no longer in the list. Pick another one.
 aetherhaven.plotcreator.error.boundsLockedFestival = Festivals always use the same size square, so the build area cannot change.
 aetherhaven.plotcreator.error.festivalIdReserved = That name is used by the everyday festival square. Pick a different one.
@@ -233,7 +233,7 @@ aetherhaven.plotcreator.error.festivalSameHours = Start and end hours cannot be 
 
 aetherhaven.plotcreator.error.kindNotAllowed = That building type is not available. Choose Decoration or Variant.
 
-aetherhaven.plotcreator.error.needVariantOf = Press F and choose at least one main building this should count as before continuing.
+aetherhaven.plotcreator.error.needVariantOf = Use Open or confirm and choose at least one main building this should count as before continuing.
 
 aetherhaven.plotcreator.error.invalidVariantOf = That main building type is not in the plot creator list.
 
@@ -277,7 +277,7 @@ aetherhaven.plotcreator.step.WELCOME.hint = Turn something you built into a town
 
 aetherhaven.plotcreator.step.BOUNDS.title = Mark build area
 aetherhaven.plotcreator.step.BOUNDS.short = Bounds
-aetherhaven.plotcreator.step.BOUNDS.hint = Drag with primary to mark the build box. Drag a side to resize it. Press E when the box looks right.
+aetherhaven.plotcreator.step.BOUNDS.hint = Drag with Mark to draw the build box. Drag a side to resize it. Use Continue when the box looks right.
 
 aetherhaven.plotcreator.step.ANCHOR.title = Plot sign spot
 aetherhaven.plotcreator.step.ANCHOR.short = Sign
@@ -310,9 +310,9 @@ aetherhaven.plotcreator.wallPiece.gate = Gate
 aetherhaven.plotcreator.wallPiece.tower_end = End tower
 aetherhaven.plotcreator.wallPiece.tower_straight = Straight tower
 aetherhaven.plotcreator.wallPiece.tower_corner = Corner tower
-aetherhaven.plotcreator.wallPiece.hint.bounds = Mark the box around this piece, then press E.
+aetherhaven.plotcreator.wallPiece.hint.bounds = Mark the box around this piece, then use Continue.
 aetherhaven.plotcreator.wallPiece.hint.connection = Click a block on the {side} edge of the box. That is the side the next piece joins on.
-aetherhaven.plotcreator.wallPiece.hint.materials = Press F to set what this piece costs to build. We have guessed it from the blocks you used.
+aetherhaven.plotcreator.wallPiece.hint.materials = Use Open or confirm to set what this piece costs to build. We have guessed it from the blocks you used.
 aetherhaven.plotcreator.wallSide.north = north
 aetherhaven.plotcreator.wallSide.south = south
 aetherhaven.plotcreator.wallSide.east = east
@@ -326,7 +326,7 @@ aetherhaven.plotcreator.wallSubstep.join.west = West join
 aetherhaven.plotcreator.wallSubstep.materials = Cost
 aetherhaven.plotcreator.hud.WALL_PIECES.primary = Click the edge block where this piece joins the next one
 aetherhaven.plotcreator.hud.WALL_PIECES.secondary = Clear the join spot you just marked
-aetherhaven.plotcreator.hud.WALL_PIECES.q = Q to go back a step
+aetherhaven.plotcreator.hud.WALL_PIECES.q = Go back a step
 aetherhaven.plotcreator.hint.wallConnectionRecorded = {side} join spot marked.
 aetherhaven.plotcreator.hint.wallConnectionRemoved = Join spot cleared.
 aetherhaven.plotcreator.hint.wallConnectionHelp = Click a block on the {side} edge of the box, the side the next piece joins on.
@@ -370,7 +370,7 @@ aetherhaven.plotcreator.step.VARIANT.hint = Pick one or more main building types
 
 aetherhaven.plotcreator.step.FESTIVAL.title = Festival
 aetherhaven.plotcreator.step.FESTIVAL.short = Festival
-aetherhaven.plotcreator.step.FESTIVAL.hint = Press F and pick New festival, or pick a festival to make a new look for it. The build area snaps to the festival square size and the starting square is placed for you.
+aetherhaven.plotcreator.step.FESTIVAL.hint = Use Open or confirm and pick New festival, or pick a festival to make a new look for it. The build area snaps to the festival square size and the starting square is placed for you.
 aetherhaven.plotcreator.festival.newFestival = New festival
 aetherhaven.plotcreator.hint.festivalPrefabReady = The festival square is ready. Build inside the {size} area.
 aetherhaven.plotcreator.field.festivalActivity = Festival activity
@@ -387,15 +387,15 @@ aetherhaven.plotcreator.success.festivalSaved = {name} is saved. It will run on 
 
 aetherhaven.plotcreator.step.IMPORTANT_SPOTS.title = Important spots
 aetherhaven.plotcreator.step.IMPORTANT_SPOTS.short = Spots
-aetherhaven.plotcreator.step.IMPORTANT_SPOTS.hint = Press F to choose which important spots this building needs. The town records shelf stays on. Next steps only ask you to place the spots you picked.
+aetherhaven.plotcreator.step.IMPORTANT_SPOTS.hint = Use Open or confirm to choose which important spots this building needs. The town records shelf stays on. Next steps only ask you to place the spots you picked.
 
 aetherhaven.plotcreator.step.SUBSTEP.title = Place spots
 aetherhaven.plotcreator.step.SUBSTEP.short = Place
-aetherhaven.plotcreator.step.SUBSTEP.hint = Placement blocks are added to your inventory for each step. Place or click the needed blocks and spots inside the footprint. Right-click a placed spot to remove it.
+aetherhaven.plotcreator.step.SUBSTEP.hint = Placement blocks are added to your inventory for each step. Place or click the needed blocks and spots inside the footprint. Use Adjust or remove on a placed spot to remove it.
 
 aetherhaven.plotcreator.step.MATERIALS.title = Build materials
 aetherhaven.plotcreator.step.MATERIALS.short = Materials
-aetherhaven.plotcreator.step.MATERIALS.hint = Press F to open the build materials menu. Prefab fill adds costs without giving you items.
+aetherhaven.plotcreator.step.MATERIALS.hint = Use Open or confirm to open the build materials menu. Prefab fill adds costs without giving you items.
 aetherhaven.plotcreator.step.MATERIALS.detail = Use plus and minus to change counts. Add from inventory copies counts into the list and returns your items.
 
 aetherhaven.plotcreator.step.CONFIGURE.title = Building settings
@@ -464,14 +464,14 @@ aetherhaven.plotcreator.substep.BARD_WORK_POI = Click where the bard should stan
 aetherhaven.plotcreator.substep.SLEEP_POI = Click a bed or rest spot.
 aetherhaven.plotcreator.substep.EAT_POI = Click an eating spot.
 aetherhaven.plotcreator.substep.FUN_POI = Click a fun spot (bench to sit). Face the way villagers should look.
-aetherhaven.plotcreator.substep.SHOP_SPOT = Place shop stalls from your inventory, confirm each setup, then click each stall with the plot creator staff.
+aetherhaven.plotcreator.substep.SHOP_SPOT = Place shop spots from your inventory, confirm each setup, then click each shop spot with the plot creator staff.
 aetherhaven.plotcreator.substep.SHOP_POI = Click where townsfolk stand to browse the shop.
 aetherhaven.plotcreator.substep.TOURIST_VISIT_POI = Click where visitors should stand in front of the shop.
 aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK = Place the portal platform from your inventory, then click it with the plot creator staff.
 aetherhaven.plotcreator.substep.INNKEEPER_SPAWN = Click where the innkeeper should stand.
-aetherhaven.plotcreator.substep.VISITOR_SPAWN = Click where each inn visitor should stand (two spots). Right-click a teal marker to remove it.
+aetherhaven.plotcreator.substep.VISITOR_SPAWN = Click where each inn visitor should stand (two spots). Use Adjust or remove on a teal marker to remove it.
 aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN = Click where the guild master should stand.
-aetherhaven.plotcreator.substep.ADVENTURER_SPAWN = Click an adventurer spawn spot. Right-click a purple marker to remove it.
+aetherhaven.plotcreator.substep.ADVENTURER_SPAWN = Click an adventurer spawn spot. Use Adjust or remove on a purple marker to remove it.
 aetherhaven.plotcreator.substep.QUEST_BOARD_POI = Click the quest board.
 aetherhaven.plotcreator.substep.FESTIVAL_NPC = Click where the festival merchant should stand. Face the way they should look.
 aetherhaven.plotcreator.substep.festivalNpc.seedSeller = Click where the seed seller should stand. Face the way they should look.
@@ -487,7 +487,7 @@ aetherhaven.plotcreator.substep.festivalNpc.wintertideMerchant = Click where the
 aetherhaven.plotcreator.substep.festivalNpc.generic = Click where the festival merchant should stand. Face the way they should look.
 aetherhaven.plotcreator.substep.FESTIVAL_TOURIST_SPOT = Click where festival visitors should stand. Face the way they should look.
 aetherhaven.plotcreator.substep.FESTIVAL_CENTERPIECE = Click the festival centerpiece spot.
-aetherhaven.plotcreator.substep.FESTIVAL_RACE_LANE = Click a pig race start, then its finish. Right click a marker to remove a lane.
+aetherhaven.plotcreator.substep.FESTIVAL_RACE_LANE = Click a pig race start, then its finish. Use Adjust or remove on a marker to remove a lane.
 aetherhaven.plotcreator.substep.FESTIVAL_BALLOON_SPAWN = Click where carnival balloons should float up from.
 aetherhaven.plotcreator.substep.FESTIVAL_WHACK_SPAWN = Click where goblins should pop up for the whack game.
 aetherhaven.plotcreator.substep.FESTIVAL_WHEEL = Click the wall cell for the carnival wheel. Face the way it should hang.
@@ -508,7 +508,7 @@ aetherhaven.plotcreator.spot.PLANNING_DESK_POI = Planning desk
 aetherhaven.plotcreator.spot.WORK_POI = Work spot
 aetherhaven.plotcreator.spot.MINING_NODE = Mining nodes
 aetherhaven.plotcreator.spot.desc.MINING_NODE = Select the rock cells that become ore. The Miner finds a clear place beside each one. Adding locations does not increase output.
-aetherhaven.plotcreator.substep.MINING_NODE = Click rock, ore or soil to mark a mining cell. Right click it to remove the marker. Leave a clear space beside it.
+aetherhaven.plotcreator.substep.MINING_NODE = Click rock, ore or soil to mark a mining cell. Use Adjust or remove on it to remove the marker. Leave a clear space beside it.
 aetherhaven.plotcreator.error.miningNodes = Choose between 1 and 64 different mining cells before saving.
 aetherhaven.plotcreator.error.miningUpgradeRequired = Update this mine before saving. Mark at least one mining node with the Building Editor Staff.
 aetherhaven.plotcreator.error.huntStorageRequired = Place and mark production storage inside the Hunter's Lodge. It opens the spoils menu and gives Couriers a pickup point.
@@ -517,10 +517,10 @@ aetherhaven.plotcreator.hint.miningCurrentRules = Saving updates this mine to th
 aetherhaven.plotcreator.spot.SLEEP_POI = Sleep spot
 aetherhaven.plotcreator.spot.EAT_POI = Eat spot
 aetherhaven.plotcreator.spot.FUN_POI = Fun spot
-aetherhaven.plotcreator.spot.SHOP_SPOT = Shop stall
+aetherhaven.plotcreator.spot.SHOP_SPOT = Shop spot
 aetherhaven.plotcreator.spot.TOURIST_PORTAL_BLOCK = Tourist portal
 aetherhaven.plotcreator.spot.TOURIST_VISIT_POI = Tourist visit spot
-aetherhaven.plotcreator.spot.SHOP_POI = Shop spot
+aetherhaven.plotcreator.spot.SHOP_POI = Browse spot
 aetherhaven.plotcreator.spot.INNKEEPER_SPAWN = Innkeeper stand
 aetherhaven.plotcreator.spot.VISITOR_SPAWN = Inn Visitor Spawn
 aetherhaven.plotcreator.spot.GUILD_MASTER_SPAWN = Guild master stand
@@ -598,7 +598,7 @@ aetherhaven.plotcreator.spot.desc.WORK_POI = Villagers stand here to work during
 aetherhaven.plotcreator.spot.desc.SLEEP_POI = Villagers sleep here at night.
 aetherhaven.plotcreator.spot.desc.EAT_POI = Villagers come here to eat.
 aetherhaven.plotcreator.spot.desc.FUN_POI = Villagers sit and rest here in their free time.
-aetherhaven.plotcreator.spot.desc.SHOP_SPOT = This is the stall shoppers use.
+aetherhaven.plotcreator.spot.desc.SHOP_SPOT = This is the shop spot shoppers buy from.
 aetherhaven.plotcreator.spot.desc.TOURIST_PORTAL_BLOCK = Visitors arrive through this portal.
 aetherhaven.plotcreator.spot.desc.TOURIST_VISIT_POI = Visitors stand here when they come by.
 aetherhaven.plotcreator.spot.desc.SHOP_POI = Townsfolk stand here to look at the shop.
@@ -695,5 +695,10 @@ aetherhaven.plotcreator.help.saveEmptySpaces.disabled = When OFF: Air in your se
 aetherhaven.plotcreator.help.close = Got it
 
 aetherhaven.plotcreator.spot.BARN_PEN=Animal pens
-aetherhaven.plotcreator.substep.BARN_PEN=Click five clear pen floors in slot order. Animals stand above each marker and face where you look. Right click a marker to remove it.
+aetherhaven.plotcreator.substep.BARN_PEN=Click five clear pen floors in slot order. Animals stand above each marker and face where you look. Use Adjust or remove on a marker to remove it.
 aetherhaven.plotcreator.error.barnPensRequired=Mark five animal pens inside the barn bounds.
+aetherhaven.plotcreator.spot.CLERK_STAND=Clerk stand
+aetherhaven.plotcreator.substep.CLERK_STAND=Click the floor where this shop's clerk should stand, usually behind the counter. Click another floor to move it. Use Adjust or remove on the marker to remove it.
+aetherhaven.plotcreator.hint.clerkStandMarked=Clerk stand marked. A townsfolk working this shop will stand here.
+aetherhaven.plotcreator.hint.clerkStandMoved=Clerk stand moved here.
+aetherhaven.plotcreator.error.clerkStandBlocked=Choose a clear floor inside the building bounds.

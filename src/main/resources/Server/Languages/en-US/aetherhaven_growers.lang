@@ -1,0 +1,84 @@
+# Mycologist and Berry Patch workplaces (grower sites under the Druid)
+aetherhaven.growers.logName = Mushroom Log
+aetherhaven.growers.logDescription = Place inside a Mycologist workplace. Townsfolk seed it, tend it as the mushrooms grow and pick them into the workplace store.
+aetherhaven.growers.logHint = Press [{key}] to open the Mycologist
+aetherhaven.growers.logOutside = Mark a Mycologist workplace around this log with the Building Staff. The Druid unlocks it.
+aetherhaven.growers.logNoAccess = You need permission to manage buildings in this town.
+
+aetherhaven.growers.mycology.title = MYCOLOGIST
+aetherhaven.growers.berries.title = BERRY PATCH
+aetherhaven.growers.mycology.chooseTitle = CHOOSE ONE MUSHROOM TO GROW
+aetherhaven.growers.mycology.bedsTitle = MUSHROOM LOGS
+aetherhaven.growers.berries.bedsTitle = BERRY BUSHES
+aetherhaven.growers.mycology.bedCount = {used} of {max} logs in use
+aetherhaven.growers.berries.bedCount = {used} of {max} bushes tended
+aetherhaven.growers.mycology.extraBeds = {used} of {max} logs in use. {extra} more inside are left alone.
+aetherhaven.growers.berries.extraBeds = {used} of {max} bushes tended. {extra} more inside are left alone.
+aetherhaven.growers.mycology.noBeds = Place Mushroom Logs inside the workplace. Craft them at the Town Planning Desk.
+aetherhaven.growers.berries.noBeds = Plant berry bushes inside the workplace. The Florist sells them.
+aetherhaven.growers.mycology.about = Each log is seeded, tended {tends} times as it grows and then picked. Changing the mushroom clears every log.
+aetherhaven.growers.berries.about = Common, wet and winter berry bushes all count. A bush ripens by itself. Townsfolk water it once it has rested, then pick it when the berries show, and it grows them again.
+aetherhaven.growers.mycology.growing = Growing {crop}
+aetherhaven.growers.berries.growing = Growing {crop}
+aetherhaven.growers.noCrop = Nothing chosen yet
+aetherhaven.growers.yield = {count} per pick. {use}
+
+aetherhaven.growers.issue.plan = This workplace has no growing plan.
+aetherhaven.growers.issue.visit = Visit the whole workplace to see its beds.
+aetherhaven.growers.issue.bench = Place a Farmer's Workbench inside the workplace.
+aetherhaven.growers.status.choose = Choose a mushroom below to start growing.
+aetherhaven.growers.status.full = The store is full. Work is paused until some is collected.
+aetherhaven.growers.status.noWorker = No employed townsfolk has this work turned on in the town journal.
+aetherhaven.growers.status.lowSkill = Nobody working here has Farming {skill} yet.
+aetherhaven.growers.status.workers = Townsfolk who can work here: {count}
+
+aetherhaven.growers.care.none = No work recorded yet.
+aetherhaven.growers.care.seed = Last job: a log was seeded.
+aetherhaven.growers.care.tend = Last job: a bed was tended.
+aetherhaven.growers.care.pick = Last job: a harvest was picked.
+aetherhaven.growers.picks = Harvests picked so far: {count}
+
+aetherhaven.growers.bed.bare = Bare
+aetherhaven.growers.bed.seed = Ready to seed
+aetherhaven.growers.bed.growing = Growing
+aetherhaven.growers.bed.tend = Needs tending
+aetherhaven.growers.bed.ripening = Ripening
+aetherhaven.growers.bed.pick = Ready to pick
+aetherhaven.growers.bed.paused = Paused
+aetherhaven.growers.bed.tooltip = Bed {number}. {status}. Growth {percent}%.
+
+aetherhaven.growers.need = Farming {skill}
+aetherhaven.growers.cardTooltip = {name}. Needs Farming {skill}. {yield}
+aetherhaven.growers.cardLocked = {name}. No townsfolk here has Farming {skill} yet.
+aetherhaven.growers.cardGrowing = {name}. Growing now. {yield}
+
+aetherhaven.growers.use.cooking = For mushroom meals.
+aetherhaven.growers.use.regen = For Regeneration mixtures.
+aetherhaven.growers.use.regenStrong = For strong Regeneration mixtures.
+aetherhaven.growers.use.regenStrongest = For the strongest Regeneration mixtures.
+aetherhaven.growers.use.healthBoost = For Health Boost mixtures.
+aetherhaven.growers.use.healthBoostStrong = For strong Health Boost mixtures.
+aetherhaven.growers.use.manaBoost = For Mana Boost mixtures.
+aetherhaven.growers.use.manaBoostStrong = For strong Mana Boost mixtures.
+aetherhaven.growers.use.poisonWard = For Poison Ward mixtures.
+aetherhaven.growers.use.blastWard = For Blast Ward mixtures.
+aetherhaven.growers.use.berries = For berry salads and snacks.
+
+aetherhaven.growers.storeTitle = WORKPLACE STORE
+aetherhaven.growers.storeCount = {stored} of {capacity} stored
+aetherhaven.growers.storeEmpty = Nothing picked yet. Harvests wait here for you, for couriers stocking a kitchen and for the Alchemist's cauldron.
+aetherhaven.growers.stockTooltip = {name}. {count} stored. Click to collect.
+aetherhaven.growers.stockReserved = {name}. {count} stored, {reserved} set aside for a workplace. Click to collect the rest.
+aetherhaven.growers.collect = Collect all
+aetherhaven.growers.settings = Workplace settings
+aetherhaven.growers.refresh = Refresh
+
+aetherhaven.growers.note.intro = Turn this work on for a townsfolk in the town journal. Beds only grow while someone from the town is here.
+aetherhaven.growers.note.chose = Now growing {crop}.
+aetherhaven.growers.note.confirm = Changing to {crop} clears every bed. Choose it again to confirm.
+aetherhaven.growers.note.skill = Nobody here has the Farming skill for that yet.
+aetherhaven.growers.note.changed = This workplace changed. Choose again.
+aetherhaven.growers.note.collected = Collected {count} items.
+aetherhaven.growers.note.nothing = Nothing to collect. Anything left is set aside for a workplace.
+aetherhaven.growers.note.packFull = Your pack is full.
+aetherhaven.growers.note.noAccess = You need permission to manage buildings.

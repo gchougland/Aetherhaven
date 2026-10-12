@@ -42,13 +42,13 @@ public final class ShopStaffingPage extends AetherhavenInteractiveCustomUIPage<S
         var current=roster.stream().filter(w->Objects.equals(w.characterId(),plot.getShopClerkId())).findFirst().orElse(null);
         int attending=ShopClerkWorkService.attendingSkill(store,town,plotId);
         c.set("#ShopStatus.Text",current==null?"No clerk assigned. The shop is closed.":current.name()+" | "+(attending>0?"Serving customers":!ShopSpotOpenService.isGameDay(store)?"Off shift until daylight":"Away from the counter"));
-        c.set("#Portrait.Visible",chosen!=null);c.set("#Name.Text",chosen==null?"Choose a clerk":chosen.name());
-        c.set("#Skill.Text",chosen==null?"": "Commerce "+chosen.progress().skill(TownsfolkSkill.COMMERCE)+" / 10");
+        c.set("#ClerkPortrait.Visible",chosen!=null);c.set("#ClerkName.Text",chosen==null?"Choose a clerk":chosen.name());
+        c.set("#ClerkSkill.Text",chosen==null?"": "Commerce "+chosen.progress().skill(TownsfolkSkill.COMMERCE)+" / 10");
         c.set("#Chance.Text",chosen==null?"":Math.round(100*ShopStaffing.purchaseChance(chosen.progress().skill(TownsfolkSkill.COMMERCE)))+"% visitor purchase chance");
         String blocked=chosen==null?null:unavailable(town,chosen);
         String elsewhere=chosen==null?null:town.getPlotInstances().stream().filter(p->!plotId.equals(p.getPlotId())&&chosen.characterId().equals(p.getShopClerkId())).map(p->"Moves this clerk from another shop. ").findFirst().orElse("");
         c.set("#Details.Text",chosen==null?"Select a portrait to compare Commerce skill.":blocked!=null?blocked:elsewhere+"Uses the normal weekly Apprentice wage. During the day the clerk follows the Commerce priority in the town journal's Work tab: work ranked above it is done first.");
-        if(chosen!=null)c.set("#Portrait.AssetPath",NpcPortraitProvider.portraitPathForTownsfolk(plugin.getTownsfolkCharacterCatalog().byId(chosen.characterId())));
+        if(chosen!=null)c.set("#ClerkPortrait.AssetPath",NpcPortraitProvider.portraitPathForTownsfolk(plugin.getTownsfolkCharacterCatalog().byId(chosen.characterId())));
         c.set("#Assign.Disabled",chosen==null||blocked!=null||Objects.equals(selected,plot.getShopClerkId())&&chosen.progress().isEmployed());
         c.set("#Assign.Text",chosen!=null&&Objects.equals(selected,plot.getShopClerkId())?(chosen.progress().isEmployed()?"Assigned":"Resume employment"):"Assign clerk");
         c.set("#Unassign.Disabled",plot.getShopClerkId()==null);c.set("#Hint.Text",hint);

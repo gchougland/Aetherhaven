@@ -130,6 +130,14 @@ public final class TownRecord {
     private List<String> completedQuestIds = new ArrayList<>();
 
     /**
+     * Quests the town was given by itself (see {@code autoStart} in quest JSON). Each is given once: a quest that was
+     * abandoned is not pushed on the town again. Null in saves from before such quests existed.
+     */
+    @SerializedName("autoStartedQuestIds")
+    @Nullable
+    private List<String> autoStartedQuestIds;
+
+    /**
      * Per-quest objective completion for non-{@code journal} objectives. Outer key: quest id; inner: objective id.
      */
     @Nullable
@@ -486,6 +494,11 @@ public final class TownRecord {
     @SerializedName("feastGatherDeadlineEpochMs")
     private long feastGatherDeadlineEpochMs;
 
+    /** Players' own items a festival is holding (market stall goods, a gift on its way). Null when there are none. */
+    @Nullable
+    @SerializedName("festivalHeldItems")
+    private com.hexvane.aetherhaven.festival.FestivalHeldItems festivalHeldItems;
+
     /** Festival currently running at this town's festival square, or null when the square is in its everyday state. */
     @Nullable
     @SerializedName("activeFestivalId")
@@ -838,6 +851,12 @@ public final class TownRecord {
     public PlotRestaurantState getOrCreatePlotRestaurant(@Nonnull UUID plotId) {
         migratePlotRestaurantIfNeeded();
         return plotRestaurantByPlotId.computeIfAbsent(plotId.toString(), k -> PlotRestaurantState.empty());
+    }
+
+    /** Read only: never creates an entry, so population checks cannot change the saved town. */
+    @Nullable
+    public PlotRestaurantState peekPlotRestaurant(@Nonnull UUID plotId) {
+        return plotRestaurantByPlotId == null ? null : plotRestaurantByPlotId.get(plotId.toString());
     }
 
     @Nonnull
@@ -1861,6 +1880,24 @@ public final class TownRecord {
         return hasQuestActive(q) || hasQuestCompleted(q);
     }
 
+    /** True once the town has been given this quest by itself, whatever became of it. */
+    public boolean wasQuestAutoStarted(@Nonnull String questId) {
+        return autoStartedQuestIds != null && autoStartedQuestIds.contains(questId.trim());
+    }
+
+    /** @return false when it was already marked */
+    public boolean markQuestAutoStarted(@Nonnull String questId) {
+        String q = questId.trim();
+        if (q.isEmpty() || wasQuestAutoStarted(q)) {
+            return false;
+        }
+        if (autoStartedQuestIds == null) {
+            autoStartedQuestIds = new ArrayList<>();
+        }
+        autoStartedQuestIds.add(q);
+        return true;
+    }
+
     public void addActiveQuest(@Nonnull String questId) {
         String q = questId.trim();
         if (q.isEmpty()) {
@@ -2358,6 +2395,27 @@ public final class TownRecord {
 
     public void setFeastGatherDeadlineEpochMs(long feastGatherDeadlineEpochMs) {
         this.feastGatherDeadlineEpochMs = feastGatherDeadlineEpochMs;
+    }
+
+    /** True when a festival is holding a player's item for this town. Never creates the record. */
+    public boolean hasFestivalHeldItems() {
+        return festivalHeldItems != null && !festivalHeldItems.isEmpty();
+    }
+
+    /** The items festivals hold for this town's players, created on first use. Save the town after changing it. */
+    @Nonnull
+    public com.hexvane.aetherhaven.festival.FestivalHeldItems festivalHeldItems() {
+        if (festivalHeldItems == null) {
+            festivalHeldItems = new com.hexvane.aetherhaven.festival.FestivalHeldItems();
+        }
+        return festivalHeldItems;
+    }
+
+    /** Drops the record from the save once it holds nothing. Do not keep a reference to it across this call. */
+    public void releaseFestivalHeldItemsIfEmpty() {
+        if (festivalHeldItems != null && festivalHeldItems.isEmpty()) {
+            festivalHeldItems = null;
+        }
     }
 
     @Nullable

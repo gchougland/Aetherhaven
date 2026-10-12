@@ -55,8 +55,16 @@ public final class ShopSpotJewelrySupport {
         record.setJewelryMetaJson(null);
     }
 
+    /**
+     * The stack a stall hands over. A listing that kept its whole stack gives exactly that stack back. Only rolled
+     * NPC stock and listings from older saves are rebuilt from the item id.
+     */
     @Nonnull
     public static ItemStack buildListingStack(@Nonnull String itemId, int quantity, @Nonnull ShopSpotRecord record) {
+        ItemStack whole = itemId.equals(record.getItemId()) ? ShopListing.stack(record, quantity) : null;
+        if (whole != null) {
+            return whole;
+        }
         ItemStack stack = new ItemStack(itemId, quantity);
         String meta = record.getJewelryMetaJson();
         if (meta != null && !meta.isBlank()) {
@@ -115,6 +123,6 @@ public final class ShopSpotJewelrySupport {
     @Nonnull
     public static String listingDisplaySignature(@Nonnull String itemId, @Nonnull ShopSpotRecord record) {
         String meta = record.getJewelryMetaJson();
-        return itemId + "|" + (meta != null ? meta.hashCode() : 0);
+        return itemId + "|" + (meta != null ? meta.hashCode() : 0) + "|" + ShopListing.appearance(record);
     }
 }

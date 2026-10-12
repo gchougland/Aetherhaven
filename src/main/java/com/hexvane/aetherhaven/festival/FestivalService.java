@@ -65,6 +65,8 @@ public final class FestivalService {
         for (TownRecord town : tm.allTowns()) {
             try {
                 applyForTown(world, store, plugin, tm, town, gameTime, epochMinute);
+                // After the festival logic, so goods a festival has just let go of are settled in the same minute.
+                FestivalHeldItemsService.tick(world, plugin, town);
             } catch (RuntimeException e) {
                 LOGGER.atWarning().withCause(e).log("Festival check failed for town %s", town.getTownId());
             }

@@ -1,0 +1,3250 @@
+{
+ "nodes": [
+  {
+   "id": "1",
+   "name": "Rest_Left",
+   "children": [],
+   "position": {
+    "x": -9,
+    "y": 2,
+    "z": 0
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.043619,
+    "z": 0.0,
+    "w": 0.999048
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 4,
+      "z": 16
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 0,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 0,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 28,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 33,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 33,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "2",
+   "name": "Rest_Right",
+   "children": [],
+   "position": {
+    "x": 9,
+    "y": 2,
+    "z": 0
+   },
+   "orientation": {
+    "x": -0.0,
+    "y": -0.034899,
+    "z": -0.0,
+    "w": 0.999391
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 4,
+      "z": 16
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 0,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 0,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 28,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 33,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 33,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "3",
+   "name": "Log",
+   "children": [],
+   "position": {
+    "x": 0,
+    "y": 9,
+    "z": 0
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 28,
+      "y": 12,
+      "z": 12
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 0,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 0,
+       "y": 24
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 0,
+       "y": 36
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 28,
+       "y": 0
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 28,
+       "y": 12
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "4",
+   "name": "Stub",
+   "children": [],
+   "position": {
+    "x": 10.6382,
+    "y": 15.3244,
+    "z": -3.0976
+   },
+   "orientation": {
+    "x": -0.078762,
+    "y": 0.101424,
+    "z": -0.228742,
+    "w": 0.96498
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 4,
+      "y": 5,
+      "z": 4
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 33,
+       "y": 28
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 33,
+       "y": 28
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 33,
+       "y": 28
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 33,
+       "y": 28
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 33,
+       "y": 33
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "5",
+   "name": "Moss_Back",
+   "children": [],
+   "position": {
+    "x": -8.4,
+    "y": 15.2,
+    "z": -3.4
+   },
+   "orientation": {
+    "x": -0.0,
+    "y": -0.078459,
+    "z": -0.0,
+    "w": 0.996917
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 7,
+      "y": 1,
+      "z": 5
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 16,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "6",
+   "name": "Moss_Back_Tuft",
+   "children": [],
+   "position": {
+    "x": -11.4,
+    "y": 15.55,
+    "z": -0.6
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.147809,
+    "z": 0.0,
+    "w": 0.989016
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 4,
+      "y": 1,
+      "z": 4
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 28,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "7",
+   "name": "Moss_Front",
+   "children": [],
+   "position": {
+    "x": 7.6,
+    "y": 15.25,
+    "z": 4.3
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.095846,
+    "z": 0.0,
+    "w": 0.995396
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 1,
+      "z": 4
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 23,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "8",
+   "name": "Moss_Back_Fall",
+   "children": [],
+   "position": {
+    "x": -8.0,
+    "y": 13.3,
+    "z": -6.12
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.034899,
+    "w": 0.999391
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 5,
+      "y": 4,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 37,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 37,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 32,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "9",
+   "name": "Moss_Front_Fall",
+   "children": [],
+   "position": {
+    "x": 7.8,
+    "y": 13.8,
+    "z": 6.14
+   },
+   "orientation": {
+    "x": -0.0,
+    "y": -0.0,
+    "z": -0.043619,
+    "w": 0.999048
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 4,
+      "y": 3,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 37,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 37,
+       "y": 48
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 16,
+       "y": 53
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 28,
+       "y": 40
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "10",
+   "name": "Plug_Top_0",
+   "children": [],
+   "position": {
+    "x": -6,
+    "y": 15.12,
+    "z": 4
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 1,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "11",
+   "name": "Plug_Top_1",
+   "children": [],
+   "position": {
+    "x": 3,
+    "y": 15.14,
+    "z": 4
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 1,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "12",
+   "name": "Plug_Top_2",
+   "children": [],
+   "position": {
+    "x": 12,
+    "y": 15.16,
+    "z": 2
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 1,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "13",
+   "name": "Plug_Front_0",
+   "children": [],
+   "position": {
+    "x": -11,
+    "y": 9,
+    "z": 6.1
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "14",
+   "name": "Plug_Front_1",
+   "children": [],
+   "position": {
+    "x": 2,
+    "y": 7,
+    "z": 6.12
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "15",
+   "name": "Plug_Front_2",
+   "children": [],
+   "position": {
+    "x": 8,
+    "y": 6,
+    "z": 6.14
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "front": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "16",
+   "name": "Plug_Back_0",
+   "children": [],
+   "position": {
+    "x": -2,
+    "y": 9,
+    "z": -6.1
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "17",
+   "name": "Plug_Back_1",
+   "children": [],
+   "position": {
+    "x": 9,
+    "y": 10,
+    "z": -6.12
+   },
+   "orientation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 1.0
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "standard",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 2,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 0,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "18",
+   "name": "Pin_Stem_0",
+   "children": [],
+   "position": {
+    "x": -2.1075,
+    "y": 15.538,
+    "z": -0.6391
+   },
+   "orientation": {
+    "x": -0.050676,
+    "y": 0.155578,
+    "z": 0.091423,
+    "w": 0.982278
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.25,
+     "y": 1.25,
+     "z": 1.25
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 1,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "19",
+   "name": "Pin_Cap_0",
+   "children": [],
+   "position": {
+    "x": -2.3907,
+    "y": 16.9563,
+    "z": -0.7422
+   },
+   "orientation": {
+    "x": -0.050676,
+    "y": 0.155578,
+    "z": 0.091423,
+    "w": 0.982278
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.125,
+     "y": 1.125,
+     "z": 1.125
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 3,
+      "y": 2,
+      "z": 3
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 8,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 8,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 8,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 8,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 5,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 5,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "20",
+   "name": "Pin_Stem_1",
+   "children": [],
+   "position": {
+    "x": 4.8628,
+    "y": 15.2837,
+    "z": -0.9252
+   },
+   "orientation": {
+    "x": 0.101613,
+    "y": -0.20506,
+    "z": -0.130059,
+    "w": 0.964733
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 1,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "21",
+   "name": "Pin_Cap_1",
+   "children": [],
+   "position": {
+    "x": 5.1139,
+    "y": 16.4183,
+    "z": -0.6259
+   },
+   "orientation": {
+    "x": 0.101613,
+    "y": -0.20506,
+    "z": -0.130059,
+    "w": 0.964733
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.9,
+     "y": 0.9,
+     "z": 0.9
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 3,
+      "y": 2,
+      "z": 3
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 8,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 8,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 8,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 8,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 5,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 5,
+       "y": 52
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "22",
+   "name": "Pin_Stem_2",
+   "children": [],
+   "position": {
+    "x": -9.6352,
+    "y": 15.0914,
+    "z": 2.6203
+   },
+   "orientation": {
+    "x": 0.039671,
+    "y": 0.318454,
+    "z": 0.204092,
+    "w": 0.924857
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.8,
+     "y": 0.8,
+     "z": 0.8
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 1,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "23",
+   "name": "Pin_Cap_2",
+   "children": [],
+   "position": {
+    "x": -9.9522,
+    "y": 15.9135,
+    "z": 2.8034
+   },
+   "orientation": {
+    "x": 0.039671,
+    "y": 0.318454,
+    "z": 0.204092,
+    "w": 0.924857
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.8,
+     "y": 0.8,
+     "z": 0.8
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "24",
+   "name": "Pin_Stem_3",
+   "children": [],
+   "position": {
+    "x": -4.0107,
+    "y": 11.3576,
+    "z": 6.1227
+   },
+   "orientation": {
+    "x": 0.319587,
+    "y": 0.098834,
+    "z": 0.062121,
+    "w": 0.940339
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.9,
+     "y": 0.9,
+     "z": 0.9
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 1,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "25",
+   "name": "Pin_Cap_3",
+   "children": [],
+   "position": {
+    "x": -4.0644,
+    "y": 12.1456,
+    "z": 6.736
+   },
+   "orientation": {
+    "x": 0.319587,
+    "y": 0.098834,
+    "z": 0.062121,
+    "w": 0.940339
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.9,
+     "y": 0.9,
+     "z": 0.9
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "26",
+   "name": "Pin_Stem_4",
+   "children": [],
+   "position": {
+    "x": 11.0072,
+    "y": 11.8415,
+    "z": 6.027
+   },
+   "orientation": {
+    "x": 0.253201,
+    "y": -0.24751,
+    "z": -0.146186,
+    "w": 0.923719
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.75,
+     "y": 0.75,
+     "z": 0.75
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 1,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "27",
+   "name": "Pin_Cap_4",
+   "children": [],
+   "position": {
+    "x": 11.1303,
+    "y": 12.5461,
+    "z": 6.4861
+   },
+   "orientation": {
+    "x": 0.253201,
+    "y": -0.24751,
+    "z": -0.146186,
+    "w": 0.923719
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.75,
+     "y": 0.75,
+     "z": 0.75
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "28",
+   "name": "Pin_Stem_5",
+   "children": [],
+   "position": {
+    "x": -5.0,
+    "y": 15.0,
+    "z": 1.4
+   },
+   "orientation": {
+    "x": 0.100554,
+    "y": 0.17151,
+    "z": 0.119836,
+    "w": 0.972683
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.7,
+     "y": 0.7,
+     "z": 0.7
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 1,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "29",
+   "name": "Pin_Cap_5",
+   "children": [],
+   "position": {
+    "x": -5.1589,
+    "y": 15.7608,
+    "z": 1.5894
+   },
+   "orientation": {
+    "x": 0.100554,
+    "y": 0.17151,
+    "z": 0.119836,
+    "w": 0.972683
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.7,
+     "y": 0.7,
+     "z": 0.7
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "30",
+   "name": "Pin_Stem_6",
+   "children": [],
+   "position": {
+    "x": 1.2065,
+    "y": 15.0927,
+    "z": -3.0369
+   },
+   "orientation": {
+    "x": -0.156302,
+    "y": 0.414854,
+    "z": -0.109444,
+    "w": 0.889656
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.8,
+     "y": 0.8,
+     "z": 0.8
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 1,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "31",
+   "name": "Pin_Cap_6",
+   "children": [],
+   "position": {
+    "x": 1.265,
+    "y": 15.9272,
+    "z": -3.3689
+   },
+   "orientation": {
+    "x": -0.156302,
+    "y": 0.414854,
+    "z": -0.109444,
+    "w": 0.889656
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.8,
+     "y": 0.8,
+     "z": 0.8
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "32",
+   "name": "Pin_Stem_7",
+   "children": [],
+   "position": {
+    "x": 7.3773,
+    "y": 14.903,
+    "z": 0.7917
+   },
+   "orientation": {
+    "x": 0.046637,
+    "y": 0.043294,
+    "z": -0.112593,
+    "w": 0.991601
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.6,
+     "y": 0.6,
+     "z": 0.6
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 1,
+      "y": 2,
+      "z": 1
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 4,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "33",
+   "name": "Pin_Cap_7",
+   "children": [],
+   "position": {
+    "x": 7.5364,
+    "y": 15.5822,
+    "z": 0.8496
+   },
+   "orientation": {
+    "x": 0.046637,
+    "y": 0.043294,
+    "z": -0.112593,
+    "w": 0.991601
+   },
+   "shape": {
+    "type": "box",
+    "offset": {
+     "x": 0,
+     "y": 0,
+     "z": 0
+    },
+    "stretch": {
+     "x": 0.6,
+     "y": 0.6,
+     "z": 0.6
+    },
+    "settings": {
+     "isPiece": false,
+     "size": {
+      "x": 2,
+      "y": 2,
+      "z": 2
+     }
+    },
+    "visible": true,
+    "doubleSided": false,
+    "shadingMode": "flat",
+    "unwrapMode": "custom",
+    "textureLayout": {
+     "front": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "back": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "left": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "right": {
+      "offset": {
+       "x": 2,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "top": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     },
+     "bottom": {
+      "offset": {
+       "x": 0,
+       "y": 54
+      },
+      "mirror": {
+       "x": false,
+       "y": false
+      },
+      "angle": 0
+     }
+    }
+   }
+  }
+ ],
+ "lod": "auto"
+}

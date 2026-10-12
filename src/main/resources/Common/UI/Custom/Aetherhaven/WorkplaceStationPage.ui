@@ -5,9 +5,9 @@ $C.@PageOverlay { LayoutMode: Middle;
   #Title { Label { Text: "WORKPLACE STATION"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
   #Content { LayoutMode: Top; Padding: (Full: 24);
    Group { LayoutMode: Left; Anchor: (Height: 112, Bottom: 18); Background: $T.@Panel; Padding: (Full: 14);
-    ItemIcon #Icon { Anchor: (Width: 80, Height: 80, Right: 18); }
+    ItemIcon #StationIcon { Anchor: (Width: 80, Height: 80, Right: 18); }
     Group { LayoutMode: Top; FlexWeight: 1;
-     Label #Name { Anchor: (Height: 32); Style: (...$C.@DefaultLabelStyle, FontSize: 22, RenderBold: true); }
+     Label #StationName { Anchor: (Height: 32); Style: (...$C.@DefaultLabelStyle, FontSize: 22, RenderBold: true); }
      Label #Tier { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, TextColor: #d7c998); }
      Label #Site { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b7c9bb); }
     }

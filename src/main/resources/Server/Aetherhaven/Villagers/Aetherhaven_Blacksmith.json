@@ -15,14 +15,6 @@
   "visitorBindingKind": "visitor_blacksmith",
   "reputationMilestones": [
     {
-      "rewardId": "rep_blacksmith_25",
-      "minReputation": 25,
-      "itemId": "Rock_Stone",
-      "itemCount": 32,
-      "dialogueNodeId": "rep_reward_25",
-      "learnRecipeItemId": null
-    },
-    {
       "rewardId": "rep_blacksmith_50",
       "minReputation": 50,
       "itemId": "",
@@ -63,7 +55,7 @@
     "Armor_Steel_Ancient_Head",
     "Armor_Steel_Ancient_Legs",
     "Deco_Iron_Stack",
-    "Flamethrower_Goblin",
+    "Weapon_Flamethrower_Scrap",
     "Food_Pie_Apple",
     "Ingredient_Bar_Adamantite",
     "Ingredient_Bar_Bronze",

@@ -26,7 +26,6 @@ import com.hypixel.hytale.server.core.modules.projectile.config.StandardPhysicsP
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -206,8 +205,7 @@ public final class SnowballHitSystem extends EntityTickingSystem<EntityStore> {
     }
 
     private static boolean isSnowballModelId(@Nonnull String id) {
-        String lower = id.toLowerCase(Locale.ROOT);
-        return lower.contains("snowball") || lower.contains(SnowballIds.PROJECTILE_MODEL_ID.toLowerCase(Locale.ROOT));
+        return SnowballIds.isOwnProjectileModel(id);
     }
 
     private static boolean isProjectileEntity(@Nonnull Archetype<EntityStore> archetype) {

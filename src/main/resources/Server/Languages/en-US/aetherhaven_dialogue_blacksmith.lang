@@ -32,7 +32,6 @@ aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.speaker=Garren Val
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.body=Good. I will camp at the inn until the chimney aligns correctly and the draft is stable. Then meet me at the bench so we can seal the agreement and begin work.
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.c0=See you there.
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.speaker=Garren Vale
-aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_25.speaker=Garren Vale
 aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_50.speaker=Garren Vale
 aetherhaven.dialogue.aetherhaven_blacksmith.root.body=Garren Vale. The wind is calm enough for the forge to behave consistently. Metal out here has specific properties, and I am here to understand them rather than argue with them.
 aetherhaven.dialogue.aetherhaven_blacksmith.root.c2=You wanted to talk about a house.

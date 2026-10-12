@@ -201,6 +201,7 @@ public final class DialogueConditionEvaluator {
                 stringOrEmpty(o, "questId"),
                 stringOrEmpty(o, "objectiveId")
             );
+            case "town_quest_auto_start_ready" -> worldView.townQuestAutoStartReady(playerRef, store, stringOrEmpty(o, "questId"));
             case "npc_schedule_at_work" -> npcScheduleAtWork(store, npcRef);
             case "bard_can_offer_music" -> bardCanOfferMusic(store, npcRef);
             case "bard_is_performing" -> BardPerformanceService.isPerforming(store, npcRef);

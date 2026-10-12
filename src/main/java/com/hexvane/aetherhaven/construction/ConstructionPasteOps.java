@@ -154,8 +154,10 @@ public final class ConstructionPasteOps {
     }
 
     /**
-     * Festival prefabs omit Empty air. Assembly clearing still needs every cell in the reserved box so trees, grass,
-     * and other terrain in the gaps are removed before paste.
+     * Festival prefabs omit Empty air. Assembly clearing still needs every cell of the reserved box from the paved
+     * floor up, so trees, grass, and other terrain in the gaps are removed before paste. The layers under the floor
+     * ({@link FestivalPrefabSize#FLOOR_LOCAL_Y}) are not added: the everyday square lists nothing there, so the ground
+     * it sits on never has to be dug out. A festival's foundation is laid there later by the swap, not by the builder.
      */
     @Nonnull
     public static List<PendingBlock> withReservedFestivalAirCells(
@@ -179,16 +181,19 @@ public final class ConstructionPasteOps {
             return cells;
         }
         int reserved =
-            FestivalPrefabSize.WIDTH_X * FestivalPrefabSize.HEIGHT_Y * FestivalPrefabSize.DEPTH_Z;
+            FestivalPrefabSize.WIDTH_X
+                * (FestivalPrefabSize.LOCAL_MAX_Y - FestivalPrefabSize.FLOOR_LOCAL_Y + 1)
+                * FestivalPrefabSize.DEPTH_Z;
         LongOpenHashSet seen = new LongOpenHashSet(Math.max(cells.size(), reserved));
         for (int i = 0; i < cells.size(); i++) {
             PendingBlock pb = cells.get(i);
             seen.add(packLocalCell(pb.x(), pb.y(), pb.z()));
         }
-        List<PendingBlock> out = new ArrayList<>(reserved);
+        List<PendingBlock> out = new ArrayList<>(Math.max(cells.size(), reserved));
         out.addAll(cells);
         for (int x = FestivalPrefabSize.LOCAL_MIN_X; x <= FestivalPrefabSize.LOCAL_MAX_X; x++) {
-            for (int y = FestivalPrefabSize.LOCAL_MIN_Y; y <= FestivalPrefabSize.LOCAL_MAX_Y; y++) {
+            // From the floor up only: cells under the floor that the prefab does not list stay as the world has them.
+            for (int y = FestivalPrefabSize.FLOOR_LOCAL_Y; y <= FestivalPrefabSize.LOCAL_MAX_Y; y++) {
                 for (int z = FestivalPrefabSize.LOCAL_MIN_Z; z <= FestivalPrefabSize.LOCAL_MAX_Z; z++) {
                     Vector3i corner = new Vector3i(x, y, z);
                     rotation.rotate(corner);

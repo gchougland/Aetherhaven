@@ -824,6 +824,20 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     }
 
     @Override
+    public boolean townQuestAutoStartReady(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String questId
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        var def = plugin.getQuestCatalog().get(questId);
+        return town != null
+            && def != null
+            && com.hexvane.aetherhaven.quest.QuestAvailability.isEnabled(def)
+            && com.hexvane.aetherhaven.quest.QuestAutoStartService.offerable(def, town, plugin.getConstructionCatalog());
+    }
+
+    @Override
     public boolean npcOtherVillagerNearby(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,

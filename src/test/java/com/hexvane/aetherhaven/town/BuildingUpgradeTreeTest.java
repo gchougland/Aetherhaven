@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BuildingUpgradeTreeTest {
     @Test void everyUpgradeHasAnInspectableNodeWithoutOverlapsOrMissingPrerequisites() {
         var trees=new ArrayList<List<Node>>();
-        for(String kind:List.of("blacksmith","farmer","rancher","miner","chef","alchemist","merchant"))trees.add(BuildingUpgradeTree.workplaces(kind));
+        for(String kind:List.of("blacksmith","farmer","rancher","miner","chef","alchemist","merchant","druid","builder","crafter"))trees.add(BuildingUpgradeTree.workplaces(kind));
         trees.add(BuildingUpgradeTree.production());trees.add(BuildingUpgradeTree.restaurant());trees.add(BuildingUpgradeTree.warehouse());trees.add(BuildingUpgradeTree.alchemy());
         for(var tree:trees) {
             assertEquals(tree.size(),tree.stream().map(Node::id).distinct().count());
@@ -39,7 +39,7 @@ class BuildingUpgradeTreeTest {
         assertEquals(10,tree.size());
     }
     @Test void prerequisitePathsStayInsideMarginsAndNeverCrossNodeInteriorsOrRankLabels() {
-        for(var tree:List.of(BuildingUpgradeTree.workplaces("blacksmith"),BuildingUpgradeTree.workplaces("farmer"),BuildingUpgradeTree.production(),BuildingUpgradeTree.restaurant(),BuildingUpgradeTree.warehouse(),BuildingUpgradeTree.alchemy())) {
+        for(var tree:List.of(BuildingUpgradeTree.workplaces("blacksmith"),BuildingUpgradeTree.workplaces("farmer"),BuildingUpgradeTree.workplaces("druid"),BuildingUpgradeTree.workplaces("builder"),BuildingUpgradeTree.production(),BuildingUpgradeTree.restaurant(),BuildingUpgradeTree.warehouse(),BuildingUpgradeTree.alchemy())) {
             var paths=BuildingUpgradeConnections.build(tree,n->0);
             for(var path:paths) {
                 assertTrue(path.x()>=32 && path.x()+path.width()<=608);

@@ -7,7 +7,7 @@ import java.util.*;
 /** Stable purchase identities and prerequisite edges, shared by rendering and purchase validation. */
 public final class BuildingUpgradeTree {
     private BuildingUpgradeTree() {}
-    public enum Kind { FOUNDATION, WORKPLACE, SLOT, SMELTING, PRODUCTION, RESTAURANT, ALCHEMY, WAREHOUSE, INN }
+    public enum Kind { FOUNDATION, WORKPLACE, SLOT, SMELTING, PRODUCTION, RESTAURANT, ALCHEMY, WAREHOUSE, WAREHOUSE_STACKS, INN, GARDEN, FARM }
     public record Node(String id, String title, String description, String icon, String item,
                        Kind kind, String branch, int tier, int level, int x, int y, List<String> parents) {}
     public static int bandTop(int level) { return level == 1 ? 0 : 350 + (level - 2) * 170; }
@@ -23,7 +23,7 @@ public final class BuildingUpgradeTree {
         var types = Arrays.stream(TownsfolkWorkType.values()).filter(t -> t.requiresWorkplace() && t.availableForNewWork() && WorkplaceRules.supervisor(t).equals(supervisor)).toList();
         for(int i=0;i<types.size();i++) {
             var t=types.get(i);
-            String bench=switch(t) {case SMELTING -> "Bench_Furnace";case BLACKSMITHING -> "Bench_Weapon";case ARMOR_CRAFTING -> "Bench_Armour";case SALVAGING -> "Bench_Salvage";default -> null;};
+            String bench=switch(t) {case SMELTING -> "Bench_Furnace";case BLACKSMITHING -> "Bench_Weapon";case ARMOR_CRAFTING -> "Bench_Armour";case SALVAGING -> "Bench_Salvage";case BLOCK_WORKSHOP -> "Bench_Builders";case MYCOLOGY -> "Aetherhaven_Mushroom_Log";case BERRIES -> "Plant_Fruit_Berries_Red";default -> null;};
             nodes.add(node("work:"+t.id,WorkplaceRules.label(t),WorkplaceRules.description(t),bench==null?t.icon:null,bench,
                 Kind.WORKPLACE,t.id,1,1,types.size()==1?233:32+i*201,208,"home"));
         }
@@ -39,7 +39,7 @@ public final class BuildingUpgradeTree {
         if("blacksmith".equals(supervisor))for(int tier=1;tier<=8;tier++) {
             int level=Math.min(6,tier+1);
             nodes.add(node("smelt:"+tier,"Smelting storage "+tier,
-                "Adds room for 100 more of each smelted resource. All smelteries share this limit.","crate.png",null,
+                "Adds room for "+com.hexvane.aetherhaven.warehouse.SmeltingOutputStore.UPGRADE_LIMIT+" more of each smelted resource. All smelteries share this limit.","crate.png",null,
                 Kind.SMELTING,"",tier,level,434,bandTop(level)+42+Math.max(0,tier-5)*150,tier==1?"home":"smelt:"+(tier-1)));
         }
         return List.copyOf(nodes);
@@ -60,16 +60,92 @@ public final class BuildingUpgradeTree {
         }
         return List.copyOf(nodes);
     }
+    /**
+     * The Conservatory's own upgrades: one row for each track, bought from left to right with Life Essence and the
+     * plants Rowan grows. Levels and costs come from the Spirit Garden's rules, never from ingots.
+     */
+    public static List<Node> garden() {
+        var rules=com.hexvane.aetherhaven.production.SpiritGardenRules.get();
+        var nodes=new ArrayList<Node>();int row=0;
+        for(var track:com.hexvane.aetherhaven.production.GardenUpgrades.Track.values()) {
+            // Three nodes fit across the tree, and four rows fit its window without scrolling.
+            int levels=Math.min(3,com.hexvane.aetherhaven.production.GardenUpgrades.maxLevel(track));
+            for(int tier=1;tier<=levels;tier++) {
+                double value=com.hexvane.aetherhaven.production.GardenUpgrades.value(track,tier);
+                double base=com.hexvane.aetherhaven.production.GardenUpgrades.value(track,0);
+                String amount=value==Math.rint(value)?Long.toString(Math.round(value)):Double.toString(value);
+                String title=switch(track) {case PLANTERS -> "More planters ";case RITE -> "Stronger rite ";case BOUNTY -> "Bountiful harvest ";case STORES -> "Wider stores ";}+tier;
+                String description=switch(track) {
+                    case PLANTERS -> "Rowan tends "+amount+" Spirit Planters.";
+                    case RITE -> "Plants rest "+amount+" hours between rites instead of "+Math.round(base)+", so they ripen sooner.";
+                    case BOUNTY -> "Each harvest gives "+amount+" plants, with more petals to match.";
+                    case STORES -> "The Conservatory holds "+amount+" times as much of every plant and petal.";
+                };
+                nodes.add(node(track.name()+":"+tier,title,description,null,rules.track(track).icon(),Kind.GARDEN,track.name(),tier,1,
+                    32+(tier-1)*201,38+row*124,tier==1?new String[0]:new String[]{track.name()+":"+(tier-1)}));
+            }
+            row++;
+        }
+        return List.copyOf(nodes);
+    }
+    /**
+     * The farm's own upgrades: six tracks of two levels, each track a column bought from the top down with Life
+     * Essence and the crops the Farmer grows. Levels and costs come from the Scarecrow Fields' rules, never from ingots.
+     */
+    public static List<Node> farm() {
+        var rules=com.hexvane.aetherhaven.production.FarmFieldRules.get();
+        var nodes=new ArrayList<Node>();var tracks=com.hexvane.aetherhaven.production.FarmUpgrades.Track.values();
+        for(int i=0;i<tracks.length;i++) {
+            var track=tracks[i];
+            // Three tracks side by side, twice: twelve nodes fill the tree's window without scrolling.
+            int column=i%3,top=i<3?38:310,levels=Math.min(2,com.hexvane.aetherhaven.production.FarmUpgrades.maxLevel(track));
+            for(int tier=1;tier<=levels;tier++) {
+                double value=com.hexvane.aetherhaven.production.FarmUpgrades.value(track,tier);
+                double before=com.hexvane.aetherhaven.production.FarmUpgrades.value(track,tier-1);
+                String amount=Long.toString(Math.round(value));
+                String title=switch(track) {case SCARECROWS -> "More Scarecrows ";case REACH -> "Wider reach ";case WATERING -> "Better watering ";
+                    case SEEDS -> "Seed saving ";case COMPOST -> "Richer compost ";case ALMANAC -> "Almanac insight ";}+tier;
+                String description=switch(track) {
+                    case SCARECROWS -> "Irienne tends "+amount+" Scarecrow fields beside the farm's own field. She shares her day between all her fields.";
+                    case REACH -> "Every Scarecrow field reaches "+amount+" blocks from its Scarecrow in each direction, up from "+Math.round(before)+".";
+                    case WATERING -> tier==1?"Each watering also wets the planned cells next to the one Irienne stands at."
+                        :"Each watering wets every planned cell within "+amount+" blocks of Irienne.";
+                    case SEEDS -> value>=1?"Every harvest gives its seed back."
+                        :"A harvest gives its seed back "+Math.round(value*100)+" times in 100, up from "+Math.round(before*100)+".";
+                    case COMPOST -> value<before?amount+" spare crops make one compost, down from "+Math.round(before)+"."
+                        :"Compost also makes Good soil Rich, so well fed fields give double harvests without rotating crops.";
+                    case ALMANAC -> value>before?"The Almanac favours "+amount+" crops each week, up from "+Math.round(before)+"."
+                        :"The Almanac shows "+rules.weeksShown(tier)+" weeks of favoured crops, a whole season, so you can plan ahead.";
+                };
+                nodes.add(node(track.name()+":"+tier,title,description,null,rules.track(track).icon(),Kind.FARM,track.name(),tier,1,
+                    32+column*201,top+(tier-1)*124,tier==1?new String[0]:new String[]{track.name()+":"+(tier-1)}));
+            }
+        }
+        return List.copyOf(nodes);
+    }
     public static List<Node> restaurant() {
         var nodes=new ArrayList<Node>();
         nodes.add(node("home","Restaurant","Improve the meals and service at this restaurant.","food-tray.png",null,Kind.FOUNDATION,"",0,1,233,48));
-        for(int tier=1;tier<=3;tier++) for(var branch:RestaurantUpgrades.Branch.values()) {
-            boolean satiety=branch==RestaurantUpgrades.Branch.SATIETY;
+        // Three columns through Town Levels 2 to 4: Satiety, Menu, Service.
+        for(int tier=1;tier<=3;tier++) for(var branch:List.of(RestaurantUpgrades.Branch.SATIETY,RestaurantUpgrades.Branch.MENU,RestaurantUpgrades.Branch.SERVICE)) {
+            boolean satiety=branch==RestaurantUpgrades.Branch.SATIETY, menu=branch==RestaurantUpgrades.Branch.MENU;
             String id=branch.name()+":"+tier;
-            nodes.add(node(id,(satiety?"Hearty meals ":"Table service ")+tier,
-                satiety?"Residents stay satisfied for longer after eating.":"Residents finish meals faster and recover more hunger.",null,
+            nodes.add(node(id,(satiety?"Hearty meals ":menu?"Chef's menu ":"Table service ")+tier,
+                satiety?"Residents stay satisfied for longer after eating."
+                    :menu?"Adds new dishes to the menu. A resident who eats here gets a short perk from one of them."
+                    :"Residents finish meals faster and recover more hunger.",null,
                 RestaurantUpgrades.ingredientCosts(branch,tier).getFirst().itemId(),Kind.RESTAURANT,branch.name(),tier,tier+1,
-                satiety?32:434,bandTop(tier+1,true)+42,tier==1?"home":branch.name()+":"+(tier-1)));
+                satiety?32:menu?233:434,bandTop(tier+1,true)+42,tier==1?"home":branch.name()+":"+(tier-1)));
+        }
+        // Provisions matter once the town outgrows its first food buildings, so they sit in the last two bands.
+        for(int tier=1;tier<=3;tier++) {
+            var branch=RestaurantUpgrades.Branch.PROVISIONS;
+            int level=tier==1?5:6;
+            nodes.add(node(branch.name()+":"+tier,"Town provisions "+tier,
+                "Adds "+RestaurantUpgrades.PROVISIONS_FOOD_PER_LEVEL+" Food Production. Every "+com.hexvane.aetherhaven.town.TownPopulation.FOOD_PER_RESIDENT
+                    +" Food feeds one resident. The kitchen cooks what your farms and ranches bring in, so it never adds more food than they do.",null,
+                RestaurantUpgrades.ingredientCosts(branch,tier).getFirst().itemId(),Kind.RESTAURANT,branch.name(),tier,level,
+                tier==3?434:233,bandTop(level,true)+42,tier==1?"home":branch.name()+":"+(tier-1)));
         }
         return List.copyOf(nodes);
     }
@@ -94,6 +170,13 @@ public final class BuildingUpgradeTree {
             nodes.add(node("warehouse:"+tier,"General storage "+tier,"Adds 20 general storage slots. Crafted goods and production buildings keep their own limits.",
                 "crate.png",null,Kind.WAREHOUSE,"",tier,level,233,bandTop(level,true)+42+Math.max(0,tier-5)*150,
                 tier==1?"home":"warehouse:"+(tier-1)));
+        }
+        // A side branch, like the backpack's compression: the same slots, each holding more of one item.
+        for(int tier=1;tier<=com.hexvane.aetherhaven.warehouse.TownWarehouse.MAX_STACK_UPGRADES;tier++) {
+            int level=Math.min(6,tier+2);
+            nodes.add(node("stacks:"+tier,"Deep shelves "+tier,"Every general storage slot holds "+(tier+1)+" stacks of the same item. Crafted goods and production buildings keep their own limits.",
+                "sack.png",null,Kind.WAREHOUSE_STACKS,"",tier,level,434,bandTop(level,true)+42,
+                tier==1?"home":"stacks:"+(tier-1)));
         }
         return List.copyOf(nodes);
     }

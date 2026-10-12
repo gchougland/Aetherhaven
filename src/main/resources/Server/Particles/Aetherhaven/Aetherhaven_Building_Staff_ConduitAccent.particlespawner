@@ -22,7 +22,6 @@
   },
   "Particle": {
     "Texture": "Particles/Textures/Basic/Star2.png",
-    "FrameSize": { "Width": 32, "Height": 32 },
     "ScaleRatioConstraint": "OneToOne",
     "Animation": {
       "0": {
@@ -48,7 +47,7 @@
         "Y": { "Min": 0, "Max": 0 },
         "Z": { "Min": 0, "Max": 360 }
       },
-      "Scale": { "X": { "Min": 0.35, "Max": 0.55 } },
+      "Scale": { "X": { "Min": 0.058, "Max": 0.092 } },
       "Opacity": 0.95,
       "Color": "#fff4ff",
       "FrameIndex": { "Min": 0, "Max": 0 }

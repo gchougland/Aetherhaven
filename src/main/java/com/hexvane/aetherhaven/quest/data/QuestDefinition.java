@@ -101,6 +101,27 @@ public final class QuestDefinition {
     @Nullable
     private String requiresSubplugin;
 
+    /** When set, the town is given this quest the first time the named condition holds, with nobody asking. */
+    @SerializedName("autoStart")
+    @Nullable
+    private QuestAutoStart autoStart;
+
+    /**
+     * When true, the quest is pinned to the HUD quest tracker of every town member once, however it started. A member
+     * who unpins it is not pinned again.
+     */
+    @SerializedName("autoPin")
+    private boolean autoPin;
+
+    @Nullable
+    public QuestAutoStart autoStart() {
+        return autoStart;
+    }
+
+    public boolean autoPin() {
+        return autoPin;
+    }
+
     @Nonnull
     public String idOrEmpty() {
         return id != null ? id.trim() : "";

@@ -231,7 +231,7 @@ public final class PlotCreatorValidator {
             case GAIA_STATUE_BLOCK -> draft.getGaiaStatueLocalPos() != null ? 1 : 0;
             case SHOP_SPOT, TOURIST_PORTAL_BLOCK -> draft.getPlacedSpecialBlocks().size();
             case PLANNING_DESK_POI, WORK_POI, BARD_WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI,
-                QUEST_BOARD_POI, BARN_PEN -> countPoiRequirement(draft, req);
+                QUEST_BOARD_POI, BARN_PEN, CLERK_STAND -> countPoiRequirement(draft, req);
             case INNKEEPER_SPAWN -> draft.getInnkeeperSpawnLocal() != null ? 1 : 0;
             case VISITOR_SPAWN -> draft.getVisitorSpawnLocals().size();
             case GUILD_MASTER_SPAWN -> draft.getGuildMasterSpawnLocal() != null ? 1 : 0;
@@ -306,6 +306,7 @@ public final class PlotCreatorValidator {
             case QUEST_BOARD_POI -> p.getTags().contains(AetherhavenConstants.POI_TAG_QUEST_BOARD)
                 || AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(p.getBlockTypeId());
             case BARN_PEN -> p.getTags().contains("BARN_PEN");
+            case CLERK_STAND -> p.getTags().contains(com.hexvane.aetherhaven.shop.ShopClerkStand.TAG);
             case SLEEP_POI -> p.getTags().contains("SLEEP") || p.getTags().contains("ENERGY");
             case EAT_POI -> p.getTags().contains("EAT");
             case FUN_POI -> p.getTags().contains("FUN") || p.getTags().contains("SIT");

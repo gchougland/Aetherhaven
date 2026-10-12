@@ -318,6 +318,29 @@ public final class PoiEntry {
     }
 
     @Nonnull
+    public PoiEntry copyWithEquipmentProfile(@Nullable String profileId) {
+        return new PoiEntry(
+            id,
+            townId,
+            x,
+            y,
+            z,
+            new HashSet<>(tags),
+            capacity,
+            plotId,
+            blockTypeId,
+            interactionKind,
+            mountOnUse,
+            profileId,
+            interactionTargetX,
+            interactionTargetY,
+            interactionTargetZ,
+            interactionTargetYawRadians,
+            workResidentKind
+        );
+    }
+
+    @Nonnull
     public PoiEntry copyWithInteractionTarget(@Nullable Double tx, @Nullable Double ty, @Nullable Double tz) {
         return copyWithInteractionTarget(tx, ty, tz, tx == null ? null : interactionTargetYawRadians);
     }

@@ -43,24 +43,24 @@ Your choice of combat stance remains when you pause and resume following. Explic
 
 ## Patrol wand
 
-Craft the **patrol wand** at the **town planning desk**. Blue sparkles mark saved routes only while you hold the wand.
+Craft the **patrol wand** at the **town planning desk**. Blue sparkles mark saved routes only while you hold the wand. The game shows your own key for each action below at the bottom right of the screen.
 
 ### Build mode (default)
 
-* **Right click the ground** — add a patrol point.
-* **Right click a point** — remove it.
-* **Left click a point on a saved route** — select that route for editing.
-* **F** — name and save the route (needs at least two points).
-* **R** — toggle **closed loop** (guards loop from last point back to first) vs **back and forth**.
-* **E** — start a fresh route.
-* **Q** — switch to Assign mode.
+* **Add or remove point** on the ground: add a patrol point.
+* **Add or remove point** on a point: remove it.
+* **Select route** on a point of a saved route: select that route for editing.
+* **Mode action**: name and save the route (needs at least two points).
+* **Crouch + Next mode**: toggle **closed loop** (guards loop from last point back to first) vs **back and forth**.
+* **Reset**: start a fresh route.
+* **Next mode**: switch to Assign mode.
 
 ### Assign mode
 
-* **Left click a route point** — select a saved route.
-* **F** — open the guard list and assign someone to the route.
-* **E** — clear the guard from the selected route.
-* **Q** — switch to Build mode.
+* **Select route** on a route point: select a saved route.
+* **Mode action**: open the guard list and assign someone to the route.
+* **Reset**: clear the guard from the selected route.
+* **Next mode**: switch to the next mode.
 
 Selected routes glow **green**; other routes stay **blue**. Guards with more than one route take turns walking each loop.
 
@@ -70,23 +70,35 @@ Place a **guard command post** stool in town (creative or progression unlock). *
 
 ### Camera and selection
 
-* **WASD** — pan the battlefield view.
-* **Space / Ctrl** — fly up and down to zoom.
-* **Scroll or number keys** — switch command tools.
-* **Click a guard** — select them.
-* **Shift + click** — add or remove from selection.
-* **Drag a box** — select many guards at once.
+* **Move**: pan the battlefield view.
+* **Fly up / Fly down**: zoom.
+* **Change hotbar slot**: switch command tools.
+* **Select guards** on a guard: select them.
+* **Sprint** while selecting: add or remove from selection.
+* **Hold Select guards and drag a box**: select many guards at once.
 
 ### Orders
 
-* **Attack-move / Move tool** — right click the ground to send selected guards. **Ability1** switches between attack-move and move-only. **Ability2** stops selected guards.
-* **Focus fire tool** — right click a creature to focus your guards on it.
-* **Stance tool** — **Ability1** cycles combat stance (defensive, aggressive, stand ground, hold fire) for selected guards.
-* **Free tool** — right click to release selected guards from your orders.
+* **Command Flag**: **Send guards** on the ground sends selected guards. **Order mode** switches between attack-move and move-only. **Stop guards** stops selected guards.
+* **Focus fire tool**: **Focus target** on a creature focuses your guards on it.
+* **Stance tool**: **Next stance** cycles combat stance (defensive, aggressive, stand ground, hold fire) for selected guards.
+* **Free tool**: **Release guards** releases selected guards from your orders.
 * **Select all / by type** — roster buttons on the HUD.
 * **Leave command tool (hotbar slot 8)** — exit command mode.
 
 The command post must sit **inside your town lands** to work. You need at least one guard.
+
+## Command Flag in hand
+
+Lyra gives you a **Command Flag** at Friendship 25. Hold it anywhere to give orders to every guard of your town without sitting at the command post. A panel shows the order type, how many guards are listening and what each action does. The game shows your own key for each action at the bottom right of the screen.
+
+* **Send guards** on the ground sends your guards there. A green ring marks the spot.
+* **Order mode** switches between attack-move and move-only.
+* **Stop guards** stops your guards where they stand.
+* **Crouch + Order mode** sends guards back to their duties.
+* **Select or count guards** counts the guards who can hear you.
+
+Orders from the flag last until you release the guards or leave the world. Choosing single guards and setting a stance are still done at the command post.
 
 ## Quest board
 

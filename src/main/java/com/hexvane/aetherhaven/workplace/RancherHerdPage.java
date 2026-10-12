@@ -42,16 +42,19 @@ public final class RancherHerdPage extends AetherhavenInteractiveCustomUIPage<Ra
         var plot=town.findPlotById(plotId);if(!NativeHerdService.barn(plugin,plot))return null;
         return new Context(manager,town,plot,town.getOrCreatePlotProduction(plotId));
     }
-    private EventData event(String action,String key){return new EventData().append("Action",action).append("Key",key).append("Revision",Long.toString(revision));}
+    private EventData event(String action,String key){return new EventData().append("Action",action).append("Key",key);}
+    /** The amount the courier button moves to from this one. The button carries it, so a press cannot skip a step. */
+    static int nextCourierTarget(int current){return switch(current){case 0->10;case 10->25;case 25->50;case 50->75;default->0;};}
     private void bind(UIEventBuilder e,String path,String action,String key){e.addEventBinding(CustomUIEventBindingType.Activating,path,event(action,key),false);}
     @Override public void build(Ref<EntityStore> ref,UICommandBuilder b,UIEventBuilder e,Store<EntityStore> store) {
         var c=current(ref,store);if(c==null){close();return;}
         boolean cards=shopOnly||choosingPen>=0;
         if(!appended){b.append(cards?"Aetherhaven/RancherAnimalShopPage.ui":"Aetherhaven/RancherHerdPage.ui");appended=true;}
-        var state=c.production();var herd=state.herd();revision=herd.revision();slots=WorkplaceProductionUpgrades.slotCount(state);
+        var state=c.production();var herd=state.herd();slots=WorkplaceProductionUpgrades.slotCount(state);
         long day=Math.floorDiv(NativeHerdService.minute(store),1440);int mastery=CoreVillagerMasteryService.level(c.town(),"rancher");
         b.set("#Summary.Text",herd.animals().size()+" owned animals   |   "+slots+" active pens   |   Rancher Mastery "+mastery);
-        for(String action:cards?List.of("Previous","Next","Refresh"):List.of("Animals","Food","Storage","Previous","Next","Refresh","Courier"))bind(e,"#"+action,action,"");
+        for(String action:cards?List.of("Previous","Next","Refresh"):List.of("Animals","Food","Storage","Previous","Next","Refresh"))bind(e,"#"+action,action,"");
+        if(!cards)bind(e,"#Courier","Courier",Integer.toString(nextCourierTarget(herd.courierFeedTarget())));
         if(choosingPen>=0){b.set("#ScreenTitle.Text","CHOOSE AN ANIMAL FOR PEN "+(choosingPen+1));b.set("#Instructions.Text","Select a card below. Animals keep their name and hearts when resting or changing pens.");b.set("#Return.Visible",true);bind(e,"#Return","Return","");}
         if(!cards){
         b.set("#Courier.Text",herd.courierFeedTarget()==0?"Courier food: Off":"Keep "+herd.courierFeedTarget()+" of each food");
@@ -66,7 +69,9 @@ public final class RancherHerdPage extends AetherhavenInteractiveCustomUIPage<Ra
             b.set(row+".Background",Value.ref("Aetherhaven/TownUiTheme.ui",locked?"BarnCardLocked":"BarnCard"));
             b.set(row+" #Name.Text",locked?"Building upgrade needed":animal==null?"Empty pen":animal.name());
             b.set(row+" #Status.Text",locked?"Ask the Rancher about upgrades":i>=pens.size()?"Mark this pen in the building editor":animal==null?"Choose an owned animal":animal.fed(day)?"Fed today":"Waiting for food");
-            for(String action:List.of("ChooseAnimal","Empty")){b.set(row+" #"+action+".Disabled",locked||herd.animals().isEmpty());bind(e,row+" #"+action,action,Integer.toString(i));}
+            // Emptying names the animal that was drawn in the pen, so it can never send another one to rest.
+            for(String action:List.of("ChooseAnimal","Empty")){b.set(row+" #"+action+".Disabled",locked||herd.animals().isEmpty());
+                bind(e,row+" #"+action,action,"Empty".equals(action)?i+"|"+(animal==null?"":animal.id()):Integer.toString(i));}
         }
         }
         List<?> rows=switch(tab) {
@@ -147,29 +152,35 @@ public final class RancherHerdPage extends AetherhavenInteractiveCustomUIPage<Ra
         else if("Previous".equals(data.action))page=Math.max(0,page-1);
         else if("Next".equals(data.action))page++;
         else if(!"Refresh".equals(data.action)) {
-            long expected;try{expected=Long.parseLong(data.revision);}catch(Exception ex){return;}
-            if(expected!=herd.revision()){hint="The barn changed. Please choose again.";refresh(ref,store);return;}
             var inventory=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);
             switch(data.action) {
                 case "Buy"->{
                     var species=BarnAnimalCatalog.get(data.key);if(species==null||inventory==null)return;
-                    hint=herd.buy(expected,data.key,CoreVillagerMasteryService.level(c.town(),"rancher"),()->GoldCoinPayment.trySpend(c.town(),inventory,species.rarity().gold,c.town().playerCanSpendTreasuryGold(playerRef.getUuid())));
+                    hint=herd.buy(data.key,CoreVillagerMasteryService.level(c.town(),"rancher"),()->GoldCoinPayment.trySpend(c.town(),inventory,species.rarity().gold,c.town().playerCanSpendTreasuryGold(playerRef.getUuid())));
                     if(hint==null)hint=species.id()+" purchased. Choose it in an active pen.";
                 }
                 case "Assign"->{
                     if(choosingPen<0)return;UUID selected;try{selected=UUID.fromString(data.key);}catch(Exception invalid){return;}
                     NativeHerdService.update(world,AetherhavenPlugin.get(),c.town(),c.plot());
-                    if(!herd.assign(expected,choosingPen,selected,WorkplaceProductionUpgrades.slotCount(state))){hint="The pen changed. Choose again.";break;}
+                    if(!herd.assign(choosingPen,selected,WorkplaceProductionUpgrades.slotCount(state))){
+                        hint=herd.animal(selected)==null?"That animal is no longer in this barn. Nothing was changed."
+                            :choosingPen>=WorkplaceProductionUpgrades.slotCount(state)?"Pen "+(choosingPen+1)+" is not unlocked."
+                            :herd.animal(selected).name()+" is already in pen "+(choosingPen+1)+".";break;}
                     NativeHerdService.update(world,AetherhavenPlugin.get(),c.town(),c.plot());c.manager().updateTown(c.town());open(ref,store,new RancherHerdPage(playerRef,townId,plotId));return;
                 }
                 case "Empty"->{
-                    int slot;try{slot=Integer.parseInt(data.key);}catch(Exception ex){return;}
+                    int slot;String named;
+                    try{int bar=data.key.indexOf('|');slot=Integer.parseInt(bar<0?data.key:data.key.substring(0,bar));named=bar<0?null:data.key.substring(bar+1);}catch(Exception ex){return;}
                     int unlocked=WorkplaceProductionUpgrades.slotCount(state);if(slot<0||slot>=unlocked)return;
+                    var held=herd.slot(slot);
+                    if(held==null){hint="Pen "+(slot+1)+" is already empty.";break;}
+                    if(named!=null&&!named.equals(held.id().toString())){hint="Pen "+(slot+1)+" holds "+held.name()+" now. Nothing was changed.";break;}
                     NativeHerdService.update(world,AetherhavenPlugin.get(),c.town(),c.plot());
-                    herd.assign(expected,slot,null,unlocked);hint="Pen selection updated. Resting animals keep their name and hearts.";
+                    herd.assign(slot,null,unlocked);hint="Pen selection updated. Resting animals keep their name and hearts.";
                 }
                 case "Rename"->{UUID id;try{id=UUID.fromString(data.key);}catch(Exception ex){return;}
-                    hint=herd.rename(expected,id,data.name)?"Animal renamed.":"Choose a name from 1 to 24 characters.";}
+                    hint=herd.animal(id)==null?"That animal is no longer in this barn. Nothing was changed."
+                        :herd.rename(id,data.name)?"Animal renamed.":"Choose a new name from 1 to 24 characters.";}
                 case "Supply","TakeFood"->{
                     if(inventory==null||data.key==null||(!BarnAnimalCatalog.food(data.key)&&herd.feed(data.key)==0))return;var stack=new ItemStack(data.key,1);boolean supply="Supply".equals(data.action);
                     if(supply){
@@ -178,8 +189,9 @@ public final class RancherHerdPage extends AetherhavenInteractiveCustomUIPage<Ra
                         hint=amount>0?"Added "+amount+" servings to the food bin.":"No food transferred. Check your inventory and the food bin's space.";
                     }else hint=herd.takeFeed(data.key,()->inventory.addItemStack(stack,true,false,true).succeeded())?"Food returned to your inventory.":"Check your available inventory space.";
                 }
-                case "Courier"->{int target=switch(herd.courierFeedTarget()){case 0->10;case 10->25;case 25->50;case 50->75;default->0;};
-                    herd.configureCourierFeed(herd.feedOrderRevision(),target);hint=target==0?"Automatic food deliveries stopped.":"Couriers will bring each active animal's food from farm output or town storage. A Warehouse Manager and Logistics worker are needed.";}
+                case "Courier"->{int target;try{target=Integer.parseInt(data.key);}catch(Exception ex){return;}
+                    if(!herd.configureCourierFeed(target)){hint=target==herd.courierFeedTarget()?"Courier food is already set to that.":"Choose the courier food amount again.";break;}
+                    hint=target==0?"Automatic food deliveries stopped.":"Couriers will bring each active animal's food from farm output or town storage. A Warehouse Manager and Logistics worker are needed.";}
                 case "Collect"->{
                     if(data.key==null||Item.getAssetMap().getAsset(data.key)==null)return;
                     var plugin=AetherhavenPlugin.get();var entry=ProductionEffectiveCatalog.effective(plugin.getProductionCatalog(),plugin.getWorkplaceUnlockCatalog(),"plot_barn",state);
@@ -205,8 +217,7 @@ public final class RancherHerdPage extends AetherhavenInteractiveCustomUIPage<Ra
         public static final BuilderCodec<Data> CODEC=BuilderCodec.builder(Data.class,Data::new)
             .append(new KeyedCodec<>("Action",Codec.STRING),(d,v)->d.action=v,d->d.action).add()
             .append(new KeyedCodec<>("Key",Codec.STRING),(d,v)->d.key=v,d->d.key).add()
-            .append(new KeyedCodec<>("Revision",Codec.STRING),(d,v)->d.revision=v,d->d.revision).add()
             .append(new KeyedCodec<>("@Name",Codec.STRING),(d,v)->d.name=v,d->d.name).add().build();
-        String action,key,revision,name;
+        String action,key,name;
     }
 }

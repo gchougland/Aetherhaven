@@ -14,11 +14,11 @@
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 10
+      "count": 15
     },
     {
       "itemId": "Ingredient_Fibre",
-      "count": 10
+      "count": 15
     }
   ],
   "output": "Aetherhaven_Leatherworker_Kit",

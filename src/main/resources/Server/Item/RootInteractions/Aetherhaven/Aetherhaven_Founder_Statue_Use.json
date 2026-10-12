@@ -1,0 +1,10 @@
+{
+  "Interactions": [
+    {
+      "Type": "OpenCustomUI",
+      "Page": {
+        "Id": "AetherhavenFounderStatue"
+      }
+    }
+  ]
+}

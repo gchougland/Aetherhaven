@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Iron",
-      "count": 25
+      "count": 35
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 10
+      "count": 15
     },
     {
       "itemId": "Ingredient_Fibre",
-      "count": 15
+      "count": 20
     }
   ],
   "output": "Aetherhaven_Iron_Mage_Kit",

@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.patrol;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -68,6 +69,16 @@ public final class PatrolWandModeCycleInteraction extends SimpleInstantInteracti
         ItemStack h = InventoryComponent.getItemInHand(commandBuffer, playerRef);
         if (h == null || h.isEmpty() || !AetherhavenConstants.PATROL_WAND_ITEM_ID.equals(h.getItemId())) {
             context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (ToolAbilityKeys.thirdActionHeld(commandBuffer, playerRef)) {
+            PatrolWandInteractions.handleToggleClosedLoop(
+                playerRef,
+                commandBuffer,
+                commandBuffer.getStore().getExternalData().getWorld(),
+                context,
+                commandBuffer.getStore()
+            );
             return;
         }
         PatrolWandInteractions.handleModeCycle(playerRef, commandBuffer, context);

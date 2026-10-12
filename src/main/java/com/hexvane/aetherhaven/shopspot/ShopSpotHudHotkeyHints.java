@@ -1,13 +1,17 @@
 package com.hexvane.aetherhaven.shopspot;
 
 import com.hexvane.aetherhaven.ui.ToolHudHotkeyRows;
-import com.hexvane.aetherhaven.ui.ToolKeybindSlot;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Hotkey hint rows for shop spot look-at HUD. */
+/**
+ * Hint rows for the shop spot look-at HUD.
+ *
+ * <p>The hints say what using the stall does. They name the action, not a key: a custom HUD cannot show the player's
+ * own key for the game's use input.
+ */
 public final class ShopSpotHudHotkeyHints {
     private static final String MSG = "aetherhaven_shop.aetherhaven.shop.hud";
 
@@ -35,7 +39,7 @@ public final class ShopSpotHudHotkeyHints {
                 case ".hintPlayerOwn" -> MSG + ".hintPlayerOwn.desc";
                 default -> MSG + ".hintPlayerBuy.desc";
             };
-        ToolHudHotkeyRows.appendHotkeyRow(builder, containerSelector, 0, ToolKeybindSlot.USE, descKey, playerRef);
+        ToolHudHotkeyRows.appendInfoRow(builder, containerSelector, 0, descKey);
         if (hintTranslationKey.endsWith(".hintNpc")) {
             ToolHudHotkeyRows.appendInfoRow(builder, containerSelector, 1, MSG + ".hintNpc.restock");
         }

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -23,7 +24,7 @@ public final class BuildingEditorStepForwardInteraction extends SimpleInstantInt
                 BuildingEditorStepForwardInteraction::new,
                 SimpleInstantInteraction.CODEC
             )
-            .documentation("Building editor staff: Ability2 — next step or save.")
+            .documentation("Building editor staff: second extra key (Ability4) — next step or save.")
             .build();
 
     @Nonnull
@@ -47,7 +48,7 @@ public final class BuildingEditorStepForwardInteraction extends SimpleInstantInt
             return;
         }
         CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
-        if (commandBuffer == null || type != InteractionType.Ability2) {
+        if (commandBuffer == null || type != ToolAbilityKeys.SECOND) {
             context.getState().state = InteractionState.Failed;
             return;
         }

@@ -16,6 +16,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 public final class TimberPlayerEditSystems {
     private TimberPlayerEditSystems() {}
     private static void mark(Store<EntityStore> store,AetherhavenPlugin plugin,TimberHarvestPlan.Position point,boolean rootstone) {
+        // A block placed or broken inside a planned tunnel changes nothing: miners dig whatever they find there.
+        if(!rootstone)return;
         var world=store.getExternalData().getWorld();var manager=AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin);
         var town=manager.findTownContainingBlock(world.getName(),point.x(),point.z());if(town==null)return;
         boolean changed=false;
@@ -23,7 +25,6 @@ public final class TimberPlayerEditSystems {
             var production=town.peekPlotProduction(plot.getPlotId());
             if(production!=null)changed|=production.uprootStoneAt(point);
         }
-        for(var site:town.getApprenticeWorkplaces().sites())changed|=site.excavation().markEdited(new com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point(point.x(),point.y(),point.z()));
         if(changed)manager.updateTown(town);
     }
     public static final class Breaking extends EntityEventSystem<EntityStore,BreakBlockEvent> {

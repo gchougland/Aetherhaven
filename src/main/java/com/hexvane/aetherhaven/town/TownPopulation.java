@@ -23,18 +23,30 @@ public final class TownPopulation {
 
     public static Snapshot snapshot(TownRecord town, ConstructionCatalog catalog) {
         int residents = count(town);
-        int food = 0;
-        for (String source : new String[]{"plot_inn", "plot_farm", "plot_barn", "plot_restaurant"}) {
+        int farmAndRanchFood = farmAndRanchFood(town, catalog);
+        int food = farmAndRanchFood;
+        for (String source : new String[]{"plot_inn", "plot_restaurant"}) {
             if (town.hasCompletePlotWithConstruction(catalog, source)) food += 10;
         }
-        for (var site : town.getApprenticeWorkplaces().sites()) {
-            if (com.hexvane.aetherhaven.workplace.WorkplaceFood.supports(site.type())) food += site.food().foodPoints();
-        }
+        // A restaurant's Provisions upgrades cook from the farms and ranches, so they are counted against them.
+        food += com.hexvane.aetherhaven.restaurant.RestaurantBenefitService.provisionsFoodPoints(town, catalog, farmAndRanchFood);
         int level = levelFor(residents);
         int next = level < LEVEL_STARTS.length ? LEVEL_STARTS[level] : 0;
         int start = LEVEL_STARTS[level - 1];
         float progress = next == 0 ? 1f : Math.clamp((float) (residents - start) / (next - start), 0f, 1f);
         return new Snapshot(residents, food, food / FOOD_PER_RESIDENT, level, next, progress);
+    }
+
+    /** Food points grown or raised: the core farm, the core barn and every tended farm or ranch site. */
+    public static int farmAndRanchFood(TownRecord town, ConstructionCatalog catalog) {
+        int food = 0;
+        for (String source : new String[]{"plot_farm", "plot_barn"}) {
+            if (town.hasCompletePlotWithConstruction(catalog, source)) food += 10;
+        }
+        for (var site : town.getApprenticeWorkplaces().sites()) {
+            if (com.hexvane.aetherhaven.workplace.WorkplaceFood.supports(site.type())) food += site.food().foodPoints();
+        }
+        return food;
     }
 
     public static int levelFor(int population) {

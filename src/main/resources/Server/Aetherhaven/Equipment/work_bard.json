@@ -2,6 +2,7 @@
   "id": "work_bard",
   "displayName": "Bard lute",
   "hireGoldCost": 0,
+  "allowedResidentKinds": ["bard"],
   "hotbar": [
     { "slot": 0, "itemId": "Aetherhaven_Lute" }
   ]

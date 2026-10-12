@@ -17,7 +17,7 @@ Food is shown as a small corner badge on each animal portrait. Resource storage 
 
 Your barn starts with one active pen. Building upgrades unlock up to five pens. Choose **Choose** on a pen to open a grid of animal cards showing their picture, name, hearts and preferred food. Select a card to assign that animal. Choosing an animal already in another pen swaps the two animals. **Rest** empties a pen without losing its animal. Animals keep their names and hearts while resting. Rename them from **My animals**.
 
-Animals stay at their marked pen and cannot be killed or captured. You do not need to bring wild animals, find a breeding pair or raise offspring. Building authors mark five animal pens in the building editor by clicking the floor where each animal should stand. Face the direction it should look. Right click a marker to remove it.
+Animals stay at their marked pen and cannot be killed or captured. You do not need to bring wild animals, find a breeding pair or raise offspring. Building authors mark five animal pens in the building editor by clicking the floor where each animal should stand. Face the direction it should look. Use **Adjust or remove** on a marker to remove it.
 
 ### Daily food and hearts
 
@@ -46,7 +46,7 @@ Rare animals need the latest vegetables or meat:
 
 These tiers refer to the ordinary seed recipe at the Farming Bench. Wheat is not animal food.
 
-Feeding gives 20 affection. Use the interaction prompt on an animal to pet it for another 5 affection, once each day. Each 100 affection earns a heart, up to five hearts. Each heart adds 20% to resource yields over time. Naming, resting or moving an animal does not reset its daily care.
+Feeding gives 20 affection. Use the interaction prompt on an animal to pet it for another 10 affection, once each day. Each 100 affection earns a heart, up to five hearts. Each heart adds 20% to resource yields over time. Naming, resting or moving an animal does not reset its daily care.
 
 ### Animal resources
 

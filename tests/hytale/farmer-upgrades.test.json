@@ -1,0 +1,1193 @@
+{
+ "cases": [
+  {
+   "name": "scarecrow fields: upgrade tree and blocks",
+   "steps": [
+    {
+     "tool": "ui_check_java",
+     "arguments": {
+      "project": "Aetherhaven"
+     },
+     "expect": {
+      "valid": true,
+      "errors": 0
+     }
+    },
+    {
+     "tool": "ui_render",
+     "name": "farm upgrades in the upgrade tree",
+     "arguments": {
+      "root": "projects",
+      "path": "Aetherhaven/src/main/resources/Common/UI/Custom/Aetherhaven/WorkplaceUpgradesPage.ui",
+      "commands": [
+       {
+        "type": "Set",
+        "selector": "#Summary.Text",
+        "data": "Farmer  |  Town Level 3  |  1/2 workplaces  |  Available: 85 gold"
+       },
+       {
+        "type": "Set",
+        "selector": "#Workplaces.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Workplaces.Disabled",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Production.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Production.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Production.Text",
+        "data": "Fields"
+       },
+       {
+        "type": "Set",
+        "selector": "#Restaurant.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Restaurant.Disabled",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Alchemy.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Alchemy.Disabled",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Storage.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Storage.Disabled",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Inn.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Inn.Disabled",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Previous.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Next.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Plot.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Plot.Text",
+        "data": "Building 1 / 1"
+       },
+       {
+        "type": "Clear",
+        "selector": "#Canvas"
+       },
+       {
+        "type": "Set",
+        "selector": "#Canvas.Anchor",
+        "data": {
+         "Left": 0,
+         "Top": 0,
+         "Width": 640,
+         "Height": 574
+        }
+       },
+       {
+        "type": "AppendInline",
+        "selector": "#Canvas",
+        "text": "Group #Bands { Anchor: (Full: 0); }"
+       },
+       {
+        "type": "Append",
+        "selector": "#Bands",
+        "text": "Aetherhaven/BuildingUpgradeBand.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Bands[0].Anchor",
+        "data": {
+         "Left": 24,
+         "Top": 0,
+         "Width": 592,
+         "Height": 30
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Bands[0] #Label.Text",
+        "data": "TOWN LEVEL 1\nREACHED"
+       },
+       {
+        "type": "AppendInline",
+        "selector": "#Canvas",
+        "text": "Group { Anchor: (Left: 132, Top: 15, Width: 484, Height: 2); Background: #48576a; }"
+       },
+       {
+        "type": "AppendInline",
+        "selector": "#Canvas",
+        "text": "Group { Anchor: (Left: 119, Top: 150, Width: 2, Height: 12); Background: #ab9060; }"
+       },
+       {
+        "type": "AppendInline",
+        "selector": "#Canvas",
+        "text": "Group { Anchor: (Left: 320, Top: 150, Width: 2, Height: 12); Background: #48576a; }"
+       },
+       {
+        "type": "AppendInline",
+        "selector": "#Canvas",
+        "text": "Group { Anchor: (Left: 521, Top: 150, Width: 2, Height: 12); Background: #48576a; }"
+       },
+       {
+        "type": "AppendInline",
+        "selector": "#Canvas",
+        "text": "Group { Anchor: (Left: 119, Top: 422, Width: 2, Height: 12); Background: #ab9060; }"
+       },
+       {
+        "type": "AppendInline",
+        "selector": "#Canvas",
+        "text": "Group { Anchor: (Left: 320, Top: 422, Width: 2, Height: 12); Background: #7bad99; }"
+       },
+       {
+        "type": "AppendInline",
+        "selector": "#Canvas",
+        "text": "Group { Anchor: (Left: 521, Top: 422, Width: 2, Height: 12); Background: #48576a; }"
+       },
+       {
+        "type": "AppendInline",
+        "selector": "#Canvas",
+        "text": "Group #Nodes { Anchor: (Full: 0); }"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0].Anchor",
+        "data": {
+         "Left": 32,
+         "Top": 38,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0] #Title.Text",
+        "data": "More Scarecrows 1"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0] #Selected.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0] #Item.ItemId",
+        "data": "Deco_Scarecrow"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0] #LockedBackground.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0] #LockedBackground.Background",
+        "data": {
+         "Color": "#3e392d"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0] #Lock.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0] #Title.Style.TextColor",
+        "data": "#c5cdd5"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0] #State.Text",
+        "data": "UNLOCKED"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[0] #State.Style.TextColor",
+        "data": "#96d4b4"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1].Anchor",
+        "data": {
+         "Left": 32,
+         "Top": 162,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1] #Title.Text",
+        "data": "More Scarecrows 2"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1] #Selected.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1] #Item.ItemId",
+        "data": "Deco_Scarecrow"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1] #LockedBackground.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1] #LockedBackground.Background",
+        "data": {
+         "Color": "#3e392d"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1] #Lock.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1] #Title.Style.TextColor",
+        "data": "#e8c984"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1] #State.Text",
+        "data": "AVAILABLE"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[1] #State.Style.TextColor",
+        "data": "#e8c984"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2].Anchor",
+        "data": {
+         "Left": 233,
+         "Top": 38,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2] #Title.Text",
+        "data": "Wider reach 1"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2] #Selected.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2] #Item.ItemId",
+        "data": "Tool_Hoe_Crude"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2] #LockedBackground.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2] #LockedBackground.Background",
+        "data": {
+         "Color": "#3e392d"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2] #Lock.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2] #Title.Style.TextColor",
+        "data": "#e8c984"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2] #State.Text",
+        "data": "AVAILABLE"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[2] #State.Style.TextColor",
+        "data": "#e8c984"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3].Anchor",
+        "data": {
+         "Left": 233,
+         "Top": 162,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3] #Title.Text",
+        "data": "Wider reach 2"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3] #Selected.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3] #Item.ItemId",
+        "data": "Tool_Hoe_Crude"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3] #LockedBackground.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3] #LockedBackground.Background",
+        "data": {
+         "Color": "#2b3038"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3] #Lock.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3] #Title.Style.TextColor",
+        "data": "#98a3ae"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3] #State.Text",
+        "data": "LOCKED"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[3] #State.Style.TextColor",
+        "data": "#889bad"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4].Anchor",
+        "data": {
+         "Left": 434,
+         "Top": 38,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4] #Title.Text",
+        "data": "Better watering 1"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4] #Selected.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4] #Item.ItemId",
+        "data": "Tool_Watering_Can"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4] #LockedBackground.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4] #LockedBackground.Background",
+        "data": {
+         "Color": "#3e392d"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4] #Lock.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4] #Title.Style.TextColor",
+        "data": "#e8c984"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4] #State.Text",
+        "data": "AVAILABLE"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[4] #State.Style.TextColor",
+        "data": "#e8c984"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5].Anchor",
+        "data": {
+         "Left": 434,
+         "Top": 162,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5] #Title.Text",
+        "data": "Better watering 2"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5] #Selected.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5] #Item.ItemId",
+        "data": "Tool_Watering_Can"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5] #LockedBackground.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5] #LockedBackground.Background",
+        "data": {
+         "Color": "#2b3038"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5] #Lock.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5] #Title.Style.TextColor",
+        "data": "#98a3ae"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5] #State.Text",
+        "data": "LOCKED"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[5] #State.Style.TextColor",
+        "data": "#889bad"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6].Anchor",
+        "data": {
+         "Left": 32,
+         "Top": 310,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6] #Title.Text",
+        "data": "Seed saving 1"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6] #Selected.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6] #Item.ItemId",
+        "data": "Plant_Seeds_Wheat"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6] #LockedBackground.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6] #LockedBackground.Background",
+        "data": {
+         "Color": "#3e392d"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6] #Lock.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6] #Title.Style.TextColor",
+        "data": "#c5cdd5"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6] #State.Text",
+        "data": "UNLOCKED"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[6] #State.Style.TextColor",
+        "data": "#96d4b4"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7].Anchor",
+        "data": {
+         "Left": 32,
+         "Top": 434,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7] #Title.Text",
+        "data": "Seed saving 2"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7] #Selected.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7] #Item.ItemId",
+        "data": "Plant_Seeds_Wheat"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7] #LockedBackground.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7] #LockedBackground.Background",
+        "data": {
+         "Color": "#3e392d"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7] #Lock.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7] #Title.Style.TextColor",
+        "data": "#e8c984"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7] #State.Text",
+        "data": "AVAILABLE"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[7] #State.Style.TextColor",
+        "data": "#e8c984"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8].Anchor",
+        "data": {
+         "Left": 233,
+         "Top": 310,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8] #Title.Text",
+        "data": "Richer compost 1"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8] #Selected.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8] #Item.ItemId",
+        "data": "Tool_Fertilizer"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8] #LockedBackground.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8] #LockedBackground.Background",
+        "data": {
+         "Color": "#3e392d"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8] #Lock.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8] #Title.Style.TextColor",
+        "data": "#c5cdd5"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8] #State.Text",
+        "data": "UNLOCKED"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[8] #State.Style.TextColor",
+        "data": "#96d4b4"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9].Anchor",
+        "data": {
+         "Left": 233,
+         "Top": 434,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9] #Title.Text",
+        "data": "Richer compost 2"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9] #Selected.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9] #Item.ItemId",
+        "data": "Tool_Fertilizer"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9] #LockedBackground.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9] #LockedBackground.Background",
+        "data": {
+         "Color": "#3e392d"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9] #Lock.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9] #Title.Style.TextColor",
+        "data": "#c5cdd5"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9] #State.Text",
+        "data": "UNLOCKED"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[9] #State.Style.TextColor",
+        "data": "#96d4b4"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10].Anchor",
+        "data": {
+         "Left": 434,
+         "Top": 310,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10] #Title.Text",
+        "data": "Almanac insight 1"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10] #Selected.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10] #Item.ItemId",
+        "data": "Aetherhaven_Calendar"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10] #LockedBackground.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10] #LockedBackground.Background",
+        "data": {
+         "Color": "#3e392d"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10] #Lock.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10] #Title.Style.TextColor",
+        "data": "#e8c984"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10] #State.Text",
+        "data": "AVAILABLE"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[10] #State.Style.TextColor",
+        "data": "#e8c984"
+       },
+       {
+        "type": "Append",
+        "selector": "#Nodes",
+        "text": "Aetherhaven/BuildingUpgradeNode.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11].Anchor",
+        "data": {
+         "Left": 434,
+         "Top": 434,
+         "Width": 174,
+         "Height": 112
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11] #Title.Text",
+        "data": "Almanac insight 2"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11] #Selected.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11] #Icon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11] #Item.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11] #Item.ItemId",
+        "data": "Aetherhaven_Calendar"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11] #LockedBackground.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11] #LockedBackground.Background",
+        "data": {
+         "Color": "#2b3038"
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11] #Lock.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11] #Title.Style.TextColor",
+        "data": "#98a3ae"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11] #State.Text",
+        "data": "LOCKED"
+       },
+       {
+        "type": "Set",
+        "selector": "#Nodes[11] #State.Style.TextColor",
+        "data": "#889bad"
+       },
+       {
+        "type": "Clear",
+        "selector": "#Costs"
+       },
+       {
+        "type": "Set",
+        "selector": "#Hint.Text",
+        "data": "Choose a node to inspect its benefits and requirements. Scroll to see later upgrades."
+       },
+       {
+        "type": "Set",
+        "selector": "#DetailLock.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DetailTitle.Style.TextColor",
+        "data": "#acb5bf"
+       },
+       {
+        "type": "Set",
+        "selector": "#DetailTitle.Text",
+        "data": "More Scarecrows 2"
+       },
+       {
+        "type": "Set",
+        "selector": "#Description.Text",
+        "data": "Irienne tends 3 Scarecrow fields beside the farm's own field. She shares her day between all her fields."
+       },
+       {
+        "type": "Set",
+        "selector": "#DetailState.Text",
+        "data": "You need more gold or materials"
+       },
+       {
+        "type": "Set",
+        "selector": "#DetailState.Style.TextColor",
+        "data": "#e8c984"
+       },
+       {
+        "type": "Set",
+        "selector": "#DetailIcon.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#DetailItem.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DetailItem.ItemId",
+        "data": "Deco_Scarecrow"
+       },
+       {
+        "type": "Set",
+        "selector": "#Requires.Text",
+        "data": "Town Level 1\nRequires: More Scarecrows 1"
+       },
+       {
+        "type": "Append",
+        "selector": "#Costs",
+        "text": "Aetherhaven/BuildingUpgradeCost.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Costs[0] #Item.ItemId",
+        "data": "Ingredient_Life_Essence"
+       },
+       {
+        "type": "Set",
+        "selector": "#Costs[0] #Count.Text",
+        "data": "40 / 25"
+       },
+       {
+        "type": "Append",
+        "selector": "#Costs",
+        "text": "Aetherhaven/BuildingUpgradeCost.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#Costs[1] #Item.ItemId",
+        "data": "Plant_Crop_Corn"
+       },
+       {
+        "type": "Set",
+        "selector": "#Costs[1] #Count.Text",
+        "data": "6 / 10"
+       },
+       {
+        "type": "Set",
+        "selector": "#Gold.Text",
+        "data": "No gold required"
+       },
+       {
+        "type": "Set",
+        "selector": "#Purchase.Text",
+        "data": "Unlock upgrade"
+       },
+       {
+        "type": "Set",
+        "selector": "#Purchase.Disabled",
+        "data": true
+       }
+      ]
+     },
+     "expect": {
+      "valid": true,
+      "errors": 0
+     },
+     "golden": "tests/hytale/golden/farmer-fields-upgrades.png"
+    },
+    {
+     "tool": "asset_check",
+     "name": "Scarecrow",
+     "arguments": {
+      "root": "projects",
+      "path": "Aetherhaven/src/main/resources/Server/Item/Items/Aetherhaven/Aetherhaven_Scarecrow.json"
+     },
+     "expect": {
+      "errors": 0
+     }
+    },
+    {
+     "tool": "asset_check",
+     "name": "Golden Harvest",
+     "arguments": {
+      "root": "projects",
+      "path": "Aetherhaven/src/main/resources/Server/Item/Items/Aetherhaven/Aetherhaven_Golden_Harvest.json"
+     },
+     "expect": {
+      "errors": 0
+     }
+    }
+   ]
+  }
+ ]
+}

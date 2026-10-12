@@ -42,6 +42,8 @@ AGENTS.md
 .cursorrules
 /scripts/__pycache__/
 /tools/__pycache__/
+# One-off content scripts (generators, importers, one-time fixes). Their output is committed, not the script.
+/tools-local/
 # Local 1Password op:// env for translation script (see translate.secrets.env.example)
 /scripts/translate.secrets.env
 # Hytale regenerates these beside .prefab.json; stale copies freeze wrong bounds (e.g. 16x16 overlays).

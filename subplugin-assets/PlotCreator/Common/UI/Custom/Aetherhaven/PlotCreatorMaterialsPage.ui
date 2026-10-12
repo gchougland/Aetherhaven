@@ -102,7 +102,7 @@ $C.@PageOverlay {
         LayoutMode: Left;
         Anchor: (Top: 8);
 
-        $C.@TextButton #CloseButton {
+        $C.@TextButton #PageCloseButton {
           FlexWeight: 1;
           Anchor: (Height: 40);
           Text: "";

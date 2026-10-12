@@ -1,0 +1,37 @@
+{
+  "id": "gamevid4",
+  "displayName": "Gamevid4",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Gamevid4",
+  "personalityIds": [
+    "adventurer",
+    "cheerful",
+    "sporty"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "WarmMale",
+  "moveInRequirements": [
+    {
+      "itemId": "Furniture_Crude_Chest_Small",
+      "count": 2
+    }
+  ],
+  "startingSkills": {
+    "building": 5,
+    "cooking": 5,
+    "ranching": 3,
+    "farming": 3,
+    "alchemy": 0
+  },
+  "startingAttributes": {
+    "strength": 8,
+    "intelligence": 8
+  }
+}

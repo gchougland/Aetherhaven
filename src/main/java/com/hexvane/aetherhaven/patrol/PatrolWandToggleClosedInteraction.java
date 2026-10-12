@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.patrol;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -55,7 +56,7 @@ public final class PatrolWandToggleClosedInteraction extends SimpleInstantIntera
             context.getState().state = InteractionState.Failed;
             return;
         }
-        if (type != InteractionType.Ability3) {
+        if (type != ToolAbilityKeys.THIRD) {
             context.getState().state = InteractionState.Failed;
             return;
         }

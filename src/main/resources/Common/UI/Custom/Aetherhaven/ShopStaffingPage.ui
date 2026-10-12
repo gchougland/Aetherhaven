@@ -7,9 +7,9 @@ $C.@PageOverlay { LayoutMode: Middle;
    Label #ShopStatus { Anchor: (Height: 36, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #d2bc85); }
    Group { LayoutMode: Left; FlexWeight: 1;
     Group { LayoutMode: Top; Anchor: (Width: 270, Right: 18); Padding: (Full: 16); Background: $T.@Panel;
-     AssetImage #Portrait { Anchor: (Width: 160, Height: 160, Left: 38); }
-     Label #Name { Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 21, Wrap: true, RenderBold: true, HorizontalAlignment: Center); }
-     Label #Skill { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #a7cbbb, HorizontalAlignment: Center); }
+     AssetImage #ClerkPortrait { Anchor: (Width: 160, Height: 160, Left: 38); }
+     Label #ClerkName { Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 21, Wrap: true, RenderBold: true, HorizontalAlignment: Center); }
+     Label #ClerkSkill { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #a7cbbb, HorizontalAlignment: Center); }
      Label #Chance { Anchor: (Height: 36); Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #d2bc85, HorizontalAlignment: Center); }
      Label #Details { Anchor: (Height: 90, Top: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #acbeb4); }
      $C.@TextButton #Assign { Text: "Assign clerk"; Anchor: (Height: 40, Top: 10); }

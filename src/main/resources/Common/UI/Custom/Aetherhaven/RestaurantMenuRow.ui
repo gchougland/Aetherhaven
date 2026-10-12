@@ -1,0 +1,13 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+// One line of the restaurant menu: the dishes that share a perk, then the perk in a sentence.
+// 76 high with its gap: three lines, the heading and the provisions line fill the details panel exactly.
+Group #Row { LayoutMode: Top; Anchor: (Bottom: 4); Padding: (Horizontal: 10, Vertical: 4); Background: $T.@Card;
+  Group { LayoutMode: Left; Anchor: (Height: 30);
+    ItemIcon #Dish0 { Anchor: (Width: 28, Height: 28, Right: 4); }
+    ItemIcon #Dish1 { Anchor: (Width: 28, Height: 28, Right: 4); Visible: false; }
+    ItemIcon #Dish2 { Anchor: (Width: 28, Height: 28, Right: 4); Visible: false; }
+    Label #Dishes { FlexWeight: 1; Anchor: (Left: 4); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, TextColor: #e8c984, VerticalAlignment: Center, Wrap: true); }
+  }
+  Label #Perk { Anchor: (Top: 2, Height: 32); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #c5cdd5, Wrap: true); }
+}

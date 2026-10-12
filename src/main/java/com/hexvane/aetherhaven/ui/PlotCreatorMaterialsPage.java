@@ -60,7 +60,7 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
         bind(eventBuilder, "#ClearPrefabMaterialsButton", "ClearPrefabMaterials");
         bind(eventBuilder, "#MaterialsPrevPageButton", "MaterialsPrevPage");
         bind(eventBuilder, "#MaterialsNextPageButton", "MaterialsNextPage");
-        bind(eventBuilder, "#CloseButton", "Close");
+        bind(eventBuilder, "#PageCloseButton", "Close");
     }
 
     private void bind(@Nonnull UIEventBuilder eventBuilder, @Nonnull String selector, @Nonnull String action) {
@@ -86,7 +86,7 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
         b.set("#FillFromBuildShapeButton.TextSpans", Message.translation(MSG + ".button.useBuildShape"));
         b.set("#SuggestResourcesButton.TextSpans", Message.translation(MSG + ".button.suggestResources"));
         b.set("#ClearPrefabMaterialsButton.TextSpans", Message.translation(MSG + ".button.clearPrefabMaterials"));
-        b.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
+        b.set("#PageCloseButton.TextSpans", Message.translation(MSG + ".button.close"));
 
         b.set("#PageLabel.Visible", multiPage);
         b.set("#PageButtonRow.Visible", multiPage);

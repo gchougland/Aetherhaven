@@ -398,6 +398,109 @@
           "speechClip": "Agree"
         },
         {
+          "id": "first_workplace_done",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c16",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_first_workplace"
+              },
+              {
+                "type": "town_quest_objective_complete",
+                "questId": "q_first_workplace",
+                "objectiveId": "unlock"
+              },
+              {
+                "type": "town_quest_objective_complete",
+                "questId": "q_first_workplace",
+                "objectiveId": "mark"
+              },
+              {
+                "type": "town_quest_objective_complete",
+                "questId": "q_first_workplace",
+                "objectiveId": "choose"
+              },
+              {
+                "type": "town_quest_objective_complete",
+                "questId": "q_first_workplace",
+                "objectiveId": "bench"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_first_workplace"
+            }
+          ],
+          "next": "workplace_done",
+          "speechClip": "Agree"
+        },
+        {
+          "id": "first_workplace_remind",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c15",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_first_workplace"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "and",
+                  "conditions": [
+                    {
+                      "type": "town_quest_objective_complete",
+                      "questId": "q_first_workplace",
+                      "objectiveId": "unlock"
+                    },
+                    {
+                      "type": "town_quest_objective_complete",
+                      "questId": "q_first_workplace",
+                      "objectiveId": "mark"
+                    },
+                    {
+                      "type": "town_quest_objective_complete",
+                      "questId": "q_first_workplace",
+                      "objectiveId": "choose"
+                    },
+                    {
+                      "type": "town_quest_objective_complete",
+                      "questId": "q_first_workplace",
+                      "objectiveId": "bench"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "workplace_intro"
+        },
+        {
+          "id": "first_workplace_offer",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c17",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_auto_start_ready",
+                "questId": "q_first_workplace"
+              },
+              {
+                "type": "aetherhaven_player_can_accept_quests"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "workplace_offer"
+        },
+        {
           "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c9",
           "condition": {
             "type": "aetherhaven_has_town"
@@ -606,6 +709,48 @@
           "next": null
         }
       ]
+    },
+    "workplace_intro": {
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.workplace_intro.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.workplace_intro.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.workplace_intro.c0",
+          "next": null
+        }
+      ]
+    },
+    "workplace_done": {
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.workplace_done.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.workplace_done.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.workplace_done.c0",
+          "next": null
+        }
+      ]
+    },
+    "workplace_offer": {
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.workplace_offer.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.workplace_offer.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.workplace_offer.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_first_workplace"
+            }
+          ],
+          "next": "workplace_intro",
+          "speechClip": "Agree"
+        },
+        {
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.workplace_offer.c1",
+          "next": null
+        }
+      ],
+      "speechClip": "Question"
     },
     "gold_explainer": {
       "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.gold_explainer.speaker",

@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Cobalt",
-      "count": 40
+      "count": 60
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 15
+      "count": 20
     },
     {
       "itemId": "Ingredient_Fibre",
-      "count": 20
+      "count": 30
     }
   ],
   "output": "Aetherhaven_Cobalt_Archer_Kit",

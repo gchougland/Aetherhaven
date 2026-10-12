@@ -71,6 +71,8 @@ If your blocks already match Aetherhaven naming (for example more `Wood_*_Planks
 }
 ```
 
+A `bricks` palette can also point at a metal set. Use `"familyKey": "metal:<Set>"`, for example `metal:Goblin_Iron`, and each brick shape is swapped for the same shape of `Metal_<Set>` (block, smooth, ornate, decorative, half, smooth half and stairs). Shapes the metal set does not have, such as walls, beams and pillars, are left alone. Metal roofs are listed under `roofs` with `"familyKey": "metal_roof:<Set>"`.
+
 ## Java API
 
 After Aetherhaven has loaded, register from your plugin setup:

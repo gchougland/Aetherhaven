@@ -9,6 +9,11 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 public final class PlayerInventoryLayout {
     private PlayerInventoryLayout() {}
     public interface Cell { void render(String row,int column,short inventorySlot); }
+    /** How many slots at the start of the combined hotbar, storage and backpack inventory are the hotbar. */
+    public static int hotbarSlots(Store<EntityStore> store,Ref<EntityStore> ref){
+        var hotbar=store.getComponent(ref,InventoryComponent.Hotbar.getComponentType());
+        return hotbar==null?0:hotbar.getInventory().getCapacity();
+    }
     public static void render(UICommandBuilder c,Store<EntityStore> store,Ref<EntityStore> ref,ItemContainer inventory,Cell cell){
         var hotbar=store.getComponent(ref,InventoryComponent.Hotbar.getComponentType());
         int count=hotbar==null?0:hotbar.getInventory().getCapacity();

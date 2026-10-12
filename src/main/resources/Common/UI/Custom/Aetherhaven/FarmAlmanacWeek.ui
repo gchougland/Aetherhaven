@@ -1,0 +1,12 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+// One week of the Almanac: when it is, and the crops it favours.
+Group { Anchor: (Height: 92, Bottom: 8); Background: $T.@Panel; Padding: (Full: 12); LayoutMode: Left;
+ Group #Now { Anchor: (Width: 4, Right: 10); Background: #dec68d; Visible: false; }
+ Group { LayoutMode: Top; Anchor: (Width: 176);
+  Label #When { Text: ""; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 13, RenderBold: true, TextColor: #dec68d); }
+  Label #Season { Text: ""; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 15, RenderBold: true); }
+  Label #Left { Text: ""; Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
+ }
+ Group #Crops { LayoutMode: Left; FlexWeight: 1; }
+}

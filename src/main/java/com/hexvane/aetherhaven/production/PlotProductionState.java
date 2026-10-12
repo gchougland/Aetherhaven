@@ -27,7 +27,21 @@ public final class PlotProductionState implements com.hexvane.aetherhaven.wareho
         if (field == null) field = new FieldProductionState();
         return field;
     }
-    public boolean usesPhysicalField() { return field != null && field.adopted(); }
+    /** True for a farm whose Farmer works real crops, under the old beds or under the Scarecrow Fields. */
+    public boolean usesPhysicalField() { return field != null && field.adopted() || usesFarmFields(); }
+
+    private FarmFieldsState farm;
+    public FarmFieldsState farm() {
+        if (farm == null) farm = new FarmFieldsState();
+        return farm;
+    }
+    public boolean usesFarmFields() { return farm != null && farm.adopted(); }
+    /** The beds a farm tended before the Scarecrow Fields, or null. Never creates them. */
+    public FieldProductionState peekField() { return field; }
+    /** A broken Scarecrow gives up its field and its crop plan. */
+    public boolean releaseScarecrowAt(com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point block) {
+        return farm != null && farm.releaseAt(block);
+    }
 
     public TimberProductionState timber() {
         if (timber == null) timber = new TimberProductionState();
@@ -45,6 +59,18 @@ public final class PlotProductionState implements com.hexvane.aetherhaven.wareho
     public MiningProductionState mining() {
         if (mining == null) mining = new MiningProductionState();
         return mining;
+    }
+
+    private SpiritGardenState garden;
+    public SpiritGardenState garden() {
+        if (garden == null) garden = new SpiritGardenState();
+        return garden;
+    }
+    public boolean usesSpiritGarden() { return garden != null && garden.adopted(); }
+    /** A broken Spirit Planter gives up its plant and its place in the garden. */
+    public boolean uprootPlanterAt(com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point block) {
+        int slot = garden == null ? -1 : garden.planterAt(block);
+        return slot >= 0 && garden.uproot(slot);
     }
 
     @SerializedName("s0")
@@ -216,6 +242,24 @@ public final class PlotProductionState implements com.hexvane.aetherhaven.wareho
         return false;
     }
 
+    /**
+     * Slot cursors are positions in the list of outputs this plot may make, and buying an output can add a line
+     * before others. Call with the lists from before and after so every slot keeps making the same material.
+     *
+     * @return true when any cursor moved
+     */
+    public boolean keepSlotItems(@Nonnull ProductionCatalog.Entry before, @Nonnull ProductionCatalog.Entry after) {
+        boolean moved = false;
+        for (int slot = 0; slot < WorkplaceProductionUpgrades.MAX_SLOT_COUNT; slot++) {
+            int cursor = getSlotCursor(slot);
+            String item = before.itemAtCursor(cursor);
+            if (item != null && setSlotCursorToItem(slot, after, item)) {
+                moved |= getSlotCursor(slot) != cursor;
+            }
+        }
+        return moved;
+    }
+
     /** When a new workplace finishes building, default slot 0 to the first catalog entry. */
     public void initDefaultSlotCursorsForNewWorkplace(int catalogSize) {
         migrateIfNeeded();
@@ -320,18 +364,29 @@ public final class PlotProductionState implements com.hexvane.aetherhaven.wareho
             return;
         }
         long cap = Math.max(1L, Math.min(maxForItem, ProductionCatalog.MAX_STORAGE_PER_OUTPUT));
-        long v = amounts.getOrDefault(itemId, 0L) + delta;
+        long have = amounts.getOrDefault(itemId, 0L);
+        long v = have + delta;
         if (v < 0L) {
             v = 0L;
         }
         if (v > cap) {
-            v = cap;
+            // A limit stops more arriving. It never takes away stock saved under a larger limit.
+            v = Math.max(cap, Math.min(have, v));
         }
         if (v == 0L) {
             amounts.remove(itemId);
         } else {
             amounts.put(itemId, v);
         }
+    }
+
+    /** Puts back stock that was just taken out and could not be handed over. It was already here, so no limit applies. */
+    public void restoreAmount(@Nonnull String itemId, long amount) {
+        if (itemId.isBlank() || amount <= 0L) {
+            return;
+        }
+        long v = amounts.getOrDefault(itemId, 0L) + amount;
+        amounts.put(itemId, Math.min(ProductionCatalog.MAX_STORAGE_PER_OUTPUT, v));
     }
 
     /** Removes up to {@code request} of {@code itemId}; returns amount actually removed. */

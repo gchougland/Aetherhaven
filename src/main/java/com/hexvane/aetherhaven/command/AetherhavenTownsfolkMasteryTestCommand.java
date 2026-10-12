@@ -27,8 +27,8 @@ final class AetherhavenTownsfolkMasteryTestCommand extends AbstractAsyncCommand 
         progress.earnMasteryXp(TownsfolkProgress.masteryXpForLevel(5)-15);
         var source=new SimpleItemContainer((short)1);var essence=new ItemStack("Ingredient_Life_Essence",2);source.setItemStackForSlot((short)0,essence,false);
         var warehouse=town.getWarehouse();
-        require(warehouse.deposit(TownWarehouse.Page.GENERAL,source,(short)0,essence,TownWarehouse.Amount.STACK,warehouse.revision()).moved()==2,"Native supply deposit failed");
-        var orders=new WorkplaceOrders();orders.add(0,"fixture",WorkplaceOrders.Mode.COUNT,1);
+        require(warehouse.deposit(TownWarehouse.Page.GENERAL,source,(short)0,essence,TownWarehouse.Amount.STACK).moved()==2,"Native supply deposit failed");
+        var orders=new WorkplaceOrders();orders.add("fixture",WorkplaceOrders.Mode.COUNT,1);
         var batch=warehouse.reserve(UUID.randomUUID(),orders.list().getFirst().id(),"fixture",
             List.of(new MaterialQuantity("Ingredient_Life_Essence",null,null,2,null)),List.of(new ItemStack("Plant_Seeds_Wheat",1)));
         require(batch!=null,"Native fixture reservation failed");

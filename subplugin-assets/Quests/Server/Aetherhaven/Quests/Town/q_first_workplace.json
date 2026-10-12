@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "id": "q_first_workplace",
+  "category": "town",
+  "title": "A Place to Work",
+  "description": "Lyren wants your townsfolk doing skilled work. Set up one workplace from start to finish: unlock a kind of work, mark out its ground, choose what it is and give it its bench. Any kind of work will do.",
+  "autoStart": {
+    "when": "workplace_supervisor_ready",
+    "skipWhenDone": true,
+    "announceLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.started"
+  },
+  "autoPin": true,
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "unlock",
+      "kind": "workplace_type_unlocked",
+      "text": "Unlock a workplace type in a villager's building and workplace upgrades.",
+      "textLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.objective.unlock",
+      "hudTextLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.hud.unlock"
+    },
+    {
+      "id": "mark",
+      "kind": "workplace_marked",
+      "text": "Mark out a workplace with a Building Staff.",
+      "textLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.objective.mark",
+      "hudTextLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.hud.mark"
+    },
+    {
+      "id": "choose",
+      "kind": "workplace_type_chosen",
+      "text": "Choose the workplace's type on the workplace page and save it.",
+      "textLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.objective.choose",
+      "hudTextLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.hud.choose"
+    },
+    {
+      "id": "bench",
+      "kind": "workplace_bench_placed",
+      "text": "Place the workplace's bench inside it.",
+      "textLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.objective.bench",
+      "hudTextLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.hud.bench"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Tell Elder Lyren your workplace is ready.",
+      "textLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.objective.talk",
+      "hudTextLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.hud.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Elder_Lyren",
+      "amount": 10,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 20,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.title",
+  "descriptionLangKey": "aetherhaven_workplace_quest.aetherhaven.workplaceQuest.description"
+}

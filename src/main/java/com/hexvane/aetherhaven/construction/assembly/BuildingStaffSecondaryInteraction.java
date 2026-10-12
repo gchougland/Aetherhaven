@@ -13,9 +13,6 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.component.spatial.SpatialResource;
-import com.hypixel.hytale.math.vector.Rotation3fc;
-import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
@@ -25,19 +22,13 @@ import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.modules.entity.EntityModule;
-import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.ChargingInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.util.TargetUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
@@ -51,8 +42,6 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
     private static final float CHARGING_HELD = -1.0F;
 
     private static final double RAY_MAX = 14.0;
-    private static final long STREAM_INTERVAL_NS = 72_000_000L;
-    private static final ConcurrentHashMap<UUID, Long> LAST_STREAM_NS = new ConcurrentHashMap<>();
     /** Short creative brush ticks while charging (non-looping — stops when RMB releases). */
     private static final ConcurrentHashMap<UUID, Long> LAST_BRUSH_AMBIENT_NS = new ConcurrentHashMap<>();
     private static final long BRUSH_AMBIENT_INTERVAL_NS = 200_000_000L;
@@ -113,7 +102,6 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         }
         UUID uuid = uc.getUuid();
         long nowNs = System.nanoTime();
-        maybeSpawnDirectedStream(playerRef, store, uuid, nowNs);
 
         World world = store.getExternalData().getWorld();
         ComponentType<EntityStore, BuildingStaffAssemblyChannelComponent> channelType =
@@ -267,85 +255,5 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         if (idx != 0 && idx != Integer.MIN_VALUE) {
             SoundUtil.playSoundEvent2dToPlayer(pr, idx, SoundCategory.UI);
         }
-    }
-
-    private static void maybeSpawnDirectedStream(
-        @Nonnull Ref<EntityStore> playerRef,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull UUID playerUuid,
-        long nowNs
-    ) {
-        Long last = LAST_STREAM_NS.get(playerUuid);
-        if (last != null && nowNs - last < STREAM_INTERVAL_NS) {
-            return;
-        }
-        TransformComponent transform = store.getComponent(playerRef, TransformComponent.getComponentType());
-        if (transform == null) {
-            return;
-        }
-        HeadRotation head = store.getComponent(playerRef, HeadRotation.getComponentType());
-        Vector3d forward = head != null ? head.getDirection() : directionFromRotation(transform.getRotation());
-        Vector3d tip = new Vector3d(transform.getPosition()).add(0.0, 1.32, 0.0).add(new Vector3d(forward).mul(0.42));
-        float yaw = head != null ? head.getRotation().yaw() : transform.getRotation().yaw();
-        float pitch = head != null ? head.getRotation().pitch() : transform.getRotation().pitch();
-        float roll = head != null ? head.getRotation().roll() : transform.getRotation().roll();
-        List<Ref<EntityStore>> nearby = particleRecipientsForPlayer(playerRef, tip, store);
-        ParticleUtil.spawnParticleEffect(
-            AetherhavenConstants.BUILDING_STAFF_STREAM_PARTICLE_SYSTEM_ID,
-            tip.x(),
-            tip.y(),
-            tip.z(),
-            yaw,
-            pitch,
-            roll,
-            1.0F,
-            null,
-            null,
-            nearby,
-            store
-        );
-        LAST_STREAM_NS.put(playerUuid, nowNs);
-    }
-
-    @Nonnull
-    private static List<Ref<EntityStore>> particleRecipientsForPlayer(
-        @Nonnull Ref<EntityStore> self,
-        @Nonnull Vector3d tip,
-        @Nonnull Store<EntityStore> store
-    ) {
-        SpatialResource<Ref<EntityStore>, EntityStore> spatial = store.getResource(EntityModule.get().getPlayerSpatialResourceType());
-        List<Ref<EntityStore>> fromSpatial = SpatialResource.getThreadLocalReferenceList();
-        spatial.getSpatialStructure().collect(tip, ParticleUtil.DEFAULT_PARTICLE_DISTANCE, fromSpatial);
-        ArrayList<Ref<EntityStore>> out = new ArrayList<>(fromSpatial.size() + 1);
-        for (int i = 0; i < fromSpatial.size(); i++) {
-            Ref<EntityStore> r = fromSpatial.get(i);
-            if (r != null && r.isValid()) {
-                out.add(r);
-            }
-        }
-        if (self.isValid()) {
-            boolean hasSelf = false;
-            for (int i = 0; i < out.size(); i++) {
-                if (self.equals(out.get(i))) {
-                    hasSelf = true;
-                    break;
-                }
-            }
-            if (!hasSelf) {
-                out.add(self);
-            }
-        }
-        return out;
-    }
-
-    @Nonnull
-    private static Vector3d directionFromRotation(@Nonnull Rotation3fc euler) {
-        double pitch = euler.pitch();
-        double yaw = euler.yaw();
-        double len = Math.cos(pitch);
-        double x = len * -Math.sin(yaw);
-        double y = Math.sin(pitch);
-        double z = len * -Math.cos(yaw);
-        return new Vector3d(x, y, z);
     }
 }

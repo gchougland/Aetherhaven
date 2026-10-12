@@ -27,7 +27,7 @@ import org.joml.Vector3i;
 /** Real rotated prefab frontiers in a disposable world. Does not claim to exercise the NPC pathfinder. */
 final class AetherhavenBuildingTestCommand extends AbstractCommandCollection {
     private static final java.util.concurrent.atomic.AtomicBoolean RUNNING=new java.util.concurrent.atomic.AtomicBoolean();
-    AetherhavenBuildingTestCommand(){super("building","Check Apprentice building in an isolated world");setPermissionGroups("hytale:WorldEditor");addSubCommand(new Check());}
+    AetherhavenBuildingTestCommand(){super("building","Check Apprentice building in an isolated world");setPermissionGroups("hytale:WorldEditor");addSubCommand(new Check());addSubCommand(new BuilderMasteryWorldCheck());}
     private static final class Check extends AbstractAsyncCommand {
         Check(){super("worldcheck","Check paid project gates, rotated placement and duplicate prevention");setPermissionGroups("hytale:WorldEditor");}
         @Override protected CompletableFuture<Void> executeAsync(CommandContext ctx) {
@@ -58,7 +58,7 @@ final class AetherhavenBuildingTestCommand extends AbstractCommandCollection {
                 var job=new PlotAssemblyJob(plot.getPlotId(),owner,anchor,yaw,sequence.pendingBlocks(),AssemblyFootprintIndex.build(sequence.pendingBlocks()),pending,sequence.prefabEntitiesInOrder(),prefab,sequence.prefabRotation(),0,1000000,false,definition.getId());
                 AssemblyWorldRegistry.put(world,plot.getPlotId(),town.getTownId(),job,PlotAssemblyPhase.PLACING,PlotAssemblyFrontierRuntime.create(pending,plot,null),null,null);
                 var site=new ApprenticeWorkplace("Fixture yard",TownsfolkWorkType.BUILDING,new WorkplaceArea(4,128,4,8,8));
-                require(site.building().add(0,plot.getPlotId(),owner)==null,"Project queue failed");var order=site.building().list().getFirst();
+                require(site.building().add(plot.getPlotId(),owner)==null,"Project queue failed");var order=site.building().list().getFirst();
                 require(NativeBuildingWork.issue(world,town,order)==null,"Started project blocked");
                 require(NativeBuildingWork.issue(world,town,new BuildingOrders.Order(UUID.randomUUID(),plot.getPlotId(),UUID.randomUUID()))!=null,"Nonmember can authorize construction");
                 plot.setState(PlotInstanceState.COMPLETE);require(NativeBuildingWork.issue(world,town,order)!=null,"Completed project considered work");plot.setState(PlotInstanceState.ASSEMBLING);
@@ -81,13 +81,13 @@ final class AetherhavenBuildingTestCommand extends AbstractCommandCollection {
                 require(!NativeBuildingWork.place(world,plugin,town,site,target,new Vector3d(100,200,100),1,1),"Distant placement succeeded");
                 var forged=new NativeBuildingWork.Target(new BuildingOrders.Cell(cell.order(),cell.index(),cell.x()+1,cell.y(),cell.z(),cell.block(),cell.rotation()),job);
                 require(!NativeBuildingWork.valid(world,town,site,forged),"Forged cell points at a different block");
-                site.building().pause(site.building().revision(),true);require(!NativeBuildingWork.place(world,plugin,town,site,target,worker,1,1),"Paused placement succeeded");site.building().pause(site.building().revision(),false);
+                site.building().pause(true);require(!NativeBuildingWork.place(world,plugin,town,site,target,worker,1,1),"Paused placement succeeded");site.building().pause(false);
                 require(NativeBuildingWork.place(world,plugin,town,site,target,worker,1,1),"Physical placement failed: "+yaw+" "+cell);
                 require(cell.block().equals(ChunkSectionBlockUtil.blockType(world,cell.x(),cell.y(),cell.z()).getId()),"Placed block differs from native prefab");
                 require(cell.rotation()==ChunkSectionBlockUtil.rotationIndex(world,cell.x(),cell.y(),cell.z()),"Rotation differs from native prefab");
                 require(plot.getAssemblyPlacedBlockCount()==1&&site.building().contributions()==1,"Placement accounting differs");
                 require(!NativeBuildingWork.place(world,plugin,town,site,target,worker,1,1),"Repeat placement succeeded");
-                var other=new ApprenticeWorkplace("Other yard",TownsfolkWorkType.BUILDING,site.area());other.building().add(0,plot.getPlotId(),owner);
+                var other=new ApprenticeWorkplace("Other yard",TownsfolkWorkType.BUILDING,site.area());other.building().add(plot.getPlotId(),owner);
                 var otherCell=new BuildingOrders.Cell(other.building().list().getFirst().id(),cell.index(),cell.x(),cell.y(),cell.z(),cell.block(),cell.rotation());other.building().focus(otherCell);
                 for(int i=0;i<20;i++)other.building().attend(otherCell,.5,true,1);
                 require(!NativeBuildingWork.place(world,plugin,town,other,new NativeBuildingWork.Target(otherCell,job),worker,1,1),"Second yard duplicated placement");

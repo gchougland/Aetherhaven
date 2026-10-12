@@ -281,6 +281,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     uuid == null ? null : uuid.getUuid(), binding.getKind(), false,
                     store.getComponent(ref, com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent.getComponentType()) != null)) {
                 commandBuffer.putComponent(ref, VillagerNeeds.getComponentType(), VillagerNeeds.full());
+                // The same moment, by whichever way they joined: a new resident starts with priorities for what they are good at.
+                var identity = store.getComponent(ref, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType());
+                if (identity != null) com.hexvane.aetherhaven.townsfolk.TownsfolkWorkRoster.startResidentWork(town, manager, plugin, identity.getCharacterId());
             }
             return;
         }
@@ -397,6 +400,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (MiningWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
         if (TimberWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
         if (FieldWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
+        if (GardenWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         PoiEntry previousTarget = autonomy.getTargetPoiUuid() != null ? reg.get(autonomy.getTargetPoiUuid()) : null;
         if (previousTarget != null
@@ -438,6 +442,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         MiningWorkService.interrupt(ref, store, npc, buffer);
         TimberWorkService.interrupt(ref, store, npc, buffer);
         FieldWorkService.interrupt(ref, store, npc, buffer);
+        GardenWorkService.interrupt(ref, store, npc, buffer);
         ShopClerkWorkService.interrupt(ref, store, npc, buffer);
         ApprenticeWorkService.interrupt(ref, store, npc, buffer);
         CourierWorkService.interrupt(ref, store, npc, buffer);
@@ -2505,6 +2510,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             catalogForNeedCap(plugin),
             villagerUuid,
             shopping
+        );
+        // A meal finished at a restaurant seat also leaves the perk of a dish from that restaurant's menu.
+        com.hexvane.aetherhaven.restaurant.RestaurantMeals.serve(
+            needs, poi, restaurantState, plugin != null ? plugin.getRestaurantMenu() : null
         );
     }
 

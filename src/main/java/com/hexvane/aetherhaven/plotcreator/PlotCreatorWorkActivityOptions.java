@@ -25,6 +25,11 @@ public final class PlotCreatorWorkActivityOptions {
         return MSG + ".option." + activityId.trim().toLowerCase(Locale.ROOT);
     }
 
+    /**
+     * The tool a spot hands to whoever works there. Leisure and reading hand out nothing: Leisure is the
+     * default animation for most residents, and it once handed every one of them the bard's lute.
+     * A profession's own prop belongs to the profession, not to an animation.
+     */
     @Nullable
     public static String equipmentProfileFor(@Nonnull String activityId) {
         return switch (activityId.trim().toLowerCase(Locale.ROOT)) {
@@ -34,7 +39,6 @@ public final class PlotCreatorWorkActivityOptions {
             case "till" -> "work_farmer_hoe";
             case "smith" -> "work_blacksmith";
             case "craft" -> "work_builder";
-            case "leisure" -> "work_bard";
             default -> null;
         };
     }

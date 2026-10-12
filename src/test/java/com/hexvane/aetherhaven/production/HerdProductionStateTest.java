@@ -10,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class HerdProductionStateTest {
     private static final String CARROT="Plant_Crop_Carrot_Item";
     private UUID buy(HerdProductionState herd,String species) {
-        assertNull(herd.buy(herd.revision(),species,10,()->true));
+        assertNull(herd.buy(species,10,()->true));
         return herd.animals().getLast().id();
     }
     private UUID active(PlotProductionState stock,String species) {
         var herd=stock.herd();var id=buy(herd,species);
-        assertTrue(herd.assign(herd.revision(),0,id,1));return id;
+        assertTrue(herd.assign(0,id,1));return id;
     }
     private void feed(HerdProductionState herd,UUID animal,long day) {
         assertTrue(herd.supply(BarnAnimalCatalog.get(herd.animal(animal).species()).food(),()->true));
@@ -36,25 +36,43 @@ class HerdProductionStateTest {
         assertTrue(tree.stream().noneMatch(n->n.branch().equals("THORIUM")));
         assertTrue(tree.stream().flatMap(n->n.parents().stream()).allMatch(id->tree.stream().anyMatch(n->n.id().equals(id))));
     }
-    @Test void purchasesValidateMasteryRevisionAndPaymentBeforeCreatingOwnership() {
+    @Test void purchasesValidateMasteryAndPaymentBeforeCreatingOwnership() {
         var h=new HerdProductionState();
-        assertNotNull(h.buy(0,"Bear",6,()->fail("Locked purchase cannot charge")));
-        assertNotNull(h.buy(1,"Rabbit",1,()->fail("Stale purchase cannot charge")));
-        assertNotNull(h.buy(0,"Rabbit",1,()->false));assertTrue(h.animals().isEmpty());
-        assertNull(h.buy(0,"Rabbit",1,()->true));assertEquals(1,h.animals().size());
-        assertNotNull(h.buy(0,"Rabbit",1,()->fail("Repeated button cannot charge")));
+        assertNotNull(h.buy("Bear",6,()->fail("Locked purchase cannot charge")));
+        assertNotNull(h.buy("Rabbit",1,()->false));assertTrue(h.animals().isEmpty());
+        assertNull(h.buy("Rabbit",1,()->true));assertEquals(1,h.animals().size());
+        // The barn has changed since the shop was drawn. A press on Buy is still one animal for one payment.
+        int[] paid={0};
+        assertNull(h.buy("Rabbit",1,()->{paid[0]++;return true;}));assertEquals(1,paid[0]);assertEquals(2,h.animals().size());
+    }
+    /** Presses act on the animal and pen they name, whatever else was changed in the barn since the page was drawn. */
+    @Test void pensAndNamesFollowTheAnimalNamedNotAnOlderPicture() {
+        var h=new HerdProductionState();var rabbit=buy(h,"Rabbit");var bear=buy(h,"Bear");
+        assertTrue(h.assign(0,rabbit,2));
+        long drawn=h.revision();
+        // Another player renames the rabbit and buys a third animal after this page was drawn.
+        assertTrue(h.rename(rabbit,"Clover"));var fox=buy(h,"Rabbit");assertNotEquals(drawn,h.revision());
+        assertTrue(h.assign(1,bear,2),"The press named pen two and the bear, and both are still there");
+        assertEquals(rabbit,h.slot(0).id());assertEquals(bear,h.slot(1).id());assertEquals("Clover",h.animal(rabbit).name());
+        // What cannot be done is refused and changes nothing.
+        long before=h.revision();
+        assertFalse(h.assign(1,bear,2),"Already in that pen");
+        assertFalse(h.assign(2,fox,2),"That pen is not unlocked");
+        assertFalse(h.assign(0,UUID.randomUUID(),2),"That animal is not in this barn");
+        assertFalse(h.rename(UUID.randomUUID(),"Ghost"));assertFalse(h.rename(rabbit,"Clover"),"The same name changes nothing");
+        assertEquals(before,h.revision());assertEquals(3,h.animals().size());
     }
     @Test void switchingPensSwapsAnimalsAndRestingPreservesNamesAndHearts() {
         var h=new HerdProductionState();var rabbit=buy(h,"Rabbit");var bear=buy(h,"Bear");
-        assertFalse(h.assign(h.revision(),1,rabbit,1));
-        assertTrue(h.assign(h.revision(),0,rabbit,2));assertTrue(h.assign(h.revision(),1,bear,2));
-        assertTrue(h.rename(h.revision(),rabbit,"  Clover  "));assertEquals("Clover",h.animal(rabbit).name());
+        assertFalse(h.assign(1,rabbit,1));
+        assertTrue(h.assign(0,rabbit,2));assertTrue(h.assign(1,bear,2));
+        assertTrue(h.rename(rabbit,"  Clover  "));assertEquals("Clover",h.animal(rabbit).name());
         assertTrue(h.pet(rabbit,0,2));
-        assertTrue(h.assign(h.revision(),1,rabbit,2));assertEquals(bear,h.slot(0).id());
-        assertEquals(rabbit,h.slot(1).id());assertTrue(h.assign(h.revision(),1,null,2));
+        assertTrue(h.assign(1,rabbit,2));assertEquals(bear,h.slot(0).id());
+        assertEquals(rabbit,h.slot(1).id());assertTrue(h.assign(1,null,2));
         assertFalse(h.pet(rabbit,1,2));assertFalse(h.lost(rabbit));
         var saved=new Gson().fromJson(new Gson().toJson(h),HerdProductionState.class);
-        assertEquals("Clover",saved.animal(rabbit).name());assertEquals(5,saved.animal(rabbit).friendship());
+        assertEquals("Clover",saved.animal(rabbit).name());assertEquals(10,saved.animal(rabbit).friendship());
         assertEquals(-1,saved.assignedSlot(rabbit));
     }
     @Test void feedingAndPettingAreOncePerDayAndUseTheSpecificFood() {
@@ -64,8 +82,8 @@ class HerdProductionStateTest {
         feed(h,rabbit,0);assertEquals(1,h.feed("Plant_Crop_Potato_Item"));
         assertTrue(h.supply(CARROT,()->true));assertFalse(h.feedAnimal(rabbit,0,1));assertEquals(1,h.feed(CARROT));
         assertTrue(h.pet(rabbit,0,1));assertFalse(h.pet(rabbit,0,1));assertFalse(h.pet(rabbit,-1,1));
-        assertFalse(h.feedAnimal(rabbit,-1,1));assertEquals(25,h.animal(rabbit).friendship());
-        assertTrue(h.feedAnimal(rabbit,1,1));assertTrue(h.pet(rabbit,1,1));assertEquals(50,h.animal(rabbit).friendship());
+        assertFalse(h.feedAnimal(rabbit,-1,1));assertEquals(30,h.animal(rabbit).friendship());
+        assertTrue(h.feedAnimal(rabbit,1,1));assertTrue(h.pet(rabbit,1,1));assertEquals(60,h.animal(rabbit).friendship());
         assertFalse(h.supply(HerdProductionState.FEED,()->fail("Wheat is no longer animal food")));
     }
     @Test void foodPaymentsAreBoundedAndEachBinIsIndependent() {

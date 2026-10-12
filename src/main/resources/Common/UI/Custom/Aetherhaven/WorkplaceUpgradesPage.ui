@@ -24,10 +24,11 @@ $C.@PageOverlay { LayoutMode: Middle;
           }
         }
         Group #UpgradeDetails { LayoutMode: Top; FlexWeight: 1; Padding: (Full: 18); Background: $T.@Panel;
+          // No Left on the three below: a width with no edge is centred, so the icon sits over the title.
           Group { Anchor: (Height: 78, Bottom: 8);
-            AssetImage #DetailIcon { Anchor: (Left: 90, Top: 5, Width: 64, Height: 64); }
-            ItemIcon #DetailItem { Anchor: (Left: 86, Top: 1, Width: 72, Height: 72); Visible: false; }
-            Group #DetailLock { Anchor: (Left: 94, Top: 9, Width: 56, Height: 56); Background: #2b3038(0.9); Visible: false;
+            AssetImage #DetailIcon { Anchor: (Top: 5, Width: 64, Height: 64); }
+            ItemIcon #DetailItem { Anchor: (Top: 1, Width: 72, Height: 72); Visible: false; }
+            Group #DetailLock { Anchor: (Top: 9, Width: 56, Height: 56); Background: #2b3038(0.9); Visible: false;
               AssetImage { AssetPath: "UI/Custom/padlock.png"; Anchor: (Left: 10, Top: 10, Width: 36, Height: 36); }
             }
           }
@@ -35,6 +36,13 @@ $C.@PageOverlay { LayoutMode: Middle;
           Label #DetailState { Anchor: (Height: 28, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, HorizontalAlignment: Center); }
           Group { Anchor: (Height: 1, Bottom: 15); Background: #48576a; }
           Label #Description { Anchor: (Height: 108); Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #c5cdd5, Wrap: true); }
+          Group #MenuBoard { LayoutMode: Top; Visible: false;
+            Label #MenuBoardHeading { Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, LetterSpacing: 1, TextColor: #c8b68d); }
+            Group #MenuBoardRows { LayoutMode: Top; }
+            Label #MenuBoardNote { Anchor: (Height: 36); Visible: false; Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #c5cdd5, Wrap: true); }
+            Label #MenuBoardMore { Anchor: (Height: 14); Visible: false; Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #98a3ae); }
+            Label #MenuBoardProvisions { Anchor: (Height: 36); Visible: false; Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #96d4b4, Wrap: true); }
+          }
           Label #Requires { Anchor: (Height: 86); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #c5cdd5, Wrap: true); }
           Group #Costs { LayoutMode: Left; Anchor: (Height: 58); }
           Label #Gold { Anchor: (Height: 42); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #e8c984, Wrap: true); }

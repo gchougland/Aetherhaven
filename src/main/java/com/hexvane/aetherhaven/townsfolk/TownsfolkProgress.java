@@ -68,6 +68,50 @@ public final class TownsfolkProgress {
         workPriorities.put(type.id, skill(type.skill) == 0 ? 0 : Math.clamp(priority, 0, 4));
     }
 
+    /** A skill above this untrained level is one the townsfolk is good at. */
+    public static final int UNTRAINED_SKILL = 1;
+    /** Saved once starting priorities have been considered for this resident, so it is never done a second time. */
+    private boolean startingPrioritiesSet;
+    public boolean startingPrioritiesSet() { return startingPrioritiesSet; }
+
+    /** Whether a new resident starts with this kind of work switched on. */
+    private boolean startsWith(TownsfolkWorkType type) {
+        // Commerce is left alone: a clerk is chosen at a shop, and until a priority is chosen the shop comes first.
+        return type.availableForNewWork() && type != TownsfolkWorkType.COMMERCE && skill(type.skill) > UNTRAINED_SKILL;
+    }
+
+    /**
+     * The priorities a new resident starts with, by how good they are at each kind of work. Their best skill comes
+     * first (1), their next best skill second (2), the one after that third (3), and every other skill they are trained
+     * in last (4). Kinds of work that share a skill share its priority, and equal skills share one too. Skills at the
+     * untrained level of 1, and work they cannot do at all, are left off.
+     */
+    public Map<TownsfolkWorkType, Integer> startingPriorities() {
+        var levels = new java.util.TreeSet<Integer>(java.util.Comparator.reverseOrder());
+        for (var type : TownsfolkWorkType.values()) if (startsWith(type)) levels.add(skill(type.skill));
+        var ranked = new java.util.ArrayList<>(levels);
+        var priorities = new LinkedHashMap<TownsfolkWorkType, Integer>();
+        for (var type : TownsfolkWorkType.values())
+            if (startsWith(type)) priorities.put(type, Math.min(4, ranked.indexOf(skill(type.skill)) + 1));
+        return priorities;
+    }
+
+    /**
+     * Gives a resident their starting priorities. It acts once in a resident's life, and it leaves the priorities alone
+     * when any has been set already, whether by a player, by a courier assignment or by an older save.
+     *
+     * @return whether this was the first call, so the caller knows the town needs saving
+     */
+    public boolean applyStartingPriorities() {
+        if (startingPrioritiesSet) return false;
+        startingPrioritiesSet = true;
+        migrateCourierPriority();
+        if (workPriorities == null) workPriorities = new LinkedHashMap<>();
+        if (workPriorities.isEmpty())
+            for (var start : startingPriorities().entrySet()) workPriorities.put(start.getKey().id, start.getValue());
+        return true;
+    }
+
     public boolean canPerform(TownsfolkWorkType type, boolean onGuardDuty, boolean overdue, boolean alive) {
         return employed && alive && !onGuardDuty && !overdue && priority(type) > 0;
     }

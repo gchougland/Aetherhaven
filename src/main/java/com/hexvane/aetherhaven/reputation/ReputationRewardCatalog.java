@@ -120,15 +120,6 @@ public final class ReputationRewardCatalog {
             "Aetherhaven_Sprinkler_Adamantite"
         ),
         new ReputationRewardDefinition(
-            "rep_blacksmith_25",
-            AetherhavenConstants.NPC_BLACKSMITH,
-            25,
-            "Rock_Stone",
-            32,
-            "rep_reward_25",
-            null
-        ),
-        new ReputationRewardDefinition(
             "rep_blacksmith_50",
             AetherhavenConstants.NPC_BLACKSMITH,
             50,

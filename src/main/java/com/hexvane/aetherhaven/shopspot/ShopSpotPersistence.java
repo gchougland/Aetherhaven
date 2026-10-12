@@ -44,12 +44,22 @@ public final class ShopSpotPersistence {
         }
         Path path = spotsFile(plugin, world.getName());
         try {
-            ShopSpotWorldFile file = ShopSpotWorldFile.readOrEmpty(path);
-            registry.replaceAll(ShopSpotWorldFile.toRecords(file));
+            loadFrom(path, registry);
             LOGGER.atInfo().log("Aetherhaven loaded %s shop spots for world %s", registry.allRecords().size(), world.getName());
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to load shop spots for world %s", world.getName());
         }
+    }
+
+    /** Everything a world load reads from its stall file, from any path. Stalls of other worlds are left out. */
+    public static void loadFrom(@Nonnull Path path, @Nonnull ShopSpotRegistry registry) throws IOException {
+        ShopSpotWorldFile file = ShopSpotWorldFile.readOrEmpty(path);
+        registry.replaceAll(ShopSpotWorldFile.toRecords(file), ShopSpotWorldFile.toHeldReturns(file));
+    }
+
+    /** Everything a world save writes to its stall file, to any path. */
+    public static void saveTo(@Nonnull Path path, @Nonnull ShopSpotRegistry registry) throws IOException {
+        ShopSpotWorldFile.fromRegistry(registry).writeAtomic(path);
     }
 
     public static void save(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull ShopSpotRegistry registry) {
@@ -58,8 +68,7 @@ public final class ShopSpotPersistence {
         }
         Path path = spotsFile(plugin, world.getName());
         try {
-            ShopSpotWorldFile file = ShopSpotWorldFile.fromRecords(registry.allRecords());
-            file.writeAtomic(path);
+            saveTo(path, registry);
         } catch (IOException e) {
             LOGGER.atSevere().withCause(e).log("Failed to save shop spots for world %s", world.getName());
         }

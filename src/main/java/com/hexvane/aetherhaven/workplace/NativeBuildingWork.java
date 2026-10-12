@@ -62,6 +62,22 @@ public final class NativeBuildingWork {
             &&town.findPlotById(order.plot()).toFootprint().containsBlock(c.x(),c.y(),c.z())&&TownTerritoryClaims.contains(town,ChunkUtil.chunkCoordinate(c.x()),ChunkUtil.chunkCoordinate(c.z()))&&ChunkSectionBlockUtil.worldChunkIfTicking(world,c.x(),c.z())!=null;
     }
     public static boolean inReach(Vector3d position,Target target){return position!=null&&target!=null&&position.distanceSquared(target.cell().x()+.5,target.cell().y()+.5,target.cell().z()+.5)<=16&&safeStanding(position,target);}
+    /**
+     * Reach for a worker whose real size is known: the same distance, and the piece's box must be clear of the worker's
+     * own bounding box from the engine. A townsfolk can be a full block wide or two blocks tall; the sizes assumed by
+     * the older check below fit only the common model.
+     */
+    public static boolean inReach(Vector3d position,com.hypixel.hytale.math.shape.Box body,Target target) {
+        if(position==null||body==null||target==null||position.distanceSquared(target.cell().x()+.5,target.cell().y()+.5,target.cell().z()+.5)>16)return false;
+        var box=pieceBox(target);
+        return box!=null&&!SiteBodies.Body.at(null,false,position,body).overlapsBlock(target.cell().x(),target.cell().y(),target.cell().z(),box);
+    }
+    /** The space the piece fills once placed, relative to its cell. */
+    public static com.hypixel.hytale.math.shape.Box pieceBox(Target target) {
+        var type=BlockType.getAssetMap().getAsset(target.cell().block());if(type==null)return null;
+        var hitbox=BlockBoundingBoxes.getAssetMap().getAsset(type.getHitboxTypeIndex());
+        return hitbox==null?null:hitbox.get(target.cell().rotation()).getBoundingBox();
+    }
     /** Keep the worker outside the rotated bounds, including furniture companion cells. */
     private static boolean safeStanding(Vector3d position,Target target) {
         var cell=target.cell();var type=BlockType.getAssetMap().getAsset(cell.block());if(type==null)return false;
@@ -75,7 +91,15 @@ public final class NativeBuildingWork {
         return block.blockId()!=0&&block.filler()==0&&!ConstructionPasteOps.isInteractiveBlockEntityOrigin(block,BlockType.getAssetMap());
     }
     public static boolean place(World world,AetherhavenPlugin plugin,TownRecord town,ApprenticeWorkplace site,Target target,Vector3d worker,int skill,int tier) {
-        if(!valid(world,town,site,target)||!inReach(worker,target)||!site.building().ready(target.cell(),BuildingOrders.duration(skill,tier)))return false;
+        return place(world,plugin,town,site,target,null,worker,skill,tier);
+    }
+    /**
+     * @param builder townsfolk id of the builder whose effort pays for this piece; null for the yard's unnamed slot.
+     *     The piece is placed and credited at most once however many builders are ready: the assembly frontier
+     *     refuses a cell that is already placed, and only this builder's own effort is spent.
+     */
+    public static boolean place(World world,AetherhavenPlugin plugin,TownRecord town,ApprenticeWorkplace site,Target target,String builder,Vector3d worker,int skill,int tier) {
+        if(!valid(world,town,site,target)||!inReach(worker,target)||!site.building().ready(builder,target.cell(),BuildingOrders.duration(skill,tier)))return false;
         var order=site.building().find(target.cell().order());var plot=town.findPlotById(order.plot());
         var block=target.job().pendingBlocks().get(target.cell().index());
         var type=BlockType.getAssetMap().getAsset(block.blockId());var hitbox=BlockBoundingBoxes.getAssetMap().getAsset(type.getHitboxTypeIndex());
@@ -84,10 +108,10 @@ public final class NativeBuildingWork {
             int x=target.cell().x()+dx,y=target.cell().y()+dy,z=target.cell().z()+dz;
             return footprint.containsBlock(x,y,z)&&TownTerritoryClaims.contains(town,ChunkUtil.chunkCoordinate(x),ChunkUtil.chunkCoordinate(z))&&ChunkSectionBlockUtil.worldChunkIfTicking(world,x,z)!=null;
         }))return false;
-        var plan=site.building();if(!plan.beginPlacement(target.cell()))return false;
+        var plan=site.building();if(!plan.beginPlacement(builder,target.cell()))return false;
         try {
             var result=PlotAssemblyService.advancePlacementAtIndex(world,plugin,world.getEntityStore().getStore(),town,plot,target.job(),target.cell().index(),false,null,true,false);
-            return result.progressed()&&plan.committed(target.cell());
+            return result.progressed()&&plan.committed(builder,target.cell());
         } finally {
             if(plan.endPlacement())AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin).updateTown(town);
         }

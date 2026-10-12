@@ -44,6 +44,7 @@ public final class CoreMasteryPage extends AetherhavenInteractiveCustomUIPage<Co
         this.residentId = residentId; this.fromJournal = fromJournal;
         if (!CoreVillagerMasteryService.supports(kind)) hint = "Grow your friendship to discover rewards and gift preferences.";
         if ("alchemist".equals(kind)) hint = "Higher Mastery unlocks more ingredient slots and larger flasks at the laboratory.";
+        if (BuilderMastery.KIND.equals(kind)) hint = "The Builder earns Mastery by working at building sites. Each level lets him place one more block at a time.";
     }
     private boolean allowed(TownRecord town) {
         return town != null && kind != null
@@ -82,6 +83,14 @@ public final class CoreMasteryPage extends AetherhavenInteractiveCustomUIPage<Co
             boolean complete = shownLevel == CoreVillagerMastery.MAX_LEVEL;
             c.set("#MasteryXp.Text", complete ? "Mastery complete" : progress.xpInLevel() + " / " + progress.xpToNextLevel() + " XP");
             c.set("#MasteryXpBar.Value", complete ? 1.0f : (float) progress.xpInLevel() / progress.xpToNextLevel());
+            // What the level does, for the villager whose Mastery is not about what he may produce.
+            boolean builder = BuilderMastery.KIND.equals(kind);
+            c.set("#MasteryPerk.Visible", builder);
+            if (builder) {
+                int blocks = BuilderMastery.blocksPerStep(shownLevel);
+                c.set("#MasteryPerk.TextSpans", (complete ? text("perk.builder.max") : text(blocks == 1 ? "perk.builder.one" : "perk.builder"))
+                    .param("count", blocks).param("next", BuilderMastery.blocksPerStep(shownLevel + 1)));
+            }
         }
         c.set("#ReturnToJournal.Visible", fromJournal);
         c.set("#ReturnToJournal.Text", "Back to Journal");
@@ -150,7 +159,7 @@ public final class CoreMasteryPage extends AetherhavenInteractiveCustomUIPage<Co
         var savedIdentity=resident==null?null:resident.getTownsfolkIdentity();
         var identity = live ? TownResidentDisplay.resolveFromEntity(store, npcRef, role, plugin)
             : TownResidentDisplay.resolveOffline(plugin, role, savedIdentity==null?null:savedIdentity.getCharacterId(),savedIdentity==null?null:savedIdentity.getModelAssetId());
-        c.set("#Name.Text", identity.displayName()); c.set("#Portrait.AssetPath", identity.portraitPath());
+        c.set("#VillagerName.Text", identity.displayName()); c.set("#Portrait.AssetPath", identity.portraitPath());
         var personal = town.getPlayerVillagerReputation().get(playerRef.getUuid().toString());
         var entry = personal == null || residentId == null ? null : personal.get(residentId.toString());
         int reputation = entry == null ? 0 : entry.getReputation();
@@ -158,6 +167,7 @@ public final class CoreMasteryPage extends AetherhavenInteractiveCustomUIPage<Co
         ReputationHeartUi.applyHearts(c, "#Hearts", reputation);
         var rewards = ReputationRewardCatalog.forRoleSorted(role);
         c.clear("#Rewards"); c.set("#NoRewards.Visible", rewards.isEmpty());
+        Map<String, String> benchItems = null;
         for (int i = 0; i < rewards.size(); i++) {
             var reward = CoreVillagerProfileView.reward(rewards.get(i), entry);
             c.append("#Rewards", reward.unlocked() ? "Aetherhaven/CoreProfileReward.ui" : "Aetherhaven/CoreProfileRewardLocked.ui");
@@ -172,6 +182,16 @@ public final class CoreMasteryPage extends AetherhavenInteractiveCustomUIPage<Co
             c.set(row + " #Reward.TextSpans", reward.recipe() ? text("reward.recipe").param("item", label)
                 : reward.count() > 0 ? text("reward.items").param("count", reward.count()).param("item", label) : label);
             c.set(row + " #Status.TextSpans", text(reward.claimed() ? "reward.claimed" : "reward.ready"));
+            // A learned recipe says where it is made. Kits are town crafting, so they never show at the player's own bench.
+            var place = !reward.recipe() ? null : RewardCraftingPlace.find(reward.item(), plugin.getApprenticeRecipes().all(),
+                com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe.getAssetMap().getAssetMap().values());
+            if (place == null) continue;
+            if (benchItems == null) benchItems = RewardCraftingPlace.loadedBenchItems();
+            String benchItem = benchItems.get(place.benchId());
+            c.set(row + " #Crafted.Visible", true);
+            c.set(row + " #Crafted.TextSpans", text(place.town() ? "reward.craftedByTownsfolk" : "reward.craftedAt")
+                .param("bench", benchItem != null ? itemName(benchItem)
+                    : Message.raw(com.hexvane.aetherhaven.workplace.WorkplaceEquipment.label(place.benchId()))));
         }
         var gifts = CoreVillagerProfileView.discoveredGifts(town.getVillagerGiftLogByRoleId().getOrDefault(role, List.of()), playerRef.getUuid());
         c.clear("#Gifts"); int displayed = 0;
@@ -202,8 +222,11 @@ public final class CoreMasteryPage extends AetherhavenInteractiveCustomUIPage<Co
             QuestJournalPage.openTown(ref, store, playerRef, townId); return;
         }
         var progress = CoreVillagerMasteryService.supports(kind) ? CoreVillagerMasteryService.progress(town, kind) : null;
-        if (!Long.toString(frame).equals(data.frame) || progress != null && (shownLevel != progress.level() || !Objects.equals(shownTool, progress.tool()))) {
-            hint = "Mastery or equipment changed. Choose again.";
+        // Mastery rising or a tool changing hands while the page is open is no reason to refuse a press: training
+        // still adds one level and a chosen tool still swaps with whatever is held now. The frame only moves when
+        // this page itself was drawn again.
+        if (!Long.toString(frame).equals(data.frame)) {
+            hint = "This page was drawn again while you chose. Choose once more.";
         } else if (("Train".equals(data.action) || "Equip".equals(data.action)) && !town.playerCanManageConstructions(playerRef.getUuid())) {
             hint = "You need permission to manage buildings to train or change equipment.";
         } else if ("FriendshipTab".equals(data.action)) {
@@ -220,7 +243,7 @@ public final class CoreMasteryPage extends AetherhavenInteractiveCustomUIPage<Co
         } else if ("Equip".equals(data.action) && progress != null) {
             var choice = choices.get(data.choice);
             String issue = choice == null ? "Choose a tool again." : CoreVillagerMasteryService.equip(progress, kind,
-                InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_STORAGE_BACKPACK), choice.slot(), choice.item(), shownTool);
+                InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_STORAGE_BACKPACK), choice.slot(), choice.item());
             hint = issue == null ? "Tool equipped." : issue;
             if (issue == null) manager.updateTown(town);
         }

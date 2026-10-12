@@ -1,0 +1,39 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_fields.items.golden.name",
+    "Description": "aetherhaven_fields.items.golden.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Golden_Harvest.png",
+  "Model": "Resources/Ingredients/Wheat.blockymodel",
+  "Texture": "Items/Aetherhaven/Golden_Harvest/Golden_Harvest_Texture.png",
+  "MaxStack": 25,
+  "PlayerAnimationsId": "Item",
+  "Categories": [
+    "Items.Ingredients",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "Quality": "Rare",
+  "IconProperties": {
+    "Scale": 1,
+    "Translation": [
+      -10.2,
+      -14.1
+    ],
+    "Rotation": [
+      45,
+      90,
+      0
+    ]
+  },
+  "DroppedItemAnimation": "Items/Animations/Dropped/Dropped_Diagonal_Left.blockyanim",
+  "Tags": {
+    "Type": [
+      "Plant"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Items_Foliage"
+}

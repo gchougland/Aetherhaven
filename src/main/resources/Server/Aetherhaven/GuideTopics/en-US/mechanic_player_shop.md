@@ -1,6 +1,6 @@
 ---
 name: Player shop and shop spots
-description: NPC stalls, your own shop, and buying in the world
+description: Villager shops, your own shop, and buying in the world
 author: Hexvane
 ---
 
@@ -10,7 +10,7 @@ author: Hexvane
 
 ## NPC shops
 
-Villager shops — **Vex's general store**, the Florist, Pyrotechnic, Crystal Keeper, and others — restock at **dawn** from loot tables. Each spot shows a floating item display; the stall's facing rotates the display.
+Villager shops — **Vex's general store**, the Florist, Pyrotechnic, Crystal Keeper, and others — restock at **dawn** from loot tables. Each shop spot shows a floating item display, and the way the shop spot faces turns the display.
 
 * **F (use)** — open the buy panel with quantity controls (±1, ±10, max).
 * **Look-at HUD** — shows item name, price, and stock while you aim at a stocked spot.
@@ -31,10 +31,10 @@ The player shop includes **shop spot** blocks and a **shop safe** that holds gol
 
 ### Listing items
 
-* **Right click a shop spot** while holding an item — list it for sale (player-controlled spots only).
-* **Right click again** on your own listing — remove it from the spot.
+* **Use a shop spot** while holding an item: list it for sale (player-controlled spots only).
+* **Use it again** on your own listing: remove it from the spot.
 
-Buyers press **F** on stocked spots to purchase. You receive a notification when someone buys your listing, and gold collects in the **shop safe**.
+Buyers use stocked spots to purchase. You receive a notification when someone buys your listing, and gold collects in the **shop safe**.
 
 ### Who shops
 

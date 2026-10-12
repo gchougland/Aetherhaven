@@ -1,0 +1,38 @@
+{
+  "id": "filipa_thespian",
+  "displayName": "Filipa Thespian",
+  "gender": "female",
+  "race": "sylvian",
+  "modelAssetId": "Filipa_Thespian",
+  "personalityIds": [
+    "cheerful",
+    "dramatic",
+    "silly"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_mage",
+  "speechVoiceId": "BrightFemale",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Kebab_Mushroom",
+      "count": 2
+    }
+  ],
+  "startingSkills": {
+    "crafting": 5,
+    "commerce": 5,
+    "alchemy": 3,
+    "cooking": 3,
+    "ranching": 0
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "dexterity": 8,
+    "vitality": 6
+  }
+}

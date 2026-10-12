@@ -32,7 +32,7 @@ public final class BlacksmithRepairPage extends ChoiceBasePage {
         @Nonnull UIEventBuilder eventBuilder,
         @Nonnull Store<EntityStore> store
     ) {
-        commandBuilder.append(getPageLayout());
+        commandBuilder.append(PAGE_LAYOUT);
         AetherhavenUiLocalization.applyBlacksmithRepairPage(commandBuilder);
         commandBuilder.clear("#ElementList");
 

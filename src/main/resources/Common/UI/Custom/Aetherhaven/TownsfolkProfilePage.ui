@@ -1,8 +1,8 @@
 $C = "../Common.ui";
 $T = "TownUiTheme.ui";
 $C.@PageOverlay { LayoutMode: Middle;
-  $C.@DecoratedContainer { Anchor: (Width: 1080, Height: 800);
-    #Title { Label #Name { Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  $C.@DecoratedContainer { Anchor: (Width: 1100, Height: 800);
+    #Title { Label #VillagerName { Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
     #Content { LayoutMode: Top; Padding: (Full: 24);
       Group { LayoutMode: Left; FlexWeight: 1;
         Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; Anchor: (Width: 224, Right: 16); Background: $T.@Panel; Padding: (Full: 12);

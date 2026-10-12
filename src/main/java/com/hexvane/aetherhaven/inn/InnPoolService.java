@@ -63,13 +63,15 @@ import javax.annotation.Nullable;
  * {@link TownRecord#getInnPoolNpcIds()} is
  * the source of truth for which visitors the mod spawned. Treasury tax is handled by {@link com.hexvane.aetherhaven.economy.TownEconomyTimeService}.
  * <p>
- * <b>Spawning</b> happens only during the morning window, at most once per calendar game day after the daily
- * refresh, and only when the inn's management block chunk is loaded â€” never to "replace" entries whose entities are
+ * <b>Spawning</b> happens once per Inn day after the daily refresh ({@link InnDailyRefill}). A fill that could not
+ * finish stays owed and is tried again on every update until it does, so a morning spent away from the Inn, a time
+ * jump or a refused spawn no longer costs the day. It runs only when the inn's management block chunk is loaded and
+ * its guest spawn points are being simulated â€” never to "replace" entries whose entities are
  * still unloaded elsewhere. <b>Pruning</b> never drops unlocked list
  * entries with a missing entity ref (unloaded); morning refresh can despawn and remove only when refs are valid.
  * <p>
- * Unlocked visitors are cleared at most once per calendar game day during the morning window ({@link WorldTimeResource}
- * clock). Locked visitors stay.
+ * Unlocked visitors are cleared at most once per Inn day ({@link WorldTimeResource} clock), from the morning window
+ * on, and only when their replacements can arrive in the same update. Locked visitors stay.
  */
 public final class InnPoolService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -185,6 +187,12 @@ public final class InnPoolService {
     private static final Object TICK_LOCK = new Object();
     private static String lastTickWorld;
     private static long lastTickGameEpochSecond = Long.MIN_VALUE;
+
+    /** Towns resting after a refused fill. See {@link InnDailyRefill.Pause}. */
+    private static final Map<UUID, InnDailyRefill.Pause> FILL_PAUSES = new ConcurrentHashMap<>();
+
+    /** Town id to the Inn day on which a held up fill was last written to the log. */
+    private static final Map<UUID, Long> FILL_WAIT_LOGGED = new ConcurrentHashMap<>();
 
     private InnPoolService() {}
 
@@ -651,8 +659,9 @@ public final class InnPoolService {
     }
 
     /**
-     * Same visitor removals as {@link #morningUnlockedRefreshIfDue} when the inn morning timestamp for {@code epochDay}
-     * was skipped by a time jump.
+     * Same visitor removals as {@link #removeUnlockedInnVisitors} when the inn morning timestamp for {@code epochDay}
+     * was skipped by a time jump. The fill it leaves owed is done by the next {@link #tick} that finds the Inn ready,
+     * whatever the hour.
      */
     private static void refreshUnlockedPoolForEpochMorning(
         @Nonnull TownRecord town,
@@ -697,64 +706,148 @@ public final class InnPoolService {
         if (store == null) {
             return;
         }
+        // One town's trouble must not cost the other towns of this world their guests.
+        InnDailyRefill.each(
+            new ArrayList<>(tm.allTowns()),
+            town -> tickTown(world, plugin, tm, store, town, wtr),
+            (town, failure) -> LOGGER.atWarning().withCause(failure).log(
+                "Inn visitor update failed for town %s. It will be tried again on the next update.", town.getTownId()
+            )
+        );
+    }
+
+    private static void tickTown(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull WorldTimeResource wtr
+    ) {
+        if (!world.getName().equals(town.getWorldName())) {
+            return;
+        }
+        if (!town.isInnActive()) {
+            return;
+        }
+        if (!town.hasQuestCompleted(AetherhavenConstants.QUEST_BUILD_INN)) {
+            return;
+        }
+        if (town.getInnkeeperEntityUuid() == null) {
+            return;
+        }
+        PlotInstance innPlot =
+            InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
+        if (innPlot == null) {
+            return;
+        }
+        ConstructionDefinition innDef = InnPlotResolver.resolveInnDefinition(plugin, innPlot);
+        if (innDef == null) {
+            return;
+        }
+        int[][] spawnLocals = innDef.getVisitorSpawnLocals();
+        if (spawnLocals == null || spawnLocals.length < 1) {
+            return;
+        }
+
+        boolean innLoaded = isInnManagementChunkLoaded(world, innPlot, innDef);
+
+        town.migrateInnFieldsIfNeeded();
+        dedupeInnPoolIds(town, tm);
+        if (!innLoaded) {
+            return;
+        }
+        autoLockQuestCriticalVisitors(town, tm, store, plugin);
+        pruneDeadVisitors(town, store, tm);
+        trimInnPoolListToMax(town, tm, store);
+        syncInnPoolWithResidentBindings(town, store, tm);
+
+        // Guests only go home when their replacements can arrive in the same update. An Inn that is in memory but
+        // outside the simulation refuses every spawn, which used to empty the rooms and leave them empty all day.
+        if (!innCanReceiveGuests(store, innPlot, innDef, spawnLocals)) {
+            return;
+        }
         int morningStart = plugin.getConfig().get().getGameMorningStartHour();
         int morningEndEx = plugin.getConfig().get().getGameMorningEndHourExclusive();
-
-        for (TownRecord town : tm.allTowns()) {
-            if (!world.getName().equals(town.getWorldName())) {
-                continue;
+        boolean morning = isMorningForInnPool(wtr, morningStart, morningEndEx);
+        long innDay = InnDailyRefill.innDay(
+            wtr.getGameDateTime().toLocalDate().toEpochDay(),
+            morning || wtr.getCurrentHour() >= morningStart
+        );
+        UUID townId = town.getTownId();
+        long gameMinute = com.hexvane.aetherhaven.time.GameTimeEpochs.gameEpochMinute(wtr.getGameDateTime());
+        InnDailyRefill.Pause pause = FILL_PAUSES.get(townId);
+        if (pause != null && pause.holds(innDay, gameMinute)) {
+            return;
+        }
+        AtomicInteger refusedArrivals = new AtomicInteger();
+        try {
+            boolean changed = InnDailyRefill.attend(
+                town,
+                innDay,
+                morning,
+                MAX_VISITORS,
+                () -> removeUnlockedInnVisitors(town, store),
+                () -> pruneDeadVisitors(town, store, tm),
+                visitorRooms(world, plugin, town, tm, store, innPlot, innDef, spawnLocals, wtr, false, refusedArrivals)
+            );
+            if (changed) {
+                tm.updateTown(town);
             }
-            if (!town.isInnActive()) {
-                continue;
+        } catch (RuntimeException e) {
+            // Guests may already have gone home. Save that, so the fill is picked up from here and not repeated.
+            tm.updateTown(town);
+            throw e;
+        }
+        boolean stillOwed = InnDailyRefill.fillOwed(
+            town.getInnPoolLastMorningEpochDay(), town.getInnPoolLastFillEpochDay(), innDay
+        );
+        if (stillOwed && refusedArrivals.get() > 0) {
+            InnDailyRefill.Pause next = InnDailyRefill.Pause.after(pause, innDay, gameMinute);
+            FILL_PAUSES.put(townId, next);
+            if (next.refusals() == 1) {
+                LOGGER.atInfo().log(
+                    "Inn for town %s could not seat every visitor yet (%s refused). Empty rooms stay owed and will be tried again.",
+                    townId,
+                    refusedArrivals.get()
+                );
             }
-            if (!town.hasQuestCompleted(AetherhavenConstants.QUEST_BUILD_INN)) {
-                continue;
-            }
-            if (town.getInnkeeperEntityUuid() == null) {
-                continue;
-            }
-            PlotInstance innPlot =
-                InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
-            if (innPlot == null) {
-                continue;
-            }
-            ConstructionDefinition innDef = InnPlotResolver.resolveInnDefinition(plugin, innPlot);
-            if (innDef == null) {
-                continue;
-            }
-            int[][] spawnLocals = innDef.getVisitorSpawnLocals();
-            if (spawnLocals == null || spawnLocals.length < 1) {
-                continue;
-            }
-
-            boolean innLoaded = isInnManagementChunkLoaded(world, innPlot, innDef);
-
-            town.migrateInnFieldsIfNeeded();
-            dedupeInnPoolIds(town, tm);
-            if (innLoaded) {
-                autoLockQuestCriticalVisitors(town, tm, store, plugin);
-                pruneDeadVisitors(town, store, tm);
-                trimInnPoolListToMax(town, tm, store);
-                syncInnPoolWithResidentBindings(town, store, tm);
-            }
-            if (innLoaded) {
-                morningUnlockedRefreshIfDue(town, tm, store, wtr, morningStart, morningEndEx);
-                pruneDeadVisitors(town, store, tm);
-                fillVisitorsAtDawnIfEligible(
-                    world,
-                    plugin,
-                    town,
-                    tm,
-                    store,
-                    innPlot,
-                    innDef,
-                    spawnLocals,
-                    wtr,
-                    morningStart,
-                    morningEndEx
+        } else {
+            FILL_PAUSES.remove(townId);
+            // Say once a day why rooms are still empty. Otherwise an Inn held up by a missing guest is silent.
+            if (stillOwed && !Long.valueOf(innDay).equals(FILL_WAIT_LOGGED.put(townId, innDay))) {
+                LOGGER.atInfo().log(
+                    "Inn for town %s has empty rooms waiting: a listed guest cannot be found right now (their part of town is "
+                        + "not loaded, or a stray visitor is being cleared). The fill is tried again on every update. "
+                        + "Ringing the Inn Bell calls guests back.",
+                    townId
                 );
             }
         }
+    }
+
+    /**
+     * True when a visitor placed at every guest spawn point would join the running simulation. Reads loaded chunk
+     * sections only.
+     */
+    private static boolean innCanReceiveGuests(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotInstance innPlot,
+        @Nonnull ConstructionDefinition innDef,
+        @Nonnull int[][] spawnLocals
+    ) {
+        Vector3i anchor = innPlot.resolvePrefabAnchorWorld(innDef);
+        Rotation yaw = innPlot.resolvePrefabYaw();
+        for (int[] local : spawnLocals) {
+            if (local == null || local.length != 3) {
+                continue;
+            }
+            Vector3i d = PrefabLocalOffset.rotate(yaw, local[0], local[1], local[2]);
+            if (!TownVillagerSpawner.canSpawnAt(store, new Vector3d(anchor.x + d.x + 0.5, anchor.y + d.y, anchor.z + d.z + 0.5))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -965,34 +1058,9 @@ public final class InnPoolService {
     }
 
     /**
-     * Once per calendar game day, during the morning window: remove unlocked pool NPCs (so fill can spawn new roles).
-     * Locked quest NPCs stay.
+     * Removes unlocked inn pool visitors and despawns them. Quest locked visitors stay. Called once per Inn day by
+     * {@link InnDailyRefill#attend}, and by the reroll command.
      */
-    private static boolean morningUnlockedRefreshIfDue(
-        @Nonnull TownRecord town,
-        @Nonnull TownManager tm,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull WorldTimeResource wtr,
-        int morningStartHour,
-        int morningEndExclusive
-    ) {
-        long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
-        Long lastDay = town.getInnPoolLastMorningEpochDay();
-        if (lastDay != null && lastDay >= epochDay) {
-            return false;
-        }
-        if (!isMorningForInnPool(wtr, morningStartHour, morningEndExclusive)) {
-            return false;
-        }
-
-        removeUnlockedInnVisitors(town, store);
-        town.setInnPoolLastMorningEpochDay(epochDay);
-        town.setInnPoolLastMorningGameDate(wtr.getGameDateTime().toLocalDate().toString());
-        tm.updateTown(town);
-        return true;
-    }
-
-    /** Removes unlocked inn pool visitors and despawns them. Quest locked visitors stay. */
     private static void removeUnlockedInnVisitors(@Nonnull TownRecord town, @Nonnull Store<EntityStore> store) {
         for (String sid : new ArrayList<>(town.getInnPoolNpcIds())) {
             UUID u = parseUuid(sid);
@@ -1132,65 +1200,15 @@ public final class InnPoolService {
     }
 
     /**
-     * Spawns visitors only during the morning window, after the daily refresh for this calendar day has run (so we
-     * never fill on generic ticks or server load).
-     */
-    private static void fillVisitorsAtDawnIfEligible(
-        @Nonnull World world,
-        @Nonnull AetherhavenPlugin plugin,
-        @Nonnull TownRecord town,
-        @Nonnull TownManager tm,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull PlotInstance innPlot,
-        @Nonnull ConstructionDefinition innDef,
-        @Nonnull int[][] spawnLocals,
-        @Nonnull WorldTimeResource wtr,
-        int morningStartHour,
-        int morningEndExclusive
-    ) {
-        if (!isMorningForInnPool(wtr, morningStartHour, morningEndExclusive)) {
-            return;
-        }
-        long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
-        Long lastDay = town.getInnPoolLastMorningEpochDay();
-        if (lastDay == null || lastDay != epochDay) {
-            return;
-        }
-        Long lastFillDay = town.getInnPoolLastFillEpochDay();
-        if (lastFillDay != null && lastFillDay >= epochDay) {
-            return;
-        }
-        fillEmptySlotsForSpawn(world, plugin, town, tm, store, innPlot, innDef, spawnLocals, wtr);
-        town.setInnPoolLastFillEpochDay(epochDay);
-        tm.updateTown(town);
-    }
-
-    /**
-     * Eligibility changes (e.g. town hall complete) take effect at the next dawn fill; vacant slots are not filled
-     * mid-day.
+     * Eligibility changes (e.g. town hall complete) take effect at the next daily fill; a room emptied after the day's
+     * fill has finished is not filled again that day.
      */
     public static void tryFillOpenSlotsAfterTownStateChange(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town
     ) {
-        // Dawn-only fill: see fillVisitorsAtDawnIfEligible.
-    }
-
-    private static void fillEmptySlotsForSpawn(
-        @Nonnull World world,
-        @Nonnull AetherhavenPlugin plugin,
-        @Nonnull TownRecord town,
-        @Nonnull TownManager tm,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull PlotInstance innPlot,
-        @Nonnull ConstructionDefinition innDef,
-        @Nonnull int[][] spawnLocals,
-        @Nonnull WorldTimeResource wtr
-    ) {
-        fillEmptySlotsForSpawn(
-            world, plugin, town, tm, store, innPlot, innDef, spawnLocals, wtr, false
-        );
+        // Daily fill only: see InnDailyRefill.attend, called from tickTown.
     }
 
     /**
@@ -1252,7 +1270,13 @@ public final class InnPoolService {
         return false;
     }
 
-    private static void fillEmptySlotsForSpawn(
+    /**
+     * One attempt at filling the empty rooms.
+     *
+     * @return {@link InnDailyRefill.Outcome#RETRY} when the attempt was held up by something that may clear by itself
+     */
+    @Nonnull
+    private static InnDailyRefill.Outcome fillEmptySlotsForSpawn(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town,
@@ -1264,70 +1288,112 @@ public final class InnPoolService {
         @Nonnull WorldTimeResource wtr,
         boolean ignorePendingMissingRef
     ) {
-        if (!ignorePendingMissingRef && hasPendingUnlockedMissingRef(town, store)) {
-            return;
-        }
+        return InnDailyRefill.fill(
+            MAX_VISITORS,
+            visitorRooms(
+                world, plugin, town, tm, store, innPlot, innDef, spawnLocals, wtr, ignorePendingMissingRef, new AtomicInteger()
+            )
+        );
+    }
 
-        if (townHasInnVisitorDrift(store, town)) {
-            reconcileInnVisitorEntities(world, town, tm, store, true);
-        }
-        if (countTownInnVisitorsInStore(store, town) >= MAX_VISITORS) {
-            return;
-        }
-
-        Set<String> presentRoles = new LinkedHashSet<>(collectTownVisitorNpcRolesFromStore(store, town));
-        mergeQuestCriticalRolesWhenLockedVisitorsUnresolved(town, store, presentRoles);
-
-        long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
-        long seed =
-            town.getTownId().getLeastSignificantBits()
-                ^ (long) world.getName().hashCode() << 1
-                ^ epochDay * 0x9E3779B97F4A7C15L
-                ^ wtr.getGameTime().toEpochMilli();
+    /**
+     * The live Inn as {@link InnDailyRefill} sees it. Make a new one for every attempt. {@code refusedArrivals} counts
+     * visitors the world would not place this time.
+     */
+    @Nonnull
+    private static InnDailyRefill.Rooms visitorRooms(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotInstance innPlot,
+        @Nonnull ConstructionDefinition innDef,
+        @Nonnull int[][] spawnLocals,
+        @Nonnull WorldTimeResource wtr,
+        boolean ignorePendingMissingRef,
+        @Nonnull AtomicInteger refusedArrivals
+    ) {
         List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
-        List<String> mergedOrder = buildDailyVisitorRoleOrder(town, plugin, pool, seed);
+        Set<String> presentRoles = new LinkedHashSet<>();
+        return new InnDailyRefill.Rooms() {
+            @Override
+            public boolean guestUnaccountedFor() {
+                return !ignorePendingMissingRef && hasPendingUnlockedMissingRef(town, store);
+            }
 
-        for (String roleId : mergedOrder) {
-            if (town.getInnPoolNpcIds().size() >= MAX_VISITORS) {
-                break;
+            @Nonnull
+            @Override
+            public List<String> candidates() {
+                if (townHasInnVisitorDrift(store, town)) {
+                    reconcileInnVisitorEntities(world, town, tm, store, true);
+                }
+                if (countTownInnVisitorsInStore(store, town) >= MAX_VISITORS) {
+                    return List.of();
+                }
+                presentRoles.addAll(collectTownVisitorNpcRolesFromStore(store, town));
+                mergeQuestCriticalRolesWhenLockedVisitorsUnresolved(town, store, presentRoles);
+                long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
+                long seed =
+                    town.getTownId().getLeastSignificantBits()
+                        ^ (long) world.getName().hashCode() << 1
+                        ^ epochDay * 0x9E3779B97F4A7C15L
+                        ^ wtr.getGameTime().toEpochMilli();
+                return buildDailyVisitorRoleOrder(town, plugin, pool, seed);
             }
-            if (countTownInnVisitorsInStore(store, town) >= MAX_VISITORS) {
-                break;
+
+            @Override
+            public int listed() {
+                return town.getInnPoolNpcIds().size();
             }
-            if (!isRoleEligibleForInnPool(plugin, town, pool, roleId)) {
-                continue;
+
+            @Override
+            public int present() {
+                return countTownInnVisitorsInStore(store, town);
             }
-            if (town.getInnVisitorPoolExcludedRoleIds().contains(roleId)) {
-                continue;
+
+            @Override
+            public boolean wanted(@Nonnull String roleId) {
+                return isRoleEligibleForInnPool(plugin, town, pool, roleId)
+                    && !town.getInnVisitorPoolExcludedRoleIds().contains(roleId)
+                    && !townHasResidentWithNpcRole(store, town, roleId)
+                    && !presentRoles.contains(roleId);
             }
-            if (townHasResidentWithNpcRole(store, town, roleId)) {
-                continue;
+
+            @Nonnull
+            @Override
+            public InnDailyRefill.Arrival arrive(@Nonnull String roleId) {
+                String kind = visitorKindForRole(pool, roleId);
+                if (kind == null) {
+                    kind = TownVillagerBinding.KIND_VISITOR_MERCHANT;
+                }
+                int slotIndex = town.getInnPoolNpcIds().size();
+                int[] local = resolveSpawnLocal(pool, roleId, spawnLocals, slotIndex);
+                if (local == null || local.length != 3) {
+                    return InnDailyRefill.Arrival.NEVER;
+                }
+                NPCPlugin npcs = NPCPlugin.get();
+                boolean knownRole = npcs != null && npcs.hasRoleName(roleId);
+                UUID spawned = spawnVisitor(world, plugin, town, store, innPlot, innDef, local, roleId, kind, "INN_MORNING_FILL", slotIndex);
+                if (spawned == null) {
+                    // An unknown role is reported by spawnVisitor and will not appear by waiting. Anything else may.
+                    if (!knownRole) {
+                        return InnDailyRefill.Arrival.NEVER;
+                    }
+                    refusedArrivals.incrementAndGet();
+                    return InnDailyRefill.Arrival.NOT_NOW;
+                }
+                town.getInnPoolNpcIds().add(spawned.toString());
+                town.getOutreach().arrived(roleId);
+                if (isRoleRequiredByActiveInnQuest(town, roleId)) {
+                    town.addInnLockedEntity(spawned);
+                }
+                presentRoles.add(roleId);
+                tm.updateTown(town);
+                InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
+                return InnDailyRefill.Arrival.ARRIVED;
             }
-            if (presentRoles.contains(roleId)) {
-                continue;
-            }
-            String kind = visitorKindForRole(pool, roleId);
-            if (kind == null) {
-                kind = TownVillagerBinding.KIND_VISITOR_MERCHANT;
-            }
-            int slotIndex = town.getInnPoolNpcIds().size();
-            int[] local = resolveSpawnLocal(pool, roleId, spawnLocals, slotIndex);
-            if (local == null || local.length != 3) {
-                break;
-            }
-            UUID spawned = spawnVisitor(world, plugin, town, store, innPlot, innDef, local, roleId, kind, "INN_MORNING_FILL", slotIndex);
-            if (spawned == null) {
-                continue;
-            }
-            town.getInnPoolNpcIds().add(spawned.toString());
-            town.getOutreach().arrived(roleId);
-            if (isRoleRequiredByActiveInnQuest(town, roleId)) {
-                town.addInnLockedEntity(spawned);
-            }
-            presentRoles.add(roleId);
-            tm.updateTown(town);
-            InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
-        }
+        };
     }
 
     /**

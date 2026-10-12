@@ -9,3 +9,6 @@ iron.name = Iron Backpack
 cobalt.name = Cobalt Backpack
 thorium.name = Thorium Backpack
 adamantite.name = Adamantite Backpack
+aetherhaven.backpack.storeMatching = Store matching items
+aetherhaven.backpack.storedMatching = Stored {count} matching items in this backpack.
+aetherhaven.backpack.matchingNone = Nothing you carry matches what is in this backpack, or it has no room. Your hotbar is left alone.

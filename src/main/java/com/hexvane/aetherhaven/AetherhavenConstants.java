@@ -246,9 +246,6 @@ public final class AetherhavenConstants {
      */
     public static final String BUILDING_STAFF_PLACE_PUFF_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_PlacePuff";
 
-    /** Mist along look direction while channeling secondary (server-spawned at staff tip with head rotation). */
-    public static final String BUILDING_STAFF_STREAM_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_Stream";
-
     /**
      * Creative Play {@code Brush_Mode} ({@code CreativePlayDefaults.json}) — short non-looping tick while channeling the
      * assembly brush so audio stops when RMB is released (unlike {@code Brush_Paint} base loop).
@@ -319,6 +316,12 @@ public final class AetherhavenConstants {
      * (hytale:Admin) receive this by default; Creative alone does not unlock the square.
      */
     public static final String PERMISSION_FESTIVAL_SQUARE_BUILD = "aetherhaven.festival.square.build";
+
+    /**
+     * Set, change and remove item prices on a running server ({@code /ah price}). Operators (hytale:Admin) receive
+     * this by default; grant it on a role for staff who balance the economy without full operator.
+     */
+    public static final String PERMISSION_PRICE_ADMIN = "aetherhaven.price.admin";
 
     /**
      * Town Journal Settings tab: live config save and repair tools. Operators always have access; grant this permission

@@ -1,0 +1,104 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_fields.items.scarecrow.name",
+    "Description": "aetherhaven_fields.items.scarecrow.description"
+  },
+  "ItemLevel": 1,
+  "Icon": "Icons/ItemsGenerated/Deco_Scarecrow.png",
+  "Categories": [
+    "Blocks.Deco",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ResourceTypeId": "Wood_Trunk",
+        "Quantity": 10
+      },
+      {
+        "ItemId": "Ingredient_Fibre",
+        "Quantity": 10
+      },
+      {
+        "ItemId": "Plant_Crop_Wheat_Item",
+        "Quantity": 5
+      },
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 5
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning_Misc"
+        ]
+      }
+    ]
+  },
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Farming/Scarecrow.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Weight": 1,
+        "Texture": "Blocks/Farming/Scarecrow_Texture.png"
+      }
+    ],
+    "HitboxType": "Scarecrow",
+    "VariantRotation": "NESW",
+    "Flags": {},
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Woods"
+      }
+    },
+    "BlockParticleSetId": "Wood",
+    "BlockSoundSetId": "Wood",
+    "PhysicalMaterialId": "Wood",
+    "TextureComputedColor": "#7E6D68",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AetherhavenScarecrow"
+            }
+          }
+        ]
+      }
+    },
+    "InteractionHint": "aetherhaven_fields.items.scarecrow.hint"
+  },
+  "PlayerAnimationsId": "Block",
+  "IconProperties": {
+    "Scale": 0.37,
+    "Translation": [
+      0,
+      -37.1
+    ],
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Deco"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "MaxStack": 10,
+  "Scale": 0.6,
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

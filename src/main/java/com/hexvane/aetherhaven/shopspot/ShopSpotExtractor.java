@@ -13,6 +13,8 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -73,12 +75,36 @@ public final class ShopSpotExtractor {
             }
         }
 
-        ShopSpotPlotRelocation.finishPlotMove(plotId);
-
-        if (activated > 0) {
-            ShopSpotPersistence.save(world, plugin, registry);
-            LOGGER.atInfo().log("Activated %s shop spot(s) for plot %s in town %s", activated, plotId, town.getTownId());
+        // A rebuilt or moved building can come back without one of its stalls. Whatever a player was selling there
+        // is handed back (or held for them), never dropped with the row.
+        List<ShopSpotRecord> gone =
+            new ArrayList<>(ShopSpotRebuild.orphans(registry, plotId, r -> stallStillStands(world, r)));
+        gone.addAll(ShopSpotPlotRelocation.drainDetached(plotId));
+        for (ShopSpotRecord record : gone) {
+            ShopSpotDisplayService.removeDisplayImmediate(world, store, plugin, registry, record);
+            ShopSpotListingReturns.retire(world, store, registry, record);
         }
+
+        if (activated > 0 || !gone.isEmpty()) {
+            ShopSpotPersistence.save(world, plugin, registry);
+            LOGGER.atInfo().log(
+                "Activated %s shop spot(s) and retired %s for plot %s in town %s",
+                activated,
+                gone.size(),
+                plotId,
+                town.getTownId()
+            );
+        }
+    }
+
+    /** Unloaded terrain counts as standing: only a block we can read may retire a stall. */
+    private static boolean stallStillStands(@Nonnull World world, @Nonnull ShopSpotRecord record) {
+        if (!ChunkSectionBlockUtil.isChunkInMemory(world, record.getBlockX(), record.getBlockZ())) {
+            return true;
+        }
+        return ShopSpotBlockUtil.isShopSpotBlock(
+            ChunkSectionBlockUtil.blockType(world, record.getBlockX(), record.getBlockY(), record.getBlockZ())
+        );
     }
 
     private static int activateSpot(
@@ -95,13 +121,35 @@ public final class ShopSpotExtractor {
         long epochDay
     ) {
         ShopSpotRecord existing = registry.getAtBlock(pos.x, pos.y, pos.z);
-        if (existing != null) {
-            ShopSpotDisplayService.removeDisplay(world, store, plugin, registry, existing);
-            registry.remove(existing.getSpotId());
+        boolean templateConfigured = blockComp != null && blockComp.isConfigured();
+        // Same building pasted again where it stood: the saved row, and anything listed on it, stays.
+        boolean keep =
+            ShopSpotRebuild.keepsRow(
+                existing,
+                town.getTownId(),
+                plotId,
+                templateConfigured,
+                templateConfigured && blockComp.isPlayerControlled()
+            );
+        if (existing != null && !keep) {
+            ShopSpotDisplayService.removeDisplayImmediate(world, store, plugin, registry, existing);
+            ShopSpotListingReturns.retire(world, store, registry, existing);
         }
 
-        ShopSpotRecord record =
-            def != null ? ShopSpotPlotRelocation.takeDetached(plotId, pos, plot, def) : null;
+        ShopSpotRecord record = keep ? existing : null;
+        if (record != null) {
+            if (templateConfigured && !record.isPlayerControlled()) {
+                record.setLootTableId(blockComp.getLootTableId().trim());
+            }
+            record.setDisplayYawRadians(ShopSpotDisplayRotation.yawFromBlockAt(world, pos));
+        } else if (def != null) {
+            record = ShopSpotPlotRelocation.takeDetached(plotId, pos, plot, def);
+            if (record != null) {
+                record.setDisplayEntityUuid(null);
+                record.setListingDisplaySignature(null);
+                record.setDisplayYawRadians(ShopSpotDisplayRotation.yawFromBlockAt(world, pos));
+            }
+        }
         if (record == null) {
             record = new ShopSpotRecord();
             record.setSpotId(UUID.randomUUID());
@@ -112,10 +160,6 @@ public final class ShopSpotExtractor {
             if (!record.isPlayerControlled()) {
                 ShopSpotDailyRerollService.initialRollIfNeeded(record, plugin, epochDay);
             }
-        } else {
-            record.setDisplayEntityUuid(null);
-            record.setListingDisplaySignature(null);
-            record.setDisplayYawRadians(ShopSpotDisplayRotation.yawFromBlockAt(world, pos));
         }
         record.setWorldName(world.getName());
         record.setBlockPosition(pos);

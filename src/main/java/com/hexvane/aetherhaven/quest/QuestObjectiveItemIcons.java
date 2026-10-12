@@ -32,6 +32,9 @@ public final class QuestObjectiveItemIcons {
         @Nonnull AetherhavenPlugin plugin
     ) {
         String kind = objective.kind() != null ? objective.kind().trim() : "";
+        if (QuestProgressionService.isWorkplaceKind(objective)) {
+            return WorkplaceObjectiveText.icons(objective, town, plugin);
+        }
         if (QuestProgressionService.TOURIST_MOVE_IN_ITEMS.equalsIgnoreCase(kind) && town != null) {
             return materialSlots(TouristMoveInRequirements.forQuestTarget(plugin, town, store));
         }

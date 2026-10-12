@@ -86,7 +86,7 @@ public final class NpcShopSpotBuyerService {
         if (itemId == null || record.getStock() <= 0) {
             return Result.UNAVAILABLE;
         }
-        ShopPriceEntry entry = ShopSpotPricing.catalogEntry(plugin, itemId);
+        ShopPriceEntry entry = ShopSpotPricing.entry(plugin, record);
         int buyBatches = 1;
         int itemQty = entry.itemsForBatchCount(buyBatches);
         if (itemQty <= 0 || itemQty > record.getStock()) {
@@ -107,24 +107,17 @@ public final class NpcShopSpotBuyerService {
                 TownLogMessage.shopSaleParams(buyerDisplayName, itemId, Integer.toString(itemQty), Long.toString(totalCost))
             )
         );
-        record.setStock(record.getStock() - itemQty);
         UUID buyerUuid = buyerEntityUuid != null ? buyerEntityUuid : new UUID(0L, 0L);
         ShopSpotPurchaseService.notifySellerIfNeeded(
             record,
             buyerUuid,
             buyerDisplayName,
-            itemId,
+            ShopListingText.name(record),
             itemQty,
             totalCost,
-            world,
-            store,
-            plugin
+            world
         );
-        if (record.getStock() <= 0) {
-            record.setItemId(null);
-            record.setSellerUuid(null);
-            ShopSpotJewelrySupport.clearJewelryListing(record);
-        }
+        ShopListing.sold(record, itemQty);
         registry.put(record);
         ShopSpotPersistence.save(world, plugin, registry);
         com.hexvane.aetherhaven.autonomy.ShopClerkWorkService.completedSale(store,town,playerShopPlotId);

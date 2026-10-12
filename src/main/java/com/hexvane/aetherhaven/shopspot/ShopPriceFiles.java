@@ -82,7 +82,7 @@ public final class ShopPriceFiles {
                     String json = Files.readString(f.absolutePath(), StandardCharsets.UTF_8);
                     ShopPriceCatalog packPrices = ShopPriceCatalog.parseJson(json);
                     int before = catalog.getExplicitPriceCount();
-                    catalog = catalog.withOverrides(packPrices);
+                    catalog = catalog.withLayer(packPrices, ShopPriceCatalog.Source.PACK);
                     int added = catalog.getExplicitPriceCount() - before;
                     packOverrideCount += Math.max(0, packPrices.getExplicitPriceCount());
                     LOGGER
@@ -98,34 +98,7 @@ public final class ShopPriceFiles {
                     LOGGER.atWarning().withCause(e).log("Failed to load shop prices from %s", f.absolutePath());
                 }
             }
-            Path path = pricesPath(plugin);
-            if (!Files.isRegularFile(path)) {
-                logLoadedCatalog(plugin, catalog, null, 0, packOverrideCount);
-                return catalog;
-            }
-            String dataJson = Files.readString(path, StandardCharsets.UTF_8);
-            ShopPriceCatalog data = ShopPriceCatalog.parseJson(dataJson);
-            if (data.getCatalogRevision() >= BUNDLED_CATALOG_REVISION) {
-                ShopPriceCatalog merged = catalog.withOverrides(data);
-                logLoadedCatalog(plugin, merged, path, data.getExplicitPriceCount(), packOverrideCount);
-                return merged;
-            }
-            if (data.getExplicitPriceCount() > 0 && data.getExplicitPriceCount() <= LEGACY_OVERRIDE_MAX_ENTRIES) {
-                ShopPriceCatalog merged = catalog.withOverrides(data);
-                LOGGER
-                    .atInfo()
-                    .log(
-                        "Loaded shop prices: catalog with %d override(s) from legacy %s (add catalogRevision: %d to that file to silence this).",
-                        data.getExplicitPriceCount(),
-                        path,
-                        BUNDLED_CATALOG_REVISION
-                    );
-                logLoadedCatalog(plugin, merged, path, data.getExplicitPriceCount(), packOverrideCount);
-                return merged;
-            }
-            backupLegacyCatalog(path);
-            logLoadedCatalog(plugin, catalog, path, 0, packOverrideCount);
-            return catalog;
+            return withServerFile(catalog, pricesPath(plugin), packOverrideCount);
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to load shop price catalog; using empty catalog");
             try {
@@ -134,6 +107,57 @@ public final class ShopPriceFiles {
                 return ShopPriceCatalog.empty();
             }
         }
+    }
+
+    /**
+     * Lays this server's own price file over the shipped table (and any pack prices). This is everything a server
+     * start does with that file, so reloading through here is the same as restarting.
+     *
+     * @param packOverrideCount only for the log line
+     */
+    @Nonnull
+    static ShopPriceCatalog withServerFile(@Nonnull ShopPriceCatalog catalog, @Nonnull Path path, int packOverrideCount)
+        throws IOException {
+        if (!Files.isRegularFile(path)) {
+            logLoadedCatalog(path, catalog, null, 0, packOverrideCount);
+            return catalog;
+        }
+        ShopPriceCatalog data;
+        try {
+            data = ShopPriceCatalog.parseJson(Files.readString(path, StandardCharsets.UTF_8));
+        } catch (RuntimeException malformed) {
+            // A slip in a hand edit must cost the server its own prices only, never the whole table or a start.
+            LOGGER
+                .atWarning()
+                .withCause(malformed)
+                .log(
+                    "%s has a mistake in it and was ignored; item prices are the shipped ones until it is fixed.",
+                    path
+                );
+            logLoadedCatalog(path, catalog, null, 0, packOverrideCount);
+            return catalog;
+        }
+        if (data.getCatalogRevision() >= BUNDLED_CATALOG_REVISION) {
+            ShopPriceCatalog merged = catalog.withOverrides(data);
+            logLoadedCatalog(path, merged, path, data.getExplicitPriceCount(), packOverrideCount);
+            return merged;
+        }
+        if (data.getExplicitPriceCount() > 0 && data.getExplicitPriceCount() <= LEGACY_OVERRIDE_MAX_ENTRIES) {
+            ShopPriceCatalog merged = catalog.withOverrides(data);
+            LOGGER
+                .atInfo()
+                .log(
+                    "Loaded shop prices: catalog with %d override(s) from legacy %s (add catalogRevision: %d to that file to silence this).",
+                    data.getExplicitPriceCount(),
+                    path,
+                    BUNDLED_CATALOG_REVISION
+                );
+            logLoadedCatalog(path, merged, path, data.getExplicitPriceCount(), packOverrideCount);
+            return merged;
+        }
+        backupLegacyCatalog(path);
+        logLoadedCatalog(path, catalog, path, 0, packOverrideCount);
+        return catalog;
     }
 
     private static void backupLegacyCatalog(@Nonnull Path path) {
@@ -163,7 +187,7 @@ public final class ShopPriceFiles {
     }
 
     private static void logLoadedCatalog(
-        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Path file,
         @Nonnull ShopPriceCatalog catalog,
         @Nullable Path overridePath,
         int overrideCount,
@@ -177,7 +201,7 @@ public final class ShopPriceFiles {
                     catalog.getExplicitPriceCount(),
                     packPriceKeys,
                     SHOP_PRICES_FILE_NAME,
-                    plugin.getDataDirectory()
+                    file.getParent()
                 );
         } else {
             LOGGER

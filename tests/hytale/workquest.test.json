@@ -1,0 +1,2110 @@
+{
+ "cases": [
+  {
+   "name": "first workplace quest in the journal",
+   "steps": [
+    {
+     "tool": "ui_render",
+     "name": "just started: every step open, the longest wording of each",
+     "arguments": {
+      "root": "projects",
+      "path": "Aetherhaven/src/main/resources/Common/UI/Custom/Aetherhaven/QuestJournal.ui",
+      "commands": [
+       {
+        "type": "Set",
+        "selector": "#JournalTabs.SelectedTab",
+        "data": "QUESTS"
+       },
+       {
+        "type": "Set",
+        "selector": "#JournalShellTitle.Text",
+        "data": "Town Journal"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#TownPage.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#PageTitle.Text",
+        "data": "Quests"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsBlocked.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsSplit.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestListHeading.Text",
+        "data": "Active quests"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardSectionHeading.Text",
+        "data": "Rewards"
+       },
+       {
+        "type": "Set",
+        "selector": "#AbandonQuestButton.Text",
+        "data": "Leave quest"
+       },
+       {
+        "type": "Clear",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList"
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList",
+        "text": "Aetherhaven/QuestJournalRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[0] #Select #QuestTitle.Text",
+        "data": "A Place to Work"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[0] #QuestTitle.Style.TextColor",
+        "data": "#f4e8c8"
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList",
+        "text": "Aetherhaven/QuestJournalRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[1] #Select #QuestTitle.Text",
+        "data": "Raise The Town Hall"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[1] #QuestTitle.Style.TextColor",
+        "data": "#e8dcc8"
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList",
+        "text": "Aetherhaven/QuestJournalRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[2] #Select #QuestTitle.Text",
+        "data": "Lyren's home"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[2] #QuestTitle.Style.TextColor",
+        "data": "#e8dcc8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDetailTitle.Text",
+        "data": "A Place to Work"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDetailDescription.Text",
+        "data": "Lyren wants your townsfolk doing skilled work. Set up one workplace from start to finish: unlock a kind of work, mark out its ground, choose what it is and give it its bench. Any kind of work will do."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestStepsHeading.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestStepsHeading.Text",
+        "data": "Steps"
+       },
+       {
+        "type": "Clear",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList"
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #CheckBox.Value",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepLabel.Text",
+        "data": "1. Unlock a workplace type. Talk to Garren Vale, the Blacksmith, at the Blacksmith shop and ask to upgrade the building and workplaces. On the Workplaces tab, unlock one of these for 100 gold: Smelting, Blacksmithing, Armor Crafting. Other villagers in town can unlock other types."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepLabel.Style.TextColor",
+        "data": "#d8ccb8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #CheckBox.Value",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepLabel.Text",
+        "data": "2. Mark out a workplace. Hold a Building Staff (crafted at the Town Planning Desk), open its mode menu and choose Create workplace, then mark two opposite corners on the ground inside your town."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepLabel.Style.TextColor",
+        "data": "#d8ccb8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepItemsPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepItemsPanel #StepItems.Slots",
+        "data": [
+         {
+          "ItemStack": {
+           "ItemId": "Aetherhaven_Building_Staff",
+           "Quantity": 1
+          }
+         }
+        ]
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #CheckBox.Value",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepLabel.Text",
+        "data": "3. Choose the workplace's type. Marking out an area opens the workplace page. Unlock a type first, then pick its card, name the workplace and press Save."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepLabel.Style.TextColor",
+        "data": "#d8ccb8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #CheckBox.Value",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepLabel.Text",
+        "data": "4. Place the bench its type needs inside your workplace. Your town has no workplace at the moment, so mark one out and choose its type first. This step will then name the bench."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepLabel.Style.TextColor",
+        "data": "#d8ccb8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #CheckBox.Value",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepLabel.Text",
+        "data": "5. Tell Elder Lyren your workplace is ready. He will say how to put townsfolk to work in it."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepLabel.Style.TextColor",
+        "data": "#d8ccb8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardSlot.Slots",
+        "data": [
+         {
+          "ItemStack": {
+           "ItemId": "Aetherhaven_Gold_Coin",
+           "Quantity": 20
+          }
+         }
+        ]
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardQuantity.Text",
+        "data": "20"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardTitle.Text",
+        "data": "Gold Coin"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardReputationLine.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardReputationLine.Text",
+        "data": "+10 reputation with Elder Lyren"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardFallback.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardFallback.Text",
+        "data": ""
+       },
+       {
+        "type": "Set",
+        "selector": "#AbandonQuestButton.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Disabled",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Text",
+        "data": "Unpin quest"
+       }
+      ]
+     },
+     "expect": {
+      "valid": true,
+      "errors": 0
+     },
+     "golden": "tests/hytale/golden/workquest-journal-started.png"
+    },
+    {
+     "tool": "ui_render",
+     "name": "three steps done, the bench named with where it is made",
+     "arguments": {
+      "root": "projects",
+      "path": "Aetherhaven/src/main/resources/Common/UI/Custom/Aetherhaven/QuestJournal.ui",
+      "commands": [
+       {
+        "type": "Set",
+        "selector": "#JournalTabs.SelectedTab",
+        "data": "QUESTS"
+       },
+       {
+        "type": "Set",
+        "selector": "#JournalShellTitle.Text",
+        "data": "Town Journal"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#TownPage.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#PageTitle.Text",
+        "data": "Quests"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsBlocked.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsSplit.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestListHeading.Text",
+        "data": "Active quests"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardSectionHeading.Text",
+        "data": "Rewards"
+       },
+       {
+        "type": "Set",
+        "selector": "#AbandonQuestButton.Text",
+        "data": "Leave quest"
+       },
+       {
+        "type": "Clear",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList"
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList",
+        "text": "Aetherhaven/QuestJournalRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[0] #Select #QuestTitle.Text",
+        "data": "A Place to Work"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[0] #QuestTitle.Style.TextColor",
+        "data": "#f4e8c8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDetailTitle.Text",
+        "data": "A Place to Work"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDetailDescription.Text",
+        "data": "Lyren wants your townsfolk doing skilled work. Set up one workplace from start to finish: unlock a kind of work, mark out its ground, choose what it is and give it its bench. Any kind of work will do."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestStepsHeading.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestStepsHeading.Text",
+        "data": "Steps"
+       },
+       {
+        "type": "Clear",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList"
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #CheckBox.Value",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepLabel.Text",
+        "data": "1. Unlock a workplace type."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepLabel.Style.TextColor",
+        "data": "#a8d4b0"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #CheckBox.Value",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepLabel.Text",
+        "data": "2. Mark out a workplace with a Building Staff."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepLabel.Style.TextColor",
+        "data": "#a8d4b0"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepItemsPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepItemsPanel #StepItems.Slots",
+        "data": [
+         {
+          "ItemStack": {
+           "ItemId": "Aetherhaven_Building_Staff",
+           "Quantity": 1
+          }
+         }
+        ]
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #CheckBox.Value",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepLabel.Text",
+        "data": "3. Choose the workplace's type and save it."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepLabel.Style.TextColor",
+        "data": "#a8d4b0"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #CheckBox.Value",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepLabel.Text",
+        "data": "4. Place the Furnace inside your workplace Hill Smeltery. Its type, Smelting, needs it. It is crafted at the Workbench."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepLabel.Style.TextColor",
+        "data": "#d8ccb8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepItemsPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepItemsPanel #StepItems.Slots",
+        "data": [
+         {
+          "ItemStack": {
+           "ItemId": "Bench_Furnace",
+           "Quantity": 1
+          }
+         }
+        ]
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #CheckBox.Value",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepLabel.Text",
+        "data": "5. Tell Elder Lyren your workplace is ready. He will say how to put townsfolk to work in it."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepLabel.Style.TextColor",
+        "data": "#d8ccb8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardSlot.Slots",
+        "data": [
+         {
+          "ItemStack": {
+           "ItemId": "Aetherhaven_Gold_Coin",
+           "Quantity": 20
+          }
+         }
+        ]
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardQuantity.Text",
+        "data": "20"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardTitle.Text",
+        "data": "Gold Coin"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardReputationLine.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardReputationLine.Text",
+        "data": "+10 reputation with Elder Lyren"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardFallback.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardFallback.Text",
+        "data": ""
+       },
+       {
+        "type": "Set",
+        "selector": "#AbandonQuestButton.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Disabled",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Text",
+        "data": "Unpin quest"
+       }
+      ]
+     },
+     "expect": {
+      "valid": true,
+      "errors": 0
+     },
+     "golden": "tests/hytale/golden/workquest-journal-bench.png"
+    },
+    {
+     "tool": "ui_render",
+     "name": "a 48 letter workplace name and a bench that needs a tier",
+     "arguments": {
+      "root": "projects",
+      "path": "Aetherhaven/src/main/resources/Common/UI/Custom/Aetherhaven/QuestJournal.ui",
+      "commands": [
+       {
+        "type": "Set",
+        "selector": "#JournalTabs.SelectedTab",
+        "data": "QUESTS"
+       },
+       {
+        "type": "Set",
+        "selector": "#JournalShellTitle.Text",
+        "data": "Town Journal"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#TownPage.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#PageTitle.Text",
+        "data": "Quests"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsBlocked.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsSplit.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestListHeading.Text",
+        "data": "Active quests"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardSectionHeading.Text",
+        "data": "Rewards"
+       },
+       {
+        "type": "Set",
+        "selector": "#AbandonQuestButton.Text",
+        "data": "Leave quest"
+       },
+       {
+        "type": "Clear",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList"
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList",
+        "text": "Aetherhaven/QuestJournalRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[0] #Select #QuestTitle.Text",
+        "data": "A Place to Work"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[0] #QuestTitle.Style.TextColor",
+        "data": "#f4e8c8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDetailTitle.Text",
+        "data": "A Place to Work"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDetailDescription.Text",
+        "data": "Lyren wants your townsfolk doing skilled work. Set up one workplace from start to finish: unlock a kind of work, mark out its ground, choose what it is and give it its bench. Any kind of work will do."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestStepsHeading.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestStepsHeading.Text",
+        "data": "Steps"
+       },
+       {
+        "type": "Clear",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList"
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #CheckBox.Value",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepLabel.Text",
+        "data": "1. Unlock a workplace type."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepLabel.Style.TextColor",
+        "data": "#a8d4b0"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #CheckBox.Value",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepLabel.Text",
+        "data": "2. Mark out a workplace with a Building Staff."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepLabel.Style.TextColor",
+        "data": "#a8d4b0"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepItemsPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepItemsPanel #StepItems.Slots",
+        "data": [
+         {
+          "ItemStack": {
+           "ItemId": "Aetherhaven_Building_Staff",
+           "Quantity": 1
+          }
+         }
+        ]
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #CheckBox.Value",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepLabel.Text",
+        "data": "3. Choose the workplace's type and save it."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepLabel.Style.TextColor",
+        "data": "#a8d4b0"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #CheckBox.Value",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepLabel.Text",
+        "data": "4. Place the Alchemist's Workbench inside your workplace Grand Northern Hillside Smeltery And Forge Works. Its type, Alchemy, needs it. It is crafted at the Workbench, which must be tier 2 or higher."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepLabel.Style.TextColor",
+        "data": "#d8ccb8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepItemsPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepItemsPanel #StepItems.Slots",
+        "data": [
+         {
+          "ItemStack": {
+           "ItemId": "Bench_Alchemy",
+           "Quantity": 1
+          }
+         }
+        ]
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #CheckBox.Value",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepLabel.Text",
+        "data": "5. Tell Elder Lyren your workplace is ready. He will say how to put townsfolk to work in it."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepLabel.Style.TextColor",
+        "data": "#d8ccb8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardSlot.Slots",
+        "data": [
+         {
+          "ItemStack": {
+           "ItemId": "Aetherhaven_Gold_Coin",
+           "Quantity": 20
+          }
+         }
+        ]
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardQuantity.Text",
+        "data": "20"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardTitle.Text",
+        "data": "Gold Coin"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardReputationLine.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardReputationLine.Text",
+        "data": "+10 reputation with Elder Lyren"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardFallback.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardFallback.Text",
+        "data": ""
+       },
+       {
+        "type": "Set",
+        "selector": "#AbandonQuestButton.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Disabled",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Text",
+        "data": "Unpin quest"
+       }
+      ]
+     },
+     "expect": {
+      "valid": true,
+      "errors": 0
+     },
+     "golden": "tests/hytale/golden/workquest-journal-longest.png"
+    },
+    {
+     "tool": "ui_render",
+     "name": "all four done, only Lyren left",
+     "arguments": {
+      "root": "projects",
+      "path": "Aetherhaven/src/main/resources/Common/UI/Custom/Aetherhaven/QuestJournal.ui",
+      "commands": [
+       {
+        "type": "Set",
+        "selector": "#JournalTabs.SelectedTab",
+        "data": "QUESTS"
+       },
+       {
+        "type": "Set",
+        "selector": "#JournalShellTitle.Text",
+        "data": "Town Journal"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#TownPage.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#PageTitle.Text",
+        "data": "Quests"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsBlocked.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsSplit.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestListHeading.Text",
+        "data": "Active quests"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardSectionHeading.Text",
+        "data": "Rewards"
+       },
+       {
+        "type": "Set",
+        "selector": "#AbandonQuestButton.Text",
+        "data": "Leave quest"
+       },
+       {
+        "type": "Clear",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList"
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList",
+        "text": "Aetherhaven/QuestJournalRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[0] #Select #QuestTitle.Text",
+        "data": "A Place to Work"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList[0] #QuestTitle.Style.TextColor",
+        "data": "#f4e8c8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDetailTitle.Text",
+        "data": "A Place to Work"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDetailDescription.Text",
+        "data": "Lyren wants your townsfolk doing skilled work. Set up one workplace from start to finish: unlock a kind of work, mark out its ground, choose what it is and give it its bench. Any kind of work will do."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestStepsHeading.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestStepsHeading.Text",
+        "data": "Steps"
+       },
+       {
+        "type": "Clear",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList"
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #CheckBox.Value",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepLabel.Text",
+        "data": "1. Unlock a workplace type."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepLabel.Style.TextColor",
+        "data": "#a8d4b0"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[0] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #CheckBox.Value",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepLabel.Text",
+        "data": "2. Mark out a workplace with a Building Staff."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepLabel.Style.TextColor",
+        "data": "#a8d4b0"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepItemsPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[1] #StepItemsPanel #StepItems.Slots",
+        "data": [
+         {
+          "ItemStack": {
+           "ItemId": "Aetherhaven_Building_Staff",
+           "Quantity": 1
+          }
+         }
+        ]
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #CheckBox.Value",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepLabel.Text",
+        "data": "3. Choose the workplace's type and save it."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepLabel.Style.TextColor",
+        "data": "#a8d4b0"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[2] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #CheckBox.Value",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepLabel.Text",
+        "data": "4. Place the workplace's bench inside it."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepLabel.Style.TextColor",
+        "data": "#a8d4b0"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepItemsPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[3] #StepItemsPanel #StepItems.Slots",
+        "data": [
+         {
+          "ItemStack": {
+           "ItemId": "Bench_Furnace",
+           "Quantity": 1
+          }
+         }
+        ]
+       },
+       {
+        "type": "Append",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList",
+        "text": "Aetherhaven/QuestJournalObjectiveRow.ui"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #CheckBox.Value",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #CheckBox.Disabled",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepLabel.Text",
+        "data": "5. Tell Elder Lyren your workplace is ready. He will say how to put townsfolk to work in it."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepLabel.Style.TextColor",
+        "data": "#d8ccb8"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepItemsPanel.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestsPage #QuestsSplit #QuestDetailPane #QuestStepsList[4] #StepItemsPanel #StepItems.Slots",
+        "data": []
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardSlot.Slots",
+        "data": [
+         {
+          "ItemStack": {
+           "ItemId": "Aetherhaven_Gold_Coin",
+           "Quantity": 20
+          }
+         }
+        ]
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardQuantity.Text",
+        "data": "20"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardTitle.Text",
+        "data": "Gold Coin"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardReputationLine.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardReputationLine.Text",
+        "data": "+10 reputation with Elder Lyren"
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardFallback.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#RewardFallback.Text",
+        "data": ""
+       },
+       {
+        "type": "Set",
+        "selector": "#AbandonQuestButton.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Disabled",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#PinQuestButton.Text",
+        "data": "Unpin quest"
+       }
+      ]
+     },
+     "expect": {
+      "valid": true,
+      "errors": 0
+     },
+     "golden": "tests/hytale/golden/workquest-journal-talk.png"
+    }
+   ]
+  },
+  {
+   "name": "first workplace quest pinned on the HUD tracker",
+   "steps": [
+    {
+     "tool": "ui_render",
+     "name": "pinned alone, first step naming the villager and building",
+     "arguments": {
+      "root": "projects",
+      "path": "Aetherhaven/src/main/resources/Common/UI/Custom/Aetherhaven/AetherhavenHud.ui",
+      "commands": [
+       {
+        "type": "Set",
+        "selector": "#QuestHeading.Text",
+        "data": "Pinned quests"
+       },
+       {
+        "type": "Set",
+        "selector": "#StatusPanel.Anchor",
+        "data": {
+         "Right": 20,
+         "Top": 20,
+         "Width": 286,
+         "Height": 117
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestPanel.Anchor",
+        "data": {
+         "Right": 20,
+         "Top": 184,
+         "Width": 370,
+         "Height": 124
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#ClockText.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#DateText.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#GoldLeftContent.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#GoldRightContent.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestHeading.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDividerLeft.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDividerRight.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestTitle.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestObjectives.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2 #QuestTitle.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2 #QuestObjectives.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3 #QuestTitle.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3 #QuestObjectives.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#StatusPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#TimeRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DateRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#GoldRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DividerTime.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DividerDate.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DateText.Text",
+        "data": "Spring 12, Year 1"
+       },
+       {
+        "type": "Set",
+        "selector": "#ClockText.Text",
+        "data": "9:41 am"
+       },
+       {
+        "type": "Set",
+        "selector": "#CoinTextLeft.Text",
+        "data": "240"
+       },
+       {
+        "type": "Set",
+        "selector": "#CoinTextRight.Text",
+        "data": "240"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1.Anchor",
+        "data": {
+         "Height": 84,
+         "Bottom": 7
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestTitle.Text",
+        "data": "A Place to Work"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestObjectives.Text",
+        "data": "Talk to Garren Vale at the Blacksmith shop and unlock a workplace type."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3.Visible",
+        "data": false
+       }
+      ],
+      "focus": "#QuestPanel"
+     },
+     "expect": {
+      "valid": true,
+      "errors": 0
+     },
+     "golden": "tests/hytale/golden/workquest-hud-first-step.png"
+    },
+    {
+     "tool": "ui_render",
+     "name": "the shortest line",
+     "arguments": {
+      "root": "projects",
+      "path": "Aetherhaven/src/main/resources/Common/UI/Custom/Aetherhaven/AetherhavenHud.ui",
+      "commands": [
+       {
+        "type": "Set",
+        "selector": "#QuestHeading.Text",
+        "data": "Pinned quests"
+       },
+       {
+        "type": "Set",
+        "selector": "#StatusPanel.Anchor",
+        "data": {
+         "Right": 20,
+         "Top": 20,
+         "Width": 286,
+         "Height": 117
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestPanel.Anchor",
+        "data": {
+         "Right": 20,
+         "Top": 184,
+         "Width": 370,
+         "Height": 124
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#ClockText.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#DateText.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#GoldLeftContent.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#GoldRightContent.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestHeading.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDividerLeft.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDividerRight.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestTitle.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestObjectives.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2 #QuestTitle.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2 #QuestObjectives.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3 #QuestTitle.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3 #QuestObjectives.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#StatusPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#TimeRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DateRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#GoldRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DividerTime.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DividerDate.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DateText.Text",
+        "data": "Spring 12, Year 1"
+       },
+       {
+        "type": "Set",
+        "selector": "#ClockText.Text",
+        "data": "9:41 am"
+       },
+       {
+        "type": "Set",
+        "selector": "#CoinTextLeft.Text",
+        "data": "240"
+       },
+       {
+        "type": "Set",
+        "selector": "#CoinTextRight.Text",
+        "data": "240"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1.Anchor",
+        "data": {
+         "Height": 84,
+         "Bottom": 7
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestTitle.Text",
+        "data": "A Place to Work"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestObjectives.Text",
+        "data": "Tell Elder Lyren your workplace is ready."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3.Visible",
+        "data": false
+       }
+      ],
+      "focus": "#QuestPanel"
+     },
+     "expect": {
+      "valid": true,
+      "errors": 0
+     },
+     "golden": "tests/hytale/golden/workquest-hud-short.png"
+    },
+    {
+     "tool": "ui_render",
+     "name": "three pins, this quest with its longest line",
+     "arguments": {
+      "root": "projects",
+      "path": "Aetherhaven/src/main/resources/Common/UI/Custom/Aetherhaven/AetherhavenHud.ui",
+      "commands": [
+       {
+        "type": "Set",
+        "selector": "#QuestHeading.Text",
+        "data": "Pinned quests"
+       },
+       {
+        "type": "Set",
+        "selector": "#StatusPanel.Anchor",
+        "data": {
+         "Right": 20,
+         "Top": 20,
+         "Width": 286,
+         "Height": 117
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestPanel.Anchor",
+        "data": {
+         "Right": 20,
+         "Top": 184,
+         "Width": 370,
+         "Height": 302
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#ClockText.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#DateText.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#GoldLeftContent.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#GoldRightContent.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestHeading.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDividerLeft.Visible",
+        "data": false
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestDividerRight.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestTitle.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestObjectives.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2 #QuestTitle.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2 #QuestObjectives.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3 #QuestTitle.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3 #QuestObjectives.Style.HorizontalAlignment",
+        "data": "End"
+       },
+       {
+        "type": "Set",
+        "selector": "#StatusPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#TimeRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DateRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#GoldRow.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DividerTime.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DividerDate.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#DateText.Text",
+        "data": "Spring 12, Year 1"
+       },
+       {
+        "type": "Set",
+        "selector": "#ClockText.Text",
+        "data": "9:41 am"
+       },
+       {
+        "type": "Set",
+        "selector": "#CoinTextLeft.Text",
+        "data": "240"
+       },
+       {
+        "type": "Set",
+        "selector": "#CoinTextRight.Text",
+        "data": "240"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestPanel.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1.Anchor",
+        "data": {
+         "Height": 84,
+         "Bottom": 7
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestTitle.Text",
+        "data": "Raise The Town Hall"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow1 #QuestObjectives.Text",
+        "data": "Stake and build the town hall prefab."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2.Anchor",
+        "data": {
+         "Height": 87,
+         "Bottom": 7
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2 #QuestTitle.Text",
+        "data": "A Place to Work"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow2 #QuestObjectives.Text",
+        "data": "Place the Alchemist's Workbench inside your workplace Grand Northern Hillside Smeltery And Forge Works."
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3.Visible",
+        "data": true
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3.Anchor",
+        "data": {
+         "Height": 84
+        }
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3 #QuestTitle.Text",
+        "data": "Irienne's Farm Plot"
+       },
+       {
+        "type": "Set",
+        "selector": "#QuestRow3 #QuestObjectives.Text",
+        "data": "Stake and build the farm plot prefab."
+       }
+      ],
+      "focus": "#QuestPanel"
+     },
+     "expect": {
+      "valid": true,
+      "errors": 0
+     },
+     "golden": "tests/hytale/golden/workquest-hud-three-pins.png"
+    }
+   ]
+  }
+ ]
+}

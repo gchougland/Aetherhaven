@@ -41,7 +41,6 @@ public final class PatternBookPage extends AetherhavenInteractiveCustomUIPage<Pa
     private String note;
     private boolean appended, polling;
     private volatile boolean open = true;
-    private String drawn = "";
 
     public PatternBookPage(PlayerRef player, Ref<EntityStore> crafter) {
         super(player, CustomPageLifetime.CanDismiss, Data.CODEC);
@@ -82,13 +81,22 @@ public final class PatternBookPage extends AetherhavenInteractiveCustomUIPage<Pa
         long whole = Math.round(seconds);
         return whole < 60 ? whole + " seconds" : whole % 60 == 0 ? whole / 60 + " minutes" : whole / 60 + " min " + whole % 60 + " s";
     }
-    private static String state(Context c) {
-        return c.book().known().size() + "|" + c.book().queue().size() + "|" + c.book().shelved();
+    /** The bench bar moves in twentieths: every step shown is an update sent, and an update can cost a press. */
+    static float shownProgress(double progress) {
+        return (float) (Math.floor(20 * Math.clamp(progress, 0, 1) + 1e-9) / 20.0);
     }
 
     @Override public void build(Ref<EntityStore> ref, UICommandBuilder b, UIEventBuilder e, Store<EntityStore> store) {
+        if (!fill(ref, b, e, store)) return;
+        // What the client receives whole. The poll below is compared with it and sends only what moved.
+        opened(b, e);
+        if (!polling) { polling = true; poll(store.getExternalData().getWorld()); }
+    }
+
+    /** Draws the whole page. False when the page had to close instead. */
+    private boolean fill(Ref<EntityStore> ref, UICommandBuilder b, UIEventBuilder e, Store<EntityStore> store) {
         var c = current(ref, store);
-        if (c == null) { open = false; close(); return; }
+        if (c == null) { open = false; close(); return false; }
         var book = c.book();
         if (!appended) {
             b.append("Aetherhaven/PatternBookPage.ui"); appended = true;
@@ -128,8 +136,7 @@ public final class PatternBookPage extends AetherhavenInteractiveCustomUIPage<Pa
         b.set("#BookNote.Text", note != null ? note : book.queue().isEmpty()
             ? "Props are built from sticks, stone rubble, scraps and linen scraps. Apprentices at a Crafting workplace can make all four."
             : "Tobin builds the first prop on his bench during his work hours.");
-        drawn = state(c);
-        if (!polling) { polling = true; poll(store.getExternalData().getWorld()); }
+        return true;
     }
 
     private void drawDetail(UICommandBuilder b, Context c, Map<String, Integer> carried) {
@@ -180,9 +187,12 @@ public final class PatternBookPage extends AetherhavenInteractiveCustomUIPage<Pa
             b.set(cell + " #Amount.Text", index == 0 ? "now" : "");
             b.set(cell + ".TooltipText", (prop == null ? "A prop" : name(prop))
                 + (index == 0 ? "\nTobin is building this one." : "\nWaiting its turn.") + "\nSelect to cancel and get everything back.");
-            e.addEventBinding(CustomUIEventBindingType.Activating, cell, EventData.of("Action", "Cancel").append("Key", Integer.toString(index)), false);
+            // The press names the prop as well as the place. Tobin finishing the first one moves every other
+            // commission along, and a press that only knew its place would then cancel the wrong one.
+            e.addEventBinding(CustomUIEventBindingType.Activating, cell,
+                EventData.of("Action", "Cancel").append("Key", index + "|" + book.queue().get(index).prop()), false);
         }
-        b.set("#BenchProgress.Value", (float) book.progress(prop -> PatternBookService.workSeconds(c.plugin(), prop)));
+        b.set("#BenchProgress.Value", shownProgress(book.progress(prop -> PatternBookService.workSeconds(c.plugin(), prop))));
         b.clear("#Shelf");
         int shown = 0;
         for (var ready : book.shelf().entrySet()) {
@@ -198,7 +208,10 @@ public final class PatternBookPage extends AetherhavenInteractiveCustomUIPage<Pa
         b.set("#Collect.Disabled", book.shelf().isEmpty());
     }
 
-    /** Keeps the bench bar moving and redraws when a prop is finished while the screen is open. */
+    /**
+     * Looks once a second and sends only what differs from what the player already sees: a step of the bench bar,
+     * or the bench and shelf when a prop is finished. While nothing on the page moves, nothing is sent.
+     */
     private void poll(World world) {
         var plugin = AetherhavenPlugin.get();
         if (plugin == null || !open) return;
@@ -208,12 +221,9 @@ public final class PatternBookPage extends AetherhavenInteractiveCustomUIPage<Pa
             var store = ref.getStore();
             var player = store.getComponent(ref, Player.getComponentType());
             if (player == null || player.getPageManager().getCustomPage() != this) { open = false; return; }
-            var c = current(ref, store);
-            if (c == null) { open = false; close(); return; }
             var b = new UICommandBuilder(); var e = new UIEventBuilder();
-            if (!state(c).equals(drawn)) build(ref, b, e, store);
-            else b.set("#BenchProgress.Value", (float) c.book().progress(prop -> PatternBookService.workSeconds(c.plugin(), prop)));
-            sendUpdate(b, e, false);
+            if (!fill(ref, b, e, store)) return;
+            sendChanges(b, e);
             poll(world);
         }, 1000L);
     }
@@ -249,7 +259,7 @@ public final class PatternBookPage extends AetherhavenInteractiveCustomUIPage<Pa
             default -> {}
         }
         var b = new UICommandBuilder(); var e = new UIEventBuilder();
-        build(ref, b, e, store); sendUpdate(b, e, false);
+        if (fill(ref, b, e, store)) sendUpdate(b, e, false);
     }
 
     private void commission(Context c) {
@@ -273,9 +283,17 @@ public final class PatternBookPage extends AetherhavenInteractiveCustomUIPage<Pa
     }
 
     private void cancel(Context c, String key) {
-        int index;
-        try { index = Integer.parseInt(key); } catch (NumberFormatException invalid) { return; }
-        if (index < 0 || index >= c.book().queue().size()) return;
+        int bar = key == null ? -1 : key.indexOf('|');
+        if (bar < 0) return;
+        int drawnAt;
+        try { drawnAt = Integer.parseInt(key.substring(0, bar)); } catch (NumberFormatException invalid) { return; }
+        String named = key.substring(bar + 1);
+        int index = c.book().locate(drawnAt, named);
+        if (index < 0) {
+            var finished = c.plugin().getPropCatalog().get(named);
+            note = "Tobin has already finished " + (finished == null ? "that prop" : name(finished)) + ". Look on his shelf.";
+            return;
+        }
         for (var part : c.book().queue().get(index).paid().entrySet())
             if (!c.inventory().canAddItemStack(new ItemStack(part.getKey(), part.getValue()))) {
                 note = "Make room in your pack for the returned materials first."; return;

@@ -94,7 +94,12 @@ public final class WorkplaceToolInteraction extends SimpleInstantInteraction {
                 var area = WorkplaceArea.corners(state.first.x, state.first.y, state.first.z, target.x, target.z);
                 if (!area.valid()) { state.hint = "Select an area from 2 by 2 to 64 by 64 blocks."; return; }
                 var page = new WorkplacePage(pr, town.getTownId(), state.editing, area);
-                world.execute(() -> { if (ref.isValid()) player.getPageManager().openCustomPage(ref, store, page); });
+                boolean marked = state.editing == null;
+                world.execute(() -> {
+                    // A new area, not a resize of an old one, is what a quest means by marking out a workplace.
+                    if (marked) com.hexvane.aetherhaven.quest.WorkplaceQuestHooks.areaMarked(world, manager, town);
+                    if (ref.isValid()) player.getPageManager().openCustomPage(ref, store, page);
+                });
             }
         }
         context.getState().state = InteractionState.Finished;

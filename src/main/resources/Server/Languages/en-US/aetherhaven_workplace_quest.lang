@@ -1,0 +1,59 @@
+# The first workplace: a quest a town is given by itself once a villager who can supervise workplaces
+# lives there and their building is finished. Elder Lyren closes it.
+#
+# The four workplace steps name things in the player's own town, so each has several wordings. The game
+# picks the one that fits the town today and fills in the names. The part after the last dot says when:
+#   done            the short line shown once the step is finished
+#   ready / waiting a villager can unlock a type now / nobody can yet
+#   place...        the bench is known, with or without a place its recipe is made
+#   noSite          the town has no workplace (none yet, or it was removed)
+# Never name a key here. Use the names the game shows for actions and buttons.
+
+aetherhaven.workplaceQuest.title = A Place to Work
+aetherhaven.workplaceQuest.description = Lyren wants your townsfolk doing skilled work. Set up one workplace from start to finish: unlock a kind of work, mark out its ground, choose what it is and give it its bench. Any kind of work will do.
+
+# Said in chat when the town is given the quest. Lyren speaking, in a sentence or two.
+aetherhaven.workplaceQuest.started = Elder Lyren: One of our villagers has a proper place of work now. Your townsfolk should have the same. I have put the steps in your journal. Come and see me if you want them explained.
+
+# Journal lines. {villager} a villager's name, {role} their trade, {building} their building,
+# {gold} the price, {types} workplace types by name.
+aetherhaven.workplaceQuest.objective.unlock.ready = Unlock a workplace type. Talk to {villager}, the {role}, at the {building} and ask to upgrade the building and workplaces. On the Workplaces tab, unlock one of these for {gold} gold: {types}.
+aetherhaven.workplaceQuest.objective.unlock.readyMore = Unlock a workplace type. Talk to {villager}, the {role}, at the {building} and ask to upgrade the building and workplaces. On the Workplaces tab, unlock one of these for {gold} gold: {types}. Other villagers in town can unlock other types.
+aetherhaven.workplaceQuest.objective.unlock.readyUnnamed = Unlock a workplace type. Talk to the {role} at the {building} and ask to upgrade the building and workplaces. On the Workplaces tab, unlock one of these for {gold} gold: {types}.
+aetherhaven.workplaceQuest.objective.unlock.readyUnnamedMore = Unlock a workplace type. Talk to the {role} at the {building} and ask to upgrade the building and workplaces. On the Workplaces tab, unlock one of these for {gold} gold: {types}. Other villagers in town can unlock other types.
+aetherhaven.workplaceQuest.objective.unlock.waiting = Unlock a workplace type. No villager in town can unlock one yet. Finish a villager's building and let them move in, then ask them to upgrade the building and workplaces.
+aetherhaven.workplaceQuest.objective.unlock.done = Unlock a workplace type.
+
+aetherhaven.workplaceQuest.objective.mark.mark = Mark out a workplace. Hold a Building Staff (crafted at the Town Planning Desk), open its mode menu and choose Create workplace, then mark two opposite corners on the ground inside your town.
+aetherhaven.workplaceQuest.objective.mark.done = Mark out a workplace with a Building Staff.
+
+aetherhaven.workplaceQuest.objective.choose.ready = Choose the workplace's type. Marking out an area opens the workplace page. Pick a type card you have unlocked ({types}), name the workplace and press Save.
+aetherhaven.workplaceQuest.objective.choose.locked = Choose the workplace's type. Marking out an area opens the workplace page. Unlock a type first, then pick its card, name the workplace and press Save.
+aetherhaven.workplaceQuest.objective.choose.done = Choose the workplace's type and save it.
+
+# {bench} the item to place, {site} the workplace's own name, {type} its type,
+# {craftedAt} the bench the item is made at, {tier} the tier that bench must be.
+aetherhaven.workplaceQuest.objective.bench.place = Place the {bench} inside your workplace {site}. Its type, {type}, needs it. It is crafted at the {craftedAt}.
+aetherhaven.workplaceQuest.objective.bench.placeTier = Place the {bench} inside your workplace {site}. Its type, {type}, needs it. It is crafted at the {craftedAt}, which must be tier {tier} or higher.
+aetherhaven.workplaceQuest.objective.bench.placePocket = Place the {bench} inside your workplace {site}. Its type, {type}, needs it. It is crafted with Pocket Crafting in your inventory.
+aetherhaven.workplaceQuest.objective.bench.placeNoRecipe = Place the {bench} inside your workplace {site}. Its type, {type}, needs it.
+aetherhaven.workplaceQuest.objective.bench.placeUnknown = Place the bench that {type} needs inside your workplace {site}. The workplace page names the bench when you select the workplace.
+aetherhaven.workplaceQuest.objective.bench.noSite = Place the bench its type needs inside your workplace. Your town has no workplace at the moment, so mark one out and choose its type first. This step will then name the bench.
+aetherhaven.workplaceQuest.objective.bench.done = Place the workplace's bench inside it.
+
+aetherhaven.workplaceQuest.objective.talk = Tell Elder Lyren your workplace is ready. He will say how to put townsfolk to work in it.
+
+# The same steps for the quest tracker on screen, which has room for one short sentence.
+aetherhaven.workplaceQuest.hud.unlock.ready = Talk to {villager} at the {building} and unlock a workplace type.
+aetherhaven.workplaceQuest.hud.unlock.readyUnnamed = Talk to the {role} at the {building} and unlock a workplace type.
+aetherhaven.workplaceQuest.hud.unlock.waiting = Finish a villager's building so a workplace type can be unlocked.
+aetherhaven.workplaceQuest.hud.unlock.done = Unlock a workplace type.
+aetherhaven.workplaceQuest.hud.mark.mark = Open the Building Staff's mode menu, choose Create workplace and mark two corners.
+aetherhaven.workplaceQuest.hud.mark.done = Mark out a workplace.
+aetherhaven.workplaceQuest.hud.choose.choose = Pick a type card on the workplace page and press Save.
+aetherhaven.workplaceQuest.hud.choose.done = Choose the workplace's type.
+aetherhaven.workplaceQuest.hud.bench.place = Place the {bench} inside your workplace {site}.
+aetherhaven.workplaceQuest.hud.bench.placeUnknown = Place the bench {type} needs inside your workplace {site}.
+aetherhaven.workplaceQuest.hud.bench.noSite = Mark out a workplace and choose its type, then place its bench inside.
+aetherhaven.workplaceQuest.hud.bench.done = Place the workplace's bench.
+aetherhaven.workplaceQuest.hud.talk = Tell Elder Lyren your workplace is ready.

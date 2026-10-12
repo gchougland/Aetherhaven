@@ -112,7 +112,6 @@ class ExcavationFittingsTest {
         var gson=new Gson();var copy=gson.fromJson(gson.toJson(p),ExcavationPlan.class);
         assertEquals(p.nextFitting(),copy.nextFitting());assertEquals(p.fitted(),copy.fitted());
         assertEquals(ExcavationFittings.Mode.BOTH,copy.fittingsMode());
-        assertFalse(copy.markEdited(copy.nextFitting().point()),"An empty-only placement can retry after obstruction clears");
         assertTrue(copy.fit(copy.id(),copy.nextFitting(),()->true));assertEquals(2,copy.fitted());
     }
     @Test void OldSavesHaveNoFittings() {

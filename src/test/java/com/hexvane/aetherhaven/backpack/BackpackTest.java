@@ -126,4 +126,45 @@ class BackpackTest {
         assertEquals(source,com.hexvane.aetherhaven.patrol.GuardSpoils.clean(marked));
         var plain=new ItemStack("test",1);assertEquals(plain,com.hexvane.aetherhaven.patrol.GuardSpoils.clean(com.hexvane.aetherhaven.patrol.GuardSpoils.mark(plain,"guardA")));
     }
+    @Test void storingMatchingItemsFillsTheBagFromEverySlotButTheHotbarAndTheBagItself(){
+        var inv=new SimpleItemContainer((short)7);var bag=Backpack.create();var pack=Backpack.read(bag);
+        pack.insert(new ItemStack("test",5));pack.insert(new ItemStack("gem",1));bag=pack.write(bag);
+        var marked=new ItemStack("test",3).withMetadata("engraved",new BsonString("Ada"));
+        // Slot 0 stands for the hotbar.
+        put(inv,0,new ItemStack("test",10));put(inv,1,bag);put(inv,2,new ItemStack("test",20));put(inv,3,new ItemStack("wood",4));
+        put(inv,4,marked);put(inv,5,new ItemStack("gem",7));put(inv,6,Backpack.create());
+        assertEquals(27,BackpackExchange.storeMatching(inv,(short)1,bag,1,7));
+        assertEquals(10,inv.getItemStack((short)0).getQuantity(),"The hotbar is left alone");
+        assertTrue(ItemStack.isEmpty(inv.getItemStack((short)2)));assertEquals(4,inv.getItemStack((short)3).getQuantity(),"Wood is not in the bag yet");
+        assertEquals(marked,inv.getItemStack((short)4),"A stack with different properties is not a match");
+        assertTrue(ItemStack.isEmpty(inv.getItemStack((short)5)));assertTrue(Backpack.isBackpack(inv.getItemStack((short)6)));
+        var after=Backpack.read(inv.getItemStack((short)1));assertEquals(25,after.items[0].getQuantity());assertEquals(8,after.items[1].getQuantity());assertEquals(2,after.used());
+        // A click on the old view of the bag changes nothing.
+        put(inv,2,new ItemStack("test",5));assertEquals(0,BackpackExchange.storeMatching(inv,(short)1,bag,1,7));assertEquals(5,inv.getItemStack((short)2).getQuantity());
+    }
+    @Test void storingMatchingItemsKeepsWhatTheBagCannotHold(){
+        var inv=new SimpleItemContainer((short)3);var bag=Backpack.create();var pack=Backpack.read(bag);
+        for(int i=0;i<pack.tier.slots-1;i++)pack.insert(new ItemStack("filler"+i,1));pack.insert(new ItemStack("test",90));bag=pack.write(bag);
+        put(inv,0,bag);put(inv,1,new ItemStack("test",30));put(inv,2,new ItemStack("wood",2));
+        assertEquals(10,BackpackExchange.storeMatching(inv,(short)0,bag,0,3));assertEquals(20,inv.getItemStack((short)1).getQuantity());
+        var full=inv.getItemStack((short)0);assertEquals(100,Backpack.read(full).items[pack.tier.slots-1].getQuantity());
+        assertEquals(0,BackpackExchange.storeMatching(inv,(short)0,full,0,3));
+        assertEquals(full,inv.getItemStack((short)0));assertEquals(20,inv.getItemStack((short)1).getQuantity());assertEquals(2,inv.getItemStack((short)2).getQuantity());
+    }
+    @Test void backpackAndWarehouseShareTheSameSlotRules(){
+        var slots=new ItemStack[3];
+        assertEquals(250,com.hexvane.aetherhaven.inventory.StackedSlots.insert(slots,2,new ItemStack("test",250),2));
+        assertEquals(200,slots[0].getQuantity());assertEquals(50,slots[1].getQuantity());assertNull(slots[2],"Slots beyond the size in use are never touched");
+        assertEquals(150,com.hexvane.aetherhaven.inventory.StackedSlots.insert(slots,2,new ItemStack("test",200),2));
+        assertEquals(0,com.hexvane.aetherhaven.inventory.StackedSlots.insert(slots,2,new ItemStack("wood",1),2));
+        assertTrue(com.hexvane.aetherhaven.inventory.StackedSlots.holds(slots,2,new ItemStack("test",1)));
+        assertFalse(com.hexvane.aetherhaven.inventory.StackedSlots.holds(slots,2,new ItemStack("wood",1)));
+        assertFalse(com.hexvane.aetherhaven.inventory.StackedSlots.holds(slots,2,new ItemStack("test",1).withMetadata("engraved",new BsonString("Ada"))));
+        assertEquals(100,com.hexvane.aetherhaven.inventory.StackedSlots.oneStack(slots[0]),"A click takes one stack from a deep slot");
+        assertEquals(40,com.hexvane.aetherhaven.inventory.StackedSlots.oneStack(new ItemStack("test",40)));
+        var pack=Backpack.read(Backpack.create());pack.tier=Backpack.Tier.THORIUM;pack.compression=1;
+        assertEquals(com.hexvane.aetherhaven.inventory.StackedSlots.limit(new ItemStack("test",1),3),pack.limit(new ItemStack("test",1)));
+        assertEquals(300,pack.insert(new ItemStack("test",300)));assertEquals(1,pack.used());assertTrue(pack.holds(new ItemStack("test",1)));
+        assertFalse(pack.holds(Backpack.create()));
+    }
 }

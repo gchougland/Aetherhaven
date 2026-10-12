@@ -22,8 +22,14 @@ final class RtsCommandFeedback {
     private static final String STANCE_SOUND = "SFX_Workbench_Upgrade_Complete_Default";
     private static final String FREE_SOUND = "SFX_Creative_Play_Remove_Mask";
     private     static final String TOOL_EQUIP_SOUND = "SFX_UI_Click";
+    /** Played with the reason whenever a press cannot do anything, so no press is silent. */
+    private static final String DENIED_SOUND = "SFX_Creative_Play_Error";
 
     private RtsCommandFeedback() {}
+
+    static void playDenied(@Nonnull Ref<EntityStore> commanderRef, @Nonnull ComponentAccessor<EntityStore> accessor) {
+        play2dToPlayer(commanderRef, accessor, DENIED_SOUND);
+    }
 
     static void playFocusAttack(
         @Nonnull Ref<EntityStore> commanderRef,

@@ -20,7 +20,8 @@ public final class PlotCreatorSpotMarkerVisuals {
             case MINING_NODE -> TEX_ORANGE;
             case BARN_PEN -> TEX_TEAL;
             case VISITOR_SPAWN, TOURIST_VISIT_POI, TOURIST_PORTAL_BLOCK, FESTIVAL_TOURIST_SPOT -> TEX_TEAL;
-            case ADVENTURER_SPAWN, INNKEEPER_SPAWN, GUILD_MASTER_SPAWN, FESTIVAL_NPC -> TEX_PURPLE;
+            // Purple marks where a particular person stands.
+            case ADVENTURER_SPAWN, INNKEEPER_SPAWN, GUILD_MASTER_SPAWN, FESTIVAL_NPC, CLERK_STAND -> TEX_PURPLE;
             case SLEEP_POI, EAT_POI, FUN_POI, FESTIVAL_CENTERPIECE, FESTIVAL_WHEEL, FESTIVAL_TREE_CLIMB_FINISH,
                 FESTIVAL_MAZE_START, FESTIVAL_MARKET_STAND, FESTIVAL_SNOWBALL_OUT ->
                 TEX_BLUE;
@@ -79,6 +80,7 @@ public final class PlotCreatorSpotMarkerVisuals {
         return switch (type) {
             case MINING_NODE -> "Mining node";
             case BARN_PEN -> "Animal pen";
+            case CLERK_STAND -> "Clerk stand";
             case MANAGEMENT_BLOCK -> "Town records shelf";
             case PRODUCTION_STORAGE -> "Production chest";
             case TREASURY_BLOCK -> "Treasury";
@@ -90,10 +92,10 @@ public final class PlotCreatorSpotMarkerVisuals {
             case SLEEP_POI -> "Sleep spot";
             case EAT_POI -> "Eat spot";
             case FUN_POI -> "Fun spot";
-            case SHOP_SPOT -> "Shop stall";
+            case SHOP_SPOT -> "Shop spot";
             case TOURIST_PORTAL_BLOCK -> "Tourist portal";
             case TOURIST_VISIT_POI -> "Tourist visit spot";
-            case SHOP_POI -> "Shop spot";
+            case SHOP_POI -> "Browse spot";
             case INNKEEPER_SPAWN -> "Innkeeper stand";
             case VISITOR_SPAWN -> "Inn Visitor Spawn";
             case GUILD_MASTER_SPAWN -> "Guild master stand";

@@ -52,7 +52,10 @@ public final class ShopSpotPlotRelocation {
         }
     }
 
-    /** Removes shop spot displays and registry rows when a plot is destroyed (no rebind). */
+    /**
+     * Removes shop spot displays and registry rows when a plot is destroyed (no rebind). Items players still had for
+     * sale there go back to those players, see {@link ShopSpotListingReturns}.
+     */
     public static void clearPlotSpots(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
@@ -60,16 +63,40 @@ public final class ShopSpotPlotRelocation {
         @Nonnull ShopSpotRegistry registry,
         @Nonnull UUID plotId
     ) {
-        PENDING_BY_PLOT.remove(plotId);
         List<ShopSpotRecord> records = new ArrayList<>(registry.listForPlot(plotId));
+        records.addAll(drainDetached(plotId));
         if (records.isEmpty()) {
             return;
         }
         for (ShopSpotRecord record : records) {
             ShopSpotDisplayService.removeDisplayImmediate(world, store, plugin, registry, record);
-            registry.remove(record.getSpotId());
+            ShopSpotListingReturns.retire(world, store, registry, record);
         }
         ShopSpotPersistence.save(world, plugin, registry);
+    }
+
+    /**
+     * Rebuilding a building where it stands: the stalls stay registered and saved with everything listed on them, and
+     * only their floating displays are taken down. {@link ShopSpotExtractor} binds the pasted stalls back to these
+     * rows when the build completes.
+     */
+    public static void beginInPlaceRebuild(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull ShopSpotRegistry registry,
+        @Nonnull UUID plotId
+    ) {
+        for (ShopSpotRecord record : registry.listForPlot(plotId)) {
+            ShopSpotDisplayService.removeDisplayImmediate(world, store, plugin, registry, record);
+        }
+    }
+
+    /** Detached rows no pasted stall claimed. Their listings must not be dropped; the caller returns them. */
+    @Nonnull
+    public static List<ShopSpotRecord> drainDetached(@Nonnull UUID plotId) {
+        Map<Long, ShopSpotRecord> pending = PENDING_BY_PLOT.remove(plotId);
+        return pending == null ? List.of() : new ArrayList<>(pending.values());
     }
 
     @Nullable
@@ -93,10 +120,6 @@ public final class ShopSpotPlotRelocation {
         return detached;
     }
 
-    public static void finishPlotMove(@Nonnull UUID plotId) {
-        PENDING_BY_PLOT.remove(plotId);
-    }
-
     @Nonnull
     private static Vector3i prefabLocalOffset(@Nonnull Vector3i anchor, @Nonnull Rotation yaw, @Nonnull Vector3i worldPos) {
         return PrefabLocalOffset.inverseRotateWorldDelta(
@@ -107,8 +130,9 @@ public final class ShopSpotPlotRelocation {
         );
     }
 
+    /** Everything a stall holds, for the time between a building being cleared and pasted again. */
     @Nonnull
-    private static ShopSpotRecord copyForRelocation(@Nonnull ShopSpotRecord src) {
+    static ShopSpotRecord copyForRelocation(@Nonnull ShopSpotRecord src) {
         ShopSpotRecord copy = new ShopSpotRecord();
         copy.setSpotId(src.getSpotId());
         copy.setWorldName(src.getWorldName());
@@ -122,6 +146,8 @@ public final class ShopSpotPlotRelocation {
         copy.setStock(src.getStock());
         copy.setStockEpochDay(src.getStockEpochDay());
         copy.setJewelryMetaJson(src.getJewelryMetaJson());
+        copy.setStackData(src.getStackData());
+        copy.setQuote(src.getQuote());
         copy.setSellerUuid(src.getSellerUuid());
         copy.setSellerName(src.getSellerName());
         return copy;

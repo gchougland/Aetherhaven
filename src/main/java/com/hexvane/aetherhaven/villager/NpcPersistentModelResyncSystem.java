@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.villager;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.entity.OwnCreatures;
 import com.hexvane.aetherhaven.festival.hallowseve.HallowsEvePumpkinComponent;
 import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceComponent;
 import com.hexvane.aetherhaven.monument.FounderMonumentStatueSkin;
@@ -36,6 +37,9 @@ import javax.annotation.Nonnull;
  * After NPC spawn/load, the client can briefly render the wrong attachment textures when many player-model NPCs appear
  * at once or when appearance is swapped immediately after spawn. A deferred rebuild from {@link PersistentModel} matches
  * what a full world reload does and clears those glitches.
+ *
+ * <p>The system sees every creature enter the world, because this mod's characters only get their binding a moment
+ * later, but it rebuilds the model of this mod's own characters only ({@link OwnCreatures}).
  */
 public final class NpcPersistentModelResyncSystem extends HolderSystem<EntityStore> {
     private static final long RESYNC_RETRY_DELAY_MS = 50L;
@@ -98,6 +102,12 @@ public final class NpcPersistentModelResyncSystem extends HolderSystem<EntitySto
         }
         Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityId);
         if (ref == null || !ref.isValid()) {
+            return;
+        }
+        // Only this mod's own characters. The bindings are attached just after a spawn, so the test is made here and
+        // not when the creature entered the world. Every other creature keeps the model its owner gave it: rebuilding
+        // it would drop a custom hit box and undo a model another mod had just changed.
+        if (!OwnCreatures.isOwnNpc(ref, store)) {
             return;
         }
         NpcModelSpawnUtil.resyncFromPersistentModel(ref, store);

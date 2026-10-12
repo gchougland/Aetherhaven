@@ -22,13 +22,8 @@ public final class TownVillagerSpawner {
         @Nonnull TownVillagerBinding binding, @Nonnull String source, @Nonnull String detail
     ) {
         var world = store.getExternalData().getWorld();
-        var chunks = world.getChunkStore();
-        var section = chunks.getChunkSectionReference(
-            ChunkUtil.chunkCoordinate(position.x), ChunkUtil.chunkCoordinate(position.y), ChunkUtil.chunkCoordinate(position.z)
-        );
         // Do not create untracked holders or repeatedly refill slots outside the active simulation.
-        if (section == null || !section.isValid()
-            || chunks.getStore().getArchetype(section).contains(ChunkStore.REGISTRY.getNonTickingComponentType())) {
+        if (!canSpawnAt(store, position)) {
             return null;
         }
         NPCPlugin npcs = NPCPlugin.get();
@@ -43,6 +38,19 @@ public final class TownVillagerSpawner {
             null
         );
         return pair != null ? pair.first() : null;
+    }
+
+    /**
+     * True when {@link #spawn} would be allowed to place a villager here: the chunk section is loaded and simulating.
+     * Callers that remove a villager in order to replace them should ask first. Reads loaded sections only.
+     */
+    public static boolean canSpawnAt(@Nonnull Store<EntityStore> store, @Nonnull Vector3d position) {
+        var chunks = store.getExternalData().getWorld().getChunkStore();
+        var section = chunks.getChunkSectionReference(
+            ChunkUtil.chunkCoordinate(position.x), ChunkUtil.chunkCoordinate(position.y), ChunkUtil.chunkCoordinate(position.z)
+        );
+        return section != null && section.isValid()
+            && !chunks.getStore().getArchetype(section).contains(ChunkStore.REGISTRY.getNonTickingComponentType());
     }
 
     public static void prepare(

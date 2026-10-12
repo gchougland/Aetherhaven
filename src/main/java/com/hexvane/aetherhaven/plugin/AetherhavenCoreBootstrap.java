@@ -155,10 +155,13 @@ public final class AetherhavenCoreBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new ConstructionFavoritesPlayerInitSystem());
         TerritoryProtectionBootstrap.register(plugin);
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.workplace.WorkplaceBenchUseSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.workplace.WorkplaceNativeBench.OpenSystem());
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.warehouse.WarehouseBenchUseSystem(plugin));
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.warehouse.WarehouseBenchRefreshSystem());
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyBlastWardSystem());
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyPoisonWardSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyRepellentSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyRepellentSystem.BrokenByAttack());
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyFlaskInventoryNormalizeSystem());
         plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyFlaskInventoryNormalizeSystem.PlayerAdded());
 
@@ -206,6 +209,8 @@ public final class AetherhavenCoreBootstrap {
         // After /ah command tree — props register systems and the prop subcommand.
         PropsBootstrap.register(plugin, plugin);
         com.hexvane.aetherhaven.blockpalette.BlockPalettesBootstrap.register(plugin, plugin);
+        // Lists every input of a held tool in the game's own key list. Shared by the tools of every feature pack.
+        com.hexvane.aetherhaven.ui.ToolKeyPromptOverrides.register(plugin);
         // After shared components and the /ah command tree — feature packs register systems and subcommands.
         AetherhavenFeatureBootstrap.registerEnabled(plugin);
         com.hexvane.aetherhaven.leveling.LevelingIntegration.register(plugin);
@@ -227,6 +232,10 @@ public final class AetherhavenCoreBootstrap {
         );
         PermissionsModule.registerPermission(
             AetherhavenConstants.PERMISSION_PROP_BREAK,
+            HytalePermissionsProvider.GROUP_ADMIN
+        );
+        PermissionsModule.registerPermission(
+            AetherhavenConstants.PERMISSION_PRICE_ADMIN,
             HytalePermissionsProvider.GROUP_ADMIN
         );
     }
@@ -376,6 +385,14 @@ public final class AetherhavenCoreBootstrap {
                                     );
                                 }
                                 RtsCommandService.exit(ref, store);
+                                if (AetherhavenFeatures.isLoaded(AetherhavenPluginIds.QUESTS)) {
+                                    com.hexvane.aetherhaven.quest.QuestAutoStartService.onTownMemberPlayerReady(
+                                        player.getWorld(),
+                                        AetherhavenPlugin.get(),
+                                        ref,
+                                        store
+                                    );
+                                }
                                 IntroQuestPromptService.maybeShow(
                                     AetherhavenPlugin.get(),
                                     ref,

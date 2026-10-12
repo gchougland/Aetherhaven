@@ -32,6 +32,10 @@ public final class WorkplaceSupplyPlanner {
                 if(HerdFeedSupplyPlanner.invalid(world,town,plugin,batch))changed|=stock.cancel(batch.id());
                 continue;
             }
+            if(batch.siteSupply()) {
+                if(com.hexvane.aetherhaven.construction.SiteSupplyPlanner.invalid(town,plugin,batch))changed|=stock.cancel(batch.id());
+                continue;
+            }
             var site=town.getApprenticeWorkplaces().find(batch.workplaceId());
             var order=site==null?null:site.orders().find(batch.orderId());
             var recipe=plugin.getApprenticeRecipes().find(batch.recipeId());
@@ -99,6 +103,8 @@ public final class WorkplaceSupplyPlanner {
             }
         }
         changed|=HerdFeedSupplyPlanner.queue(world,town,plugin,sources,now);
+        // Last, so workplace orders and the barn always have first call on the stock.
+        changed|=com.hexvane.aetherhaven.construction.SiteSupplyPlanner.queue(world,town,plugin,courierStacks<0?bestCourierStacks(town,plugin):courierStacks);
         if(changed) manager.updateTown(town);
     }
     /** The most stacks any of the town's couriers can carry in one trip. One when nobody is a courier yet. */

@@ -187,7 +187,10 @@ public final class TimberWorkService {
                     &&timber.cargo()==null
                     &&NativeTimberProducts.hasRoom(production,entry,planned)&&!otherGrove(town,plot,planned)) {
                     var fresh=NativeTimberGrowth.capture(planned.output(),planned.root(),0,bounds(town));
-                    if(fresh.ready()&&fresh.receipt().stages().equals(planned.stages())&&fresh.receipt().clearance().equals(planned.clearance())) {
+                    // The saved plan and today's prediction list the same tree in whatever order the engine
+                    // loaded its prefab, so they are matched by content. Matching the lists left her unable to
+                    // plant a tree that had not changed at all.
+                    if(fresh.ready()&&fresh.receipt().sameGrowth(planned)) {
                         var prepared=NativeTimberPlanting.prepare(world,production,slot,fresh.receipt(),bounds(town));
                         changed=prepared.ready()&&NativeTimberPlanting.plant(world,production,slot,prepared,bounds(town))==null;
                         if(changed)timber.rotateAfter(slot);

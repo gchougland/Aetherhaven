@@ -130,7 +130,7 @@ public record WorkplaceRecipe(String id, String name, String workplace, String s
         if(source==null||source.getBenchRequirement()==null)return false;
         for(var requirement:source.getBenchRequirement())
             if(requirement!=null&&candidate.id().equals(requirement.id)&&requirement.requiredTierLevel<=candidate.tier()
-                &&(requirement.type==com.hypixel.hytale.protocol.BenchType.Crafting||requirement.type==com.hypixel.hytale.protocol.BenchType.Processing)
+                &&NativeWorkplaceRecipes.craftable(requirement.type)
                 &&(requirement.requiredAugmentTags==null||candidate.augmentTags().containsAll(java.util.Arrays.asList(requirement.requiredAugmentTags))))return true;
         return false;
     }

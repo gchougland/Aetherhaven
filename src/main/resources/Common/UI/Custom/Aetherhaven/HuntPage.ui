@@ -28,11 +28,12 @@ $C.@PageOverlay { LayoutMode: Middle;
       Label #Wave { Anchor: (Height: 54); Style: (...$C.@DefaultLabelStyle, FontSize: 29, RenderBold: true, TextColor: #9dceba); }
       Label #Status { Anchor: (Height: 56); Style: (...$C.@DefaultLabelStyle, FontSize: 18, Wrap: true, TextColor: #d2bc85); }
       Label #RunInfo { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+      Label #Lineup { Anchor: (Height: 44, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #9dceba); }
       Label #RunDetails { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true, TextColor: #c0cbbb); }
      }
      Group #CreaturesPanel { LayoutMode: Top; FlexWeight: 1;
       Label { Text: "FIELD BESTIARY"; Anchor: (Height: 38); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true); }
-      Label { Text: "Bring samples from creatures found in the world. Unlocks are permanent and join the next run."; Anchor: (Height: 58); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true); }
+      Label { Text: "Bring samples from creatures found in the world to unlock them for good. Tick the ones that should take turns in the arena."; Anchor: (Height: 58); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true); }
       Group #CreatureCards { LayoutMode: Top; FlexWeight: 1; }
       Group { LayoutMode: Left; Anchor: (Height: 38, Top: 8);
        $C.@SecondaryTextButton #CreaturePrevious { Text: "Previous"; Anchor: (Width: 140); Padding: (Horizontal: 8); }

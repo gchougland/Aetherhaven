@@ -45,7 +45,7 @@ $C.@PageOverlay {
         LayoutMode: Left;
         Anchor: (Top: 8);
 
-        $C.@CancelTextButton #CloseButton {
+        $C.@CancelTextButton #PageCloseButton {
           Anchor: (Height: 40, Width: 110);
           Text: "";
         }

@@ -186,9 +186,8 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         long epochDay = epochDay(store);
         FurnitureMerchantShopService.ensureInventory(plugin, town, tm, epochDay);
         paletteUnlockTown = TownPlayerResolution.resolveActiveTown(world, store, ref, tm);
-        String token = FurnitureMerchantShopService.inventoryToken(town);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#RerollButton",
-            EventData.of("Action", "Reroll").append("StockToken", token), false);
+            EventData.of("Action", "Reroll").append("StockToken", FurnitureMerchantShopService.offersToken(town)), false);
         commandBuilder.set("#RerollButton.Disabled",
             !playerCanAfford(store, ref, plugin, FurnitureMerchantShopService.REROLL_GOLD_COST));
         if (shopTab == ShopTab.PROPS) {
@@ -198,8 +197,11 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         }
 
         applySelectionLabels(commandBuilder, plugin, town, store, ref);
+        // The press names the offer it buys: the slot and what was in it. Another customer buying something else,
+        // or one of these, never refuses it; only this offer being replaced or sold out does.
+        String offer = FurnitureMerchantShopService.offerAt(town, shopTab == ShopTab.PALETTES, selectedSlot);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#BuyButton",
-            EventData.of("Action", "Buy").append("StockToken", token)
+            EventData.of("Action", "Buy").append("StockToken", offer == null ? "" : offer)
                 .append("Slot", String.valueOf(selectedSlot)).append("ShopTab", shopTab.name()), false);
     }
 
@@ -697,7 +699,8 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         if (town == null) {
             return;
         }
-        if (!FurnitureMerchantShopService.inventoryToken(town).equals(token)) {
+        String offered = FurnitureMerchantShopService.offerAt(town, shopTab == ShopTab.PALETTES, selectedSlot);
+        if (offered == null || !offered.equals(token)) {
             NotificationUtil.sendNotification(pr.getPacketHandler(), Message.translation(MSG + ".error.stockChanged"),
                 NotificationStyle.Warning);
             refresh(ref, store);

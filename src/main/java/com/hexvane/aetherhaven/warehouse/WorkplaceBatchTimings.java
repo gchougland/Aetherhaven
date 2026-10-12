@@ -68,7 +68,7 @@ public final class WorkplaceBatchTimings {
     public static void observe(UUID town, String townName, Iterable<WarehouseBatch> batches, long now) {
         var live = new HashSet<UUID>();
         for (var batch : batches) {
-            if (batch.cancelled() || batch.herdFeed() || batch.smelting() || batch.cultivation()) {
+            if (batch.cancelled() || batch.herdFeed() || batch.siteSupply() || batch.smelting() || batch.cultivation()) {
                 continue;
             }
             live.add(batch.id());

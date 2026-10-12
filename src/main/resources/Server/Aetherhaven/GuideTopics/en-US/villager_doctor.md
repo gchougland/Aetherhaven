@@ -5,7 +5,7 @@ author: Hexvane
 npcRoleId: Aetherhaven_Doctor
 ---
 
-**Elara Willowmere** becomes available at the Inn at **Town Level 3**. Build her **Clinic** to give your residents a place to recover.
+**Elara Willowmere** becomes available at the Inn at **Town Level 4**. Build her **Clinic** to give your residents a place to recover.
 
 ### Clinic care
 

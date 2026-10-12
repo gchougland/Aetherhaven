@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -23,7 +24,7 @@ public final class BuildingEditorCancelInteraction extends SimpleInstantInteract
                 BuildingEditorCancelInteraction::new,
                 SimpleInstantInteraction.CODEC
             )
-            .documentation("Building editor staff: Ability3 — cancel the active session.")
+            .documentation("Building editor staff: third extra action — cancel the active session.")
             .build();
 
     @Nonnull
@@ -47,7 +48,7 @@ public final class BuildingEditorCancelInteraction extends SimpleInstantInteract
             return;
         }
         CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
-        if (commandBuffer == null || type != InteractionType.Ability3) {
+        if (commandBuffer == null || type != ToolAbilityKeys.THIRD) {
             context.getState().state = InteractionState.Failed;
             return;
         }

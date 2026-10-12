@@ -79,7 +79,7 @@ class FurnitureMerchantShopServiceTest {
     private static FurnitureMerchantShopService.BuyResult reroll(TownRecord shop, TownRecord payer,
         CombinedItemContainer inventory, boolean allowTreasury) {
         return FurnitureMerchantShopService.tryReroll(shop, payer, inventory, allowTreasury, 11L,
-            FurnitureMerchantShopService.inventoryToken(shop), PROPS, PALETTES);
+            FurnitureMerchantShopService.offersToken(shop), PROPS, PALETTES);
     }
 
     @Test void chargesExactlyTwentyFromBuyerTownAndRefreshesBothTabs() {
@@ -136,9 +136,9 @@ class FurnitureMerchantShopServiceTest {
         assertEquals(before, FurnitureMerchantShopService.inventoryToken(shop));
     }
 
-    @Test void staleClickDoesNotChargeOrReplaceStock() {
+    @Test void aSecondPressOnOffersAlreadyReplacedDoesNotChargeOrReplaceStock() {
         var shop = town(100);
-        String token = FurnitureMerchantShopService.inventoryToken(shop);
+        String token = FurnitureMerchantShopService.offersToken(shop);
         assertTrue(reroll(shop, shop, inventory(), true).ok());
         String after = FurnitureMerchantShopService.inventoryToken(shop);
         var result = FurnitureMerchantShopService.tryReroll(shop, shop, inventory(), true, 11L, token, PROPS, PALETTES);
@@ -152,7 +152,7 @@ class FurnitureMerchantShopServiceTest {
         var shop = town(100);
         String before = FurnitureMerchantShopService.inventoryToken(shop);
         assertFalse(FurnitureMerchantShopService.tryReroll(shop, shop, inventory(), true, 11L,
-            before, List.of(), List.of()).ok());
+            FurnitureMerchantShopService.offersToken(shop), List.of(), List.of()).ok());
         assertEquals(100, shop.getTreasuryGoldCoinCount());
         assertEquals(before, FurnitureMerchantShopService.inventoryToken(shop));
     }
@@ -160,7 +160,7 @@ class FurnitureMerchantShopServiceTest {
     @Test void paletteOnlyCatalogStillRestocksAndPadsSlots() {
         var shop = town(20);
         assertTrue(FurnitureMerchantShopService.tryReroll(shop, shop, inventory(), true, 11L,
-            FurnitureMerchantShopService.inventoryToken(shop), List.of(), List.of("p1", "p1", "p2")).ok());
+            FurnitureMerchantShopService.offersToken(shop), List.of(), List.of("p1", "p1", "p2")).ok());
         assertEquals(6, shop.getFurnitureMerchantShopSlots().size());
         assertTrue(shop.getFurnitureMerchantShopSlots().stream().noneMatch(FurnitureMerchantShopSlotRecord::hasStock));
         assertEquals(6, shop.getFurnitureMerchantPaletteShopSlots().size());
@@ -170,7 +170,7 @@ class FurnitureMerchantShopServiceTest {
     @Test void propOnlyCatalogStillRestocksAndPadsSlots() {
         var shop = town(20);
         assertTrue(FurnitureMerchantShopService.tryReroll(shop, shop, inventory(), true, 11L,
-            FurnitureMerchantShopService.inventoryToken(shop), List.of("a", "a"), List.of()).ok());
+            FurnitureMerchantShopService.offersToken(shop), List.of("a", "a"), List.of()).ok());
         assertEquals(6, shop.getFurnitureMerchantShopSlots().size());
         assertEquals(1, shop.getFurnitureMerchantShopSlots().stream().filter(FurnitureMerchantShopSlotRecord::hasStock).count());
         assertTrue(shop.getFurnitureMerchantPaletteShopSlots().stream().noneMatch(FurnitureMerchantPaletteShopSlotRecord::hasStock));
@@ -228,5 +228,31 @@ class FurnitureMerchantShopServiceTest {
         assertEquals(6, palettes(shop).size());
         assertTrue(PALETTES.containsAll(palettes(shop)));
         assertTrue(shop.getFurnitureMerchantPaletteShopSlots().stream().allMatch(slot -> slot.getStock() >= 5 && slot.getStock() <= 10));
+    }
+
+    /**
+     * A press is tied to the offers the page showed, not to how many of each are left. Another customer buying
+     * something is no reason to refuse; the offers having been replaced is.
+     */
+    @Test void anotherCustomerBuyingDoesNotRefuseARerollOrABuy() {
+        var shop = town(100);
+        String drawnOffers = FurnitureMerchantShopService.offersToken(shop);
+        String drawnStock = FurnitureMerchantShopService.inventoryToken(shop);
+        String drawnOffer = FurnitureMerchantShopService.offerAt(shop, false, 0);
+        assertEquals("oldProp", drawnOffer);
+        assertEquals("oldPalette", FurnitureMerchantShopService.offerAt(shop, true, 0));
+        // Another customer buys one of the two old props after this page was drawn.
+        shop.getFurnitureMerchantShopSlots().getFirst().setStock(1);
+        assertNotEquals(drawnStock, FurnitureMerchantShopService.inventoryToken(shop), "The old check compared this and refused");
+        assertEquals(drawnOffers, FurnitureMerchantShopService.offersToken(shop));
+        assertEquals(drawnOffer, FurnitureMerchantShopService.offerAt(shop, false, 0), "The offer the Buy button named is still there");
+        assertTrue(FurnitureMerchantShopService.tryReroll(shop, shop, inventory(), true, 11L, drawnOffers, PROPS, PALETTES).ok());
+        assertEquals(80, shop.getTreasuryGoldCoinCount());
+        // The offers are new now. A Buy press drawn before names an offer that is gone, and a second reroll press is not charged.
+        assertNotEquals(drawnOffer, FurnitureMerchantShopService.offerAt(shop, false, 0), "Buying slot one now would buy another prop");
+        assertFalse(FurnitureMerchantShopService.tryReroll(shop, shop, inventory(), true, 11L, drawnOffers, PROPS, PALETTES).ok());
+        assertEquals(80, shop.getTreasuryGoldCoinCount());
+        assertNull(FurnitureMerchantShopService.offerAt(shop, false, 99));
+        assertNull(FurnitureMerchantShopService.offerAt(shop, true, -1));
     }
 }

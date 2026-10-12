@@ -2,5 +2,6 @@
   "Interactions": [
     "Aetherhaven_BuildingStaff_Secondary_Op"
   ],
+  "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.buildingStaff.secondary",
   "RequireNewClick": false
 }

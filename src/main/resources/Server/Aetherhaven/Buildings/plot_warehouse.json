@@ -48,8 +48,7 @@
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "WORK_SURFACE",
       "workResidentKind": "warehouse_manager",
-      "interactionTargetYawDegrees": 14.595337,
-      "equipmentProfileId": "work_bard"
+      "interactionTargetYawDegrees": 14.595337
     }
   ],
   "styleId": "core",

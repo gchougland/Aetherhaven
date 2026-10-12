@@ -23,6 +23,12 @@ public final class WarehouseBatch {
     private boolean herdFeed;
     public boolean herdFeed() { return herdFeed; }
     void markHerdFeed() { herdFeed = true; }
+    /** Materials on their way to a planned building. Like barn feed, there is no recipe, bench or output. */
+    private boolean siteSupply;
+    public boolean siteSupply() { return siteSupply; }
+    void markSiteSupply() { siteSupply = true; }
+    /** Loose items a builder picked up on a building site. Only ever cargo on its way to general storage. */
+    public boolean salvage() { return TownWarehouse.SALVAGE_RECIPE.equals(recipeId); }
     public boolean cultivation() { return cultivation; }
     public boolean cropPlanted() { return cropPlanted; }
     void markCultivation() { cultivation = true; }

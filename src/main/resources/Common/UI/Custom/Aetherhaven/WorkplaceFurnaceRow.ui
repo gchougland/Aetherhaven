@@ -6,4 +6,5 @@ Group { LayoutMode: Left; Anchor: (Height: 60, Bottom: 4); Background: $T.@Card;
   Group #In { LayoutMode: Left; Anchor: (Width: 240, Right: 12); }
   Label { Text: "OUT"; Anchor: (Width: 38); Style: (...$C.@DefaultLabelStyle, FontSize: 12, VerticalAlignment: Center, TextColor: #becadb); }
   Group #Out { LayoutMode: Left; FlexWeight: 1; }
+  $C.@SmallSecondaryTextButton #Open { Text: "Open"; Anchor: (Width: 84, Height: 30, Left: 8); TextTooltipStyle: $C.@DefaultTextTooltipStyle; Visible: false; }
 }

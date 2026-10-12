@@ -92,7 +92,10 @@ public final class PoiExtractor {
             return;
         }
         reg.unregisterByPlotId(plotId);
-        reg.registerAll(ShopBrowsePoiMigration.migrate(batch));
+        // Community and older building definitions can still name a profession's own prop on another spot.
+        reg.registerAll(
+            PoiEquipmentProfiles.migrate(ShopBrowsePoiMigration.migrate(batch), plugin.getEquipmentProfileCatalog())
+        );
         LOGGER.atInfo().log(
             "Registered %s POIs for construction %s plot %s (%s from JSON, %s from markers)",
             batch.size(),

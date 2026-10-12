@@ -36,6 +36,39 @@ public final class RestaurantBenefitService {
         return RestaurantUpgrades.satietyDecayMultiplier(state.getSatietyLevel());
     }
 
+    /**
+     * Highest Provisions level among the town's finished restaurants (0 when none). A second restaurant never adds
+     * a second helping, the same way a second Inn does not.
+     */
+    public static int provisionsLevel(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog catalog
+    ) {
+        int level = 0;
+        for (PlotInstance plot :
+            town.listCompletePlotsWithGameplayConstruction(catalog, AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT)) {
+            PlotRestaurantState state = town.peekPlotRestaurant(plot.getPlotId());
+            if (state != null) {
+                level = Math.max(level, state.getProvisionsLevel());
+            }
+        }
+        return level;
+    }
+
+    /**
+     * Town food from the restaurant's Provisions upgrades, in the same unit as a farm or ranch site. Needs a finished
+     * restaurant, and is limited to what the town's farms and ranches provide.
+     *
+     * @param farmAndRanchFoodPoints food points from the core farm, the core barn and tended farm or ranch sites
+     */
+    public static int provisionsFoodPoints(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog catalog,
+        int farmAndRanchFoodPoints
+    ) {
+        return RestaurantUpgrades.provisionsFoodPoints(provisionsLevel(town, catalog), farmAndRanchFoodPoints);
+    }
+
     @Nullable
     public static PlotRestaurantState restaurantStateForPoi(
         @Nullable TownRecord town,

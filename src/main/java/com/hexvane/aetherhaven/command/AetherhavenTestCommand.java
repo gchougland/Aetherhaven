@@ -57,6 +57,9 @@ public final class AetherhavenTestCommand extends AbstractCommandCollection {
         addSubCommand(new AetherhavenHerdTestCommand());
         addSubCommand(new AetherhavenExcavationTestCommand());
         addSubCommand(new AetherhavenBuildingTestCommand());
+        addSubCommand(new AetherhavenStaffEffectsTestCommand());
+        addSubCommand(new AetherhavenFestivalSquareTestCommand());
+        addSubCommand(new AetherhavenSalvageTestCommand());
         addSubCommand(new AetherhavenAttachmentTestCommand());
         addSubCommand(new AetherhavenFounderAssetsTestCommand());
         addSubCommand(new AetherhavenAssetTestCommand());
@@ -64,6 +67,7 @@ public final class AetherhavenTestCommand extends AbstractCommandCollection {
         addSubCommand(new AetherhavenPrefabTestCommand());
         addSubCommand(new AetherhavenPayrollTestCommand());
         addSubCommand(new AetherhavenGuardStatsTestCommand());
+        addSubCommand(new AetherhavenFlagTestCommand());
         addSubCommand(new AetherhavenBuildingIconsTestCommand());
         addSubCommand(new AetherhavenAlchemyAssetsTestCommand());
         addSubCommand(new AetherhavenHalloweenTestCommand());
@@ -73,6 +77,15 @@ public final class AetherhavenTestCommand extends AbstractCommandCollection {
         addSubCommand(new AetherhavenAlchemyTestCommand());
         addSubCommand(new AetherhavenAlchemyUiTestCommand());
         addSubCommand(new AetherhavenSpecialistPreviewCommand());
+        addSubCommand(new AetherhavenTestTownCommand());
+        addSubCommand(new AetherhavenToolKeysTestCommand());
+        addSubCommand(new AetherhavenMyKeysTestCommand());
+        addSubCommand(new AetherhavenWorkUiTestCommand());
+        addSubCommand(new AetherhavenWorkQuestTestCommand());
+        addSubCommand(new AetherhavenPagesTestCommand());
+        addSubCommand(new AetherhavenPaletteTestCommand());
+        addSubCommand(new AetherhavenShopMetaTestCommand());
+        addSubCommand(new AetherhavenMobsTestCommand());
     }
 
     private static final class Shop extends AbstractPlayerCommand {

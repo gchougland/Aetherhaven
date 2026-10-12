@@ -3,7 +3,6 @@ package com.hexvane.aetherhaven.questboard;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.map.RaidQuestCompassCache;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
@@ -31,7 +30,23 @@ public final class RaidQuestSpawnService {
 
     private RaidQuestSpawnService() {}
 
-    public static boolean startRaid(
+    /** How an attempt to start a raid ended. Only {@link #STARTED} leaves anything in the world. */
+    public enum RaidStart {
+        STARTED,
+        /** Nowhere awake to put the raiders. Nothing was spawned. */
+        NO_GROUND,
+        /** The raid cannot start yet and the player has already been told why. Nothing was spawned. */
+        NOT_READY,
+        /** Nothing was spawned, or what was spawned has been removed. */
+        FAILED;
+
+        public boolean started() {
+            return this == STARTED;
+        }
+    }
+
+    @Nonnull
+    public static RaidStart startRaid(
         @Nonnull TownRecord town,
         @Nonnull QuestBoardSlotRecord slot,
         @Nonnull World world,
@@ -39,16 +54,16 @@ public final class RaidQuestSpawnService {
         @Nonnull UUID acceptingPlayerUuid
     ) {
         if (!slot.isRaidQuest()) {
-            return false;
+            return RaidStart.FAILED;
         }
         List<String> roster = slot.raidMobRoleIdsOrEmpty();
         if (roster.isEmpty()) {
-            return false;
+            return RaidStart.FAILED;
         }
 
         NPCPlugin npc = NPCPlugin.get();
         if (npc == null) {
-            return false;
+            return RaidStart.FAILED;
         }
 
         int ownerLevel = com.hexvane.aetherhaven.leveling.LevelingIntegration.ownerLevel(town, store);
@@ -62,133 +77,84 @@ public final class RaidQuestSpawnService {
                     break;
                 }
             }
-            return false;
+            return RaidStart.NOT_READY;
         }
 
         Random rng = new Random(slot.getGenerationSeed() ^ acceptingPlayerUuid.getLeastSignificantBits());
 
         // A rescue's attackers gather around a camp outside town and march on it, not on the charter.
-        Vector3d campTarget = null;
         if (slot.isRescueQuest()) {
-            campTarget = RescueCampService.start(town, slot, world, store, rng);
+            Vector3d campTarget = RescueCampService.start(town, slot, world, store, rng);
             if (campTarget == null) {
-                return false;
+                return RaidStart.FAILED;
             }
-        }
-        if (campTarget != null) {
             // The captors are placed when a player reaches the camp (RescueCampService.populate), not here: the
             // camp is far from whoever is standing at the quest board.
             slot.setRaidSpawnedEntityUuids(new ArrayList<>());
             slot.setRaidKillRequired(roster.size());
             slot.setRaidKillProgress(0);
             notifyRescueAccepted(store, acceptingPlayerUuid, slot);
-            return true;
+            return RaidStart.STARTED;
         }
-        Vector3d charterMarchTarget = charterMarchTarget(world, town);
-        RaidQuestCompassCache.removeForTown(world.getName(), town.getTownId());
 
-        List<String> spawnedUuids = new ArrayList<>();
         String instanceId = slot.instanceIdOrEmpty();
         UUID townId = town.getTownId();
         RaidApproachDirection preferredDirection = slot.raidApproachDirectionEnum();
-        RaidApproachDirection waveDirection = null;
 
-        for (int i = 0; i < roster.size(); i++) {
-            String roleId = roster.get(i);
-            String spawnRoleId = RaidQuestMarchRoles.spawnRoleFor(roleId);
-            RaidSpawnPositionFinder.Result spawn = RaidSpawnPositionFinder.findForMob(
-                world,
-                town,
-                preferredDirection,
-                waveDirection,
-                rng,
-                i
+        // Every raider gets a place before the first one is spawned, so a raid with nowhere to stand leaves nothing
+        // behind. The search only reads land that is already awake: it loads nothing.
+        RaidSpawnTerrain terrain = WorldRaidSpawnTerrain.simulating(world);
+        List<RaidSpawnPositionFinder.Result> plan = RaidSpawnPositionFinder.planWave(
+            terrain,
+            RaidSpawnPositionFinder.Site.of(town),
+            preferredDirection,
+            rng,
+            roster.size()
+        );
+        if (plan.isEmpty()) {
+            LOGGER.atWarning().log("Raid quest %s: no awake ground for the raiders on any side of town", instanceId);
+            return RaidStart.NO_GROUND;
+        }
+        RaidSpawnPositionFinder.Result first = plan.get(0);
+        if (first.tier() != RaidSpawnPositionFinder.Tier.OUTSKIRTS) {
+            LOGGER.atInfo().log("Raid quest %s: no clear ground outside the border, using %s", instanceId, first.tier());
+        }
+
+        Vector3d charterMarchTarget = charterMarchTarget(world, town);
+        RaidQuestCompassCache.removeForTown(world.getName(), townId);
+
+        RaidWaveStart.Outcome outcome = RaidWaveStart.run(roster, plan, new RaidWaveStart.Spawner() {
+            @Override
+            public String spawn(int index, @Nonnull String roleId, @Nonnull RaidSpawnPositionFinder.Result spot) {
+                return spawnRaider(npc, store, terrain, townId, instanceId, roleId, spot.position(), charterMarchTarget, ownerLevel);
+            }
+
+            @Override
+            public void remove(@Nonnull String raiderId) {
+                removeEntityByUuidString(store, raiderId);
+            }
+        });
+        if (!outcome.started()) {
+            if (outcome.error() != null) {
+                LOGGER.atWarning().withCause(outcome.error()).log(
+                    "Raid quest %s: spawning stopped part way; the raiders already placed were removed", instanceId);
+            } else {
+                LOGGER.atWarning().log("Raid quest %s: none of the %d raiders could be placed", instanceId, roster.size());
+            }
+            return RaidStart.FAILED;
+        }
+
+        RaidApproachDirection waveDirection = first.direction();
+        if (waveDirection != preferredDirection) {
+            slot.setRaidApproachDirection(waveDirection.id());
+            LOGGER.atInfo().log(
+                "Raid quest %s: switched approach from %s to %s after spawn search",
+                instanceId,
+                preferredDirection.id(),
+                waveDirection.id()
             );
-            if (spawn == null) {
-                LOGGER.atWarning().log("Raid quest %s: no valid spawn position for %s", instanceId, roleId);
-                continue;
-            }
-            if (waveDirection == null) {
-                waveDirection = spawn.direction();
-                if (waveDirection != preferredDirection) {
-                    slot.setRaidApproachDirection(waveDirection.id());
-                    LOGGER.atInfo().log(
-                        "Raid quest %s: switched approach from %s to %s after spawn search",
-                        instanceId,
-                        preferredDirection.id(),
-                        waveDirection.id()
-                    );
-                }
-            }
-            Vector3d pos = spawn.position();
-            if (RaidQuestMarchRoles.isFlyingRosterRole(roleId)) {
-                pos = new Vector3d(pos.x, pos.y + RaidQuestMarchRoles.FLY_RAID_SPAWN_LIFT, pos.z);
-            }
-            int roleIndex = npc.getIndex(spawnRoleId);
-            if (roleIndex < 0) {
-                LOGGER.atWarning().log(
-                    "Raid quest %s: missing raid spawn role %s (from %s); using base role",
-                    instanceId,
-                    spawnRoleId,
-                    roleId
-                );
-                roleIndex = npc.getIndex(roleId);
-            }
-            if (roleIndex < 0) {
-                LOGGER.atWarning().log("Raid quest %s: unknown NPC role %s", instanceId, roleId);
-                continue;
-            }
-
-            Vector3d marchTarget = charterMarchTarget;
-            Vector3d spawnPos = new Vector3d(pos);
-            long marchNowMs = RaidQuestMarchUtil.resolveNowMs(store);
-            var pair =
-                npc.spawnEntity(
-                    store,
-                    roleIndex,
-                    pos,
-                    Rotation3f.ZERO,
-                    null,
-                    (npcEntity, mobRef, st) ->
-                        configureRaidMobMarch(npcEntity, mobRef, spawnPos, marchTarget, roleId, st)
-                );
-            if (pair == null) {
-                LOGGER.atWarning().log("Raid quest %s: failed to spawn %s", instanceId, roleId);
-                continue;
-            }
-            Ref<EntityStore> mobRef = pair.first();
-            NPCEntity spawnedNpc = store.getComponent(mobRef, NPCEntity.getComponentType());
-            UUIDComponent mobUuid = store.getComponent(mobRef, UUIDComponent.getComponentType());
-            if (spawnedNpc != null && mobUuid != null) {
-                RaidQuestMarchDebugLog.logSpawn(
-                    AetherhavenPlugin.get(),
-                    instanceId,
-                    roleId,
-                    spawnRoleId,
-                    mobUuid.getUuid(),
-                    spawnPos,
-                    marchTarget,
-                    spawnedNpc.getLeashPoint(),
-                    spawnedNpc
-                );
-            }
-            RaidQuestMobBinding binding = new RaidQuestMobBinding(townId, instanceId);
-            if (RaidQuestMarchRoles.isFlyingRosterRole(roleId)) {
-                binding.setMarchFlyCruiseY(spawnPos.y);
-            }
-            RaidQuestMarchUtil.bootstrapMarch(binding, spawnPos, marchTarget, marchNowMs);
-            store.putComponent(mobRef, RaidQuestMobBinding.getComponentType(), binding);
-            com.hexvane.aetherhaven.leveling.LevelingIntegration.scaleRaid(mobRef, store, ownerLevel);
-            if (mobUuid != null) {
-                spawnedUuids.add(mobUuid.getUuid().toString());
-            }
         }
-
-        if (spawnedUuids.isEmpty()) {
-            cleanupRaid(slot, world, store, townId);
-            return false;
-        }
-
+        List<String> spawnedUuids = new ArrayList<>(outcome.raiders());
         slot.setRaidSpawnedEntityUuids(spawnedUuids);
         slot.setRaidKillRequired(spawnedUuids.size());
         slot.setRaidKillProgress(0);
@@ -203,7 +169,100 @@ public final class RaidQuestSpawnService {
         }
 
         notifyAcceptingPlayer(store, acceptingPlayerUuid, slot);
-        return true;
+        return RaidStart.STARTED;
+    }
+
+    /**
+     * Places one raider. Returns its id, or null when the raid cannot count it, in which case it is not left
+     * standing in the world.
+     */
+    @Nullable
+    private static String spawnRaider(
+        @Nonnull NPCPlugin npc,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull RaidSpawnTerrain terrain,
+        @Nonnull UUID townId,
+        @Nonnull String instanceId,
+        @Nonnull String roleId,
+        @Nonnull Vector3d ground,
+        @Nonnull Vector3d marchTarget,
+        int ownerLevel
+    ) {
+        String spawnRoleId = RaidQuestMarchRoles.spawnRoleFor(roleId);
+        int roleIndex = npc.getIndex(spawnRoleId);
+        if (roleIndex < 0) {
+            LOGGER.atWarning().log(
+                "Raid quest %s: missing raid spawn role %s (from %s); using base role",
+                instanceId,
+                spawnRoleId,
+                roleId
+            );
+            roleIndex = npc.getIndex(roleId);
+        }
+        if (roleIndex < 0) {
+            LOGGER.atWarning().log("Raid quest %s: unknown NPC role %s", instanceId, roleId);
+            return null;
+        }
+
+        boolean flying = RaidQuestMarchRoles.isFlyingRosterRole(roleId);
+        Vector3d pos = new Vector3d(ground);
+        if (flying) {
+            // The air above may belong to a part of the world that is asleep even when the ground is awake.
+            double liftedY = ground.y + RaidQuestMarchRoles.FLY_RAID_SPAWN_LIFT;
+            if (terrain.liveCell((int) Math.floor(ground.x), (int) Math.floor(liftedY), (int) Math.floor(ground.z))) {
+                pos.y = liftedY;
+            }
+        }
+        Vector3d spawnPos = new Vector3d(pos);
+        long marchNowMs = RaidQuestMarchUtil.resolveNowMs(store);
+        // The raider is tagged before it enters the world. If the game stores it instead of keeping it awake, it
+        // still carries the tag and RaidQuestMarchSystem takes it out when it wakes.
+        RaidQuestMobBinding binding = new RaidQuestMobBinding(townId, instanceId);
+        if (flying) {
+            binding.setMarchFlyCruiseY(spawnPos.y);
+        }
+        RaidQuestMarchUtil.bootstrapMarch(binding, spawnPos, marchTarget, marchNowMs);
+        var pair =
+            npc.spawnEntity(
+                store,
+                roleIndex,
+                pos,
+                Rotation3f.ZERO,
+                null,
+                (npcEntity, holder, st) -> holder.putComponent(RaidQuestMobBinding.getComponentType(), binding),
+                (npcEntity, mobRef, st) ->
+                    configureRaidMobMarch(npcEntity, mobRef, spawnPos, marchTarget, roleId, st)
+            );
+        if (pair == null) {
+            LOGGER.atWarning().log("Raid quest %s: failed to spawn %s", instanceId, roleId);
+            return null;
+        }
+        Ref<EntityStore> mobRef = pair.first();
+        UUIDComponent mobUuid = mobRef.isValid() ? store.getComponent(mobRef, UUIDComponent.getComponentType()) : null;
+        if (mobUuid == null) {
+            // A raider the raid cannot name cannot be counted or cleaned up later, so it does not stay.
+            LOGGER.atWarning().log("Raid quest %s: %s appeared without an id and was removed", instanceId, roleId);
+            if (mobRef.isValid()) {
+                store.removeEntity(mobRef, RemoveReason.REMOVE);
+            }
+            return null;
+        }
+        NPCEntity spawnedNpc = store.getComponent(mobRef, NPCEntity.getComponentType());
+        if (spawnedNpc != null) {
+            RaidQuestMarchDebugLog.logSpawn(
+                AetherhavenPlugin.get(),
+                instanceId,
+                roleId,
+                spawnRoleId,
+                mobUuid.getUuid(),
+                spawnPos,
+                marchTarget,
+                spawnedNpc.getLeashPoint(),
+                spawnedNpc
+            );
+        }
+        com.hexvane.aetherhaven.leveling.LevelingIntegration.scaleRaid(mobRef, store, ownerLevel);
+        return mobUuid.getUuid().toString();
     }
 
     public static void cleanupRaid(

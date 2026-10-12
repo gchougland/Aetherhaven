@@ -1,0 +1,2 @@
+// Up to three workplace type cards side by side.
+Group { LayoutMode: Left; Anchor: (Height: 120, Bottom: 9); }

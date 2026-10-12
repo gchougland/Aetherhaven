@@ -34,7 +34,7 @@ class TownsfolkStartingSkillsAuditTest {
                 count++;
             }
         }
-        assertEquals(65, count);
+        assertEquals(67, count);
         assertTrue(incapableCount > 0 && incapableCount < count / 3, "Incapable professions are occasional");
     }
 

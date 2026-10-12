@@ -45,7 +45,7 @@ public final class TreeClimbLeaderboardPage
             commandBuilder.append("Aetherhaven/TreeClimbLeaderboardPage.ui");
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
-                "#CloseButton",
+                "#PageCloseButton",
                 EventData.of("Action", "Close"),
                 false
             );
@@ -60,7 +60,7 @@ public final class TreeClimbLeaderboardPage
             Message.translation("aetherhaven_festivals.aetherhaven.festival.tree_climbing.leaderboard.hint")
         );
         commandBuilder.set(
-            "#CloseButton.TextSpans",
+            "#PageCloseButton.TextSpans",
             Message.translation("aetherhaven_festivals.aetherhaven.festival.tree_climbing.leaderboard.close")
         );
 

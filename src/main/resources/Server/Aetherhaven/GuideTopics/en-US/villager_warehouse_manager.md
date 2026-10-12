@@ -5,7 +5,7 @@ author: Hexvane
 npcRoleId: Aetherhaven_Warehouse_Manager
 ---
 
-Mara can visit from **Town Level 3**. Build her **Warehouse** and finish her recruitment quest.
+Mara can visit from **Town Level 2**. Build her **Warehouse** and finish her recruitment quest.
 
 ## Storage and deliveries
 

@@ -34,6 +34,11 @@ public final class AlchemyTownStock {
         }
         var lodge=town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(),HuntService.CONSTRUCTION);
         if(lodge!=null)sources.add(new Source(lodge.getPlotId(),town.getHunts()));
+        // Mushrooms grown by the Mycologist are brewed straight from the workplace store.
+        for(var site:town.getApprenticeWorkplaces().sites()) {
+            var harvest=com.hexvane.aetherhaven.workplace.GrowerOutput.find(town,site.id());
+            if(harvest!=null)sources.add(new Source(site.id(),harvest));
+        }
         return List.copyOf(sources);
     }
     public static Snapshot snapshot(TownWarehouse warehouse,List<Source> sources) {
@@ -50,14 +55,20 @@ public final class AlchemyTownStock {
         }
         return new Snapshot(warehouse.craftingStock(),production);
     }
-    public static boolean brew(TownWarehouse warehouse,Supplier<List<Source>> sources,Snapshot seen,ItemContainer bag,
+    /**
+     * Spends the costs from the bag first, then unreserved storage, then unreserved production, and swaps the flask.
+     * Town stock is read here, at the moment of filling. What a page showed earlier is never compared, so couriers,
+     * harvests and finished crafts between opening the cauldron and bottling cannot refuse a fill.
+     */
+    public static boolean brew(TownWarehouse warehouse,Supplier<List<Source>> sources,ItemContainer bag,
                                short flaskSlot,ItemStack expected,ItemStack replacement,Map<String,Integer> costs) {
-        if(seen==null||!AlchemyFlask.isFlask(expected)||!AlchemyFlask.isFlask(replacement))return false;
+        if(warehouse==null||sources==null||!AlchemyFlask.isFlask(expected)||!AlchemyFlask.isFlask(replacement))return false;
         var spentProduction=new boolean[]{false};
-        boolean accepted=warehouse.exchangeForCrafting(bag,flaskSlot,expected,replacement,costs,seen.storage(),
-            ()->seen.equals(snapshot(warehouse,sources.get())),remaining->{
+        boolean accepted=warehouse.exchangeForCrafting(bag,flaskSlot,expected,replacement,costs,warehouse.craftingStock(),
+            ()->true,remaining->{
+                if(remaining.isEmpty())return true;
                 var left=new HashMap<>(remaining);var plans=new LinkedHashMap<Source,Map<String,Long>>();
-                for(var held:seen.production())for(var need:List.copyOf(left.entrySet())) {
+                for(var held:snapshot(warehouse,sources.get()).production())for(var need:List.copyOf(left.entrySet())) {
                     long take=Math.min(need.getValue(),held.available(need.getKey()));if(take<=0)continue;
                     plans.computeIfAbsent(held.source(),unused->new LinkedHashMap<>()).put(need.getKey(),take);
                     left.put(need.getKey(),need.getValue()-(int)take);

@@ -5,7 +5,10 @@ import com.hexvane.aetherhaven.patrol.GuardCombatClock;
 import com.hexvane.aetherhaven.patrol.GuardFollowPlayerState;
 import com.hexvane.aetherhaven.patrol.GuardNpcAttackerMemory;
 import com.hexvane.aetherhaven.patrol.GuardPlayerProvokedTargets;
+import com.hexvane.aetherhaven.patrol.GuardThreatRule;
+import com.hexvane.aetherhaven.questboard.RaidQuestMobBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hypixel.hytale.assetstore.map.AssetMapWithIndexes;
 import com.hypixel.hytale.builtin.tagset.config.NPCGroup;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -14,8 +17,11 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.EntityModule;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.WorldGenId;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.components.SpawnBeaconReference;
+import com.hypixel.hytale.server.npc.components.SpawnMarkerReference;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.support.WorldSupport;
 import java.util.ArrayList;
@@ -32,6 +38,8 @@ public final class RtsHostileQuery {
     private static final String AGGRESSIVE_GROUP = "Aggressive";
     private static final String TOWNSFOLK_GROUP = "Aetherhaven_Townsfolk";
     private static final String RAID_GROUP = "Aetherhaven_Raid";
+    /** The shared group for town allies. A pack lists a role here and guards never attack it unprovoked. */
+    private static final String SPARED_GROUP = "Friendly";
     /**
      * Vanilla NPC groups for factions that attack players but are omitted from {@code LivingWorld/Aggressive.json}
      * (Outlander, Scarak). Guards check membership only in Java; we do not patch vanilla Aggressive assets.
@@ -240,27 +248,69 @@ public final class RtsHostileQuery {
         return targetNpc != null && targetNpc.getRole() != null;
     }
 
-    /** Hostile creatures guards should notice without provocation (not livestock, prey, or critters). */
+    /**
+     * True when guards may attack this creature although it has attacked nobody: an enemy this mod spawned (it carries
+     * the raid binding), or a hostile kind of creature that the game's own spawner put in the world. A creature placed
+     * by a command or by another plugin, such as another mod's pet or summon, is never one, whatever its role is
+     * called. See {@link GuardThreatRule}.
+     */
     private static boolean isAmbientHostileCreature(@Nonnull Ref<EntityStore> targetRef, @Nonnull Store<EntityStore> store) {
-        NPCEntity targetNpc = store.getComponent(targetRef, NPCEntity.getComponentType());
-        if (targetNpc == null || targetNpc.getRole() == null) {
-            return false;
+        GuardThreatRule.Creature creature = describe(targetRef, store);
+        return creature != null && GuardThreatRule.unprovoked(creature);
+    }
+
+    /** Reads what the guard rule needs to know about a creature, or null when it is not a creature with a role. */
+    @Nullable
+    static GuardThreatRule.Creature describe(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (!ref.isValid()) {
+            return null;
         }
-        int roleIndex = targetNpc.getRole().getRoleIndex();
-        if (roleIndex >= 0 && npcInRaidGroup(roleIndex)) {
+        NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+        if (npc == null || npc.getRole() == null) {
+            return null;
+        }
+        int roleIndex = npc.getRole().getRoleIndex();
+        boolean townsOwn = store.getComponent(ref, TownVillagerBinding.getComponentType()) != null
+            || (roleIndex >= 0 && npcInTownsfolkGroup(roleIndex));
+        var raidType = RaidQuestMobBinding.typeOrNull();
+        boolean raidEnemy = raidType != null && store.getComponent(ref, raidType) != null;
+        var arenaType = com.hexvane.aetherhaven.hunter.HuntOpponent.getComponentType();
+        boolean arenaCreature = arenaType != null && store.getComponent(ref, arenaType) != null;
+        boolean spared = roleIndex >= 0 && npcInGroup(SPARED_GROUP, roleIndex);
+        return new GuardThreatRule.Creature(townsOwn, raidEnemy, arenaCreature, spared, isWildSpawn(ref, npc, store),
+            isHostileKind(npc, roleIndex));
+    }
+
+    /**
+     * True when the game's own spawner placed this creature. Natural spawning records its spawn rule on the creature,
+     * and beacons, spawn markers and world generation each leave their own component. A creature placed by a command
+     * or by another plugin has none of them.
+     */
+    private static boolean isWildSpawn(@Nonnull Ref<EntityStore> ref, @Nonnull NPCEntity npc, @Nonnull Store<EntityStore> store) {
+        if (npc.getSpawnConfiguration() != AssetMapWithIndexes.NOT_FOUND) {
             return true;
         }
-        if (isAggressiveNpc(targetRef, store)) {
+        if (store.getComponent(ref, SpawnBeaconReference.getComponentType()) != null
+            || store.getComponent(ref, SpawnMarkerReference.getComponentType()) != null) {
             return true;
         }
+        WorldGenId generated = store.getComponent(ref, WorldGenId.getComponentType());
+        return generated != null && generated.getWorldGenId() != WorldGenId.NON_WORLD_GEN_ID;
+    }
+
+    /** A kind of creature that attacks people. This says nothing about whose it is. */
+    private static boolean isHostileKind(@Nonnull NPCEntity npc, int roleIndex) {
         if (roleIndex >= 0) {
+            if (npcInAggressiveGroup(roleIndex)) {
+                return true;
+            }
             for (String group : EXTRA_AMBIENT_HOSTILE_GROUPS) {
                 if (npcInGroup(group, roleIndex)) {
                     return true;
                 }
             }
         }
-        String roleName = targetNpc.getRoleName();
+        String roleName = npc.getRoleName();
         return roleName != null && !roleName.isEmpty() && matchesAmbientHostileRoleName(roleName);
     }
 
@@ -821,7 +871,7 @@ public final class RtsHostileQuery {
         Ref<EntityStore> best = null;
         double bestSq = Double.MAX_VALUE;
         for (Ref<EntityStore> ref : hits) {
-            if (!ref.isValid() || !isAggressiveNpc(ref, store)) {
+            if (!ref.isValid() || !isAmbientHostileCreature(ref, store)) {
                 continue;
             }
             if (observerRef != null && !hasLineOfSight(observerRef, ref, store)) {

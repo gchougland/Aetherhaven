@@ -117,6 +117,57 @@ public final class PlotMaterialDepositService {
         return deposited;
     }
 
+    /**
+     * Adds what the plot still needs from one stack brought to its sign, for example by a courier.
+     *
+     * @return how many of the stack the plot kept; the rest was not needed
+     */
+    public static int depositStack(
+        @Nonnull PlotInstance plot,
+        @Nonnull List<MaterialRequirement> required,
+        @Nonnull ItemStack stack
+    ) {
+        if (ItemStack.isEmpty(stack)) {
+            return 0;
+        }
+        int left = stack.getQuantity();
+        for (MaterialRequirement line : required) {
+            if (left <= 0) {
+                break;
+            }
+            if (line.getCount() <= 0 || !lineAccepts(line, stack)) {
+                continue;
+            }
+            int take = Math.min(left, line.getCount() - depositedCount(plot, line));
+            if (take <= 0) {
+                continue;
+            }
+            addDeposited(plot, MaterialRequirement.ofItem(stack.getItemId(), take), take);
+            left -= take;
+        }
+        return stack.getQuantity() - left;
+    }
+
+    /** How many more of each required line the plot needs. Lines already covered are left out. */
+    @Nonnull
+    public static List<MaterialRequirement> missing(@Nonnull PlotInstance plot, @Nonnull List<MaterialRequirement> required) {
+        List<MaterialRequirement> out = new ArrayList<>();
+        for (MaterialRequirement line : required) {
+            int need = line.getCount() - depositedCount(plot, line);
+            if (line.getCount() > 0 && need > 0) {
+                out.add(copyLine(line, need));
+            }
+        }
+        return out;
+    }
+
+    public static boolean lineAccepts(@Nonnull MaterialRequirement line, @Nonnull ItemStack stack) {
+        if (line.getResourceTypeId() != null && !line.getResourceTypeId().isBlank()) {
+            return InventoryMaterials.itemStackHasResourceType(stack, line.getResourceTypeId().trim());
+        }
+        return line.getItemId() != null && line.getItemId().equals(stack.getItemId());
+    }
+
     public static void clearDeposits(@Nonnull PlotInstance plot) {
         plot.setDepositedMaterials(List.of());
     }

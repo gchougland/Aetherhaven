@@ -168,9 +168,23 @@ public final class ShopClerkWorkService {
     private static boolean behind(org.joml.Vector3d spot,ShopSpotRecord counter,org.joml.Vector3d customers) {
         return behind(spot,counter.getBlockX()+.5,counter.getBlockZ()+.5,customers);
     }
-    /** Existing buildings can provide a work spot behind the counter; no new marker is required. */
+    /**
+     * The building's own Clerk Stand, when it marks one that can be stood on right now. A blocked or unloaded stand
+     * gives null, and the clerk falls back to choosing a place by the counter.
+     */
+    private static org.joml.Vector3d markedStand(World world,PlotInstance plot,AetherhavenPlugin plugin) {
+        var cell=com.hexvane.aetherhaven.shop.ShopClerkStand.cell(plugin.getConstructionCatalog().get(plot.getConstructionId()),plot);
+        if(cell==null||!plot.containsWorldBlock(cell.x,cell.y,cell.z)
+            ||!CourierWorkService.loaded(world,new WarehouseBatch.Point(cell.x,cell.y,cell.z))
+            ||!VillagerBlockUtil.isNpcStandColumn(world,cell.x,cell.y,cell.z))return null;
+        var stand=new org.joml.Vector3d(cell.x+.5,VillagerBlockUtil.resolveFeetYForStandCell(world,cell.x,cell.y,cell.z),cell.z+.5);
+        return CourierWorkService.clearApproach(world,stand)?stand:null;
+    }
+    /** A marked Clerk Stand comes first. Without one, existing buildings can provide a work spot behind the counter. */
     private static org.joml.Vector3d clerkPosition(World world,TownRecord town,PlotInstance plot,AetherhavenPlugin plugin,
             ShopSpotRecord counter,org.joml.Vector3d from,int attempt) {
+        var marked=markedStand(world,plot,plugin);
+        if(marked!=null)return marked;
         var authored=AetherhavenWorldRegistries.getOrCreatePoiRegistry(world,plugin).listByTownAndTag(town.getTownId(),"WORK").stream()
             .filter(p->plot.getPlotId().equals(p.getPlotId()))
             .map(p->new org.joml.Vector3d(p.getX()+.5,VillagerBlockUtil.resolveFeetYForStandCell(world,p.getX(),p.getY(),p.getZ()),p.getZ()+.5))

@@ -101,7 +101,7 @@ class BuildingProjectCleanupTest {
             add(plan, unavailable);add(plan, planned.getPlotId());
             plan.focus(cell(first));assertTrue(plan.committed(cell(first)));
             plan.focus(cell(first));plan.attend(cell(first), .5, true, 1);
-            plan.pause(plan.revision(), true);
+            plan.pause(true);
         }
         // Restored queues can include inactive yard plans after a workplace is redesignated.
         town = GSON.fromJson(GSON.toJson(town), TownRecord.class);
@@ -112,8 +112,10 @@ class BuildingProjectCleanupTest {
             assertTrue(plan.paused());assertEquals(1, plan.contributions());assertEquals(.5, plan.work());
             assertEquals(plan.list().getFirst().id(), plan.cell().order());
             assertEquals(6, plan.revision());
-            assertFalse(plan.remove(5, plan.list().getFirst().id()));
-            assertNotNull(plan.add(5, UUID.randomUUID(), AUTHOR));
+            // The board moved since any page drew it. A press still acts only on the project it names.
+            assertFalse(plan.remove(UUID.randomUUID()), "A project that is not on the board cannot be removed");
+            assertNotNull(plan.add(active.getPlotId(), AUTHOR), "A project already on the board is not queued twice");
+            assertEquals(6, plan.revision(), "A refused press changes nothing");
         }
         String after = GSON.toJson(town);
         assertFalse(BuildingProjectCleanup.reconcile(town));
@@ -125,7 +127,7 @@ class BuildingProjectCleanupTest {
         var plan = town.getApprenticeWorkplaces().sites().getFirst().building();
         var complete = plot(PlotInstanceState.COMPLETE);town.getPlotInstances().add(complete);
         var done = add(plan, complete.getPlotId());var next = add(plan, UUID.randomUUID());
-        var cell = cell(done);plan.focus(cell);plan.attend(cell, .5, true, 1);plan.pause(plan.revision(), true);
+        var cell = cell(done);plan.focus(cell);plan.attend(cell, .5, true, 1);plan.pause(true);
         assertTrue(BuildingProjectCleanup.reconcile(town));
         assertEquals(List.of(next), plan.list());assertTrue(plan.paused());
         assertNull(plan.cell());assertEquals(0, plan.work());assertEquals(0, plan.contributions());
@@ -157,7 +159,7 @@ class BuildingProjectCleanupTest {
         return new PlotInstance(UUID.randomUUID(), "plot_house", state, new PlotFootprintRecord(0, 128, 0, 10, 138, 10), 0, 128, 0, 0);
     }
     private static BuildingOrders.Order add(BuildingOrders plan, UUID plot) {
-        assertNull(plan.add(plan.revision(), plot, AUTHOR));return plan.list().getLast();
+        assertNull(plan.add(plot, AUTHOR));return plan.list().getLast();
     }
     private static BuildingOrders.Cell cell(BuildingOrders.Order order) {
         return new BuildingOrders.Cell(order.id(), 42, 1, 129, 1, "Rock_Stone", 0);

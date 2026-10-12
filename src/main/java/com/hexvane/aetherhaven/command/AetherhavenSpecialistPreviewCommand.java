@@ -386,7 +386,7 @@ final class AetherhavenSpecialistPreviewCommand extends AbstractPlayerCommand {
                     if("fieldpage".equals(ctx.get(action))) {
                         var town=AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin).findTownForOwnerInWorld(player.getUuid());
                         store.getComponent(ref,com.hypixel.hytale.server.core.entity.entities.Player.getComponentType()).getPageManager()
-                            .openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.FarmerFieldPage(player,town.getTownId(),session.field.plotId()));
+                            .openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.FarmerFieldPage(player,town.getTownId(),session.field.plotId(),null));
                     }
                     say(player,session.field.status(world,player.getUuid()));
                 }catch(RuntimeException error){say(player,"Field preview: "+error.getMessage());}
@@ -452,11 +452,11 @@ final class AetherhavenSpecialistPreviewCommand extends AbstractPlayerCommand {
                 var town=manager.findTownForOwnerInWorld(session.player.getUuid());
                 require(town!=null,"Preview town missing");
                 var druid=town.getPlotInstances().stream().filter(p->"plot_druid".equals(p.getConstructionId())).findFirst().orElseThrow();
-                var beds=com.hexvane.aetherhaven.production.NativeDruidCrops.review(world,town,druid);
-                require(beds.ready()&&beds.beds().size()==9,"Druid bed review: "+beds.issue()+" ("+beds.beds().size()+" beds)");
                 var storage=com.hexvane.aetherhaven.warehouse.ProductionStorageLocator.find(world,druid,System.currentTimeMillis());
                 require(storage!=null,"Druid storage was not found in its fresh footprint");
-                say(session.player,"Preview ready. Druid has nine reviewable beds and storage at "+storage.x()+", "+storage.y()+", "+storage.z()+". Nothing was adopted. Use visit --building=plot_alchemist or finish. Preview expires in 30 minutes.");
+                for(var plant:com.hexvane.aetherhaven.production.SpiritGardenRules.get().plants())
+                    require(com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType.getAssetMap().getAsset(plant.block())!=null,"Spirit Garden plant is missing: "+plant.block());
+                say(session.player,"Preview ready. The Conservatory has its storage at "+storage.x()+", "+storage.y()+", "+storage.z()+" and all nine Spirit Garden plants are loaded. Place a Spirit Planter and choose a seed to start its garden. Use visit --building=plot_alchemist or finish. Preview expires in 30 minutes.");
                 session.ready=true;
             },world);
         }); } catch(RuntimeException error) { preparation=CompletableFuture.failedFuture(error); }

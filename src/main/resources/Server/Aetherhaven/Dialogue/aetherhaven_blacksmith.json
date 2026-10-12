@@ -340,22 +340,6 @@
         }
       ]
     },
-    "rep_reward_25": {
-      "speaker": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_25.speaker",
-      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.blacksmith.25",
-      "actions": [
-        {
-          "type": "reputation_reward_grant",
-          "rewardId": "rep_blacksmith_25"
-        }
-      ],
-      "choices": [
-        {
-          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
-          "next": "main_hub"
-        }
-      ]
-    },
     "rep_reward_50": {
       "speaker": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_50.speaker",
       "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.blacksmith.50",

@@ -368,16 +368,6 @@ public final class AetherhavenUiLocalization {
         b.set("#InvTitle.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.yourBags"));
     }
 
-    public static void applyHandMirror(@Nonnull UICommandBuilder b) {
-        b.set("#HandMirrorTitleText.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.title"));
-        b.set("#EquipSection.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.equipment"));
-        b.set("#Ring1Label.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.ring1"));
-        b.set("#Ring2Label.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.ring2"));
-        b.set("#NeckLabel.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.necklace"));
-        b.set("#ListSection.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.inventory"));
-        b.set("#TraitTitle.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.traitsColumnHeading"));
-    }
-
     public static void applyCharterTownPage(@Nonnull UICommandBuilder b) {
         b.set("#CharterTownTitleText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.title"));
         b.set("#MoveCharterHint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.moveCharterHint"));

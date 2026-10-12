@@ -1,0 +1,262 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_growers.aetherhaven.growers.logName",
+    "Description": "aetherhaven_growers.aetherhaven.growers.logDescription"
+  },
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ResourceTypeId": "Wood_Trunk",
+        "Quantity": 5
+      },
+      {
+        "ItemId": "Ingredient_Fibre",
+        "Quantity": 5
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning_Misc"
+        ]
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Mushroom_Log.png",
+  "IconProperties": {
+    "Scale": 0.9,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -7.3
+    ]
+  },
+  "Categories": [
+    "Furniture.Decorative",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Block_Half",
+    "VariantRotation": "NESW",
+    "Group": "Wood",
+    "State": {
+      "Definitions": {
+        "Seeded": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Seeded.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Seeded.png",
+              "Weight": 1
+            }
+          ]
+        },
+        "Sprouting": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Sprouting.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Sprouting.png",
+              "Weight": 1
+            }
+          ]
+        },
+        "Grown_Common_Brown": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Dome.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Common_Brown.png",
+              "Weight": 1
+            }
+          ]
+        },
+        "Grown_Cap_Brown": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Funnel.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Cap_Brown.png",
+              "Weight": 1
+            }
+          ]
+        },
+        "Grown_Cap_White": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Tall.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Cap_White.png",
+              "Weight": 1
+            }
+          ]
+        },
+        "Grown_Flatcap_Green": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Flat.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Flatcap_Green.png",
+              "Weight": 1
+            }
+          ],
+          "Light": {
+            "Color": "#353"
+          }
+        },
+        "Grown_Cap_Red": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Poison.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Cap_Red.png",
+              "Weight": 1
+            }
+          ]
+        },
+        "Grown_Common_Blue": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Dome.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Common_Blue.png",
+              "Weight": 1
+            }
+          ]
+        },
+        "Grown_Common_Lime": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Puff.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Common_Lime.png",
+              "Weight": 1
+            }
+          ],
+          "Light": {
+            "Color": "#442"
+          }
+        },
+        "Grown_Cap_Green": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Funnel.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Cap_Green.png",
+              "Weight": 1
+            }
+          ]
+        },
+        "Grown_Boomshroom_Small": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Boom.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Boomshroom_Small.png",
+              "Weight": 1
+            }
+          ],
+          "Light": {
+            "Color": "#532"
+          }
+        },
+        "Grown_Boomshroom_Large": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_BoomLarge.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Boomshroom_Large.png",
+              "Weight": 1
+            }
+          ],
+          "Light": {
+            "Color": "#532"
+          }
+        },
+        "Grown_Glowing_Blue": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Thin.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Glowing_Blue.png",
+              "Weight": 1
+            }
+          ],
+          "Light": {
+            "Color": "#58b"
+          }
+        },
+        "Grown_Glowing_Red": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Thin.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Glowing_Red.png",
+              "Weight": 1
+            }
+          ],
+          "Light": {
+            "Color": "#a94"
+          }
+        },
+        "Grown_Glowing_Green": {
+          "CustomModel": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Thin.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Aetherhaven/Mushroom_Log/Mushroom_Log_Grown_Glowing_Green.png",
+              "Weight": 1
+            }
+          ],
+          "Light": {
+            "Color": "#696"
+          }
+        }
+      }
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Benches"
+      }
+    },
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "BlockParticleSetId": "Wood",
+    "ParticleColor": "#603623",
+    "BlockSoundSetId": "Wood",
+    "PhysicalMaterialId": "Wood",
+    "TextureComputedColor": "#603623",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AetherhavenGrowerBed"
+            }
+          }
+        ]
+      }
+    },
+    "InteractionHint": "aetherhaven_growers.aetherhaven.growers.logHint"
+  },
+  "PlayerAnimationsId": "Block",
+  "Tags": {
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "MaxStack": 20,
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

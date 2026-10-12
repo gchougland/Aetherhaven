@@ -13,6 +13,15 @@ public final class SnowballIds {
     public static final String PROJECTILE_CONFIG_ID = "Projectile_Config_Aetherhaven_Snowball";
     public static final String PROJECTILE_MODEL_ID = "Aetherhaven_Snowball_Projectile";
 
+    /**
+     * True for this mod's own snowball and nothing else. The hit check used to match any projectile with
+     * "snowball" in its model name, which would also have taken another mod's snowball out of the air before the
+     * game could land it.
+     */
+    public static boolean isOwnProjectileModel(String modelId) {
+        return PROJECTILE_MODEL_ID.equalsIgnoreCase(modelId);
+    }
+
     public static final String MERCHANT_NPC_ROLE = "Aetherhaven_Festival_Snowball_Merchant";
     public static final String MERCHANT_MODEL = "Aetherhaven_Festival_Snowball_Merchant";
     public static final String SHOP_ID = "Aetherhaven_Festival_Snowball";

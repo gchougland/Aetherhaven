@@ -386,15 +386,20 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
             QuestBoardSlotRecord slotBefore = town.getQuestBoardSlots().get(slotIndex);
             boolean wasRaidOffer = slotBefore.stateEnum() == QuestBoardSlotState.OFFER && slotBefore.isRaidQuest();
             boolean wasRescueOffer = wasRaidOffer && slotBefore.isRescueQuest();
-            boolean accepted = QuestBoardService.acceptOffer(town, uc.getUuid(), slotIndex, catalog, world, store);
+            QuestBoardService.AcceptOutcome outcome =
+                QuestBoardService.acceptOfferOutcome(town, uc.getUuid(), slotIndex, catalog, world, store);
             tm.updateTown(town);
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
             if (pr != null) {
-                if (accepted) {
-                    pr.sendMessage(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.acceptedToast"));
-                } else if (wasRaidOffer) {
-                    pr.sendMessage(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard."
-                        + (wasRescueOffer ? "rescueStartFailedToast" : "raidSpawnFailedToast")));
+                // One message for each outcome. RAID_NOT_READY has already told the player why.
+                String toast = switch (outcome) {
+                    case ACCEPTED -> "acceptedToast";
+                    case RAID_NO_GROUND -> wasRaidOffer ? "raidNoGroundToast" : null;
+                    case RAID_FAILED -> wasRaidOffer ? (wasRescueOffer ? "rescueStartFailedToast" : "raidSpawnFailedToast") : null;
+                    default -> null;
+                };
+                if (toast != null) {
+                    pr.sendMessage(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard." + toast));
                 }
             }
         } else if ("AbandonSlot".equalsIgnoreCase(data.action)) {

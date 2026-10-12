@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
 import com.hexvane.aetherhaven.construction.PlotMaterialDepositService;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
+import com.hexvane.aetherhaven.mastery.BuilderMastery;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
@@ -20,11 +21,13 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.workplace.BuildingProjectAutoQueue;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -62,19 +65,23 @@ import javax.annotation.Nullable;
  * face-adjacent (6-neighbor in prefab space) to an already placed cell, starting from the lowest-Y layer. Passive places
  * one block every {@link #computeSlotWallMs} of {@link com.hypixel.hytale.server.core.modules.time.TimeResource} time
  * (dilated), independent of how many blocks the staff placed; staff only speeds completion by reducing remaining work.
+ * While the core Builder stands at the site a step comes {@link BuilderMastery#STEP_DIVISOR} times as often and places
+ * as many blocks as his Mastery level; he earns Mastery for the blocks those steps really place or clear.
  */
 public final class PlotAssemblyService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final int BREAK_SIGN_SETTINGS = 10;
-    /** Passive assembly: at most one prefab cell per plot per {@link #tickPassive} invocation. */
+    /** Passive assembly with nobody at the site: at most one prefab cell per plot per {@link #tickPassive} step. */
     private static final int PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB = 1;
-    /** Passive clearing: base cells per tick; builder boost multiplies burst like the placing phase. */
+    /** Passive clearing with nobody at the site: cells per step. */
     private static final int PASSIVE_CLEARING_BLOCKS_PER_WORLD_TICK_PER_JOB = 1;
     private static final long REHYDRATE_SCAN_INTERVAL_MS = 3_000L;
     private static final ConcurrentHashMap<String, Long> LAST_REHYDRATE_SCAN_MS = new ConcurrentHashMap<>();
     private static final int COMPLETION_SOLIDS_BATCH = 48;
     private static final int COMPLETION_INTERACTIVE_BATCH = 16;
     private static final int COMPLETION_ENTITIES_BATCH = 8;
+    /** Why a villager was moved, for the log. */
+    private static final String FINISHING = "standing where a building is being finished";
 
     /** Clearing advance: {@code progressed} advances the passive burst; {@code brokeBlock} is true only when a solid was removed. */
     public record ClearingAdvanceOutcome(boolean progressed, boolean brokeBlock) {
@@ -94,8 +101,16 @@ public final class PlotAssemblyService {
         }
     }
 
-    /** Placement advance: {@code progressed} advances the passive burst; {@code wroteBlock} is true when world state changed. */
-    public record PlacementAdvanceOutcome(boolean progressed, boolean wroteBlock) {
+    /**
+     * Placement advance: {@code progressed} advances the passive burst; {@code wroteBlock} is true when world state
+     * changed. {@code bodyInTheWay} is set, with no progress, when the piece was left for later because a player or one
+     * of this mod's villagers stands where it goes; that body is {@code blocker}.
+     */
+    public record PlacementAdvanceOutcome(boolean progressed, boolean wroteBlock, boolean bodyInTheWay, @Nullable SiteBodies.Body blocker) {
+        public PlacementAdvanceOutcome(boolean progressed, boolean wroteBlock) {
+            this(progressed, wroteBlock, false, null);
+        }
+
         @Nonnull
         public static PlacementAdvanceOutcome noProgress() {
             return new PlacementAdvanceOutcome(false, false);
@@ -109,6 +124,12 @@ public final class PlotAssemblyService {
         @Nonnull
         public static PlacementAdvanceOutcome committed() {
             return new PlacementAdvanceOutcome(true, true);
+        }
+
+        /** Nothing was placed and nothing is lost: the piece stays on the frontier and is tried again. */
+        @Nonnull
+        public static PlacementAdvanceOutcome waitingFor(@Nonnull SiteBodies.Body blocker) {
+            return new PlacementAdvanceOutcome(false, false, true, blocker);
         }
     }
 
@@ -345,6 +366,9 @@ public final class PlotAssemblyService {
         }
         plot.setAssemblyPrefabId(prefabId);
         plot.setAssemblyOwnerUuid(assemblyOwnerUuid);
+        // A started project goes on one Builder's yard by itself, along with any that were waiting for room.
+        BuildingProjectAutoQueue.offer(town, plot, assemblyOwnerUuid);
+        BuildingProjectAutoQueue.offerWaiting(town);
         long slot = computeSlotWallMs(world, plugin, def, placementOrder.size());
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         tm.updateTown(town);
@@ -777,6 +801,15 @@ public final class PlotAssemblyService {
         return nextDue;
     }
 
+    /**
+     * Cells one passive step may handle. With the core Builder at the site that is his Mastery level, read each step
+     * so a level gained during a build counts at once. Townsfolk builders and the building staff place through
+     * {@link #advancePlacementAtIndex} directly and are not limited by this.
+     */
+    static int passiveBlocksPerStep(@Nonnull TownRecord town, boolean builderAtSite, int unattended) {
+        return builderAtSite ? BuilderMastery.blocksPerStep(town) : unattended;
+    }
+
     public static void tickPassive(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
@@ -808,8 +841,10 @@ public final class PlotAssemblyService {
                 }
                 if (clearingRt != null && !clearingRt.isEmpty()) {
                     int boost = AssemblyPassiveBoostRegistry.boostFor(world, job.plotId());
+                    boolean builderAtSite = boost > 1;
                     long slot = Math.max(1L, job.slotWallMs() / boost);
-                    int maxBlocks = PASSIVE_CLEARING_BLOCKS_PER_WORLD_TICK_PER_JOB * boost;
+                    int maxBlocks = passiveBlocksPerStep(clearingTown, builderAtSite, PASSIVE_CLEARING_BLOCKS_PER_WORLD_TICK_PER_JOB);
+                    int builderCleared = 0;
                     Instant assemblyStart = resolvePassiveAssemblyStart(clearingPlot, simNow, tm, clearingTown);
                     long nextDue = resolvePassiveNextDue(clearingPlot, simNow, slot, assemblyStart, tm, clearingTown);
                     if (simNowMs >= nextDue) {
@@ -863,12 +898,18 @@ public final class PlotAssemblyService {
                             clearingPlot.setAssemblyNextPassiveDueSimMs(simNowMs + slot);
                             markAssemblyTownDirty(dirtyTowns, clearingTown);
                             burst++;
+                            if (outcome.brokeBlock()) {
+                                builderCleared++;
+                            }
                             maybeAdvanceClearingSection(
                                 tm, clearingTown, clearingPlot, job, clearingRt, world, clearingMapper, dirtyTowns
                             );
                             if (clearingRt.isEmpty()) {
                                 break;
                             }
+                        }
+                        if (builderAtSite) {
+                            BuilderMastery.earn(clearingTown, builderCleared);
                         }
                     }
                 }
@@ -893,21 +934,31 @@ public final class PlotAssemblyService {
             }
             Instant assemblyStart = resolvePassiveAssemblyStart(plot, simNow, tm, town);
             int boost = AssemblyPassiveBoostRegistry.boostFor(world, job.plotId());
+            boolean builderAtSite = boost > 1;
             long slot = Math.max(1L, job.slotWallMs() / boost);
-            int maxBlocks = PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB * boost;
+            int maxBlocks = passiveBlocksPerStep(town, builderAtSite, PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB);
             long nextDue = resolvePassiveNextDue(plot, simNow, slot, assemblyStart, tm, town);
             if (simNowMs < nextDue) {
                 continue;
             }
+            int builderPlaced = 0;
             int burst = 0;
             int placementAttempts = 0;
             int maxPlacementAttempts = Math.max(maxBlocks * 32, 32);
+            // Pieces with someone standing in them: left for a later step, and not counted against this one.
+            IntOpenHashSet waitingForBodies = null;
+            ArrayList<SiteBodies.Body> inTheWay = null;
+            List<SiteBodies.Body> bodies = null;
             while (burst < maxBlocks
                 && placedCount < pending.size()
                 && placementAttempts < maxPlacementAttempts) {
                 placementAttempts++;
                 PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
-                int pick = rt.smallestPlacementIndex();
+                int pick = rt.smallestPlacementIndex(waitingForBodies);
+                if (pick < 0 && waitingForBodies != null) {
+                    // Someone stands in every piece this step could still place.
+                    break;
+                }
                 if (pick < 0) {
                     rt.rebuildFrontierFromPlot(pending, plot);
                     pick = rt.smallestPlacementIndex();
@@ -925,17 +976,47 @@ public final class PlotAssemblyService {
                 if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(pick))) {
                     break;
                 }
+                if (bodies == null) {
+                    bodies = bodiesNearSite(entityAccessor, job, rt);
+                }
                 PlacementAdvanceOutcome outcome =
                     advancePlacementAtIndex(
-                        world, plugin, entityStore, town, plot, job, pick, false, null, true, false
+                        world, plugin, entityStore, town, plot, job, pick, false, null, true, false, bodies
                     );
+                if (outcome.bodyInTheWay()) {
+                    if (waitingForBodies == null) {
+                        waitingForBodies = new IntOpenHashSet();
+                        inTheWay = new ArrayList<>();
+                    }
+                    waitingForBodies.add(pick);
+                    if (outcome.blocker() != null && !inTheWay.contains(outcome.blocker())) {
+                        inTheWay.add(outcome.blocker());
+                    }
+                    // Not an attempt: the step still owes its full count of other pieces.
+                    placementAttempts--;
+                    continue;
+                }
                 if (!outcome.progressed()) {
                     continue;
                 }
                 plot.setAssemblyNextPassiveDueSimMs(simNowMs + slot);
                 markAssemblyTownDirty(dirtyTowns, town);
                 burst++;
+                if (outcome.wroteBlock()) {
+                    builderPlaced++;
+                }
                 placedCount = plot.getAssemblyPlacedBlockCount();
+            }
+            if (builderAtSite) {
+                BuilderMastery.earn(town, builderPlaced);
+            }
+            if (burst > 0 || inTheWay == null) {
+                SiteRefuge.notWaiting(job.plotId());
+            } else if (SiteRefuge.waitedOut(job.plotId(), System.currentTimeMillis())) {
+                // The site has been able to place nothing else for a while. Villagers are moved; a player's cell waits.
+                for (int b = 0; b < inTheWay.size(); b++) {
+                    SiteRefuge.moveOut(world, entityAccessor, inTheWay.get(b), null, "standing in the last pieces of a building site");
+                }
             }
         }
         flushDirtyAssemblyTowns(tm, dirtyTowns);
@@ -986,6 +1067,36 @@ public final class PlotAssemblyService {
         boolean deferCompletionWhenFullyPlaced,
         boolean persistProgress
     ) {
+        return advancePlacementAtIndex(
+            world, plugin, entityStore, town, plot, job, placementIndex, fromStaff, staffActor,
+            deferCompletionWhenFullyPlaced, persistProgress, null
+        );
+    }
+
+    /**
+     * Every way a piece of a site is placed one at a time comes through here: the site's own steps (with or without the
+     * Builder), a townsfolk builder's piece and the building staff. A piece that would put a solid block where a player
+     * or one of this mod's villagers stands is not placed: the call answers
+     * {@link PlacementAdvanceOutcome#waitingFor} and the piece stays on the frontier.
+     *
+     * @param bodies who is near the site right now, from {@link SiteBodies#near}, when the caller places several pieces
+     *     in one go; null to look around this one piece
+     */
+    @Nonnull
+    public static PlacementAdvanceOutcome advancePlacementAtIndex(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job,
+        int placementIndex,
+        boolean fromStaff,
+        @Nullable UUID staffActor,
+        boolean deferCompletionWhenFullyPlaced,
+        boolean persistProgress,
+        @Nullable List<SiteBodies.Body> bodies
+    ) {
         if (plot.getState() != PlotInstanceState.ASSEMBLING) {
             return PlacementAdvanceOutcome.noProgress();
         }
@@ -1016,6 +1127,11 @@ public final class PlotAssemblyService {
         boolean wroteBlock =
             !ConstructionPasteOps.isAssemblyPlacementNoOp(world, job.anchor(), pb, blockTypeMap);
         if (wroteBlock) {
+            SiteBodies.Body blocker = bodyInTheWay(entityStore, job, pb, blockTypeMap, bodies);
+            if (blocker != null) {
+                SiteRefuge.countDeferred();
+                return PlacementAdvanceOutcome.waitingFor(blocker);
+            }
             if (!ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, job.preserveWater(), blockTypeMap)) {
                 return PlacementAdvanceOutcome.noProgress();
             }
@@ -1050,6 +1166,52 @@ public final class PlotAssemblyService {
             return wroteBlock ? PlacementAdvanceOutcome.committed() : PlacementAdvanceOutcome.skipped();
         }
         return wroteBlock ? PlacementAdvanceOutcome.committed() : PlacementAdvanceOutcome.skipped();
+    }
+
+    /**
+     * The player or villager standing where this piece would put a solid block, or null when the space is free. Read at
+     * the moment of placing, from each entity's own bounding box, so it is right however long ago the piece was chosen.
+     */
+    @Nullable
+    private static SiteBodies.Body bodyInTheWay(
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull PlotAssemblyJob job,
+        @Nonnull PendingBlock pb,
+        @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap,
+        @Nullable List<SiteBodies.Body> bodies
+    ) {
+        Box box = SiteBodies.pieceBox(pb, blockTypeMap);
+        if (box == null) {
+            return null;
+        }
+        int x = job.anchor().x + pb.x();
+        int y = job.anchor().y + pb.y();
+        int z = job.anchor().z + pb.z();
+        List<SiteBodies.Body> near = bodies;
+        if (near == null) {
+            double reach = Math.max(box.width(), Math.max(box.height(), box.depth())) + 3.0;
+            near = SiteBodies.near(entityStore, x + 0.5, y + 0.5, z + 0.5, reach);
+        }
+        return SiteBodies.blocker(near, x, y, z, box);
+    }
+
+    /** Players and villagers anywhere near a site, for one step that may place several pieces. */
+    @Nonnull
+    static List<SiteBodies.Body> bodiesNearSite(
+        @Nonnull ComponentAccessor<EntityStore> accessor,
+        @Nonnull PlotAssemblyJob job,
+        @Nonnull PlotAssemblyFrontierRuntime rt
+    ) {
+        double hx = (rt.maxPrefabX() - rt.minPrefabX() + 1) / 2.0;
+        double hy = (rt.maxPrefabY() - rt.minPrefabY() + 1) / 2.0;
+        double hz = (rt.maxPrefabZ() - rt.minPrefabZ() + 1) / 2.0;
+        return SiteBodies.near(
+            accessor,
+            job.anchor().x + rt.minPrefabX() + hx,
+            job.anchor().y + rt.minPrefabY() + hy,
+            job.anchor().z + rt.minPrefabZ() + hz,
+            Math.sqrt(hx * hx + hy * hy + hz * hz) + 4.0
+        );
     }
 
     /**
@@ -1140,6 +1302,11 @@ public final class PlotAssemblyService {
                         progress.solidCells =
                             ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
                     }
+                    // The finishing pass writes whatever stands there. Villagers are sent out of its way first.
+                    SiteRefuge.clearTheWay(
+                        world, entityStore, job.anchor(), progress.solidCells, progress.index,
+                        progress.index + COMPLETION_SOLIDS_BATCH, null, FINISHING
+                    );
                     progress.index =
                         ConstructionPasteOps.forcePasteSolidsBatch(
                             world,
@@ -1164,6 +1331,10 @@ public final class PlotAssemblyService {
                         progress.interactiveCells =
                             ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
                     }
+                    SiteRefuge.clearTheWay(
+                        world, entityStore, job.anchor(), progress.interactiveCells, progress.index,
+                        progress.index + COMPLETION_INTERACTIVE_BATCH, null, FINISHING
+                    );
                     progress.index =
                         ConstructionPasteOps.placeInteractiveCellsBatch(
                             world,
@@ -1265,6 +1436,7 @@ public final class PlotAssemblyService {
         UUID plotId = plot.getPlotId();
         IPrefabBuffer buffer = acquireCompletionPrefabBuffer(plugin, job);
         try {
+            SiteRefuge.clearTheWay(world, entityStore, job.anchor(), job.pendingBlocks(), 0, job.pendingBlocks().size(), null, FINISHING);
             ConstructionPasteOps.forcePasteAllSolids(
                 world,
                 job.anchor(),
@@ -1394,6 +1566,9 @@ public final class PlotAssemblyService {
         plot.fillAssemblyPlacedSet(placedSet, pending.size());
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         boolean any = false;
+        if (world.getEntityStore() != null) {
+            SiteRefuge.clearTheWay(world, world.getEntityStore().getStore(), job.anchor(), pending, 0, pending.size(), null, FINISHING);
+        }
         for (int i = 0; i < pending.size(); i++) {
             if (placedSet.contains(i)) {
                 continue;

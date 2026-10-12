@@ -1,17 +1,14 @@
 {
-  "$Comment": "Main cyan orb cone + sparse violet star accent cone (same tip; slight Z stagger).",
+  "$Comment": "Everything the staff shows while secondary is held: cyan orb cone, violet star accents and mint tip stars. No spawner has an offset, so all three start at the system origin, and the secondary interaction hangs that origin on the staff's tip. It streams until the interaction ends; the client clears it then.",
   "Spawners": [
     {
-      "SpawnerId": "Aetherhaven_Building_Staff_ConduitStream",
-      "PositionOffset": {
-        "Z": 0.5
-      }
+      "SpawnerId": "Aetherhaven_Building_Staff_ConduitStream"
     },
     {
-      "SpawnerId": "Aetherhaven_Building_Staff_ConduitAccent",
-      "PositionOffset": {
-        "Z": 0.58
-      }
+      "SpawnerId": "Aetherhaven_Building_Staff_ConduitAccent"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Building_Staff_ConduitMist"
     }
   ],
   "CullDistance": 100.0,

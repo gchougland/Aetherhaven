@@ -69,6 +69,16 @@ public final class PatternBook {
         queue.add(new Commission(prop, 0, paid));
         return true;
     }
+    /**
+     * Where the commission a press named is on the bench now, or -1 when it has been finished. The press names the
+     * place it was drawn at and its prop. The bench only ever loses commissions from the front, so the same one is
+     * at that place or nearer the front, and it is never a commission of another prop.
+     */
+    public int locate(int drawnAt, String prop) {
+        if (queue == null || prop == null) return -1;
+        for (int index = Math.min(drawnAt, queue.size() - 1); index >= 0; index--) if (prop.equals(queue.get(index).prop())) return index;
+        return -1;
+    }
     /** Removes a commission and reports what it cost, so every part can be handed back. */
     public Map<String, Integer> cancel(int index) {
         if (queue == null || index < 0 || index >= queue.size()) return null;

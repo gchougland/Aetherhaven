@@ -3,7 +3,11 @@ package com.hexvane.aetherhaven.ui;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import javax.annotation.Nonnull;
 
-/** Hotkey hint rows for plot placement page tips. */
+/**
+ * Tip rows for the plot placement page.
+ *
+ * <p>Tips name actions, never keys: a custom page cannot show the player's own key for an input.
+ */
 public final class PlotPlacementHotkeyTips {
     private static final String MSG = "aetherhaven_plot_move.aetherhaven.ui.plotplacement";
 
@@ -12,10 +16,10 @@ public final class PlotPlacementHotkeyTips {
     public static void appendTipsRows(@Nonnull UICommandBuilder builder, @Nonnull String containerSelector) {
         builder.clear(containerSelector);
         int i = 0;
-        i = ToolHudHotkeyRows.appendHotkeyRow(builder, containerSelector, i, ToolKeybindSlot.ESCAPE, MSG + ".tipsClosePanel", null);
+        i = ToolHudHotkeyRows.appendInfoRowIndex(builder, containerSelector, i, MSG + ".tipsClosePanel");
         i = ToolHudHotkeyRows.appendInfoRowIndex(builder, containerSelector, i, MSG + ".tipsCancelPreview");
-        i = ToolHudHotkeyRows.appendHotkeyRow(builder, containerSelector, i, ToolKeybindSlot.SECONDARY, MSG + ".tipsReopenPanel", null);
-        i = ToolHudHotkeyRows.appendHotkeyRow(builder, containerSelector, i, ToolKeybindSlot.SECONDARY, MSG + ".tipsBlockNoMove", null);
+        i = ToolHudHotkeyRows.appendInfoRowIndex(builder, containerSelector, i, MSG + ".tipsReopenPanel");
+        i = ToolHudHotkeyRows.appendInfoRowIndex(builder, containerSelector, i, MSG + ".tipsBlockNoMove");
         ToolHudHotkeyRows.appendInfoRowIndex(builder, containerSelector, i, MSG + ".cameraHint");
     }
 

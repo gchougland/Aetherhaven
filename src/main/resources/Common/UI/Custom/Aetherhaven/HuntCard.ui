@@ -12,6 +12,13 @@ Group { Anchor: (Height: 120, Bottom: 8); Background: $T.@Panel;
    Label #Description { Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
    Label #Detail { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #adc5b8); }
   }
-  $C.@TextButton #Choose { Text: "Unlock"; Anchor: (Width: 130, Height: 38, Top: 28, Left: 12); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+  // A locked creature shows the Unlock button here. An unlocked one shows the box that puts it in or out of runs.
+  Group { Anchor: (Width: 142, Left: 12);
+   $C.@TextButton #Choose { Text: "Unlock"; Anchor: (Left: 12, Height: 38, Top: 29); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+   Group #Pick { LayoutMode: Left; Anchor: (Height: 44, Top: 26); Padding: (Horizontal: 11); Background: $T.@Inset; Visible: false;
+    $C.@CheckBox #Hunt {}
+    Label #PickLabel { Text: "In the hunt"; FlexWeight: 1; Anchor: (Left: 9); Style: (...$C.@DefaultLabelStyle, FontSize: 14, VerticalAlignment: Center, TextColor: #d2bc85); }
+   }
+  }
  }
 }

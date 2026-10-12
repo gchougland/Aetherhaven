@@ -19,8 +19,8 @@
   "speechVoiceId": "BrightMale",
   "moveInRequirements": [
     {
-      "itemId": "Ingredient_Motes_Light",
-      "count": 1
+      "itemId": "Ingredient_Life_Essence",
+      "count": 10
     }
   ],
   "startingSkills": {

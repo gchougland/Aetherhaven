@@ -1,5 +1,7 @@
 $C = "../Common.ui";
-Group { LayoutMode: Top; Anchor: (Width: 50); TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-  AssetImage #Icon { Anchor: (Width: 32, Height: 32, Left: 6, Bottom: 4); }
-  Label #Label { Anchor: (Width: 44, Height: 36); Style: (...$C.@DefaultLabelStyle, FontSize: 11, Wrap: true, HorizontalAlignment: Center, TextColor: #c7d3df); }
+// The top of one column of the work grid: 48 high, the same 44 wide as a cell, with icon and caption on the cell's centre.
+// The caption box runs 6 past each side of the column, so the longest captions stay whole without touching a neighbour.
+Group { LayoutMode: Top; Anchor: (Width: 44); TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+  AssetImage #Icon { Anchor: (Width: 30, Height: 30, Bottom: 2); }
+  Label #Label { Anchor: (Left: -6, Right: -6, Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 10, HorizontalAlignment: Center, TextColor: #c7d3df); }
 }

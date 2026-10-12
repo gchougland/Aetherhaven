@@ -5,6 +5,8 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPage;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
+import com.hypixel.hytale.protocol.packets.interface_.CustomUICommand;
+import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBinding;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.CustomUIPage;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
@@ -22,6 +24,8 @@ import javax.annotation.Nullable;
  */
 public abstract class AetherhavenInteractiveCustomUIPage<T> extends InteractiveCustomUIPage<T> {
     private volatile boolean dismissed;
+    /** Only pages that refresh by themselves keep this; see {@link #sendChanges}. */
+    private PageDelta delta;
 
     public AetherhavenInteractiveCustomUIPage(
         @Nonnull PlayerRef playerRef, @Nonnull CustomPageLifetime lifetime, @Nonnull BuilderCodec<T> eventDataCodec
@@ -95,11 +99,57 @@ public abstract class AetherhavenInteractiveCustomUIPage<T> extends InteractiveC
         super.rebuild();
     }
 
+    /**
+     * For a page that refreshes by itself. Call at the end of {@code build}: what was just built is what the client
+     * receives whole, and later refreshes are compared with it.
+     */
+    protected final void opened(@Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder) {
+        if (delta == null) {
+            delta = new PageDelta();
+        }
+        delta.reset();
+        delta.sent(commandBuilder.getCommands(), eventBuilder.getEvents());
+    }
+
+    /**
+     * A refresh nobody asked for (a timer, a poll). Sends only the values that differ from what the client already
+     * shows, and sends nothing when nothing differs. Every update sent makes the server ignore this player's presses
+     * until the client answers it, so a page must never send one on a beat.
+     *
+     * @return true when an update was sent
+     */
+    protected final boolean sendChanges(@Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder) {
+        if (dismissed) {
+            return false;
+        }
+        if (delta == null) {
+            delta = new PageDelta();
+        }
+        PageDelta.Update update = delta.next(commandBuilder.getCommands(), eventBuilder.getEvents());
+        if (update == null) {
+            return false;
+        }
+        send(update.commands(), update.events(), false);
+        return true;
+    }
+
     @Override
     protected void sendUpdate(@Nullable UICommandBuilder commandBuilder, @Nullable UIEventBuilder eventBuilder, boolean clear) {
         if (dismissed) {
             return;
         }
+        CustomUICommand[] commands = commandBuilder != null ? commandBuilder.getCommands() : UICommandBuilder.EMPTY_COMMAND_ARRAY;
+        CustomUIEventBinding[] events = eventBuilder != null ? eventBuilder.getEvents() : UIEventBuilder.EMPTY_EVENT_BINDING_ARRAY;
+        if (delta != null) {
+            if (clear) {
+                delta.reset();
+            }
+            delta.sent(commands, events);
+        }
+        send(commands, events, clear);
+    }
+
+    private void send(@Nonnull CustomUICommand[] commands, @Nonnull CustomUIEventBinding[] events, boolean clear) {
         Ref<EntityStore> ref = this.playerRef.getReference();
         if (ref == null) {
             return;
@@ -125,8 +175,8 @@ public abstract class AetherhavenInteractiveCustomUIPage<T> extends InteractiveC
                             false,
                             clear,
                             this.lifetime,
-                            commandBuilder != null ? commandBuilder.getCommands() : UICommandBuilder.EMPTY_COMMAND_ARRAY,
-                            eventBuilder != null ? eventBuilder.getEvents() : UIEventBuilder.EMPTY_EVENT_BINDING_ARRAY
+                            commands,
+                            events
                         )
                     );
             }

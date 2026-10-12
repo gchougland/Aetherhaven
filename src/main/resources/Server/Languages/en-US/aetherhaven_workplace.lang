@@ -1,3 +1,53 @@
 dialogue = I want to upgrade your building and workplaces.
 test = Inspect Apprentice workplace screens in the local test town.
 test.action = upgrades, create or status
+
+# Workplace page: choosing what a workplace is
+aetherhaven.workplace.typesReady = READY TO USE
+aetherhaven.workplace.typesLocked = LOCKED
+aetherhaven.workplace.filterAll = All
+aetherhaven.workplace.filterAllHint = Every workplace type
+aetherhaven.workplace.filterHint = {skill} workplaces
+aetherhaven.workplace.shown = {shown} of {total} types
+aetherhaven.workplace.noMatch = No workplace type matches. Clear the search or choose All.
+aetherhaven.workplace.chosen = CHOSEN
+aetherhaven.workplace.choosePrompt = CHOOSE A TYPE
+aetherhaven.workplace.chooseHelp = Pick a card to see what the workplace does and which bench it is built around.
+aetherhaven.workplace.defaultHint = One Apprentice can work here at a time. Each villager unlocks their own workplace types.
+aetherhaven.workplace.stateFree = {used} of {slots} sites in use
+aetherhaven.workplace.stateFull = No free site. Add one at the {villager}.
+aetherhaven.workplace.stateLocked = Locked. Costs {gold} gold at the {villager}.
+aetherhaven.workplace.stateNoVillager = Locked. The {villager} must move in first.
+aetherhaven.workplace.lockedHint = {type} is locked. Talk to the {villager} and unlock it for {gold} gold.
+aetherhaven.workplace.noVillagerHint = {type} is locked. The {villager} must move into town before it can be unlocked.
+
+# One plain line for each workplace type card: what it makes and the bench it needs
+aetherhaven.workplace.line.smelting = Smelts ore into bars. Needs a Furnace.
+aetherhaven.workplace.line.blacksmithing = Forges weapons and tools. Needs a Blacksmith's Anvil.
+aetherhaven.workplace.line.armorCrafting = Makes armor and guard kits. Needs an Armorer's Workbench.
+aetherhaven.workplace.line.ranching = Tends animals for food support. Needs a Feeding Trough.
+aetherhaven.workplace.line.farming = Tends crops for food support. Needs a Farmer's Workbench.
+aetherhaven.workplace.line.mycology = Grows mushrooms. Needs Mushroom Logs.
+aetherhaven.workplace.line.berries = Picks berries from bushes. Needs a Farmer's Workbench.
+aetherhaven.workplace.line.mining = Digs tunnels for ore and stone. Needs a Workbench.
+aetherhaven.workplace.line.building = Builds your town's projects. Needs a Builder's Workbench.
+aetherhaven.workplace.line.blockWorkshop = Cuts building blocks to order. Needs a Builder's Workbench.
+aetherhaven.workplace.line.alchemy = Brews potions. Needs an Alchemist's Workbench.
+aetherhaven.workplace.line.crafting = Makes supplies and tools. Needs a Workbench.
+aetherhaven.workplace.line.leatherworking = Tans hides into leather goods. Needs a Tanning Rack.
+aetherhaven.workplace.line.cooking = Cooks food to order. Needs a Chef's Stove.
+aetherhaven.workplace.line.jewelry = Crafts rings and necklaces. Needs a Jewelry Crafting Bench.
+aetherhaven.workplace.line.salvaging = Breaks old gear into materials. Needs a Salvager's Workbench.
+
+# The villager who unlocks each kind of workplace
+aetherhaven.workplace.villager.blacksmith = Blacksmith
+aetherhaven.workplace.villager.farmer = Farmer
+aetherhaven.workplace.villager.rancher = Rancher
+aetherhaven.workplace.villager.miner = Miner
+aetherhaven.workplace.villager.builder = Builder
+aetherhaven.workplace.villager.alchemist = Alchemist
+aetherhaven.workplace.villager.druid = Druid
+aetherhaven.workplace.villager.crafter = Crafter
+aetherhaven.workplace.villager.leatherworker = Leatherworker
+aetherhaven.workplace.villager.chef = Chef
+aetherhaven.workplace.villager.merchant = Merchant

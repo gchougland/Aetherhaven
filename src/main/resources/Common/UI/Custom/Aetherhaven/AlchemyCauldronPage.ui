@@ -12,13 +12,19 @@ $T = "TownUiTheme.ui";
   Label #Name { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, HorizontalAlignment: Center, TextColor: #c5d5ce); }
  }
 };
+// Where a choice would put the heat: an arrowhead at the gauge and the name of the choice. Java moves it by its Anchor.
+@Pip = Group {
+ LayoutMode: Left; Visible: false;
+ Group #Arrow { Anchor: (Width: 12, Height: 12, Top: 2, Right: 4); }
+ Label #PipName { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, VerticalAlignment: Center, TextColor: #c5d5ce); }
+};
 $C.@PageOverlay { LayoutMode: Middle;
- $C.@DecoratedContainer { Anchor: (Width: 1060, Height: 780);
+ $C.@DecoratedContainer { Anchor: (Width: 1220, Height: 820);
   #Title { Label { Text: "THE ALCHEMIST'S CAULDRON"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
   #Content { LayoutMode: Top; Padding: (Full: 22);
    Label #Summary { Anchor: (Height: 28, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #e4c987); }
    Group { LayoutMode: Left; FlexWeight: 1;
-    Group { LayoutMode: Top; Anchor: (Width: 395, Right: 18);
+    Group { LayoutMode: Top; Anchor: (Width: 380, Right: 16);
      Label { Text: "INGREDIENTS & DISCOVERIES"; Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #91b7a5); }
      Label #EmptyIngredients { Anchor: (Height: 58); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9ba9aa, Wrap: true); Visible: false; }
      Group #Ingredients { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
@@ -27,41 +33,81 @@ $C.@PageOverlay { LayoutMode: Middle;
      Group { LayoutMode: Left; Anchor: (Height: 88, Bottom: 8);
       @IngredientSlot #Slot0 {}
       @IngredientSlot #Slot1 {}
-      @IngredientSlot #Slot2 {}
+      @IngredientSlot #Slot2 { Anchor: (Right: 0); }
      }
-     Group { LayoutMode: Top; Anchor: (Height: 132, Bottom: 8); Background: $T.@Panel; Padding: (Full: 10);
-      Label #Progress { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #e4c987, RenderBold: true); }
-      Label #Clue { Anchor: (Height: 46, Bottom: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true, TextColor: #d1e0d9); }
-      Group { LayoutMode: Left; Anchor: (Height: 36);
-       $C.@SecondaryTextButton #Grind { Text: "Grind"; FlexWeight: 1; Anchor: (Right: 8); }
-       $C.@SecondaryTextButton #Stir { Text: "Stir"; FlexWeight: 1; Anchor: (Right: 8); }
-       $C.@SecondaryTextButton #Simmer { Text: "Simmer"; FlexWeight: 1; }
+     Group { LayoutMode: Top; FlexWeight: 1; Background: $T.@Panel; Padding: (Full: 12);
+      Group { Anchor: (Height: 40, Bottom: 6); Background: $T.@Inset;
+       Group #BannerGreat { Anchor: (Full: 0); Background: PatchStyle(TexturePath: "../Common/InputBoxSelected.png", Border: 12, Color: #8fd6a8); Visible: false; }
+       Group #BannerPerfect { Anchor: (Full: 0); Background: PatchStyle(TexturePath: "../Common/InputBoxSelected.png", Border: 12, Color: #ffd884); Visible: false; }
+       Label #BrewTitle { Anchor: (Full: 0); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #e4c987); }
       }
+      Group { LayoutMode: Left; Anchor: (Height: 316, Bottom: 8);
+       // The gauge carries heat 0 to 100 on 300 of its 316: Java places the band, the ghost and the marker from its bottom edge.
+       Group #Gauge { Anchor: (Width: 96, Height: 316, Right: 6);
+        Group { Anchor: (Left: 20, Top: 0, Width: 56, Height: 316); Background: (TexturePath: "AlchemyHeatGauge.png", Border: 0); }
+        Group #Ghost { Anchor: (Left: 13, Bottom: 110, Width: 70, Height: 48); Background: PatchStyle(TexturePath: "AlchemyBrewGhost.png", Border: 8); Visible: false; }
+        Group #Band { Anchor: (Left: 13, Bottom: 80, Width: 70, Height: 48); Background: PatchStyle(TexturePath: "AlchemyBrewBand.png", Border: 8); Visible: false; }
+        Group #Marker { Anchor: (Left: 10, Bottom: 89, Width: 76, Height: 18); Background: (TexturePath: "AlchemyBrewMarker.png", Border: 0); Visible: false; }
+       }
+       Group #Pips { Anchor: (Width: 76, Height: 316, Right: 8);
+        @Pip #PipStir { Anchor: (Left: 0, Bottom: 55, Width: 76, Height: 16); #Arrow { Background: PatchStyle(TexturePath: "AlchemyBrewPip.png", Border: 0, Color: #8fd0ff); } }
+        @Pip #PipWait { Anchor: (Left: 0, Bottom: 109, Width: 76, Height: 16); #Arrow { Background: PatchStyle(TexturePath: "AlchemyBrewPip.png", Border: 0, Color: #e6edf2); } }
+        @Pip #PipStoke { Anchor: (Left: 0, Bottom: 145, Width: 76, Height: 16); #Arrow { Background: PatchStyle(TexturePath: "AlchemyBrewPip.png", Border: 0, Color: #ffb070); } }
+       }
+       Group { LayoutMode: Top; FlexWeight: 1;
+        Group { LayoutMode: Center; Anchor: (Height: 150);
+         ItemIcon #Cauldron { Anchor: (Width: 140, Height: 140); ItemId: "Alchemy_Cauldron_Big"; }
+        }
+        Label #BrewCount { Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 15, RenderBold: true, HorizontalAlignment: Center, TextColor: #e4c987); }
+        Label #BrewLine { Anchor: (Height: 84); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, HorizontalAlignment: Center, TextColor: #d1e0d9); }
+        Label #BrewDrift { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, HorizontalAlignment: Center, TextColor: #bfe6ff); }
+       }
+      }
+      // Each move with what it does to the heat written under it. Shown only while a brew is being played.
+      Group #MoveRow { LayoutMode: Top; Anchor: (Height: 74, Bottom: 4); Visible: false;
+       Group { LayoutMode: Left; Anchor: (Height: 52);
+        $C.@SecondaryTextButton #Stir { Text: "Stir"; FlexWeight: 1; Anchor: (Right: 8, Height: 52); }
+        $C.@SecondaryTextButton #Wait { Text: "Let it rise"; FlexWeight: 1; Anchor: (Right: 8, Height: 52); }
+        $C.@SecondaryTextButton #Stoke { Text: "Stoke"; FlexWeight: 1; Anchor: (Height: 52); }
+       }
+       Group { LayoutMode: Left; Anchor: (Height: 22);
+        Label #StirNote { FlexWeight: 1; Anchor: (Right: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 12, HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #8fd0ff); }
+        Label #WaitNote { FlexWeight: 1; Anchor: (Right: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 12, HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #e6edf2); }
+        Label #StokeNote { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #ffb070); }
+       }
+      }
+      Group #StartRow { LayoutMode: Left; Anchor: (Height: 52, Bottom: 26);
+       $C.@TextButton #Start { Text: "Start brewing"; FlexWeight: 1; Anchor: (Height: 52); }
+      }
+      Label #BrewRule { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, HorizontalAlignment: Center, TextColor: #91b7a5); }
      }
-     Group { LayoutMode: Left; Anchor: (Height: 56, Bottom: 6); Background: $T.@Inset; Padding: (Full: 8);
-      ItemIcon #FlaskIcon { Anchor: (Width: 40, Height: 40, Right: 10); }
+    }
+    Group { LayoutMode: Top; Anchor: (Width: 300, Left: 14);
+     Label { Text: "YOUR FLASK"; Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #91b7a5); }
+     Group { LayoutMode: Left; Anchor: (Height: 64, Bottom: 6); Background: $T.@Inset; Padding: (Full: 8);
+      ItemIcon #FlaskIcon { Anchor: (Width: 44, Height: 44, Top: 2, Right: 10); }
       Label #FlaskState { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, VerticalAlignment: Center); }
-      $C.@SecondaryTextButton #NextFlask { Text: "Next"; Anchor: (Width: 110, Height: 36, Top: 6); }
      }
-     Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 6);
-      $C.@TextButton #Brew { Text: "Fill flask"; FlexWeight: 1; Anchor: (Right: 8); }
-      $C.@SecondaryTextButton #Empty { Text: "Empty flask"; Anchor: (Width: 145); }
-     }
+     $C.@SecondaryTextButton #NextFlask { Text: "Next flask"; Anchor: (Height: 34, Bottom: 10); }
+     $C.@TextButton #Brew { Text: "Fill flask"; Anchor: (Height: 52, Bottom: 4); }
+     Label #FillNote { Anchor: (Height: 52, Bottom: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, HorizontalAlignment: Center, TextColor: #e4c987); }
+     $C.@SecondaryTextButton #Empty { Text: "Empty flask"; Anchor: (Height: 34, Bottom: 12); }
      Group { LayoutMode: Left; Anchor: (Height: 52, Bottom: 4);
-      ItemIcon #LeatherIcon { Anchor: (Width: 40, Height: 40, Top: 9, Right: 8); }
+      ItemIcon #LeatherIcon { Anchor: (Width: 40, Height: 40, Top: 6, Right: 8); }
       Label #UpgradeInfo { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, VerticalAlignment: Center, TextColor: #91b7a5); }
-      $C.@SecondaryTextButton #Upgrade { Text: "Upgrade flask"; Anchor: (Width: 150, Height: 36, Top: 8); }
      }
-     Label #Cost { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, TextColor: #b7c9bb); }
+     $C.@SecondaryTextButton #Upgrade { Text: "Upgrade flask"; Anchor: (Height: 34, Bottom: 12); }
+     $C.@SecondaryTextButton #Craft { Text: "Craft flask"; Anchor: (Height: 34, Bottom: 4); }
+     Label #CraftCost { Anchor: (Height: 36); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, HorizontalAlignment: Center, TextColor: #91b7a5); }
+     Group { FlexWeight: 1; }
+     Label #Cost { Anchor: (Height: 64); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, TextColor: #b7c9bb); }
     }
    }
    Group { LayoutMode: Left; Anchor: (Height: 36, Top: 12, Bottom: 8);
-    $C.@SecondaryTextButton #Learn { Text: "Learn flask recipe"; Anchor: (Width: 230, Right: 12); }
     $C.@SecondaryTextButton #Upgrades { Text: "Building upgrades"; Anchor: (Width: 230, Right: 12); }
-    Group { FlexWeight: 1; }
+    Label #Hint { FlexWeight: 1; Anchor: (Right: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, VerticalAlignment: Center, TextColor: #e4c987); }
     $C.@SecondaryTextButton #Refresh { Text: "Refresh"; Anchor: (Width: 120); }
    }
-   Label #Hint { Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #e4c987); }
   }
  }
 }

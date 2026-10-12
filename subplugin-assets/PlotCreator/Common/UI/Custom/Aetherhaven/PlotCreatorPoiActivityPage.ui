@@ -56,7 +56,7 @@ $C.@PageOverlay {
           Text: "";
         }
 
-        $C.@CancelTextButton #CloseButton {
+        $C.@CancelTextButton #PageCloseButton {
           FlexWeight: 1;
           Anchor: (Height: 40);
           Text: "";

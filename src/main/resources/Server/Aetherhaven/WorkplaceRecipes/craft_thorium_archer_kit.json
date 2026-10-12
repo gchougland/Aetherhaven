@@ -10,15 +10,15 @@
   "inputs": [
     {
       "itemId": "Ingredient_Bar_Thorium",
-      "count": 30
+      "count": 45
     },
     {
       "itemId": "Ingredient_Leather_Light",
-      "count": 10
+      "count": 15
     },
     {
       "itemId": "Ingredient_Fibre",
-      "count": 20
+      "count": 30
     }
   ],
   "output": "Aetherhaven_Thorium_Archer_Kit",

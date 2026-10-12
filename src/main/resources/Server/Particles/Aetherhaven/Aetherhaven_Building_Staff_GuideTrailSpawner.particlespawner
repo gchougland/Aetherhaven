@@ -5,7 +5,7 @@
   "LightInfluence": 0.28,
   "ParticleRotateWithSpawner": false,
   "ParticleLifeSpan": { "Min": 0.52, "Max": 0.78 },
-  "SpawnRate": { "Min": 0, "Max": 0 },
+  "SpawnRate": { "Min": 1, "Max": 1 },
   "TotalParticles": { "Min": 1, "Max": 1 },
   "SpawnBurst": true,
   "MaxConcurrentParticles": 1,
@@ -16,12 +16,11 @@
   },
   "Particle": {
     "Texture": "Particles/Textures/Basic/Star2.png",
-    "FrameSize": { "Width": 32, "Height": 32 },
     "ScaleRatioConstraint": "OneToOne",
     "Animation": {
       "0": {
         "FrameIndex": { "Min": 0, "Max": 0 },
-        "Scale": { "X": { "Min": 0.35, "Max": 0.55 } },
+        "Scale": { "X": { "Min": 1.09375, "Max": 1.1 } },
         "Opacity": 0.92,
         "Color": "#88ffdd"
       },
@@ -35,7 +34,7 @@
       }
     },
     "InitialAnimationFrame": {
-      "Scale": { "X": { "Min": 0.32, "Max": 0.5 } },
+      "Scale": { "X": { "Min": 0.053, "Max": 0.083 } },
       "Opacity": 0.95,
       "FrameIndex": { "Min": 0, "Max": 0 },
       "Color": "#99ffee"

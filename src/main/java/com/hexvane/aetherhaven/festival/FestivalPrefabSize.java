@@ -12,7 +12,8 @@ import org.joml.Vector3i;
 /**
  * Every festival prefab shares one footprint so the festival square plot can swap between them without moving the plot
  * sign or re-validating overlap. The reserved volume is always 30 x 55 x 30 in prefab-local cells
- * ({@link #LOCAL_MIN_X}..{@link #LOCAL_MAX_X}, etc.). Solid content may omit empty air; swaps clear the full box.
+ * ({@link #LOCAL_MIN_X}..{@link #LOCAL_MAX_X}, etc.). Solid content may omit empty air; swaps clear the box from the
+ * paved floor up ({@link #FLOOR_LOCAL_Y}) and, under the floor, write only the cells the incoming layout lists.
  */
 public final class FestivalPrefabSize {
     public static final int WIDTH_X = 30;
@@ -31,6 +32,15 @@ public final class FestivalPrefabSize {
     public static final int LOCAL_MAX_X = LOCAL_MIN_X + SPAN_X;
     public static final int LOCAL_MAX_Y = LOCAL_MIN_Y + SPAN_Y;
     public static final int LOCAL_MAX_Z = LOCAL_MIN_Z + SPAN_Z;
+
+    /**
+     * Prefab-local Y of the paved floor: the lowest layer the game ever clears for a festival square. The layers under
+     * it ({@link #LOCAL_MIN_Y} up to {@code FLOOR_LOCAL_Y - 1}) are where a festival layout keeps its foundation, and
+     * the game never empties them: building the square does not ask for them to be dug out (the everyday square lists
+     * nothing there), a festival start lays the layout's foundation over whatever ground is there, and a festival end
+     * or a removal leaves that fill in place as ground.
+     */
+    public static final int FLOOR_LOCAL_Y = 5;
 
     private FestivalPrefabSize() {}
 
@@ -72,6 +82,25 @@ public final class FestivalPrefabSize {
             }
         }
         return new PlotFootprintRecord(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
+    /**
+     * {@code box} with every layer under the paved floor cut away, for a square whose prefab anchor sits at world
+     * height {@code anchorWorldY}: the only part of a square the game may empty. What lies under the floor (ground, or
+     * a festival's foundation) is never in it, so the square needs no digging, a swap leaves no cavity and a teardown
+     * leaves no pit. Stored plot boxes still start at the anchor, so pass them through this before clearing blocks.
+     */
+    @Nonnull
+    public static PlotFootprintRecord fromFloorUp(@Nonnull PlotFootprintRecord box, int anchorWorldY) {
+        int floorY = anchorWorldY + FLOOR_LOCAL_Y;
+        return new PlotFootprintRecord(
+            box.getMinX(),
+            Math.max(box.getMinY(), floorY),
+            box.getMinZ(),
+            box.getMaxX(),
+            Math.max(box.getMaxY(), floorY),
+            box.getMaxZ()
+        );
     }
 
     @Nonnull

@@ -1,0 +1,899 @@
+{
+  "world": {
+    "name": "aetherhaven_test_town",
+    "displayName": "Aetherhaven Test Town",
+    "environment": "Env_Zone1_Plains",
+    "naturalSpawns": true,
+    "layers": [
+      {
+        "block": "Rock_Stone",
+        "thickness": 76
+      },
+      {
+        "block": "Soil_Dirt",
+        "thickness": 4
+      },
+      {
+        "block": "Soil_Grass",
+        "thickness": 1
+      }
+    ]
+  },
+  "town": {
+    "displayName": "Testhaven",
+    "rank": "SSS",
+    "treasuryGold": 100000,
+    "completeQuests": [
+      "q_bard",
+      "q_crystal_keeper_rescue",
+      "q_pyrotechnic_rescue",
+      "q_clown_rescue",
+      "q_halloween_rescue"
+    ],
+    "coreMastery": 10
+  },
+  "grid": {
+    "rowWidth": 300,
+    "street": 8,
+    "plaza": 14
+  },
+  "buildings": [
+    {
+      "id": "plot_town_hall"
+    },
+    {
+      "id": "plot_inn"
+    },
+    {
+      "id": "plot_farm"
+    },
+    {
+      "id": "plot_barn"
+    },
+    {
+      "id": "plot_restaurant"
+    },
+    {
+      "id": "plot_builders_hut"
+    },
+    {
+      "id": "plot_miners_hut"
+    },
+    {
+      "id": "plot_lumbermill"
+    },
+    {
+      "id": "plot_blacksmith_shop"
+    },
+    {
+      "id": "plot_warehouse"
+    },
+    {
+      "id": "plot_market_stall"
+    },
+    {
+      "id": "plot_player_shop"
+    },
+    {
+      "id": "plot_gaia_altar"
+    },
+    {
+      "id": "plot_guild_hall"
+    },
+    {
+      "id": "plot_crafter"
+    },
+    {
+      "id": "plot_leatherworker"
+    },
+    {
+      "id": "plot_doctor"
+    },
+    {
+      "id": "plot_druid"
+    },
+    {
+      "id": "plot_monster_hunter"
+    },
+    {
+      "id": "plot_alchemist"
+    },
+    {
+      "id": "plot_flower_shop"
+    },
+    {
+      "id": "plot_furniture_shop"
+    },
+    {
+      "id": "plot_crystal_keepers_shop"
+    },
+    {
+      "id": "plot_bomb_shop"
+    },
+    {
+      "id": "plot_clown_tent"
+    },
+    {
+      "id": "plot_halloween"
+    },
+    {
+      "id": "plot_park"
+    },
+    {
+      "id": "plot_tourist_portal"
+    },
+    {
+      "id": "plot_festival_square"
+    },
+    {
+      "id": "plot_house",
+      "count": 24
+    }
+  ],
+  "buildingSites": [
+    {
+      "id": "plot_house"
+    }
+  ],
+  "production": {
+    "farmOutputs": [
+      "Plant_Crop_Wheat_Item",
+      "Plant_Crop_Lettuce_Item"
+    ],
+    "mineOutputs": [
+      "Ore_Copper",
+      "Rubble_Stone"
+    ],
+    "animals": [
+      "Sheep",
+      "Chicken",
+      "Pig",
+      "Cow"
+    ],
+    "saplings": [
+      "Wood_Beech_Trunk",
+      "Wood_Oak_Trunk"
+    ],
+    "gardenPlants": [
+      "Plant_Crop_Health1",
+      "Plant_Crop_Stamina1",
+      "Plant_Crop_Mana1"
+    ]
+  },
+  "workplaces": [
+    {
+      "type": "smelting",
+      "name": "Test Smelter",
+      "width": 9,
+      "depth": 9,
+      "floor": "Rock_Stone_Cobble",
+      "blocks": [
+        {
+          "block": "Bench_Furnace",
+          "x": 2,
+          "z": 2,
+          "turn": 0
+        },
+        {
+          "block": "Bench_Furnace",
+          "x": 6,
+          "z": 2,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": [
+        {
+          "recipe": "smelt_copper",
+          "amount": 8
+        },
+        {
+          "recipe": "smelt_iron",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "type": "blacksmithing",
+      "name": "Test Forge",
+      "width": 9,
+      "depth": 9,
+      "floor": "Rock_Stone_Cobble",
+      "blocks": [
+        {
+          "block": "Bench_Weapon",
+          "x": 4,
+          "z": 2,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": [
+        {
+          "recipe": "forge_copper_sword",
+          "amount": 2
+        },
+        {
+          "recipe": "forge_iron_sword",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "type": "armorCrafting",
+      "name": "Test Armoury",
+      "width": 9,
+      "depth": 9,
+      "floor": "Rock_Stone_Cobble",
+      "blocks": [
+        {
+          "block": "Bench_Armour",
+          "x": 4,
+          "z": 2,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": [
+        {
+          "recipe": "craft_copper_knight_kit",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "type": "ranching",
+      "name": "Test Ranch",
+      "width": 11,
+      "depth": 9,
+      "blocks": [
+        {
+          "block": "Bench_Trough",
+          "x": 5,
+          "z": 4,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": []
+    },
+    {
+      "type": "farming",
+      "name": "Test Field",
+      "width": 11,
+      "depth": 9,
+      "blocks": [
+        {
+          "block": "Bench_Farming",
+          "x": 5,
+          "z": 1,
+          "turn": 0
+        },
+        {
+          "block": "Plant_Crop_Wheat_Block",
+          "x": 2,
+          "z": 4,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Wheat_Block",
+          "x": 4,
+          "z": 4,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Wheat_Block",
+          "x": 6,
+          "z": 4,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Wheat_Block",
+          "x": 8,
+          "z": 4,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Wheat_Block",
+          "x": 2,
+          "z": 6,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Wheat_Block",
+          "x": 4,
+          "z": 6,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Wheat_Block",
+          "x": 6,
+          "z": 6,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Wheat_Block",
+          "x": 8,
+          "z": 6,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": []
+    },
+    {
+      "type": "mycology",
+      "name": "Test Mushroom Yard",
+      "width": 11,
+      "depth": 9,
+      "blocks": [
+        {
+          "block": "Aetherhaven_Mushroom_Log",
+          "x": 2,
+          "z": 2,
+          "turn": 0
+        },
+        {
+          "block": "Aetherhaven_Mushroom_Log",
+          "x": 5,
+          "z": 2,
+          "turn": 0
+        },
+        {
+          "block": "Aetherhaven_Mushroom_Log",
+          "x": 8,
+          "z": 2,
+          "turn": 0
+        },
+        {
+          "block": "Aetherhaven_Mushroom_Log",
+          "x": 2,
+          "z": 5,
+          "turn": 0
+        },
+        {
+          "block": "Aetherhaven_Mushroom_Log",
+          "x": 5,
+          "z": 5,
+          "turn": 0
+        },
+        {
+          "block": "Aetherhaven_Mushroom_Log",
+          "x": 8,
+          "z": 5,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": [],
+      "choice": "common_brown"
+    },
+    {
+      "type": "berries",
+      "name": "Test Berry Patch",
+      "width": 11,
+      "depth": 9,
+      "blocks": [
+        {
+          "block": "Bench_Farming",
+          "x": 5,
+          "z": 1,
+          "turn": 0
+        },
+        {
+          "block": "Plant_Crop_Berry_Block",
+          "x": 2,
+          "z": 4,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Berry_Block",
+          "x": 4,
+          "z": 4,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Berry_Block",
+          "x": 6,
+          "z": 4,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Berry_Block",
+          "x": 8,
+          "z": 4,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Berry_Block",
+          "x": 2,
+          "z": 6,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Berry_Block",
+          "x": 4,
+          "z": 6,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Berry_Block",
+          "x": 6,
+          "z": 6,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        },
+        {
+          "block": "Plant_Crop_Berry_Block",
+          "x": 8,
+          "z": 6,
+          "turn": 0,
+          "below": "Soil_Dirt_Tilled"
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": []
+    },
+    {
+      "type": "mining",
+      "name": "Test Mineshaft",
+      "width": 5,
+      "depth": 15,
+      "blocks": [],
+      "workers": 1,
+      "skill": 6,
+      "orders": [],
+      "choice": "STAIRS_DOWN"
+    },
+    {
+      "type": "building",
+      "name": "Test Building Yard",
+      "width": 11,
+      "depth": 9,
+      "floor": "Rock_Stone_Cobble",
+      "blocks": [
+        {
+          "block": "Bench_Builders",
+          "x": 5,
+          "z": 2,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": []
+    },
+    {
+      "type": "blockWorkshop",
+      "name": "Test Block Workshop",
+      "width": 9,
+      "depth": 9,
+      "floor": "Rock_Stone_Cobble",
+      "blocks": [
+        {
+          "block": "Bench_Builders",
+          "x": 4,
+          "z": 2,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": [
+        {
+          "recipe": "auto",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "type": "alchemy",
+      "name": "Test Alchemy Lab",
+      "width": 9,
+      "depth": 9,
+      "floor": "Wood_Softwood_Planks",
+      "blocks": [
+        {
+          "block": "Bench_Alchemy",
+          "x": 4,
+          "z": 2,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": [
+        {
+          "recipe": "brew_lesser_health",
+          "amount": 2
+        },
+        {
+          "recipe": "brew_lesser_stamina",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "type": "crafting",
+      "name": "Test Workshop",
+      "width": 9,
+      "depth": 9,
+      "floor": "Wood_Softwood_Planks",
+      "blocks": [
+        {
+          "block": "Bench_WorkBench",
+          "x": 4,
+          "z": 2,
+          "turn": 0
+        },
+        {
+          "block": "Aetherhaven_PatternCabinet",
+          "x": 1,
+          "z": 6,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": [
+        {
+          "recipe": "craft_repair_kit",
+          "amount": 2
+        },
+        {
+          "recipe": "craft_prop_sticks",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "type": "leatherworking",
+      "name": "Test Tannery",
+      "width": 9,
+      "depth": 9,
+      "floor": "Wood_Softwood_Planks",
+      "blocks": [
+        {
+          "block": "Bench_Tannery",
+          "x": 4,
+          "z": 2,
+          "turn": 0
+        },
+        {
+          "block": "Aetherhaven_StitchingFrame",
+          "x": 1,
+          "z": 6,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": [
+        {
+          "recipe": "tan_light_leather",
+          "amount": 4
+        },
+        {
+          "recipe": "craft_courier_kit",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "type": "cooking",
+      "name": "Test Kitchen",
+      "width": 9,
+      "depth": 9,
+      "floor": "Wood_Softwood_Planks",
+      "blocks": [
+        {
+          "block": "Bench_Cooking",
+          "x": 4,
+          "z": 2,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": [
+        {
+          "recipe": "cook_berry_salad",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "type": "jewelry",
+      "name": "Test Jeweller",
+      "width": 9,
+      "depth": 9,
+      "floor": "Wood_Softwood_Planks",
+      "blocks": [
+        {
+          "block": "Aetherhaven_Jewelry_Crafting_Bench",
+          "x": 4,
+          "z": 2,
+          "turn": 0
+        },
+        {
+          "block": "Aetherhaven_Appraisal_Bench",
+          "x": 1,
+          "z": 6,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": [
+        {
+          "recipe": "auto",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "type": "salvaging",
+      "name": "Test Salvage Yard",
+      "width": 9,
+      "depth": 9,
+      "floor": "Rock_Stone_Cobble",
+      "blocks": [
+        {
+          "block": "Bench_Salvage",
+          "x": 4,
+          "z": 2,
+          "turn": 0
+        }
+      ],
+      "workers": 1,
+      "skill": 6,
+      "orders": [
+        {
+          "recipe": "auto",
+          "amount": 2
+        }
+      ]
+    }
+  ],
+  "staff": {
+    "couriers": 2,
+    "guards": 2,
+    "guardClass": "guard_knight",
+    "clerks": 1,
+    "skill": 5
+  },
+  "stock": [
+    {
+      "item": "Wood_Beech_Trunk",
+      "count": 300
+    },
+    {
+      "item": "Wood_Oak_Trunk",
+      "count": 100
+    },
+    {
+      "item": "Ingredient_Stick",
+      "count": 100
+    },
+    {
+      "item": "Ingredient_Tree_Sap",
+      "count": 40
+    },
+    {
+      "item": "Ingredient_Charcoal",
+      "count": 60
+    },
+    {
+      "item": "Rock_Stone_Cobble",
+      "count": 300
+    },
+    {
+      "item": "Rock_Stone",
+      "count": 100
+    },
+    {
+      "item": "Ore_Copper",
+      "count": 100
+    },
+    {
+      "item": "Ore_Iron",
+      "count": 100
+    },
+    {
+      "item": "Ingredient_Bar_Copper",
+      "count": 200
+    },
+    {
+      "item": "Ingredient_Bar_Iron",
+      "count": 200
+    },
+    {
+      "item": "Ingredient_Bar_Silver",
+      "count": 50
+    },
+    {
+      "item": "Ingredient_Bar_Gold",
+      "count": 50
+    },
+    {
+      "item": "Ingredient_Bar_Thorium",
+      "count": 50
+    },
+    {
+      "item": "Ingredient_Bar_Cobalt",
+      "count": 50
+    },
+    {
+      "item": "Ingredient_Fibre",
+      "count": 200
+    },
+    {
+      "item": "Ingredient_Fabric_Scrap_Linen",
+      "count": 50
+    },
+    {
+      "item": "Ingredient_Hide_Light",
+      "count": 60
+    },
+    {
+      "item": "Ingredient_Leather_Light",
+      "count": 100
+    },
+    {
+      "item": "Ingredient_Leather_Medium",
+      "count": 50
+    },
+    {
+      "item": "Ingredient_Life_Essence",
+      "count": 100
+    },
+    {
+      "item": "Ingredient_Crystal_White",
+      "count": 20
+    },
+    {
+      "item": "Potion_Empty_Small",
+      "count": 40
+    },
+    {
+      "item": "Food_Bread",
+      "count": 60
+    },
+    {
+      "item": "Plant_Fruit_Berries_Red",
+      "count": 80
+    },
+    {
+      "item": "Food_Wildmeat_Raw",
+      "count": 40
+    },
+    {
+      "item": "Plant_Crop_Wheat_Item",
+      "count": 100
+    },
+    {
+      "item": "Plant_Crop_Lettuce_Item",
+      "count": 60
+    },
+    {
+      "item": "Plant_Crop_Carrot_Item",
+      "count": 60
+    },
+    {
+      "item": "Plant_Crop_Corn_Item",
+      "count": 60
+    },
+    {
+      "item": "Plant_Crop_Turnip_Item",
+      "count": 60
+    },
+    {
+      "item": "Plant_Seeds_Wheat",
+      "count": 40
+    },
+    {
+      "item": "Plant_Seeds_Lettuce",
+      "count": 40
+    },
+    {
+      "item": "Plant_Seeds_Carrot",
+      "count": 40
+    },
+    {
+      "item": "Plant_Seeds_Health1",
+      "count": 20
+    },
+    {
+      "item": "Plant_Seeds_Stamina1",
+      "count": 20
+    },
+    {
+      "item": "Plant_Seeds_Mana1",
+      "count": 20
+    }
+  ],
+  "kit": {
+    "creative": true,
+    "items": [
+      {
+        "item": "Aetherhaven_Building_Staff",
+        "count": 1
+      },
+      {
+        "item": "Aetherhaven_Workplace_Tool",
+        "count": 1
+      },
+      {
+        "item": "Aetherhaven_Plot_Placement_Tool",
+        "count": 1
+      },
+      {
+        "item": "Aetherhaven_Plot_Creator_Staff",
+        "count": 1
+      },
+      {
+        "item": "Aetherhaven_Building_Editor_Staff",
+        "count": 1
+      },
+      {
+        "item": "Aetherhaven_Path_Tool",
+        "count": 1
+      },
+      {
+        "item": "Aetherhaven_Patrol_Wand",
+        "count": 1
+      },
+      {
+        "item": "Aetherhaven_Rts_Flag",
+        "count": 1
+      },
+      {
+        "item": "Aetherhaven_Packaging_Wand",
+        "count": 1
+      },
+      {
+        "item": "Aetherhaven_Quest_Journal",
+        "count": 1
+      },
+      {
+        "item": "Aetherhaven_Alchemy_Flask",
+        "count": 1
+      },
+      {
+        "item": "Aetherhaven_Gold_Coin",
+        "count": 1000
+      }
+    ],
+    "plotTokens": [
+      "plot_house",
+      "plot_park",
+      "plot_simple_workplace"
+    ],
+    "props": [
+      "flower_basket",
+      "candle_stump",
+      "balloons"
+    ]
+  }
+}

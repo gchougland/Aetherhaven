@@ -741,7 +741,7 @@ public final class RescueCampService {
                 continue;
             }
             RaidSpawnPositionFinder.Result spot =
-                RaidSpawnPositionFinder.findForMob(world, town, slot.raidApproachDirectionEnum(), locked, rng, attempt);
+                RaidSpawnPositionFinder.findOutsideTown(world, town, slot.raidApproachDirectionEnum(), locked, rng, attempt);
             if (spot == null) {
                 continue;
             }
@@ -757,13 +757,17 @@ public final class RescueCampService {
         return null;
     }
 
-    /** The centre, corners and edge midpoints of the footprint must all sit close to the camp's floor. */
+    /**
+     * The centre, corners and edge midpoints of the footprint must all sit close to the camp's floor. Only land in
+     * memory is read: a corner that is not loaded has no known height, so the site is turned down.
+     */
     private static boolean isLevel(@Nonnull World world, int x, int z, int floor, @Nonnull IPrefabBuffer prefab, @Nonnull PrefabRotation rotation) {
         int[] xs = {x + prefab.getMinX(rotation), x, x + prefab.getMaxX(rotation)};
         int[] zs = {z + prefab.getMinZ(rotation), z, z + prefab.getMaxZ(rotation)};
         for (int px : xs) {
             for (int pz : zs) {
-                if (!levelColumn(ChunkSectionBlockUtil.columnHeight(world, px, pz), floor)) {
+                int surface = ChunkSectionBlockUtil.surfaceHeightIfInMemory(world, px, pz);
+                if (surface == ChunkSectionBlockUtil.NO_SURFACE || !levelColumn(surface, floor)) {
                     return false;
                 }
             }

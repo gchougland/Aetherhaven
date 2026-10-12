@@ -10,6 +10,8 @@ import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.tourist.TouristMoveInRequirements;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType;
+import com.hexvane.aetherhaven.workplace.WorkplaceQuestSteps;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -31,8 +33,29 @@ public final class QuestProgressionService {
     public static final String TOURIST_MOVE_IN_ITEMS = "tourist_move_in_items";
     public static final String ITEM_CRAFTED = "item_crafted";
     public static final String CHARTER_PLACED = "charter_placed";
+    /** The town has unlocked a workplace type through its supervising villager. */
+    public static final String WORKPLACE_TYPE_UNLOCKED = "workplace_type_unlocked";
+    /** A player has marked out a workplace area with the Building Staff. */
+    public static final String WORKPLACE_MARKED = "workplace_marked";
+    /** A marked workplace has been given its type and saved. */
+    public static final String WORKPLACE_TYPE_CHOSEN = "workplace_type_chosen";
+    /** A workplace has the station of its type standing inside it. */
+    public static final String WORKPLACE_BENCH_PLACED = "workplace_bench_placed";
 
     private QuestProgressionService() {}
+
+    /** The four workplace steps can be done in any order, so each is ticked by its own proof and never by a later one. */
+    static boolean isWorkplaceKind(@Nonnull QuestObjective objective) {
+        return isKind(objective, WORKPLACE_TYPE_UNLOCKED)
+            || isKind(objective, WORKPLACE_MARKED)
+            || isKind(objective, WORKPLACE_TYPE_CHOSEN)
+            || isKind(objective, WORKPLACE_BENCH_PLACED);
+    }
+
+    /** Whether an objective's proof lies in the world, where only loaded chunks can be read. */
+    public static boolean needsWorld(@Nonnull QuestObjective objective) {
+        return isKind(objective, WORKPLACE_BENCH_PLACED);
+    }
 
     public static boolean initialize(
         @Nonnull AetherhavenPlugin plugin,
@@ -61,19 +84,36 @@ public final class QuestProgressionService {
         if (def == null) {
             return false;
         }
+        return reconcile(def, plugin.getConstructionCatalog(), town, questId);
+    }
+
+    /** The same reconciliation for callers that hold the definition, and for tests, which have no plugin. */
+    static boolean reconcile(
+        @Nonnull QuestDefinition def,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull TownRecord town,
+        @Nonnull String questId
+    ) {
         List<QuestObjective> objectives = def.objectivesOrEmpty();
         town.initQuestObjectiveProgress(questId, def.trackableObjectiveIds());
         town.initQuestKillProgress(questId, def.entityKillObjectiveIds());
 
+        boolean changed = false;
         int furthestProven = -1;
         for (int i = 0; i < objectives.size(); i++) {
             QuestObjective objective = objectives.get(i);
-            if (isPersistedComplete(town, questId, objective) || isStateComplete(plugin, town, def, objective)) {
+            boolean stateComplete = isStateComplete(catalog, town, def, objective);
+            // What the town's own state proves is written down at once. The proof may go away later (a workplace
+            // can be removed) and the step must stay done. For the older kinds this changes nothing: they were
+            // already written by the loop below.
+            if (stateComplete && !isKillObjective(objective) && hasId(objective)) {
+                changed |= town.completeQuestObjective(questId, objective.id());
+            }
+            if (stateComplete || isPersistedComplete(town, questId, objective)) {
                 furthestProven = i;
             }
         }
 
-        boolean changed = false;
         for (int i = 0; i <= furthestProven; i++) {
             QuestObjective objective = objectives.get(i);
             if (!isKillObjective(objective)
@@ -93,13 +133,12 @@ public final class QuestProgressionService {
                 changed |= town.completeQuestObjective(questId, objective.id());
             }
         }
-        changed |= migrateTouristMoveInGiftFromLegacyTokenProgress(plugin, town, questId, def);
+        changed |= migrateTouristMoveInGiftFromLegacyTokenProgress(town, questId, def);
         return changed;
     }
 
     /** Saves that started the house quest before move in items: token progress implies gift was satisfied. */
     private static boolean migrateTouristMoveInGiftFromLegacyTokenProgress(
-        @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town,
         @Nonnull String questId,
         @Nonnull QuestDefinition def
@@ -132,6 +171,10 @@ public final class QuestProgressionService {
             return false;
         }
         if (isKind(objective, PLOT_TOKEN_RECEIVED) && deferPlotTokenOnQuestStart(def)) {
+            return false;
+        }
+        // A player may mark an area before unlocking a type. A later step must not tick an earlier one for them.
+        if (isWorkplaceKind(objective)) {
             return false;
         }
         return true;
@@ -230,6 +273,35 @@ public final class QuestProgressionService {
         return isKind(objective, "journal");
     }
 
+    static boolean isDialogueTurnIn(@Nonnull QuestObjective objective) {
+        return isKind(objective, DIALOGUE_TURN_IN);
+    }
+
+    /**
+     * Answers for the objectives whose proof stands in the world, read from the chunks that are loaded now. Each
+     * question is looked up once however many quests ask it. Call it as a world task, never from inside a tick system.
+     */
+    @Nonnull
+    public static java.util.function.Function<QuestObjective, WorldProof> worldProofs(
+        @Nonnull com.hypixel.hytale.server.core.universe.world.World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town
+    ) {
+        java.util.Map<String, WorldProof> answers = new java.util.HashMap<>();
+        return objective -> {
+            if (!isKind(objective, WORKPLACE_BENCH_PLACED)) {
+                return WorldProof.NO;
+            }
+            String only = objective.workType() == null ? "" : objective.workType();
+            return answers.computeIfAbsent(
+                WORKPLACE_BENCH_PLACED + ':' + only,
+                key -> WorkplaceQuestSteps.stationProof(
+                    WorkplaceQuestSteps.of(world), town, WorkplaceQuestSteps.type(only), plugin.getGrowerPlans()
+                )
+            );
+        };
+    }
+
     public static boolean allObjectivesComplete(
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town,
@@ -295,6 +367,136 @@ public final class QuestProgressionService {
         @Nullable String npcRoleId
     ) {
         return advanceAllMatching(plugin, town, ASSIGN_HOUSE_RESIDENT, null, residentUuid, npcRoleId);
+    }
+
+    /**
+     * A workplace type was bought, or a workplace was saved. Both leave their proof in the town's save, so every
+     * active quest is simply read again, whatever step it is on.
+     */
+    public static boolean onWorkplacesChanged(@Nonnull AetherhavenPlugin plugin, @Nonnull TownRecord town) {
+        return reconcileActive(plugin.getQuestCatalog(), plugin.getConstructionCatalog(), town);
+    }
+
+    /** A player marked out a workplace area. It counts at once, even when no type is unlocked yet. */
+    public static boolean onWorkplaceAreaMarked(@Nonnull AetherhavenPlugin plugin, @Nonnull TownRecord town) {
+        return completeWhereverItStands(
+            plugin.getQuestCatalog(), plugin.getConstructionCatalog(), town, WORKPLACE_MARKED, null
+        );
+    }
+
+    /** The station of a workplace of this type was seen standing inside it: set down, used, or found by a look. */
+    public static boolean onWorkplaceStationFound(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownsfolkWorkType type
+    ) {
+        return completeWhereverItStands(
+            plugin.getQuestCatalog(), plugin.getConstructionCatalog(), town, WORKPLACE_BENCH_PLACED, type
+        );
+    }
+
+    /** Reads every active quest against the town's state. Call it before state that proves a step is taken away. */
+    static boolean reconcileActive(
+        @Nonnull QuestCatalog quests,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull TownRecord town
+    ) {
+        boolean changed = false;
+        for (String questId : town.getActiveQuestIdsSnapshot()) {
+            QuestDefinition def = quests.get(questId);
+            if (def != null) {
+                changed |= reconcile(def, catalog, town, questId);
+            }
+        }
+        return changed;
+    }
+
+    /**
+     * Ticks an objective a player may do at any time. Unlike {@code advanceCurrent}, it does not wait for the step
+     * to be the current one: a player who does things out of order sees each one count when it happens.
+     *
+     * @param type the workplace type the event was about, or null when the event names none
+     */
+    static boolean completeWhereverItStands(
+        @Nonnull QuestCatalog quests,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull TownRecord town,
+        @Nonnull String kind,
+        @Nullable TownsfolkWorkType type
+    ) {
+        boolean changed = false;
+        for (String questId : town.getActiveQuestIdsSnapshot()) {
+            QuestDefinition def = quests.get(questId);
+            if (def == null) {
+                continue;
+            }
+            changed |= reconcile(def, catalog, town, questId);
+            for (QuestObjective objective : def.objectivesOrEmpty()) {
+                if (!isKind(objective, kind) || !hasId(objective)) {
+                    continue;
+                }
+                TownsfolkWorkType only = WorkplaceQuestSteps.type(objective.workType());
+                if (only != null && type != null && only != type) {
+                    continue;
+                }
+                changed |= town.completeQuestObjective(questId, objective.id());
+            }
+        }
+        return changed;
+    }
+
+    /**
+     * Looks at the loaded world for objectives whose proof stands there, in every active quest. Events tick these
+     * steps in ordinary play; this catches what no event saw, such as a bench that stood there before the quest began.
+     */
+    public static boolean observeWorld(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull java.util.function.Function<QuestObjective, WorldProof> world
+    ) {
+        boolean changed = false;
+        for (String questId : town.getActiveQuestIdsSnapshot()) {
+            QuestDefinition def = plugin.getQuestCatalog().get(questId);
+            if (def == null) {
+                continue;
+            }
+            changed |= observeWorld(def, town, questId, world);
+        }
+        return changed;
+    }
+
+    static boolean observeWorld(
+        @Nonnull QuestDefinition def,
+        @Nonnull TownRecord town,
+        @Nonnull String questId,
+        @Nonnull java.util.function.Function<QuestObjective, WorldProof> world
+    ) {
+        boolean changed = false;
+        for (QuestObjective objective : def.objectivesOrEmpty()) {
+            if (!needsWorld(objective) || !hasId(objective) || isPersistedComplete(town, questId, objective)) {
+                continue;
+            }
+            if (world.apply(objective) == WorldProof.YES) {
+                changed |= town.completeQuestObjective(questId, objective.id());
+            }
+        }
+        return changed;
+    }
+
+    /** True when an active quest still waits on something only the world can show. */
+    public static boolean awaitsWorld(@Nonnull QuestCatalog quests, @Nonnull TownRecord town) {
+        for (String questId : town.getActiveQuestIdsSnapshot()) {
+            QuestDefinition def = quests.get(questId);
+            if (def == null) {
+                continue;
+            }
+            for (QuestObjective objective : def.objectivesOrEmpty()) {
+                if (needsWorld(objective) && hasId(objective) && !isPersistedComplete(town, questId, objective)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static boolean advanceDialogueTurnIn(
@@ -374,22 +576,29 @@ public final class QuestProgressionService {
         return hasId(objective) && town.isQuestObjectiveComplete(questId, objective.id());
     }
 
-    private static boolean isStateComplete(
-        @Nonnull AetherhavenPlugin plugin,
+    /** Whether the town's own saved state proves an objective, with no event and no world needed. */
+    static boolean isStateComplete(
+        @Nonnull ConstructionCatalog catalog,
         @Nonnull TownRecord town,
         @Nonnull QuestDefinition def,
         @Nonnull QuestObjective objective
     ) {
+        if (isKind(objective, WORKPLACE_TYPE_UNLOCKED)) {
+            return WorkplaceQuestSteps.typeUnlocked(town, WorkplaceQuestSteps.type(objective.workType()));
+        }
+        if (isKind(objective, WORKPLACE_MARKED) || isKind(objective, WORKPLACE_TYPE_CHOSEN)) {
+            return WorkplaceQuestSteps.siteExists(town, WorkplaceQuestSteps.type(objective.workType()));
+        }
         String constructionId = objectiveConstruction(def, objective);
         if (isKind(objective, CONSTRUCTION_PLACED)) {
-            return constructionId != null && hasPlot(town, plugin.getConstructionCatalog(), constructionId, false);
+            return constructionId != null && hasPlot(town, catalog, constructionId, false);
         }
         if (isKind(objective, CONSTRUCTION_BUILT)) {
-            return constructionId != null && town.hasCompletePlotWithConstruction(plugin.getConstructionCatalog(), constructionId);
+            return constructionId != null && town.hasCompletePlotWithConstruction(catalog, constructionId);
         }
         if (isKind(objective, ASSIGN_HOUSE_RESIDENT)) {
             UUID resident = assigneeUuid(town, def, objective);
-            return resident != null && town.isNpcHomeResidentOnHousePlot(resident, plugin.getConstructionCatalog());
+            return resident != null && town.isNpcHomeResidentOnHousePlot(resident, catalog);
         }
         if (isKillObjective(objective)) {
             return isObjectiveComplete(town, def.idOrEmpty(), objective);

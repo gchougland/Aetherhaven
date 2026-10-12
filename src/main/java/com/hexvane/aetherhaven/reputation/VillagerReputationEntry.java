@@ -122,6 +122,8 @@ public final class VillagerReputationEntry {
         // Elder reputation rewards were replaced; drop obsolete pending ids so dialogue does not stall.
         pendingRewardIds.removeIf(id -> id != null && (id.equals("rep_elder_25") || id.equals("rep_elder_75")));
         pendingRewardIds.removeIf(id -> id != null && id.equals("rep_merchant_25"));
+        // The Blacksmith's stone reward was removed; an unclaimed one must not wait for a dialogue that is gone.
+        pendingRewardIds.removeIf(id -> id != null && id.equals("rep_blacksmith_25"));
         claimedRewardIds.removeIf(id -> id != null && id.equals("rep_merchant_25"));
         // Jewelry workbench unlock moved from rep 75 to 100; rewrite stored ids.
         for (int i = 0; i < claimedRewardIds.size(); i++) {

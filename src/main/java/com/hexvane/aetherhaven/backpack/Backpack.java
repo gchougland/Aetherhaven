@@ -58,20 +58,15 @@ public final class Backpack {
     }
     public int multiplier(){return tier.stacks+compression;}
     public static String stacksLabel(int count){return count+(count==1?" stack":" stacks");}
-    public int limit(ItemStack stack){return Math.max(1,stack.getItem().getMaxStack())*multiplier();}
+    public int limit(ItemStack stack){return com.hexvane.aetherhaven.inventory.StackedSlots.limit(stack,multiplier());}
     public int used(){int n=0;for(var s:items)if(!ItemStack.isEmpty(s))n++;return n;}
     /** Returns the number accepted. Native stack metadata is retained. */
     public int insert(ItemStack stack){
         if(ItemStack.isEmpty(stack)||isBackpack(stack))return 0;
-        int left=stack.getQuantity();
-        for(int pass=0;pass<2;pass++)for(int i=0;i<tier.slots&&left>0;i++){
-            var current=items[i];boolean empty=ItemStack.isEmpty(current);
-            if(pass==0?empty||!current.isStackableWith(stack):!empty)continue;
-            int held=empty?0:current.getQuantity(),take=Math.min(left,Math.max(0,limit(stack)-held));
-            if(take>0){items[i]=stack.withQuantity(held+take);left-=take;}
-        }
-        return stack.getQuantity()-left;
+        return com.hexvane.aetherhaven.inventory.StackedSlots.insert(items,tier.slots,stack,multiplier());
     }
+    /** True when the bag already holds a stack this one merges with. */
+    public boolean holds(ItemStack stack){return !isBackpack(stack)&&com.hexvane.aetherhaven.inventory.StackedSlots.holds(items,tier.slots,stack);}
     public ItemStack write(ItemStack original){
         var data=new BsonDocument().append("id",new BsonString(id.toString())).append("tier",new BsonString(tier.name()))
             .append("compression",new BsonInt32(compression)).append("magnet",BsonBoolean.valueOf(magnet))

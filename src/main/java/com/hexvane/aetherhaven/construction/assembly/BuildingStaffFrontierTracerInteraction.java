@@ -157,11 +157,11 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
             return;
         }
         HeadRotation headRot = store.getComponent(playerRef, HeadRotation.getComponentType());
-        Vector3d tip = staffTip(transform, headRot);
+        Vector3d searchOrigin = searchOrigin(transform, headRot);
         ArrayList<Vector3i> obstructionCells = new ArrayList<>();
-        AssemblyObstructionWorldCells.collectWithinDefaultRange(world, plugin, tip, obstructionCells);
+        AssemblyObstructionWorldCells.collectWithinDefaultRange(world, plugin, searchOrigin, obstructionCells);
         ArrayList<Vector3i> frontierCells = new ArrayList<>();
-        AssemblyFrontierWorldCells.collectWithinDefaultRange(world, plugin, tip, frontierCells);
+        AssemblyFrontierWorldCells.collectWithinDefaultRange(world, plugin, searchOrigin, frontierCells);
         ArrayList<Vector3i> cells = new ArrayList<>(obstructionCells);
         cells.addAll(frontierCells);
         if (cells.isEmpty()) {
@@ -200,7 +200,7 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
             }
             eligible.add(new BuildingStaffTracerTargets.Candidate(cell, plot.toFootprint(), phase == PlotAssemblyPhase.CLEARING));
         }
-        Vector3i best = BuildingStaffTracerTargets.select(eligible, transform.getPosition(), tip, AssemblyFrontierWorldCells.DEFAULT_RANGE);
+        Vector3i best = BuildingStaffTracerTargets.select(eligible, transform.getPosition(), searchOrigin, AssemblyFrontierWorldCells.DEFAULT_RANGE);
         if (best == null) {
             failWithHint(playerRef, store);
             context.getState().state = InteractionState.Failed;
@@ -216,16 +216,9 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
         double tx = best.x + 0.5;
         double ty = best.y + 0.5;
         double tz = best.z + 0.5;
-        Vector3d spawnPos = new Vector3d(tip);
-        Vector3d toTarget = new Vector3d(tx - spawnPos.x, ty - spawnPos.y, tz - spawnPos.z);
-        double leg = toTarget.length();
-        if (leg < 1.0e-4) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
-        toTarget.mul(1.0 / leg);
-        double pullback = Math.min(0.58, Math.max(0.22, leg * 0.09));
-        spawnPos.add(new Vector3d(toTarget).mul(-pullback));
+        // The bolt and its first stars leave from the staff's tip, the point the held effects hang on.
+        float lookPitch = headRot != null ? headRot.getRotation().pitch() : transform.getRotation().pitch();
+        Vector3d spawnPos = BuildingStaffTip.estimate(transform.getPosition(), transform.getRotation().yaw(), lookPitch);
         double pathLen =
             Math.sqrt(
                 (tx - spawnPos.x) * (tx - spawnPos.x)
@@ -291,8 +284,12 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
         }
     }
 
+    /**
+     * Where the search for work in range is centred: chest height, a little ahead of the player. Nothing is drawn
+     * there; the bolt starts at {@link BuildingStaffTip}.
+     */
     @Nonnull
-    private static Vector3d staffTip(@Nonnull TransformComponent transform, @Nullable HeadRotation head) {
+    private static Vector3d searchOrigin(@Nonnull TransformComponent transform, @Nullable HeadRotation head) {
         Rotation3fc euler = transform.getRotation();
         Vector3d forward =
             head != null ? head.getDirection() : directionFromRotation(euler);

@@ -47,7 +47,7 @@ public final class BackpackExchange {
                 plan[slot]=accepted==source.getQuantity()?null:source.withQuantity(source.getQuantity()-accepted);
             }else{
                 if(slot<0||slot>=pack.tier.slots||ItemStack.isEmpty(source)||!Objects.equals(source,pack.items[slot]))return false;
-                int requested=one?1:Math.min(source.getQuantity(),Math.max(1,source.getItem().getMaxStack()));
+                int requested=one?1:com.hexvane.aetherhaven.inventory.StackedSlots.oneStack(source);
                 int left=requested;
                 for(int pass=0;pass<2;pass++)for(int i=0;i<plan.length&&left>0;i++){
                     if(i==bagSlot)continue;var held=plan[i];boolean empty=ItemStack.isEmpty(held);
@@ -60,6 +60,28 @@ public final class BackpackExchange {
             }
             plan[bagSlot]=pack.write(expected);return true;
         });
+    }
+    /**
+     * Quick stack: moves every stack in inventory slots {@code from} (inclusive) to {@code to} (exclusive) that the bag
+     * already holds some of. What does not fit stays where it was.
+     *
+     * @return the number of items stored, or 0 when nothing matched, nothing fitted or the bag changed
+     */
+    public static int storeMatching(ItemContainer inv,short bagSlot,ItemStack expected,int from,int to){
+        int[] moved={0};
+        boolean done=commit(inv,plan->{moved[0]=0;
+            if(bagSlot<0||bagSlot>=plan.length||!Objects.equals(expected,plan[bagSlot]))return false;
+            var pack=Backpack.read(expected);if(pack==null)return false;
+            for(int i=Math.max(0,from);i<Math.min(to,plan.length);i++){
+                var stack=plan[i];
+                if(i==bagSlot||ItemStack.isEmpty(stack)||!pack.holds(stack))continue;
+                int accepted=pack.insert(stack);if(accepted==0)continue;
+                plan[i]=accepted==stack.getQuantity()?null:stack.withQuantity(stack.getQuantity()-accepted);moved[0]+=accepted;
+            }
+            if(moved[0]==0)return false;
+            plan[bagSlot]=pack.write(expected);return true;
+        });
+        return done?moved[0]:0;
     }
     public static int collect(ItemContainer inv,short slot,ItemStack expected,ItemStack incoming){
         int[] accepted={0};boolean done=change(inv,slot,expected,Map.of(),pack->{accepted[0]=pack.insert(incoming);return accepted[0]>0;});return done?accepted[0]:0;

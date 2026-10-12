@@ -76,7 +76,7 @@ public final class TownsfolkProfilePage extends AetherhavenInteractiveCustomUIPa
             com.hexvane.aetherhaven.AetherhavenConstants.ITEM_SHARD_OF_GAIA) > 0;
         boolean hasCatalyst = trainingInventory != null && com.hexvane.aetherhaven.inventory.InventoryMaterials.count(trainingInventory,
             com.hexvane.aetherhaven.AetherhavenConstants.ITEM_VERDANT_CATALYST) > 0;
-        commands.set("#Name.Text", definition != null && definition.getDisplayName() != null ? definition.getDisplayName() : characterId);
+        commands.set("#VillagerName.Text", definition != null && definition.getDisplayName() != null ? definition.getDisplayName() : characterId);
         commands.set("#Summary.Text", "Mastery " + progress.masteryLevel() + " / " + TownsfolkProgress.MAX_MASTERY_LEVEL);
         for (int i = 0; i < TownsfolkProgress.MAX_MASTERY_LEVEL; i++)
             commands.setObject("#MasteryPip" + i + ".Background", new com.hypixel.hytale.server.core.ui.PatchStyle()

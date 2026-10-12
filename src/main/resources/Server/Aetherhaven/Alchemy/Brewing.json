@@ -1,0 +1,22 @@
+{
+  "$Comment": "Hold the brew steady. Heat runs from 0 to 100. Every beat the heat rises by Rise; Stoke adds Stoke on top, Stir takes Stir away. A beat counts when the heat ends inside the glowing band. Edit these numbers to retune the game.",
+  "Beats": 10,
+  "StartHeat": 30,
+  "Rise": 6,
+  "Stoke": 12,
+  "Stir": 18,
+  "BandWidth": 12,
+  "BandWidthPerExtraIngredient": -2,
+  "BandWidthPerMasteryLevel": 1,
+  "BandMinWidth": 8,
+  "EdgeForgiveness": 1,
+  "Drift": [8, 10, 12],
+  "DriftJitter": 5,
+  "TurnChance": 0.35,
+  "GreatShare": 0.6,
+  "PerfectShare": 0.9,
+  "GreatDuration": 1.25,
+  "PerfectDuration": 1.5,
+  "GreatRestore": 1.1,
+  "PerfectRestore": 1.2
+}

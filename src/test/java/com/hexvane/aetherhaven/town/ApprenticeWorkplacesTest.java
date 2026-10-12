@@ -31,7 +31,7 @@ class ApprenticeWorkplacesTest {
         var town=town();var sites=town.getApprenticeWorkplaces();
         assertNull(sites.save(town,null,SMELTING,area(0,0),"Smeltery"));
         var site=sites.sites().getFirst();
-        assertNull(site.orders().add(site.orders().revision(),"test",WorkplaceOrders.Mode.COUNT,1));
+        assertNull(site.orders().add("test",WorkplaceOrders.Mode.COUNT,1));
         assertNotNull(sites.remove(town,UUID.randomUUID(),site.id()));
         assertEquals(1,site.orders().list().size());
         assertEquals(1,sites.used("blacksmith"));

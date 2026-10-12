@@ -47,6 +47,7 @@ public final class QuestsBootstrap {
         PlayerQuestProgress.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new PlayerQuestProgressInitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new QuestCraftProgressSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new WorkplaceQuestPlaceSystem());
         core.registerAetherhavenSubcommand(new AetherhavenQuestDebugCommand());
         core.registerAetherhavenSubcommand(new AetherhavenQuestBoardDebugCommand());
         core.registerAetherhavenSubcommand(new AetherhavenTownRankDebugCommand());
@@ -64,6 +65,7 @@ public final class QuestsBootstrap {
                 long newEpochMinute
             ) {
                 QuestBoardOnlineDawnService.tickWorld(world, store, core, wtr);
+                QuestAutoStartService.onGameMinute(world, core, prevEpochMinute, newEpochMinute);
             }
 
             @Override
@@ -77,6 +79,8 @@ public final class QuestsBootstrap {
                 boolean backward
             ) {
                 QuestBoardOnlineDawnService.tickWorld(world, store, core, wtr);
+                // The clock jumped, so the next slow check may be far off. Do it now.
+                world.execute(() -> QuestAutoStartService.evaluateWorld(world, core));
             }
         };
     }

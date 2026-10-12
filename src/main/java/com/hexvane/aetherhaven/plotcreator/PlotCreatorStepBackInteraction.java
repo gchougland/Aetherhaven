@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -14,13 +15,13 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Plot creator staff: Q / Ability1 — previous step. */
+/** Plot creator staff: Q / Ability1 — previous step. While crouching: cancel the session. */
 public final class PlotCreatorStepBackInteraction extends SimpleInstantInteraction {
     @Nonnull
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<PlotCreatorStepBackInteraction> CODEC =
         com.hypixel.hytale.codec.builder.BuilderCodec
             .builder(PlotCreatorStepBackInteraction.class, PlotCreatorStepBackInteraction::new, SimpleInstantInteraction.CODEC)
-            .documentation("Plot creator staff: Ability1 — go to the previous step.")
+            .documentation("Plot creator staff: Ability1 — go to the previous step. While crouching: cancel the session.")
             .build();
 
     @Nonnull
@@ -52,6 +53,10 @@ public final class PlotCreatorStepBackInteraction extends SimpleInstantInteracti
         Ref<EntityStore> ref = context.getEntity();
         if (ref == null) {
             context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (ToolAbilityKeys.thirdActionHeld(commandBuffer, ref)) {
+            PlotCreatorCancelInteraction.cancel(ref, commandBuffer, context);
             return;
         }
         PlotCreatorInteractions.handleStepBack(ref, commandBuffer, context);

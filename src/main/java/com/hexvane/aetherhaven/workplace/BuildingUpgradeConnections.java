@@ -24,8 +24,10 @@ public final class BuildingUpgradeConnections {
                 add(rails,port,from.y()+56,gutter,from.y()+56,s);
                 add(rails,gutter,from.y()+56,gutter,by-20,s);
                 add(rails,gutter,by-20,bx,by-20,s);add(rails,bx,by-20,bx,by,s);
-            } else if(from.id().equals("home")&&(to.kind()==Kind.SLOT||to.kind()==Kind.SMELTING)) {
-                int gutter=to.kind()==Kind.SLOT?220:420;
+            } else if(from.id().equals("home")&&(to.kind()==Kind.SLOT||to.kind()==Kind.SMELTING
+                    ||to.kind()==Kind.RESTAURANT&&to.branch().equals("PROVISIONS"))) {
+                // Restaurant provisions start below the Menu column, so their trunk uses the left gutter too.
+                int gutter=to.kind()==Kind.SMELTING?420:220;
                 add(rails,ax,ay,ax,ay+24,s);add(rails,ax,ay+24,gutter,ay+24,s);
                 add(rails,gutter,ay+24,gutter,by-20,s);add(rails,gutter,by-20,bx,by-20,s);
                 add(rails,bx,by-20,bx,by,s);

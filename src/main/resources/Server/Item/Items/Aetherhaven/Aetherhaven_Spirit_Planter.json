@@ -1,0 +1,100 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_garden.items.planter.name",
+    "Description": "aetherhaven_garden.items.planter.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ResourceTypeId": "Wood_Trunk",
+        "Quantity": 10
+      },
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 5
+      },
+      {
+        "ResourceTypeId": "Soils",
+        "Quantity": 5
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning_Misc"
+        ]
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Spirit_Planter.png",
+  "Categories": [
+    "Blocks.Wood",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Cube",
+    "Group": "Wood",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Woods"
+      }
+    },
+    "BlockParticleSetId": "Wood",
+    "ParticleColor": "#8e643c",
+    "BlockSoundSetId": "Wood",
+    "PhysicalMaterialId": "Wood",
+    "TextureComputedColor": "#8e643c",
+    "Textures": [
+      {
+        "Up": "BlockTextures/Aetherhaven_Spirit_Planter_Top.png",
+        "Sides": "BlockTextures/Aetherhaven_Spirit_Planter_Side.png",
+        "Down": "BlockTextures/Aetherhaven_Spirit_Planter_Bottom.png",
+        "Weight": 1
+      }
+    ],
+    "Light": {
+      "Color": "#231"
+    },
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AetherhavenSpiritPlanter"
+            }
+          }
+        ]
+      }
+    },
+    "InteractionHint": "aetherhaven_garden.items.planter.hint"
+  },
+  "PlayerAnimationsId": "Block",
+  "Tags": {
+    "Type": [
+      "Wood"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "MaxStack": 10,
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "IconProperties": {
+    "Scale": 0.58823,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -13.5
+    ]
+  }
+}

@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 
 public final class TouristPortalTravelPage extends AetherhavenInteractiveCustomUIPage<TouristPortalTravelPage.PageData> {
     private static final String MSG = "aetherhaven_tourist.aetherhaven.tourist.portalTravel";
-    private static final String MAIN = "#Content";
+    private static final String MAIN = "#PortalMain #Content";
     private static final String ROWS = MAIN + " #DestinationScroll #DestinationRows";
     private static final String COLOR_MODAL = "#PortalColorPickerModal";
     private static final String COLOR_GRID = COLOR_MODAL + " #Content #PortalColorPresetGrid";

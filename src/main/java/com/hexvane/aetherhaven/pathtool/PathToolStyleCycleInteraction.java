@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.pathtool;
 
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+import com.hexvane.aetherhaven.ui.ToolAbilityKeys;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -15,7 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * {@link InteractionType#Ability3}: cycles configured path style (inner blocks; edges stay grass).
+ * Third extra tool action (first extra key while crouching): cycles configured path style (inner blocks; edges stay grass).
  */
 public final class PathToolStyleCycleInteraction extends SimpleInstantInteraction {
     @Nonnull
@@ -50,7 +51,7 @@ public final class PathToolStyleCycleInteraction extends SimpleInstantInteractio
             context.getState().state = InteractionState.Failed;
             return;
         }
-        if (type != InteractionType.Ability3) {
+        if (type != ToolAbilityKeys.THIRD) {
             context.getState().state = InteractionState.Failed;
             return;
         }

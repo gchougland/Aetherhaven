@@ -1,8 +1,16 @@
 $C = "../Common.ui";
 
 @SectionLabelStyle = (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #7a8e9c, RenderBold: true, RenderUppercase: true, HorizontalAlignment: Start);
-@QuestCardHeight = 480;
-@QuestCardWidth = 300;
+// The card fills the board's card row (QuestBoardPage.ui @BoardCardRowHeight).
+@QuestCardHeight = 560;
+@QuestCardWidth = 344;
+// Text column: the card less its outer (4) and inner (12) padding on both sides.
+@QuestCardInnerWidth = @QuestCardWidth - 32;
+@QuestHeaderMinHeight = 64;
+@QuestHeaderIconSize = 52;
+@QuestHeaderIconGap = 10;
+// An explicit title width keeps the wrapped title's height known, so the header can grow with it.
+@QuestTitleWidth = @QuestCardInnerWidth - @QuestHeaderIconSize - @QuestHeaderIconGap - @QuestHeaderIconSize;
 @QuestCardOuter = (TexturePath: "../Common/ContainerFullPatch.png", Border: 20);
 @RankBadgeBg = (TexturePath: "../Common/InputBoxSelected.png", Border: 12, Color: #ffffff);
 
@@ -34,18 +42,24 @@ Group #QuestBoardCard {
       LayoutMode: Top;
       FlexWeight: 1;
 
+      // No fixed height: a title that wraps to three lines makes the header taller instead of
+      // running into the description. The portrait frame keeps it at least @QuestHeaderMinHeight.
       Group #CardHeader {
         LayoutMode: Left;
-        Anchor: (Bottom: 14, Height: 64);
+        Anchor: (Bottom: 14);
 
-        AssetImage #Portrait {
-          Anchor: (Width: 52, Height: 52, Right: 10, Vertical: 0);
+        Group #PortraitFrame {
+          LayoutMode: Middle;
+          Anchor: (Width: @QuestHeaderIconSize, Height: @QuestHeaderMinHeight, Right: @QuestHeaderIconGap);
+
+          AssetImage #Portrait {
+            Anchor: (Width: @QuestHeaderIconSize, Height: @QuestHeaderIconSize);
+          }
         }
 
         Group #TitleWrap {
           LayoutMode: Middle;
-          FlexWeight: 1;
-          Anchor: (Vertical: 0);
+          Anchor: (Width: @QuestTitleWidth);
 
           Label #QuestTitle {
             Style: (...$C.@DefaultLabelStyle, FontSize: 21, TextColor: #f4e8c8, RenderBold: true, Wrap: true, HorizontalAlignment: Center);
@@ -56,7 +70,7 @@ Group #QuestBoardCard {
 
         Group #RankBadgeFrame {
           LayoutMode: Middle;
-          Anchor: (Width: 52, Height: 52, Vertical: 0);
+          Anchor: (Width: @QuestHeaderIconSize, Height: @QuestHeaderIconSize);
           Background: @RankBadgeBg;
 
           AssetImage #QuestRankIcon {
@@ -65,47 +79,57 @@ Group #QuestBoardCard {
         }
       }
 
-      Label #QuestDescription {
-        Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #b8b0a0, Wrap: true);
-        Anchor: (Bottom: 14, Height: 48);
-        Text: "";
-      }
+      // Everything below the header is as tall as its content, so a long description pushes the
+      // rest down. If a card still holds more than fits, this area scrolls instead of overlapping
+      // the footer.
+      Group #CardDetails {
+        LayoutMode: TopScrolling;
+        FlexWeight: 1;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
 
-      Label #RequestedLabel {
-        Style: @SectionLabelStyle;
-        Anchor: (Bottom: 6, Top: 8);
-        Text: "";
-      }
+        Label #QuestDescription {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #b8b0a0, Wrap: true);
+          Anchor: (Bottom: 14);
+          Text: "";
+        }
 
-      Group #ItemRow {
-        LayoutMode: Left;
-        Anchor: (Bottom: 12, Height: 52);
-      }
+        Label #RequestedLabel {
+          Style: @SectionLabelStyle;
+          Anchor: (Bottom: 6, Top: 8);
+          Text: "";
+        }
 
-      Label #ObjectiveText {
-        Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #c8b8a0, Wrap: true);
-        Anchor: (Bottom: 12, Height: 44);
-        Visible: false;
-        Text: "";
-      }
+        // Wraps to a second row when a quest asks for more items than fit across the card.
+        Group #ItemRow {
+          LayoutMode: LeftWrap;
+          Anchor: (Bottom: 6);
+        }
 
-      Label #RewardLabelHeader {
-        Style: @SectionLabelStyle;
-        Anchor: (Bottom: 4, Top: 6);
-        Text: "";
-      }
+        Label #ObjectiveText {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #c8b8a0, Wrap: true);
+          Anchor: (Bottom: 12);
+          Visible: false;
+          Text: "";
+        }
 
-      Group #RewardItemsRow {
-        LayoutMode: Left;
-        Anchor: (Bottom: 10, Height: 52);
-        Visible: false;
-      }
+        Label #RewardLabelHeader {
+          Style: @SectionLabelStyle;
+          Anchor: (Bottom: 4, Top: 6);
+          Text: "";
+        }
 
-      Label #RewardReputationLine {
-        Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #a8c8d8, Wrap: true);
-        Anchor: (Top: 6, Bottom: 6);
-        Visible: false;
-        Text: "";
+        Group #RewardItemsRow {
+          LayoutMode: LeftWrap;
+          Anchor: (Bottom: 4);
+          Visible: false;
+        }
+
+        Label #RewardReputationLine {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #a8c8d8, Wrap: true);
+          Anchor: (Top: 6, Bottom: 6);
+          Visible: false;
+          Text: "";
+        }
       }
     }
 

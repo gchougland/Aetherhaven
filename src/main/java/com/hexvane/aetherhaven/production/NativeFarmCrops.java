@@ -15,6 +15,8 @@ public final class NativeFarmCrops {
     public static final String LIFE_ESSENCE="Ingredient_Life_Essence";
     public record Crop(String block,String output) {}
     private static final Map<String,Crop> CROPS=new java.util.concurrent.ConcurrentHashMap<>();
+    /** Crop items in the order they were registered, which is the order players meet them in. */
+    private static final List<String> ORDER=new java.util.concurrent.CopyOnWriteArrayList<>();
     static {
         for(String name:List.of("Wheat","Lettuce","Carrot","Corn","Cauliflower","Turnip","Aubergine",
                 "Pumpkin","Tomato","Chilli","Cotton","Rice","Onion","Potato"))
@@ -25,9 +27,22 @@ public final class NativeFarmCrops {
         if(crop.block()==null||crop.block().isBlank()||crop.output()==null||crop.output().isBlank())throw new IllegalArgumentException("Crop IDs are required");
         var old=CROPS.putIfAbsent(crop.block(),crop);
         if(old!=null&&!old.equals(crop))throw new IllegalArgumentException("Crop already registered: "+crop.block());
+        if(old==null)ORDER.add(crop.output());
     }
     public static List<Crop> crops(){return CROPS.values().stream().sorted(Comparator.comparing(Crop::block)).toList();}
-    public static boolean supportedOutput(String item){return LIFE_ESSENCE.equals(item)||NativeDruidCrops.supported(item)||item!=null&&CROPS.values().stream().anyMatch(c->c.output().equals(item));}
+    /** Crop items in the order they were registered. */
+    public static List<String> outputsInOrder(){return List.copyOf(ORDER);}
+    /** The crop that gives this item, or null. */
+    public static Crop byOutput(String item) {
+        if(item!=null)for(var crop:CROPS.values())if(crop.output().equals(item))return crop;
+        return null;
+    }
+    /** The game's own seed for a crop item, named the way the game names every crop seed. Null for anything else. */
+    public static String seedFor(String output) {
+        return output!=null&&output.startsWith("Plant_Crop_")&&output.endsWith("_Item")
+            ?"Plant_Seeds_"+output.substring("Plant_Crop_".length(),output.length()-"_Item".length()):null;
+    }
+    public static boolean supportedOutput(String item){return LIFE_ESSENCE.equals(item)||item!=null&&CROPS.values().stream().anyMatch(c->c.output().equals(item));}
     public static Crop crop(BlockType block) {
         if(block==null)return null;
         var crop=CROPS.get(block.getId());
@@ -39,7 +54,6 @@ public final class NativeFarmCrops {
         public boolean ready(){return issue==null&&!beds.isEmpty();}
     }
     public static Review review(World world,TownRecord town,PlotInstance plot) {
-        if(NativeDruidCrops.isPlot(plot))return NativeDruidCrops.review(world,town,plot);
         if(!world.isInThread())throw new IllegalStateException("Field review requires the world thread");
         var f=plot.toFootprint();
         long width=(long)f.getMaxX()-f.getMinX()+1,height=(long)f.getMaxY()-f.getMinY()+1,depth=(long)f.getMaxZ()-f.getMinZ()+1;
@@ -67,7 +81,6 @@ public final class NativeFarmCrops {
         return town.getApprenticeWorkplaces().sites().stream().anyMatch(site->site.area().contains(p.x(),p.y(),p.z()));
     }
     public static boolean usable(World world,TownRecord town,PlotInstance plot,FieldProductionState.Bed bed) {
-        if(NativeDruidCrops.supported(bed.crop()))return NativeDruidCrops.isPlot(plot)&&NativeDruidCrops.usable(world,town,plot,bed);
         var p=bed.point();
         if(!plot.containsWorldBlock(p.x(),p.y(),p.z())||!TownTerritoryClaims.contains(town,ChunkUtil.chunkCoordinate(p.x()),ChunkUtil.chunkCoordinate(p.z()))
                 ||excluded(town,p)||ChunkSectionBlockUtil.worldChunkIfTicking(world,p.x(),p.z())==null)return false;
@@ -77,14 +90,12 @@ public final class NativeFarmCrops {
         return crop!=null&&crop.block().equals(bed.crop())&&crop.output().equals(bed.output());
     }
     public static boolean ripe(World world,FieldProductionState.Bed bed) {
-        if(NativeDruidCrops.supported(bed.crop()))return NativeDruidCrops.ripe(world,bed);
         var p=bed.point();var block=ChunkSectionBlockUtil.blockType(world,p.x(),p.y(),p.z());
         var crop=crop(block);
         return crop!=null&&crop.block().equals(bed.crop())&&block.getFarming()!=null
             &&block.getGathering()!=null&&block.getGathering().getHarvest()!=null;
     }
     public static boolean needsWater(World world,FieldProductionState.Bed bed) {
-        if(NativeDruidCrops.supported(bed.crop()))return false;
         var p=bed.point();var ref=ChunkSectionBlockUtil.blockEntityRefAt(world,p.x(),p.y()-1,p.z());
         if(ref==null||!ref.isValid())return false;
         var soil=ref.getStore().getComponent(ref,com.hypixel.hytale.builtin.adventure.farming.states.TilledSoilBlock.getComponentType());
@@ -106,7 +117,6 @@ public final class NativeFarmCrops {
      *                    room, whether or not Life Essence is one of the farm's chosen outputs.
      */
     public static boolean harvest(World world,TownRecord town,PlotInstance plot,PlotProductionState production,FieldProductionState.Bed bed,Set<String> outputs,long essenceRoom,Runnable save) {
-        if(NativeDruidCrops.supported(bed.crop()))return NativeDruidCrops.harvest(world,town,plot,production,bed,outputs,save);
         if(com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issueForKind(town,"farmer",bed.output())!=null)return false;
         if(production.field().cargo()!=null||production.field().pending()!=null||!usable(world,town,plot,bed)||!ripe(world,bed))return false;
         var p=bed.point();var block=ChunkSectionBlockUtil.blockType(world,p.x(),p.y(),p.z());var config=block.getFarming();
@@ -130,11 +140,6 @@ public final class NativeFarmCrops {
         var p=pending.bed().point();
         if(ChunkSectionBlockUtil.worldChunkIfTicking(world,p.x(),p.z())==null||ChunkSectionBlockUtil.blockSectionAt(world,p.x(),p.y(),p.z())==null)return false;
         var actual=ChunkSectionBlockUtil.blockType(world,p.x(),p.y(),p.z());
-        if(actual!=null&&NativeDruidCrops.supported(pending.bed().crop())) {
-            var crop=com.hexvane.aetherhaven.workplace.AlchemicalCrop.fromBlock(actual.getId());
-            if(crop!=null&&crop.plantedBlock().equals(pending.bed().crop())&&!crop.item().equals(actual.getId()))
-                return production.field().settleHarvest(pending.id(),pending.regrownBlock());
-        }
         return actual!=null&&production.field().settleHarvest(pending.id(),actual.getId());
     }
     /** Roll the ripe plant's harvest table once. Seeds and unrelated drops are not town outputs. */
@@ -175,9 +180,15 @@ public final class NativeFarmCrops {
         for(String item:List.of(bed.output(),LIFE_ESSENCE))if(selected(p,entry,item))result.add(item);
         return Collections.unmodifiableSet(result);
     }
+    /**
+     * A bed is worked while there is room for what it is grown for: its own crop when that is a chosen output,
+     * otherwise Life Essence. A full store of anything else never holds the bed up; the extra is left behind.
+     */
     public static boolean canTend(PlotProductionState p,ProductionCatalog.Entry entry,FieldProductionState.Bed bed) {
         var outputs=selectedOutputs(p,entry,bed);
-        return !outputs.isEmpty()&&outputs.stream().allMatch(item->p.getAmount(item)<WorkplaceProductionUpgrades.effectiveMaxStorage(p,entry,item));
+        if(outputs.isEmpty())return false;
+        String grownFor=outputs.contains(bed.output())?bed.output():LIFE_ESSENCE;
+        return p.getAmount(grownFor)<WorkplaceProductionUpgrades.effectiveMaxStorage(p,entry,grownFor);
     }
     public static boolean selected(PlotProductionState production,ProductionCatalog.Entry entry,String item) {
         for(int slot=0;slot<WorkplaceProductionUpgrades.slotCount(production);slot++)

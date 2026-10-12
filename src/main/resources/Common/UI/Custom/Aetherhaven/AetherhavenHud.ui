@@ -27,7 +27,7 @@ Group #AetherhavenHudRoot {
         Label #ClockText {
           Anchor: (Full: 0);
           Text: "12:00 am";
-          Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 24, LetterSpacing: 0.5, TextColor: #f3e5c5, OutlineColor: #000000(0.9), RenderBold: true, VerticalAlignment: Center);
+          Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 24, LetterSpacing: 0.5, TextColor: #f3e5c5, RenderBold: true, VerticalAlignment: Center);
         }
       }
 
@@ -48,7 +48,7 @@ Group #AetherhavenHudRoot {
         Label #DateText {
           Anchor: (Full: 0);
           Text: "Spring 1, Year 1";
-          Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 14, LetterSpacing: 0.7, TextColor: #c9d4df, OutlineColor: #000000(0.9), RenderBold: true, VerticalAlignment: Center);
+          Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 14, LetterSpacing: 0.7, TextColor: #c9d4df, RenderBold: true, VerticalAlignment: Center);
         }
       }
 
@@ -89,7 +89,7 @@ Group #AetherhavenHudRoot {
 
             Label #CoinTextLeft {
               Text: "0";
-              Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 0.5, TextColor: #f3ca63, OutlineColor: #000000(0.9), RenderBold: true, VerticalAlignment: Center);
+              Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 0.5, TextColor: #f3ca63, RenderBold: true, VerticalAlignment: Center);
             }
           }
         }
@@ -106,7 +106,7 @@ Group #AetherhavenHudRoot {
 
             Label #CoinTextRight {
               Text: "0";
-              Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 0.5, TextColor: #f3ca63, OutlineColor: #000000(0.9), RenderBold: true, HorizontalAlignment: End, VerticalAlignment: Center);
+              Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 0.5, TextColor: #f3ca63, RenderBold: true, HorizontalAlignment: End, VerticalAlignment: Center);
             }
           }
 
@@ -149,7 +149,7 @@ Group #AetherhavenHudRoot {
         Label #QuestHeading {
           Anchor: (Full: 0);
           Text: "";
-          Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 1.2, TextColor: #e4edf3, OutlineColor: #000000(0.9), RenderBold: true, RenderUppercase: true, VerticalAlignment: Center);
+          Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 1.2, TextColor: #e4edf3, RenderBold: true, RenderUppercase: true, VerticalAlignment: Center);
         }
       }
 
@@ -189,11 +189,11 @@ Group #AetherhavenHudRoot {
           Label #QuestTitle {
             Text: "";
             Anchor: (Bottom: 3);
-            Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 15, LetterSpacing: 0.3, TextColor: #f0dfba, OutlineColor: #000000(0.9), RenderBold: true, Wrap: true);
+            Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 15, LetterSpacing: 0.3, TextColor: #f0dfba, RenderBold: true, Wrap: true);
           }
           Label #QuestObjectives {
             Text: "";
-            Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d7e0e7, OutlineColor: #000000(0.9), Wrap: true);
+            Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d7e0e7, Wrap: true);
           }
         }
       }
@@ -210,11 +210,11 @@ Group #AetherhavenHudRoot {
           Label #QuestTitle {
             Text: "";
             Anchor: (Bottom: 3);
-            Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 15, LetterSpacing: 0.3, TextColor: #f0dfba, OutlineColor: #000000(0.9), RenderBold: true, Wrap: true);
+            Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 15, LetterSpacing: 0.3, TextColor: #f0dfba, RenderBold: true, Wrap: true);
           }
           Label #QuestObjectives {
             Text: "";
-            Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d7e0e7, OutlineColor: #000000(0.9), Wrap: true);
+            Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d7e0e7, Wrap: true);
           }
         }
       }
@@ -231,11 +231,11 @@ Group #AetherhavenHudRoot {
           Label #QuestTitle {
             Text: "";
             Anchor: (Bottom: 3);
-            Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 15, LetterSpacing: 0.3, TextColor: #f0dfba, OutlineColor: #000000(0.9), RenderBold: true, Wrap: true);
+            Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 15, LetterSpacing: 0.3, TextColor: #f0dfba, RenderBold: true, Wrap: true);
           }
           Label #QuestObjectives {
             Text: "";
-            Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d7e0e7, OutlineColor: #000000(0.9), Wrap: true);
+            Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d7e0e7, Wrap: true);
           }
         }
       }

@@ -1,27 +1,39 @@
-$LegendCommon = "../Hud/ToolsLegends/ToolsLegendsCommon.ui";
+// A tool hint row for an action used while crouching: "Crouch +", the action name, then what it does.
+// The game has no key prompt for a chord, so both parts are action names and neither is a key.
+// #ModifierLabel holds the name of the held action, #KeyLabel the name of the action used with it.
 
 Group #ControlRow {
   LayoutMode: Left;
-  Anchor: (Vertical: 4);
+  Anchor: (Vertical: 3);
 
-  Group #ModifierWrap {
-    LayoutMode: Middle;
-    Anchor: (Right: 6);
+  Group #ActionWrap {
+    LayoutMode: LeftWrap;
+    Anchor: (Width: 152, Right: 10);
 
     Label #ModifierLabel {
-      Style: $LegendCommon.@RowHintTextStyle;
+      Anchor: (Right: 4);
+      Style: (
+        FontSize: 14,
+        RenderBold: true,
+        TextColor: #b9c6d6
+      );
       Text: "";
     }
-  }
 
-  $LegendCommon.@RowHintContainer {
     Label #KeyLabel {
-      Style: $LegendCommon.@RowHintTextStyle;
+      Style: (
+        FontSize: 14,
+        RenderBold: true,
+        TextColor: #e6edf5
+      );
       Text: "";
     }
   }
 
-  $LegendCommon.@RowLabelContainer {
+  Group #DescWrap {
+    FlexWeight: 1;
+    LayoutMode: Top;
+
     Label #DescLabel {
       Style: (
         FontSize: 14,

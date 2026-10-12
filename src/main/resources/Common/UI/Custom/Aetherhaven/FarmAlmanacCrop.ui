@@ -1,0 +1,11 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+// One favoured crop, with its name under its icon.
+Group { Anchor: (Width: 92, Height: 68, Right: 6); LayoutMode: Top;
+ Group { LayoutMode: Center; Anchor: (Height: 46);
+  Group { Anchor: (Width: 46, Height: 46); Background: $T.@Slot;
+   ItemIcon #Icon { Anchor: (Left: 5, Top: 5, Width: 36, Height: 36); }
+  }
+ }
+ Label #Name { Text: ""; Anchor: (Height: 18, Top: 2); Style: (...$C.@DefaultLabelStyle, FontSize: 12, HorizontalAlignment: Center); }
+}

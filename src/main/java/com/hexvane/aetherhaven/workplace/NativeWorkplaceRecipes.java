@@ -8,6 +8,7 @@ import java.util.*;
 /** Routes the same registered recipes used by native benches to their workplaces. */
 final class NativeWorkplaceRecipes {
     private static final Map<String,TownsfolkWorkType> BENCHES=Map.of(
+        WorkplaceEquipment.BUILDERS_BENCH,TownsfolkWorkType.BLOCK_WORKSHOP,
         "Workbench",TownsfolkWorkType.CRAFTING,
         "Weapon_Bench",TownsfolkWorkType.BLACKSMITHING,
         "Armor_Bench",TownsfolkWorkType.ARMOR_CRAFTING,
@@ -31,6 +32,14 @@ final class NativeWorkplaceRecipes {
 
     private NativeWorkplaceRecipes() {}
 
+    /**
+     * The Builder's Workbench is a structural bench: the player drops a block in and picks a shape. Its recipes are
+     * ordinary ones with an input and an output, so a workshop can make them to order like any other bench recipe.
+     */
+    static boolean craftable(BenchType type) {
+        return type==BenchType.Crafting||type==BenchType.Processing||type==BenchType.StructuralCrafting;
+    }
+
     static Map<String,WorkplaceRecipe> merge(Map<String,WorkplaceRecipe> configured,
                                             Map<String,CraftingRecipe> nativeRecipes) {
         var result=new LinkedHashMap<>(configured);
@@ -45,7 +54,9 @@ final class NativeWorkplaceRecipes {
             for(var bench:source.getBenchRequirement()) {
                 if(bench==null||bench.id==null)continue;
                 var type=BENCHES.get(bench.id);
-                if(type==null||(bench.type!=BenchType.Crafting&&bench.type!=BenchType.Processing))continue;
+                if(type==null||!craftable(bench.type))continue;
+                // Only the Builder's Workbench is structural. An ordinary bench never gains structural recipes.
+                if((bench.type==BenchType.StructuralCrafting)!=(type==TownsfolkWorkType.BLOCK_WORKSHOP))continue;
                 if(explicit.contains(key(type.id,entry.getKey(),bench.id)))continue;
                 // Plot tokens and building staffs are taken apart by the player who owns them, not by a workshop.
                 if(type==TownsfolkWorkType.SALVAGING&&entry.getKey().startsWith("Salvage_Aetherhaven_"))continue;

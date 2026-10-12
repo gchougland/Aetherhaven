@@ -169,6 +169,7 @@ aetherhaven.ui.townJournal.abandon=Leave quest
 aetherhaven.ui.townJournal.pinQuest=Pin quest
 aetherhaven.ui.townJournal.unpinQuest=Unpin quest
 aetherhaven.ui.townJournal.pinLimit=Three quests pinned
+aetherhaven.ui.townJournal.autoPinReplaced=Your quest tracker was full, so {name} took the place of one pinned quest. You can change pins in your journal.
 aetherhaven.ui.hud.gold=Gold {amount}
 aetherhaven.ui.hud.quests=Pinned quests
 aetherhaven.ui.hud.noPinnedQuests=No quests pinned
@@ -257,8 +258,8 @@ items.Aetherhaven_Management_Block.description=Clerk shelf for a completed build
 
 
 items.Aetherhaven_Wood_Scaffold.name=Wood Scaffolding
-items.Aetherhaven_Wood_Scaffold.description=Climb like a ladder. Right-click places like a normal block. Hold Use (F) while aiming at scaffolding to extend the tower from the side or branch horizontally from the top face. Breaking the bottom unsupported piece collapses the stack.
-items.Aetherhaven_Wood_Scaffold.legendUse=Use (F): extend tower / branch from top while aiming at scaffold. Right-click: normal block placement.
+items.Aetherhaven_Wood_Scaffold.description=Climb like a ladder. The secondary action places it like a normal block. Hold Use while aiming at scaffolding to extend the tower from the side or branch horizontally from the top face. Breaking the bottom unsupported piece collapses the stack.
+items.Aetherhaven_Wood_Scaffold.legendUse=Use: extend tower / branch from top while aiming at scaffold. Secondary action: normal block placement.
 
 # === NPC role display names (npcRoles.*) ===
 npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren

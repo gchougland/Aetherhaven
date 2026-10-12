@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
 import com.hexvane.aetherhaven.ui.ToolHudHotkeyRows;
+import com.hexvane.aetherhaven.ui.ToolKeyPrompts;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -95,11 +96,12 @@ public final class PatrolWandStatusHud extends CustomUIHud {
                 b,
                 CONTROL_ROWS,
                 i,
+                ToolKeyPrompts.PATROL_WAND,
                 row.slot(),
-                LANG_PREFIX + row.descriptionLangKey(),
-                getPlayerRef()
+                LANG_PREFIX + row.descriptionLangKey()
             );
         }
+        ToolHudHotkeyRows.appendWhereKeysRow(b, CONTROL_ROWS, rows.size());
         this.update(false, b);
     }
 }

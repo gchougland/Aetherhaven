@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "soil": {
+    "tilled": "Soil_Dirt_Tilled",
+    "tillable": [
+      "Soil_Dirt",
+      "Soil_Dirt_Burnt",
+      "Soil_Dirt_Cold",
+      "Soil_Dirt_Dry",
+      "Soil_Grass",
+      "Soil_Grass_Burnt",
+      "Soil_Grass_Cold",
+      "Soil_Grass_Deep",
+      "Soil_Grass_Dry",
+      "Soil_Grass_Full",
+      "Soil_Grass_Sunny",
+      "Soil_Leaves",
+      "Soil_Mud",
+      "Soil_Mud_Dry",
+      "Soil_Needles",
+      "Soil_Pathway"
+    ],
+    "wearEvery": 6,
+    "richYield": 2,
+    "goldenChance": 0.02
+  },
+  "golden": {
+    "item": "Aetherhaven_Golden_Harvest",
+    "keep": 10
+  },
+  "seeds": {
+    "essence": "Ingredient_Life_Essence",
+    "fallbackEssenceCost": 5,
+    "starter": {
+      "Plant_Seeds_Wheat": 16,
+      "Plant_Seeds_Lettuce": 16
+    },
+    "keep": 64
+  },
+  "compost": {
+    "keep": 20,
+    "enrichLevel": 2
+  },
+  "almanac": {
+    "extraYield": 1,
+    "weeksShown": [
+      2,
+      2,
+      4
+    ]
+  },
+  "work": {
+    "harvestSeconds": 6,
+    "plantSeconds": 6,
+    "waterSeconds": 4,
+    "compostSeconds": 3,
+    "deliverSeconds": 1.5,
+    "basket": 16,
+    "waterHours": 24,
+    "rewaterHours": 4
+  },
+  "xp": 1,
+  "tracks": {
+    "SCARECROWS": {
+      "icon": "Aetherhaven_Scarecrow",
+      "base": 1,
+      "levels": [
+        {
+          "value": 2,
+          "cost": {
+            "Ingredient_Life_Essence": 15,
+            "Plant_Crop_Wheat_Item": 10
+          }
+        },
+        {
+          "value": 3,
+          "cost": {
+            "Ingredient_Life_Essence": 25,
+            "Plant_Crop_Corn_Item": 10
+          }
+        }
+      ]
+    },
+    "REACH": {
+      "icon": "Tool_Hoe_Crude",
+      "base": 2,
+      "levels": [
+        {
+          "value": 3,
+          "cost": {
+            "Ingredient_Life_Essence": 10,
+            "Plant_Crop_Lettuce_Item": 10
+          }
+        },
+        {
+          "value": 4,
+          "cost": {
+            "Ingredient_Life_Essence": 20,
+            "Plant_Crop_Carrot_Item": 10
+          }
+        }
+      ]
+    },
+    "WATERING": {
+      "icon": "Tool_Watering_Can",
+      "base": 0,
+      "levels": [
+        {
+          "value": 1,
+          "cost": {
+            "Ingredient_Life_Essence": 10,
+            "Plant_Crop_Wheat_Item": 10
+          }
+        },
+        {
+          "value": 2,
+          "cost": {
+            "Ingredient_Life_Essence": 20,
+            "Plant_Crop_Cauliflower_Item": 10
+          }
+        }
+      ]
+    },
+    "SEEDS": {
+      "icon": "Plant_Seeds_Wheat",
+      "base": 0.5,
+      "levels": [
+        {
+          "value": 0.75,
+          "cost": {
+            "Ingredient_Life_Essence": 10,
+            "Plant_Crop_Lettuce_Item": 10
+          }
+        },
+        {
+          "value": 1.0,
+          "cost": {
+            "Ingredient_Life_Essence": 20,
+            "Plant_Crop_Turnip_Item": 10
+          }
+        }
+      ]
+    },
+    "COMPOST": {
+      "icon": "Tool_Fertilizer",
+      "base": 3,
+      "levels": [
+        {
+          "value": 2,
+          "cost": {
+            "Ingredient_Life_Essence": 10,
+            "Plant_Crop_Wheat_Item": 10,
+            "Plant_Crop_Lettuce_Item": 10
+          }
+        },
+        {
+          "value": 2,
+          "cost": {
+            "Ingredient_Life_Essence": 20,
+            "Plant_Crop_Carrot_Item": 10
+          }
+        }
+      ]
+    },
+    "ALMANAC": {
+      "icon": "Aetherhaven_Calendar",
+      "base": 2,
+      "levels": [
+        {
+          "value": 3,
+          "cost": {
+            "Ingredient_Life_Essence": 15,
+            "Plant_Crop_Wheat_Item": 5,
+            "Plant_Crop_Lettuce_Item": 5
+          }
+        },
+        {
+          "value": 3,
+          "cost": {
+            "Ingredient_Life_Essence": 25,
+            "Plant_Crop_Corn_Item": 10
+          }
+        }
+      ]
+    }
+  }
+}

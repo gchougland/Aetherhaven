@@ -45,6 +45,9 @@ $Sounds = "../Sounds.ui";
   VerticalAlignment: Center
 );
 
+@ShopItemSlot = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 8);
+@ShopItemSlotHovered = PatchStyle(TexturePath: "../Common/InputBoxHovered.png", Border: 12);
+@ShopInfoNoteStyle = (...$C.@DefaultLabelStyle, TextColor: #c9d6e2, FontSize: 15, Wrap: true, HorizontalAlignment: Center);
 @ShopInfoItemStyle = (...$C.@DefaultLabelStyle, TextColor: #b8d8ff, FontSize: 20, RenderBold: true, Wrap: true, HorizontalAlignment: Center);
 @ShopInfoDetailStyle = (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 17, Wrap: true, HorizontalAlignment: Center);
 @QtyAmountStyle = (...$C.@DefaultLabelStyle, HorizontalAlignment: Center, VerticalAlignment: Center, FontSize: 17, RenderBold: true, TextColor: #e8dcc8, Wrap: true);
@@ -69,9 +72,30 @@ $C.@PageOverlay {
 
       Group {
         LayoutMode: Center;
+        Anchor: (Bottom: 8, Horizontal: 0);
+        Button #ItemCell {
+          Anchor: (Width: 64, Height: 64);
+          TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+          Style: (Default: (Background: @ShopItemSlot), Hovered: (Background: @ShopItemSlotHovered), Pressed: (Background: @ShopItemSlotHovered), Disabled: (Background: @ShopItemSlot));
+          ItemIcon #Icon { Anchor: (Left: 8, Top: 8, Width: 48, Height: 48); }
+          AssetImage #Art { Anchor: (Left: 8, Top: 8, Width: 48, Height: 48); FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png"; HitTestVisible: false; Visible: false; }
+        }
+      }
+      Group {
+        LayoutMode: Center;
         Anchor: (Bottom: 6, Horizontal: 0);
         Label #ItemLine {
           Style: @ShopInfoItemStyle;
+          Anchor: (Width: 440);
+          Text: "";
+        }
+      }
+      Group #DetailRow {
+        LayoutMode: Center;
+        Anchor: (Bottom: 8, Horizontal: 0);
+        Visible: false;
+        Label #DetailLine {
+          Style: @ShopInfoNoteStyle;
           Anchor: (Width: 440);
           Text: "";
         }

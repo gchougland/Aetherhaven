@@ -16,15 +16,19 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.*;
 import com.hypixel.hytale.server.core.modules.interaction.Interactions;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.*;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 /** Displays only active owned animals at authored pen markers; care and output use the same daily clock. */
 public final class NativeHerdService {
+    private static final HytaleLogger LOGGER=HytaleLogger.forEnclosingClass();
     public static final String PEN_TAG="BARN_PEN";
     private NativeHerdService() {}
     public static boolean barn(AetherhavenPlugin plugin,PlotInstance plot) {
@@ -52,18 +56,47 @@ public final class NativeHerdService {
         });
         return found.isEmpty()?null:found.getFirst();
     }
+    /**
+     * The display must name its animal and be unsaved before it enters the world. Tagging it afterwards left a
+     * moment in which the engine could park or save an ordinary, untracked animal.
+     */
+    public static void prepareDisplay(Holder<EntityStore> holder,BarnAnimalBinding binding,ComponentRegistry<EntityStore> registry) {
+        holder.putComponent(BarnAnimalBinding.getComponentType(),binding);
+        holder.ensureComponent(registry.getNonSerializedComponentType());
+    }
+    private static boolean sectionActive(World world,Vector3i point) {
+        var chunks=world.getChunkStore();var section=chunks.getChunkSectionReferenceAtBlock(point.x,point.y,point.z);
+        return section!=null&&section.isValid()
+            &&!chunks.getStore().getArchetype(section).contains(ChunkStore.REGISTRY.getNonTickingComponentType());
+    }
+    /** Removes barn display animals that no town record accounts for. Returns how many were removed. */
+    public static int removeStrays(Store<EntityStore> store,ComponentType<EntityStore,NPCEntity> npcType) {
+        var strays=new ArrayList<Ref<EntityStore>>();
+        store.forEachChunk(npcType,(chunk,buffer)->{
+            boolean bound=chunk.getArchetype().contains(BarnAnimalBinding.getComponentType());
+            for(int i=0;i<chunk.size();i++)
+                if(HerdDisplayPlan.stray(chunk.getComponent(i,npcType).getRoleName(),bound))strays.add(chunk.getReferenceTo(i));
+        });
+        int removed=0;
+        for(var ref:strays)if(ref.isValid()){store.removeEntity(ref,RemoveReason.REMOVE);removed++;}
+        if(removed>0)LOGGER.atInfo().log("Removed %s stray barn display animals that no owned animal accounts for",removed);
+        return removed;
+    }
     public static Set<UUID> sync(World world,AetherhavenPlugin plugin,TownRecord town,PlotInstance plot) {
         var state=town.getOrCreatePlotProduction(plot.getPlotId());var herd=state.herd();
         var store=world.getEntityStore().getStore();int slots=WorkplaceProductionUpgrades.slotCount(state);
-        var existing=new HashMap<UUID,Ref<EntityStore>>();var remove=new ArrayList<Ref<EntityStore>>();
+        var shown=new ArrayList<HerdDisplayPlan.Shown<Ref<EntityStore>>>();
         store.forEachChunk(BarnAnimalBinding.getComponentType(),(chunk,buffer)->{
             for(int i=0;i<chunk.size();i++) {
-                var binding=chunk.getComponent(i,BarnAnimalBinding.getComponentType());if(!plot.getPlotId().equals(binding.plot))continue;
-                var ref=chunk.getReferenceTo(i);int slot=herd.assignedSlot(binding.animal);
-                if(slot<0||slot>=slots||penPoint(plugin,plot,slot)==null||existing.putIfAbsent(binding.animal,ref)!=null)remove.add(ref);
+                var binding=chunk.getComponent(i,BarnAnimalBinding.getComponentType());
+                shown.add(new HerdDisplayPlan.Shown<>(chunk.getReferenceTo(i),binding.plot,binding.animal));
             }
         });
-        for(var ref:remove)if(ref.isValid())store.removeEntity(ref,RemoveReason.REMOVE);
+        var plan=HerdDisplayPlan.reconcile(plot.getPlotId(),shown,id->{
+            int slot=herd.assignedSlot(id);return slot<slots&&penPoint(plugin,plot,slot)!=null?slot:-1;
+        });
+        for(var ref:plan.remove())if(ref.isValid())store.removeEntity(ref,RemoveReason.REMOVE);
+        var existing=plan.keep();
         var present=new HashSet<UUID>();
         for(int slot=0;slot<slots;slot++) {
             var animal=herd.slot(slot);var point=penPoint(plugin,plot,slot);
@@ -75,10 +108,14 @@ public final class NativeHerdService {
             var position=new Vector3d(point.x+.5,point.y,point.z+.5);
             var ref=existing.get(animal.id());
             if(ref==null||!ref.isValid()) {
-                var spawned=NPCPlugin.get().spawnNPC(store,species.role(),null,position,new Rotation3f(0,yaw,0));
-                if(spawned==null)continue;ref=spawned.first();
-                store.putComponent(ref,BarnAnimalBinding.getComponentType(),new BarnAnimalBinding(town.getTownId(),plot.getPlotId(),animal.id()));
-                store.ensureComponent(ref,EntityStore.REGISTRY.getNonSerializedComponentType());
+                // A ticking column can still hold an inactive section. The engine parks whatever is added there
+                // and reports no entity, so every later attempt would leave one more animal behind.
+                if(!sectionActive(world,point))continue;
+                int role=NPCPlugin.get().getIndex(species.role());if(role<0)continue;
+                var binding=new BarnAnimalBinding(town.getTownId(),plot.getPlotId(),animal.id());
+                var spawned=NPCPlugin.get().spawnEntity(store,role,position,new Rotation3f(0,yaw,0),null,
+                    (npc,holder,accessor)->prepareDisplay(holder,binding,store.getRegistry()),null);
+                if(spawned==null||!spawned.first().isValid())continue;ref=spawned.first();
                 store.ensureComponent(ref,Frozen.getComponentType());
                 // Frozen skips the walking controller, including its initial movement flags.
                 // All-false flags otherwise make the client choose a moving animation.
@@ -115,7 +152,7 @@ public final class NativeHerdService {
         herd.advance(minute,slots,present,state,WorkplaceProductionUpgrades.barnCapacity(state),1.0);
         for(UUID id:present)herd.feedAnimal(id,day,slots);
         long made=state.getAmounts().values().stream().mapToLong(Long::longValue).sum()-before;
-        if(made>0){com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService.progress(town,"rancher").earnXp((int)Math.min(100,made));town.getWarehouse().markProductionWithdrawal();}
+        if(made>0){com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService.progress(town,"rancher").earnXp(com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService.ranchXp(made));town.getWarehouse().markProductionWithdrawal();}
     }
     public static void advance(World world,AetherhavenPlugin plugin,long minutes) {
         if(minutes<=0)return;
@@ -129,6 +166,8 @@ public final class NativeHerdService {
             }
         });
         for(var ref:stale)if(ref.isValid())store.removeEntity(ref,RemoveReason.REMOVE);
+        // Copies saved by older builds load back as ordinary animals with no binding; clear them as they appear.
+        removeStrays(store,NPCEntity.getComponentType());
         for(var town:manager.allTowns()) {
             if(!world.getName().equals(town.getWorldName()))continue;
             boolean changed=false;

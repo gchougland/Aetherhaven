@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.festival;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
+import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hexvane.aetherhaven.placement.PlotBuildingRelocation;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.placement.PrefabTriggerVolumeCleanup;
@@ -20,6 +22,8 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,7 +31,13 @@ import javax.annotation.Nullable;
 /**
  * Replaces what stands on a festival square plot: the everyday prefab from its construction definition, or a festival's
  * own prefab for the length of the festival. Every festival reserves the same {@link FestivalPrefabSize} volume, so the
- * swap clears that full box at the plot's stored anchor and pastes the new prefab at the same anchor and yaw.
+ * swap clears that box from the paved floor up at the plot's stored anchor and pastes the new prefab at the same anchor
+ * and yaw.
+ *
+ * <p>Under the floor the swap only writes what the incoming layout lists there. A festival layout brings its own
+ * foundation (and the Market its pond), which the game lays by itself over whatever ground is there, so nobody digs
+ * for it. The everyday square lists nothing under its floor, so ending a festival leaves the festival's fill hidden
+ * under the paving: nothing is cleared to air and no cavity is left. See {@link #plan}.
  *
  * <p>Anything a player left inside the square is removed by the swap. Festival prefabs omit empty air; clearing uses the
  * fixed reserved box rather than listed prefab cells.
@@ -85,26 +95,33 @@ public final class FestivalPrefabSwapService {
             if (live == null || livePlot == null) {
                 return;
             }
-            // Always clear the reserved festival volume (airless prefabs no longer list Empty cells).
+            // Always clear the reserved festival volume from the floor up (airless prefabs no longer list Empty
+            // cells). Under the floor only the cells the incoming layout lists are cleared, then the paste writes them.
+            // The stored plot box keeps its full height.
             PlotFootprintRecord reservedBox = FestivalPrefabSize.footprintAt(anchor, yaw);
-            PlotFootprintRecord clearFootprint = PlotFootprintRecord.union(reservedBox, livePlot.toFootprint());
+            SwapPlan plan =
+                plan(anchor, yaw, livePlot.toFootprint(), ConstructionPasteOps.buildSequence(targetBuffer, yaw).pendingBlocks());
+            PlotFootprintRecord occupied = plan.occupied();
             // Corner props live in edge chunks that are often unloaded when the swap runs from a game-time tick.
-            PlotFootprintChunkUtil.ensureFootprintChunksLoaded(world, clearFootprint);
-            PropPlotTeardown.packageIntersecting(world, plugin, clearFootprint, null, store);
-            PlotBuildingRelocation.relocateTownNpcsOutOfFootprint(store, live, clearFootprint);
-            int removed =
-                PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(store, clearFootprint, live);
-            PrefabFootprintClearUtil.clearFootprint(world, clearFootprint, true);
-            PrefabTriggerVolumeCleanup.removeVolumesInFootprint(store, clearFootprint);
+            PlotFootprintChunkUtil.ensureFootprintChunksLoaded(world, occupied);
+            PropPlotTeardown.packageIntersecting(world, plugin, occupied, null, store);
+            PlotBuildingRelocation.relocateTownNpcsOutOfFootprint(store, live, occupied);
+            int removed = PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(store, occupied, live);
+            PrefabFootprintClearUtil.clearFootprint(world, plan.emptied(), true);
+            // Not the square's own chests: if a player buried one here before the first festival, its items drop.
+            PrefabFootprintClearUtil.clearListedCells(world, anchor, plan.underFloorWritten(), false);
+            PrefabTriggerVolumeCleanup.removeVolumesInFootprint(store, occupied);
             LOGGER.atInfo().log(
-                "Festival square swap cleared %d entities in box [%d,%d,%d]-[%d,%d,%d] (%s -> %s)",
+                "Festival square swap cleared %d entities, emptied box [%d,%d,%d]-[%d,%d,%d], rewrites %d cells under"
+                    + " the floor (%s -> %s)",
                 removed,
-                clearFootprint.getMinX(),
-                clearFootprint.getMinY(),
-                clearFootprint.getMinZ(),
-                clearFootprint.getMaxX(),
-                clearFootprint.getMaxY(),
-                clearFootprint.getMaxZ(),
+                plan.emptied().getMinX(),
+                plan.emptied().getMinY(),
+                plan.emptied().getMinZ(),
+                plan.emptied().getMaxX(),
+                plan.emptied().getMaxY(),
+                plan.emptied().getMaxZ(),
+                plan.underFloorWritten().size(),
                 currentPrefabPath,
                 targetPrefabPath
             );
@@ -131,6 +148,44 @@ public final class FestivalPrefabSwapService {
             );
         });
         return true;
+    }
+
+    /**
+     * What one swap does to the world, worked out before any block changes.
+     *
+     * @param emptied box cleared to air before the paste: the reserved volume from the paved floor up, never lower
+     * @param underFloorWritten prefab-local cells the incoming layout lists under the floor (its foundation). They are
+     *     the only cells under the floor a swap clears and rewrites. Empty for the everyday square.
+     * @param occupied everything the incoming layout writes into: {@code emptied}, reaching down to the bottom of the
+     *     plot box when the layout brings a foundation. Props, town villagers and loose entities are moved out of it.
+     */
+    record SwapPlan(
+        @Nonnull PlotFootprintRecord emptied,
+        @Nonnull List<PendingBlock> underFloorWritten,
+        @Nonnull PlotFootprintRecord occupied
+    ) {}
+
+    /**
+     * Plans a swap to a layout whose cells are {@code incomingCells} (as {@link ConstructionPasteOps#buildSequence}
+     * lists them, already rotated). Cells under the floor that the layout does not list are in neither part of the
+     * plan, so they stay exactly as the world has them: ending a festival digs nothing and leaves no cavity.
+     */
+    @Nonnull
+    static SwapPlan plan(
+        @Nonnull org.joml.Vector3i anchor,
+        @Nonnull Rotation yaw,
+        @Nonnull PlotFootprintRecord storedPlotBox,
+        @Nonnull List<PendingBlock> incomingCells
+    ) {
+        PlotFootprintRecord whole = PlotFootprintRecord.union(FestivalPrefabSize.footprintAt(anchor, yaw), storedPlotBox);
+        PlotFootprintRecord emptied = FestivalPrefabSize.fromFloorUp(whole, anchor.y);
+        List<PendingBlock> underFloor = new ArrayList<>();
+        for (PendingBlock cell : incomingCells) {
+            if (cell.y() < FestivalPrefabSize.FLOOR_LOCAL_Y) {
+                underFloor.add(cell);
+            }
+        }
+        return new SwapPlan(emptied, List.copyOf(underFloor), underFloor.isEmpty() ? emptied : whole);
     }
 
     /** World position of a festival spot given in prefab-local cells. Centers on the block. */

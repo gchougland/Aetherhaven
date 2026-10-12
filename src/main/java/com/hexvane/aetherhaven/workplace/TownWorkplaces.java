@@ -21,9 +21,11 @@ public final class TownWorkplaces {
         boolean changed = false;
         for (var batch : List.copyOf(stock.batches()))
             if (batch.cultivation() || retired.contains(batch.workplaceId())) changed |= stock.cancel(batch.id());
+        // Slots bought for gardens went with the gardens. A town that never had one keeps its Druid slots.
+        boolean hadGardens = !retired.isEmpty() || unlockedTypes.contains(TownsfolkWorkType.CULTIVATION.id);
         changed |= sites.removeIf(site -> retired.contains(site.id()));
         changed |= unlockedTypes.remove(TownsfolkWorkType.CULTIVATION.id);
-        changed |= extraSlots.remove("druid") != null;
+        if (hadGardens) changed |= extraSlots.remove("druid") != null;
         return changed;
     }
 
@@ -69,10 +71,10 @@ public final class TownWorkplaces {
     public long nextSlotCost(String supervisor) { return 100L * (extraSlots(supervisor) + 1); }
     public int nextSlotLevel(String supervisor) { return Math.min(6, 2 + extraSlots(supervisor)); }
     public String buySlot(TownRecord town, UUID player, String supervisor, int expectedExtraSlots, CombinedItemContainer inventory) {
-        if("druid".equals(supervisor))return "The Druid tends the conservatory directly. No Apprentice garden slots are needed.";
         if (!town.hasMemberOrOwner(player) || !town.playerCanManageConstructions(player)) return "You need permission to manage buildings.";
         if (!hasSupervisor(town, supervisor)) return "This villager must first become a resident.";
-        if (extraSlots(supervisor) != expectedExtraSlots) return "This upgrade has changed. Review its new cost.";
+        if (extraSlots(supervisor) != expectedExtraSlots)
+            return extraSlots(supervisor) > expectedExtraSlots ? "This workplace slot is already unlocked. Nothing was spent." : "Unlock the earlier slot first.";
         if (extraSlots(supervisor) >= 35) return "All workplace slots are unlocked.";
         if (TownPopulation.levelFor(TownPopulation.count(town)) < nextSlotLevel(supervisor)) return "Your town needs a higher level for this upgrade.";
         long cost = nextSlotCost(supervisor);
@@ -91,6 +93,7 @@ public final class TownWorkplaces {
         if(editing!=null&&find(editing).mineBaseId()!=null)return "Manage this tunnel from its base mineshaft planner.";
         if(editing!=null&&sites.stream().anyMatch(s->editing.equals(s.mineBaseId()))&&(type!=TownsfolkWorkType.MINING||!find(editing).area().equals(area)))return "Remove the planned tunnels before changing the base workplace area or type.";
         if(editing!=null&&find(editing).existingExcavation()!=null&&find(editing).existingExcavation().held()&&(find(editing).type()!=type||!find(editing).area().equals(area)))return "Let the mining Apprentice deliver collected material before changing this workplace.";
+        if(editing!=null&&find(editing).type()!=type&&find(editing).existingGrower()!=null&&find(editing).grower().stored()>0)return "Collect the stored harvest before changing this workplace's type.";
         if (!unlocked(type)) return "Unlock this workplace through its supervising villager first.";
         if (!hasSupervisor(town, WorkplaceRules.supervisor(type))) return "This villager must first become a resident.";
         var claims = TownTerritoryClaims.toChunkIndexSet(town);
@@ -126,10 +129,11 @@ public final class TownWorkplaces {
         if(children.stream().anyMatch(s->s.excavation().held()))return "Tunnels paused. Let miners finish delivery and empty the mine output storage before removing the base.";
         if(site.mineBaseId()!=null&&sites.stream().anyMatch(s->id.equals(s.minePrerequisiteId())))return "Remove the branches connected to this tunnel first.";
         site.excavation().pause(site.excavation().revision(), true);
-        site.building().pause(site.building().revision(), true);
-        for (var order : List.copyOf(site.orders().list())) site.orders().change(site.orders().revision(), order.id(), "Remove");
+        site.building().pause(true);
+        for (var order : List.copyOf(site.orders().list())) site.orders().change(order.id(), "Remove");
         for (var batch : List.copyOf(town.getWarehouse().batches()))
             if (id.equals(batch.workplaceId())) town.getWarehouse().cancel(batch.id());
+        if (site.existingGrower()!=null && site.grower().stored()>0) return "Collect the stored harvest before removing this workplace.";
         if (site.excavation().heldCargo()) return "Tunnel paused. A miner is carrying its output. Let them deliver it, then remove the tunnel again.";
         var outputBase=site.mineBaseId()==null?null:find(site.mineBaseId());
         if (site.excavation().outputCount()>0 && outputBase==null) return "Collect the stored mining output before removing this workplace.";
@@ -147,18 +151,22 @@ public final class TownWorkplaces {
         if(!town.hasMemberOrOwner(player)||!town.playerCanManageConstructions(player)||!town.playerCanBreakBlocks(player))return "You need permission to plan and dig tunnels.";
         if(base==null||base.type()!=TownsfolkWorkType.MINING||base.mineBaseId()!=null||!unlocked(TownsfolkWorkType.MINING))return "Choose an unlocked base Mining workplace.";
         if(tunnels(baseId).size()>=75)return "This mine already has 75 planned tunnels.";
-        if(tunnel==null||tunnel.type()!=TownsfolkWorkType.MINING||!tunnel.area().valid()||tunnel.existingExcavation()==null||tunnel.excavation().id()==null||find(tunnel.id())!=null)return "Review the new tunnel before saving.";
-        if(prerequisite!=null&&tunnels(baseId).stream().noneMatch(s->s.id().equals(prerequisite)))return "The connecting tunnel changed. Review again.";
+        if(tunnel==null||tunnel.type()!=TownsfolkWorkType.MINING||!tunnel.area().valid()||tunnel.existingExcavation()==null||tunnel.excavation().id()==null||find(tunnel.id())!=null)return "This tunnel could not be read. Choose its start on the map again.";
+        if(prerequisite!=null&&tunnels(baseId).stream().noneMatch(s->s.id().equals(prerequisite)))return "The passage this tunnel starts from changed while you were planning. Choose its start on the map again.";
         var ground=MineshaftSelection.ground(tunnel.area(),tunnel.mineshaftEntrance(),tunnel.mineshaftLayout());
         var connection=MineshaftNetwork.mapConnections(this,base).get(new com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point(ground.x(),ground.y()+1,ground.z()));
         if(connection==null)return "Start the tunnel on the base or an existing passage at the same height.";
         var expected=connection.equals(baseId)&&(base.existingExcavation()==null||base.excavation().id()==null)?null:connection;
-        if(!Objects.equals(expected,prerequisite))return "The connecting tunnel changed. Review again.";
+        if(!Objects.equals(expected,prerequisite))return "The passage this tunnel starts from changed while you were planning. Choose its start on the map again.";
         var area=tunnel.area();var claims=TownTerritoryClaims.toChunkIndexSet(town);
         for(int x=ChunkUtil.chunkCoordinate(area.minX());x<=ChunkUtil.chunkCoordinate(area.maxX()-1);x++)for(int z=ChunkUtil.chunkCoordinate(area.minZ());z<=ChunkUtil.chunkCoordinate(area.maxZ()-1);z++)
             if(!claims.contains(ChunkUtil.indexChunk(x,z)))return "Keep the tunnel inside town borders.";
         String overlap=tunnelOverlapIssue(baseId,tunnel);if(overlap!=null)return overlap;
-        tunnel.attachTunnel(baseId,prerequisite);sites.add(tunnel);return null;
+        String covered=MineshaftNetwork.coveredPassageIssue(this,base,area,tunnel.mineshaftEntrance(),tunnel.mineshaftLayout());if(covered!=null)return covered;
+        tunnel.attachTunnel(baseId,prerequisite);sites.add(tunnel);
+        // No post may stand where the new passage opens into the others, or where they open into it.
+        MineshaftNetwork.openDoorways(this,base,tunnel);
+        return null;
     }
     String tunnelOverlapIssue(UUID baseId,ApprenticeWorkplace tunnel){
         for(var other:sites)if(!other.id().equals(baseId)&&!baseId.equals(other.mineBaseId())&&WorkplaceOverlap.tunnel(tunnel,other))

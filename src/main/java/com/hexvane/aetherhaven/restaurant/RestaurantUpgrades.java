@@ -12,9 +12,14 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Restaurant plot upgrades: satiety (town hunger decay) and service (meal speed/fill). */
+/**
+ * Restaurant plot upgrades: satiety (town hunger decay), service (meal speed/fill), menu (dishes that leave a short
+ * perk on the diner) and provisions (extra town food support).
+ */
 public final class RestaurantUpgrades {
     public static final int MAX_BRANCH_LEVEL = 3;
+    /** Food Production each Provisions level adds, in the same unit as a farm or ranch site's 10. */
+    public static final int PROVISIONS_FOOD_PER_LEVEL = 5;
 
     public static final String ITEM_CARROT = "Plant_Crop_Carrot_Item";
     public static final String ITEM_CORN = "Plant_Crop_Corn_Item";
@@ -29,10 +34,20 @@ public final class RestaurantUpgrades {
     public static final String ITEM_PIE_APPLE = "Food_Pie_Apple";
     public static final String ITEM_PIE_MEAT = "Food_Pie_Meat";
     public static final String ITEM_PIE_PUMPKIN = "Food_Pie_Pumpkin";
+    public static final String ITEM_KEBAB_VEGETABLE = "Food_Kebab_Vegetable";
+    public static final String ITEM_KEBAB_MUSHROOM = "Food_Kebab_Mushroom";
+    public static final String ITEM_WHEAT = "Plant_Crop_Wheat_Item";
+    public static final String ITEM_TOMATO = "Plant_Crop_Tomato_Item";
+    public static final String ITEM_PUMPKIN = "Plant_Crop_Pumpkin_Item";
+    public static final String ITEM_VEGETABLE_COOKED = "Food_Vegetable_Cooked";
 
     public enum Branch {
         SATIETY,
-        SERVICE
+        SERVICE,
+        /** Each level puts new dishes on the menu; see {@link RestaurantMenuCatalog}. */
+        MENU,
+        /** Each level adds {@link #PROVISIONS_FOOD_PER_LEVEL} Food Production for the town. */
+        PROVISIONS
     }
 
     public record IngredientCost(@Nonnull String itemId, int count) {}
@@ -44,7 +59,22 @@ public final class RestaurantUpgrades {
         return switch (branch) {
             case SATIETY -> state.getSatietyLevel();
             case SERVICE -> state.getServiceLevel();
+            case MENU -> state.getMenuLevel();
+            case PROVISIONS -> state.getProvisionsLevel();
         };
+    }
+
+    /** Town food a Provisions level adds on its own (0 when none). */
+    public static int provisionsFoodPoints(int provisionsLevel) {
+        return Math.max(0, Math.min(MAX_BRANCH_LEVEL, provisionsLevel)) * PROVISIONS_FOOD_PER_LEVEL;
+    }
+
+    /**
+     * Town food from Provisions once the kitchen's supply is counted. The restaurant cooks what farms and ranches
+     * bring in, so it never adds more food than they provide and cannot stand in for them.
+     */
+    public static int provisionsFoodPoints(int provisionsLevel, int farmAndRanchFoodPoints) {
+        return Math.min(provisionsFoodPoints(provisionsLevel), Math.max(0, farmAndRanchFoodPoints));
     }
 
     public static int maxLevel(@Nonnull Branch branch) {
@@ -83,6 +113,20 @@ public final class RestaurantUpgrades {
                     new IngredientCost(ITEM_PIE_MEAT, 4),
                     new IngredientCost(ITEM_PIE_PUMPKIN, 4)
                 );
+                default -> List.of();
+            };
+            // The kitchen learns a dish from samples of it: five of each dish the level adds.
+            case MENU -> switch (tier) {
+                case 1 -> List.of(new IngredientCost(ITEM_KEBAB_VEGETABLE, 5), new IngredientCost(ITEM_KEBAB_MUSHROOM, 5));
+                case 2 -> List.of(new IngredientCost(ITEM_SALAD_BERRY, 5), new IngredientCost(ITEM_SALAD_MUSHROOM, 5));
+                case 3 -> List.of(new IngredientCost(ITEM_PIE_APPLE, 5), new IngredientCost(ITEM_PIE_PUMPKIN, 5));
+                default -> List.of();
+            };
+            // A stocked pantry: bulk crops and plain cooked staples from the farm and ranch.
+            case PROVISIONS -> switch (tier) {
+                case 1 -> List.of(new IngredientCost(ITEM_WHEAT, 20), new IngredientCost(ITEM_BREAD, 10));
+                case 2 -> List.of(new IngredientCost(ITEM_TOMATO, 25), new IngredientCost(ITEM_VEGETABLE_COOKED, 15));
+                case 3 -> List.of(new IngredientCost(ITEM_PUMPKIN, 30), new IngredientCost(ITEM_CHEESE, 20));
                 default -> List.of();
             };
         };
@@ -210,6 +254,8 @@ public final class RestaurantUpgrades {
         switch (branch) {
             case SATIETY -> state.setSatietyLevel(tier);
             case SERVICE -> state.setServiceLevel(tier);
+            case MENU -> state.setMenuLevel(tier);
+            case PROVISIONS -> state.setProvisionsLevel(tier);
         }
         return PurchaseResult.OK;
     }
@@ -238,6 +284,8 @@ public final class RestaurantUpgrades {
         return switch (raw.trim().toLowerCase()) {
             case "satiety" -> Branch.SATIETY;
             case "service" -> Branch.SERVICE;
+            case "menu" -> Branch.MENU;
+            case "provisions" -> Branch.PROVISIONS;
             default -> null;
         };
     }

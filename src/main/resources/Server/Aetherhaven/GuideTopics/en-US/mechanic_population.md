@@ -22,15 +22,15 @@ Farmer and Rancher become available.
 
 ### Town Level 2 · 4 to 6 residents
 
-Miner, Logger, Builder, Priestess, Guild Master, and Chef become available.
+Miner, Logger, Builder, Priestess, Guild Master, Chef and Warehouse Manager become available.
 
 ### Town Level 3 · 7 to 10 residents
 
-Blacksmith, Doctor, Crafter and Warehouse Manager become available.
+Blacksmith and Crafter become available.
 
 ### Town Level 4 · 11 to 15 residents
 
-Merchant, Leatherworker, Monster Hunter and Druid become available.
+Merchant, Leatherworker, Monster Hunter, Druid and Doctor become available.
 
 ### Town Level 5 · 16 to 20 residents
 

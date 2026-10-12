@@ -1,0 +1,54 @@
+{
+  "$Comment": "Mint star sparkles that flow out of the staff tip with the cone. The same stars the staff used to spawn in the world from the server; sizes, speeds and offsets are those divided by 1.45, the scale the interaction attaches this system with, so they look the same.",
+  "RenderMode": "BlendAdd",
+  "EmitOffset": {
+    "X": { "Min": -0.028, "Max": 0.028 },
+    "Y": { "Min": -0.028, "Max": 0.028 },
+    "Z": { "Min": -0.028, "Max": 0.028 }
+  },
+  "ParticleRotationInfluence": "Billboard",
+  "LinearFiltering": true,
+  "LightInfluence": 0.45,
+  "ParticleRotateWithSpawner": true,
+  "TrailSpawnerPositionMultiplier": 1,
+  "TrailSpawnerRotationMultiplier": 1,
+  "MaxConcurrentParticles": 12,
+  "ParticleLifeSpan": { "Min": 0.28, "Max": 0.42 },
+  "SpawnRate": { "Min": 20, "Max": 32 },
+  "InitialVelocity": {
+    "Speed": { "Min": 0.59, "Max": 1.0 },
+    "Yaw": { "Min": -5, "Max": 5 },
+    "Pitch": { "Min": -5, "Max": 5 }
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Basic/Star2.png",
+    "ScaleRatioConstraint": "OneToOne",
+    "Animation": {
+      "0": {
+        "FrameIndex": { "Min": 0, "Max": 0 },
+        "Scale": { "X": { "Min": 0.55, "Max": 0.85 } },
+        "Opacity": 0.92,
+        "Color": "#66ffcc"
+      },
+      "70": {
+        "Opacity": 0.35,
+        "Color": "#44eeaa"
+      },
+      "100": {
+        "Opacity": 0,
+        "Color": "#228866"
+      }
+    },
+    "InitialAnimationFrame": {
+      "Rotation": {
+        "X": { "Min": 0, "Max": 0 },
+        "Y": { "Min": 0, "Max": 360 },
+        "Z": { "Min": 0, "Max": 0 }
+      },
+      "Scale": { "X": { "Min": 0.046, "Max": 0.081 } },
+      "Opacity": 0.88,
+      "FrameIndex": { "Min": 0, "Max": 0 },
+      "Color": "#88ffdd"
+    }
+  }
+}

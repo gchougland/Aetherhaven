@@ -334,7 +334,7 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
     private boolean available(Ref<EntityStore> ref, Store<EntityStore> store, boolean social) {
         if (ref == null || !ref.isValid()) return false;
         if (MiningWorkService.active(ref)) return false;
-        if (TimberWorkService.active(ref) || FieldWorkService.active(ref)) return false;
+        if (TimberWorkService.active(ref) || FieldWorkService.active(ref) || GardenWorkService.active(ref)) return false;
         if (ClinicVisitService.active(ref)) return false;
         if (com.hexvane.aetherhaven.hunter.HuntService.owns(ref,store)) return false;
         var clerk=store.getComponent(ref,com.hexvane.aetherhaven.shopspot.ShopClerkState.getComponentType());

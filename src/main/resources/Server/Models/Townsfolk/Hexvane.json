@@ -48,12 +48,6 @@
       "GradientId": "BrownSemiLight"
     },
     {
-      "Model": "Characters/Haircuts/Stylish.blockymodel",
-      "Texture": "Characters/Haircuts/Stylish_Greyscale.png",
-      "GradientSet": "Hair",
-      "GradientId": "BrownSemiLight"
-    },
-    {
       "Model": "Cosmetics/Pants/Pants_Straight.blockymodel",
       "Texture": "Cosmetics/Pants/Pants_Straight_Textures/Wasteland_Marauder_Pants.png",
       "GradientSet": "Fantasy_Cotton_Dark",

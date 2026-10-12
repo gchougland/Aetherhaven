@@ -44,7 +44,7 @@ public final class HallowsEveLeaderboardPage
             commandBuilder.append("Aetherhaven/HallowsEveLeaderboardPage.ui");
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
-                "#CloseButton",
+                "#PageCloseButton",
                 EventData.of("Action", "Close"),
                 false
             );
@@ -59,7 +59,7 @@ public final class HallowsEveLeaderboardPage
             Message.translation("aetherhaven_festivals.aetherhaven.festival.hallows_eve.leaderboard.hint")
         );
         commandBuilder.set(
-            "#CloseButton.TextSpans",
+            "#PageCloseButton.TextSpans",
             Message.translation("aetherhaven_festivals.aetherhaven.festival.hallows_eve.leaderboard.close")
         );
 

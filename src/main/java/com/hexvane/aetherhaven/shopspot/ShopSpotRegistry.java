@@ -14,6 +14,11 @@ public final class ShopSpotRegistry {
     private final World world;
     private final Map<UUID, ShopSpotRecord> byId = new HashMap<>();
     private final Map<Long, UUID> byBlockKey = new HashMap<>();
+    /**
+     * Player listings whose stall no longer exists (a rebuilt building dropped the stall). They are saved with the
+     * stalls but are never offered for sale; {@link ShopSpotListingReturns} hands them back to their seller.
+     */
+    private final List<ShopSpotRecord> heldReturns = new ArrayList<>();
     final ShopSpotDisplayQueue displayUpdates = new ShopSpotDisplayQueue();
 
     public ShopSpotRegistry(@Nonnull World world) {
@@ -26,14 +31,65 @@ public final class ShopSpotRegistry {
     }
 
     public void replaceAll(@Nonnull List<ShopSpotRecord> records) {
+        replaceAll(records, List.of());
+    }
+
+    public void replaceAll(@Nonnull List<ShopSpotRecord> records, @Nonnull List<ShopSpotRecord> held) {
         byId.clear();
         byBlockKey.clear();
+        heldReturns.clear();
         for (ShopSpotRecord r : records) {
             if (!world.getName().equals(r.getWorldName())) {
                 continue;
             }
             put(r);
         }
+        for (ShopSpotRecord r : held) {
+            if (world.getName().equals(r.getWorldName()) && ShopSpotListingReturns.isReturnable(r)) {
+                heldReturns.add(r);
+            }
+        }
+    }
+
+    /**
+     * Takes a stall out of the live registry. A player listing it still carries is kept as a held return instead of
+     * being discarded.
+     *
+     * @return true when the listing was kept for its seller
+     */
+    public boolean removeKeepingListing(@Nonnull ShopSpotRecord record) {
+        remove(record.getSpotId());
+        if (!ShopSpotListingReturns.isReturnable(record) || heldReturns.contains(record)) {
+            return false;
+        }
+        record.setDisplayEntityUuid(null);
+        heldReturns.add(record);
+        return true;
+    }
+
+    public boolean hasHeldReturns() {
+        return !heldReturns.isEmpty();
+    }
+
+    @Nonnull
+    public List<ShopSpotRecord> heldReturns() {
+        return new ArrayList<>(heldReturns);
+    }
+
+    @Nonnull
+    public List<ShopSpotRecord> heldReturnsFor(@Nonnull UUID sellerUuid) {
+        List<ShopSpotRecord> out = new ArrayList<>();
+        for (ShopSpotRecord r : heldReturns) {
+            if (sellerUuid.equals(r.getSellerUuid())) {
+                out.add(r);
+            }
+        }
+        return out;
+    }
+
+    /** Call once the held listing has really been handed to its seller. */
+    public boolean releaseHeldReturn(@Nonnull ShopSpotRecord record) {
+        return heldReturns.remove(record);
     }
 
     public void put(@Nonnull ShopSpotRecord record) {
