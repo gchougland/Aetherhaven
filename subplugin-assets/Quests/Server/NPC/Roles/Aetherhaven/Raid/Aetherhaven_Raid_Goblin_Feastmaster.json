@@ -1,7 +1,33 @@
 {
+  "$Comment": "The Feastmaster as a raid leader. Hytale 0.7.0 moved this creature to its dungeon boss role; this is that role's own setup at the health the raid was balanced for.",
   "Type": "Variant",
-  "Reference": "Dungeon_Feastmaster_Boss",
+  "Reference": "Template_Dungeon_Feastmaster_Boss",
   "Modify": {
-    "MaxHealth": 350
+    "DropList": "Drop_Dungeon_Feastmaster",
+    "MaxHealth": 350,
+    "IsMemory": true,
+    "MemoriesCategory": "Goblin",
+    "MemoriesNameOverride": "Goblin_Feastmaster",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    },
+    "ViewRange": 40,
+    "ViewSector": 360,
+    "HearingRange": 15,
+    "MaxSpeed": 2,
+    "AlertedRange": 40,
+    "KnockbackScale": 0,
+    "_CombatConfig": "CAE_Dungeon_Feastmaster_Boss",
+    "Appearance": "Dungeon_Feastmaster_Boss",
+    "CombatChargeDistance": [
+      25,
+      30
+    ]
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Dungeon_Feastmaster_Boss.name",
+      "Description": "Translation key for NPC name display"
+    }
   }
 }

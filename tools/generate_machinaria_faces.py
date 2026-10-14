@@ -71,9 +71,10 @@ def generate(destination):
         for action in table['Animations'].values():
             if action.get('ThirdPersonFace'):
                 action['ThirdPersonFace'] = adapt(action['ThirdPersonFace'])
-        write(destination / f'Server/Item/Animations/{name}_{RIG}.json', table)
+        # Machinaria keeps these outside the folders the server scans and loads them only when Aetherhaven is present.
+        write(destination / f'Server/Aetherhaven/ItemAnimations/{name}_{RIG}.json', table)
         for variant in ('_Lower','_Higher'):
-            write(destination / f'Server/Item/Animations/{name}{variant}_{RIG}.json', {'Parent':name+'_'+RIG})
+            write(destination / f'Server/Aetherhaven/ItemAnimations/{name}{variant}_{RIG}.json', {'Parent':name+'_'+RIG})
     model['AnimationSets'] = {k:v for k,v in model.get('AnimationSets', {}).items() if not k.startswith('Aetherhaven_Life_Lip_')}
     model['AnimationSets'].update(bindings)
     write(model_path, model)

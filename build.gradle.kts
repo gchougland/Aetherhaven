@@ -252,6 +252,8 @@ tasks.test {
         "java.util.logging.manager",
         "com.hypixel.hytale.logger.backend.HytaleLogManager"
     )
+    // Tests run with the game's logger quiet (see QuietTestLogs). Use -PtestLogs=true to see the log.
+    systemProperty("aetherhaven.testLogs", providers.gradleProperty("testLogs").getOrElse("false"))
     testLogging {
         events("passed", "failed", "skipped")
         showStandardStreams = true

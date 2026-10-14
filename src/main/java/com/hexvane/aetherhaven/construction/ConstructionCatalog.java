@@ -210,7 +210,7 @@ public final class ConstructionCatalog {
         String id = def.getId();
         if (!def.isLegacyPlotSupport()) {
             Path prefabResolved = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
-            if (prefabResolved == null) {
+            if (prefabResolved == null && PrefabResolveUtil.assetPacksMounted()) {
                 LOGGER.atWarning().log(
                     "Construction %s prefabPath '%s' not found in asset packs (may load later) (%s)",
                     id,

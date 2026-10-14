@@ -9,7 +9,7 @@ from villager_creature_faces import walk
 def verify(res):
     def read(path):
         data=json.loads(path.read_text())
-        if path.parent.name=='Animations' and 'Parent' in data:
+        if path.parent.name in ('Animations','ItemAnimations') and 'Parent' in data:
             from villager_native_items import merge
             data=merge(read(path.with_name(data.pop('Parent')+'.json')),data)
         return data
@@ -51,7 +51,7 @@ def verify(res):
     for pitch in ('', '_Lower', '_Higher'):
         name = 'Aetherhaven_Life_Actions' + pitch
         original = read(RES / f'Server/Item/Animations/{name}.json')['Animations']
-        table = read(res / f'Server/Item/Animations/{name}_MachinariaRobot.json')['Animations']
+        table = read(res / f'Server/Aetherhaven/ItemAnimations/{name}_MachinariaRobot.json')['Animations']
         assert table.keys() == original.keys()
         for key, action in table.items():
             expected = dict(original[key])

@@ -17,6 +17,14 @@ import javax.annotation.Nullable;
 public final class PrefabResolveUtil {
     private PrefabResolveUtil() {}
 
+    /**
+     * Whether the game's asset packs can be searched yet. They cannot outside a running server (unit tests), where
+     * the engine's prefab lookup would throw instead of answering.
+     */
+    public static boolean assetPacksMounted() {
+        return com.hypixel.hytale.server.core.asset.AssetModule.get() != null;
+    }
+
     @Nullable
     public static Path resolvePrefabPath(@Nullable String key) {
         if (key == null || key.isBlank()) {
@@ -33,6 +41,9 @@ public final class PrefabResolveUtil {
         Path festivalOverride = resolveFestivalDataPrefabOverride(k);
         if (festivalOverride != null) {
             return festivalOverride;
+        }
+        if (!assetPacksMounted()) {
+            return null;
         }
         PrefabStore ps = PrefabStore.get();
         Path p = ps.findAssetPrefabPath(k);
