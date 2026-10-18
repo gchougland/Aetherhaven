@@ -7,6 +7,8 @@ npcRoleId: Aetherhaven_Doctor
 
 **Elara Willowmere** becomes available at the Inn at **Town Level 4**. Build her **Clinic** to give your residents a place to recover.
 
+Open **Clinic and recovery** under Mechanics for setup and treatment troubleshooting.
+
 ### Clinic care
 
 Talk to Elara and choose **Let us check the clinic**. The medicine cabinet accepts **Lesser Health Potions** from your inventory. Each bottle supplies **80 medicine**, and the cabinet holds **800**. Medicine is spent only when someone receives healing.

@@ -29,6 +29,14 @@ Even a florist who talks to her plants all day deserves a quiet place to rest.
 3. Assign Ivy as resident on the house management block.
 4. Find Ivy and close the quest in dialogue.
 
+### Friendship rewards
+
+Visit after reaching each friendship level to claim the reward through dialogue. Plans are learned by the town and crafted by Apprentices.
+
+- **Friendship 25:** Pink Flower Crown Pattern for the town wardrobe.
+- **Friendship 50:** Plant Arch plans, requiring Crafting 4.
+- **Friendship 75:** Spooky Terrarium plans, requiring Crafting 6.
+
 ## Weekly routine
 
 Times are in world hours. Most days follow the same rhythm; Sunday can include a short visit to the altar.

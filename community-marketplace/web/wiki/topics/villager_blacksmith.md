@@ -30,8 +30,8 @@ Garren has smoke and sparks at work. He wants a roof at night that does not smel
 
 Visit them after your friendship reaches each level to pick up the reward through dialogue.
 
-- **Friendship 25:** gives you **32** × **Rock Stone**
 - **Friendship 50:** teaches you to craft **Geode Anvil**
+- **Friendship 75:** teaches your town the **Master Smith's Chest** recipe.
 
 ## Weekly routine
 

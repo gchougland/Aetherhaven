@@ -173,6 +173,7 @@ public final class PlotCreatorProgressModel {
 
     @Nonnull
     private static String spotLangKey(@Nonnull PlotBuildingKindRequirements.SubstepRequirement req) {
+        if(req.type()==PlotCreatorSubstepType.SPECIALTY_BLOCK)return LANG+"spot.specialty."+req.workResidentKind();
         if (req.type() == PlotCreatorSubstepType.WORK_POI
             && req.workResidentKind() != null
             && !req.workResidentKind().isBlank()) {

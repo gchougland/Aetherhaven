@@ -8,10 +8,18 @@ author: Hexvane
 
 # Town records shelf
 
-The town records shelf is a hub of information and controls for your town. In the needs tab you can view the current needs of all the villagers as well as teleport them to you using the teleport button. You can also check villagers gift preferences. It will show any gifts you've given to each villager and their response to it. In the town management tab you can invite and manage players in your town. You can click on a player name to manage their town permissions. You can use the move button to rearrange your building. (Be careful moving buildings, anything that wasn't part of the building when it was placed will be destoyed, including entities like animals).
+The Town Records Shelf brings together your building and town controls. The first tab shows the assigned worker. Use **Teleport to me** beside their name to bring them to you if they become stuck.
 
-## Production building upgrades
+Open the residents tab to browse **both villagers and townsfolk**, with portraits, page controls and filters. Select a resident for their needs, or choose **Profile** for their abilities, reputation and discovered gift preferences. Gifts and friendship rewards stay hidden until discovered or unlocked.
 
-Open the shelf on a **production building** (farm, lumber mill, miner's hut, barn, and similar workplaces) to **upgrade** it. Upgrades improve output or capacity depending on the building type. Costs and tiers are shown in the shelf UI — pay from town resources or materials as listed.
+Use the player management tab to invite members and change their town permissions. The move control lets you relocate the building. Remove anything you want to keep that was not part of its original design before moving it, including animals.
 
-Upgrades persist with the plot. Check the shelf after finishing a new workplace to see what the first tier unlocks.
+## Block palettes
+
+Open the paintbrush tab on a finished building to change its walls, roofs, wood, stone, cloth, and more. Use a Block Palette item to unlock looks for your town, then cycle each type to a look you have (or Default for the original) and hit Save. Your choices stay when you repair, rebuild, or move the building.
+
+## Building upgrades
+
+Open **Building upgrades** through the building's villager or production controls. Warehouse storage also has a **Building upgrades** button. Select a node to see its benefit, Town Level, earlier upgrades and costs. Grey nodes with padlocks are locked. A node stands out when its prerequisites are satisfied.
+
+Production storage upgrades remain with the plot when you move or reconstruct the building. Warehouse storage expansions belong to the town.

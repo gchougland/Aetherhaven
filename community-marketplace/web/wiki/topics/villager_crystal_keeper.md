@@ -32,6 +32,14 @@ Even an ancient keeper of crystals deserves a quiet place to rest between the li
 3. Assign Vaelith as resident on the house management block.
 4. Find Vaelith and close the quest in dialogue.
 
+### Friendship rewards
+
+Visit after reaching each friendship level to claim the reward through dialogue. Plans are learned by the town and crafted by Apprentices.
+
+- **Friendship 25:** 8 Cyan Crystals.
+- **Friendship 50:** 2 Gaia Shards.
+- **Friendship 75:** Large Glow Ring plans, requiring Jewelry 7 and a Glow Ring.
+
 ## Weekly routine
 
 Times are in world hours. Most days follow the same rhythm; Sunday can include a short visit to the altar.

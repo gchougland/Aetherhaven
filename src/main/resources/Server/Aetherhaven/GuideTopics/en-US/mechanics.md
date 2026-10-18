@@ -4,7 +4,15 @@ description: Tools, buildings, and town systems
 author: Hexvane
 sub-topics:
   - mechanic_population
-  - mechanic_apprentice_workplaces
+  - mechanic_work_priorities
+  - mechanic_townsfolk_stats
+  - mechanic_warehouse
+  - mechanic_backpacks
+  - mechanic_pattern_book
+  - mechanic_alchemy
+  - mechanic_production_buildings
+  - mechanic_hunting
+  - mechanic_clinic
   - mechanic_mastery
   - mechanic_commands
   - mechanic_plot_placement_staff
@@ -37,6 +45,8 @@ sub-topics:
 # Mechanics
 
 These pages describe how each major feature works in play. Start with **Getting Started** if you are new, then open the page you need from the list on the left.
+
+For the new town systems, start with **Apprentice workplaces** and its individual setup guides, **Work priorities and wages**, **Townsfolk stats and equipment**, **Warehouse and deliveries**, **Backpacks**, and **Alchemy and flasks**. **Production buildings** leads to the Farm, Barn, Lumbermill, Miner's Hut and Spirit Garden. **Hunter's Lodge and arena** and **Clinic and recovery** explain those specialists' services.
 
 | Topic | What it covers |
 | --- | --- |

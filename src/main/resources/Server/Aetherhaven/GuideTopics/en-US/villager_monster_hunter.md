@@ -7,6 +7,8 @@ npcRoleId: Aetherhaven_Monster_Hunter
 
 Kael can visit from **Town Level 4**. Build his **Hunter's Lodge** and finish his recruitment quest.
 
+Open **Hunter's Lodge and arena** under Mechanics for setup, portal placement and troubleshooting.
+
 ## The arena
 
 The **Hunt Beacon** marks the centre of the arena. Keep a clear **9 by 9** floor around it with room overhead. The beacon must stay inside the completed lodge plot.
@@ -17,7 +19,7 @@ Skeletons provide bones and linen scraps. Goblin Scrappers provide Scraps, which
 
 Collected spoils stay safe when a run ends. Open the lodge's **Production Storage** to browse and collect spoils, or collect them through the town warehouse. Make space when the spoils racks fill. Couriers can use lodge supplies for workplace orders.
 
-When creating or editing a Hunter's Lodge, place and mark **Production Storage** inside its bounds. The building editor requires this storage before saving.
+When creating or editing a Hunter's Lodge, the creator and editor require both the **Hunt Beacon** and **Production Storage** inside its bounds. Select the beacon to see **Hunt portal opens here**, **Creature entrance** and **Hunter's starting position** markers. Their positions follow the building's orientation, not the beacon block's facing. Leave the whole 9 by 9 arena clear.
 
 ## Training
 

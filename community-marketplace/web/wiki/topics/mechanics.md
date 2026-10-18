@@ -3,6 +3,17 @@ name: Mechanics
 description: Tools, buildings, and town systems
 author: Hexvane
 sub-topics:
+  - mechanic_population
+  - mechanic_work_priorities
+  - mechanic_townsfolk_stats
+  - mechanic_warehouse
+  - mechanic_backpacks
+  - mechanic_pattern_book
+  - mechanic_alchemy
+  - mechanic_production_buildings
+  - mechanic_hunting
+  - mechanic_clinic
+  - mechanic_mastery
   - mechanic_commands
   - mechanic_plot_placement_staff
   - mechanic_plot_creator_staff
@@ -11,6 +22,7 @@ sub-topics:
   - mechanic_villager_needs
   - mechanic_reputation
   - mechanic_town_records_shelf
+  - mechanic_block_palettes_modding
   - mechanic_production_wardrobe
   - mechanic_floating_gifts
   - mechanic_geodes
@@ -25,6 +37,7 @@ sub-topics:
   - mechanic_guild_hall_and_guards
   - mechanic_player_shop
   - mechanic_tourist_portal
+  - mechanic_festivals
 ---
 
 ![Mechanics hub art](wiki/mechanics_hub.png)
@@ -32,6 +45,8 @@ sub-topics:
 # Mechanics
 
 These pages describe how each major feature works in play. Start with **Getting Started** if you are new, then open the page you need from the list on the left.
+
+For the new town systems, start with **Apprentice workplaces** and its individual setup guides, **Work priorities and wages**, **Townsfolk stats and equipment**, **Warehouse and deliveries**, **Backpacks**, and **Alchemy and flasks**. **Production buildings** leads to the Farm, Barn, Lumbermill, Miner's Hut and Spirit Garden. **Hunter's Lodge and arena** and **Clinic and recovery** explain those specialists' services.
 
 | Topic | What it covers |
 | --- | --- |
@@ -41,7 +56,9 @@ These pages describe how each major feature works in play. Start with **Getting 
 | **Treasury and taxes** | Morning gold from residents |
 | **Villager needs** | Hunger, energy, and fun |
 | **Reputation** | Friendship, gifts, and milestones |
+| **Mastery and training** | Specialist tools, production requirements and Townsfolk points |
 | **Guild hall and guards** | Hiring patrols and the command post |
 | **Tourist portal** | Visitors from other worlds |
+| **Festivals** | Holiday builds on the festival square |
 
 Each linked page includes steps, related buildings, and cross-links where another system matters.

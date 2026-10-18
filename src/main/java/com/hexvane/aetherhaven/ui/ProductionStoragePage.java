@@ -149,6 +149,10 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             world.execute(()->{if(ref.isValid()){var player=store.getComponent(ref,Player.getComponentType());if(player!=null)player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.RancherHerdPage(pr,townId,plotId));}});
             return;
         }
+        if (com.hexvane.aetherhaven.production.FarmFields.isPlot(plot)) {
+            world.execute(()->{if(ref.isValid()){var player=store.getComponent(ref,Player.getComponentType());if(player!=null)player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.FarmerFieldPage(pr,townId,plotId,null));}});
+            return;
+        }
         PlotProductionState state = town.getOrCreatePlotProduction(plotId);
         if (!plot.getProductionLayout().legacy() && plot.getProductionLayout().validationError()!=null) {
             commandBuilder.set("#ErrMsg.Visible", true);

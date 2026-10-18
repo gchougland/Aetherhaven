@@ -10,7 +10,6 @@ import com.hexvane.aetherhaven.production.FarmFieldWorld.Spot;
 import com.hexvane.aetherhaven.town.*;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hexvane.aetherhaven.ui.ProductionStoragePage;
-import com.hexvane.aetherhaven.warehouse.ProductionStorageLocator;
 import com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point;
 import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.codec.*;
@@ -199,7 +198,7 @@ public final class FarmerFieldPage extends AetherhavenInteractiveCustomUIPage<Fa
         resolveSlot(c);
         if (!appended) {
             b.append("Aetherhaven/FarmerFieldPage.ui"); appended = true;
-            for (String action : List.of("Almanac", "Fill", "Clear", "Rotate", "Adopt", "Copy", "Collect", "Refresh", "Seeds", "Storage", "Upgrades"))
+            for (String action : List.of("Almanac", "Fill", "Clear", "Rotate", "Adopt", "Copy", "Collect", "Refresh", "Seeds", "Upgrades"))
                 e.addEventBinding(CustomUIEventBindingType.Activating, "#" + action, EventData.of("Action", action), false);
             for (int i = 0; i < FarmFieldsState.MAX_FIELDS; i++)
                 e.addEventBinding(CustomUIEventBindingType.Activating, "#Tab" + i, EventData.of("Action", "Field").append("Key", Integer.toString(i)), false);
@@ -209,7 +208,7 @@ public final class FarmerFieldPage extends AetherhavenInteractiveCustomUIPage<Fa
             b.set("#StockEmpty.TextSpans", t("ui.stores.empty")); b.set("#Collect.TextSpans", t("ui.collect"));
             b.set("#Fill.TextSpans", t("ui.fill")); b.set("#Clear.TextSpans", t("ui.clear")); b.set("#Rotate.TextSpans", t("ui.rotate"));
             b.set("#Adopt.TextSpans", t("ui.adopt")); b.set("#Copy.TextSpans", t("ui.copy"));
-            b.set("#Refresh.TextSpans", t("ui.refresh")); b.set("#Seeds.TextSpans", t("ui.seeds")); b.set("#Storage.TextSpans", t("ui.storage"));
+            b.set("#Refresh.TextSpans", t("ui.refresh")); b.set("#Seeds.TextSpans", t("ui.seeds"));
             b.set("#Upgrades.TextSpans", t("ui.upgrades")); b.set("#FavouredTitle.TextSpans", t("ui.favoured"));
             b.set("#AlmanacTitle.TextSpans", t("ui.almanac.title")); b.set("#AlmanacIntro.TextSpans", t("ui.almanac.intro"));
             b.set("#Tab0.TextSpans", t("ui.tab.home")); b.set("#TabNew.TextSpans", t("ui.tab.new"));
@@ -469,15 +468,6 @@ public final class FarmerFieldPage extends AetherhavenInteractiveCustomUIPage<Fa
             case "Seeds" -> addSeeds(ref, store, c);
             case "Collect" -> collect(ref, store, c, null);
             case "Take" -> collect(ref, store, c, data.key);
-            case "Storage" -> {
-                var player = store.getComponent(ref, Player.getComponentType());
-                var block = ProductionStorageLocator.find(c.world(), c.plot(), System.currentTimeMillis());
-                if (player != null && block != null) {
-                    player.getPageManager().openCustomPage(ref, store, new ProductionStoragePage(playerRef, townId, plotId, block.x(), block.y(), block.z()));
-                    return;
-                }
-                hint = t("hint.noStorage");
-            }
             case "Upgrades" -> {
                 var player = store.getComponent(ref, Player.getComponentType());
                 if (player != null) player.getPageManager().openCustomPage(ref, store, WorkplaceUpgradesPage.farm(playerRef, townId));

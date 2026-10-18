@@ -124,7 +124,8 @@ public final class PlotCreatorImportantSpotsPage
             String row = SPOT_ROWS + "[" + i + "]";
             boolean locked = isLockedSpot(spot);
             boolean checked = locked || containsSpot(working, spot);
-            b.set(row + " #Label.TextSpans", Message.translation(labelKey(spot)));
+            b.set(row + " #Label.TextSpans", spot.type()==PlotCreatorSubstepType.SPECIALTY_BLOCK
+                ? Message.raw(com.hexvane.aetherhaven.plotcreator.CoreBuildingSpecialties.label(spot.workResidentKind())) : Message.translation(labelKey(spot)));
             b.set(row + " #Toggle.Value", checked);
             b.set(row + " #Toggle.Disabled", locked);
             if (!locked) {
@@ -235,7 +236,10 @@ public final class PlotCreatorImportantSpotsPage
             return ranked;
         }
         out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
+        for(String block:com.hexvane.aetherhaven.plotcreator.CoreBuildingSpecialties.required(session.getDraft(),AetherhavenPlugin.get()))
+            out.add(new PlotCreatorSpotEntry(PlotCreatorSubstepType.SPECIALTY_BLOCK,1,block));
         for (PlotCreatorSubstepType type : PlotCreatorSubstepType.values()) {
+            if(type==PlotCreatorSubstepType.SPECIALTY_BLOCK)continue;
             if (type == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
                 continue;
             }
@@ -347,6 +351,8 @@ public final class PlotCreatorImportantSpotsPage
     }
 
     private boolean isLockedSpot(@Nonnull PlotCreatorSpotEntry spot) {
+        if(spot.type()==PlotCreatorSubstepType.SPECIALTY_BLOCK)return true;
+        if(spot.type()==PlotCreatorSubstepType.PRODUCTION_STORAGE&&PlotBuildingKindRequirements.requiresProductionStorage(session.getDraft(),AetherhavenPlugin.get()))return true;
         if (spot.type()==PlotCreatorSubstepType.BARN_PEN && PlotCreatorProductionRules.requiresBarnPens(
             session.getDraft(),AetherhavenPlugin.get())) return true;
         if (spot.type()==PlotCreatorSubstepType.MINING_NODE && PlotCreatorProductionRules.requiresMiningNodes(
@@ -432,6 +438,7 @@ public final class PlotCreatorImportantSpotsPage
 
     @Nonnull
     private static String spotKey(@Nonnull PlotCreatorSpotEntry spot) {
+        if(spot.type()==PlotCreatorSubstepType.SPECIALTY_BLOCK)return "SPECIALTY_BLOCK:"+spot.workResidentKind();
         if (spot.isWorkRoleSpot() && spot.workResidentKind() != null) {
             return "WORK_ROLE:" + spot.workResidentKind();
         }
@@ -443,6 +450,10 @@ public final class PlotCreatorImportantSpotsPage
 
     @Nullable
     private static PlotCreatorSpotEntry parseSpotKey(@Nonnull String key) {
+        if(key.startsWith("SPECIALTY_BLOCK:")) {
+            String block=key.substring("SPECIALTY_BLOCK:".length());
+            return com.hexvane.aetherhaven.plotcreator.CoreBuildingSpecialties.isSpecialty(block)?new PlotCreatorSpotEntry(PlotCreatorSubstepType.SPECIALTY_BLOCK,1,block):null;
+        }
         if (key.startsWith("FESTIVAL_NPC:")) {
             String role = key.substring("FESTIVAL_NPC:".length()).trim();
             return role.isEmpty() ? null : PlotCreatorSpotEntry.festivalNpc(role, 1);

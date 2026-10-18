@@ -38,6 +38,14 @@ public final class PlotCreatorProductionRules {
     }
 
     public static void enforceSelectedSpots(PlotCreatorDraft draft) {
+        if(!draft.isDecorationOnly()&&!draft.isFestivalMode()&&!draft.isWallMode()&&!draft.isPropMode()&&PlotBuildingKindRequirements.requiresProductionStorage(draft,AetherhavenPlugin.get())) {
+            draft.getSelectedSpots().removeIf(s->s.type()==PlotCreatorSubstepType.PRODUCTION_STORAGE);
+            draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.PRODUCTION_STORAGE,1));
+        }
+        for(String block:CoreBuildingSpecialties.required(draft,AetherhavenPlugin.get())) {
+            draft.getSelectedSpots().removeIf(s->s.type()==PlotCreatorSubstepType.SPECIALTY_BLOCK&&block.equals(s.workResidentKind()));
+            draft.getSelectedSpots().add(new PlotCreatorSpotEntry(PlotCreatorSubstepType.SPECIALTY_BLOCK,1,block));
+        }
         if(requiresBarnPens(draft,AetherhavenPlugin.get())&&draft.getSelectedSpots().stream().noneMatch(s->s.type()==PlotCreatorSubstepType.BARN_PEN))
             draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.BARN_PEN,5));
         if(requiresHuntStorage(draft,AetherhavenPlugin.get())&&draft.getSelectedSpots().stream().noneMatch(s->s.type()==PlotCreatorSubstepType.PRODUCTION_STORAGE))
@@ -50,6 +58,11 @@ public final class PlotCreatorProductionRules {
 
     static void enforceRequirements(PlotCreatorDraft draft, AetherhavenPlugin plugin,
                                     List<PlotBuildingKindRequirements.SubstepRequirement> requirements) {
+        CoreBuildingSpecialties.enforce(draft,plugin,requirements);
+        if(!draft.isDecorationOnly()&&!draft.isFestivalMode()&&!draft.isWallMode()&&!draft.isPropMode()&&PlotBuildingKindRequirements.requiresProductionStorage(draft,plugin)) {
+            requirements.removeIf(s->s.type()==PlotCreatorSubstepType.PRODUCTION_STORAGE);
+            requirements.add(new PlotBuildingKindRequirements.SubstepRequirement(PlotCreatorSubstepType.PRODUCTION_STORAGE,1));
+        }
         if(requiresBarnPens(draft,plugin)&&requirements.stream().noneMatch(s->s.type()==PlotCreatorSubstepType.BARN_PEN))
             requirements.add(new PlotBuildingKindRequirements.SubstepRequirement(PlotCreatorSubstepType.BARN_PEN,5));
         if(requiresHuntStorage(draft,plugin)&&requirements.stream().noneMatch(r->r.type()==PlotCreatorSubstepType.PRODUCTION_STORAGE))
@@ -63,12 +76,17 @@ public final class PlotCreatorProductionRules {
 
     /** Save barrier independent of the chooser, including direct writer callers. */
     public static String validationError(PlotCreatorDraft draft, AetherhavenPlugin plugin) {
+        String specialty=CoreBuildingSpecialties.validationError(draft,plugin);
+        if(specialty!=null)return specialty;
         if(requiresBarnPens(draft,plugin)) {
             var pens=draft.getPois().stream().filter(p->p.getTags().contains("BARN_PEN")).toList();
             if(pens.size()!=5||pens.stream().map(p->p.getLocalX()+":"+p.getLocalY()+":"+p.getLocalZ()).distinct().count()!=5||pens.stream().anyMatch(p->!draft.isInsideBounds(PlotCreatorLocalCoords.toWorldBlock(draft,new int[]{p.getLocalX(),p.getLocalY(),p.getLocalZ()}))))return "barnPensRequired";
         }
         if(requiresHuntStorage(draft,plugin)&&(draft.getProductionStorageLocalPos()==null
             ||!draft.isInsideBounds(PlotCreatorLocalCoords.toWorldBlock(draft,draft.getProductionStorageLocalPos()))))return "huntStorageRequired";
+        if(!draft.isDecorationOnly()&&!draft.isFestivalMode()&&!draft.isWallMode()&&!draft.isPropMode()
+            &&PlotBuildingKindRequirements.requiresProductionStorage(draft,plugin)&&(draft.getProductionStorageLocalPos()==null
+            ||!draft.isInsideBounds(PlotCreatorLocalCoords.toWorldBlock(draft,draft.getProductionStorageLocalPos()))))return "productionStorageRequired";
         if (!requiresMiningNodes(draft,plugin)) return null;
         if (draft.getMiningNodes().isEmpty()) return "miningUpgradeRequired";
         if (draft.miningLayout().validationError()!=null) return "miningNodes";

@@ -221,6 +221,7 @@ public final class QuestCatalog {
                 "workplace_marked",
                 "workplace_type_chosen",
                 "workplace_bench_placed",
+                "workplace_food_tended",
                 "custom",
                 "entity_kills" -> true;
             default -> false;

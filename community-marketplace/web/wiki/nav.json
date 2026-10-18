@@ -17,6 +17,103 @@
           "depth": 1,
           "children": [
             {
+              "id": "mechanic_population",
+              "name": "Population and villager availability",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_work_priorities",
+              "name": "Work priorities and wages",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_townsfolk_stats",
+              "name": "Townsfolk stats and equipment",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_warehouse",
+              "name": "Warehouse and deliveries",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_backpacks",
+              "name": "Backpacks",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_pattern_book",
+              "name": "Tobin's Pattern Book",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_alchemy",
+              "name": "Alchemy and flasks",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_production_buildings",
+              "name": "Production buildings",
+              "depth": 2,
+              "children": [
+                {
+                  "id": "mechanic_farm",
+                  "name": "Farm and Scarecrow Fields",
+                  "depth": 3,
+                  "children": []
+                },
+                {
+                  "id": "mechanic_barn",
+                  "name": "Barn and owned animals",
+                  "depth": 3,
+                  "children": []
+                },
+                {
+                  "id": "mechanic_lumbermill",
+                  "name": "Lumbermill and Singing Grove",
+                  "depth": 3,
+                  "children": []
+                },
+                {
+                  "id": "mechanic_core_mining",
+                  "name": "Miner's Hut and mining nodes",
+                  "depth": 3,
+                  "children": []
+                },
+                {
+                  "id": "mechanic_spirit_garden",
+                  "name": "Spirit Garden",
+                  "depth": 3,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "mechanic_hunting",
+              "name": "Hunter's Lodge and arena",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_clinic",
+              "name": "Clinic and recovery",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_mastery",
+              "name": "Mastery and training",
+              "depth": 2,
+              "children": []
+            },
+            {
               "id": "mechanic_commands",
               "name": "Commands",
               "depth": 2,
@@ -61,6 +158,12 @@
             {
               "id": "mechanic_town_records_shelf",
               "name": "Town records shelf",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_block_palettes_modding",
+              "name": "Block palettes for modders",
               "depth": 2,
               "children": []
             },
@@ -145,6 +248,127 @@
             {
               "id": "mechanic_tourist_portal",
               "name": "Tourist portal",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_festivals",
+              "name": "Festivals",
+              "depth": 2,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "mechanic_apprentice_workplaces",
+          "name": "Apprentice workplaces",
+          "depth": 1,
+          "children": [
+            {
+              "id": "workplace_smelting",
+              "name": "Smelting workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_blacksmithing",
+              "name": "Blacksmithing workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_armorCrafting",
+              "name": "Armor Crafting workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_farming",
+              "name": "Farming workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_ranching",
+              "name": "Ranching workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_mycology",
+              "name": "Mycologist workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_berries",
+              "name": "Berry Patch workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_mining",
+              "name": "Mining workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_building",
+              "name": "Builder's Yard workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_blockWorkshop",
+              "name": "Block Workshop workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_alchemy",
+              "name": "Alchemy workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_crafting",
+              "name": "Crafting workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_leatherworking",
+              "name": "Leatherworking workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_cooking",
+              "name": "Cooking workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_jewelry",
+              "name": "Jewelry Crafting workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_salvaging",
+              "name": "Salvaging workplace",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_logistics",
+              "name": "Logistics and couriers",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "workplace_commerce",
+              "name": "Commerce and shop clerks",
               "depth": 2,
               "children": []
             }
@@ -250,6 +474,60 @@
               "name": "Elias Thornwood",
               "depth": 2,
               "children": []
+            },
+            {
+              "id": "villager_clown",
+              "name": "Bozo Bleak",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_furniture_merchant",
+              "name": "Cap'n Clive",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_doctor",
+              "name": "Elara Willowmere",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_alchemist",
+              "name": "Orin Glasswick",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_druid",
+              "name": "Rowan Mossweald",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_warehouse_manager",
+              "name": "Mara Finch",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_monster_hunter",
+              "name": "Kael Thorne",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_crafter",
+              "name": "Tobin Reedwright",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_leatherworker",
+              "name": "Hazel Brindle",
+              "depth": 2,
+              "children": []
             }
           ]
         },
@@ -331,6 +609,86 @@
       "depth": 1
     },
     {
+      "id": "mechanic_population",
+      "name": "Population and villager availability",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_work_priorities",
+      "name": "Work priorities and wages",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_townsfolk_stats",
+      "name": "Townsfolk stats and equipment",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_warehouse",
+      "name": "Warehouse and deliveries",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_backpacks",
+      "name": "Backpacks",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_pattern_book",
+      "name": "Tobin's Pattern Book",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_alchemy",
+      "name": "Alchemy and flasks",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_production_buildings",
+      "name": "Production buildings",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_farm",
+      "name": "Farm and Scarecrow Fields",
+      "depth": 3
+    },
+    {
+      "id": "mechanic_barn",
+      "name": "Barn and owned animals",
+      "depth": 3
+    },
+    {
+      "id": "mechanic_lumbermill",
+      "name": "Lumbermill and Singing Grove",
+      "depth": 3
+    },
+    {
+      "id": "mechanic_core_mining",
+      "name": "Miner's Hut and mining nodes",
+      "depth": 3
+    },
+    {
+      "id": "mechanic_spirit_garden",
+      "name": "Spirit Garden",
+      "depth": 3
+    },
+    {
+      "id": "mechanic_hunting",
+      "name": "Hunter's Lodge and arena",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_clinic",
+      "name": "Clinic and recovery",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_mastery",
+      "name": "Mastery and training",
+      "depth": 2
+    },
+    {
       "id": "mechanic_commands",
       "name": "Commands",
       "depth": 2
@@ -368,6 +726,11 @@
     {
       "id": "mechanic_town_records_shelf",
       "name": "Town records shelf",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_block_palettes_modding",
+      "name": "Block palettes for modders",
       "depth": 2
     },
     {
@@ -438,6 +801,106 @@
     {
       "id": "mechanic_tourist_portal",
       "name": "Tourist portal",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_festivals",
+      "name": "Festivals",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_apprentice_workplaces",
+      "name": "Apprentice workplaces",
+      "depth": 1
+    },
+    {
+      "id": "workplace_smelting",
+      "name": "Smelting workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_blacksmithing",
+      "name": "Blacksmithing workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_armorCrafting",
+      "name": "Armor Crafting workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_farming",
+      "name": "Farming workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_ranching",
+      "name": "Ranching workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_mycology",
+      "name": "Mycologist workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_berries",
+      "name": "Berry Patch workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_mining",
+      "name": "Mining workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_building",
+      "name": "Builder's Yard workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_blockWorkshop",
+      "name": "Block Workshop workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_alchemy",
+      "name": "Alchemy workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_crafting",
+      "name": "Crafting workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_leatherworking",
+      "name": "Leatherworking workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_cooking",
+      "name": "Cooking workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_jewelry",
+      "name": "Jewelry Crafting workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_salvaging",
+      "name": "Salvaging workplace",
+      "depth": 2
+    },
+    {
+      "id": "workplace_logistics",
+      "name": "Logistics and couriers",
+      "depth": 2
+    },
+    {
+      "id": "workplace_commerce",
+      "name": "Commerce and shop clerks",
       "depth": 2
     },
     {
@@ -526,6 +989,51 @@
       "depth": 2
     },
     {
+      "id": "villager_clown",
+      "name": "Bozo Bleak",
+      "depth": 2
+    },
+    {
+      "id": "villager_furniture_merchant",
+      "name": "Cap'n Clive",
+      "depth": 2
+    },
+    {
+      "id": "villager_doctor",
+      "name": "Elara Willowmere",
+      "depth": 2
+    },
+    {
+      "id": "villager_alchemist",
+      "name": "Orin Glasswick",
+      "depth": 2
+    },
+    {
+      "id": "villager_druid",
+      "name": "Rowan Mossweald",
+      "depth": 2
+    },
+    {
+      "id": "villager_warehouse_manager",
+      "name": "Mara Finch",
+      "depth": 2
+    },
+    {
+      "id": "villager_monster_hunter",
+      "name": "Kael Thorne",
+      "depth": 2
+    },
+    {
+      "id": "villager_crafter",
+      "name": "Tobin Reedwright",
+      "depth": 2
+    },
+    {
+      "id": "villager_leatherworker",
+      "name": "Hazel Brindle",
+      "depth": 2
+    },
+    {
       "id": "faq",
       "name": "FAQ",
       "depth": 1
@@ -580,70 +1088,126 @@
     "FAQ": "faq",
     "Getting Started": "getting_started",
     "Mechanics": "mechanics",
+    "Alchemy and flasks": "mechanic_alchemy",
+    "Apprentice workplaces": "mechanic_apprentice_workplaces",
+    "Backpacks": "mechanic_backpacks",
+    "Barn and owned animals": "mechanic_barn",
+    "Block palettes for modders": "mechanic_block_palettes_modding",
     "Building staff": "mechanic_building_staff",
     "Town charter": "mechanic_charter",
     "charter": "mechanic_charter",
+    "Clinic and recovery": "mechanic_clinic",
     "Commands": "mechanic_commands",
+    "Miner's Hut and mining nodes": "mechanic_core_mining",
+    "Farm and Scarecrow Fields": "mechanic_farm",
+    "Festivals": "mechanic_festivals",
     "Floating gifts": "mechanic_floating_gifts",
     "Geodes": "mechanic_geodes",
     "Guild hall and guards": "mechanic_guild_hall_and_guards",
+    "Hunter's Lodge and arena": "mechanic_hunting",
     "Inn pool and visitors": "mechanic_inn_pool_visitors",
     "Jewelry": "mechanic_jewelry",
+    "Lumbermill and Singing Grove": "mechanic_lumbermill",
+    "Mastery and training": "mechanic_mastery",
     "Path designer shovel": "mechanic_path_designer_shovel",
+    "Tobin's Pattern Book": "mechanic_pattern_book",
     "Player shop and shop spots": "mechanic_player_shop",
     "Player shop": "mechanic_player_shop",
     "shop spots": "mechanic_player_shop",
     "Plot creator staff": "mechanic_plot_creator_staff",
     "Plot placement staff": "mechanic_plot_placement_staff",
     "Plot tokens": "mechanic_plot_tokens",
+    "Population and villager availability": "mechanic_population",
+    "Production buildings": "mechanic_production_buildings",
     "Production wardrobe": "mechanic_production_wardrobe",
     "Purification powder": "mechanic_purification_powder",
     "Quest board": "mechanic_quest_board",
     "Reputation": "mechanic_reputation",
+    "Spirit Garden": "mechanic_spirit_garden",
     "Sprinklers": "mechanic_sprinklers",
     "Tourist portal": "mechanic_tourist_portal",
+    "Townsfolk stats and equipment": "mechanic_townsfolk_stats",
     "Town records shelf": "mechanic_town_records_shelf",
     "Treasury and taxes": "mechanic_treasury_taxes",
     "Villager needs": "mechanic_villager_needs",
+    "Warehouse and deliveries": "mechanic_warehouse",
+    "Work priorities and wages": "mechanic_work_priorities",
     "Roadmap": "roadmap",
     "Villagers": "villagers",
+    "Orin Glasswick": "villager_alchemist",
     "Elias Thornwood": "villager_bard",
     "Garren Vale": "villager_blacksmith",
     "Rowan Ridgecraft": "villager_builder",
     "Pepper Ashford": "villager_chef",
+    "Bozo Bleak": "villager_clown",
+    "Tobin Reedwright": "villager_crafter",
     "Vaelith Prismshade": "villager_crystal_keeper",
+    "Elara Willowmere": "villager_doctor",
+    "Rowan Mossweald": "villager_druid",
     "Elder Lyren": "villager_elder",
     "Irienne Mossmark": "villager_farmer",
     "Reed Castwell": "villager_fisherman",
     "Ivy Bloomwell": "villager_florist",
+    "Cap'n Clive": "villager_furniture_merchant",
     "Lyra Fairhollow": "villager_guild_master",
     "Corin Mosscup": "villager_innkeeper",
+    "Hazel Brindle": "villager_leatherworker",
     "Seren Fairhollow": "villager_logger",
     "Rivet Cogsworth": "villager_mechanic",
     "Vex Sunderlane": "villager_merchant",
     "Gorruk Stonevein": "villager_miner",
+    "Kael Thorne": "villager_monster_hunter",
     "Serah Thornwell": "villager_priestess",
     "Grubble Sparkmatch": "villager_pyrotechnic",
     "Thalen Meadowrun": "villager_rancher",
-    "Welcome": "welcome"
+    "Mara Finch": "villager_warehouse_manager",
+    "Welcome": "welcome",
+    "Alchemy workplace": "workplace_alchemy",
+    "Armor Crafting workplace": "workplace_armorCrafting",
+    "Berry Patch workplace": "workplace_berries",
+    "Blacksmithing workplace": "workplace_blacksmithing",
+    "Block Workshop workplace": "workplace_blockWorkshop",
+    "Builder's Yard workplace": "workplace_building",
+    "Commerce and shop clerks": "workplace_commerce",
+    "Cooking workplace": "workplace_cooking",
+    "Crafting workplace": "workplace_crafting",
+    "Farming workplace": "workplace_farming",
+    "Jewelry Crafting workplace": "workplace_jewelry",
+    "Leatherworking workplace": "workplace_leatherworking",
+    "Logistics and couriers": "workplace_logistics",
+    "Mining workplace": "workplace_mining",
+    "Mycologist workplace": "workplace_mycology",
+    "Ranching workplace": "workplace_ranching",
+    "Salvaging workplace": "workplace_salvaging",
+    "Smelting workplace": "workplace_smelting"
   },
   "portraitRemap": {
+    "wiki/villager_alchemist.png": "/wiki/images/Aetherhaven_Alchemist.png",
     "wiki/villager_bard.png": "/wiki/images/Aetherhaven_Bard.png",
     "wiki/villager_blacksmith.png": "/wiki/images/Aetherhaven_Blacksmith.png",
     "wiki/villager_builder.png": "/wiki/images/Aetherhaven_Builder.png",
+    "wiki/villager_chef.png": "/wiki/images/Aetherhaven_Chef.png",
+    "wiki/villager_clown.png": "/wiki/images/Aetherhaven_Clown.png",
+    "wiki/villager_crafter.png": "/wiki/images/Aetherhaven_Crafter.png",
     "wiki/villager_crystal_keeper.png": "/wiki/images/Aetherhaven_Crystal_Keeper.png",
+    "wiki/villager_doctor.png": "/wiki/images/Aetherhaven_Doctor.png",
+    "wiki/villager_druid.png": "/wiki/images/Aetherhaven_Druid.png",
     "wiki/villager_elder.png": "/wiki/images/Aetherhaven_Elder_Lyren.png",
     "wiki/villager_farmer.png": "/wiki/images/Aetherhaven_Farmer.png",
     "wiki/villager_fisherman.png": "/wiki/images/CozyFishing_Fisherman.png",
     "wiki/villager_florist.png": "/wiki/images/Aetherhaven_Florist.png",
+    "wiki/villager_furniture_merchant.png": "/wiki/images/Aetherhaven_Furniture_Merchant.png",
     "wiki/villager_guild_master.png": "/wiki/images/Aetherhaven_Guild_Master.png",
     "wiki/villager_innkeeper.png": "/wiki/images/Aetherhaven_Innkeeper.png",
+    "wiki/villager_leatherworker.png": "/wiki/images/Aetherhaven_Leatherworker.png",
     "wiki/villager_logger.png": "/wiki/images/Aetherhaven_Logger.png",
     "wiki/villager_mechanic.png": "/wiki/images/Machinaria_Mechanic.png",
     "wiki/villager_merchant.png": "/wiki/images/Aetherhaven_Merchant.png",
     "wiki/villager_miner.png": "/wiki/images/Aetherhaven_Miner.png",
+    "wiki/villager_monster_hunter.png": "/wiki/images/Aetherhaven_Monster_Hunter.png",
     "wiki/villager_priestess.png": "/wiki/images/Aetherhaven_Priestess.png",
     "wiki/villager_pyrotechnic.png": "/wiki/images/Aetherhaven_Pyrotechnic.png",
-    "wiki/villager_rancher.png": "/wiki/images/Aetherhaven_Rancher.png"
+    "wiki/villager_rancher.png": "/wiki/images/Aetherhaven_Rancher.png",
+    "wiki/villager_warehouse_manager.png": "/wiki/images/Aetherhaven_Warehouse_Manager.png"
   }
 }

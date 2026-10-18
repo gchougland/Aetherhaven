@@ -1,7 +1,7 @@
 $C = "../Common.ui";
 $T = "TownUiTheme.ui";
 $C.@PageOverlay { LayoutMode: Middle;
- $C.@DecoratedContainer { Anchor: (Width: 780, Height: 610);
+ $C.@DecoratedContainer { Anchor: (Width: 820, Height: 730);
   #Title { Label #FoodTitle { Text: "FOOD WORKPLACE"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
   #Content { LayoutMode: Top; Padding: (Full: 24);
    Group { LayoutMode: Left; Anchor: (Height: 136, Bottom: 18);
@@ -16,9 +16,9 @@ $C.@PageOverlay { LayoutMode: Middle;
      Label #CareTime { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #b7c9bb); }
     }
    }
-   Group { LayoutMode: Top; Anchor: (Height: 210, Bottom: 12); Padding: (Full: 18); Background: $T.@Panel;
-    Label #Habitat { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true, TextColor: #d7c998); }
-    Label #Worker { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true); }
+   Group { LayoutMode: Top; Anchor: (Height: 330, Bottom: 12); Padding: (Full: 18); Background: $T.@Panel;
+    Label #Habitat { Anchor: (Height: 144); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true, TextColor: #d7c998); }
+    Label #Worker { Anchor: (Height: 62); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true); }
     Label #LastCare { Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b7c9bb); }
     Label { Text: "Apprentices visit periodically to tend this site. Enable its profession in the town journal. After a full simulated day without care, its food support pauses."; Anchor: (Height: 62); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #b7c9bb); }
    }

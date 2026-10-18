@@ -41,6 +41,7 @@ public final class QuestProgressionService {
     public static final String WORKPLACE_TYPE_CHOSEN = "workplace_type_chosen";
     /** A workplace has the station of its type standing inside it. */
     public static final String WORKPLACE_BENCH_PLACED = "workplace_bench_placed";
+    public static final String WORKPLACE_FOOD_TENDED = "workplace_food_tended";
 
     private QuestProgressionService() {}
 
@@ -49,7 +50,8 @@ public final class QuestProgressionService {
         return isKind(objective, WORKPLACE_TYPE_UNLOCKED)
             || isKind(objective, WORKPLACE_MARKED)
             || isKind(objective, WORKPLACE_TYPE_CHOSEN)
-            || isKind(objective, WORKPLACE_BENCH_PLACED);
+            || isKind(objective, WORKPLACE_BENCH_PLACED)
+            || isKind(objective, WORKPLACE_FOOD_TENDED);
     }
 
     /** Whether an objective's proof lies in the world, where only loaded chunks can be read. */
@@ -585,6 +587,10 @@ public final class QuestProgressionService {
     ) {
         if (isKind(objective, WORKPLACE_TYPE_UNLOCKED)) {
             return WorkplaceQuestSteps.typeUnlocked(town, WorkplaceQuestSteps.type(objective.workType()));
+        }
+        if (isKind(objective, WORKPLACE_FOOD_TENDED)) {
+            return WorkplaceQuestSteps.markedSites(town, WorkplaceQuestSteps.type(objective.workType())).stream()
+                .anyMatch(site -> com.hexvane.aetherhaven.workplace.WorkplaceFood.supports(site.type()) && site.food().completedVisits() > 0);
         }
         if (isKind(objective, WORKPLACE_MARKED) || isKind(objective, WORKPLACE_TYPE_CHOSEN)) {
             return WorkplaceQuestSteps.siteExists(town, WorkplaceQuestSteps.type(objective.workType()));

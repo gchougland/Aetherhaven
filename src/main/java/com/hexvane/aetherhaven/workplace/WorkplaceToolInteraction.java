@@ -87,8 +87,10 @@ public final class WorkplaceToolInteraction extends SimpleInstantInteraction {
                 }
             } else if (state.first == null) {
                 if (state.editing != null && !town.getTownId().equals(state.townId)) { state.hint = "Keep the workplace in its own town."; return; }
-                state.first = new Vector3i(target); state.townId = town.getTownId();
-                state.hint = "First corner set. Choose the opposite ground corner.";
+                var ground = WorkplaceSelectionGround.ground(world,target);
+                if(ground.y<0||ground.y>314){state.hint="Choose ground below Y=315.";return;}
+                state.first = ground; state.townId = town.getTownId();
+                state.hint = "First corner set. Workplace floor Y="+(ground.y+1)+". Choose the opposite ground corner.";
             } else {
                 if (!town.getTownId().equals(state.townId)) { state.hint = "Both corners must belong to the same town."; return; }
                 var area = WorkplaceArea.corners(state.first.x, state.first.y, state.first.z, target.x, target.z);

@@ -32,6 +32,7 @@ public final class PlotCreatorSubstepGrants {
             return List.of();
         }
         return switch (type) {
+            case SPECIALTY_BLOCK -> CoreBuildingSpecialties.isSpecialty(requirement.workResidentKind())?List.of(new ItemStack(requirement.workResidentKind(),qty)):List.of();
             case MANAGEMENT_BLOCK -> List.of(new ItemStack(AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID, qty));
             case PRODUCTION_STORAGE -> List.of(new ItemStack(AetherhavenConstants.BLOCK_PRODUCTION_STORAGE, qty));
             case TREASURY_BLOCK -> List.of(new ItemStack(AetherhavenConstants.TREASURY_BLOCK_TYPE_ID, qty));

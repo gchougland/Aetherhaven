@@ -868,7 +868,9 @@ public final class PlotCreatorService {
         if (draft.getPlotAnchor() != null) {
             PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
         }
+        CoreBuildingSpecialties.refresh(session.getWorld(),draft,plugin);
         String err = PlotCreatorValidator.validateBeforeSave(draft, plugin);
+        if(err==null)err=CoreBuildingSpecialties.validateArena(session.getWorld(),draft);
         if (err == null) err = PlotCreatorMiningNodes.validateWorld(session);
         if (err != null) {
             String messageKey = err.startsWith("substep_")

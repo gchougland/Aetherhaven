@@ -36,8 +36,9 @@ Lyren wants a house like anyone else's: four walls, a shelf with his name, and n
 
 Visit them after your friendship reaches each level to pick up the reward through dialogue.
 
-- **Friendship 50:** teaches you to craft **Charter Amendments Table**
-- **Friendship 100:** gives you **1** × **Founder Monument**
+- **Friendship 25:** gives you **2 Verdant Catalysts** for profession training.
+- **Friendship 50:** teaches you to craft **Charter Amendments Table**.
+- **Friendship 100:** gives you **1 Founder Monument**.
 
 ## Weekly routine
 

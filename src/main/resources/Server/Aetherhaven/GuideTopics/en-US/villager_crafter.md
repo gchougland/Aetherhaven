@@ -11,8 +11,10 @@ Mark a workplace with the Building Staff and place an ordinary **Workbench** ins
 
 Seed and sapling plans use **Life Essence** and the Apprentice's **Farming** skill. Alchemical seeds use **Void Essence**, exactly as at the Alchemy Bench. The task screen shows the required Farming level for each plant.
 
-Couriers bring ingredients and return completed goods to the warehouse. Bench upgrades and required recipe unlocks still apply. A **Pattern Cabinet** improves attended Crafting work speed without replacing the workbench.
+Couriers bring ingredients, and completed crafting orders go to **Crafted Goods**. Bench upgrades and required recipe unlocks still apply. A **Pattern Cabinet** improves attended Crafting work speed without replacing the workbench.
 
+
+Open **Crafting workplace** and **Salvaging workplace** for Apprentice setup. **Tobin's Pattern Book** under Mechanics is the dedicated guide to his prop service.
 
 ### Tobin's Pattern Book
 

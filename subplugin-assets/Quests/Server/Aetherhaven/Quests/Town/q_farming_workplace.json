@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "q_farming_workplace",
+  "category": "town",
+  "title": "Wheat for the Town",
+  "description": "Irienne will teach you to make a Farming workplace. Townsfolk plant and tend their own wheat to support more residents. This workplace produces food supply, not items to collect.",
+  "autoStart": {
+    "when": "farmer_ready",
+    "skipWhenDone": true
+  },
+  "autoPin": true,
+  "prerequisites": {
+    "completedQuestIds": [
+      "q_farm_plot"
+    ]
+  },
+  "objectives": [
+    {
+      "id": "unlock",
+      "kind": "workplace_type_unlocked",
+      "text": "Unlock Farming workplaces through Irienne's building and workplace upgrades.",
+      "workType": "farming"
+    },
+    {
+      "id": "choose",
+      "kind": "workplace_type_chosen",
+      "text": "Mark bare ground with the Building Staff, choose Farming and save. Include at least four clear dirt, grass or tilled-soil spaces.",
+      "workType": "farming"
+    },
+    {
+      "id": "bench",
+      "kind": "workplace_bench_placed",
+      "text": "Place a Farmer's Workbench inside the marked area, at the same floor as the growing spaces.",
+      "workType": "farming"
+    },
+    {
+      "id": "tend",
+      "kind": "workplace_food_tended",
+      "text": "Employ a resident, enable Farming in work priorities, and let them plant wheat and finish tending. No seeds are needed. This adds 10 food points for 5 residents, not inventory items.",
+      "workType": "farming"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Return to Irienne to discuss your town's food supply."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Farmer",
+      "amount": 10,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "repeat": {
+    "mode": "none"
+  }
+}

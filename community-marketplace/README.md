@@ -88,6 +88,8 @@ Sources:
 
 Re-run `sync-wiki` after guide or addon guide edits, then commit the updated `web/wiki/topics`, `images`, `nav.json`, and `search-index.json`.
 
+The English journal tree is the source of truth for both navigation and content. Add new pages to a hub's `sub-topics` list so players can find them in both places. Workplace setup pages live under `mechanic_apprentice_workplaces`; core production pages live under `mechanic_production_buildings`. Easter-egg villager pages are excluded from the public sync. Run `node --test test/wikiGuides.test.js` after syncing to check the mirror, navigation, search and page rendering.
+
 ## Production (Railway)
 
 See **[docs/RailwayDeployment.md](../docs/RailwayDeployment.md)** for full setup.

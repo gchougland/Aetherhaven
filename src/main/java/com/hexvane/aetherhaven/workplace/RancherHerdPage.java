@@ -59,7 +59,7 @@ public final class RancherHerdPage extends AetherhavenInteractiveCustomUIPage<Ra
         if(!cards){
         b.set("#Courier.Text",herd.courierFeedTarget()==0?"Courier food: Off":"Keep "+herd.courierFeedTarget()+" of each food");
         b.clear("#Slots");
-        var pens=NativeHerdService.pens(AetherhavenPlugin.get(),c.plot());
+        var pens=BarnPenCompatibility.resolve(store.getExternalData().getWorld(),AetherhavenPlugin.get(),c.plot(),herd);
         for(int i=0;i<5;i++) {
             b.append("#Slots","Aetherhaven/BarnAnimalSlot.ui");String row="#Slots["+i+"]";var animal=herd.slot(i);
             boolean locked=i>=slots;var species=animal==null?null:BarnAnimalCatalog.get(animal.species());
@@ -68,7 +68,7 @@ public final class RancherHerdPage extends AetherhavenInteractiveCustomUIPage<Ra
             b.set(row+" #FoodIcon.Visible",!locked&&species!=null);
             b.set(row+".Background",Value.ref("Aetherhaven/TownUiTheme.ui",locked?"BarnCardLocked":"BarnCard"));
             b.set(row+" #Name.Text",locked?"Building upgrade needed":animal==null?"Empty pen":animal.name());
-            b.set(row+" #Status.Text",locked?"Ask the Rancher about upgrades":i>=pens.size()?"Mark this pen in the building editor":animal==null?"Choose an owned animal":animal.fed(day)?"Fed today":"Waiting for food");
+            b.set(row+" #Status.Text",locked?"Ask the Rancher about upgrades":!pens.containsKey(i)?"Needs a clear 3 by 3 floor, 4 blocks high":animal==null?pens.get(i).automatic()?"Automatic pen ready; choose an animal":"Choose an owned animal":animal.fed(day)?"Fed today":"Waiting for food");
             // Emptying names the animal that was drawn in the pen, so it can never send another one to rest.
             for(String action:List.of("ChooseAnimal","Empty")){b.set(row+" #"+action+".Disabled",locked||herd.animals().isEmpty());
                 bind(e,row+" #"+action,action,"Empty".equals(action)?i+"|"+(animal==null?"":animal.id()):Integer.toString(i));}

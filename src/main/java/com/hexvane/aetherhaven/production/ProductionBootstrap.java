@@ -91,7 +91,7 @@ public final class ProductionBootstrap {
                 // The Conservatory keeps its stores and its Spirit Garden on one screen.
                 if(SpiritGarden.isPlot(plot))return new com.hexvane.aetherhaven.workplace.SpiritGardenPage(playerRef,town.getTownId(),plot.getPlotId(),null);
                 // A farm with a crop plan keeps its stores and its Scarecrow Fields on one screen.
-                if(FarmFields.isPlot(plot)&&FarmFields.production(town,plot).usesFarmFields())
+                if(FarmFields.isPlot(plot))
                     return new com.hexvane.aetherhaven.workplace.FarmerFieldPage(playerRef,town.getTownId(),plot.getPlotId(),null);
                 // A lumbermill that tends Rootstones keeps its stores and its grove on one screen.
                 if(town.playerCanManageConstructions(uc.getUuid())&&town.getOrCreatePlotProduction(plot.getPlotId()).usesPhysicalTimber()

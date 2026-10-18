@@ -21,9 +21,9 @@ const GUIDE_EN = path.join(
   "src",
   "main",
   "resources",
-  "Common",
-  "Docs",
-  "Hexvane_AetherhavenWiki",
+  "Server",
+  "Aetherhaven",
+  "GuideTopics",
   "en-US"
 );
 const GUIDE_IMG = path.join(
@@ -47,6 +47,8 @@ const PORTRAITS = path.join(
   "ModelsGenerated"
 );
 const CROSSMOD = path.join(REPO, "tutorials", "crossmod-integration.md");
+// Easter-egg content stays out of public topics, search and the sitemap.
+const HIDDEN_TOPICS = new Set(["villager_halloween"]);
 
 const SIBLING_TOPICS = [
   {
@@ -126,6 +128,17 @@ const ROLE_PORTRAITS = {
   Aetherhaven_Builder: "Aetherhaven_Builder.png",
   Aetherhaven_Guild_Master: "Aetherhaven_Guild_Master.png",
   Aetherhaven_Bard: "Aetherhaven_Bard.png",
+  Aetherhaven_Chef: "Aetherhaven_Chef.png",
+  Aetherhaven_Clown: "Aetherhaven_Clown.png",
+  Aetherhaven_Furniture_Merchant: "Aetherhaven_Furniture_Merchant.png",
+  Aetherhaven_Doctor: "Aetherhaven_Doctor.png",
+  Aetherhaven_Alchemist: "Aetherhaven_Alchemist.png",
+  Aetherhaven_Druid: "Aetherhaven_Druid.png",
+  Aetherhaven_Warehouse_Manager: "Aetherhaven_Warehouse_Manager.png",
+  Aetherhaven_Monster_Hunter: "Aetherhaven_Monster_Hunter.png",
+  Aetherhaven_Crafter: "Aetherhaven_Crafter.png",
+  Aetherhaven_Leatherworker: "Aetherhaven_Leatherworker.png",
+  Aetherhaven_Courier: "Aetherhaven_Courier.png",
   Machinaria_Mechanic: "Machinaria_Mechanic.png",
   CozyFishing_Fisherman: "CozyFishing_Fisherman.png",
 };
@@ -319,7 +332,7 @@ function main() {
 
   // Core guide topics
   for (const f of fs.readdirSync(GUIDE_EN)) {
-    if (!f.endsWith(".md")) continue;
+    if (!f.endsWith(".md") || HIDDEN_TOPICS.has(f.slice(0, -3))) continue;
     copyFile(path.join(GUIDE_EN, f), path.join(TOPICS_OUT, f));
   }
 
@@ -333,8 +346,8 @@ function main() {
 
   // Portraits
   if (fs.existsSync(PORTRAITS)) {
-    for (const f of fs.readdirSync(PORTRAITS)) {
-      if (!f.startsWith("Aetherhaven_") || !f.endsWith(".png")) continue;
+    for (const f of new Set(Object.values(ROLE_PORTRAITS))) {
+      if (!fs.existsSync(path.join(PORTRAITS, f))) continue;
       copyFile(path.join(PORTRAITS, f), path.join(IMAGES_OUT, f));
     }
   }
@@ -373,7 +386,7 @@ ${body}
   // Website-authored site pages
   if (fs.existsSync(SITE_PAGES)) {
     for (const f of fs.readdirSync(SITE_PAGES)) {
-      if (!f.endsWith(".md")) continue;
+      if (!f.endsWith(".md") || HIDDEN_TOPICS.has(f.slice(0, -3))) continue;
       copyFile(path.join(SITE_PAGES, f), path.join(TOPICS_OUT, f));
     }
   }

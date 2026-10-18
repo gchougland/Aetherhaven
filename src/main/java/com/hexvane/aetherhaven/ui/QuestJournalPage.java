@@ -163,9 +163,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     private String selectedGuideTopicId = "welcome";
     private boolean guideGiftSpoilerOpen;
     private boolean guideScheduleSpoilerOpen;
-    /** Depth-1 section ids (for example mechanics, villagers) whose child topics are hidden in the sidebar. */
+    /** Sections opened during this journal session. All dropdowns start collapsed. */
     @Nonnull
-    private final Set<String> guideNavCollapsedSectionIds = new HashSet<>();
+    private final Set<String> guideNavExpandedSectionIds = new HashSet<>();
     private boolean journalSettingsPlotModalOpen;
     private boolean journalSettingsVillagerModalOpen;
     private boolean journalSettingsResetConfirmOpen;
@@ -1820,9 +1820,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     }
 
     @Nonnull
-    private static List<GuideTopicRepository.GuideNavEntry> filterCollapsedGuideNav(
+    private static List<GuideTopicRepository.GuideNavEntry> filterExpandedGuideNav(
         @Nonnull List<GuideTopicRepository.GuideNavEntry> full,
-        @Nonnull Set<String> collapsedDepth1SectionIds
+        @Nonnull Set<String> expandedDepth1SectionIds
     ) {
         List<GuideTopicRepository.GuideNavEntry> out = new ArrayList<>();
         String depth1Parent = null;
@@ -1835,7 +1835,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 depth1Parent = e.topicId();
                 out.add(e);
             } else {
-                if (depth1Parent == null || !collapsedDepth1SectionIds.contains(depth1Parent)) {
+                if (depth1Parent == null || expandedDepth1SectionIds.contains(depth1Parent)) {
                     out.add(e);
                 }
             }
@@ -1885,7 +1885,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         commandBuilder.clear(GUIDE_SCHEDULE_ROWS);
 
         List<GuideTopicRepository.GuideNavEntry> nav =
-            filterCollapsedGuideNav(repo.navEntries(), guideNavCollapsedSectionIds);
+            filterExpandedGuideNav(repo.navEntries(), guideNavExpandedSectionIds);
         int nt = Math.min(nav.size(), MAX_GUIDE_TOPICS);
         guideNavLayout.resize(commandBuilder, nt);
         boolean refreshNav = !nav.equals(renderedGuideNav) || !selectedGuideTopicId.equals(renderedGuideSelection);
@@ -1916,7 +1916,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 commandBuilder.set(row + " #ExpandToggleHost.Visible", showChevron);
             }
             if (showChevron) {
-                boolean collapsed = guideNavCollapsedSectionIds.contains(e.topicId());
+                boolean collapsed = !guideNavExpandedSectionIds.contains(e.topicId());
                 commandBuilder.set(row + " #ExpandToggleCollapsed.Visible", collapsed);
                 commandBuilder.set(row + " #ExpandToggleExpanded.Visible", !collapsed);
                 eventBuilder.addEventBinding(
@@ -2823,8 +2823,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             String sid = data.guideNavSectionId;
             if (sid != null && !sid.isBlank()) {
                 String key = sid.trim();
-                if (!guideNavCollapsedSectionIds.remove(key)) {
-                    guideNavCollapsedSectionIds.add(key);
+                if (!guideNavExpandedSectionIds.remove(key)) {
+                    guideNavExpandedSectionIds.add(key);
                 }
             }
             UICommandBuilder cmd = new UICommandBuilder();

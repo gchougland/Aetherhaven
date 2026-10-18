@@ -26,7 +26,7 @@ public final class ApprenticeWorkState implements Component<EntityStore> {
     public boolean excavationDelivery,excavationCarrying,excavationPickup;
     public long excavationGeneration;
     public Vector3d approach;
-    public boolean active,working,foodHarvest;
+    public boolean active,working,foodHarvest,foodPlanting;
     public long nextDecision,beganAt,retryAt,nextVisual,nextSave;
     public WorkplaceRouteRetries routeRetries=new WorkplaceRouteRetries();
     public UUID furnishingSite;
@@ -39,6 +39,7 @@ public final class ApprenticeWorkState implements Component<EntityStore> {
     @Override public ApprenticeWorkState clone() {
         var copy=new ApprenticeWorkState();copy.batch=batch;copy.approach=approach==null?null:new Vector3d(approach);
         copy.excavationSite=excavationSite;copy.excavationPlan=excavationPlan;copy.excavationTarget=excavationTarget;copy.excavationPickup=excavationPickup;copy.excavationDelivery=excavationDelivery;copy.excavationCarrying=excavationCarrying;copy.buildingSite=buildingSite;copy.buildingTarget=buildingTarget;copy.foodSite=foodSite;copy.foodHarvest=foodHarvest;
+        copy.foodPlanting=foodPlanting;
         copy.growerSite=growerSite;copy.growerBed=growerBed;copy.growerJob=growerJob;
         copy.active=active;copy.working=working;copy.nextDecision=nextDecision;copy.beganAt=beganAt;
         copy.retryAt=retryAt;copy.nextVisual=nextVisual;copy.nextSave=nextSave;

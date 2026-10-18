@@ -33,14 +33,17 @@ Once the restaurant is running, Pepper still wants a quiet house of her own.
 
 Visit her after your friendship reaches each level to pick up the reward through dialogue.
 
+- **Friendship 25:** teaches your town the **Chef's Utensil Roll** recipe.
 - **Friendship 50:** teaches you to craft a **Cooking Bench**
 
 ### Restaurant upgrades
 
-On the restaurant's town records page you can spend gold and ingredients on two upgrade paths:
+On the restaurant's town records page you can spend gold and ingredients on four upgrade paths:
 
 - **Full bellies** — townsfolk stay full longer between meals
 - **Quick service** — meals at the restaurant finish faster and fill more hunger
+- **Chef's menu**: each level adds two dishes, and a resident who eats at the restaurant gets a short perk from one of them. Skewers help townsfolk work faster, salads slow the loss of energy, and pies slow the loss of fun. Each perk lasts about 8 hours.
+- **Town provisions**: each level adds 5 Food Production, so the town can welcome more residents. The kitchen cooks what your farms and ranches bring in, so it never adds more food than they do.
 
 ### What she sells
 

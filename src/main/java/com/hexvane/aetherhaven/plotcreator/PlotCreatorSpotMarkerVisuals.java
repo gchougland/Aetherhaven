@@ -17,6 +17,7 @@ public final class PlotCreatorSpotMarkerVisuals {
     @Nonnull
     public static String textureFor(@Nonnull PlotCreatorSubstepType type) {
         return switch (type) {
+            case SPECIALTY_BLOCK -> TEX_GREEN;
             case MINING_NODE -> TEX_ORANGE;
             case BARN_PEN -> TEX_TEAL;
             case VISITOR_SPAWN, TOURIST_VISIT_POI, TOURIST_PORTAL_BLOCK, FESTIVAL_TOURIST_SPOT -> TEX_TEAL;
@@ -79,6 +80,7 @@ public final class PlotCreatorSpotMarkerVisuals {
         }
         return switch (type) {
             case MINING_NODE -> "Mining node";
+            case SPECIALTY_BLOCK -> CoreBuildingSpecialties.label(workResidentKind);
             case BARN_PEN -> "Animal pen";
             case CLERK_STAND -> "Clerk stand";
             case MANAGEMENT_BLOCK -> "Town records shelf";

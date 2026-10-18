@@ -415,7 +415,7 @@ public final class PlotCreatorSpotMarkerCollector {
         if (type == null || PlotCreatorSpotPreviewRoles.usesVillagerPreview(type)) {
             return;
         }
-        String workKind = type == PlotCreatorSubstepType.WORK_POI ? poi.getWorkResidentKind() : null;
+        String workKind = type == PlotCreatorSubstepType.SPECIALTY_BLOCK ? poi.getBlockTypeId() : type == PlotCreatorSubstepType.WORK_POI ? poi.getWorkResidentKind() : null;
         if (filter != null) {
             if (!PlotCreatorValidator.matchesPoiRequirement(poi, filter)) {
                 return;
@@ -427,6 +427,17 @@ public final class PlotCreatorSpotMarkerCollector {
         String activityId =
             PlotCreatorWorkActivityTags.resolveActivityId(type, poi.getWorkResidentKind(), poi.getTags());
         out.add(desired(block.x, block.y, block.z, type, workKind, activityId, worldYaw));
+        if(type==PlotCreatorSubstepType.SPECIALTY_BLOCK&&com.hexvane.aetherhaven.hunter.HuntService.BEACON.equals(workKind)) {
+            var layout=com.hexvane.aetherhaven.hunter.HuntArenaLayout.of(new org.joml.Vector3d(block.x+.5,block.y+1,block.z+.5),PlotCreatorPrefabCoords.placementYaw(draft));
+            addArenaMarker(out,layout.portal(),"Hunt portal opens here",layout.yawTowardBeacon());
+            addArenaMarker(out,layout.creatureSpawn(),"Creature entrance",layout.yawTowardBeacon());
+            addArenaMarker(out,layout.hunterStand(),"Hunter's starting position",layout.yawTowardBeacon()+ (float)Math.PI);
+        }
+    }
+
+    private static void addArenaMarker(List<DesiredSpotMarker> out,org.joml.Vector3d p,String label,float yaw) {
+        out.add(new DesiredSpotMarker((int)Math.floor(p.x),(int)Math.floor(p.y),(int)Math.floor(p.z),
+            PlotCreatorSubstepType.SPECIALTY_BLOCK,label,label,PlotCreatorSpotMarkerVisuals.textureFor(PlotCreatorSubstepType.SPECIALTY_BLOCK),yaw));
     }
 
     @Nullable
@@ -473,6 +484,7 @@ public final class PlotCreatorSpotMarkerCollector {
 
     @Nullable
     private static PlotCreatorSubstepType resolvePoiType(@Nonnull PlotCreatorPoiDraft poi) {
+        if(poi.getTags().contains(CoreBuildingSpecialties.TAG))return PlotCreatorSubstepType.SPECIALTY_BLOCK;
         if(poi.getTags().contains("BARN_PEN"))return PlotCreatorSubstepType.BARN_PEN;
         if (poi.getTags().contains(com.hexvane.aetherhaven.shop.ShopClerkStand.TAG)) {
             return PlotCreatorSubstepType.CLERK_STAND;

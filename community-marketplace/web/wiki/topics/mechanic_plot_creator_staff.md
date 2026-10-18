@@ -8,7 +8,7 @@ author: Hexvane
 
 The plot creator staff registers **custom buildings** you built in the world: footprint, specialty blocks, prefab export, costs, and (optionally) a live plot in your town. Most players should use **Decoration** or **Variant**, not the full workplace types below.
 
-Open your **town journal → Guide → Mechanics → Plot creator staff** (this page) while learning the flow. In play: equip the staff, press **F** to start or open the current step panel, **primary-click** blocks in the world, **Q** / **E** previous / next step, **middle mouse** to open the step menu and jump to a step you already reached, **R** to cancel.
+Open your **town journal → Guide → Mechanics → Plot creator staff** (this page) while learning the flow. In play: equip the staff, use **Open or confirm** to start or open the current step panel, use **Mark** on blocks in the world, **Back** / **Continue** for the previous / next step, **Step menu** to jump to a step you already reached, and **crouch + Back** to cancel. The game shows your own key for each of these at the bottom right of the screen.
 
 ## Recommended paths
 
@@ -30,7 +30,7 @@ Open your **town journal → Guide → Mechanics → Plot creator staff** (this 
 
 **Amenity** — Fun or leisure (park, altar-style amenity): shelf + fun/sit POI.
 
-**Shop** — Stall or shop counter: shelf + shop-tagged work POI.
+**Shop** — Villager shop with a counter: shelf + shop-tagged work POI, plus shop spots for the goods.
 
 **Inn** — Full inn layout: shelf, work surface, beds, eat spot, innkeeper and visitor spawns (and optional guild master spawn slot).
 
@@ -41,19 +41,27 @@ Open your **town journal → Guide → Mechanics → Plot creator staff** (this 
 ### Overlap and confusion
 
 - **Variant** vs **Home / Work / …** — Variant is for “looks different, behaves like X.” Pick **Variant** + main type, not **Home**, if you are reskinning an existing gameplay building.
-- **Work** vs **Shop** — **Shop** is for merchant stalls. **Work** is for farms, mills, forges, and other production workplaces.
+- **Work** vs **Shop** — **Shop** is for villager shops that sell from shop spots. **Work** is for farms, mills, forges, and other production workplaces.
 - **Amenity** vs **Decoration** — **Decoration** has almost no gameplay hooks. **Amenity** sets fun/amenity tags and POIs for villager schedules.
 - **Inn**, **Town hall**, and **Guild hall** are full templates; use **Variant** only if you are matching one of those templates on purpose.
 
 ## Flow (short)
 
-1. Mark two opposite corners and an **outside** plot-sign corner.
+1. Drag to mark the build box (the plot sign is placed at the center automatically). Stand inside the box and use **Adjust or remove** to expand one block toward where you look, or **crouch + Adjust or remove** to shrink. You can also drag the side panels.
 2. Choose **building type** (and **variant of** if applicable).
 3. Place **important spots** (blocks are given one at a time per substep).
 4. Open **building settings** (F): name, id, tags, treasury gold cost, self build days, empty space prefab option, and other options.
 5. **Export prefab** with F on the save shape step (uses settings from step 4).
 6. Set **build materials** (virtual chest; items return to you when you continue).
 7. Review and save.
+
+## Required equipment and animal spots
+
+Both the creator and building editor include the equipment required by the chosen core building, including variants. Required steps cannot be removed. Place and select each named block; saving checks that the equipment is still inside the building.
+
+For a Hunter's Lodge, place the **Hunt Beacon** in a flat 9 by 9 arena. Select it to see markers for **Hunt portal opens here**, **Creature entrance** and **Hunter's starting position**. Keep those spaces clear. These positions follow the building's orientation, not the direction the beacon block faces. The lodge also needs **Production Storage**.
+
+For a barn, mark **five animal pens** on the floor, facing the direction each animal should look. Older community barns without these markers automatically use clear floor spaces until their author supplies pen markers.
 
 ## Permissions
 

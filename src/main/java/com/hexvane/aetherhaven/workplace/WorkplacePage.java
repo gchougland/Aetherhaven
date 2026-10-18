@@ -59,7 +59,7 @@ public final class WorkplacePage extends AetherhavenInteractiveCustomUIPage<Work
                 new EventData().append("Action", "Search").append("@Search", "#TypeSearch.Value").append("@Name", "#NameField.Value"), false);
             buildFilters(c);
         }
-        c.set("#Area.Text", (area.maxX() - area.minX()) + " by " + (area.maxZ() - area.minZ()) + " blocks | Floor " + area.floorY() + " | Height " + WorkplaceArea.HEIGHT);
+        c.set("#Area.Text", (area.maxX() - area.minX()) + " by " + (area.maxZ() - area.minZ()) + " blocks | Floor " + area.floorY() + " | Height " + area.height());
         c.set("#Hint.TextSpans", hint);
         c.set("#DetailTitle.TextSpans", selected == null ? t("choosePrompt") : Message.raw(WorkplaceRules.label(selected)));
         c.set("#MainBench.Text", selected == null ? "" : WorkplaceRules.mainBench(selected));
@@ -72,6 +72,13 @@ public final class WorkplacePage extends AetherhavenInteractiveCustomUIPage<Work
         c.set("#Save.Disabled", selected == null || !sites.unlocked(selected));
         c.set("#Tasks.Visible", editing != null);
         var saved = editing == null ? null : sites.find(editing);
+        boolean foodSetup=selected!=null&&WorkplaceFood.supports(selected);
+        c.set("#FoodSetup.Visible",foodSetup);
+        if(foodSetup) {
+            var preview=saved!=null&&saved.type()==selected&&saved.area().equals(area)?saved:new ApprenticeWorkplace(name,selected,area);
+            var habitat=FoodSiteService.inspect(store.getExternalData().getWorld(),preview);
+            c.set("#FoodSetup.Text",habitat.ready()?"Equipment and growing area ready. Open Food support and tending to check workers and care.":habitat.issue());
+        }
         c.set("#Tasks.Text", saved!=null&&saved.type()==TownsfolkWorkType.MINING?"Open mineshaft planner":saved != null && GrowerPlan.supports(saved.type()) ? "Beds and harvest" : saved != null && WorkplaceFood.supports(saved.type()) ? "Food support and tending" : "Tasks for saved workplace");
         e.addEventBinding(CustomUIEventBindingType.Activating, "#Tasks", EventData.of("Action", "Tasks"), false);
         e.addEventBinding(CustomUIEventBindingType.Activating, "#Save", new EventData().append("Action", "Save").append("@Name", "#NameField.Value"), false);

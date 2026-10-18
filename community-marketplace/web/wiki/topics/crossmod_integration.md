@@ -46,6 +46,7 @@ Place content under your pack root:
 | `Server/Aetherhaven/Quests/`               | Story / housing quests                                              |
 | `Server/Aetherhaven/QuestBoardExtensions/` | Extra quest board fetch/hunt/raid entries                           |
 | `Server/Aetherhaven/Buildings/`            | Construction definitions                                            |
+| `Server/Aetherhaven/Festivals/`            | Festival definitions swapped onto the festival square               |
 | `Server/Aetherhaven/ShopPrices/`           | Gold prices for shop spots                                          |
 | `Server/Aetherhaven/ShopLoot/`             | Shop spot loot tables (append or replace)                           |
 | `Server/Aetherhaven/Townsfolk/`            | Townsfolk character pool                                            |
@@ -63,7 +64,7 @@ Crossmod villagers should put **engine NPC roles** under `Server/Aetherhaven/Npc
 1. Add role JSON under `Server/Aetherhaven/NpcRoles/` (role id = filename without `.json`). Interact should open Aetherhaven dialogue (`OpenAetherhavenDialogue`), same pattern as Aetherhaven’s own roles. Optional component files can live under `NpcRoles/.../Components/` (loaded before spawnable roles).
 2. Optional appearance models under `Server/Aetherhaven/NpcModels/` (model id = filename). You may still parent models to `Aetherhaven_Human` or reuse Aetherhaven villager models that already ship with Aetherhaven under `Server/Models/`.
 3. Add a villager definition under `Server/Aetherhaven/Villagers/` with matching `npcRoleId`, `residentTreeId` / `visitorTreeId`, gifts, schedule bindings, and so on.
-4. For a shop worker who starts in the inn pool: set `innPoolEligible`, `visitorBindingKind` (e.g. `visitor_angler`), `workConstructionId` to your shop building id, and `dialogueVillagerKind` (resident kind after promotion, e.g. `angler`). When that shop plot completes, Aetherhaven promotes the matching inn visitor if the shop quest is active or completed. Completing the quest alone does not move them; finishing the shop plot does. The shop quest should use `grantPlotTokenConstructionId` or `grantPlotBlueprintConstructionId` equal to that same `workConstructionId` (optionally also `assignNpcRoleId`).
+4. For a shop worker who starts in the inn pool: set `innPoolEligible`, `visitorBindingKind` (e.g. `visitor_angler`), `workConstructionId` to **your shop building id** (not `plot_house`), and `dialogueVillagerKind` (resident kind after promotion, e.g. `angler`). Use `countsAsConstructionId: ["plot_house"]` on the building when it should also offer a resident bed; Aetherhaven uses house residency separately from workplace assignment and ignores generic house/park/player-shop aliases when listing worker slots on the town records shelf. When that shop plot completes, Aetherhaven promotes the matching inn visitor if the shop quest is active or completed. Set `assignNpcRoleId` on the shop quest to the same NPC role and add a `try_promote_inn_pool_shops` lifecycle effect on quest complete so promotion runs after dialogue turn-in when the shop is already built.
 5. **Display name for Aetherhaven UI** (town journal, quest board, gift history, and similar): add a line to your pack’s `Server/Languages/en-US/aetherhaven_ui_journal_items_tail.lang`:
 
 ```lang
@@ -318,6 +319,56 @@ Example fishing shop base (other players can then make variants of it):
 
 Do **not** set `countsAsConstructionId` on the base itself. Variants created in the plot creator will point at this id.
 
+## Festivals
+
+A town with a finished **festival square** (`plot_festival_square`) celebrates one festival per calendar day. On the festival's day the square's prefab is cleared and the festival's own prefab is pasted at the same anchor and yaw, then swapped back when the festival ends.
+
+Add a festival JSON under `Server/Aetherhaven/Festivals/`. Same `id` from a later pack replaces an earlier one, exactly like `Buildings/`.
+
+```json
+{
+  "id": "example_lantern_night",
+  "displayName": "Lantern Night",
+  "displayNameLangKey": "example_mod.festival.lantern_night.name",
+  "prefabPath": "Festivals/Festival_Lantern_Night.prefab.json",
+  "season": "Autumn",
+  "dayOfSeason": 21,
+  "allDay": false,
+  "startHour": 18,
+  "endHour": 4,
+  "calendarIconPath": "Icons/ItemsGenerated/Furniture_Lantern.png",
+  "mechanicId": "example_lantern_night",
+  "spots": [
+    { "residentKind": "priestess", "localX": 0, "localY": 6, "localZ": -6, "yawDegrees": 180.0 }
+  ],
+  "npcs": [
+    { "npcRoleId": "ExampleMod_Lantern_Seller", "localX": -4, "localY": 6, "localZ": 0, "yawDegrees": 270.0 }
+  ],
+  "greetings": {
+    "priestess": [
+      "example_mod_dialogue_lantern_night.example.dialogue.lantern_night.greeting.priestess.0",
+      "example_mod_dialogue_lantern_night.example.dialogue.lantern_night.greeting.priestess.1"
+    ],
+    "default": [
+      "example_mod_dialogue_lantern_night.example.dialogue.lantern_night.greeting.default.0"
+    ]
+  }
+}
+```
+
+Rules to follow:
+
+- **The prefab must be exactly 30 x 55 x 30**, anchored at the middle of the square on the ground (local x and z from `-14` to `15`, y from `0` to `54`). Any other size is rejected with a warning so a festival can never spill outside the plot. Copy `Festivals/Festival_Square.prefab.json` as your starting point.
+- `season` is `Spring`, `Summer`, `Autumn`, or `Winter`; `dayOfSeason` is 1 to 28. An end hour earlier than the start hour runs overnight. `allDay` ignores both hours.
+- `calendarIconPath` is the marker drawn on that day in the town calendar. Leave it out for the default flag.
+- `spots` are prefab-local cells where a villager of that `residentKind` stands for the whole festival. They become temporary points of interest, so they never end up in the town's saved POI file.
+- `npcs` are festival-only NPCs spawned at the start and removed at the end. Use a role from `Server/Aetherhaven/NpcRoles/`.
+- `greetings` in festival JSON lists what base Aetherhaven villagers say while the festival runs, keyed by the same `residentKind` names as `spots`. Each key is a full lang key and one is picked per player, villager, and day. `default` covers everyone the festival does not name, including townsfolk and inn visitors. A villager's own birthday still wins over the festival line.
+- **Crossmod festival greetings** For your own villager kinds on an existing holiday, add lang lines instead of editing Aetherhaven's festival JSON. Put them in any pack under `Server/Languages/en-US/` (for example `your_mod_dialogue_festival_wintertide.lang` or the shipped `aetherhaven_dialogue_festival_wintertide.lang` bundle). Use in-file keys like `your_mod.dialogue.festival.wintertide.greeting.mechanic.0` with numeric suffixes `0`, `1`, `2`, and so on. The kind in the key must match the villager's `dialogueVillagerKind` (for example `mechanic` for a mechanics shop worker). Aetherhaven discovers these keys at load and merges them with the festival JSON greetings. Wintertide gift and incoming lines already use the same kind names in lang; inn visitors use the kind after stripping `visitor_` from their binding.
+- Players cannot break or place blocks inside a finished festival square, since the next swap would wipe the change. Harvesting and block interactions still work, and creative mode plus the territory bypass permission still get through.
+
+For custom behaviour, register a `FestivalMechanic` by id on `AetherhavenPlugin.getFestivalMechanicRegistry()`. The mechanic is called when the festival starts, when the prefab paste finishes, and when it ends, which is where Aetherhaven's own `new_life` mechanic wires up the growing lettuce.
+
 ## Dialogue trees vs patches
 
 
@@ -426,6 +477,22 @@ ah.getDialogueConditionRegistry().register("example_mod_ready", (condition, play
 
 Unknown types fall through to Aetherhaven’s built-in conditions; registered types are checked first.
 
+**Built-in NPC and town checks (dialogue JSON):**
+
+| Type | Params | Meaning |
+|------|--------|---------|
+| `npc_other_villager_nearby` | `radius` (default 8), optional `kind` | Another town villager is near the speaker |
+| `npc_reputation_hearts_at_least` | `hearts` (0–10) | Player friendship with this villager is at least N hearts |
+| `npc_reputation_hearts_below` | `hearts` | Player friendship is below N hearts |
+| `npc_mood_at_least` | `percent` (0–100) | Villager’s lowest need (hunger, energy, fun) is at least N% |
+| `npc_mood_below` | `percent` | Villager’s lowest need is below N% |
+| `npc_hunger_at_least` | `percent` | Villager hunger is at least N% |
+| `npc_hunger_below` | `percent` | Villager hunger is below N% |
+| `town_has_building` | `constructionId` | Alias for `town_has_complete_plot` |
+| `player_recently_finished_quest_board_quest` | `withinDays` (default 3), optional `giverRoleId`, optional `configEntryId` | Player finished a town quest board quest recently |
+| `player_recently_failed_quest_board_quest` | `withinDays` (default 3) | Player failed or abandoned a town quest board quest recently |
+| `town_quest_auto_start_ready` | `questId` | A quest with `autoStart` could be handed to the town now: its condition holds and the town has neither the quest nor its completion. Lets a villager offer it again after it was abandoned |
+
 ## Quests
 
 Add quest JSON under `Server/Aetherhaven/Quests/`. Same quest `id` overrides. You can reference your items and constructions. Use `requiresSubplugin` only if you are tying into Aetherhaven’s optional feature packs.
@@ -472,6 +539,31 @@ Minimal housing quest (match fields to your villager):
   ]
 }
 ```
+
+### Workplace objectives, quests that start by themselves, and the HUD pin
+
+Four objective kinds follow what a town does to get a working Apprentice workplace. Unlike the kinds above they may be done **in any order**: each is ticked by its own proof and never by a later step, and a step that was done stays done when the workplace is removed again.
+
+| Kind | Ticked when |
+| --- | --- |
+| `workplace_type_unlocked` | The town has unlocked a workplace type in a supervising villager's upgrades (also true for a type unlocked before the quest started) |
+| `workplace_marked` | A player marks out a new workplace area with a Building Staff, or the town has a saved workplace |
+| `workplace_type_chosen` | The town has a saved workplace (saving one on the workplace page gives it its type) |
+| `workplace_bench_placed` | A workplace has the station of its type standing inside it: its bench, a ranch's trough, or a bed of a grower site with no bench. Seen when the block is placed, when the workplace is saved, when the bench is used, and by a look at loaded chunks every few game minutes |
+
+Add `"workType": "smelting"` (a workplace type id) to any of them to count only that type. Leave it out and any type counts.
+
+Their text names things in the player's own town, so a `textLangKey` on these kinds is a **prefix**. The game appends a suffix for the wording that fits the town and fills the gaps. Copy the full set of lines from `aetherhaven_workplace_quest.lang` (every suffix is listed there with what its gaps are); a missing suffix shows as a bare key.
+
+Three optional fields work on any town quest:
+
+| Field | Meaning |
+| --- | --- |
+| `hudTextLangKey` (objective) | A shorter line for the HUD quest tracker. The journal keeps `textLangKey` |
+| `autoPin` (quest) | `true` pins the quest to the tracker of every town member once, however it started. A member who unpins it is not pinned again. A full tracker gives up a pin that is not showing, else its last row, and tells the player |
+| `autoStart` (quest) | `{ "when": "workplace_supervisor_ready", "skipWhenDone": true, "announceLangKey": "..." }` gives the town the quest the first time the condition holds, with nobody asking. `workplace_supervisor_ready` is the only condition today: a villager who supervises a workplace type lives in town and their building is finished. `skipWhenDone` marks the quest done, with no banner and no reward, for a town that has already done every step before the closing talk. `announceLangKey` is a chat line for the members in the world when it starts. A quest that starts this way cannot grant a plot token or blueprint, because nobody is there to take it |
+
+A quest is given by itself once per town. If the player leaves it, it does not come back by itself; offer it from a villager with the `town_quest_auto_start_ready` dialogue condition and a `start_quest` action, as Elder Lyren does for `q_first_workplace`.
 
 ## Quest board extensions
 

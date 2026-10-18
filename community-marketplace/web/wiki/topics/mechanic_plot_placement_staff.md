@@ -14,7 +14,7 @@ The plot placement staff is how you stake where a new building will go. You rece
 
 1. Hold a **plot token** for the building you want (from a quest giver or the **plot crafting bench**).
 2. Equip the plot placement staff.
-3. Choose the construction type if prompted, then place the plot sign on solid ground where the footprint fits.
+3. Choose the construction type if prompted, then aim where the building should sit and confirm. The building preview uses that spot; the plot sign is placed at the center of the footprint on the ground below.
 4. Bring materials listed on the sign and finish construction with the **building staff** or by waiting for auto-build.
 
 The staff only places footprints. It does not finish walls or assign villagers. Read **Plot tokens** for where tokens and blueprints come from, and **Building staff** for speeding up construction.

@@ -26,11 +26,13 @@ Irienne wants roots under rafters that belong to her, not borrowed floorboards b
 3. Assign Irienne as resident on the house management block.
 4. Find Irienne and close the quest in dialogue.
 
+For a dedicated setup guide, open **Farm and Scarecrow Fields** under Production buildings. For population support from Townsfolk, open **Farming workplace**. Irienne's **Wheat for the Town** quest teaches that separate workplace setup.
+
 ### The Scarecrow Fields
 
 Irienne works the town's crops from a **crop plan**. You paint which crop goes where. She tills the ground, sows from the farm's seed store, waters, harvests and sows again, all by herself during her work hours while someone from town is nearby.
 
-1. Open the farm's storage and choose **Plan the fields**, or place a **Farmer's Scarecrow** on open ground anywhere in town and use it. Irienne gives you one Scarecrow when her farm is built, and more are crafted at the **Town Planning Desk**.
+1. Use the farm's storage cupboard to open the **field planner** directly, or place a **Farmer's Scarecrow** on open ground anywhere in town and use it. Irienne gives you one Scarecrow when her farm is built, and more are crafted at the **Town Planning Desk**.
 2. Pick a crop in the palette and select cells on the map. Double click a cell to paint its whole bed. Right click a cell to clear it. **Fill field** paints everything that is free.
 3. That is all. Until you paint a plan a farm keeps its old automatic production. The first painted cell hands the farm to Irienne.
 
@@ -59,7 +61,7 @@ Growing the same crop in a cell six times running wears it one step. Sowing a di
 - **Richer compost** needs fewer crops, and at its second level makes Good soil Rich.
 - **Almanac insight** favours a third crop each week, then shows a whole season ahead.
 
-Each crop needs the Farmer's Mastery shown in the palette, and crops beyond wheat and lettuce are unlocked in the farm's storage. Crops inside Apprentice workplaces are not Irienne's: Apprentice farms feed the town and never produce items. A farm that already did field work before this change keeps working with its beds as its plan.
+Each crop needs the Farmer's Mastery and unlocks shown in the palette. Collect harvests from the field planner's stores or the warehouse's Building Outputs; the farm no longer opens a separate Building Output screen. Crops inside Apprentice workplaces are not Irienne's: Apprentice farms feed the town and never produce items. A farm that already did field work before this change keeps working with its beds as its plan.
 
 ### Friendship rewards
 

@@ -20,6 +20,7 @@ class MiningNodeAuthoringTest {
         d.setPrefabPath("mine.prefab.json"); d.setPrefabFileName("mine.prefab.json");
         d.setPlotAnchor(new Vector3i(100,120,200));
         d.setCornerFirst(new Vector3i(60,100,160)); d.setCornerSecond(new Vector3i(140,150,240));
+        d.setProductionStorageLocalPos(new int[]{1,0,1});
         return d;
     }
     @Test void oneCellRoundTripsWithoutCreatingAWorkerStandingPoi() throws Exception {
@@ -38,6 +39,7 @@ class MiningNodeAuthoringTest {
              "pois":[{"localX":2,"localY":0,"localZ":3,"tags":["WORK"],"workResidentKind":"miner"}]}
             """,ConstructionDefinition.class);
         var loaded=draft(); PlotCreatorDraftLoader.loadIntoDraft(loaded,def);
+        loaded.setProductionStorageLocalPos(new int[]{1,0,1});
         assertFalse(loaded.isLoadedPhysicalMining()); assertTrue(loaded.getMiningNodes().isEmpty());
         assertEquals("miningUpgradeRequired",PlotCreatorProductionRules.validationError(loaded,null));
         assertTrue(loaded.getSelectedSpots().stream().anyMatch(s->s.type()==PlotCreatorSubstepType.MINING_NODE));

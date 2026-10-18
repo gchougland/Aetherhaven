@@ -130,6 +130,13 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
         @Nonnull UICommandBuilder b,
         @Nonnull PlotBuildingKindRequirements.SubstepRequirement sub
     ) {
+        if(sub.type()==PlotCreatorSubstepType.SPECIALTY_BLOCK) {
+            b.set("#StepHelp.TextSpans",Message.raw("Place and select "+CoreBuildingSpecialties.label(sub.workResidentKind())+"."));
+            b.set("#DetailLine.TextSpans",Message.raw("Aetherhaven_Hunt_Beacon".equals(sub.workResidentKind())
+                ? "Leave a clear 9 by 9 arena. Markers show the portal, creature entrance and Hunter's stand; these turn with the building."
+                : "This equipment is required for this building. Select its base block inside the build bounds."));
+            return;
+        }
         if (sub.type() == PlotCreatorSubstepType.WORK_POI
             && sub.workResidentKind() != null
             && !sub.workResidentKind().isBlank()) {

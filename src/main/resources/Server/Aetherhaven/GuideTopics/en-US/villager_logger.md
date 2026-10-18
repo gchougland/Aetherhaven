@@ -30,6 +30,8 @@ Raise a mill so Seren can turn rings of timber into stacks for the town instead 
 2. Stake and build the lumbermill prefab.
 3. Find Seren at the desk and close the quest in dialogue.
 
+For a dedicated setup guide, open **Lumbermill and Singing Grove** under Production buildings.
+
 ### The Singing Grove
 
 Seren grows the town's wood on **Rootstones**. She gives you two when her lumbermill is finished. Craft more at the **Town Planning Desk** from stone, Life Essence and fibre.

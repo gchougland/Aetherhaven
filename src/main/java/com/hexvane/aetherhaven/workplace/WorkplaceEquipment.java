@@ -14,9 +14,19 @@ public final class WorkplaceEquipment {
     public static final String APPRAISAL_BENCH="Aetherhaven_Appraisal_Bench";
     /** Decorative craft surfaces remain usable by Apprentices without exposing a player crafting window. */
     public static String benchId(com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType block) {
+        return benchId(block,key->com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType.getAssetMap().getAsset(key));
+    }
+    static String benchId(com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType block,
+                          java.util.function.Function<String,com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType> assets) {
         if(block==null)return null;
         if(JEWELRY_BENCH.equals(block.getId())||APPRAISAL_BENCH.equals(block.getId()))return block.getId();
-        return block.getBench()==null?null:block.getBench().getId();
+        if(block.getBench()!=null&&block.getBench().getId()!=null)return block.getBench().getId();
+        // Animation/upgrade states may carry only the appearance; the station belongs to the base asset.
+        String base=block.getDefaultStateKey();
+        if(base==null||base.equals(block.getId()))return null;
+        if(JEWELRY_BENCH.equals(base)||APPRAISAL_BENCH.equals(base))return base;
+        var original=assets.apply(base);
+        return original==null||original.getBench()==null?null:original.getBench().getId();
     }
     public record Bench(String id, int tier, int x, int y, int z, Set<String> augmentTags) {
         public Bench(String id,int tier,int x,int y,int z) {this(id,tier,x,y,z,Set.of());}
@@ -52,7 +62,7 @@ public final class WorkplaceEquipment {
                 if (ChunkSectionBlockUtil.worldChunkIfTicking(world, ChunkUtil.indexChunk(cx,cz)) == null) { loaded=false; continue; }
                 int x0=Math.max(area.minX(),cx*32), x1=Math.min(area.maxX(),cx*32+32);
                 int z0=Math.max(area.minZ(),cz*32), z1=Math.min(area.maxZ(),cz*32+32);
-                for (int x=x0;x<x1;x++) for (int z=z0;z<z1;z++) for(int y=area.floorY();y<area.floorY()+WorkplaceArea.HEIGHT;y++) {
+                for (int x=x0;x<x1;x++) for (int z=z0;z<z1;z++) for(int y=area.floorY();y<area.floorY()+area.height();y++) {
                     var section = ChunkSectionBlockUtil.blockSectionAt(world,x,y,z);
                     if (section == null || section.getFiller(x,y,z) != 0) continue;
                     var block = ChunkSectionBlockUtil.blockType(world,x,y,z); if (block == null) continue;

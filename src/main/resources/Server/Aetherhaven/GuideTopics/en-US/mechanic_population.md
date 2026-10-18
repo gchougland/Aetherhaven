@@ -12,6 +12,10 @@ The Inn provides **10 food points**. The Elder and Innkeeper use four of those p
 
 When food support falls below your population, current residents stay. New invitations become unavailable until enough food support is restored.
 
+Each ready, tended **Farming** or **Ranching workplace** adds another **10 food points**, supporting five residents. These sites produce no inventory items. Their bonus pauses after a full simulated day without tending and returns when care resumes. The neglect clock pauses when no town member is in the town's world. **Cooking**, **Berry Patch** and **Mycologist** workplaces produce items rather than this food-support bonus.
+
+Irienne's **Wheat for the Town** quest teaches Farming workplace setup, including the bench and four clear soil spaces. The townsfolk plant wheat themselves. Ask the **Innkeeper** about food supply and population for an in-game explanation, and see the individual Farming and Ranching workplace guides for setup and troubleshooting.
+
 ## Villager availability
 
 Earlier villagers remain available as your town grows. Building requirements still apply.

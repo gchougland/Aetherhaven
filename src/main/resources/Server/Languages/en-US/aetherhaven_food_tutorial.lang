@@ -1,0 +1,15 @@
+farmer.offer = Can you teach me to feed more residents?
+farmer.finish = The Farming workplace is feeding our town.
+farmer.help = How do I set up a Farming workplace?
+farmer.setup = A growing town needs a reliable food supply. My own farm brings home harvest items, but a townsfolk Farming workplace feeds the town directly. Let me walk you through setting one up.
+farmer.instructions = Unlock Farming in my building and workplace upgrades. With a Building Staff in workplace mode, mark an area by selecting bare ground for the first corner. Choose Farming and save. Place a Farmer's Workbench inside and leave at least four clear dirt, grass or tilled-soil spaces at that floor, with room above for wheat. Employ a resident and enable Farming in the Town Journal's work priorities. They prepare the soil, plant wheat and tend it themselves. You do not need seeds or planted crops. Open Food support and tending to see exactly what is missing.
+farmer.food = What does this food supply provide?
+farmer.supply = Once the wheat patch has been planted and tended, this workplace adds 10 food points: enough for five residents. It produces no items to collect or deliver. Workers return every six game hours; food support pauses after a full simulated day without care. Keep workers employed, paid and able to reach the field. Check food supply and population in the Town Journal.
+farmer.finished = That wheat now feeds our neighbours! Your workplace provides 10 food points, enough for five residents, without filling a chest. Keep a farmer available to tend it. More Farming or Ranching workplaces let our town welcome more people.
+accept = Let's set one up.
+back = Back.
+inn.ask = How do food supply and population work?
+inn.population = Each resident needs two food points of capacity. Ten food points support five residents. Food supply limits how many people we can welcome; houses give them somewhere to live. Visitors do not count as residents until they move in. Town Level grows with the number of residents, not the number of empty houses. The Town Journal shows food supply, population and room for newcomers.
+inn.sources = What increases our food supply?
+inn.sourcesBody = A completed Inn, core Farm, core Barn and Restaurant each add 10 food points, counted once per building type. Each tended Farming or Ranching workplace adds another 10. The Restaurant's Town provisions upgrades can add more food using the supply from farms and ranches. Extra houses and food items in a chest do not add food points. Keep workplace workers employed and paid: neglected workplaces lose their support until cared for again.
+inn.farms = How do we set up a Farming workplace?

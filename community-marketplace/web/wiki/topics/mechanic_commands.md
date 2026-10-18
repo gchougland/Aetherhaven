@@ -52,6 +52,16 @@ author: Hexvane
   - Permission: `hexvane.aetherhaven.command.aetherhaven.town.relinquish`
   - Access: Adventure
 
+- **`/ah town style [townName]`** — Open the town look picker for building quests.
+  - `[townName]` — Full town name with spaces. Omit for your own town.
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.town.style`
+  - Access: Adventure
+
+- **`/ah town difficulty [townName]`** — Open the building cost difficulty menu for your town.
+  - `[townName]` — Full town name with spaces. Omit for your own town.
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.town.difficulty`
+  - Access: Adventure
+
 ### Floating gifts
 
 - **`/ah floatinggift next`** — See when your next floating gift balloon can appear.
@@ -69,7 +79,7 @@ author: Hexvane
 
 These are for creative mode or people running the server. Not needed for normal town play.
 
-- **`/ah difficulty`** — Open the world difficulty menu for building costs.
+- **`/ah difficulty`** — Open the building cost difficulty menu for your town (same as `/ah town difficulty`).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.difficulty`
   - Access: Creative
 
@@ -99,6 +109,14 @@ These are for creative mode or people running the server. Not needed for normal 
 
 - **`/ah time dawn`** — Set that clock to 6:00 in the morning.
   - Permission: `hexvane.aetherhaven.command.aetherhaven.time.dawn`
+  - Access: Creative
+
+- **`/ah palette give <paletteId> [player] [amount]`** — Give a Block Palette unlock item (example `walls_blue` or `roofs_softwood`).
+  - Permission: World Editor
+  - Access: Creative
+
+- **`/ah palette unlockall`** — Unlock every Block Palette for your town.
+  - Permission: World Editor
   - Access: Creative
 
 - **`/ah plots finishassembly`** — Instantly finish every building still assembling in your town.
@@ -248,7 +266,7 @@ Examples:
   - Permission: `hexvane.aetherhaven.command.aetherhaven.villager.locate`
   - Access: Creative
 
-- **`/ah villager reset`** — Respawn all town villagers near you.
+- **`/ah villager reset`** — Respawn all town villagers near you, including invited visitors who went missing.
   - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.villager.reset`
   - Access: Creative
@@ -341,3 +359,11 @@ Examples:
 - **`/ah path navviz`** — Toggle debug lines for villager path navigation. Requires path tool permission in play.
   - Permission: `hexvane.aetherhaven.command.aetherhaven.path.navviz`
   - Access: Creative
+
+### Copy content to another local save
+
+Use `/ah transfer` while playing your own local save. Choose the destination save and whether to copy props, buildings and festival looks, or configuration files. Review the choices before copying. Existing conflicting files are skipped unless you enable replacement. Keep the destination save closed until the transfer finishes, then open it to load the content.
+
+The command copies reusable files from Aetherhaven's mod data folder. Towns, villagers, inventories, and quest progress are not transferred. The original files stay in the source save. Only the local save's host can use this command.
+
+Elder Lyren also offers **Something needs fixing** to players who can manage his town. Each repair explains what it does and asks for confirmation. Sending a support packet uploads Aetherhaven save data and recent server logs to Aetherhaven support.

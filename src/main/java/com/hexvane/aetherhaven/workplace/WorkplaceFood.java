@@ -61,6 +61,15 @@ public final class WorkplaceFood {
         return completeCare(action,null);
     }
 
+    /** Establishing wheat is real attended work, but food support begins only once the patch is ready. */
+    public boolean completePlanting(java.util.function.BooleanSupplier action) {
+        if (!needsTending() || workSeconds() < WORK_SECONDS || !action.getAsBoolean()) return false;
+        workSeconds = 0;
+        careIssue = null;
+        lastCare = "Wheat planted. Preparing the growing area for town food.";
+        return true;
+    }
+
     public boolean completeCare(java.util.function.BooleanSupplier action,String description) {
         if(!needsTending() || workSeconds() < WORK_SECONDS || !action.getAsBoolean())return false;
         tended = true;
@@ -73,7 +82,7 @@ public final class WorkplaceFood {
     }
 
     public String status() {
-        if (!equipmentReady) return "Needs its workbench and a tended growing area.";
+        if (!equipmentReady) return "Setup incomplete. Open Food support and tending to see the missing requirements.";
         if (!tended) return "Waiting for its first tending visit. No food support yet.";
         if (foodPoints() == 0) return "Untended for a full day. Food support paused.";
         long remaining = minutesUntilNeglected();

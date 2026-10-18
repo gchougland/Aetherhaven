@@ -16,6 +16,7 @@ class HunterStorageRequirementsTest {
         draft.setPlotAnchor(new Vector3i(0,0,0));
         draft.setCornerFirst(new Vector3i(-5,-1,-5));
         draft.setCornerSecond(new Vector3i(5,5,5));
+        var beacon=new PlotCreatorPoiDraft();beacon.setLocal(0,0,0);beacon.setTags(List.of(CoreBuildingSpecialties.TAG));beacon.setBlockTypeId("Aetherhaven_Hunt_Beacon");draft.getPois().add(beacon);
         return draft;
     }
     @Test void existingLodgeRequiresStorageEvenWhenItWasNotSelected() {

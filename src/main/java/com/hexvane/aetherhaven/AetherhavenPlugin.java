@@ -596,6 +596,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.prefabMaterialsCatalog = PrefabMaterialsCatalog.loadFromAssetPacksOrClasspath(cl, customData);
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
+        this.questCatalog = com.hexvane.aetherhaven.quest.CoreVillagerHousing.ensure(
+            this.villagerDefinitionCatalog, this.constructionCatalog, this.questCatalog, this.dialogueCatalog);
         this.questBoardCatalog = QuestBoardCatalog.loadFromAssetPacksOrClasspath(cl);
         this.worldQuestBoardCatalog = WorldQuestBoardCatalog.loadFromAssetPacks();
         this.scheduleLocationCatalog = ScheduleLocationCatalog.loadFromAssetPacks();

@@ -29,6 +29,91 @@
           "next": "gift_confirm"
         },
         {
+          "text": "aetherhaven_food_tutorial.farmer.offer",
+          "next": "food_setup",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_completed",
+                "questId": "q_farm_plot"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_farming_workplace"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_farming_workplace"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide"
+        },
+        {
+          "text": "aetherhaven_food_tutorial.farmer.finish",
+          "next": "food_finished",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_farming_workplace"
+              },
+              {
+                "type": "town_quest_objective_complete",
+                "questId": "q_farming_workplace",
+                "objectiveId": "unlock"
+              },
+              {
+                "type": "town_quest_objective_complete",
+                "questId": "q_farming_workplace",
+                "objectiveId": "choose"
+              },
+              {
+                "type": "town_quest_objective_complete",
+                "questId": "q_farming_workplace",
+                "objectiveId": "bench"
+              },
+              {
+                "type": "town_quest_objective_complete",
+                "questId": "q_farming_workplace",
+                "objectiveId": "tend"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_farming_workplace"
+            }
+          ]
+        },
+        {
+          "text": "aetherhaven_food_tutorial.farmer.help",
+          "next": "food_help",
+          "condition": {
+            "type": "not",
+            "condition": {
+              "type": "npc_binding_is_visitor"
+            }
+          },
+          "whenFalse": "hide"
+        },
+        {
           "text": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.root.c0",
           "condition": {
             "type": "and",
@@ -477,6 +562,90 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "food_setup": {
+      "speaker": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.root.speaker",
+      "text": "aetherhaven_food_tutorial.farmer.setup",
+      "choices": [
+        {
+          "text": "aetherhaven_food_tutorial.accept",
+          "next": "food_help",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_completed",
+                "questId": "q_farm_plot"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_farming_workplace"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_farming_workplace"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_farming_workplace"
+            }
+          ]
+        },
+        {
+          "text": "aetherhaven_food_tutorial.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "food_help": {
+      "speaker": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.root.speaker",
+      "text": "aetherhaven_food_tutorial.farmer.instructions",
+      "choices": [
+        {
+          "text": "aetherhaven_food_tutorial.farmer.food",
+          "next": "food_supply"
+        },
+        {
+          "text": "aetherhaven_food_tutorial.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "food_supply": {
+      "speaker": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.root.speaker",
+      "text": "aetherhaven_food_tutorial.farmer.supply",
+      "choices": [
+        {
+          "text": "aetherhaven_food_tutorial.back",
+          "next": "food_help"
+        }
+      ]
+    },
+    "food_finished": {
+      "speaker": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.root.speaker",
+      "text": "aetherhaven_food_tutorial.farmer.finished",
+      "choices": [
+        {
+          "text": "aetherhaven_food_tutorial.back",
           "next": "main_hub"
         }
       ]

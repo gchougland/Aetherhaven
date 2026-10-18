@@ -32,5 +32,5 @@ Extra plot tokens — including variant tokens from gifts — can be **salvaged*
 
 **Tips**
 
-* Read **Player shop and shop spots** under Mechanics if a building includes merchant stalls.
+* Read **Player shop and shop spots** under Mechanics if a building includes shop spots.
 * Florist, Pyrotechnic, and Crystal Keeper shop quests grant blueprints rather than direct tokens.

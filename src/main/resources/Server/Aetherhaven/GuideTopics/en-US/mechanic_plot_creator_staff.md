@@ -55,6 +55,14 @@ Open your **town journal → Guide → Mechanics → Plot creator staff** (this 
 6. Set **build materials** (virtual chest; items return to you when you continue).
 7. Review and save.
 
+## Required equipment and animal spots
+
+Both the creator and building editor include the equipment required by the chosen core building, including variants. Required steps cannot be removed. Place and select each named block; saving checks that the equipment is still inside the building.
+
+For a Hunter's Lodge, place the **Hunt Beacon** in a flat 9 by 9 arena. Select it to see markers for **Hunt portal opens here**, **Creature entrance** and **Hunter's starting position**. Keep those spaces clear. These positions follow the building's orientation, not the direction the beacon block faces. The lodge also needs **Production Storage**.
+
+For a barn, mark **five animal pens** on the floor, facing the direction each animal should look. Older community barns without these markers automatically use clear floor spaces until their author supplies pen markers.
+
 ## Permissions
 
 By default, config may allow everyone to use the plot creator; servers can require the `aetherhaven.plot.creator` permission instead.

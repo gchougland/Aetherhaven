@@ -17,10 +17,9 @@ Use **Show weekly schedule** below to see where Reed goes each day. Gift likes a
 Reed washed ashore with little more than tackle. Help him open a proper shop where the town can buy gear and fresh fish.
 
 1. Talk to Reed at the inn and accept the quest.
-2. Take the shop **blueprint** from Reed.
-3. Use the blueprint at your **plot crafting bench** to learn the fishing shop.
-4. Craft a shop plot token and build the fishing shop prefab.
-5. Find Reed at the shop and close the quest in dialogue.
+2. Take the shop **plot token** from Reed. It matches your town building style.
+3. Place the token and bring the materials to build the fishing shop.
+4. Find Reed at the shop and close the quest in dialogue.
 
 #### Reed's home
 Even a castaway who washed up by the water deserves a quiet place to rest.

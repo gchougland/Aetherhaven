@@ -1,5 +1,24 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- **Food supply guidance** Irienne teaches you to set up a Farming workplace, and the Innkeeper explains how food supply supports more residents.
+- **Town guides** Find setup guides for every workplace, new town systems and production buildings in the journal and website wiki, with workplaces in their own section and journal dropdowns closed at first.
+
+### Changed
+
+- **Simpler Farming workplaces** Townsfolk plant their own wheat on clear soil without seeds, and workplace screens list missing equipment, growing spaces and worker requirements.
+- **Farm screen** Irienne's farm opens its field planner without the separate Building Output screen.
+
+### Fixed
+
+- **Homes for every villager** All core villagers offer a house quest after their work-building recruitment, including the new villagers in existing towns.
+- **Workplace detection** Selecting crops or benches keeps their bases inside the workplace, and Farming screens identify equipment or crops excluded by the marked height.
+- **Building authoring** The creator and editor require specialty equipment and show where the Hunter's portal and fighters will appear.
+- **Older barns** Community barns without animal markers automatically use clear spaces for pens, keeping owned animals and upgrades.
+
 ## [4.0.0] - 10/12/2026
 
 Aetherhaven 4.0 puts your townsfolk to work. Hire residents as apprentices, give them workplaces, and meet new specialist villagers who bring the trades your town was missing.

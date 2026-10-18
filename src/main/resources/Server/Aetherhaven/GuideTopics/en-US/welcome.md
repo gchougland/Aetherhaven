@@ -5,6 +5,7 @@ author: Hexvane
 sub-topics:
   - getting_started
   - mechanics
+  - mechanic_apprentice_workplaces
   - villagers
   - faq
   - roadmap
@@ -19,6 +20,8 @@ This is the public Aetherhaven wiki at [aetherhaven.net](https://aetherhaven.net
 **Getting Started** walks you through founding a town, your first buildings, and how money flows in.
 
 **Mechanics** explains tools, buildings, and systems you will use around town.
+
+**Apprentice workplaces** has its own section with setup and troubleshooting guides for every workplace, plus Logistics and Commerce.
 
 **Villagers** introduces each resident, their story quests, friendship rewards, and weekly routines.
 

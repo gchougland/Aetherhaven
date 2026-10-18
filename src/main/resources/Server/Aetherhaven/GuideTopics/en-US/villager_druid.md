@@ -7,6 +7,8 @@ npcRoleId: Aetherhaven_Druid
 
 **Rowan Mossweald** becomes available at the Inn at **Town Level 4**. Build his **Conservatory** and return to him to complete his recruitment quest. He gives you two **Spirit Planters** when it is finished.
 
+Open **Spirit Garden** under Production buildings for setup and troubleshooting. Rowan also supervises the **Mycologist** and **Berry Patch** workplace types.
+
 ## The Spirit Garden
 
 Rowan grows the town's potion plants in **Spirit Planters**. Craft more at the **Town Planning Desk** from wood, Life Essence and soil.

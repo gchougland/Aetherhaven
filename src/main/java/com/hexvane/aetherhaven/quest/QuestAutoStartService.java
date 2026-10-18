@@ -53,12 +53,14 @@ public final class QuestAutoStartService {
     private QuestAutoStartService() {}
 
     public static boolean isKnownCondition(@Nonnull String when) {
-        return WHEN_WORKPLACE_SUPERVISOR_READY.equals(when);
+        return WHEN_WORKPLACE_SUPERVISOR_READY.equals(when) || "farmer_ready".equals(when);
     }
 
     static boolean holds(@Nonnull String when, @Nonnull TownRecord town, @Nonnull ConstructionCatalog catalog) {
         return switch (when) {
             case WHEN_WORKPLACE_SUPERVISOR_READY -> WorkplaceGuide.supervisorReady(town, catalog);
+            case "farmer_ready" -> town.hasCompletePlotWithConstruction(catalog,"plot_farm")
+                && town.getResidentNpcRecords().stream().anyMatch(r -> "farmer".equals(r.getKind()));
             default -> false;
         };
     }

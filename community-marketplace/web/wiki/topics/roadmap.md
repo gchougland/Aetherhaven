@@ -29,9 +29,7 @@ These are planned or under consideration but **not** tied to a specific mileston
 - Villager home decor quests
 - Villager: Wizard
 - Villager: Witch
-- Villager: Druid
 - Villager: Necromancer
-- Villager: Alchemist
 - Villager: Equestrian
 - Villager: Chef
 - Crime system

@@ -18,10 +18,9 @@ Find a rusty robot in the Rusted Expanse, break it for the block, and throw it i
 Help Rivet open a shop where the town can buy metal and gear.
 
 1. Talk to Rivet at the inn and accept the quest.
-2. Take the shop blueprint from Rivet.
-3. Use the blueprint at your plot crafting bench to learn the mechanics shop.
-4. Craft a shop plot token and build the mechanics shop prefab.
-5. Find Rivet at the shop and close the quest in dialogue.
+2. Take the bronze mechanics shop plot token from Rivet.
+3. Stake and build the bronze mechanics shop prefab.
+4. Find Rivet at the shop and close the quest in dialogue.
 
 #### Rivet's home
 Even a freshly oiled robot deserves a quiet place to rest.

@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.plotcreator;
 
 /** One guided placement or POI collection step inside a building kind flow. */
 public enum PlotCreatorSubstepType {
+    /** Building-specific equipment; workResidentKind carries its registered block id. */
+    SPECIALTY_BLOCK,
     MANAGEMENT_BLOCK,
     PRODUCTION_STORAGE,
     TREASURY_BLOCK,

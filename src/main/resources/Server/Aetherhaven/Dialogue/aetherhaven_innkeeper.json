@@ -13,6 +13,10 @@
           "next": "inn_explain_pool"
         },
         {
+          "text": "aetherhaven_food_tutorial.inn.ask",
+          "next": "population_help"
+        },
+        {
           "text": "aetherhaven_inn_outreach.open",
           "condition": {
             "type": "and",
@@ -709,6 +713,44 @@
         {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
           "next": "main_hub"
+        }
+      ]
+    },
+    "population_help": {
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "aetherhaven_food_tutorial.inn.population",
+      "choices": [
+        {
+          "text": "aetherhaven_food_tutorial.inn.sources",
+          "next": "population_sources"
+        },
+        {
+          "text": "aetherhaven_food_tutorial.inn.farms",
+          "next": "population_farms"
+        },
+        {
+          "text": "aetherhaven_food_tutorial.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "population_sources": {
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "aetherhaven_food_tutorial.inn.sourcesBody",
+      "choices": [
+        {
+          "text": "aetherhaven_food_tutorial.back",
+          "next": "population_help"
+        }
+      ]
+    },
+    "population_farms": {
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "aetherhaven_food_tutorial.farmer.instructions",
+      "choices": [
+        {
+          "text": "aetherhaven_food_tutorial.back",
+          "next": "population_help"
         }
       ]
     }

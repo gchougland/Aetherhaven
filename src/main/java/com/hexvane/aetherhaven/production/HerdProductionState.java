@@ -26,6 +26,12 @@ public final class HerdProductionState {
     private Map<String,Integer> foodBin=new LinkedHashMap<>(); private long feedOrderRevision;
     private List<Animal> animals=new ArrayList<>(); private UUID[] slots=new UUID[MAX_SLOTS];
     private long lastSimulationMinute=Long.MIN_VALUE;
+    private Map<Integer,com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point> automaticPens=new LinkedHashMap<>();
+    /** Prefab-local positions survive reload and moving/rotating a building. Authored markers always take precedence. */
+    public Map<Integer,com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point> automaticPens() {
+        if(automaticPens==null)automaticPens=new LinkedHashMap<>();
+        return automaticPens;
+    }
     // Retain any already paid, carried output from the retired development system for one-time delivery.
     public record Cargo(UUID id,String output,int quantity) {}
     private Cargo cargo;

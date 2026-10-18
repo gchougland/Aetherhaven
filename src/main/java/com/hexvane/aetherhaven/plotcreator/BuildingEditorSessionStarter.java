@@ -192,6 +192,7 @@ public final class BuildingEditorSessionStarter {
         seedSpecialBlocksFromPois(draft);
         seedShopStallsFromWorld(world, draft, fp);
         seedInnBellFromWorldIfMissing(world, draft, fp);
+        CoreBuildingSpecialties.refresh(world,draft,plugin);
         seedAdventurerSpawnsFromWorldMarkers(world, draft, fp);
         PlotCreatorStep startStep = editorStartStep(draft);
         draft.setStep(startStep);

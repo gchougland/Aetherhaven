@@ -1,6 +1,6 @@
 ---
 name: Production wardrobe
-description: Outfits and output for production buildings
+description: Open each building's work controls and collect its stored output
 author: Hexvane
 ---
 
@@ -8,22 +8,25 @@ author: Hexvane
 
 # Production wardrobe
 
-Production buildings (farm, lumber mill, miner's hut, barn, and similar workplaces) store output in a **wardrobe-style chest** inside the plot. Interact with the wardrobe to open the production window.
+A core building's **Production Storage** opens the controls appropriate to that building. The town warehouse's **Building Outputs** also lets you collect resources while they remain in their original stores.
 
-## Production window
+## What opens at each building
 
-* Use the **arrows** to cycle which resource type the building generates.
-* Each resource type is stored separately in the wardrobe inventory.
-* Selecting multiple slots of the **same** resource increases how fast that resource is produced.
+- **Farm:** the Scarecrow Fields planner opens directly. Paint crops, supply seeds, review soil and collect harvests there. The separate Building Output screen is hidden.
+- **Barn:** use the herd controls to assign owned animals, supply food and view Resources. Production follows assigned, active animals, not a generic choice of outputs.
+- **Lumbermill:** manage Rootstones and collect grove output. Older mills retain their original production until their first Rootstone is bound.
+- **Conservatory:** open the Spirit Garden to manage planters and collect plants and petals.
+- **Miner's Hut:** choose unlocked resources and collect output. Physical mines require accessible nodes, the Miner's Mastery and an appropriate Pickaxe.
+- **Hunter's Lodge:** collect the spoils of ordered arena runs from lodge storage.
 
-## Unlocks tab
+Open **Production buildings** for dedicated setup pages. A Townsfolk Farming or Ranching workplace has no item-output cupboard: it contributes food support instead.
 
-The **unlocks** page lists new resource types you can add to the rotation. Unlocking costs some of that resource plus **gold coins** from town funds.
+## Storage, unlocks and upgrades
 
-## Upgrades
+**Collect all** also recovers older stock whose resource is no longer selected. Milk needs empty buckets. Full storage can pause further production. Couriers can collect eligible resources for workplace tasks.
 
-Open the **town records shelf** on a production building to **upgrade** it. Upgrades improve output or capacity depending on building type. Costs and tiers are shown in the shelf UI.
+Where a building has output choices, selecting a resource does not bypass its Mastery, tool or unlock requirements. Read the screen's missing requirement and train or equip the named specialist.
 
-*In the future you will be able to upgrade the max storage and production speed of buildings.*
+Use the building's own upgrade controls for capacity, speed and its physical system. Farm, grove and garden upgrades affect their named fields, stones or planters. Warehouse upgrades do not expand every production store.
 
-See **Town records shelf** for shelf controls on production plots and **Sprinklers** for farm watering.
+Keep paths and work areas accessible and loaded. Core specialists follow their schedules; the Townsfolk priority grid controls Apprentice jobs.

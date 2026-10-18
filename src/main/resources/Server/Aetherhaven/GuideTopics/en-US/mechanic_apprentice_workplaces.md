@@ -1,91 +1,82 @@
 ---
 name: Apprentice workplaces
-description: Mark areas, unlock types and plan work
+description: Unlock, mark and staff each kind of Townsfolk workplace
 author: Hexvane
+sub-topics:
+  - workplace_smelting
+  - workplace_blacksmithing
+  - workplace_armorCrafting
+  - workplace_farming
+  - workplace_ranching
+  - workplace_mycology
+  - workplace_berries
+  - workplace_mining
+  - workplace_building
+  - workplace_blockWorkshop
+  - workplace_alchemy
+  - workplace_crafting
+  - workplace_leatherworking
+  - workplace_cooking
+  - workplace_jewelry
+  - workplace_salvaging
+  - workplace_logistics
+  - workplace_commerce
 ---
 
 # Apprentice workplaces
 
-Craft a **Building Staff** at the Town Planning Desk. Every tier can manage workplaces. Talk to the supervising resident villager and choose **I want to manage Apprentice workplaces** to unlock the types they supervise.
+Workplaces are areas you mark for employed civilian Townsfolk. Named core villagers supervise their unlocks, but do not replace the workers. A workplace may be anywhere inside town; it need not be inside its supervisor's building.
 
-The blacksmith starts with two shared workplace slots for Smelting, Blacksmithing and Armor Crafting. Other supervisors start with one. Each capacity upgrade adds one slot. Upgrades use treasury gold and require a Town Level.
+## Set up your first workplace
 
-## Crafting and leather goods
+1. Recruit the supervisor and finish their work building. Ask about **Apprentice workplaces** and unlock the desired type. Elder Lyren's **A Place to Work** quest helps you begin.
+2. Craft a **Building Staff** at the Town Planning Desk. Any tier can manage workplaces.
+3. Choose **Create workplace** from the staff's mode menu and mark two opposite ground corners. Choose a name and type, then save.
+4. Place the type's required station inside the marked area. Keep its base within the floor and height, and leave a walking route to it.
+5. Employ a civilian Townsfolk with the required skill. Enable the exact work type on the journal's **Work** page and keep wages paid.
+6. Open the station or use **Manage workplace**. Queue a task, choose a growing plan or prepare a food-support site as its guide describes.
 
-**Tobin Reedwright**, the Crafter, can visit from Town Level 3. Build his Artisan Workshop to invite him to settle, then unlock Crafting through his dialogue. Crafting sites use an ordinary workbench and make supplies such as repair kits.
+The Blacksmith starts with two shared slots for Smelting, Blacksmithing and Armor Crafting. Other supervisors start with one. Capacity upgrades add slots; the upgrade screen shows Town Level and treasury costs. A slot belongs to the supervisor's allowance, not to an individual worker.
 
-**Hazel Brindle**, the Leatherworker, can visit from Town Level 4. Build her Tannery and unlock Leatherworking through her dialogue. Tanning racks turn light, medium and heavy hides into leather at skill levels 1, 3 and 5. Leatherworking also makes courier satchels and other leather equipment. Every recipe shows its own requirements.
+## Pick a workplace
 
-**Tobin**, the Crafter, also supervises Salvaging. Mark a workplace around a **Salvager's Workbench** (the Blacksmith sells one) and Apprentices take apart old weapons, armor and tools using their Crafting skill. The recovered materials go to Crafted Goods.
+- **Smelting workplace** — Blacksmith; Furnace. Apprentices load furnaces, supply your selected fuel and collect the finished materials.
+- **Blacksmithing workplace** — Blacksmith; Blacksmith's Anvil. Apprentices forge weapons, tools and unlocked profession equipment.
+- **Armor Crafting workplace** — Blacksmith; Armorer's Workbench. Apprentices make armor and guard kits for the town.
+- **Farming workplace** — Farmer; Farmer's Workbench. A tended Farming workplace adds **10 food points**, enough to support **five residents**. It produces **no inventory items**.
+- **Ranching workplace** — Rancher; Feeding Trough. A tended Ranching workplace adds **10 food points**, supporting **five residents**. It produces **no inventory items**.
+- **Mycologist workplace** — Druid; Mushroom Log. Apprentices seed logs, tend growing mushrooms and harvest ingredients for cooking and Alchemy.
+- **Berry Patch workplace** — Druid; Farmer's Workbench. Apprentices tend berry bushes and collect ripe berries as inventory items.
+- **Mining workplace** — Miner; Workbench. Apprentices excavate real tunnels, stairs and rooms, then carry mined drops back to their base.
+- **Builder's Yard workplace** — Builder; Builder's Workbench. Apprentices travel to your town's construction projects and help build reachable pieces.
+- **Block Workshop workplace** — Builder; Builder's Workbench. Apprentices make planks, bricks, stairs, slabs, roofs and other building blocks to order.
+- **Alchemy workplace** — Alchemist; Alchemist's Workbench. Apprentices brew queued potion recipes from plants, petals, mushrooms and other supplies.
+- **Crafting workplace** — Crafter; Workbench. Apprentices make supplies, repair items, equipment and unlocked seed or sapling recipes.
+- **Leatherworking workplace** — Leatherworker; Tanning Rack. Apprentices turn hides into leather and make unlocked leather goods and profession equipment.
+- **Cooking workplace** — Chef; Chef's Stove. Apprentices cook food items from queued recipes.
+- **Jewelry Crafting workplace** — Merchant; Jewelry Crafting Bench. Apprentices make unlocked jewelry recipes, including equipment learned through friendship.
+- **Salvaging workplace** — Crafter; Salvager's Workbench. Apprentices dismantle old weapons, armor and tools into recovered materials.
 
-The **Builder** supervises two kinds of workplace, and both use a **Builder's Workbench**. A **Builder's Yard** sends Apprentices out to build the town's construction projects. A **Block Workshop** stays at the bench and cuts planks, bricks, stairs, slabs, roofs and other building blocks to order using the Building skill. The bench opens the right page for the workplace it stands in.
+**Logistics and couriers** and **Commerce and shop clerks** have priority controls but do not need marked workplace areas. **Herb Cultivation** is retired; use the Druid's **Spirit Garden** for core alchemical plants. Existing hand-planted crops remain ordinary plants.
 
-The task page of every crafting workplace shows the finished goods waiting in Crafted Goods for its tasks. Click a stack to collect it there.
+## Area and staff controls
 
-A courier brings the materials for several crafts of a task in one trip, and the Apprentice makes them all in one visit. A task set to keep crafting is supplied a few crafts at a time, so it never empties the warehouse. Furnaces are loaded with a whole stack of ore and enough fuel for it, and the Apprentice returns when the furnace stops. A smelting workplace's task page shows what each furnace holds.
+Both marked ground corners are included. The first ground level sets the floor, with a five-block work band above it. Selecting a crop or bench resolves its base so the selection does not accidentally start above the equipment. Review the border and height if equipment is reported outside.
 
-The Artisan Workshop and Tannery are available in the Core style. Once the supervisor is a resident, workplaces may be built anywhere inside the town. They do not have to be inside the supervisor's building. Enable Logistics to deliver ingredients, and collect finished items from Crafted Goods in the warehouse.
+Use **Resize workplace**, select the site, then choose new corners. Changes apply when saved. Separate sites may meet at their borders; sites on different floors must have separate height bands. **Manage mineshafts** reopens Mining bases.
 
-Friendship with Tobin and Hazel grants a profession tool kit at 25, plans to craft more kits at 50, and workplace furnishing plans at 75. Equip the **Joiner's Toolbox** or **Leatherworker's Roll** through an Apprentice profile for 15% faster work in that profession.
+The staff display shows your current key bindings. **Mode menu** selects a tool mode; **Build structures** returns to construction. Switching modes clears unfinished selections, not saved workplaces. Use workplace removal controls so carried supplies can be returned.
 
-Place a **Pattern Cabinet** in a Crafting site or a **Stitching Frame** in a Leatherworking site for 10% faster attended work. Only the strongest furnishing bonus counts. Furnishings do not replace the required workbench or its tier. These furnishings require skill 5 to craft, and the Pattern Cabinet needs a tier 2 workbench. Collect them from Crafted Goods after an Apprentice finishes making them.
+## Ingredients, orders and output
 
-## Seeds and alchemy
+Crafting task pages offer a quantity, continuous crafting or a stock target. Search the recipes and select one to see its materials, worker skill, bench tier, upgrades and unlocks. Locked recipes appear below available ones. Added pack recipes can appear through their matching benches.
 
-Seed and sapling recipes use a Crafting workplace and the worker's **Farming** skill. Enable Crafting for that worker and check the recipe's Farming requirement. Alchemical seed tiers need Farming **1, 4 and 7**. Life Essence supplies these recipes; the required amount is shown in the task screen.
+Put supplies in **General storage** and enable a paid worker's **Logistics** priority. Couriers deliver ingredients; a worker completes the task. Finished crafting orders go to **Crafted Goods**, also collectible from their task page. Mineshafts, berries and mushrooms have their own output stores, accessible through the warehouse.
 
-Herb Garden workplaces have been removed. The Druid grows ingredients directly in the Conservatory. Existing plants remain in the world. Unused supplies stay in storage, and couriers return supplies that were already picked up.
+Farming and Ranching workplaces provide food-support points and no inventory items. Cooking produces meal items and does not add those points. Core production buildings have their own systems.
 
-The **Druid** supervises two growing workplaces that use the Farming skill. Unlock them on the Druid's upgrade screen.
+## If nobody works
 
-A **Mycologist** grows one kind of mushroom at a time. Craft **Mushroom Logs** at the Town Planning Desk, place up to six inside the workplace and use any log to open it. Choose a mushroom, and an Apprentice seeds each log, tends it twice as it grows and picks it. Common mushrooms for cooking need little skill. Mushrooms for mixtures, glowing mushrooms and boomshrooms need more. Changing the mushroom clears every log.
+Read the site's exact status first. Check the type unlock and slot allowance, station and tier, bounds and growing spaces, task or crop plan, ingredients and fuel, output capacity, qualified worker, enabled priority, wages and walking access. Priority 1 cannot create work that is not ready.
 
-A **Berry Patch** needs a Farmer's Workbench and berry bushes from the Florist. An Apprentice waters up to eight bushes and picks the ripe ones, and the bushes grow their berries back.
-
-Both keep their harvest in the workplace store. Collect it on the workplace screen or from the warehouse Production page. Couriers take it to kitchens that need it, and the Alchemist's cauldron brews with it directly. A full store pauses work until some is collected.
-
-The Laboratory, Clinic, Conservatory, Hunter's Lodge and Warehouse are also available in the Core style. **Simple Workplace** is a decoration building for your own benches and furnishings; place and mark an Apprentice workplace there using the normal staff controls.
-
-## Mark an area
-
-To create a workplace, hold the Building Staff and choose **Create workplace** from its mode menu. Click two opposite ground corners inside your town. Both ground blocks are included. Choose a workplace name and type, then save.
-
-The first corner sets the floor. The site reaches five blocks above that floor. You do not select a ceiling. Sites may touch at their borders. Sites on different floors may share a footprint when their height bands are separate.
-
-Use **Manage workplace** to open a saved workplace. Use **Resize workplace**, select a workplace, then choose its new corners. A Mining base uses the same corners. Plan its tunnels through the Workbench map. The original area stays unchanged until you save. Cancel clears the selection.
-
-Use **Next mode** to cycle modes, or **Mode menu** to open the mode menu. The game shows your own keys for the staff at the bottom right of the screen. Choose **Build structures** to return to construction. Switching modes clears unfinished corner selections but keeps saved workplaces.
-
-## Plan your workforce
-
-### Ranch workplaces
-
-Craft a **Feeding Trough** at the Workbench from 5 tree trunks and 10 Plant Fiber. Place it inside a Ranching workplace and leave clear floor space around it. A cow and a chicken appear automatically near the trough. These workplace animals stay at their spots and cannot be captured or killed for resources. They disappear when the workplace is removed and return when its area is loaded again.
-
-You do not need to bring animals or find a breeding pair. Employ a Townsfolk with Ranching enabled so they can tend the trough. A tended ranch provides ten food points, enough to support five residents. It produces no inventory items. Keep a clear path to the trough and space for both animals.
-
-### Work priorities
-
-Open **Work** in the Town Journal. Employ civilian Townsfolk and choose profession priorities. One is highest priority; a dot means that profession is disabled. A zero skill means the Townsfolk cannot do that profession. Guards do no profession work while on guard duty.
-
-Use **Guard: On** or **Guard: Off** beside a worker to change guard duty. Starting duty lets you choose a guard class. Town permissions and safety restrictions still apply. Returning to civilian life makes their profession priorities available again.
-
-Weekly wages appear in **Bills** in the journal and treasury. Pay them from the treasury before their deadline. Paid bills leave the list. An overdue worker stops working until the bill is paid. Changing priorities does not change pay.
-
-Wages and Apprentice work pause when no town member is in the town's world. Food workplaces also pause their neglect clock during that absence. Workers still need their workplaces and travel routes nearby and active; the town does not keep distant areas loaded.
-
-## Bench recipes
-
-Crafting workplaces discover recipes from their matching benches: Workbench, Blacksmith's Anvil, Armorer's Workbench, Furnace, Tanning Rack, Chef's Stove, Alchemist's Workbench, Salvager's Workbench and Builder's Workbench. Added pack recipes appear in the same list. Costs, outputs, required bench tiers, bench upgrades and Memories requirements come from those recipes. Town recipe unlocks still apply. Search updates as you type. Recipes that need a higher skill, bench tier or unlock are grey and appear below available recipes. Select one to see its requirements.
-
-## Plan a mineshaft
-
-Create a **Mining** base workplace around a regular **Workbench**. Use that bench to open the **Mineshaft planner**. The staff's **Manage mineshafts** mode reopens existing bases.
-
-Each map square covers three blocks. Click a blue base cell or green passage, choose a direction, then set a length in three block steps. Choose a level tunnel, stairs or a 9 by 9 room with five blocks of height. New stairs span seven blocks vertically and need at least nine blocks of length. Use the floor buttons to inspect stairs and connected branches. Violet squares with arrows show where stairs pass through the floor you are viewing, and a route cannot go through them. Review terrain before adding an order. Adding an order authorizes permanent excavation.
-
-Turn support beams, wall torches, ceiling lanterns and rails on or off separately. Each one takes a single item: **Hardwood - Beam**, **Crude Torch**, **Lantern** or **Rail**. The planner shows how many the route needs and how many town storage holds. Put them in **General storage** at the **Warehouse Ledger Desk**. Miners take one for each piece they place, after the digging is done. Employed townsfolk need Mining enabled, sufficient skill and paid wages. Higher skilled available workers get first choice. Miners carry 25 items at Mining 1 and 10 more per additional level before returning to their base. Short finished orders can continue into another ready tunnel at the same base without emptying a partial bag.
-
-Choose **Open output storage** in the planner or use **Building Outputs** in the Warehouse to collect mined resources. Couriers collect supplies directly from the base. No core mine is required. Keep routes and entrances clear. Only the base shows border particles. Pause or remove saved orders in the planner. Stored output stays at the base. Removing an order does not restore excavated terrain.
-
-The mineshaft planner remembers direction, length, passage type and fitting choices for each base. New stairs have four blocks of headroom. Finished digging opens connected orders even when beams or lights still need supplies. A tunnel can leave any landing or passage at that passage's height, and two tunnels may cross at the same height. Miners dig whatever they find in a planned tunnel, so placing or breaking blocks there never stops it. They leave a chest or other furnishing standing, dig the rest and finish once it is moved. Removing a tunnel order keeps its stored output at the base and leaves excavated terrain as it is. Remove connected branches first and let miners deposit carried materials.
+Workers take breaks for their needs and stop profession work while on guard duty. Work and wages pause when no member is in the town's world; distant areas are not kept loaded. See **Work priorities and wages**, **Townsfolk stats and equipment**, and **Warehouse and deliveries** for details.

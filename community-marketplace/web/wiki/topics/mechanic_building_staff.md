@@ -18,3 +18,7 @@ Each staff grants extra max mana while you hold it. Placing blocks with secondar
 
 * Use scaffolding to reach higher places with the staff.
 * Very large buildings are split into sections when building for performance.
+
+## Plan a mineshaft
+
+Use **Create workplace** to mark a Mining base around a regular **Workbench**. Use that bench to open the map and plan tunnels, rooms and stairs into undug ground. The staff's **Manage mineshafts** mode reopens existing mine planners. Review each route before adding it. See **Apprentice workplaces** for worker, fitting and output storage details.

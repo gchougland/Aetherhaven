@@ -26,7 +26,7 @@ import java.util.*;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
-/** Displays only active owned animals at authored pen markers; care and output use the same daily clock. */
+/** Displays active owned animals at authored or compatible legacy pens; care and output share the daily clock. */
 public final class NativeHerdService {
     private static final HytaleLogger LOGGER=HytaleLogger.forEnclosingClass();
     public static final String PEN_TAG="BARN_PEN";
@@ -85,6 +85,7 @@ public final class NativeHerdService {
     public static Set<UUID> sync(World world,AetherhavenPlugin plugin,TownRecord town,PlotInstance plot) {
         var state=town.getOrCreatePlotProduction(plot.getPlotId());var herd=state.herd();
         var store=world.getEntityStore().getStore();int slots=WorkplaceProductionUpgrades.slotCount(state);
+        var positions=BarnPenCompatibility.resolve(world,plugin,plot,herd);
         var shown=new ArrayList<HerdDisplayPlan.Shown<Ref<EntityStore>>>();
         store.forEachChunk(BarnAnimalBinding.getComponentType(),(chunk,buffer)->{
             for(int i=0;i<chunk.size();i++) {
@@ -93,18 +94,18 @@ public final class NativeHerdService {
             }
         });
         var plan=HerdDisplayPlan.reconcile(plot.getPlotId(),shown,id->{
-            int slot=herd.assignedSlot(id);return slot<slots&&penPoint(plugin,plot,slot)!=null?slot:-1;
+            int slot=herd.assignedSlot(id);return slot<slots&&positions.containsKey(slot)?slot:-1;
         });
         for(var ref:plan.remove())if(ref.isValid())store.removeEntity(ref,RemoveReason.REMOVE);
         var existing=plan.keep();
         var present=new HashSet<UUID>();
         for(int slot=0;slot<slots;slot++) {
-            var animal=herd.slot(slot);var point=penPoint(plugin,plot,slot);
+            var animal=herd.slot(slot);var pen=positions.get(slot);var point=BarnPenCompatibility.worldPoint(plot,pen);
             if(animal==null||point==null||!plot.containsWorldBlock(point.x,point.y,point.z)
                 ||ChunkSectionBlockUtil.worldChunkIfTicking(world,point.x,point.z)==null)continue;
             var species=BarnAnimalCatalog.get(animal.species());if(species==null)continue;
-            var pen=pens(plugin,plot).get(slot);
-            float yaw=com.hexvane.aetherhaven.construction.PrefabYaw.worldFromPrefabLocal(plot.resolvePrefabYaw(),(float)Math.toRadians(pen.getInteractionTargetYawDegrees()==null?0:pen.getInteractionTargetYawDegrees()));
+            if(pen.automatic()&&BarnPenCompatibility.space(world,plot,point)!=BarnPenCompatibility.Space.CLEAR)continue;
+            float yaw=com.hexvane.aetherhaven.construction.PrefabYaw.worldFromPrefabLocal(plot.resolvePrefabYaw(),(float)Math.toRadians(pen.yaw()));
             var position=new Vector3d(point.x+.5,point.y,point.z+.5);
             var ref=existing.get(animal.id());
             if(ref==null||!ref.isValid()) {

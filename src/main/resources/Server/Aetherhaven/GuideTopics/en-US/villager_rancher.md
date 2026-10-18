@@ -9,6 +9,8 @@ npcRoleId: Aetherhaven_Rancher
 
 **Thalen Meadowrun** is usually found at **the barn** when they are on shift.
 
+For the complete setup and troubleshooting guide, open **Barn and owned animals** under Production buildings. **Ranching workplace** explains the separate food-support site for Townsfolk.
+
 ### Owned barn animals
 
 Choose **Animal shop** when speaking to Thalen to open his separate shop. Common animals cost 100 gold at Rancher Mastery 1, uncommon animals cost 250 gold at Mastery 4, and rare animals cost 500 gold at Mastery 7. Ask Thalen about **Building upgrades** to unlock more pens and improve the barn.
@@ -18,6 +20,8 @@ Food is shown as a small corner badge on each animal portrait. Resource storage 
 Your barn starts with one active pen. Building upgrades unlock up to five pens. Choose **Choose** on a pen to open a grid of animal cards showing their picture, name, hearts and preferred food. Select a card to assign that animal. Choosing an animal already in another pen swaps the two animals. **Rest** empties a pen without losing its animal. Animals keep their names and hearts while resting. Rename them from **My animals**.
 
 Animals stay at their marked pen and cannot be killed or captured. You do not need to bring wild animals, find a breeding pair or raise offspring. Building authors mark five animal pens in the building editor by clicking the floor where each animal should stand. Face the direction it should look. Use **Adjust or remove** on a marker to remove it.
+
+Older community barns without pen markers automatically look for clear floor spaces inside the barn. Each automatic pen needs a 3 by 3 floor with four clear blocks above it. The pen screen tells you when space is missing. Your animals and upgrades stay yours; updated building designs use their author's pen positions.
 
 ### Daily food and hearts
 

@@ -7,7 +7,7 @@ npcRoleId: Aetherhaven_Merchant
 
 ![](wiki/villager_merchant.png)
 
-**Vex Sunderlane** runs a **general store** through **shop spots** in the market stall once it is built. Stock restocks at dawn; press **F** on a spot to buy. See **Player shop and shop spots** under Mechanics.
+**Vex Sunderlane** runs a **general store** through **shop spots** in the market stall once it is built. Stock restocks at dawn; use a spot to buy. See **Player shop and shop spots** under Mechanics.
 
 ### Quests
 
@@ -38,6 +38,7 @@ Build a shop where you can sell goods to townsfolk and tourists.
 
 Visit them after your friendship reaches each level to pick up the reward through dialogue.
 
+- **Friendship 25:** teaches your town the **Jeweler's Case** recipe.
 - **Friendship 50:** teaches you to craft **Appraisal Bench**
 - **Friendship 100:** teaches you to craft **Jewelry Crafting Bench**
 

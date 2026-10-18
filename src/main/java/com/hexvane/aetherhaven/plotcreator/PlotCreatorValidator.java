@@ -222,6 +222,7 @@ public final class PlotCreatorValidator {
     ) {
         PlotCreatorSubstepType type = req.type();
         return switch (type) {
+            case SPECIALTY_BLOCK -> countPoiRequirement(draft, req);
             case MINING_NODE -> draft.getMiningNodes().size();
             case MANAGEMENT_BLOCK -> draft.getManagementBlockLocalPos() != null ? 1 : 0;
             case PRODUCTION_STORAGE -> draft.getProductionStorageLocalPos() != null ? 1 : 0;
@@ -286,6 +287,7 @@ public final class PlotCreatorValidator {
     ) {
         PlotCreatorSubstepType type = req.type();
         return switch (type) {
+            case SPECIALTY_BLOCK -> CoreBuildingSpecialties.matches(p,req.workResidentKind());
             case WORK_POI -> {
                 if (!p.getTags().contains("WORK") || p.getTags().contains(AetherhavenConstants.POI_TAG_BARD)) {
                     yield false;

@@ -307,7 +307,7 @@ public final class PlotBuildingKindRequirements {
     }
 
     public static boolean isSpecialBlockType(@Nonnull String blockTypeId) {
-        return AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID.equals(blockTypeId)
+        return CoreBuildingSpecialties.isSpecialty(blockTypeId) || AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID.equals(blockTypeId)
             || AetherhavenConstants.BLOCK_PRODUCTION_STORAGE.equals(blockTypeId)
             || AetherhavenConstants.TREASURY_BLOCK_TYPE_ID.equals(blockTypeId)
             || AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID.equals(blockTypeId)
@@ -512,15 +512,14 @@ public final class PlotBuildingKindRequirements {
         return out;
     }
 
-    private static boolean requiresProductionStorage(
+    public static boolean requiresProductionStorage(
         @Nonnull PlotCreatorDraft draft,
         @Nullable AetherhavenPlugin plugin
     ) {
         if (PlotCreatorProductionRules.requiresHuntStorage(draft,plugin)) return true;
-        if (plugin == null) {
-            return false;
-        }
         for (String id : candidateConstructionIds(draft)) {
+            if(ProductionCatalog.isProductionWorkplaceConstruction(id.trim()))return true;
+            if(plugin==null)continue;
             String gameplayId = plugin.getConstructionCatalog().resolveGameplayConstructionId(id.trim());
             if (ProductionCatalog.isProductionWorkplaceConstruction(gameplayId)) {
                 return true;

@@ -1,6 +1,6 @@
 ---
 name: Production wardrobe
-description: Collect output, choose resources and plan physical work
+description: Open each building's work controls and collect its stored output
 author: Hexvane
 ---
 
@@ -8,22 +8,25 @@ author: Hexvane
 
 # Production wardrobe
 
-The Farm, Lumbermill, Miner's Hut, Barn and Conservatory keep output in a **storage cupboard** inside their building. Interact with it to choose outputs, collect materials and open the building's work controls.
+A core building's **Production Storage** opens the controls appropriate to that building. The town warehouse's **Building Outputs** also lets you collect resources while they remain in their original stores.
 
-## Production window
+## What opens at each building
 
-Use the arrows to select unlocked resources for the available output slots. Each resource has its own stored quantity. **Collect all** also recovers older stock whose resource is no longer selected.
+- **Farm:** the Scarecrow Fields planner opens directly. Paint crops, supply seeds, review soil and collect harvests there. The separate Building Output screen is hidden.
+- **Barn:** use the herd controls to assign owned animals, supply food and view Resources. Production follows assigned, active animals, not a generic choice of outputs.
+- **Lumbermill:** manage Rootstones and collect grove output. Older mills retain their original production until their first Rootstone is bound.
+- **Conservatory:** open the Spirit Garden to manage planters and collect plants and petals.
+- **Miner's Hut:** choose unlocked resources and collect output. Physical mines require accessible nodes, the Miner's Mastery and an appropriate Pickaxe.
+- **Hunter's Lodge:** collect the spoils of ordered arena runs from lodge storage.
 
-An output may need greater **Mastery** or a better equipped tool. The storage screen explains what is missing. Talk to the resident specialist to train or change their tool. Earned stock and material already being carried stay available while you do this.
+Open **Production buildings** for dedicated setup pages. A Townsfolk Farming or Ranching workplace has no item-output cupboard: it contributes food support instead.
 
-For physical production, use the controls to review Farm beds, tend the Lumbermill's grove or manage the Barn's herd. The Conservatory's cupboard opens Rowan's Spirit Garden. These work plans use real plants, trees and animals. The resident must finish the work and carry output back before it can be collected. A full cupboard pauses further harvesting. Couriers can collect stored materials needed by Apprentice tasks.
+## Storage, unlocks and upgrades
 
-## Unlocks tab
+**Collect all** also recovers older stock whose resource is no longer selected. Milk needs empty buckets. Full storage can pause further production. Couriers can collect eligible resources for workplace tasks.
 
-The **Unlocks** page lists more resources you can select. It shows each purchase's materials, gold and requirements. Buying an output does not bypass the resident's Mastery or tool requirement.
+Where a building has output choices, selecting a resource does not bypass its Mastery, tool or unlock requirements. Read the screen's missing requirement and train or equip the named specialist.
 
-## Upgrades
+Use the building's own upgrade controls for capacity, speed and its physical system. Farm, grove and garden upgrades affect their named fields, stones or planters. Warehouse upgrades do not expand every production store.
 
-Open **Building upgrades** for additional output slots, faster work and larger storage. The tree shows the required Town Level, earlier upgrades and cost. For physical growing, faster work shortens attended tending and harvesting; it does not skip plant or tree growth.
-
-See the Farmer, Logger, Rancher and Druid guide pages for their work plans, **Mastery and training** for resource requirements, and **Sprinklers** for farm watering.
+Keep paths and work areas accessible and loaded. Core specialists follow their schedules; the Townsfolk priority grid controls Apprentice jobs.

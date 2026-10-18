@@ -59,7 +59,7 @@ public final class WorkplaceRules {
             case SMELTING -> "Apprentices load furnaces, replenish your chosen fuel and collect finished materials.";
             case BLACKSMITHING -> "Apprentices forge weapons and tools at a blacksmith's anvil.";
             case ARMOR_CRAFTING -> "Apprentices make armor and guard kits at an armorer's workbench.";
-            case FARMING -> "Tending crops provides ten food points. This site produces no items.";
+            case FARMING -> "Place a Farmer's Workbench and leave 4 clear soil spaces. Apprentices plant wheat without seeds and tend it for 10 food points, supporting 5 residents. No item output.";
             case RANCHING -> "Place a feeding trough and leave clear floor space around it. Workplace animals appear automatically and stay nearby. Tending them provides ten food points and no items.";
             case MYCOLOGY -> "Place Mushroom Logs and choose one kind of mushroom to grow. An Apprentice seeds each log, tends it as it grows and picks the mushrooms into the workplace store. Rarer mushrooms need more Farming skill.";
             case BERRIES -> "Plant berry bushes around a Farmer's Workbench. An Apprentice tends the bushes and picks ripe berries into the workplace store. The bushes ripen again by themselves.";

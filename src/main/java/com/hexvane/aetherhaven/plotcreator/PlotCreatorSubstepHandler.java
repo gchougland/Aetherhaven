@@ -62,6 +62,7 @@ public final class PlotCreatorSubstepHandler {
             return false;
         }
         return switch (req.type()) {
+            case SPECIALTY_BLOCK -> tryRemoveMatchingPoiNear(draft,targetBlock,req,playerRef);
             case MINING_NODE -> PlotCreatorMiningNodes.remove(draft,targetBlock,playerRef);
             case VISITOR_SPAWN -> tryRemoveVisitorSpawnAt(session, targetBlock, playerRef);
             case ADVENTURER_SPAWN -> tryRemoveAdventurerSpawnAt(session, targetBlock, playerRef, commandBuffer);
@@ -295,6 +296,26 @@ public final class PlotCreatorSubstepHandler {
         String blockId = PlotCreatorLocalCoords.blockTypeAt(session.getWorld(), targetBlock);
         int[] local = PlotCreatorLocalCoords.toLocal(draft, targetBlock);
         return switch (req.type()) {
+            case SPECIALTY_BLOCK -> {
+                int filler=com.hexvane.aetherhaven.world.ChunkSectionBlockUtil.filler(session.getWorld(),targetBlock.x,targetBlock.y,targetBlock.z);
+                var base=new Vector3i(targetBlock).sub(
+                    com.hypixel.hytale.server.core.util.FillerBlockUtil.unpackX(filler),
+                    com.hypixel.hytale.server.core.util.FillerBlockUtil.unpackY(filler),
+                    com.hypixel.hytale.server.core.util.FillerBlockUtil.unpackZ(filler));
+                var block=com.hexvane.aetherhaven.world.ChunkSectionBlockUtil.blockType(session.getWorld(),base.x,base.y,base.z);
+                String specialty=block==null?null:block.getDefaultStateKey()==null?block.getId():block.getDefaultStateKey();
+                if(!draft.isInsideBounds(base)||!java.util.Objects.equals(specialty,req.workResidentKind())) {
+                    playerRef.sendMessage(com.hypixel.hytale.server.core.Message.raw("Place and select "+CoreBuildingSpecialties.label(req.workResidentKind())+" inside the building bounds."));
+                    yield true;
+                }
+                int[] at=PlotCreatorLocalCoords.toLocal(draft,base);
+                draft.getPois().removeIf(p->CoreBuildingSpecialties.matches(p,specialty));
+                var poi=new PlotCreatorPoiDraft();poi.setLocal(at[0],at[1],at[2]);
+                poi.setTags(List.of(CoreBuildingSpecialties.TAG));poi.setBlockTypeId(specialty);poi.setInteractionKind("NONE");
+                draft.getPois().add(poi);
+                playerRef.sendMessage(com.hypixel.hytale.server.core.Message.raw(CoreBuildingSpecialties.label(specialty)+" recorded."));
+                yield true;
+            }
             case MANAGEMENT_BLOCK -> {
                 if (!AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID.equals(blockId)) {
                     playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));

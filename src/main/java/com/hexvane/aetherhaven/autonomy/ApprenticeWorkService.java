@@ -311,6 +311,7 @@ public final class ApprenticeWorkService {
         if (!state.active) {
             CourierWorkService.interrupt(ref,store,npc,buffer);
             state.foodHarvest=site.type()==TownsfolkWorkType.FARMING&&FoodSiteService.readyToHarvest(world,target);
+            state.foodPlanting=site.type()==TownsfolkWorkType.FARMING&&FoodSiteService.plantable(world,target);
             var approach=CourierWorkService.approach(world,target,position,state.routeRetries.approachAttempt(site.id(),now));
             if (approach==null) {
                 state.routeRetries.failed(site.id(),now);site.food().careFailed("No clear place to stand beside the work area.");
@@ -341,7 +342,7 @@ public final class ApprenticeWorkService {
         }
         state.working=true;NpcStandStill.hold(ref,store,npc,state.approach,buffer);
         if (now>=state.nextVisual) {
-            boolean watering=site.type()==TownsfolkWorkType.FARMING&&!state.foodHarvest;
+            boolean watering=site.type()==TownsfolkWorkType.FARMING&&!state.foodHarvest&&!state.foodPlanting;
             state.nextVisual=now+(watering?2500:VillagerLifeTiming.durationMs("Tend"));
             PoiAutonomyVisuals.applyBodyYaw(ref,store,buffer,(float)(Math.atan2(target.x()+.5-position.x,target.z()+.5-position.z)+Math.PI));
             buffer.run(st->{if(!ref.isValid())return;
@@ -353,13 +354,15 @@ public final class ApprenticeWorkService {
         if (site.food().work(dt,true,habitat.ready(),com.hexvane.aetherhaven.restaurant.RestaurantMeals.work(needs,
             com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,site.type().skill,plugin.getProfessionKits())))) {
             boolean harvested=state.foodHarvest;
+            boolean planting=state.foodPlanting;
             var area=site.area();
             buffer.run(st->{
                 if(!eligibleAtCommit(ref,st,town,worker,site.type())
                     || town.getApprenticeWorkplaces().find(site.id())!=site || !area.equals(site.area()))return;
                 var actual=st.getComponent(ref,TransformComponent.getComponentType());
                 if(actual==null || actual.getPosition().distanceSquared(target.x()+.5,target.y(),target.z()+.5)>16)return;
-                boolean completed=site.food().completeCare(()->{
+                boolean completed=planting ? site.food().completePlanting(()->FoodSiteService.plantWheat(world,site,target))
+                    : site.food().completeCare(()->{
                     if(ranchJob!=null)return RanchWorkService.complete(world,site,ranchJob);
                     boolean applied=harvested?FoodSiteService.harvestForTown(world,target):FoodSiteService.waterSoil(world,target);
                     if(applied && !harvested)com.hypixel.hytale.server.core.universe.world.ParticleUtil.spawnParticleEffect("Water_Can_Splash",new Vector3d(target.x()+.5,target.y()+.1,target.z()+.5),st);

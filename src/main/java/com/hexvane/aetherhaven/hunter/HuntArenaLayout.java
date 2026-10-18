@@ -20,7 +20,7 @@ import org.joml.Vector3i;
  * @param creatureSpawn where each creature steps out, one block in front of the portal
  * @param yawTowardBeacon body yaw that looks from the portal to the beacon; an unturned lodge gives 0
  */
-record HuntArenaLayout(
+public record HuntArenaLayout(
     @Nonnull Vector3d hunterStand,
     @Nonnull Vector3d portal,
     @Nonnull Vector3d creatureSpawn,
@@ -36,7 +36,7 @@ record HuntArenaLayout(
      * @param lodgeYaw how the lodge was turned when it was placed
      */
     @Nonnull
-    static HuntArenaLayout of(@Nonnull Vector3d beacon, @Nonnull Rotation lodgeYaw) {
+    public static HuntArenaLayout of(@Nonnull Vector3d beacon, @Nonnull Rotation lodgeYaw) {
         Vector3d portal = turned(beacon, lodgeYaw, PORTAL_LOCAL_Z);
         return new HuntArenaLayout(
             turned(beacon, lodgeYaw, HUNTER_LOCAL_Z),

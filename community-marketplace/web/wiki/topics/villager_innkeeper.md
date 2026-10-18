@@ -9,6 +9,12 @@ npcRoleId: Aetherhaven_Innkeeper
 
 **Corin Mosscup** is usually found at **the inn** when they are on shift.
 
+### Guest Book
+
+At Town Level 3, ask Corin about **Building Upgrades** to unlock the Guest Book for **100 gold** from the treasury. The Guest Book dialogue option appears after this upgrade.
+
+The book shows available guests in Town Level order. Each invitation costs **50 gold** from the treasury and requests the next free morning guest spot. Only one invitation can wait at a time. Cancelling an invitation does not refund its fee.
+
 ### Quests
 
 #### A Place To Breathe
@@ -16,6 +22,13 @@ Corin wants a small park with benches so townsfolk can sit outside and feel a li
 
 1. Take the park plot token from Corin.
 2. Stake and build the park.
+3. Find Corin at the inn and close the quest in dialogue.
+
+#### Somewhere To Celebrate
+The park gave the town a place to sit. Corin wants a proper square next, so the whole town has somewhere to gather when a festival comes around.
+
+1. Take the festival square plot token from Corin.
+2. Stake and build the festival square.
 3. Find Corin at the inn and close the quest in dialogue.
 
 #### Corin's home

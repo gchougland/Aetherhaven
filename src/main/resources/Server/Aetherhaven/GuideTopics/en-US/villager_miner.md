@@ -9,6 +9,8 @@ npcRoleId: Aetherhaven_Miner
 
 **Gorruk Stonevein** is usually found at **the miner's hut** when they are on shift.
 
+Open **Miner's Hut and mining nodes** for core production, or **Mining workplace** for Townsfolk tunnels.
+
 ### Mastery and tools
 
 Gorruk's own production requires both his Mastery and an equipped Pickaxe. Talk to him to train Mastery with Verdant Catalysts and equip a better tool from your inventory. He starts with a Crude Pickaxe. Iron needs Mastery 3 and Copper; Thorium and Cobalt need Mastery 5 and 6 respectively and Iron; Adamantite needs Mastery 8 and Thorium or Cobalt. Higher tools satisfy lower requirements. See **Mastery and training** for the full table. These requirements are separate from the Mining skill used by Apprentices below.

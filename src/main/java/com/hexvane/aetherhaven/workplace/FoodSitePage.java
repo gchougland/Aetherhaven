@@ -59,14 +59,15 @@ public final class FoodSitePage extends AetherhavenInteractiveCustomUIPage<FoodS
         var habitat=FoodSiteService.inspect(world,site);var food=site.food();
         int points=habitat.simulated()&&!habitat.ready()?0:food.foodPoints();
         long remaining=shownCare(food.minutesUntilNeglected());
-        long workers=TownsfolkWorkRoster.list(town,manager,store,plugin).stream()
+        var roster=TownsfolkWorkRoster.list(town,manager,store,plugin);
+        long workers=roster.stream()
             .filter(w->w.progress().canPerform(site.type(),w.guard(),town.getPayroll().overdue(w.characterId()),w.alive())).count();
         var view=new View(site.name(),points,
-            food.completedVisits()==0?"Awaiting first visit":points==0?"Food support paused":food.needsTending()?"Ready for tending":"Well tended",
+            !habitat.simulated()?"Visit the whole workplace":!habitat.ready()?"Setup incomplete":workers==0?"No eligible worker":food.completedVisits()==0?"Preparing first food supply":points==0?"Food support paused":food.needsTending()?"Ready for tending":"Well tended",
             remaining,food.completedVisits()==0?"Care begins when an Apprentice works here.":"About "+remaining/60+"h "+remaining%60+"m of care remaining",
             food.lastCare(),!habitat.ready()?habitat.issue():food.careIssue()!=null?food.careIssue():
-                site.type()==com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.RANCHING?RanchWorkService.herdStatus(world,site):"The workplace has the equipment and growing area it needs.",
-            workers==0?"No available Apprentice has this profession enabled.":workers+" eligible "+(workers==1?"Apprentice":"Apprentices")+" | "+food.completedVisits()+" tending "+(food.completedVisits()==1?"visit":"visits")+" completed",
+                site.type()==com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.RANCHING?RanchWorkService.herdStatus(world,site):"Setup ready: Farmer's Workbench and at least 4 growing spaces found. Apprentices plant wheat themselves; you do not need seeds or planted crops.",
+            workerStatus(roster,town,site.type(),workers),
             !town.playerCanManageConstructions(playerRef.getUuid()));
         if(!view.equals(rendered)) {
             c.set("#FoodTitle.Text",view.name());c.set("#FoodPoints.Text",view.points()+" / 10");
@@ -78,6 +79,17 @@ public final class FoodSitePage extends AetherhavenInteractiveCustomUIPage<FoodS
         }
         if(!refreshing){refreshing=true;scheduleRefresh(world);}
         return true;
+    }
+    static String workerStatus(java.util.List<TownsfolkWorkRoster.Worker> roster,TownRecord town,
+                               com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType type,long eligible) {
+        if(eligible>0)return eligible+" eligible "+(eligible==1?"Apprentice":"Apprentices")+". They work when awake, fed and free from higher-priority jobs.";
+        var enabled=roster.stream().filter(w->w.progress().isEmployed()&&w.progress().priority(type)>0).toList();
+        if(enabled.isEmpty())return "Missing worker: employ a resident and enable "+WorkplaceRules.label(type)+" in the Town Journal's work priorities.";
+        var issues=new java.util.ArrayList<String>();
+        if(enabled.stream().anyMatch(w->town.getPayroll().overdue(w.characterId())))issues.add("pay overdue wages");
+        if(enabled.stream().anyMatch(TownsfolkWorkRoster.Worker::guard))issues.add("release assigned workers from guard duty");
+        if(enabled.stream().anyMatch(w->!w.alive()))issues.add("revive missing or dead assigned workers");
+        return "No eligible worker: "+String.join("; ",issues)+".";
     }
     private void scheduleRefresh(com.hypixel.hytale.server.core.universe.world.World world) {
         var plugin=AetherhavenPlugin.get();if(plugin==null)return;
