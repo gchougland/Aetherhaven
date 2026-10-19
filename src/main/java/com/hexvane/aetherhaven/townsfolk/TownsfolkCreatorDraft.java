@@ -8,6 +8,8 @@ import java.util.function.Predicate;
 
 /** The editable sheet, independent of the UI and transport. Nothing here changes a live resident. */
 public final class TownsfolkCreatorDraft {
+    public static final int ATTRIBUTE_START = 5, ATTRIBUTE_POINTS = 5, ATTRIBUTE_CAP = 8;
+    public static final int SKILL_START = 1, SKILL_POINTS = 10, SKILL_CAP = 5;
     public String name = "", gender = "male", race = "human", voice = "WarmMale";
     public final List<String> traits = new ArrayList<>(List.of("adventurer", "crafty", "grumpy"));
     public final Map<String, Integer> attributes = new LinkedHashMap<>(), skills = new LinkedHashMap<>();
@@ -15,8 +17,19 @@ public final class TownsfolkCreatorDraft {
     public static final List<String> ASSIGNMENTS = List.of("idle", "tourist", "guard", "guild_adventurer");
 
     public TownsfolkCreatorDraft() {
-        for (var attribute : TownsfolkAttribute.values()) attributes.put(attribute.id, 5);
-        for (var skill : TownsfolkSkill.values()) skills.put(skill.id, 1);
+        for (var attribute : TownsfolkAttribute.values()) attributes.put(attribute.id, ATTRIBUTE_START);
+        for (var skill : TownsfolkSkill.values()) skills.put(skill.id, SKILL_START);
+    }
+
+    // Derive the balance from the scores, so lowering a score refunds exactly what raising it costs.
+    public int attributePointsRemaining() {
+        return TownsfolkAttribute.values().length * ATTRIBUTE_START + ATTRIBUTE_POINTS
+            - attributes.values().stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public int skillPointsRemaining() {
+        return TownsfolkSkill.values().length * SKILL_START + SKILL_POINTS
+            - skills.values().stream().mapToInt(Integer::intValue).sum();
     }
 
     public void adjust(String kind, String key, int delta) {
@@ -25,8 +38,10 @@ public final class TownsfolkCreatorDraft {
             case "attribute" -> attributes; case "skill" -> skills; case "item" -> items; default -> Map.of();
         };
         if (!values.containsKey(key)) return;
+        if (delta > 0 && ((kind.equals("attribute") && attributePointsRemaining() <= 0)
+            || (kind.equals("skill") && skillPointsRemaining() <= 0))) return;
         int min = kind.equals("skill") ? 0 : 1;
-        int max = kind.equals("attribute") ? 20 : kind.equals("skill") ? 10 : 64;
+        int max = kind.equals("attribute") ? ATTRIBUTE_CAP : kind.equals("skill") ? SKILL_CAP : 64;
         values.put(key, Math.clamp(values.get(key) + delta, min, max));
     }
 
@@ -44,8 +59,10 @@ public final class TownsfolkCreatorDraft {
         require(knownVoices.contains(voice), "Choose a voice.");
         require(!items.isEmpty() && items.size() <= 8, "Choose at least one move-in item (up to eight).");
         items.forEach((id, count) -> require(knownItem.test(id) && count >= 1 && count <= 64, "Choose available items in amounts from 1 to 64."));
-        for (var attribute : TownsfolkAttribute.values()) requireScore(attributes.get(attribute.id), 1, 20);
-        for (var skill : TownsfolkSkill.values()) requireScore(skills.get(skill.id), 0, 10);
+        for (var attribute : TownsfolkAttribute.values()) requireScore(attributes.get(attribute.id), 1, ATTRIBUTE_CAP);
+        for (var skill : TownsfolkSkill.values()) requireScore(skills.get(skill.id), 0, SKILL_CAP);
+        require(attributePointsRemaining() >= 0, "You have spent too many attribute points. Lower an attribute to refund points.");
+        require(skillPointsRemaining() >= 0, "You have spent too many skill points. Lower a skill to refund points.");
         String slug = Normalizer.normalize(displayName, Normalizer.Form.NFKD).replaceAll("\\p{M}", "")
             .toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "_").replaceAll("^_+|_+$", "");
         if (slug.length() > 24) slug = slug.substring(0, 24);

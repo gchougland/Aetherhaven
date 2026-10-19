@@ -38,6 +38,35 @@ test("rejects malformed scores, duplicate traits, invalid gifts and arbitrary mo
     assert.throws(() => validateTownsfolk(character(), { ...model(), Model }));
 });
 
+test("starting scores enforce separate point pools and per-score creation caps", () => {
+  const fresh = () => { const c = character(); c.startingSkills.jewelry = 1; return c; };
+  const valid = fresh();
+  Object.assign(valid.startingAttributes, { strength: 8, intelligence: 7 }); // 30 total: all five points spent.
+  Object.assign(valid.startingSkills, { building: 5, crafting: 5, farming: 3 }); // 22 total: all ten spent.
+  assert.doesNotThrow(() => validateTownsfolk(valid, model()));
+  valid.startingAttributes.speed++;
+  assert.throws(() => validateTownsfolk(valid, model()), /Too many attribute points/);
+  valid.startingAttributes.vitality--; // Refunding an attribute permits the extra speed.
+  assert.doesNotThrow(() => validateTownsfolk(valid, model()));
+  valid.startingSkills.mining++;
+  assert.throws(() => validateTownsfolk(valid, model()), /Too many skill points/);
+  valid.startingSkills.jewelry = 0; // Giving up jewelry refunds one point.
+  assert.doesNotThrow(() => validateTownsfolk(valid, model()));
+  const attributeCap = fresh(); attributeCap.startingAttributes.strength = 9;
+  assert.throws(() => validateTownsfolk(attributeCap, model()), /Invalid strength score/);
+  const skillCap = fresh(); skillCap.startingSkills.building = 6;
+  assert.throws(() => validateTownsfolk(skillCap, model()), /Invalid building score/);
+  const noTransfer = fresh();
+  Object.assign(noTransfer.startingSkills, { building: 5, crafting: 5, farming: 4 });
+  noTransfer.startingAttributes.strength = 1;
+  assert.throws(() => validateTownsfolk(noTransfer, model()), /Too many skill points/);
+  const reverseTransfer = fresh();
+  Object.assign(reverseTransfer.startingAttributes, { strength: 8, speed: 8 });
+  reverseTransfer.startingSkills.jewelry = 0;
+  assert.throws(() => validateTownsfolk(reverseTransfer, model()), /Too many attribute points/);
+  assert.doesNotThrow(() => validateTownsfolk(fresh(), model())); // Unspent points are allowed.
+});
+
 test("paired files persist privately and retries do not duplicate or overwrite a submission", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "townsfolk-storage-"));
   try {
@@ -54,14 +83,18 @@ test("paired files persist privately and retries do not duplicate or overwrite a
 
 test("HTTP upload, authenticated admin listing/downloads, portrait retry and spoofed-header denial", async t => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "townsfolk-http-"));
-  const app = express(); let failPortrait = true;
+  const app = express(); let failPortrait = true, renderGate = null, onRender = () => {};
   // Only this test harness supplies sessions. Production routes use the website's signed login session.
   app.use((req, _res, next) => { req.session = req.get("X-Test-Session") ? { user: { role: req.get("X-Test-Session") } } : {}; next(); });
   registerTownsfolkRoutes(app, { dataDir: dir,
     requireWebUser: (req,res,next) => req.session.user ? next() : res.sendStatus(401),
     requireAdmin: (req,res,next) => req.session.user?.role === "admin" ? next() : res.sendStatus(403),
     submissionRateLimit: (_req,_res,next) => next(),
-    renderPortrait: async () => { if (failPortrait) throw new Error("test missing asset"); return Buffer.from("test portrait"); },
+    renderPortrait: async () => {
+      if (failPortrait) throw new Error("Portrait asset is missing: Cosmetics/CharacterCreator/GradientSets.json");
+      if (renderGate) { onRender(); await renderGate; }
+      return Buffer.from("test portrait");
+    },
   });
   let server;
   try {
@@ -83,17 +116,41 @@ test("HTTP upload, authenticated admin listing/downloads, portrait retry and spo
     assert.equal((await fetch(`${base}/private-townsfolk/${ID}.json`)).status, 404);
     const admin = { "X-Test-Session": "admin" };
     response = await fetch(base+routes[0], { headers: admin }); assert.equal(response.headers.get("cache-control"), "no-store");
-    assert.equal((await response.json()).submissions.length, 1);
+    const submissions = (await response.json()).submissions;
+    assert.equal(submissions.length, 1);
+    assert.equal(submissions[0].portraitError.code, "missing_asset");
+    assert.match(submissions[0].portraitError.message, /Cosmetics\/CharacterCreator\/GradientSets.json/);
     response = await fetch(base+routes[1], { headers: admin }); assert.equal((await response.json()).displayName, "Test Adventurer");
     assert.match(response.headers.get("content-disposition"), /community_test.json/);
     assert.equal((await fetch(base+routes[3], { headers: admin })).status, 409);
     assert.equal((await fetch(`${base}/api/admin/townsfolk/${ID}/portrait`, { method: "POST" })).status, 401);
+    response = await fetch(`${base}/api/admin/townsfolk/${ID}/portrait`, { method: "POST", headers: admin });
+    const failure = await response.json();
+    assert.equal(failure.portraitStatus, "failed"); assert.match(failure.portraitError.message, /GradientSets.json/);
     failPortrait = false;
     response = await fetch(`${base}/api/admin/townsfolk/${ID}/portrait`, { method: "POST", headers: admin });
-    assert.equal((await response.json()).portraitStatus, "ready");
+    const recovered = await response.json();
+    assert.equal(recovered.portraitStatus, "ready"); assert.equal(recovered.portraitError, null);
     response = await fetch(base+routes[3], { headers: admin }); assert.equal(response.status, 200); assert.match(response.headers.get("content-type"), /image\/png/);
     assert.equal((await send()).status, 201);
     assert.equal((await (await fetch(base+routes[0], { headers: admin })).json()).submissions.length, 1);
+    const deleteUrl = `${base}/api/admin/townsfolk/${ID}`;
+    assert.equal((await fetch(deleteUrl, { method: "DELETE", headers: { "X-Player-Uuid": AUTHOR } })).status, 401);
+    assert.equal((await fetch(deleteUrl, { method: "DELETE", headers: { "X-Test-Session": "player", "X-Player-Uuid": AUTHOR } })).status, 403);
+    // A render must not recreate a portrait after the character has been deleted.
+    fs.unlinkSync(path.join(dir,"private-townsfolk",`${ID}.png`));
+    const started = new Promise(resolve => { onRender = resolve; });
+    let release; renderGate = new Promise(resolve => { release = resolve; });
+    const pending = fetch(`${deleteUrl}/portrait`, { method: "POST", headers: admin });
+    await started;
+    try { assert.equal((await fetch(deleteUrl, { method: "DELETE", headers: admin })).status, 409); }
+    finally { release(); }
+    assert.equal((await (await pending).json()).portraitStatus, "ready");
+    assert.equal((await fetch(deleteUrl, { method: "DELETE", headers: admin })).status, 204);
+    assert.deepEqual(fs.readdirSync(path.join(dir,"private-townsfolk")), []);
+    for (const route of routes.slice(1)) assert.equal((await fetch(base+route, { headers: admin })).status, 404);
+    assert.equal((await (await fetch(base+routes[0], { headers: admin })).json()).submissions.length, 0);
+    assert.equal((await fetch(deleteUrl, { method: "DELETE", headers: admin })).status, 404);
   } finally {
     if (server) { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); assert.equal(server.listening, false); }
     fs.rmSync(dir, { recursive: true, force: true });

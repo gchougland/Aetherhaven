@@ -45,19 +45,44 @@ if (section) {
       const link = element("a", "btn", label); link.href = `${url}/files/${kind}`; link.download = ""; downloads.append(link);
     }
     if (entry.portraitStatus !== "ready") {
+      const errorText = element("p", "townsfolk-portrait-error", entry.portraitError?.message || "");
+      errorText.hidden = !entry.portraitError?.message; errorText.setAttribute("role", "status"); article.append(errorText);
       const retry = element("button", "btn", entry.portraitStatus === "rendering" ? "Rendering portrait..." : "Retry portrait");
       retry.type = "button"; retry.disabled = entry.portraitStatus === "rendering";
       retry.addEventListener("click", async () => {
         retry.disabled = true; retry.textContent = "Rendering portrait...";
         try {
           const response = await fetch(`${url}/portrait`, { method: "POST", credentials: "same-origin" });
-          if (!response.ok || (await response.json()).portraitStatus !== "ready") throw new Error("Portrait could not be created. Check the server's synced character assets, then retry.");
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok || result.portraitStatus !== "ready") throw new Error(result.portraitError?.message || "Portrait could not be created. Check the server's synced character assets, then retry.");
           await load();
-        } catch (e) { retry.disabled = false; retry.textContent = "Retry portrait"; status.textContent = e.message; }
+        } catch (e) { retry.disabled = false; retry.textContent = "Retry portrait"; errorText.hidden = false; errorText.textContent = e.message; status.textContent = e.message; }
       });
       downloads.append(retry);
     }
-    article.append(downloads); return article;
+    const remove = element("button", "btn townsfolk-delete", "Delete");
+    remove.type = "button"; remove.disabled = entry.portraitStatus === "rendering";
+    remove.setAttribute("aria-label", `Delete ${c.displayName}`);
+    const confirmation = element("div", "townsfolk-delete-confirm"); confirmation.hidden = true;
+    confirmation.append(element("p", "", `Permanently delete ${c.displayName}? This removes the character, model and portrait. It cannot be undone.`));
+    const confirm = element("button", "btn townsfolk-delete", "Delete permanently"), cancel = element("button", "btn", "Cancel");
+    confirm.type = cancel.type = "button"; confirmation.append(confirm, cancel);
+    remove.addEventListener("click", () => { confirmation.hidden = false; remove.hidden = true; cancel.focus(); });
+    cancel.addEventListener("click", () => { confirmation.hidden = true; remove.hidden = false; remove.focus(); });
+    confirm.addEventListener("click", async () => {
+      confirm.disabled = cancel.disabled = true; confirm.textContent = "Deleting...";
+      try {
+        const response = await fetch(url, { method: "DELETE", credentials: "same-origin" });
+        if (!response.ok) {
+          const result = await response.json().catch(() => ({}));
+          throw new Error(result.message || "Could not delete the submission. Please retry.");
+        }
+        await load();
+      } catch (error) { status.textContent = error.message; }
+      finally { confirm.disabled = cancel.disabled = false; confirm.textContent = "Delete permanently"; }
+    });
+    downloads.append(remove);
+    article.append(downloads, confirmation); return article;
   }
   function render() {
     const query = search.value.trim().toLocaleLowerCase();

@@ -171,11 +171,40 @@ async function main() {
     collectDefPaths(def, addFor(id));
   }
 
+  // A building-only bundle passes the catalogs but cannot render a single player portrait.
+  const gradientPath = "Cosmetics/CharacterCreator/GradientSets.json";
+  const gradientFile = path.join(assetsDir, gradientPath);
+  let portraitFailures = 0;
+  try {
+    const gradients = JSON.parse(fs.readFileSync(gradientFile, "utf8"));
+    if (!Array.isArray(gradients)) throw new Error("Expected an array of gradient sets");
+    for (const set of gradients) for (const gradient of Object.values(set.Gradients || {}))
+      if (gradient.Texture) addFor("Player portrait gradient")(gradient.Texture);
+  } catch (error) {
+    console.error(`Missing or invalid ${gradientPath}. Run npm run sync-hytale-assets -- --portraits-only.`);
+    portraitFailures++;
+  }
+  for (const p of ["Characters/Player.blockymodel", "Characters/Player_Textures/Player_Greyscale.png",
+    "Characters/Aetherhaven/Resident_Ears.blockymodel", "Cosmetics/Underwears/Underwear.blockymodel"])
+    addFor("Player portrait")(p);
+  const localPortraits = indexLocalCommon();
+  for (const p of localPortraits.exact) if (/^(Characters|Cosmetics|TintGradients)\//.test(p) && /\.(png|blockymodel)$/.test(p))
+    addFor("Player portrait cosmetics")(p);
+  if (baseUrl) {
+    try {
+      const response = await fetch(`${baseUrl}/hytale-assets/${gradientPath}`);
+      if (!response.ok || !Array.isArray(await response.json())) throw new Error("Missing gradient data");
+    } catch {
+      console.error(`Live portrait assets are missing ${gradientPath}. Upload the refreshed portrait bundle.`);
+      portraitFailures++;
+    }
+  }
+
   console.log(
     `Catalogs: ${Object.keys(blocks).length} blocks, ${Object.keys(models).length} models, ${refs.size} distinct asset paths`
   );
 
-  let failures = 0;
+  let failures = portraitFailures;
 
   // Local check always runs: it is free and catches a bad sync before a bad deploy.
   const local = indexLocalCommon();

@@ -32,9 +32,57 @@ class TownsfolkCreatorDraftTest {
     @Test void scoresAreClampedAndZeroRemainsIncapable() {
         var d = sheet();
         for (int i=0;i<100;i++) { d.adjust("skill","jewelry",-1); d.adjust("attribute","speed",1); d.adjust("item","Wood",1); }
-        assertEquals(0,d.skills.get("jewelry")); assertEquals(20,d.attributes.get("speed")); assertEquals(64,d.items.get("Wood"));
+        assertEquals(0,d.skills.get("jewelry")); assertEquals(8,d.attributes.get("speed")); assertEquals(64,d.items.get("Wood"));
         d.adjust("skill","jewelry",100); assertEquals(0,d.skills.get("jewelry"));
         assertDoesNotThrow(() -> export(d));
+    }
+    @Test void startsWithIndependentAttributeAndSkillBudgets() {
+        var d = sheet();
+        assertTrue(d.attributes.values().stream().allMatch(value -> value == 5));
+        assertTrue(d.skills.values().stream().allMatch(value -> value == 1));
+        assertEquals(5, d.attributePointsRemaining()); assertEquals(10, d.skillPointsRemaining());
+        d.adjust("attribute", "strength", 1);
+        assertEquals(4, d.attributePointsRemaining()); assertEquals(10, d.skillPointsRemaining());
+        d.adjust("skill", "building", 1);
+        assertEquals(4, d.attributePointsRemaining()); assertEquals(9, d.skillPointsRemaining());
+    }
+    @Test void spendingStopsAtZeroAndRefundsAllowReallocation() {
+        var d = sheet();
+        for (int i=0;i<3;i++) d.adjust("attribute", "strength", 1);
+        for (int i=0;i<2;i++) d.adjust("attribute", "speed", 1);
+        assertEquals(0, d.attributePointsRemaining());
+        d.adjust("attribute", "vitality", 1); assertEquals(5, d.attributes.get("vitality"));
+        d.adjust("attribute", "strength", -1); assertEquals(1, d.attributePointsRemaining());
+        d.adjust("attribute", "vitality", 1); assertEquals(6, d.attributes.get("vitality"));
+        for (int i=0;i<4;i++) { d.adjust("skill", "building", 1); d.adjust("skill", "crafting", 1); }
+        for (int i=0;i<2;i++) d.adjust("skill", "farming", 1);
+        assertEquals(0, d.skillPointsRemaining());
+        d.adjust("skill", "mining", 1); assertEquals(1, d.skills.get("mining"));
+        d.adjust("skill", "jewelry", -1); assertEquals(1, d.skillPointsRemaining());
+        d.adjust("skill", "mining", 1); assertEquals(2, d.skills.get("mining"));
+        assertEquals(0, d.attributePointsRemaining()); assertEquals(0, d.skillPointsRemaining());
+        assertDoesNotThrow(() -> export(d));
+    }
+    @Test void loweringBelowDefaultsRefundsPointsButBoundsAndRepeatedClicksCannotCreatePoints() {
+        var d = sheet();
+        for (int i=0;i<100;i++) { d.adjust("attribute", "strength", -1); d.adjust("skill", "jewelry", -1); }
+        assertEquals(1, d.attributes.get("strength")); assertEquals(9, d.attributePointsRemaining());
+        assertEquals(0, d.skills.get("jewelry")); assertEquals(11, d.skillPointsRemaining());
+        for (int i=0;i<100;i++) { d.adjust("attribute", "speed", 1); d.adjust("skill", "building", 1); }
+        assertEquals(8, d.attributes.get("speed")); assertEquals(6, d.attributePointsRemaining());
+        assertEquals(5, d.skills.get("building")); assertEquals(7, d.skillPointsRemaining());
+        for (int i=0;i<100;i++) { d.adjust("skill", "mining", 1); d.adjust("skill", "mining", -1); }
+        assertEquals(1, d.skills.get("mining")); assertEquals(7, d.skillPointsRemaining());
+    }
+    @Test void exportRejectsTamperedCapsAndOverBudgetScoresEvenWhenIndividuallyInRange() {
+        var d = sheet(); d.attributes.put("strength", 9);
+        assertThrows(IllegalArgumentException.class, () -> export(d));
+        var capped = sheet(); capped.skills.put("building", 6);
+        assertThrows(IllegalArgumentException.class, () -> export(capped));
+        var attributes = sheet(); attributes.attributes.put("strength", 8); attributes.attributes.put("speed", 8);
+        assertThrows(IllegalArgumentException.class, () -> export(attributes));
+        var skills = sheet(); skills.skills.put("building", 5); skills.skills.put("crafting", 5); skills.skills.put("farming", 4);
+        assertThrows(IllegalArgumentException.class, () -> export(skills));
     }
     @Test void validatesDistinctTraitsAndAvailableItemsBeforeExport() {
         var d = sheet(); d.traits.set(1,"adventurer"); assertThrows(IllegalArgumentException.class,()->export(d));

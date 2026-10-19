@@ -3,6 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
 import test from "node:test";
 import sharp from "sharp";
 import { renderPortrait, createPortraitRenderer, TOWNSFOLK_ICON } from "../server/townsfolkPortrait.js";
@@ -27,6 +28,20 @@ test("portrait uses the townsfolk camera with depth, transparent edges and skin 
     // A 24-unit cube at 19 degrees is wider than a front-on 48px square.
     assert.ok(columns.length >= 60 && columns.length <= 64, String(columns.length));
     await assert.rejects(renderPortrait({...model,Model:"../../secret.blockymodel"},[dir]),/Invalid portrait asset path/);
+
+    // Exercise the shipped asset sync, then render with ONLY its output (no developer-checkout fallback).
+    fs.mkdirSync(path.join(dir,"Common/Cosmetics/Underwears"),{recursive:true});
+    fs.copyFileSync(path.join(dir,"Common/Characters/Test.blockymodel"),path.join(dir,"Common/Cosmetics/Underwears/Test.blockymodel"));
+    fs.copyFileSync(path.join(dir,"Common/Characters/skin.png"),path.join(dir,"Common/Cosmetics/Underwears/skin.png"));
+    const output=path.join(dir,"synced");fs.mkdirSync(path.join(output,"catalog"),{recursive:true});
+    fs.writeFileSync(path.join(output,"catalog/keep.json"),'existing catalog');
+    const sync=spawnSync(process.execPath,[fileURLToPath(new URL("../scripts/sync-hytale-viewer-assets.mjs",import.meta.url)),"--portraits-only"],{
+      encoding:"utf8",env:{...process.env,HYTALE_ASSETS_SRC:dir,AETHERHAVEN_ASSETS_SRC:path.join(dir,"empty-mod"),OUT_DIR:output},timeout:30000,
+    });
+    assert.equal(sync.status,0,sync.stderr);
+    assert.equal(fs.readFileSync(path.join(output,"catalog/keep.json"),"utf8"),'existing catalog');
+    const clothingModel={...model,Model:"Cosmetics/Underwears/Test.blockymodel",Texture:"Cosmetics/Underwears/skin.png"};
+    assert.deepEqual(await renderPortrait(clothingModel,[output]),png);
   } finally { fs.rmSync(dir,{recursive:true,force:true}); }
 });
 

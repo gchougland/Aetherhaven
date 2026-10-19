@@ -67,6 +67,8 @@ public final class TownsfolkCreatorPage extends AetherhavenInteractiveCustomUIPa
         }
         for (String id : List.of("CharacterName", "Gender", "Race", "Voice", "Trait0", "Trait1", "Trait2", "Search"))
             e.addEventBinding(CustomUIEventBindingType.ValueChanged, "#" + id, EventData.of("Field", id).append("@Value", "#" + id + ".Value"), false);
+        b.set("#AttributeBudget.Text", "Points left: " + draft.attributePointsRemaining());
+        b.set("#SkillBudget.Text", "Points left: " + draft.skillPointsRemaining());
         for (var attribute : TownsfolkAttribute.values()) stat(b, e, "#Attributes", attribute.id, "attribute", draft.attributes.get(attribute.id));
         int index = 0;
         for (var skill : TownsfolkSkill.values()) stat(b, e, index++ < 6 ? "#SkillsLeft" : "#SkillsRight", skill.id, "skill", draft.skills.get(skill.id));
@@ -103,7 +105,9 @@ public final class TownsfolkCreatorPage extends AetherhavenInteractiveCustomUIPa
         b.set(row + " #Score.Text", Integer.toString(value));
         b.set(row + " #Note.Text", kind.equals("skill") && value == 0 ? "Cannot learn" : kind.equals("skill") ? "Skill level" : "Attribute");
         b.set(row + " #Minus.Disabled", value <= (kind.equals("skill") ? 0 : 1));
-        b.set(row + " #Plus.Disabled", value >= (kind.equals("skill") ? 10 : 20));
+        int cap = kind.equals("skill") ? TownsfolkCreatorDraft.SKILL_CAP : TownsfolkCreatorDraft.ATTRIBUTE_CAP;
+        int remaining = kind.equals("skill") ? draft.skillPointsRemaining() : draft.attributePointsRemaining();
+        b.set(row + " #Plus.Disabled", value >= cap || remaining <= 0);
         action(e, row + " #Minus", kind + ":-1:" + id); action(e, row + " #Plus", kind + ":1:" + id);
     }
 

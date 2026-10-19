@@ -1,10 +1,10 @@
 # Changelog
 
-## Unreleased
+## [4.0.1] - Unreleased]
 
 ### Added
 
-- **Townsfolk creator** Use /ah create-townsfolk to design a character sheet, choose move-in gifts with an item picker, and send your character, appearance and portrait privately to website admins.
+- **Townsfolk creator** Use /ah create-townsfolk to spend attribute and skill points, choose move-in gifts with an item picker, and send your character, appearance and portrait privately to website admins. Admins can view, download or delete each submission.
 
 - **New townsfolk** Meet LoneStar144, a crafty, grumpy adventurer who excels at building and crafting and asks for wood planks to move in.
 - **English language option** Choose Use English for Aetherhaven in the journal's personal settings without changing your game's language.

@@ -577,6 +577,19 @@ function subpluginRoots() {
     .map((e) => path.join(packs, e.name));
 }
 
+function syncPortraitAssets() {
+  let copied = 0;
+  for (const root of assetRoots) {
+    for (const folder of ["Characters", "Cosmetics", "TintGradients"]) {
+      copied += copyTree(path.join(root, "Common", folder), path.join(outDir, "Common", folder), f => /\.(blockymodel|png)$/i.test(f));
+    }
+    copied += copyTree(path.join(root, "Cosmetics", "CharacterCreator"), path.join(outDir, "Cosmetics", "CharacterCreator"), f => path.basename(f) === "GradientSets.json");
+  }
+  const gradientFile = path.join(outDir, "Cosmetics", "CharacterCreator", "GradientSets.json");
+  if (!fs.existsSync(gradientFile)) throw new Error("Portrait sync is missing Cosmetics/CharacterCreator/GradientSets.json. Check HYTALE_ASSETS_SRC.");
+  console.log(`Character portrait assets: ${copied} files`);
+}
+
 function main() {
   console.log("Hytale assets:", hytaleRoot);
   console.log("Aetherhaven assets:", aetherhavenRoot);
@@ -589,6 +602,8 @@ function main() {
   }
 
   ensureDir(outDir);
+  // Additive repair for older website bundles: never clear existing viewer assets or catalogs.
+  if (process.argv.includes("--portraits-only")) { syncPortraitAssets(); return; }
   // Clean previous sync (keep folder, replace contents)
   for (const name of fs.readdirSync(outDir)) {
     fs.rmSync(path.join(outDir, name), { recursive: true, force: true });
@@ -647,12 +662,7 @@ function main() {
   console.log(`NPC models/textures: ${npcCopied} files`);
 
   // Character submissions render the player's exact cosmetics, including gradients and attachment anchors.
-  const portraitsCopied = sumOverRoots(root =>
-    copyTree(path.join(root, "Common", "Characters"), path.join(outDir, "Common", "Characters"), isModelOrTexture)
-    + copyTree(path.join(root, "Common", "TintGradients"), path.join(outDir, "Common", "TintGradients"), isModelOrTexture)
-    + copyTree(path.join(root, "Cosmetics", "CharacterCreator"), path.join(outDir, "Cosmetics", "CharacterCreator"), f => f.endsWith("GradientSets.json"))
-  );
-  console.log(`Character portrait assets: ${portraitsCopied} files`);
+  syncPortraitAssets();
 
   const catalogFiles = {
     "block_catalog.json": JSON.stringify(blockCatalog),

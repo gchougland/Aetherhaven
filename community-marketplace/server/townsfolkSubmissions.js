@@ -8,12 +8,21 @@ import { TOWNSFOLK_ICON } from "./townsfolkPortrait.js";
 export const ATTRIBUTES = ["strength", "intelligence", "vitality", "dexterity", "speed"];
 export const SKILLS = ["blacksmithing", "ranching", "farming", "mining", "building", "alchemy", "crafting", "leatherworking", "cooking", "logistics", "commerce", "jewelry"];
 export const ASSIGNMENTS = ["idle", "tourist", "guard", "guild_adventurer"];
+const ATTRIBUTE_START = 5, ATTRIBUTE_POINTS = 5, ATTRIBUTE_CAP = 8;
+const SKILL_START = 1, SKILL_POINTS = 10, SKILL_CAP = 5;
 const ID = /^[a-z][a-z0-9_]{0,63}$/;
 const ASSET = /^[A-Za-z0-9_/-]+\.(png|blockymodel)$/;
 const VOICE = /^(Bright|Warm|Mellow|Gravely|Old)(Male|Female)(Lower|Higher)?$|^RustyRobot(Lower|Higher)?$/;
 const MAX_BYTES = 256 * 1024;
 
 class ValidationError extends Error { }
+function portraitFailure(error) {
+  const missing = /^Portrait asset is missing: ([A-Za-z0-9_./-]+)$/.exec(error?.message || "");
+  if (missing) return { code: "missing_asset", message: `Missing website asset: ${missing[1]}. Sync and upload the portrait assets, then retry.` };
+  if (error?.message === "Portrait gradient is missing") return { code: "missing_gradient", message: "The website's skin or hair colour data is outdated. Update the portrait assets, then retry." };
+  if (error?.message === "Portrait rendering timed out") return { code: "timeout", message: "Portrait rendering took too long. Please retry." };
+  return { code: "render_failed", message: "Portrait rendering failed. Check the website server logs for the cause before retrying." };
+}
 function check(ok, message) { if (!ok) throw new ValidationError(message); }
 function text(value, max, label) {
   check(typeof value === "string" && value.trim().length > 0 && value.length <= max && !/[\x00-\x1f]/.test(value), `Invalid ${label}.`);
@@ -61,12 +70,17 @@ export function validateTownsfolk(character, model) {
   const icon = `Icons/ModelsGenerated/${character.modelAssetId}.png`;
   const cleanModel = { Parent: "Aetherhaven_Human", ...appearance(model, true), DefaultAttachments: model.DefaultAttachments.map(part => appearance(part)),
     Icon: icon, IconProperties: TOWNSFOLK_ICON };
+  const startingAttributes = scores(character.startingAttributes, ATTRIBUTES, 1, ATTRIBUTE_CAP);
+  const startingSkills = scores(character.startingSkills, SKILLS, 0, SKILL_CAP);
+  check(Object.values(startingAttributes).reduce((sum, value) => sum + value, 0) <= ATTRIBUTES.length * ATTRIBUTE_START + ATTRIBUTE_POINTS,
+    "Too many attribute points. Lower an attribute to refund points.");
+  check(Object.values(startingSkills).reduce((sum, value) => sum + value, 0) <= SKILLS.length * SKILL_START + SKILL_POINTS,
+    "Too many skill points. Lower a skill to refund points.");
   const cleanCharacter = {
     id: character.id, displayName: text(character.displayName, 48, "name"), gender: character.gender, race: character.race,
     modelAssetId: character.modelAssetId, portraitIcon: `${character.modelAssetId}.png`, personalityIds: character.personalityIds,
     allowedAssignmentKinds: ASSIGNMENTS, befriendable: false, speechVoiceId: character.speechVoiceId,
-    moveInRequirements: items, startingAttributes: scores(character.startingAttributes, ATTRIBUTES, 1, 20),
-    startingSkills: scores(character.startingSkills, SKILLS, 0, 10),
+    moveInRequirements: items, startingAttributes, startingSkills,
   };
   return { character: cleanCharacter, model: cleanModel };
 }
@@ -95,10 +109,21 @@ export function createTownsfolkSubmissions(dataDir) {
   }
   return {
     save, get,
+    remove(id) {
+      const target = file(id);
+      if (!target || !fs.existsSync(target)) return false;
+      // Keep the record available for a retry if removing a file fails.
+      const png = path.join(root, `${normalizePlayerUuid(id)}.png`);
+      if (fs.existsSync(png)) fs.unlinkSync(png);
+      fs.unlinkSync(target); // This record contains both the character and model JSON.
+      return true;
+    },
     portraitPath: id => normalizePlayerUuid(id) ? path.join(root, `${normalizePlayerUuid(id)}.png`) : null,
-    portraitStatus(id, status) {
+    portraitStatus(id, status, error = null) {
       const entry = get(id); if (!entry) return;
       entry.portraitStatus = status;
+      if (error) entry.portraitError = error;
+      else delete entry.portraitError;
       const target = file(id), temp = `${target}.${crypto.randomUUID()}.tmp`;
       try { fs.writeFileSync(temp, JSON.stringify(entry, null, 2), { flag: "wx" }); fs.renameSync(temp, target); }
       finally { if (fs.existsSync(temp)) fs.unlinkSync(temp); }
@@ -116,7 +141,9 @@ export function registerTownsfolkRoutes(app, { dataDir, requireWebUser, requireA
     if (fs.existsSync(storage.portraitPath(entry.id))) return "ready";
     if (rendering.has(entry.id)) return rendering.get(entry.id);
     // Do not let a large submission burst build an unbounded worker queue.
-    if (rendering.size >= 8) { storage.portraitStatus(entry.id, "failed"); return "failed"; }
+    if (rendering.size >= 8) {
+      storage.portraitStatus(entry.id, "failed", { code: "busy", message: "The portrait queue is full. Wait a moment, then retry." }); return "failed";
+    }
     storage.portraitStatus(entry.id, "rendering");
     const job = Promise.resolve().then(() => renderPortrait(entry.model)).then(png => {
       const target = storage.portraitPath(entry.id), temp = `${target}.tmp`;
@@ -125,7 +152,7 @@ export function registerTownsfolkRoutes(app, { dataDir, requireWebUser, requireA
       storage.portraitStatus(entry.id, "ready"); return "ready";
     }).catch(error => {
       console.warn("Townsfolk portrait failed:", error.message);
-      storage.portraitStatus(entry.id, "failed"); return "failed";
+      storage.portraitStatus(entry.id, "failed", portraitFailure(error)); return "failed";
     }).finally(() => rendering.delete(entry.id));
     rendering.set(entry.id, job); return job;
   }
@@ -157,7 +184,19 @@ export function registerTownsfolkRoutes(app, { dataDir, requireWebUser, requireA
   app.post("/api/admin/townsfolk/:id/portrait", requireWebUser, requireAdmin, async (req, res) => {
     const entry = storage.get(req.params.id);
     if (!entry) return res.status(404).json({ error: "not_found" });
-    res.set("Cache-Control", "no-store").json({ portraitStatus: await portrait(entry) });
+    const portraitStatus = await portrait(entry);
+    res.set("Cache-Control", "no-store").json({ portraitStatus, portraitError: storage.get(entry.id)?.portraitError || null });
+  });
+  app.delete("/api/admin/townsfolk/:id", requireWebUser, requireAdmin, (req, res) => {
+    res.set("Cache-Control", "no-store");
+    const entry = storage.get(req.params.id);
+    if (!entry) return res.status(404).json({ error: "not_found", message: "This submission no longer exists." });
+    if (rendering.has(entry.id)) return res.status(409).json({ error: "portrait_busy", message: "Wait for this character's portrait to finish, then delete the submission." });
+    try { storage.remove(entry.id); res.status(204).end(); }
+    catch (error) {
+      console.warn("Townsfolk deletion failed:", error.message);
+      res.status(500).json({ error: "delete_failed", message: "Could not remove all submission files. Please retry." });
+    }
   });
   app.get("/api/admin/townsfolk/:id/files/:kind", requireWebUser, requireAdmin, (req, res) => {
     const entry = storage.get(req.params.id);

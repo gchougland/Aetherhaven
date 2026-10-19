@@ -38,12 +38,14 @@ $C.@PageOverlay { LayoutMode: Middle;
             }
             Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; Anchor: (Width: 220, Right: 16);
               Label { Text: "02  ATTRIBUTES"; Anchor: (Height: 28); Style: @Heading; }
-              Label { Text: "Starting ability: 1 to 20"; Anchor: (Height: 24, Bottom: 6); Style: @Caption; }
+              Label #AttributeBudget { Anchor: (Height: 26); Style: @Heading; }
+              Label { Text: "Start at 5, with 5 points to spend. Min 1, max 8. Lower a score to refund points."; Anchor: (Height: 54, Bottom: 6); Style: @Caption; }
               Group #Attributes { LayoutMode: Top; }
             }
             Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; FlexWeight: 1;
               Label { Text: "03  SKILLS"; Anchor: (Height: 28); Style: (...@Heading, TextColor: #99c7b5); }
-              Label { Text: "1-10 can improve. 0 means they can NEVER learn that skill."; Anchor: (Height: 36, Bottom: 6); Style: @Caption; }
+              Label #SkillBudget { Anchor: (Height: 26); Style: (...@Heading, TextColor: #99c7b5); }
+              Label { Text: "Start at 1, with 10 points to spend. Max 5. Lower a skill to refund points. At 0, they can NEVER learn it."; Anchor: (Height: 54, Bottom: 6); Style: @Caption; }
               Group { LayoutMode: Left;
                 Group #SkillsLeft { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 8); }
                 Group #SkillsRight { LayoutMode: Top; FlexWeight: 1; }
