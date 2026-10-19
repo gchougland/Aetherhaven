@@ -646,6 +646,14 @@ function main() {
   );
   console.log(`NPC models/textures: ${npcCopied} files`);
 
+  // Character submissions render the player's exact cosmetics, including gradients and attachment anchors.
+  const portraitsCopied = sumOverRoots(root =>
+    copyTree(path.join(root, "Common", "Characters"), path.join(outDir, "Common", "Characters"), isModelOrTexture)
+    + copyTree(path.join(root, "Common", "TintGradients"), path.join(outDir, "Common", "TintGradients"), isModelOrTexture)
+    + copyTree(path.join(root, "Cosmetics", "CharacterCreator"), path.join(outDir, "Cosmetics", "CharacterCreator"), f => f.endsWith("GradientSets.json"))
+  );
+  console.log(`Character portrait assets: ${portraitsCopied} files`);
+
   const catalogFiles = {
     "block_catalog.json": JSON.stringify(blockCatalog),
     "model_catalog.json": JSON.stringify(modelCatalog),

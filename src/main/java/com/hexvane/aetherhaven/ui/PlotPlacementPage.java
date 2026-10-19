@@ -207,7 +207,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             ) {
                 selectedDropdownValue = options.get(0).getDropdownValue();
             }
-            List<DropdownEntryInfo> entries = collectPlotDropdownEntries(plugin, inv, playerRef.getLanguage());
+            List<DropdownEntryInfo> entries = collectPlotDropdownEntries(plugin, inv, AetherhavenLanguage.modLanguage(playerRef));
             showPlotTypeDropdown = !entries.isEmpty();
             commandBuilder.set("#PlotTypeDropdown.Entries", entries);
             commandBuilder.set("#PlotTypeDropdown.Visible", showPlotTypeDropdown);

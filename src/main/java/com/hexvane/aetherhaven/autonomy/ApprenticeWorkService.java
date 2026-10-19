@@ -346,10 +346,11 @@ public final class ApprenticeWorkService {
             state.nextVisual=now+(watering?2500:VillagerLifeTiming.durationMs("Tend"));
             PoiAutonomyVisuals.applyBodyYaw(ref,store,buffer,(float)(Math.atan2(target.x()+.5-position.x,target.z()+.5-position.z)+Math.PI));
             buffer.run(st->{if(!ref.isValid())return;
-                if(watering)VillagerLifeProps.equip(ref,"WaterCrops",st);
+                if(state.foodPlanting)VillagerLifeProps.equip(ref,"PlantCrops",st);
+                else if(watering)VillagerLifeProps.equip(ref,"WaterCrops",st);
                 else if(ranchJob!=null)VillagerLifeProps.equip(ref,ranchJob.slaughter()?"Slaughter":"FeedAnimals",st);
                 else VillagerLifeProps.clear(ref,st);
-                AnimationUtils.playAnimation(ref,AnimationSlot.Action,watering?"Aetherhaven_Work_Actions":NpcFaceVisuals.itemAnimationsForFaceRig(ref,"Aetherhaven_Life_Actions",st),watering?"WaterCrops":"Tend",true,st);});
+                AnimationUtils.playAnimation(ref,AnimationSlot.Action,state.foodPlanting?"Hoe":watering?"Aetherhaven_Work_Actions":NpcFaceVisuals.itemAnimationsForFaceRig(ref,"Aetherhaven_Life_Actions",st),state.foodPlanting?"Till":watering?"WaterCrops":"Tend",true,st);});
         }
         if (site.food().work(dt,true,habitat.ready(),com.hexvane.aetherhaven.restaurant.RestaurantMeals.work(needs,
             com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,site.type().skill,plugin.getProfessionKits())))) {
@@ -443,8 +444,9 @@ public final class ApprenticeWorkService {
             state.nextVisual=now+(watering?2500:VillagerLifeTiming.durationMs("Tend"));
             PoiAutonomyVisuals.applyBodyYaw(ref,store,buffer,(float)(Math.atan2(target.x()+.5-position.x,target.z()+.5-position.z)+Math.PI));
             buffer.run(st->{if(!ref.isValid())return;
-                if(watering)VillagerLifeProps.equip(ref,"WaterCrops",st);else VillagerLifeProps.clear(ref,st);
-                AnimationUtils.playAnimation(ref,AnimationSlot.Action,watering?"Aetherhaven_Work_Actions":NpcFaceVisuals.itemAnimationsForFaceRig(ref,"Aetherhaven_Life_Actions",st),watering?"WaterCrops":"Tend",true,st);});
+                if(state.foodPlanting)VillagerLifeProps.equip(ref,"PlantCrops",st);
+                else if(watering)VillagerLifeProps.equip(ref,"WaterCrops",st);else VillagerLifeProps.clear(ref,st);
+                AnimationUtils.playAnimation(ref,AnimationSlot.Action,state.foodPlanting?"Hoe":watering?"Aetherhaven_Work_Actions":NpcFaceVisuals.itemAnimationsForFaceRig(ref,"Aetherhaven_Life_Actions",st),state.foodPlanting?"Till":watering?"WaterCrops":"Tend",true,st);});
         }
         if(grower.work(plan,bed,job,dt,true,
             com.hexvane.aetherhaven.restaurant.RestaurantMeals.work(needs,com.hexvane.aetherhaven.equipment.ProfessionKitService.workMultiplier(progress,site.type().skill,plugin.getProfessionKits())))) {

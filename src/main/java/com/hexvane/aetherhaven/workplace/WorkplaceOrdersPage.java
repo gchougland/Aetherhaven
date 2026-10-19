@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.workplace;
 
+import com.hexvane.aetherhaven.ui.AetherhavenLanguage;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.*;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkWorkRoster;
@@ -478,7 +480,7 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
     private String itemName(String id) {
         var item=com.hypixel.hytale.server.core.asset.type.item.config.Item.getAssetMap().getAsset(id);
         var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
-        String name=item==null||i18n==null?null:i18n.getMessage(playerRef.getLanguage(),item.getTranslationKey());
+        String name=item==null||i18n==null?null:AetherhavenLanguage.message(playerRef,item.getTranslationKey());
         return name==null||name.isBlank()?id.replace('_',' '):name;
     }
     private EventData event(String action,ApprenticeWorkplace site) {

@@ -129,6 +129,7 @@ public final class BuildingEditorJsonWriter {
             root.remove("tags");
         }
         putFlag(root, "scheduleSharedUtilityPick", draft.isScheduleSharedUtilityPick());
+        putFlag(root, "preferredStyleQuestBuilding", draft.isPreferredStyleQuestBuilding());
         putFlag(root, "touristDestination", draft.isTouristDestination());
         putFlag(root, "preserveWater", draft.isPreserveWater());
         putFlag(root, "plotTokenLockedByDefault", draft.isPlotTokenLockedByDefault());

@@ -1,0 +1,10 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Left; Anchor: (Height: 42, Bottom: 4); Padding: (Full: 4); Background: $T.@Card;
+  ItemIcon #Icon { Anchor: (Width: 32, Height: 32, Right: 10); }
+  Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, VerticalAlignment: Center); }
+  $C.@SecondaryTextButton #Minus { Text: "-"; Padding: (Horizontal: 0); Anchor: (Width: 32, Right: 6); }
+  Label #Count { Anchor: (Width: 40, Right: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #e0c891, HorizontalAlignment: Center, VerticalAlignment: Center); }
+  $C.@SecondaryTextButton #Plus { Text: "+"; Padding: (Horizontal: 0); Anchor: (Width: 32, Right: 14); }
+  $C.@SecondaryTextButton #Remove { Text: "Remove"; Anchor: (Width: 110); }
+}

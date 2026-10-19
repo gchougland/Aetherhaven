@@ -1,0 +1,11 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Button { LayoutMode: Left; Anchor: (Height: 56, Bottom: 4); Padding: (Full: 7);
+  Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+  ItemIcon #Icon { Anchor: (Width: 40, Height: 40, Right: 14); }
+  Group { LayoutMode: Top; FlexWeight: 1;
+    Label #Name { Anchor: (Height: 23); Style: (...$C.@DefaultLabelStyle, FontSize: 15, RenderBold: true); }
+    Label #Id { Anchor: (Height: 17); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #9ab8ae); }
+  }
+  Label { Text: "+"; Anchor: (Width: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 24, TextColor: #e0c891, VerticalAlignment: Center); }
+}

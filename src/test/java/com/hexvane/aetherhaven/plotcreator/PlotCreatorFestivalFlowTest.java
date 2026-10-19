@@ -15,6 +15,40 @@ import org.junit.jupiter.api.Test;
 @Tag("crossmod")
 final class PlotCreatorFestivalFlowTest {
     @Test
+    void freshFestivalPickCreatesTheFullFootprintWithoutAManualBoundsStep() {
+        PlotCreatorDraft draft = festivalDraft();
+        assertFalse(PlotCreatorService.stepOrder(draft).contains(PlotCreatorStep.BOUNDS));
+        var center = BuildingEditorFestivalSessionStarter.pasteCenterNearPlayer(new org.joml.Vector3d(10.5, 80, 20.5), 0);
+        PlotCreatorFestivalDraftSetup.initializeFootprint(draft, center);
+        assertEquals(new org.joml.Vector3i(10, 80, 14), draft.getPlotAnchor());
+        var expected = com.hexvane.aetherhaven.festival.FestivalPrefabSize.footprintAt(center,
+            com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation.None);
+        assertEquals(new org.joml.Vector3i(expected.getMinX(), expected.getMinY(), expected.getMinZ()), draft.boundsMin());
+        assertEquals(new org.joml.Vector3i(expected.getMaxX(), expected.getMaxY(), expected.getMaxZ()), draft.boundsMax());
+        assertTrue(draft.isFestivalSizeLocked());
+    }
+
+    @Test
+    void changingFestivalKeepsItsAuthoringLocationEvenWhenThePlayerMoves() {
+        PlotCreatorDraft draft = festivalDraft();
+        PlotCreatorFestivalDraftSetup.initializeFootprint(draft, new org.joml.Vector3i(-40, 80, -30));
+        var before = new org.joml.Vector3i(draft.boundsMin());
+        PlotCreatorFestivalDraftSetup.initializeFootprint(draft, new org.joml.Vector3i(200, 100, 300));
+        assertEquals(before, draft.boundsMin());
+        assertEquals(new org.joml.Vector3i(-40, 80, -30), draft.getPlotAnchor());
+    }
+
+    @Test
+    void existingVariantBoundsKeepTheirOriginAndSnapToTheSharedSize() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        PlotCreatorBoundsValidation.commitCorners(draft, new org.joml.Vector3i(-100, 30, 50), new org.joml.Vector3i(-90, 40, 60));
+        PlotCreatorFestivalDraftSetup.initializeFootprint(draft, null);
+        assertEquals(new org.joml.Vector3i(-100, 30, 50), draft.boundsMin());
+        assertEquals(new org.joml.Vector3i(-71, 84, 79), draft.boundsMax());
+        assertEquals(draft.boundsMin(), draft.getPrefabOriginMin());
+    }
+
+    @Test
     void festivalStepFollowsTheKindStepAndSkipsVariantAndMaterials() {
         PlotCreatorDraft draft = festivalDraft();
 

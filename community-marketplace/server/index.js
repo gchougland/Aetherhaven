@@ -9,6 +9,8 @@ import multer from "multer";
 import { createOidc } from "./oauth.js";
 import { createSessionMiddleware } from "./sessionStore.js";
 import { createStorage } from "./storage.js";
+import { registerTownsfolkRoutes } from "./townsfolkSubmissions.js";
+import { createPortraitRenderer } from "./townsfolkPortrait.js";
 import {
   assertSize,
   formatScreenshotMaxSizeLabel,
@@ -3016,6 +3018,9 @@ app.get("/api/buildings/:id/screenshots/:screenshotId", (req, res) => {
   }
   sendScreenshotImage(meta, res, parseScreenshotVariant(req), { cachePublic: true });
 });
+
+registerTownsfolkRoutes(app, { dataDir, requireWebUser, requireAdmin, submissionRateLimit,
+  renderPortrait: createPortraitRenderer([path.resolve(__dirname, "../../src/main/resources"), hytaleAssetsDir]) });
 
 app.get("/api/admin/pending", requireWebUser, requireAdmin, (_req, res) => {
   res.json({ submissions: listEnrichedPending() });

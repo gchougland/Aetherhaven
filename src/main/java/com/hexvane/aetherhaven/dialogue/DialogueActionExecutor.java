@@ -1684,8 +1684,7 @@ public final class DialogueActionExecutor {
 
     @Nonnull
     private static String resolveItemLabel(@Nullable PlayerRef playerRef, @Nonnull String itemId) {
-        String lang = playerRef != null && playerRef.getLanguage() != null ? playerRef.getLanguage() : "en-US";
-        return UiMaterialLabels.itemLabelForUi(lang, itemId);
+        return UiMaterialLabels.itemLabelForPlayer(playerRef, itemId);
     }
 
     private static void hireGuildAdventurer(

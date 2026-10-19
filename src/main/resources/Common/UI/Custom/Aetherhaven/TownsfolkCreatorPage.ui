@@ -1,0 +1,90 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+@Heading = (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #e0c891, RenderBold: true);
+@Caption = (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9ab8ae, Wrap: true);
+$C.@PageOverlay { LayoutMode: Middle;
+  Group { Anchor: (Width: 1080, Height: 760);
+    $C.@DecoratedContainer { Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+      #Title { Label { Text: "CREATE A TOWNSFOLK"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+      #Content { LayoutMode: Top; Padding: (Full: 18);
+        Group { LayoutMode: Left; Anchor: (Height: 28, Bottom: 10);
+          Label { Text: "A NEW FACE. A NEW STORY."; FlexWeight: 1; Style: @Heading; }
+          Label { Text: "PRIVATE SUBMISSION  /  ADMINS ONLY"; Style: @Caption; }
+        }
+        Group #Editor { LayoutMode: Top; FlexWeight: 1;
+          Group { LayoutMode: Left; FlexWeight: 1;
+            Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; Anchor: (Width: 268, Right: 16); Padding: (Full: 12); Background: $T.@Panel;
+              Label { Text: "01  IDENTITY"; Anchor: (Height: 28); Style: @Heading; }
+              Label { Text: "Character name"; Anchor: (Height: 20); Style: @Caption; }
+              $C.@TextField #CharacterName { Anchor: (Height: 32, Bottom: 8); MaxLength: 48; PlaceholderText: "Your townsfolk's name"; }
+              Group { LayoutMode: Left; Anchor: (Height: 52, Bottom: 8);
+                Group { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 8);
+                  Label { Text: "Gender"; Anchor: (Height: 20); Style: @Caption; }
+                  $C.@DropdownBox #Gender { Anchor: (Width: 116, Height: 32); }
+                }
+                Group { LayoutMode: Top; FlexWeight: 1;
+                  Label { Text: "Race"; Anchor: (Height: 20); Style: @Caption; }
+                  $C.@DropdownBox #Race { Anchor: (Width: 116, Height: 32); }
+                }
+              }
+              Label { Text: "Personality - pick three different traits"; Anchor: (Height: 32); Style: @Caption; }
+              $C.@DropdownBox #Trait0 { Anchor: (Width: 244, Height: 32, Bottom: 4); }
+              $C.@DropdownBox #Trait1 { Anchor: (Width: 244, Height: 32, Bottom: 4); }
+              $C.@DropdownBox #Trait2 { Anchor: (Width: 244, Height: 32, Bottom: 8); }
+              Label { Text: "Voice"; Anchor: (Height: 20); Style: @Caption; }
+              $C.@DropdownBox #Voice { Anchor: (Width: 244, Height: 32, Bottom: 8); }
+              Label { Text: "YOUR APPEARANCE IS INCLUDED"; Anchor: (Height: 24); Style: (...@Caption, TextColor: #e0c891, RenderBold: true); }
+              Label { Text: "We copy your current avatar when you submit. Race describes your character; it does not change the model."; Anchor: (Height: 58); Style: @Caption; }
+            }
+            Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; Anchor: (Width: 220, Right: 16);
+              Label { Text: "02  ATTRIBUTES"; Anchor: (Height: 28); Style: @Heading; }
+              Label { Text: "Starting ability: 1 to 20"; Anchor: (Height: 24, Bottom: 6); Style: @Caption; }
+              Group #Attributes { LayoutMode: Top; }
+            }
+            Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; FlexWeight: 1;
+              Label { Text: "03  SKILLS"; Anchor: (Height: 28); Style: (...@Heading, TextColor: #99c7b5); }
+              Label { Text: "1-10 can improve. 0 means they can NEVER learn that skill."; Anchor: (Height: 36, Bottom: 6); Style: @Caption; }
+              Group { LayoutMode: Left;
+                Group #SkillsLeft { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 8); }
+                Group #SkillsRight { LayoutMode: Top; FlexWeight: 1; }
+              }
+            }
+          }
+          Group { LayoutMode: Top; Anchor: (Height: 154, Top: 12); Background: $T.@Panel; Padding: (Full: 10);
+            Group { LayoutMode: Left; Anchor: (Height: 32, Bottom: 6);
+              Label { Text: "04  MOVE-IN GIFTS"; Anchor: (Width: 210); Style: @Heading; }
+              Label #ItemSummary { FlexWeight: 1; Style: @Caption; }
+              $C.@SecondaryTextButton #AddItem { Text: "+ Choose item"; Anchor: (Width: 160, Height: 30); }
+            }
+            Label #ItemsEmpty { Text: "What would convince this character to join a town? Choose at least one item."; Anchor: (Height: 28); Style: @Caption; }
+            Group #Requirements { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; FlexWeight: 1; }
+          }
+        }
+        Label #UploadNotice { Visible: false; FlexWeight: 1; Style: (...@Heading, Wrap: true, HorizontalAlignment: Center, VerticalAlignment: Center); }
+        Label #Status { Anchor: (Height: 42, Top: 8); Style: (...@Caption, TextColor: #e0c891); }
+        Group { LayoutMode: Left; Anchor: (Height: 36);
+          $C.@SecondaryTextButton #Close { Text: "Close"; Anchor: (Width: 100); }
+          Label { Text: "Only website admins can view or download your sheet and model."; FlexWeight: 1; Anchor: (Left: 14, Right: 14); Style: (...@Caption, VerticalAlignment: Center); }
+          $C.@TextButton #Submit { Text: "Submit to admins"; Anchor: (Width: 200); }
+        }
+      }
+    }
+    Group #Picker { Visible: false; LayoutMode: Middle; Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0); Background: #000000(0.8);
+      $C.@DecoratedContainer { Anchor: (Width: 680, Height: 680);
+        #Title { Label { Text: "CHOOSE A MOVE-IN GIFT"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+        #Content { LayoutMode: Top; Padding: (Full: 20);
+          Label { Text: "Search by item name or ID. Click an item to add it to your sheet."; Anchor: (Height: 32); Style: @Caption; }
+          $C.@TextField #Search { Anchor: (Height: 36, Bottom: 12); MaxLength: 80; PlaceholderText: "Search items..."; }
+          Group #Choices { LayoutMode: Top; FlexWeight: 1; }
+          Label #NoResults { Visible: false; Text: "No items match. Try another name."; Anchor: (Height: 28); Style: @Caption; }
+          Group { LayoutMode: Left; Anchor: (Height: 32, Top: 8, Bottom: 10);
+            $C.@SecondaryTextButton #Previous { Text: "Previous"; Anchor: (Width: 110); }
+            Label #PageCount { FlexWeight: 1; Style: (...@Caption, HorizontalAlignment: Center, VerticalAlignment: Center); }
+            $C.@SecondaryTextButton #Next { Text: "Next"; Anchor: (Width: 110); }
+          }
+          $C.@SecondaryTextButton #ClosePicker { Text: "Back to character sheet"; Anchor: (Height: 36); }
+        }
+      }
+    }
+  }
+}

@@ -125,7 +125,7 @@ public final class JewelryCraftingPage extends AetherhavenInteractiveCustomUIPag
 
         List<DropdownEntryInfo> gemEntries = new ObjectArrayList<>();
         if (ownedGems.isEmpty()) {
-            String lang = pr.getLanguage() != null ? pr.getLanguage() : "en-US";
+            String lang = AetherhavenLanguage.modLanguage(pr);
             String noGems =
                 I18nModule.get().getMessage(lang, "aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.noGemsDropdown");
             if (noGems == null || noGems.isEmpty()) {

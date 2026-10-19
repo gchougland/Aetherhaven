@@ -16,6 +16,14 @@ npm start
 
 Single server on **http://127.0.0.1:3847** (API + website).
 
+### Private townsfolk submissions
+
+Players open `/ah create-townsfolk` in game, fill out a character sheet and submit their current avatar. The website saves both JSON files and generates a transparent 128px portrait with the existing townsfolk framing (scale 0.5, yaw 19°, translation 0/-110). Admin → Townsfolk character sheets shows the sheet and provides all three downloads. The signed website session must belong to `ADMIN_HYTALE_UUIDS`; player UUID headers never grant access to these files.
+
+Before enabling this on a deployed website, run `npm run sync-hytale-assets` and upload the refreshed asset directory using the existing asset upload workflow. Portraits additionally need `Common/Characters`, `Common/TintGradients` and `Cosmetics/CharacterCreator/GradientSets.json`; the sync now includes them. Rendering runs in a bounded worker queue and uses the existing `sharp` dependency. Missing assets do not discard submissions: admins can select **Retry portrait** after updating the assets.
+
+Private records and portraits live under `DATA_DIR/private-townsfolk`, outside public manifests and download folders. Include that folder in backups. To install an accepted character, put its character JSON under `Server/Aetherhaven/Townsfolk`, its model JSON under `Server/Models/Townsfolk`, and its portrait under `Common/Icons/ModelsGenerated`, preserving the download filenames. Submission only creates a private record; it does not add the character to live towns.
+
 ### Prefab 3D viewer assets
 
 Building cards open a zoomable / rotatable Three.js prefab preview. That needs Hytale (+ Aetherhaven) textures and models on disk — **not committed to git** (Hypixel IP). Blocks from other mods are skipped in the viewer.

@@ -505,12 +505,18 @@ public final class AetherhavenPlugin extends JavaPlugin {
     /**
      * Reloads {@code config.json} from disk and refreshes JSON-backed asset catalogs (constructions, dialogue, quests, villager definitions, villager schedules).
      */
-    public void reloadConfigsAndAssetCatalogs() {
+    public static final int RESOURCE_RELOAD_STEPS = 12;
+
+    public void reloadConfigsAndAssetCatalogs() { reloadConfigsAndAssetCatalogs(ignored -> {}); }
+
+    public void reloadConfigsAndAssetCatalogs(java.util.function.Consumer<String> loaded) {
         this.config.load().join();
         com.hexvane.aetherhaven.difficulty.ServerDifficultyPersistence.load(this);
-        this.reloadAetherhavenAssetCatalogs();
+        loaded.accept("Server settings loaded");
+        this.reloadAetherhavenAssetCatalogs(loaded);
         this.shopPriceCatalog = ShopPriceFiles.loadCatalog(this);
         ShopPriceTooltipMessages.clearCache();
+        loaded.accept("Shop prices loaded");
     }
 
     /**
@@ -572,7 +578,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.apprenticeRecipes.refreshNativeRecipes();
     }
 
-    private void reloadAetherhavenAssetCatalogs() {
+    private void reloadAetherhavenAssetCatalogs() { reloadAetherhavenAssetCatalogs(ignored -> {}); }
+
+    private void reloadAetherhavenAssetCatalogs(java.util.function.Consumer<String> loaded) {
         ClassLoader cl = this.getClassLoader();
         this.villagerDefinitionCatalog = VillagerDefinitionCatalog.loadFromAssetPacksOrClasspath(cl);
         this.townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.loadFromAssetPacksOrClasspath(cl);
@@ -582,6 +590,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.workplaceFurnishings = com.hexvane.aetherhaven.workplace.WorkplaceFurnishingCatalog.load(cl);
         this.growerPlans = com.hexvane.aetherhaven.workplace.GrowerCatalog.load(cl);
         this.guardKits = com.hexvane.aetherhaven.equipment.GuardKitCatalog.load(cl);
+        loaded.accept("Workplaces and equipment loaded");
         this.townsfolkCharacterCatalog =
             TownsfolkCharacterCatalog.loadFromAssetPacksOrClasspath(cl, this.townsfolkPersonalityCatalog);
         this.speechVoiceCatalog = SpeechVoiceCatalog.loadFromAssetPacksOrClasspath(cl);
@@ -589,25 +598,31 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.equipmentProfileCatalog = EquipmentProfileCatalog.loadFromAssetPacksOrClasspath(cl);
         ReputationRewardCatalog.refreshFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);
+        loaded.accept("Villagers and voices loaded");
         Path customData = this.getDataDirectory();
         this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl, customData);
+        loaded.accept("Building definitions loaded");
         com.hexvane.aetherhaven.wall.WallStyleCatalog.invalidate();
         this.prefabMaterialsService.generateAllForCatalog(this.constructionCatalog, customData, cl);
         this.prefabMaterialsCatalog = PrefabMaterialsCatalog.loadFromAssetPacksOrClasspath(cl, customData);
+        loaded.accept("Building materials loaded");
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = com.hexvane.aetherhaven.quest.CoreVillagerHousing.ensure(
             this.villagerDefinitionCatalog, this.constructionCatalog, this.questCatalog, this.dialogueCatalog);
+        loaded.accept("Quests and dialogue loaded");
         this.questBoardCatalog = QuestBoardCatalog.loadFromAssetPacksOrClasspath(cl);
         this.worldQuestBoardCatalog = WorldQuestBoardCatalog.loadFromAssetPacks();
         this.scheduleLocationCatalog = ScheduleLocationCatalog.loadFromAssetPacks();
         this.festivalCatalog = FestivalCatalog.loadFromAssetPacksOrClasspath(cl, customData);
         this.propCatalog = PropCatalog.loadFromAssetPacksOrClasspath(cl, customData);
+        loaded.accept("Festivals and props loaded");
         this.blockPaletteCatalog =
             com.hexvane.aetherhaven.blockpalette.BlockPaletteCatalog.loadFromAssetPacksOrClasspath(cl);
         this.villagerCosmeticCatalog = VillagerCosmeticCatalog.loadFromClasspath(cl);
         this.villagerScheduleRegistry =
             VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl, this.villagerDefinitionCatalog, this.scheduleLocationCatalog);
+        loaded.accept("Building palettes and schedules loaded");
         this.townNameCatalog = TownNameCatalog.loadFromClasspath();
         this.productionCatalog = ProductionCatalog.loadFromClasspath(cl);
         this.workplaceUnlockCatalog = WorkplaceUnlockCatalog.loadFromClasspath(cl);
@@ -615,6 +630,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         com.hexvane.aetherhaven.production.FarmFieldRules.reload(cl);
         this.bardSongCatalog = BardSongCatalog.loadFromAssetPacksOrClasspath(cl);
         GuideTopicRepository.clearCache();
+        loaded.accept("Production and guides loaded");
         LOGGER.atInfo().log(
             "Aetherhaven asset catalogs reloaded (constructions=%s, dialogue=%s, quests=%s, villagerDefs=%s, villagerSchedules=loaded)",
             this.constructionCatalog.ids(),
@@ -624,10 +640,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
         );
         CustomBuildingIconAssetRegistry.syncFromDataDirectory(this);
         CommunityIconRegistry.syncFromCommunityDirectory(this);
+        loaded.accept("Building images registered");
         this.communityCatalogService.repairMissingIconsForInstalledBuildings();
         if (this.propCatalog != null) {
             PropPrefabCache.invalidateCatalog(this.propCatalog);
         }
+        loaded.accept("Resource caches refreshed");
     }
 
     public void registerJewelryNativeTooltipHooks() {
@@ -717,6 +735,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     @Override
     protected void shutdown() {
+        com.hexvane.aetherhaven.ui.AetherhavenLanguage.shutdown();
         com.hexvane.aetherhaven.backup.AetherhavenBackupResource.shutdown();
         AetherhavenFeatureBootstrap.shutdownEnabled();
         if (this.shopPriceTooltipPacketAdapter != null) {

@@ -890,6 +890,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         @Nonnull PlayerTownJournalState journalPrefs
     ) {
         commandBuilder.set("#SettingsPersonalStatus.TextSpans", journalSettingsPersonalStatus != null ? journalSettingsPersonalStatus : Message.raw(""));
+        commandBuilder.set("#SettingsEnglishCheck #CheckBox.Value", journalPrefs.isUseEnglishTranslations());
+        eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#SettingsEnglishCheck #CheckBox",
+            new EventData().append("Action", "UseEnglishTranslations")
+                .append("@Checked", "#SettingsEnglishCheck #CheckBox.Value"), false);
         boolean rtsSettings = JournalTabVisibility.rtsTuningTab();
         commandBuilder.set("#SettingsRtsPickFovField.Visible", rtsSettings);
         commandBuilder.set("#SettingsRtsPickAspectField.Visible", rtsSettings);
@@ -1861,9 +1865,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         commandBuilder.set("#GuidePluginMissing.Visible", false);
         commandBuilder.set("#GuideSplit.Visible", true);
 
-        String guideLocale = playerRef.getLanguage() != null && !playerRef.getLanguage().isBlank()
-            ? playerRef.getLanguage()
-            : "en-US";
+        String guideLocale = AetherhavenLanguage.modLanguage(playerRef);
         GuideTopicRepository repo = GuideTopicRepository.get(plugin.getClass().getClassLoader(), guideLocale);
         boolean idOk = false;
         for (GuideTopicRepository.GuideNavEntry e : repo.navEntries()) {
@@ -3317,6 +3319,19 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             UICommandBuilder cmd = new UICommandBuilder();
             cmd.set("#SettingsHudOpacityValue.TextSpans", Message.raw(opacityPercent + "%"));
             sendUpdate(cmd, new UIEventBuilder(), false);
+            return;
+        }
+        if (action.equalsIgnoreCase("UseEnglishTranslations")) {
+            if (data.checked == null) return;
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) st = new PlayerTownJournalState();
+            st.setUseEnglishTranslations(data.checked);
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            AetherhavenLanguage.sync(playerRef, st.isUseEnglishTranslations());
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
             return;
         }
         if (action.equalsIgnoreCase("PersonalSettingsSave")) {

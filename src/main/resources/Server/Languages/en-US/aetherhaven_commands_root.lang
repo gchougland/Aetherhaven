@@ -21,3 +21,5 @@ commands.aetherhaven.exportskin.invalidSkin=Skin validation failed: {detail}
 commands.aetherhaven.exportskin.resolveError=Could not resolve skin to model attachments: {detail}
 commands.aetherhaven.exportskin.ioError=Failed to write {path}: {detail}
 commands.aetherhaven.exportskin.success=Wrote model JSON to {path}
+
+commands.aetherhaven.createTownsfolk.desc = Create a townsfolk character and submit it privately to website admins.

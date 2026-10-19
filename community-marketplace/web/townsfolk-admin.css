@@ -1,0 +1,33 @@
+#adminTownsfolkSection { scroll-margin-top: 120px; }
+.townsfolk-toolbar { display: flex; gap: 12px; align-items: center; margin: 16px 0; }
+.townsfolk-toolbar input { flex: 1; min-width: 0; padding: 12px 16px; }
+.townsfolk-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 24px; }
+.townsfolk-sheet { color: #ecdfc5; background: radial-gradient(ellipse at top left, #324442 0, transparent 55%), #192a2c; border: 1px solid #7c7152; border-radius: 12px; padding: 26px; box-shadow: inset 0 0 0 5px #d9bc7020, 0 8px 28px #0003; }
+.townsfolk-heading { display: flex; align-items: center; gap: 20px; padding-bottom: 20px; border-bottom: 1px solid #c8b47b40; }
+.townsfolk-portrait { flex: 0 0 128px; height: 144px; display: grid; place-items: center; text-align: center; border: 1px solid #c8b47b70; border-radius: 64px 64px 10px 10px; background: radial-gradient(ellipse at center, #bca16a40, #101b1f); overflow: hidden; font-size: 12px; color: #b8c1b4; }
+.townsfolk-portrait img { object-fit: contain; image-rendering: auto; }
+.townsfolk-identity { min-width: 0; overflow-wrap: anywhere; }
+.townsfolk-eyebrow { font-size: 10px; letter-spacing: 1.7px; color: #c5b17c; }
+.townsfolk-sheet h3 { font: 600 27px/1.25 Cinzel, Georgia, serif; margin: 8px 0; color: #f2ddb0; }
+.townsfolk-sheet h4 { font: 600 14px Cinzel, Georgia, serif; letter-spacing: 1px; color: #d2be8a; margin: 22px 0 12px; }
+.townsfolk-identity p { margin: 5px 0; font-size: 14px; }
+.townsfolk-credit { color: #a4b8af; font-size: 12px !important; }
+.townsfolk-traits { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.townsfolk-traits span { border: 1px solid #93a89355; border-radius: 20px; padding: 3px 10px; color: #bdd0b5; font-size: 12px; }
+.townsfolk-attributes, .townsfolk-skills { display: grid; gap: 8px; margin: 0; }
+.townsfolk-attributes { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.townsfolk-stat { background: #0e1c2066; border: 1px solid #c6b07930; border-radius: 7px; padding: 10px 7px; }
+.townsfolk-attributes .townsfolk-stat { text-align: center; }
+.townsfolk-stat dt { font-size: 12px; color: #b1c0b6; overflow-wrap: anywhere; }
+.townsfolk-stat dd { margin: 3px 0 0; font: 600 24px Cinzel, Georgia, serif; color: #e7cb87; }
+.townsfolk-skills { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.townsfolk-skills .townsfolk-stat { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 9px; }
+.townsfolk-skills dt { flex: 1; }
+.townsfolk-skills dd { font-size: 19px; }
+.townsfolk-untrained { flex-basis: 100%; color: #e0a899; font-size: 10px; }
+.townsfolk-gifts { margin: 0; padding-left: 20px; font-size: 14px; color: #c7d3c2; overflow-wrap: anywhere; }
+.townsfolk-downloads { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 22px; }
+.townsfolk-downloads .btn { font-size: 12px; padding: 9px 12px; border: 1px solid #a58e53; color: #ead39b; border-radius: 5px; background: #bca16a15; text-decoration: none; cursor: pointer; }
+.townsfolk-downloads .btn:hover { background: #bca16a30; }
+.townsfolk-empty { padding: 24px; color: #b1c0b6; }
+@media(max-width: 600px) { .townsfolk-sheet { padding: 18px; } .townsfolk-heading { gap: 12px; } .townsfolk-portrait { flex-basis: 90px; height: 110px; } .townsfolk-portrait img { width: 96px; height: 96px; } .townsfolk-sheet h3 { font-size: 21px; } .townsfolk-skills { grid-template-columns: repeat(2, minmax(0, 1fr)); } .townsfolk-attributes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

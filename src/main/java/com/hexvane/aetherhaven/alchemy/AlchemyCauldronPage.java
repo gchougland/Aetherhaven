@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.alchemy;
 
+import com.hexvane.aetherhaven.ui.AetherhavenLanguage;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.crafter.PatternBookPayment;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
@@ -300,7 +302,7 @@ public final class AlchemyCauldronPage extends AetherhavenInteractiveCustomUIPag
     /** The item's own name in this player's language, as the backpack workshop shows its materials. */
     private String itemName(String id) {
         var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
-        String name=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),new ItemStack(id,1).getItem().getTranslationKey());
+        String name=i18n==null?null:AetherhavenLanguage.message(playerRef,new ItemStack(id,1).getItem().getTranslationKey());
         return name==null?id:name;
     }
     public static final class Data {

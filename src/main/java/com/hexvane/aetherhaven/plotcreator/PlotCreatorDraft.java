@@ -215,6 +215,10 @@ public final class PlotCreatorDraft {
     @Nullable
     private String styleId;
 
+    private boolean preferredStyleQuestBuilding;
+    public boolean isPreferredStyleQuestBuilding() { return preferredStyleQuestBuilding; }
+    public void setPreferredStyleQuestBuilding(boolean value) { preferredStyleQuestBuilding = value; }
+
     @Nullable
     private Vector3i stagingChestWorldPos;
     @Nonnull

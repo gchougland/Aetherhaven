@@ -1,0 +1,13 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Left; Anchor: (Height: 54, Bottom: 6); Padding: (Full: 6); Background: $T.@Card;
+  Label #Score { Anchor: (Width: 32, Right: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 23, TextColor: #e0c891, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center); }
+  Group { LayoutMode: Top; FlexWeight: 1;
+    Label #Name { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true); }
+    Label #Note { Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #9ab8ae); }
+  }
+  Group { LayoutMode: Top; Anchor: (Width: 27);
+    $C.@SecondaryTextButton #Plus { Text: "+"; Padding: (Horizontal: 0); Anchor: (Height: 20, Bottom: 2); }
+    $C.@SecondaryTextButton #Minus { Text: "-"; Padding: (Horizontal: 0); Anchor: (Height: 20); }
+  }
+}

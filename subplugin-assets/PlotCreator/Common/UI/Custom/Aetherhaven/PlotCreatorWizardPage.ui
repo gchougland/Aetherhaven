@@ -118,6 +118,26 @@ $C.@PageOverlay {
         PlaceholderText: "";
       }
 
+      Group #PreferredStyleQuestSettings {
+        LayoutMode: Top;
+        Visible: false;
+        Group {
+          LayoutMode: Left;
+          Anchor: (Bottom: 6);
+          $C.@CheckBox #PreferredStyleQuestToggle {}
+          Label #PreferredStyleQuestLabel {
+            Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+            Anchor: (Left: 11);
+            Text: "";
+          }
+        }
+        Label #PreferredStyleQuestHint {
+          Style: (...@HintStyle);
+          Anchor: (Bottom: 10);
+          Text: "";
+        }
+      }
+
       Label #FrontFacingLabel {
         Style: $C.@DefaultLabelStyle;
         Text: "";

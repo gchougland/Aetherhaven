@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.backpack;
 
+import com.hexvane.aetherhaven.ui.AetherhavenLanguage;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hexvane.aetherhaven.town.*;
@@ -103,7 +105,7 @@ public final class BackpackWorkshopPage extends AetherhavenInteractiveCustomUIPa
         c.set("#Purchase.Disabled",!allowed||!available(pack,choice)||!afford(store,inv,cost(pack,choice)));c.set("#Hint.Text",allowed?hint:"Stay near Hazel to craft or upgrade a backpack.");
         for(String a:List.of("Craft","Open","Purchase"))e.addEventBinding(CustomUIEventBindingType.Activating,"#"+a,event(a),false);
     }
-    private String name(String id){var item=new ItemStack(id,1);var i=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();var n=i==null?null:i.getMessage(playerRef.getLanguage(),item.getItem().getTranslationKey());return n==null?id:n;}
+    private String name(String id){var item=new ItemStack(id,1);var i=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();var n=i==null?null:AetherhavenLanguage.message(playerRef,item.getItem().getTranslationKey());return n==null?id:n;}
     private static String description(Backpack p,String id){if(id.startsWith("Compression"))return "Compression "+id.substring(11)+": adds one more native stack to every slot.";if(id.equals("Magnet"))return "Collect nearby loose items directly into this backpack.";if(id.equals("Jukebox"))return "Play bard music in a radius that follows you.";var t=Backpack.Tier.valueOf(id);return t.label+": "+t.slots+" slots, "+Backpack.stacksLabel(t.stacks+(p==null?0:p.compression))+" per slot.";}
     private static String requirement(Backpack p,String id){if(owned(p,id))return "Already installed.";if(available(p,id))return "Ready to purchase with the materials above.";if(p==null)return "Craft or select a backpack first.";if(id.startsWith("Compression"))return "Requires the previous compression upgrade.";return switch(id){case "IRON"->"Requires a Simple Backpack.";case "COBALT","THORIUM"->"Choose either Cobalt or Thorium from an Iron Backpack.";case "ADAMANTITE"->"Requires Cobalt or Thorium. Combines both paths.";default->"Requires a backpack.";};}
     @Override public void handleDataEvent(Ref<EntityStore> ref,Store<EntityStore> store,Data d){

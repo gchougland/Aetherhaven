@@ -504,6 +504,10 @@ public final class TownRecord {
     @SerializedName("activeFestivalId")
     private String activeFestivalId;
 
+    @Nullable
+    @SerializedName("activeFestivalLayoutId")
+    private String activeFestivalLayoutId;
+
     /** Festival square plot the running festival was pasted onto. */
     @Nullable
     @SerializedName("activeFestivalPlotId")
@@ -2423,6 +2427,11 @@ public final class TownRecord {
         return activeFestivalId != null && !activeFestivalId.isBlank() ? activeFestivalId.trim() : null;
     }
 
+    @Nullable
+    public String getActiveFestivalLayoutId() { return activeFestivalLayoutId; }
+
+    public void setActiveFestivalLayoutId(@Nullable String id) { activeFestivalLayoutId = id; }
+
     public void setActiveFestivalId(@Nullable String activeFestivalId) {
         this.activeFestivalId = activeFestivalId != null && !activeFestivalId.isBlank() ? activeFestivalId.trim() : null;
     }
@@ -2472,6 +2481,7 @@ public final class TownRecord {
     /** Clears every field the running festival owns (called when the square swaps back to its everyday prefab). */
     public void clearActiveFestival() {
         this.activeFestivalId = null;
+        this.activeFestivalLayoutId = null;
         this.activeFestivalPlotId = null;
         this.activeFestivalEndEpochMinute = 0L;
         this.activeFestivalSpotPoiIds = null;

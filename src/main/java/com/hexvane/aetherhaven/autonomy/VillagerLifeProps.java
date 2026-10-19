@@ -41,6 +41,7 @@ public final class VillagerLifeProps {
             case "Craft" -> "Tool_Hammer_Iron";
             case "Mix" -> SALAD;
             case "Tend" -> "Plant_Flower_Bushy_Blue";
+            case "PlantCrops" -> "Tool_Hoe_Iron";
             case "WaterCrops" -> "Tool_Watering_Can";
             case "FeedAnimals" -> "Tool_Feedbag";
             case "Slaughter" -> "Tool_Hatchet_Crude";

@@ -13,6 +13,25 @@ public final class UiMaterialLabels {
     private UiMaterialLabels() {}
 
     @Nonnull
+    public static String itemLabelForPlayer(@Nullable com.hypixel.hytale.server.core.universe.PlayerRef player, @Nonnull String itemId) {
+        Item item = Item.getAssetMap().getAsset(itemId);
+        String resolved = item == null ? null : AetherhavenLanguage.message(player, item.getTranslationKey());
+        return resolved != null ? resolved : itemId;
+    }
+
+    @Nonnull
+    public static String materialLabelForPlayer(@Nullable com.hypixel.hytale.server.core.universe.PlayerRef player, @Nonnull MaterialRequirement m) {
+        String rt = m.getResourceTypeId();
+        if (rt != null && !rt.isBlank()) {
+            String id = rt.trim();
+            String resolved = AetherhavenLanguage.message(player, "server.resourceType." + id + ".name");
+            return resolved != null ? resolved : id;
+        }
+        String itemId = m.getItemId();
+        return itemId != null && !itemId.isBlank() ? itemLabelForPlayer(player, itemId) : "?";
+    }
+
+    @Nonnull
     public static String itemLabelForUi(@Nullable String language, @Nonnull String itemId) {
         Item item = Item.getAssetMap().getAsset(itemId);
         if (item == null) {

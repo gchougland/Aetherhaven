@@ -80,6 +80,31 @@ class BuildingEditorJsonWriterTest {
         assertTrue(draft.isTouristDestination());
     }
 
+    @Test
+    void preferredQuestChoiceSurvivesBothWritersAndEditingAndCanBeCleared() throws Exception {
+        PlotCreatorDraft draft = minimalDraft("plot_test_shop");
+        draft.setStyleId("stormwind");
+        draft.setPreferredStyleQuestBuilding(true);
+        Path out = tempDir.resolve("quest-choice.json");
+        PlotCreatorJsonWriter.writeBuilding(out, draft);
+        assertEquals(true, readJson(out).get("preferredStyleQuestBuilding"));
+        var loaded = new PlotCreatorDraft();
+        PlotCreatorDraftLoader.loadIntoDraft(loaded, GSON.fromJson(Files.readString(out),
+            com.hexvane.aetherhaven.construction.ConstructionDefinition.class));
+        assertTrue(loaded.isPreferredStyleQuestBuilding());
+        assertEquals("stormwind", loaded.getStyleId());
+        BuildingEditorJsonWriter.writeMerged(out, loaded, readJson(out));
+        assertEquals(true, readJson(out).get("preferredStyleQuestBuilding"));
+        loaded.setPreferredStyleQuestBuilding(false);
+        BuildingEditorJsonWriter.writeMerged(out, loaded, readJson(out));
+        var disabled = GSON.fromJson(Files.readString(out), com.hexvane.aetherhaven.construction.ConstructionDefinition.class);
+        assertFalse(disabled.isPreferredStyleQuestBuilding());
+        PlotCreatorDraftLoader.loadIntoDraft(loaded, disabled);
+        assertFalse(loaded.isPreferredStyleQuestBuilding());
+        PlotCreatorJsonWriter.writeBuilding(out, loaded);
+        assertFalse(readJson(out).containsKey("preferredStyleQuestBuilding"));
+    }
+
     @Nonnull
     private static PlotCreatorDraft minimalDraft(@Nonnull String id) {
         PlotCreatorDraft draft = new PlotCreatorDraft();

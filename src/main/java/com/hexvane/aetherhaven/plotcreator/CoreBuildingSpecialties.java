@@ -53,6 +53,7 @@ public final class CoreBuildingSpecialties {
         var required=required(draft,plugin);if(required.isEmpty())return;
         var min=draft.boundsMin();var max=draft.boundsMax();
         long volume=((long)max.x-min.x+1)*((long)max.y-min.y+1)*((long)max.z-min.z+1);
+        var previous = List.copyOf(draft.getPois());
         draft.getPois().removeIf(p->p.getTags().contains(TAG)&&required.contains(p.getBlockTypeId()));
         if(volume<=0||volume>2_000_000)return;
         var found=new HashSet<String>();
@@ -63,8 +64,16 @@ public final class CoreBuildingSpecialties {
             String id=block.getDefaultStateKey()==null?block.getId():block.getDefaultStateKey();
             if(!required.contains(id)||!found.add(id))continue;
             int[] local=PlotCreatorLocalCoords.toLocal(draft,new org.joml.Vector3i(x,y,z));
-            var poi=new PlotCreatorPoiDraft();poi.setLocal(local[0],local[1],local[2]);poi.setTags(List.of(TAG));poi.setBlockTypeId(id);poi.setInteractionKind("NONE");draft.getPois().add(poi);
+            var poi=new PlotCreatorPoiDraft();poi.setLocal(local[0],local[1],local[2]);poi.setTags(List.of(TAG));poi.setBlockTypeId(id);poi.setInteractionKind("NONE");preserveFacing(previous,poi);draft.getPois().add(poi);
             if(found.containsAll(required))return;
+        }
+    }
+    /** Revalidation must retain authored facing on the same specialty block. */
+    static void preserveFacing(List<PlotCreatorPoiDraft> previous, PlotCreatorPoiDraft found) {
+        for (var old : previous) if (matches(old, found.getBlockTypeId())
+            && old.getLocalX() == found.getLocalX() && old.getLocalY() == found.getLocalY() && old.getLocalZ() == found.getLocalZ()) {
+            found.setInteractionTargetYawDegrees(old.getInteractionTargetYawDegrees());
+            return;
         }
     }
     static String validateArena(com.hypixel.hytale.server.core.universe.world.World world,PlotCreatorDraft draft) {

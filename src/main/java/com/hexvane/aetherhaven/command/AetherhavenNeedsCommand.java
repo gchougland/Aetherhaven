@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.command;
 
+import com.hexvane.aetherhaven.ui.AetherhavenLanguage;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -56,7 +58,7 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
             Store<EntityStore> es = world.getEntityStore().getStore();
             world.execute(
                 () -> {
-                    String lang = playerRef.getLanguage() != null ? playerRef.getLanguage() : "en-US";
+                    String lang = AetherhavenLanguage.modLanguage(playerRef);
                     String resolvedNo =
                         I18nModule.get().getMessage(lang, "aetherhaven_world_debug.aetherhaven.debug.needs.noHandle");
                     final String noHandle =

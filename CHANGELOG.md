@@ -4,20 +4,31 @@
 
 ### Added
 
+- **Townsfolk creator** Use /ah create-townsfolk to design a character sheet, choose move-in gifts with an item picker, and send your character, appearance and portrait privately to website admins.
+
+- **New townsfolk** Meet LoneStar144, a crafty, grumpy adventurer who excels at building and crafting and asks for wood planks to move in.
+- **English language option** Choose Use English for Aetherhaven in the journal's personal settings without changing your game's language.
+- **Style download progress** Choosing Download selects the style and closes the menu while a HUD shows live download and resource-loading progress, skipping builds that need missing mods and explaining any errors.
+
 - **Food supply guidance** Irienne teaches you to set up a Farming workplace, and the Innkeeper explains how food supply supports more residents.
 - **Town guides** Find setup guides for every workplace, new town systems and production buildings in the journal and website wiki, with workplaces in their own section and journal dropdowns closed at first.
 
 ### Changed
 
-- **Simpler Farming workplaces** Townsfolk plant their own wheat on clear soil without seeds, and workplace screens list missing equipment, growing spaces and worker requirements.
+- **Festival styles** Festival builds automatically match your placed square's style, using the core festival build when no matching design is installed.
+
+- **Quest building choices** Quests prefer single-purpose buildings in your town's style, and creators can mark preferred quest designs in either building editor.
+
+- **Simpler Farming workplaces** Townsfolk use a hoe to plant their own wheat on clear soil without seeds, and workplace screens list missing equipment, growing spaces and worker requirements.
 - **Farm screen** Irienne's farm opens its field planner without the separate Building Output screen.
 
 ### Fixed
 
 - **Homes for every villager** All core villagers offer a house quest after their work-building recruitment, including the new villagers in existing towns.
 - **Workplace detection** Selecting crops or benches keeps their bases inside the workplace, and Farming screens identify equipment or crops excluded by the marked height.
-- **Building authoring** The creator and editor require specialty equipment and show where the Hunter's portal and fighters will appear.
+- **Building authoring** The creator and editor require specialty equipment and let you aim the Hunter's portal and fighters by facing a direction when marking the beacon.
 - **Older barns** Community barns without animal markers automatically use clear spaces for pens, keeping owned animals and upgrades.
+- **Festival creator** Choosing a festival keeps your selection and places its fixed-size starting square nearby without asking you to mark an area.
 
 ## [4.0.0] - 10/12/2026
 

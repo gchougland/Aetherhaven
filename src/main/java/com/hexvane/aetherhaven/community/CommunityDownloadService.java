@@ -109,7 +109,19 @@ public final class CommunityDownloadService {
         @Nullable IntConsumer onProgress,
         @Nullable UUID playerUuid
     ) {
+        return installBatch(plugin, entries, onProgress, playerUuid, null);
+    }
+
+    public static BatchResult installBatch(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull List<CommunityManifestEntry> entries,
+        @Nullable IntConsumer onProgress,
+        @Nullable UUID playerUuid,
+        @Nullable CommunityDownloadProgress progress
+    ) {
+        if (progress != null) progress.start(entries.size());
         if (entries.isEmpty()) {
+            if (progress != null) progress.complete();
             return new BatchResult(0, 0, 0);
         }
         CommunityCatalogService catalog = plugin.getCommunityCatalogService();
@@ -117,10 +129,12 @@ public final class CommunityDownloadService {
         int skipped = 0;
         for (CommunityManifestEntry entry : entries) {
             if (catalog.isInstalled(entry.getId())) {
+                if (progress != null) progress.skipped(entry, false);
                 skipped++;
                 continue;
             }
             if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
+                if (progress != null) progress.skipped(entry, true);
                 skipped++;
                 continue;
             }
@@ -130,6 +144,7 @@ public final class CommunityDownloadService {
             onProgress.accept(skipped);
         }
         if (toInstall.isEmpty()) {
+            if (progress != null) progress.complete();
             return new BatchResult(0, 0, skipped);
         }
 
@@ -153,10 +168,17 @@ public final class CommunityDownloadService {
                 futures.add(
                     CompletableFuture.runAsync(
                         () -> {
-                            FileInstallOutcome outcome = installFiles(plugin, entry, false, false);
+                            FileInstallOutcome outcome;
+                            try {
+                                outcome = installFiles(plugin, entry, false, false, progress);
+                            } catch (RuntimeException e) {
+                                LOGGER.atWarning().withCause(e).log("Community download failed for %s", entry.getId());
+                                outcome = new FileInstallOutcome(InstallResult.IO_ERROR, null);
+                            }
+                            if (progress != null) progress.finished(entry, outcome.result());
                             if (outcome.result() == InstallResult.SUCCESS) {
                                 ok.incrementAndGet();
-                                successes.add(new SuccessfulInstall(entry.getId(), outcome.iconFile(), entry.isProp()));
+                                successes.add(new SuccessfulInstall(entry.getId(), entry.getDisplayName(), outcome.iconFile(), entry.isProp()));
                                 catalog.markIconComplete(entry.getId());
                             } else {
                                 failed.incrementAndGet();
@@ -166,9 +188,9 @@ public final class CommunityDownloadService {
                                     outcome.result()
                                 );
                             }
-                            int progress = done.incrementAndGet();
+                            int completed = done.incrementAndGet();
                             if (onProgress != null) {
-                                onProgress.accept(progress);
+                                onProgress.accept(completed);
                             }
                         },
                         pool
@@ -180,10 +202,15 @@ public final class CommunityDownloadService {
             pool.shutdown();
         }
 
+        AtomicInteger loaded = new AtomicInteger();
+        int loadingTotal = successes.size() * 2 + AetherhavenPlugin.RESOURCE_RELOAD_STEPS + 1;
         if (!successes.isEmpty()) {
+            if (progress != null) progress.loading(0, loadingTotal, "Registering building images...");
             List<CommonAsset> toBroadcast = new ArrayList<>();
             for (SuccessfulInstall success : successes) {
+                if (progress != null) progress.loading(loaded.get(), loadingTotal, "Loading preview: " + success.displayName());
                 if (success.iconFile() == null) {
+                    if (progress != null) progress.loading(loaded.incrementAndGet(), loadingTotal, "Building needs no preview image");
                     continue;
                 }
                 CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, success.iconFile(), true);
@@ -191,32 +218,42 @@ public final class CommunityDownloadService {
                 if (asset != null) {
                     toBroadcast.add(asset);
                 }
-                if (success.prop()) {
-                    PropIconSync.afterIconRegistered(plugin, success.constructionId());
-                } else {
-                    PlotTokenIconSync.afterIconRegistered(plugin, success.constructionId());
-                }
+                if (progress != null) progress.loading(loaded.incrementAndGet(), loadingTotal, "Building preview registered");
+                // Refresh item definitions once, after their new catalog definitions are available below.
             }
-            CommunityIconRegistry.broadcastAssets(toBroadcast);
+            if (progress != null) progress.loading(loaded.get(), loadingTotal, "Sending building images to players...");
+            com.hexvane.aetherhaven.plotcreator.RuntimeCommonIconBroadcast.broadcast(toBroadcast, sent -> {
+                if (progress != null) progress.loading(loaded.get(), loadingTotal,
+                    "Sending building images: " + sent + " / " + toBroadcast.size());
+            });
+            if (progress != null) progress.loading(loaded.incrementAndGet(), loadingTotal, "Loading building resources...");
         }
 
         if (ok.get() > 0) {
-            plugin.reloadConfigsAndAssetCatalogs();
+            plugin.reloadConfigsAndAssetCatalogs(detail -> {
+                if (progress != null) progress.loading(loaded.incrementAndGet(), loadingTotal, detail);
+            });
             for (SuccessfulInstall success : successes) {
+                if (progress != null) progress.loading(loaded.get(), loadingTotal, "Preparing: " + success.displayName());
                 // Catalog reload can race icon atlas; refresh virtual defs again for online players.
                 if (success.prop()) {
                     PropIconSync.afterIconRegistered(plugin, success.constructionId());
                 } else if (success.iconFile() != null) {
                     PlotTokenIconSync.afterIconRegistered(plugin, success.constructionId());
                 }
-                reportInstall(plugin, success.constructionId(), playerUuid);
+                if (progress != null) progress.loading(loaded.incrementAndGet(), loadingTotal, "Plot tokens refreshed");
             }
             LOGGER.atInfo().log("Batch installed %s community buildings (%s failed)", ok.get(), failed.get());
         }
+        if (progress != null) progress.complete();
+        // Analytics must not keep a usable style waiting on another round of network requests.
+        CompletableFuture.runAsync(() -> {
+            for (SuccessfulInstall success : successes) reportInstall(plugin, success.constructionId(), playerUuid);
+        });
         return new BatchResult(ok.get(), failed.get(), skipped);
     }
 
-    private record SuccessfulInstall(@Nonnull String constructionId, @Nullable Path iconFile, boolean prop) {}
+    private record SuccessfulInstall(@Nonnull String constructionId, @Nonnull String displayName, @Nullable Path iconFile, boolean prop) {}
 
     private record FileInstallOutcome(@Nonnull InstallResult result, @Nullable Path iconFile) {}
 
@@ -231,8 +268,16 @@ public final class CommunityDownloadService {
         boolean forceRefresh,
         boolean registerIconImmediately
     ) {
+        return installFiles(plugin, entry, forceRefresh, registerIconImmediately, null);
+    }
+
+    private static FileInstallOutcome installFiles(
+        AetherhavenPlugin plugin, CommunityManifestEntry entry, boolean forceRefresh,
+        boolean registerIconImmediately, @Nullable CommunityDownloadProgress progress
+    ) {
+        if (progress != null) progress.file(entry, "checking files");
         if (entry.isProp()) {
-            return installPropFiles(plugin, entry, forceRefresh, registerIconImmediately);
+            return installPropFiles(plugin, entry, forceRefresh, registerIconImmediately, progress);
         }
         if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
             return new FileInstallOutcome(InstallResult.MISSING_MODS, null);
@@ -279,6 +324,7 @@ public final class CommunityDownloadService {
                 if (prefabUrl == null || prefabUrl.isBlank()) {
                     return new FileInstallOutcome(InstallResult.NOT_FOUND, null);
                 }
+                if (progress != null) progress.file(entry, "building shape");
                 byte[] prefab = CommunityHttpClient.getBytes(catalog.resolveUrl(prefabUrl));
                 if (prefab == null || prefab.length == 0) {
                     return new FileInstallOutcome(InstallResult.DOWNLOAD_FAILED, null);
@@ -310,6 +356,7 @@ public final class CommunityDownloadService {
                     rollbackFreshInstall(dataDir, id, festivalLook, wrotePrefabThisAttempt, false, false);
                     return new FileInstallOutcome(InstallResult.NOT_FOUND, null);
                 }
+                if (progress != null) progress.file(entry, "building settings");
                 String buildingJson = CommunityHttpClient.getString(catalog.resolveUrl(buildingUrl));
                 if (buildingJson == null || buildingJson.isBlank()) {
                     rollbackFreshInstall(dataDir, id, festivalLook, wrotePrefabThisAttempt, false, false);
@@ -324,6 +371,7 @@ public final class CommunityDownloadService {
                 CommunityBuildingJsonNormalizer.normalizeInstalledBuildingFile(buildingFile, id);
             }
 
+            if (progress != null) progress.file(entry, "preview image");
             boolean iconRequired = CommunityIconDownload.iconRequired(entry);
             if (iconRequired) {
                 Path iconFile = CommunityPaths.iconFile(dataDir, id);
@@ -396,7 +444,8 @@ public final class CommunityDownloadService {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull CommunityManifestEntry entry,
         boolean forceRefresh,
-        boolean registerIconImmediately
+        boolean registerIconImmediately,
+        @Nullable CommunityDownloadProgress progress
     ) {
         if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
             return new FileInstallOutcome(InstallResult.MISSING_MODS, null);
@@ -421,6 +470,7 @@ public final class CommunityDownloadService {
                 if (prefabUrl == null || prefabUrl.isBlank()) {
                     return new FileInstallOutcome(InstallResult.NOT_FOUND, null);
                 }
+                if (progress != null) progress.file(entry, "building shape");
                 byte[] prefab = CommunityHttpClient.getBytes(catalog.resolveUrl(prefabUrl));
                 if (prefab == null || prefab.length == 0) {
                     return new FileInstallOutcome(InstallResult.DOWNLOAD_FAILED, null);
@@ -446,6 +496,7 @@ public final class CommunityDownloadService {
                     }
                     return new FileInstallOutcome(InstallResult.NOT_FOUND, null);
                 }
+                if (progress != null) progress.file(entry, "prop settings");
                 String propJson = CommunityHttpClient.getString(catalog.resolveUrl(propUrl));
                 if (propJson == null || propJson.isBlank()) {
                     if (wrotePrefab) {
@@ -468,6 +519,7 @@ public final class CommunityDownloadService {
                 wroteDef = true;
             }
 
+            if (progress != null) progress.file(entry, "preview image");
             if (CommunityIconDownload.iconRequired(entry)) {
                 Path iconFile = CommunityPaths.iconsDirectory(dataDir).resolve(PropPaths.iconFileName(id));
                 boolean needIcon = forceRefresh || !Files.isRegularFile(iconFile);

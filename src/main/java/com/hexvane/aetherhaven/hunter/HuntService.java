@@ -41,6 +41,7 @@ public final class HuntService extends TickingSystem<EntityStore> {
         Vector3d center,loot;
         /** How the lodge was turned when it was placed. The arena's pieces turn with it. */
         com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation turn=com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation.None;
+        Float arenaFacing;
         boolean collecting,down,secondWind;
         boolean standard,brazier,sigil;
         Set<Integer> previousEffects=Set.of();
@@ -48,7 +49,7 @@ public final class HuntService extends TickingSystem<EntityStore> {
         float lastFoeHealth,lastHunterHealth;
         long lastTick,searchCursor,planningUntil;
         String status="Choose creatures, then start a run.";
-        HuntArenaLayout layout() {return HuntArenaLayout.of(center,turn);}
+        HuntArenaLayout layout() {return HuntArenaLayout.of(center,turn,arenaFacing);}
     }
     private static Map<UUID,Run> runs(World world) { synchronized(RUNS){return RUNS.computeIfAbsent(world,w->new HashMap<>());} }
     private static Run run(Store<EntityStore> store,UUID town) { return runs(store.getExternalData().getWorld()).get(town); }
@@ -90,7 +91,7 @@ public final class HuntService extends TickingSystem<EntityStore> {
         var plugin=AetherhavenPlugin.get();var world=store.getExternalData().getWorld();var state=town.getHunts();
         var plot=town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(),CONSTRUCTION);
         var r=runs(world).computeIfAbsent(town.getTownId(),id->new Run());
-        r.hunter=new WeakReference<>(hunter);r.plot=plot.getPlotId();r.turn=plot.resolvePrefabYaw();
+        r.hunter=new WeakReference<>(hunter);r.plot=plot.getPlotId();r.turn=plot.resolvePrefabYaw();r.arenaFacing=HuntArenaLayout.savedFacing(AetherhavenPlugin.get().getConstructionCatalog().get(plot.getConstructionId()));
         if(r.center==null||!beacon(world,r.center)||!insidePoint(r.center,plot))r.center=findBeacon(world,plot,r);
         if(r.center==null)return "Finding the Hunt Beacon. Try again in a moment.";
         if(!clearArena(world,plot,r.center))return "Keep a clear 9 by 9 floor around the Hunt Beacon.";
@@ -144,7 +145,7 @@ public final class HuntService extends TickingSystem<EntityStore> {
             var r=map.computeIfAbsent(entry.getKey(),id->new Run());r.hunter=new WeakReference<>(hunter);
             if(r.id==null&&state.run()!=null) {state.end("Run interrupted by a restart.");save(town,store);}
             var plot=town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(),CONSTRUCTION);
-            if(plot!=null)r.turn=plot.resolvePrefabYaw();
+            if(plot!=null) {r.turn=plot.resolvePrefabYaw();r.arenaFacing=HuntArenaLayout.savedFacing(plugin.getConstructionCatalog().get(plot.getConstructionId()));}
             if(r.id==null) {
                 if(now<r.planningUntil)NpcSupportUtil.setState(hunter,"AetherhavenStandStill",null,store);
                 if(plot!=null&&(r.center==null||!beacon(world,r.center)))r.center=findBeacon(world,plot,r);

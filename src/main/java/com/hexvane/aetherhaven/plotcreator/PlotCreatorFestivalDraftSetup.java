@@ -12,6 +12,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -89,23 +90,22 @@ public final class PlotCreatorFestivalDraftSetup {
         @Nonnull String startingPrefabPath
     ) {
         PlotCreatorDraft draft = session.getDraft();
-        if (draft.getCornerFirst() == null || draft.getCornerSecond() == null) {
-            return "needBounds";
-        }
         IPrefabBuffer buffer = PrefabResolveUtil.resolvePrefabBuffer(startingPrefabPath);
         if (buffer == null) {
             return "prefab_missing";
         }
 
+        Vector3i initialCenter = null;
+        if (draft.getCornerFirst() == null || draft.getCornerSecond() == null) {
+            TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
+            if (transform == null || transform.getPosition() == null) return "festivalPositionUnavailable";
+            initialCenter = BuildingEditorFestivalSessionStarter.pasteCenterNearPlayer(
+                transform.getPosition(), transform.getRotation().yaw());
+        }
+        initializeFootprint(draft, initialCenter);
         Vector3i min = new Vector3i(draft.boundsMin());
         Vector3i max = FestivalPrefabSize.maxFromMin(min);
-        PlotCreatorBoundsValidation.commitCorners(draft, min, max);
-        draft.setBoundsPhase(PlotCreatorBoundsPhase.SELECTION);
-        Vector3i center =
-            new Vector3i(min.x + FestivalPrefabSize.SPAN_X / 2, min.y, min.z + FestivalPrefabSize.SPAN_Z / 2);
-        draft.setPlotAnchor(new Vector3i(center));
-        draft.setPrefabOriginMin(new Vector3i(min));
-        draft.setFestivalSizeLocked(true);
+        Vector3i center = new Vector3i(draft.getPlotAnchor());
 
         World world = session.getWorld();
         PlotFootprintRecord volume = new PlotFootprintRecord(min.x, min.y, min.z, max.x, max.y, max.z);
@@ -135,6 +135,20 @@ public final class PlotCreatorFestivalDraftSetup {
         PlotCreatorService.refreshBoundsVisuals(session, playerRef);
         PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
         return null;
+    }
+
+    /** First pick creates the fixed box; subsequent choices keep the same authoring location. */
+    static void initializeFootprint(@Nonnull PlotCreatorDraft draft, @Nullable Vector3i initialCenter) {
+        Vector3i min = draft.getCornerFirst() != null && draft.getCornerSecond() != null
+            ? new Vector3i(draft.boundsMin())
+            : new Vector3i(java.util.Objects.requireNonNull(initialCenter))
+                .add(FestivalPrefabSize.LOCAL_MIN_X, FestivalPrefabSize.LOCAL_MIN_Y, FestivalPrefabSize.LOCAL_MIN_Z);
+        PlotCreatorBoundsValidation.commitCorners(draft, min, FestivalPrefabSize.maxFromMin(min));
+        draft.setBoundsPhase(PlotCreatorBoundsPhase.SELECTION);
+        draft.setPlotAnchor(new Vector3i(min).sub(
+            FestivalPrefabSize.LOCAL_MIN_X, FestivalPrefabSize.LOCAL_MIN_Y, FestivalPrefabSize.LOCAL_MIN_Z));
+        draft.setPrefabOriginMin(new Vector3i(min));
+        draft.setFestivalSizeLocked(true);
     }
 
     /** Fills festival settings and important-spot selections from an existing definition or clears for a new one. */

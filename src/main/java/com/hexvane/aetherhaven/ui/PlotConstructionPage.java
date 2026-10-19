@@ -1240,7 +1240,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             false
         );
 
-        String langU = playerRef.getLanguage() != null ? playerRef.getLanguage() : "en-US";
+        String langU = AetherhavenLanguage.modLanguage(playerRef);
         String unassignedLabel =
             I18nModule.get().getMessage(langU, "aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.houseResidentUnassigned");
         if (unassignedLabel == null || unassignedLabel.isEmpty()) {
@@ -2007,7 +2007,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             String displayName = defToken != null ? defToken.getDisplayName() : plotTokenInst.getConstructionId();
             String language = "en-US";
             if (playerRef.getLanguage() != null && !playerRef.getLanguage().isBlank()) {
-                language = playerRef.getLanguage();
+                language = AetherhavenLanguage.modLanguage(playerRef);
             }
             ItemStack moveStack =
                 PlotTokenInventory.createMoveTokenStack(
@@ -3041,7 +3041,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         @Nonnull String residentKind,
         @Nonnull String rowPath
     ) {
-        String langU = playerRef.getLanguage() != null ? playerRef.getLanguage() : "en-US";
+        String langU = AetherhavenLanguage.modLanguage(playerRef);
         String unassignedLabel =
             I18nModule.get().getMessage(langU, "aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.houseResidentUnassigned");
         if (unassignedLabel == null || unassignedLabel.isEmpty()) {
@@ -3136,7 +3136,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             false
         );
 
-        String langU = playerRef.getLanguage() != null ? playerRef.getLanguage() : "en-US";
+        String langU = AetherhavenLanguage.modLanguage(playerRef);
         String unassignedLabel =
             I18nModule.get().getMessage(langU, "aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.houseResidentUnassigned");
         if (unassignedLabel == null || unassignedLabel.isEmpty()) {

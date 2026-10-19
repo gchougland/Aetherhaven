@@ -36,6 +36,7 @@ import com.hexvane.aetherhaven.community.CommunityFestivalLookGrouping;
 import com.hexvane.aetherhaven.community.CommunityWallStyleGrouping;
 import com.hexvane.aetherhaven.festival.FestivalCatalog;
 import com.hexvane.aetherhaven.festival.FestivalService;
+import com.hexvane.aetherhaven.festival.FestivalLookSelection;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.prop.PropDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -85,7 +86,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -1181,7 +1181,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
         ConstructionDefinition def = catalog.get(variant.constructionId());
         String displayName = def != null && def.getDisplayName() != null ? def.getDisplayName() : variant.displayName();
-        ItemStack token = PlotTokenInventory.createTokenStack(variant.constructionId(), 1, displayName, pr.getLanguage());
+        ItemStack token = PlotTokenInventory.createTokenStack(variant.constructionId(), 1, displayName, AetherhavenLanguage.modLanguage(pr));
         if (!inv.canAddItemStack(token)) {
             GoldCoinPayment.refund(town, player, ref, store, paid);
             if (town != null) {
@@ -1242,15 +1242,21 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             town != null
                 && variant != null
                 && variant.constructionId().equals(town.getSelectedFestivalLookId(festivalLookBaseId(selectedGroup)));
+        var square = town == null ? null : FestivalService.findFestivalSquare(plugin, town);
+        var look = variant == null ? null : plugin.getFestivalCatalog().get(variant.constructionId());
+        boolean matchesStyle = look != null && FestivalLookSelection.squareStyle(plugin.getConstructionCatalog(), square)
+            .equals(PlotBuildingStyles.normalize(look.getStyleId()));
         commandBuilder.set(
             "#CraftButton.TextSpans",
             Message.translation(
-                selected
+                !matchesStyle
+                    ? "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.festivalLookStyleButton"
+                    : selected
                     ? "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.useOriginalLook"
                     : "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.useThisLook"
             )
         );
-        commandBuilder.set("#CraftButton.Disabled", !hasVariant || town == null);
+        commandBuilder.set("#CraftButton.Disabled", !hasVariant || town == null || !matchesStyle);
     }
 
     private void tryApplyFestivalLook(
@@ -2217,13 +2223,11 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         @Nonnull GroupEntry group
     ) {
         List<CommunityManifestEntry> pieces = new ArrayList<>();
-        boolean anyInstalled = false;
         for (VariantEntry v : group.variants()) {
             CommunityManifestEntry piece = community.findEntry(v.constructionId());
             if (piece == null) {
                 continue;
             }
-            anyInstalled |= community.isInstalled(piece.getId());
             pieces.add(piece);
         }
         if (pieces.isEmpty()) {
@@ -2233,60 +2237,34 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         if (!marketplaceRefreshInFlight.compareAndSet(false, true)) {
             return;
         }
-        boolean forceRefresh = anyInstalled;
         String styleName = group.displayName();
         refresh(ref, store);
         World world = store.getExternalData().getWorld();
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        UUID playerUuid = uc != null ? uc.getUuid() : null;
-        int total = pieces.size();
+        UUID playerUuid = pr.getUuid();
+        var progress = CommunityDownloadHud.begin(playerUuid, "Style: " + styleName);
+        if (progress == null) {
+            marketplaceRefreshInFlight.set(false);
+            pr.sendMessage(Message.raw("A style download is already running. Follow its progress on your HUD."));
+            refresh(ref, store);
+            return;
+        }
         CompletableFuture.runAsync(
             () -> {
-                CommunityDownloadService.BatchResult batchResult;
                 try {
-                    batchResult =
-                        CommunityDownloadService.installBatch(plugin, pieces, done -> {}, playerUuid);
+                    CommunityDownloadService.installBatch(plugin, pieces, null, playerUuid, progress);
                 } catch (RuntimeException e) {
-                    batchResult = new CommunityDownloadService.BatchResult(0, total, 0);
+                    java.util.logging.Logger.getLogger(PlotCraftingPage.class.getName())
+                        .log(java.util.logging.Level.WARNING, "Style download failed", e);
+                    progress.fail("Could not finish downloading or loading this style. Check the server log and try again.");
                 }
-                CommunityDownloadService.BatchResult result = batchResult;
+                marketplaceRefreshInFlight.set(false);
                 plugin.scheduleOnWorld(
                     world,
                     () -> {
-                        marketplaceRefreshInFlight.set(false);
                         if (!ref.isValid() || isDismissed()) {
                             return;
                         }
                         communityPreviewConstructionId = null;
-                        if (result.ok() <= 0) {
-                            NotificationUtil.sendNotification(
-                                pr.getPacketHandler(),
-                                Message.translation(
-                                    forceRefresh
-                                        ? "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.updateFailed"
-                                        : "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.downloadFailed"
-                                ),
-                                NotificationStyle.Danger
-                            );
-                        } else if (result.failed() > 0) {
-                            NotificationUtil.sendNotification(
-                                pr.getPacketHandler(),
-                                Message.translation(
-                                        "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.wallStylePartial"
-                                    )
-                                    .param("name", Message.raw(styleName)),
-                                NotificationStyle.Warning
-                            );
-                        } else {
-                            NotificationUtil.sendNotification(
-                                pr.getPacketHandler(),
-                                Message.translation(
-                                        "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.wallStyleDownloaded"
-                                    )
-                                    .param("name", Message.raw(styleName)),
-                                NotificationStyle.Success
-                            );
-                        }
                         refresh(ref, store);
                     },
                     1L
@@ -2324,88 +2302,31 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         }
         refresh(ref, store);
         World world = store.getExternalData().getWorld();
-        int total = targets.size();
-        AtomicInteger lastNotified = new AtomicInteger(-1);
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        UUID playerUuid = uc != null ? uc.getUuid() : null;
+        UUID playerUuid = pr.getUuid();
+        var progress = CommunityDownloadHud.begin(playerUuid, "Style: " + String.join(", ", activeStyleFilters));
+        if (progress == null) {
+            marketplaceRefreshInFlight.set(false);
+            pr.sendMessage(Message.raw("A style download is already running. Follow its progress on your HUD."));
+            refresh(ref, store);
+            return;
+        }
         CompletableFuture.runAsync(
             () -> {
-                CommunityDownloadService.BatchResult batchResult;
                 try {
-                    batchResult =
-                        CommunityDownloadService.installBatch(
-                            plugin,
-                            targets,
-                            done -> {
-                                int step = Math.max(1, total / 10);
-                                int previous = lastNotified.get();
-                                if (done < total && done - previous < step) {
-                                    return;
-                                }
-                                if (!lastNotified.compareAndSet(previous, done)) {
-                                    return;
-                                }
-                                plugin.scheduleOnWorld(
-                                    world,
-                                    () -> {
-                                        if (!ref.isValid() || isDismissed()) {
-                                            return;
-                                        }
-                                        NotificationUtil.sendNotification(
-                                            pr.getPacketHandler(),
-                                            Message.translation(
-                                                    "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.downloadThemeInProgress"
-                                                )
-                                                .param("done", Message.raw(Integer.toString(done)))
-                                                .param("total", Message.raw(Integer.toString(total))),
-                                            NotificationStyle.Warning
-                                        );
-                                    },
-                                    1L
-                                );
-                            },
-                            playerUuid
-                        );
+                    CommunityDownloadService.installBatch(plugin, targets, null, playerUuid, progress);
                 } catch (RuntimeException e) {
-                    batchResult = new CommunityDownloadService.BatchResult(0, total, 0);
+                    java.util.logging.Logger.getLogger(PlotCraftingPage.class.getName())
+                        .log(java.util.logging.Level.WARNING, "Style download failed", e);
+                    progress.fail("Could not finish downloading or loading this style. Check the server log and try again.");
                 }
-                CommunityDownloadService.BatchResult result = batchResult;
+                marketplaceRefreshInFlight.set(false);
                 plugin.scheduleOnWorld(
                     world,
                     () -> {
-                        marketplaceRefreshInFlight.set(false);
                         if (!ref.isValid() || isDismissed()) {
                             return;
                         }
                         communityPreviewConstructionId = null;
-                        if (result.ok() <= 0 && result.failed() <= 0) {
-                            NotificationUtil.sendNotification(
-                                pr.getPacketHandler(),
-                                Message.translation(
-                                    "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.downloadThemeNothing"
-                                ),
-                                NotificationStyle.Warning
-                            );
-                        } else if (result.failed() > 0) {
-                            NotificationUtil.sendNotification(
-                                pr.getPacketHandler(),
-                                Message.translation(
-                                        "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.downloadThemePartial"
-                                    )
-                                    .param("ok", Message.raw(Integer.toString(result.ok())))
-                                    .param("failed", Message.raw(Integer.toString(result.failed()))),
-                                result.ok() > 0 ? NotificationStyle.Warning : NotificationStyle.Danger
-                            );
-                        } else {
-                            NotificationUtil.sendNotification(
-                                pr.getPacketHandler(),
-                                Message.translation(
-                                        "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.downloadThemeDone"
-                                    )
-                                    .param("count", Message.raw(Integer.toString(result.ok()))),
-                                NotificationStyle.Success
-                            );
-                        }
                         refresh(ref, store);
                     },
                     1L
@@ -2655,7 +2576,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             ? AetherhavenPlugin.get().getConstructionCatalog().get(constructionId)
             : null;
         String name = def != null && def.getDisplayName() != null ? def.getDisplayName() : displayName;
-        ItemStack token = PlotTokenInventory.createTokenStack(constructionId, 1, name, pr.getLanguage());
+        ItemStack token = PlotTokenInventory.createTokenStack(constructionId, 1, name, AetherhavenLanguage.modLanguage(pr));
         if (!inv.canAddItemStack(token)) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
@@ -3367,7 +3288,6 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             b.set("#InfoMaterialRows[0] #Name.TextSpans", Message.raw("No materials required"));
             b.set("#InfoMaterialRows[0] #Count.TextSpans", Message.raw(""));
         } else {
-            String language = playerRef != null ? playerRef.getLanguage() : "en-US";
             for (int i = 0; i < visibleMaterials.size(); i++) {
                 MaterialRequirement material = visibleMaterials.get(i);
                 String row = "#InfoMaterialRows[" + i + "]";
@@ -3379,7 +3299,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 }
                 b.set(
                     row + " #Name.TextSpans",
-                    Message.raw(UiMaterialLabels.materialLabelForUi(language, material))
+                    Message.raw(UiMaterialLabels.materialLabelForPlayer(playerRef, material))
                 );
                 b.set(row + " #Count.TextSpans", Message.raw("×" + material.getCount()));
             }

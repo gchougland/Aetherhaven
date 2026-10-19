@@ -39,6 +39,7 @@ public final class PlotCreatorDraftLoader {
         draft.setPlotTokenLockedByDefault(def.isPlotTokenLockedByDefault());
         draft.setExcludeFromTownJournal(def.isExcludeFromTownJournal());
         draft.setStyleId(def.getStyleId());
+        draft.setPreferredStyleQuestBuilding(def.isPreferredStyleQuestBuilding());
         draft.getBuildingTags().clear();
         draft.getBuildingTags().addAll(def.getBuildingTags());
         draft.getMaterials().clear();

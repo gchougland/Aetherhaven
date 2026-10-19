@@ -1,0 +1,38 @@
+{
+  "id": "lonestar144",
+  "displayName": "LoneStar144",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "LoneStar144",
+  "personalityIds": [
+    "adventurer",
+    "crafty",
+    "grumpy"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "GravelyMale",
+  "moveInRequirements": [
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 8
+    }
+  ],
+  "startingSkills": {
+    "building": 5,
+    "crafting": 5,
+    "farming": 3,
+    "ranching": 3,
+    "jewelry": 0
+  },
+  "startingAttributes": {
+    "intelligence": 8,
+    "dexterity": 7,
+    "speed": 7
+  }
+}

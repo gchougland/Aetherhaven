@@ -51,7 +51,7 @@ final class QuestPlotTokenStyleResolverTest {
     }
 
     @Test
-    void housingQuestFallsBackToBaseHouseWhenStyleHasOnlyDuals() {
+    void housingQuestFallsBackToMatchingDualWhenStyleHasOnlyDuals() {
         ConstructionCatalog catalog = dualOnlyCatalog();
         TownRecord town = stormwindTown();
 
@@ -63,7 +63,59 @@ final class QuestPlotTokenStyleResolverTest {
                 RANDOM
             );
 
-        assertEquals(AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE, resolved);
+        assertEquals("plot_stormwind_general_store", resolved);
+    }
+
+    @Test
+    void farmQuestPrefersDedicatedBuildingsOverEveryMixedUseBuilding() {
+        var candidates = new LinkedHashMap<String, ConstructionDefinition>();
+        put(candidates, canonical("plot_farm"));
+        put(candidates, canonical("plot_house"));
+        put(candidates, canonical("plot_blacksmith"));
+        put(candidates, variant("farm_home", "[\"plot_farm\",\"plot_house\"]", false));
+        put(candidates, variant("farm_smith", "[\"plot_farm\",\"plot_blacksmith\"]", false));
+        put(candidates, variant("farm_a", "[\"plot_farm\"]", false));
+        put(candidates, variant("farm_b", "[\"plot_farm\"]", false));
+        assertChoices(candidates, "plot_farm", java.util.Set.of("farm_a", "farm_b"));
+    }
+
+    @Test
+    void markedChoicesOverrideDedicatedBuildingsAndRandomizeAmongMarked() {
+        var candidates = new LinkedHashMap<String, ConstructionDefinition>();
+        put(candidates, canonical("plot_farm"));
+        put(candidates, canonical("plot_house"));
+        put(candidates, variant("dedicated", "[\"plot_farm\"]", false));
+        put(candidates, variant("marked_a", "[\"plot_farm\",\"plot_house\"]", true));
+        put(candidates, variant("marked_b", "[\"plot_farm\"]", true));
+        put(candidates, variant("wrong_type", "[\"plot_house\"]", true));
+        put(candidates, definition(GSON.toJson(variant("wrong_style", "[\"plot_farm\"]", true))
+            .replace("stormwind", "medieval")));
+        assertChoices(candidates, "plot_farm", java.util.Set.of("marked_a", "marked_b"));
+    }
+
+    @Test
+    void noDedicatedBuildingRandomizesAmongMatchingMixedUseBuildings() {
+        var candidates = new LinkedHashMap<String, ConstructionDefinition>();
+        put(candidates, canonical("plot_farm"));
+        put(candidates, canonical("plot_house"));
+        put(candidates, variant("mixed_a", "[\"plot_farm\",\"plot_house\"]", false));
+        put(candidates, variant("mixed_b", "[\"plot_farm\",\"plot_house\"]", false));
+        assertChoices(candidates, "plot_farm", java.util.Set.of("mixed_a", "mixed_b"));
+        assertEquals("plot_blacksmith", QuestPlotTokenStyleResolver.resolveConstructionId(
+            ConstructionCatalog.forTests(candidates), "plot_blacksmith", stormwindTown(), new Random(1)));
+    }
+
+    private static void assertChoices(Map<String, ConstructionDefinition> candidates, String base, java.util.Set<String> expected) {
+        var random = new Random(812);
+        var catalog = ConstructionCatalog.forTests(candidates);
+        var actual = new java.util.HashSet<String>();
+        for (int i=0; i<100; i++) actual.add(QuestPlotTokenStyleResolver.resolveConstructionId(catalog, base, stormwindTown(), random));
+        assertEquals(expected, actual);
+    }
+
+    private static ConstructionDefinition variant(String id, String countsAs, boolean preferred) {
+        return definition("{\"id\":\""+id+"\",\"prefabPath\":\"test.prefab.json\",\"styleId\":\"stormwind\","
+            +"\"countsAsConstructionId\":"+countsAs+",\"preferredStyleQuestBuilding\":"+preferred+"}");
     }
 
     private static TownRecord stormwindTown() {

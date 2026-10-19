@@ -19,7 +19,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -180,10 +179,7 @@ public final class TownStylePickerPage extends AetherhavenInteractiveCustomUIPag
             if (community.isInstalled(entry.getId())) {
                 continue;
             }
-            if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
-                continue;
-            }
-            out.add(entry);
+            if (CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) out.add(entry);
         }
         return out;
     }
@@ -258,121 +254,46 @@ public final class TownStylePickerPage extends AetherhavenInteractiveCustomUIPag
     ) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-        if (plugin == null || pr == null || styleId == null || styleId.isBlank()) {
-            return;
-        }
+        if (plugin == null || pr == null || styleId == null || styleId.isBlank()) return;
         TownBuildingStyleShowcase.Entry entry = TownBuildingStyleShowcase.findByStyleId(styleId);
-        if (entry == null || !entry.marketplace()) {
-            return;
-        }
-        if (!downloadInFlight.compareAndSet(false, true)) {
-            return;
-        }
-        refresh(ref, store);
+        if (entry == null || !entry.marketplace() || !downloadInFlight.compareAndSet(false, true)) return;
         World world = store.getExternalData().getWorld();
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        UUID playerUuid = uc != null ? uc.getUuid() : null;
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(townId);
+        if (town == null) { downloadInFlight.set(false); close(); return; }
+        var progress = CommunityDownloadHud.begin(pr.getUuid(), "Style: " + entry.styleId());
+        if (progress == null) {
+            downloadInFlight.set(false);
+            pr.sendMessage(Message.raw("A style download is already running. Follow its progress on your HUD."));
+            close();
+            return;
+        }
+        town.setPreferredBuildingStyleId(entry.styleId());
+        tm.updateTown(town);
+        close();
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player != null) CommunityDownloadHud.refresh(player, pr);
         CommunityCatalogService community = plugin.getCommunityCatalogService();
-        CompletableFuture.runAsync(
-            () -> {
-                if (community.isEnabled() && (community.isCacheEmpty() || community.isCacheStale())) {
-                    community.refreshFromApi(playerUuid);
-                }
-                List<CommunityManifestEntry> targets = listDownloadTargets(community, entry.styleId());
-                if (targets.isEmpty()) {
-                    plugin.scheduleOnWorld(
-                        world,
-                        () -> {
-                            downloadInFlight.set(false);
-                            if (!ref.isValid() || isDismissed()) {
-                                return;
-                            }
-                            NotificationUtil.sendNotification(
-                                pr.getPacketHandler(),
-                                Message.translation(MSG + ".downloadNothing"),
-                                NotificationStyle.Warning
-                            );
-                            refresh(ref, store);
-                        },
-                        1L
-                    );
+        CompletableFuture.runAsync(() -> {
+            try {
+                if (community.isEnabled() && (community.isCacheEmpty() || community.isCacheStale())
+                    && !community.refreshFromApi(pr.getUuid())) {
+                    progress.fail("Could not refresh the marketplace. Please try again.");
                     return;
                 }
-                int total = targets.size();
-                AtomicInteger lastNotified = new AtomicInteger(-1);
-                CommunityDownloadService.BatchResult batchResult;
-                try {
-                    batchResult =
-                        CommunityDownloadService.installBatch(
-                            plugin,
-                            targets,
-                            done -> {
-                                int step = Math.max(1, total / 10);
-                                int previous = lastNotified.get();
-                                if (done < total && done - previous < step) {
-                                    return;
-                                }
-                                if (!lastNotified.compareAndSet(previous, done)) {
-                                    return;
-                                }
-                                plugin.scheduleOnWorld(
-                                    world,
-                                    () -> {
-                                        if (!ref.isValid() || isDismissed()) {
-                                            return;
-                                        }
-                                        NotificationUtil.sendNotification(
-                                            pr.getPacketHandler(),
-                                            Message.translation(MSG + ".downloadProgress")
-                                                .param("done", Message.raw(Integer.toString(done)))
-                                                .param("total", Message.raw(Integer.toString(total))),
-                                            NotificationStyle.Warning
-                                        );
-                                    },
-                                    1L
-                                );
-                            },
-                            playerUuid
-                        );
-                } catch (RuntimeException e) {
-                    batchResult = new CommunityDownloadService.BatchResult(0, total, 0);
-                }
-                CommunityDownloadService.BatchResult result = batchResult;
-                plugin.scheduleOnWorld(
-                    world,
-                    () -> {
-                        downloadInFlight.set(false);
-                        if (!ref.isValid() || isDismissed()) {
-                            return;
-                        }
-                        if (result.ok() <= 0 && result.failed() <= 0) {
-                            NotificationUtil.sendNotification(
-                                pr.getPacketHandler(),
-                                Message.translation(MSG + ".downloadNothing"),
-                                NotificationStyle.Warning
-                            );
-                        } else if (result.failed() > 0) {
-                            NotificationUtil.sendNotification(
-                                pr.getPacketHandler(),
-                                Message.translation(MSG + ".downloadPartial")
-                                    .param("ok", Message.raw(Integer.toString(result.ok())))
-                                    .param("failed", Message.raw(Integer.toString(result.failed()))),
-                                result.ok() > 0 ? NotificationStyle.Warning : NotificationStyle.Danger
-                            );
-                        } else {
-                            NotificationUtil.sendNotification(
-                                pr.getPacketHandler(),
-                                Message.translation(MSG + ".downloadDone")
-                                    .param("count", Message.raw(Integer.toString(result.ok()))),
-                                NotificationStyle.Success
-                            );
-                        }
-                        refresh(ref, store);
-                    },
-                    1L
-                );
+                CommunityDownloadService.installBatch(plugin, listDownloadTargets(community, entry.styleId()),
+                    null, pr.getUuid(), progress);
+            } catch (RuntimeException e) {
+                java.util.logging.Logger.getLogger(TownStylePickerPage.class.getName())
+                    .log(java.util.logging.Level.WARNING, "Style download failed", e);
+                progress.fail("Could not finish downloading or loading this style. Check the server log and try again.");
+            } finally {
+                downloadInFlight.set(false);
+                plugin.scheduleOnWorld(world, () -> {
+                    if (ref.isValid() && !isDismissed()) refresh(ref, store);
+                }, 1L);
             }
-        );
+        });
     }
 
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

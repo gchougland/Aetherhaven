@@ -13,7 +13,7 @@ import org.joml.Vector3i;
  * <p>The beacon is a block of the lodge, so it turns with the building. The Hunter's mark, the portal and the place a
  * creature steps out are measured from it along the lodge's own axes and turned by the same quarter turns, so the
  * portal stands in front of the same row of seats and looks at the beacon however the lodge was placed. Nothing here
- * is saved: a run works its layout out again from the beacon each time, so lodges built earlier need no repair.
+ * changes for older lodges without a saved author facing; their original layout needs no repair.
  *
  * @param hunterStand where the Hunter waits for the portal, and where he is put back after a defeat
  * @param portal where the portal opens
@@ -44,6 +44,25 @@ public record HuntArenaLayout(
             turned(beacon, lodgeYaw, CREATURE_LOCAL_Z),
             yawLooking(beacon.x - portal.x, beacon.z - portal.z)
         );
+    }
+
+    /** Saved author facing points from the beacon toward the portal. Missing data keeps older lodges unchanged. */
+    public static HuntArenaLayout of(Vector3d beacon, Rotation lodgeYaw, Float localFacingDegrees) {
+        if (localFacingDegrees == null || !Float.isFinite(localFacingDegrees)) return of(beacon, lodgeYaw);
+        float yaw = com.hexvane.aetherhaven.construction.PrefabYaw.worldFromPrefabLocal(lodgeYaw,
+            (float) Math.toRadians(localFacingDegrees));
+        double dx = -Math.sin(yaw), dz = -Math.cos(yaw);
+        return new HuntArenaLayout(new Vector3d(beacon).add(dx * HUNTER_LOCAL_Z, 0, dz * HUNTER_LOCAL_Z),
+            new Vector3d(beacon).add(dx * PORTAL_LOCAL_Z, 0, dz * PORTAL_LOCAL_Z),
+            new Vector3d(beacon).add(dx * CREATURE_LOCAL_Z, 0, dz * CREATURE_LOCAL_Z), yawLooking(-dx, -dz));
+    }
+
+    public static Float savedFacing(com.hexvane.aetherhaven.construction.ConstructionDefinition definition) {
+        if (definition == null) return null;
+        for (var poi : definition.getPois()) if (HuntService.BEACON.equals(poi.getBlockTypeId())
+            && poi.getTags().contains(com.hexvane.aetherhaven.plotcreator.CoreBuildingSpecialties.TAG))
+            return poi.getInteractionTargetYawDegrees();
+        return null;
     }
 
     /** The rotation given to the portal and to a creature as it steps out: both look at the beacon. */

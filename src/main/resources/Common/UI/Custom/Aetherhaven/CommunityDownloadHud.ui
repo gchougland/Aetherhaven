@@ -1,0 +1,36 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+
+Group #CommunityDownloadHudRoot {
+  LayoutMode: Full;
+  Anchor: (Full: 0);
+  HitTestVisible: false;
+
+  Group #DownloadPanel {
+    LayoutMode: Top;
+    Anchor: (Left: 24, Top: 220, Width: 370, Height: 188);
+    Padding: (Horizontal: 18, Vertical: 14);
+    Background: $T.@Panel;
+    Label #DownloadTitle { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 15, RenderBold: true, TextColor: #f3e5c5); Text: ""; }
+    Label #DownloadPhase { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #afcbae); Text: ""; }
+    Group { Anchor: (Height: 1, Top: 3, Bottom: 7); Background: #b49b69(0.55); }
+    Label #DownloadDetail { Anchor: (Height: 58); Style: (...$C.@DefaultLabelStyle, FontSize: 11, Wrap: true, TextColor: #c3ccd8); Text: ""; }
+    Group {
+      LayoutMode: Left;
+      Anchor: (Height: 12, Bottom: 8);
+      Padding: (Full: 3);
+      Background: $T.@Inset;
+      Group #DownloadFill { FlexWeight: 1; Background: #9dbd9a; }
+      Group #DownloadRemainder { FlexWeight: 999; }
+    }
+    Label #DownloadCount { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #aebccc); Text: ""; }
+  }
+  Group #DownloadErrorPanel {
+    LayoutMode: Top;
+    Anchor: (Left: 24, Top: 412, Width: 370, Height: 84);
+    Padding: (Horizontal: 14, Vertical: 10);
+    Background: PatchStyle(TexturePath: "../Common/ContainerFullPatch.png", Border: 16, Color: #e5a9a9);
+    Visible: false;
+    Label #DownloadErrors { Anchor: (Height: 64); Style: (...$C.@DefaultLabelStyle, FontSize: 11, Wrap: true, TextColor: #efaaa0); Text: ""; }
+  }
+}

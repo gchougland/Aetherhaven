@@ -133,7 +133,7 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
         if(sub.type()==PlotCreatorSubstepType.SPECIALTY_BLOCK) {
             b.set("#StepHelp.TextSpans",Message.raw("Place and select "+CoreBuildingSpecialties.label(sub.workResidentKind())+"."));
             b.set("#DetailLine.TextSpans",Message.raw("Aetherhaven_Hunt_Beacon".equals(sub.workResidentKind())
-                ? "Leave a clear 9 by 9 arena. Markers show the portal, creature entrance and Hunter's stand; these turn with the building."
+                ? "Leave a clear 9 by 9 arena. Face toward the portal, then mark the beacon. Mark it again while facing another direction to turn the portal, creature and Hunter together."
                 : "This equipment is required for this building. Select its base block inside the build bounds."));
             return;
         }

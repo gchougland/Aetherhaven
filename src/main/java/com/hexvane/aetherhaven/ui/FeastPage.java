@@ -96,7 +96,6 @@ public final class FeastPage extends AetherhavenInteractiveCustomUIPage<FeastPag
         FeastService.pruneExpiredActiveFeast(town, dawn);
 
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        String language = pr.getLanguage();
 
         for (int i = 0; i < ORDERED.size(); i++) {
             FeastDefinition d = ORDERED.get(i);
@@ -171,9 +170,9 @@ public final class FeastPage extends AetherhavenInteractiveCustomUIPage<FeastPag
                     ? Message.join(
                         Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.locked"),
                         Message.raw("\n\n"),
-                        costMessage(language, inv, selDef)
+                        costMessage(pr, inv, selDef)
                     )
-                    : costMessage(language, inv, selDef)
+                    : costMessage(pr, inv, selDef)
             );
             boolean ingredients = inv != null && InventoryMaterials.hasAll(inv, selDef.costs());
             boolean conflict =
@@ -186,7 +185,7 @@ public final class FeastPage extends AetherhavenInteractiveCustomUIPage<FeastPag
 
     @Nonnull
     private static Message costMessage(
-        @Nullable String language,
+        @Nullable PlayerRef player,
         @Nullable CombinedItemContainer inv,
         @Nonnull FeastDefinition def
     ) {
@@ -195,7 +194,7 @@ public final class FeastPage extends AetherhavenInteractiveCustomUIPage<FeastPag
             if (m.getCount() <= 0) {
                 continue;
             }
-            String label = UiMaterialLabels.materialLabelForUi(language, m);
+            String label = UiMaterialLabels.materialLabelForPlayer(player, m);
             int have = inv != null ? InventoryMaterials.count(inv, m) : 0;
             sb.append(label).append(": ").append(have).append(" / ").append(m.getCount()).append("\n");
         }

@@ -208,6 +208,7 @@ aetherhaven.plotcreator.hint.kindCycled = Building type: {kind}
 aetherhaven.plotcreator.hint.prefabSaved = Prefab saved as {file}. Use Continue when ready for the next step.
 
 aetherhaven.plotcreator.error.needBounds = Mark the build area before continuing.
+aetherhaven.plotcreator.error.festivalPositionUnavailable = Your position is not ready yet. Close the menu and try choosing the festival again.
 aetherhaven.plotcreator.error.noSession = Start plot creator or building editor first.
 aetherhaven.plotcreator.error.noSelection = Mark a box with the selection tool first.
 aetherhaven.plotcreator.error.boundsDragTooShort = Hold primary and drag to mark a box. A single click is not enough.
@@ -370,7 +371,7 @@ aetherhaven.plotcreator.step.VARIANT.hint = Pick one or more main building types
 
 aetherhaven.plotcreator.step.FESTIVAL.title = Festival
 aetherhaven.plotcreator.step.FESTIVAL.short = Festival
-aetherhaven.plotcreator.step.FESTIVAL.hint = Use Open or confirm and pick New festival, or pick a festival to make a new look for it. The build area snaps to the festival square size and the starting square is placed for you.
+aetherhaven.plotcreator.step.FESTIVAL.hint = Stand in an open area, then use Open or confirm to pick New festival or make a new look for an existing festival. Its fixed-size starting square is placed nearby. You do not need to mark an area.
 aetherhaven.plotcreator.festival.newFestival = New festival
 aetherhaven.plotcreator.hint.festivalPrefabReady = The festival square is ready. Build inside the {size} area.
 aetherhaven.plotcreator.field.festivalActivity = Festival activity
@@ -714,3 +715,5 @@ aetherhaven.plotcreator.spot.specialty.Bench_Farming = Farmer's Workbench
 aetherhaven.plotcreator.spot.specialty.Bench_WorkBench = Workbench
 aetherhaven.plotcreator.spot.specialty.Bench_Tannery = Tanning Rack
 aetherhaven.plotcreator.error.productionStorageRequired = Place and record the required production storage inside the building bounds.
+aetherhaven.plotcreator.field.preferredStyleQuest = Preferred quest building for this style
+aetherhaven.plotcreator.field.preferredStyleQuest.hint = When a town uses this style, matching building quests choose marked buildings first. If several are marked, one is chosen at random.

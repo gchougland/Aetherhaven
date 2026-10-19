@@ -100,7 +100,9 @@ public final class AetherhavenHudRefreshSystem
         if (player == null || player.isWaitingForClientReady() || playerRef == null || uuid == null || preferences == null) {
             return;
         }
+        com.hexvane.aetherhaven.ui.AetherhavenLanguage.sync(playerRef, preferences.isUseEnglishTranslations());
         if (!preferences.isHudEnabled()) {
+            com.hexvane.aetherhaven.ui.CommunityDownloadHud.refresh(player, playerRef);
             if (AetherhavenHudSupport.isActive(player)) {
                 AetherhavenHudSupport.remove(player, playerRef);
             }
@@ -108,6 +110,7 @@ public final class AetherhavenHudRefreshSystem
         }
 
         World world = store.getExternalData().getWorld();
+        com.hexvane.aetherhaven.ui.CommunityDownloadHud.refresh(player, playerRef);
         String worldName = world.getName();
         long revision = worldRevision.getOrDefault(worldName, 0L);
         float elapsed = elapsedByPlayer.getOrDefault(uuid.getUuid(), PLAYER_VALUE_REFRESH_SECONDS) + Math.max(0f, dt);

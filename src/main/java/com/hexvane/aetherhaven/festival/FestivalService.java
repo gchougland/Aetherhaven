@@ -87,7 +87,7 @@ public final class FestivalService {
             FestivalDefinition running = plugin.getFestivalCatalog().get(runningId);
             FestivalDefinition base = FestivalLookSelection.gameplayBase(plugin.getFestivalCatalog(), running);
             FestivalDefinition layout =
-                base != null ? FestivalLookSelection.layoutFor(plugin.getFestivalCatalog(), town, base) : running;
+                base != null ? FestivalLookSelection.runningLayout(plugin.getFestivalCatalog(), town, base) : running;
             boolean expired = running == null
                 || base == null
                 || epochMinute >= town.getActiveFestivalEndEpochMinute()
@@ -151,14 +151,15 @@ public final class FestivalService {
             abandonActiveFestivalWithoutSquare(world, store, plugin, tm, town);
             return;
         }
+        FestivalDefinition layout = FestivalLookSelection.layoutFor(plugin, town, square, festival);
         boolean started = FestivalPrefabSwapService.swap(
             world,
             plugin,
             town,
             square,
             everyday,
-            festival.getPrefabPath(),
-            () -> onFestivalPasted(world, plugin, town.getTownId(), square.getPlotId(), festival)
+            layout.getPrefabPath(),
+            () -> onFestivalPasted(world, plugin, town.getTownId(), square.getPlotId(), layout)
         );
         if (!started) {
             LOGGER.atWarning().log(
@@ -168,6 +169,7 @@ public final class FestivalService {
             );
             return;
         }
+        town.setActiveFestivalLayoutId(layout.getId());
         town.setActiveFestivalPlotId(square.getPlotId());
         tm.updateTown(town);
         LOGGER.atInfo().log(
@@ -222,7 +224,7 @@ public final class FestivalService {
         if (base == null) {
             base = festival;
         }
-        FestivalDefinition layout = FestivalLookSelection.layoutFor(plugin.getFestivalCatalog(), town, base);
+        FestivalDefinition layout = FestivalLookSelection.layoutFor(plugin, town, square, base);
         long endEpochMinute = resolveEndEpochMinute(base, gameTime, epochMinute);
         FestivalDefinition layoutForPaste = layout;
         boolean started = FestivalPrefabSwapService.swap(
@@ -237,6 +239,7 @@ public final class FestivalService {
         if (!started) {
             return false;
         }
+        town.setActiveFestivalLayoutId(layout.getId());
         town.setActiveFestivalId(base.getId());
         town.setActiveFestivalPlotId(square.getPlotId());
         town.setActiveFestivalEndEpochMinute(endEpochMinute);
@@ -247,7 +250,7 @@ public final class FestivalService {
     }
 
     /**
-     * Sets this town's look for {@code baseFestivalId}. {@code lookId} null restores the original. If that holiday is
+     * Sets a matching-style look for {@code baseFestivalId}. {@code lookId} null restores automatic style selection. If that holiday is
      * running, the square swaps to the new prefab on the world thread.
      *
      * @return plot crafting error lang suffix, or null on success
@@ -267,23 +270,31 @@ public final class FestivalService {
         if (base == null || base.isLook()) {
             return "unknownFestivalLook";
         }
+        PlotInstance square = town.getActiveFestivalPlotId() == null ? null : town.findPlotById(town.getActiveFestivalPlotId());
+        if (square == null) square = findFestivalSquare(plugin, town);
         if (lookId != null && !lookId.isBlank()) {
             FestivalDefinition look = catalog.get(lookId.trim());
             if (look == null || !look.isLook() || !base.getId().equals(look.getGameplayFestivalId())) {
                 return "unknownFestivalLook";
             }
+            if (!FestivalLookSelection.squareStyle(plugin.getConstructionCatalog(), square).equals(
+                com.hexvane.aetherhaven.plot.PlotBuildingStyles.normalize(look.getStyleId()))) return "festivalLookWrongStyle";
         }
-        FestivalDefinition oldLayout = FestivalLookSelection.layoutFor(catalog, town, base);
+        FestivalDefinition oldLayout = base.getId().equals(town.getActiveFestivalId())
+            ? FestivalLookSelection.runningLayout(catalog, town, base)
+            : FestivalLookSelection.layoutFor(plugin, town, square, base);
+        if (base.getId().equals(town.getActiveFestivalId())) town.setActiveFestivalLayoutId(oldLayout.getId());
+        String previousChoice = town.getSelectedFestivalLookId(base.getId());
         town.setSelectedFestivalLookId(base.getId(), lookId);
         tm.updateTown(town);
         if (!base.getId().equals(town.getActiveFestivalId())) {
             return null;
         }
-        PlotInstance square = findFestivalSquare(plugin, town);
         if (square == null) {
             return null;
         }
-        FestivalDefinition newLayout = FestivalLookSelection.layoutFor(catalog, town, base);
+        FestivalDefinition newLayout = FestivalLookSelection.layoutFor(plugin, town, square, base);
+        PlotInstance host = square;
         if (oldLayout.getPrefabPath().equals(newLayout.getPrefabPath()) && oldLayout.getId().equals(newLayout.getId())) {
             return null;
         }
@@ -296,11 +307,15 @@ public final class FestivalService {
             square,
             oldLayout.getPrefabPath(),
             newLayout.getPrefabPath(),
-            () -> onFestivalPasted(world, plugin, town.getTownId(), square.getPlotId(), newLayout)
+            () -> onFestivalPasted(world, plugin, town.getTownId(), host.getPlotId(), newLayout)
         );
         if (!started) {
+            town.setSelectedFestivalLookId(base.getId(), previousChoice);
+            tm.updateTown(town);
             return "festivalLookSwapFailed";
         }
+        town.setActiveFestivalLayoutId(newLayout.getId());
+        tm.updateTown(town);
         return null;
     }
 
@@ -316,7 +331,7 @@ public final class FestivalService {
         FestivalDefinition running = runningId != null ? plugin.getFestivalCatalog().get(runningId) : null;
         FestivalDefinition base = FestivalLookSelection.gameplayBase(plugin.getFestivalCatalog(), running);
         FestivalDefinition layout =
-            base != null ? FestivalLookSelection.layoutFor(plugin.getFestivalCatalog(), town, base) : running;
+            base != null ? FestivalLookSelection.runningLayout(plugin.getFestivalCatalog(), town, base) : running;
         PlotInstance square = findFestivalSquare(plugin, town);
 
         FestivalSpotService.clearSpots(world, plugin, town);

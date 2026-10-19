@@ -175,7 +175,7 @@ public final class BuildingEditorFestivalSessionStarter {
     }
 
     @Nonnull
-    private static Vector3i pasteCenterNearPlayer(@Nonnull Vector3d pos, float yawRad) {
+    static Vector3i pasteCenterNearPlayer(@Nonnull Vector3d pos, float yawRad) {
         double forwardX = -Math.sin(yawRad);
         double forwardZ = -Math.cos(yawRad);
         int ox = (int) Math.floor(pos.x + forwardX * PASTE_FORWARD_BLOCKS);

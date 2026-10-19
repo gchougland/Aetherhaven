@@ -2,6 +2,10 @@ package com.hexvane.aetherhaven.festival;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -58,6 +62,41 @@ public final class FestivalLookSelection {
         return look;
     }
 
+    /** The square's actual construction style, independent of the town's preference for future builds. */
+    public static String squareStyle(ConstructionCatalog constructions, PlotInstance square) {
+        var def = square == null ? null : constructions.get(square.getConstructionId());
+        String style = def == null ? null : PlotBuildingStyles.styleIdOf(def);
+        return style == null ? "core" : style;
+    }
+
+    /** A stable choice within the square's style; the base festival is always the core fallback. */
+    public static FestivalDefinition layoutFor(FestivalCatalog catalog, ConstructionCatalog constructions,
+                                               TownRecord town, PlotInstance square, FestivalDefinition base) {
+        FestivalDefinition holiday = gameplayBase(catalog, base);
+        if (holiday == null) return base;
+        String style = squareStyle(constructions, square);
+        var candidates = looksOf(catalog, holiday.getId()).stream()
+            .filter(look -> style.equals(PlotBuildingStyles.normalize(look.getStyleId())))
+            .filter(look -> !look.getPrefabPath().isBlank())
+            .sorted(Comparator.comparing(FestivalDefinition::getId)).toList();
+        String selected = town.getSelectedFestivalLookId(holiday.getId());
+        for (var look : candidates) if (look.getId().equals(selected)) return look;
+        return style.equals("core") || candidates.isEmpty() ? holiday : candidates.getFirst();
+    }
+
+    public static FestivalDefinition layoutFor(AetherhavenPlugin plugin, TownRecord town,
+                                               PlotInstance square, FestivalDefinition base) {
+        return layoutFor(plugin.getFestivalCatalog(), plugin.getConstructionCatalog(), town, square, base);
+    }
+
+    /** Exact layout placed for the current run; old saves retain their existing manual layout until it ends. */
+    public static FestivalDefinition runningLayout(FestivalCatalog catalog, TownRecord town, FestivalDefinition base) {
+        String saved = town.getActiveFestivalLayoutId();
+        FestivalDefinition placed = saved == null ? null : catalog.get(saved);
+        if (placed != null && placed.getGameplayFestivalId().equals(base.getGameplayFestivalId())) return placed;
+        return layoutFor(catalog, town, base);
+    }
+
     /** Layout currently pasted for a running festival, or null when none is on. */
     @Nullable
     public static FestivalDefinition activeLayout(
@@ -77,7 +116,7 @@ public final class FestivalLookSelection {
             return null;
         }
         FestivalDefinition base = gameplayBase(catalog, running);
-        return base != null ? layoutFor(catalog, town, base) : running;
+        return base != null ? runningLayout(catalog, town, base) : running;
     }
 
     /** Looks that count as {@code baseId}, in catalog order. */

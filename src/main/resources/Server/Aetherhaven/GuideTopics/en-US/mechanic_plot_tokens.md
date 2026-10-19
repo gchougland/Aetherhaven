@@ -16,6 +16,12 @@ Craft plot tokens at the **plot crafting bench**. The bench shows a **3D preview
 
 Most story quests still hand you the first token directly from the quest giver. After that, replacements and extra copies usually come from the bench.
 
+## Your town's building style
+
+Click **Download** to choose a town style and start its download. The menu closes so you can keep playing: a small HUD panel shows which building files are downloading, how many buildings remain, and how many resource-loading steps are complete. Builds requiring mods your server does not have are left out. Wait for **Ready to use** before choosing a newly downloaded building. If something fails, the panel names the problem and puts the details in chat so you can read them later and retry.
+
+When a quest gives you a plot token, it looks for an installed building in your town's chosen style. It first uses any matching buildings the author marked as preferred quest choices. Otherwise, it prefers a building that has only the requested purpose: a farm quest picks a farm-only building before a farm that also counts as a house or blacksmith. If there is no single-purpose option, it uses a matching mixed-use building. When several buildings qualify, one is chosen at random. If the style has no suitable installed building, you receive the default plot.
+
 ## Plot blueprints
 
 Some buildings are gated behind **plot blueprints** instead of dropping ready-made tokens from balloons.

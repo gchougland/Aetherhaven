@@ -119,6 +119,11 @@ public final class ConstructionDefinition {
     @Nullable
     private String styleId;
 
+    @SerializedName("preferredStyleQuestBuilding")
+    private boolean preferredStyleQuestBuilding;
+
+    public boolean isPreferredStyleQuestBuilding() { return preferredStyleQuestBuilding; }
+
     /**
      * External asset packs required to place/use this build (from marketplace building JSON). Empty or omitted means
      * no extra mods.

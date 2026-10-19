@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.plot;
 
+import com.hexvane.aetherhaven.ui.AetherhavenLanguage;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -294,7 +296,7 @@ public final class PlotTokenInventory {
         String language = "en-US";
         PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
         if (playerRef != null && playerRef.getLanguage() != null && !playerRef.getLanguage().isBlank()) {
-            language = playerRef.getLanguage();
+            language = AetherhavenLanguage.modLanguage(playerRef);
         }
         ItemStack stack = createTokenStack(constructionId, amount, displayName, language);
         grantTokenStackToPlayer(player, ref, store, playerRef, stack, null);
@@ -314,7 +316,7 @@ public final class PlotTokenInventory {
         String language = "en-US";
         PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
         if (playerRef != null && playerRef.getLanguage() != null && !playerRef.getLanguage().isBlank()) {
-            language = playerRef.getLanguage();
+            language = AetherhavenLanguage.modLanguage(playerRef);
         }
         ItemStack tokenStack = createTokenStackForDefinition(def, language);
         grantTokenStackToPlayer(player, ref, store, playerRef, tokenStack, dropPosition);

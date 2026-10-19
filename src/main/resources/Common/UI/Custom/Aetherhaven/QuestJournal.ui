@@ -508,6 +508,25 @@ $C.@PageOverlay {
                         Text: "";
                       }
 
+                      Group #SettingsEnglishRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 6);
+                        Group #SettingsEnglishCheck {
+                          LayoutMode: Left;
+                          $C.@CheckBox #CheckBox {}
+                        }
+                        Label {
+                          Anchor: (Left: 10, Top: 4);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2);
+                          Text: "Use English for Aetherhaven";
+                        }
+                      }
+                      Label {
+                        Anchor: (Bottom: 14);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                        Text: "Only changes this mod. Applies immediately and is saved for your character.";
+                      }
+
                       Group #SettingsMapBorderRow {
                         LayoutMode: Left;
                         Anchor: (Bottom: 14);

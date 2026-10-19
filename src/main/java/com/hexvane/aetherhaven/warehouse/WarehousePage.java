@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.warehouse;
 
+import com.hexvane.aetherhaven.ui.AetherhavenLanguage;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.production.*;
 import com.hexvane.aetherhaven.town.*;
@@ -99,7 +101,7 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
                 String name=definition==null?"Production building":definition.getDisplayName();
                 if(definition!=null&&definition.getDisplayNameLangKey()!=null) {
                     var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
-                    String translated=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),definition.getDisplayNameLangKey());
+                    String translated=i18n==null?null:AetherhavenLanguage.message(playerRef,definition.getDisplayNameLangKey());
                     if(translated!=null&&!translated.isBlank())name=translated;
                 }
                 List<Entry> slots=new ArrayList<>();List<Long> capacities=new ArrayList<>();
@@ -285,7 +287,7 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
     /** Page text from {@code aetherhaven_warehouse.lang}, in the player's language. */
     private String text(String key) {
         var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
-        String value=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),"aetherhaven_warehouse.aetherhaven.warehouse."+key);
+        String value=i18n==null?null:AetherhavenLanguage.message(playerRef,"aetherhaven_warehouse.aetherhaven.warehouse."+key);
         return value==null||value.isBlank()?key:value;
     }
     private String displayName(ItemStack stack) {
@@ -293,7 +295,7 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
         var item=Item.getAssetMap().getAsset(stack.getItemId());
         if(item==null)return stack.getItemId();
         var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
-        String name=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),item.getTranslationKey());
+        String name=i18n==null?null:AetherhavenLanguage.message(playerRef,item.getTranslationKey());
         return name==null?stack.getItemId():name;
     }
     @Override public void handleDataEvent(Ref<EntityStore> ref,Store<EntityStore> store,Data data) {

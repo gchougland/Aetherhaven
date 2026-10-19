@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.hunter;
 
+import com.hexvane.aetherhaven.ui.AetherhavenLanguage;
+
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
@@ -156,7 +158,7 @@ public final class HuntPage extends AetherhavenInteractiveCustomUIPage<HuntPage.
     private String itemName(String id) {
         var item=com.hypixel.hytale.server.core.asset.type.item.config.Item.getAssetMap().getAsset(id);
         var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
-        String name=item==null||i18n==null?null:i18n.getMessage(playerRef.getLanguage(),item.getTranslationKey());
+        String name=item==null||i18n==null?null:AetherhavenLanguage.message(playerRef,item.getTranslationKey());
         return name==null?id:name;
     }
     private EventData event(String action,String key){return new EventData().append("Action",action).append("Key",key);}

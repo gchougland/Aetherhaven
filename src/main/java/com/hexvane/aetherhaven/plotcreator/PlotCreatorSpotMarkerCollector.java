@@ -428,7 +428,7 @@ public final class PlotCreatorSpotMarkerCollector {
             PlotCreatorWorkActivityTags.resolveActivityId(type, poi.getWorkResidentKind(), poi.getTags());
         out.add(desired(block.x, block.y, block.z, type, workKind, activityId, worldYaw));
         if(type==PlotCreatorSubstepType.SPECIALTY_BLOCK&&com.hexvane.aetherhaven.hunter.HuntService.BEACON.equals(workKind)) {
-            var layout=com.hexvane.aetherhaven.hunter.HuntArenaLayout.of(new org.joml.Vector3d(block.x+.5,block.y+1,block.z+.5),PlotCreatorPrefabCoords.placementYaw(draft));
+            var layout=com.hexvane.aetherhaven.hunter.HuntArenaLayout.of(new org.joml.Vector3d(block.x+.5,block.y+1,block.z+.5),PlotCreatorPrefabCoords.placementYaw(draft),poi.getInteractionTargetYawDegrees());
             addArenaMarker(out,layout.portal(),"Hunt portal opens here",layout.yawTowardBeacon());
             addArenaMarker(out,layout.creatureSpawn(),"Creature entrance",layout.yawTowardBeacon());
             addArenaMarker(out,layout.hunterStand(),"Hunter's starting position",layout.yawTowardBeacon()+ (float)Math.PI);

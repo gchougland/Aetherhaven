@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.backpack;
 
+import com.hexvane.aetherhaven.ui.AetherhavenLanguage;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hexvane.aetherhaven.town.*;
@@ -58,7 +60,7 @@ public final class BackpackPage extends AetherhavenInteractiveCustomUIPage<Backp
         }else if("music".equals(picker)&&pack!=null&&pack.jukebox){
             c.set("#PickerTitle.Text","CHOOSE MUSIC");
             for(var song:AetherhavenPlugin.get().getBardSongCatalog().songsOrdered()){
-                var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();var name=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),song.getDisplayLangKey());
+                var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();var name=i18n==null?null:AetherhavenLanguage.message(playerRef,song.getDisplayLangKey());
                 button(c,e,"#Choices",(song.getId().equals(pack.song)?"Playing: ":"")+(name==null?song.getId():name),"Song:"+song.getId());
             }
         }
@@ -89,8 +91,8 @@ public final class BackpackPage extends AetherhavenInteractiveCustomUIPage<Backp
         e.addEventBinding(CustomUIEventBindingType.RightClicking,at+" #Cell",event(id).append("One","true"),false);
     }
     /** Page text from {@code aetherhaven_backpack.lang}, in the player's language. */
-    private String text(String key){var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();String s=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),"aetherhaven_backpack.aetherhaven.backpack."+key);return s==null||s.isBlank()?key:s;}
-    private String itemName(ItemStack stack){String own=com.hexvane.aetherhaven.ui.StackIcons.instanceName(stack);if(own!=null)return own;var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();String s=i18n==null?null:i18n.getMessage(playerRef.getLanguage(),stack.getItem().getTranslationKey());return s==null?stack.getItemId():s;}
+    private String text(String key){var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();String s=i18n==null?null:AetherhavenLanguage.message(playerRef,"aetherhaven_backpack.aetherhaven.backpack."+key);return s==null||s.isBlank()?key:s;}
+    private String itemName(ItemStack stack){String own=com.hexvane.aetherhaven.ui.StackIcons.instanceName(stack);if(own!=null)return own;var i18n=com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();String s=i18n==null?null:AetherhavenLanguage.message(playerRef,stack.getItem().getTranslationKey());return s==null?stack.getItemId():s;}
     @Override public void handleDataEvent(Ref<EntityStore> ref,Store<EntityStore> store,Data data){
         if(!Long.toString(frame).equals(data.frame))return;
         var inv=InventoryComponent.getCombined(store,ref,InventoryComponent.HOTBAR_STORAGE_BACKPACK);if(inv==null){close();return;}

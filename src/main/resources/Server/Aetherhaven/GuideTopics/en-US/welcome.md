@@ -17,6 +17,8 @@ sub-topics:
 
 This is the public Aetherhaven wiki at [aetherhaven.net](https://aetherhaven.net). The same articles appear in your in-game **Town Journal** while you play. Use the directory on the left to open a topic.
 
+Prefer the original English text? Open **Town Journal → Settings → Personal** and turn on **Use English for Aetherhaven**. It changes this mod's text and guide pages immediately, saves your choice for your character, and leaves your game's language alone. Turn it off to follow your game language again.
+
 **Getting Started** walks you through founding a town, your first buildings, and how money flows in.
 
 **Mechanics** explains tools, buildings, and systems you will use around town.

@@ -125,6 +125,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 .append("@PlotTokenLocked", "#PlotTokenLockedToggle.Value")
                 .append("@SubmitToCommunity", "#SubmitToCommunityToggle.Value")
                 .append("@StyleId", "#StyleIdField.Value")
+                .append("@PreferredStyleQuestBuilding", "#PreferredStyleQuestToggle.Value")
                 .append("@FestivalActivity", "#FestivalActivityField.Value")
                 .append("@FestivalSeason", "#FestivalSeasonField.Value")
                 .append("@FestivalDay", "#FestivalDayField.Value")
@@ -216,6 +217,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         wireConfigureToggle(eventBuilder, "#TouristDestinationToggle", "@TouristDestination");
         wireConfigureToggle(eventBuilder, "#PlotTokenLockedToggle", "@PlotTokenLocked");
         wireConfigureToggle(eventBuilder, "#SubmitToCommunityToggle", "@SubmitToCommunity");
+        wireConfigureToggle(eventBuilder, "#PreferredStyleQuestToggle", "@PreferredStyleQuestBuilding");
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
             "#StyleIdField",
@@ -314,6 +316,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#PlotTokenLockedHint.TextSpans", Message.translation(MSG + ".field.plotTokenLocked.hint"));
         b.set("#SubmitToCommunityLabel.TextSpans", Message.translation(MSG + ".field.submitToCommunity"));
         b.set("#StyleIdLabel.TextSpans", Message.translation(MSG + ".field.styleId"));
+        b.set("#PreferredStyleQuestLabel.TextSpans", Message.translation(MSG + ".field.preferredStyleQuest"));
+        b.set("#PreferredStyleQuestHint.TextSpans", Message.translation(MSG + ".field.preferredStyleQuest.hint"));
         b.set("#StyleIdField.PlaceholderText", Message.translation(MSG + ".field.styleId.hint"));
         b.set("#FrontFacingLabel.TextSpans", Message.translation(MSG + ".field.frontFacing"));
         b.set("#FrontFacingHint.TextSpans", Message.translation(MSG + ".field.frontFacing.hint"));
@@ -348,6 +352,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
     }
 
     private void applyVisibility(@Nonnull UICommandBuilder b) {
+        PlotCreatorDraft draft = session.getDraft();
+        b.set("#PreferredStyleQuestSettings.Visible", draft.getStep() == PlotCreatorStep.CONFIGURE
+            && !draft.isFestivalMode() && !draft.isWallMode() && !draft.isPropMode() && !draft.isDecorationOnly());
         PlotCreatorStep step = session.getDraft().getStep();
         applyFestivalFieldVisibility(b, false, false);
         if (subPanelOnly && step == PlotCreatorStep.KIND) {
@@ -808,6 +815,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#TouristDestinationToggle.Value", d.isTouristDestination());
         b.set("#PlotTokenLockedToggle.Value", d.isPlotTokenLockedByDefault());
         b.set("#SubmitToCommunityToggle.Value", d.isSubmitToCommunity());
+        b.set("#PreferredStyleQuestToggle.Value", d.isPreferredStyleQuestBuilding());
         if (d.getStyleId() != null) {
             b.set("#StyleIdField.Value", d.getStyleId());
         } else {
@@ -1322,6 +1330,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
 
     private void applyConfigureBooleans(@Nonnull PageData data) {
         PlotCreatorDraft d = session.getDraft();
+        if (data.preferredStyleQuestBuilding != null) d.setPreferredStyleQuestBuilding(data.preferredStyleQuestBuilding);
         if (data.saveEmptySpaces != null) {
             d.setSaveEmptySpaces(data.saveEmptySpaces);
         }
@@ -1470,6 +1479,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             .add()
             .append(new KeyedCodec<>("@StyleId", Codec.STRING), (d, v) -> d.styleId = v, d -> d.styleId)
             .add()
+            .append(new KeyedCodec<>("@PreferredStyleQuestBuilding", Codec.BOOLEAN), (d, v) -> d.preferredStyleQuestBuilding = v, d -> d.preferredStyleQuestBuilding)
+            .add()
             .append(new KeyedCodec<>("@FrontFacing", Codec.STRING), (d, v) -> d.frontFacing = v, d -> d.frontFacing)
             .add()
             .append(new KeyedCodec<>("FestivalId", Codec.STRING), (d, v) -> d.festivalId = v, d -> d.festivalId)
@@ -1544,6 +1555,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private Boolean submitToCommunity;
         @Nullable
         private String styleId;
+        private Boolean preferredStyleQuestBuilding;
         @Nullable
         private String frontFacing;
         @Nullable

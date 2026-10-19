@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.workplace;
 
+import com.hexvane.aetherhaven.ui.AetherhavenLanguage;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.*;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkWorkRoster;
@@ -323,7 +325,7 @@ public final class GrowerSitePage extends AetherhavenInteractiveCustomUIPage<Gro
     private String name(String itemId) {
         var item = Item.getAssetMap().getAsset(itemId);
         var i18n = com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
-        String translated = item == null || i18n == null ? null : i18n.getMessage(playerRef.getLanguage(), item.getTranslationKey());
+        String translated = item == null || i18n == null ? null : AetherhavenLanguage.message(playerRef, item.getTranslationKey());
         return translated == null || translated.isBlank() ? itemId.replace('_', ' ') : translated;
     }
 

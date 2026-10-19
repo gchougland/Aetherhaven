@@ -16,6 +16,8 @@ public final class VillagerLifePolicy {
 
     private VillagerLifePolicy() {}
 
+    public static java.util.List<String> availableVoices() { return java.util.List.of(VOICES); }
+
     public static String ambientMood(boolean working, boolean useWorkVoice) {
         return working && useWorkVoice ? "Work" : "Idle";
     }

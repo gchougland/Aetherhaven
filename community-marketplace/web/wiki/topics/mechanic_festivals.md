@@ -12,6 +12,12 @@ Build a **festival square** and your town gets a place to celebrate. Most days i
 
 Corin at the inn asks for one once the park is done. Take his token, place the festival square like any other plot, and let it finish building. It counts as a fun spot all year, so townsfolk and visitors come by even when nothing special is happening.
 
+## Matching your square's style
+
+Festival builds automatically match the style of the **Festival Square you placed**. For example, a Stormwind square uses the installed Stormwind look for that holiday. If there is no matching look, it uses the core festival build. Changing your town's preferred style does not change the style of an existing square.
+
+If several looks match, you can choose one at the plot crafting bench. **Use square style automatically** clears that preference. Looks from another style cannot be applied to this square. At the end of the festival, your square returns to its usual design.
+
 ## On the day
 
 * The square swaps to the festival build in the morning and swaps back at the end of the festival.
@@ -101,4 +107,4 @@ Late winter, from morning until evening. Town members each give one gift to a ne
 
 ## Making your own festival
 
-The plot creator has a **Festival** build type. Pick it, choose **New festival** or one you already made, and the square is placed for you at the fixed festival size. Build inside it, mark where villagers should stand, then name the festival and pick its season, day, and hours.
+The plot creator has a **Festival** build type. Stand in an open area, pick it, then choose **New festival** or an existing holiday to give it a new look. A starting square is placed nearby at the fixed festival size; you do not need to mark an area. Build inside it, mark where villagers should stand, then name the festival and pick its season, day, and hours.

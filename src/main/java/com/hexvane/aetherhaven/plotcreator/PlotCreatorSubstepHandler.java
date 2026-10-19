@@ -312,6 +312,11 @@ public final class PlotCreatorSubstepHandler {
                 draft.getPois().removeIf(p->CoreBuildingSpecialties.matches(p,specialty));
                 var poi=new PlotCreatorPoiDraft();poi.setLocal(at[0],at[1],at[2]);
                 poi.setTags(List.of(CoreBuildingSpecialties.TAG));poi.setBlockTypeId(specialty);poi.setInteractionKind("NONE");
+                if (com.hexvane.aetherhaven.hunter.HuntService.BEACON.equals(specialty)) {
+                    var head = store.getComponent(playerEntityRef, com.hypixel.hytale.server.core.modules.entity.component.HeadRotation.getComponentType());
+                    if (head != null) poi.setInteractionTargetYawDegrees((float)Math.toDegrees(
+                        PlotCreatorSpotPlacement.prefabYawFromWorld(draft, head.getRotation().yaw())));
+                }
                 draft.getPois().add(poi);
                 playerRef.sendMessage(com.hypixel.hytale.server.core.Message.raw(CoreBuildingSpecialties.label(specialty)+" recorded."));
                 yield true;

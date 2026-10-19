@@ -55,11 +55,19 @@ Open your **town journal → Guide → Mechanics → Plot creator staff** (this 
 6. Set **build materials** (virtual chest; items return to you when you continue).
 7. Review and save.
 
+## Choosing buildings for style quests
+
+In **Building settings**, enter the building's **Style**, then tick **Preferred quest building for this style** if quests should use this design. You can change this setting in the Building Editor too.
+
+For example, mark your farm design to make it the farm plot given by quests in towns using that style. The building must still count as a farm. If several matching designs are marked, the quest picks one at random. Marked designs take priority even if they also count as another building, such as a house.
+
+Leave the setting off to let quests prefer buildings with just the requested purpose, then use mixed-use buildings when no single-purpose option exists. Only installed buildings in the town's chosen style are considered.
+
 ## Required equipment and animal spots
 
 Both the creator and building editor include the equipment required by the chosen core building, including variants. Required steps cannot be removed. Place and select each named block; saving checks that the equipment is still inside the building.
 
-For a Hunter's Lodge, place the **Hunt Beacon** in a flat 9 by 9 arena. Select it to see markers for **Hunt portal opens here**, **Creature entrance** and **Hunter's starting position**. Keep those spaces clear. These positions follow the building's orientation, not the direction the beacon block faces. The lodge also needs **Production Storage**.
+For a Hunter's Lodge, place the **Hunt Beacon** in a flat 9 by 9 arena. Face toward where you want the portal, then mark the beacon to see **Hunt portal opens here**, **Creature entrance** and **Hunter's starting position**. Mark it again while facing another direction to turn all three positions together. Keep those spaces clear. Your chosen direction is saved and turns with the building when placed. The lodge also needs **Production Storage**.
 
 For a barn, mark **five animal pens** on the floor, facing the direction each animal should look. Older community barns without these markers automatically use clear floor spaces until their author supplies pen markers.
 

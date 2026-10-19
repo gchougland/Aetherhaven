@@ -85,4 +85,35 @@ class CoreBuildingSpecialtiesTest {
             assertEquals(4,markers.size());
         }
     }
+    @Test void authoredArenaFacingSurvivesRefreshSaveAndLoadAndMatchesEveryPlacedRotation(@TempDir Path dir) throws Exception {
+        var d=draft("plot_monster_hunter");d.setProductionStorageLocalPos(new int[]{0,0,0});
+        var marked=new PlotCreatorPoiDraft();marked.setLocal(2,1,3);marked.setBlockTypeId("Aetherhaven_Hunt_Beacon");
+        marked.setTags(List.of(CoreBuildingSpecialties.TAG));marked.setInteractionTargetYawDegrees(37f);
+        var rescanned=new PlotCreatorPoiDraft();rescanned.setLocal(2,1,3);rescanned.setBlockTypeId(marked.getBlockTypeId());rescanned.setTags(marked.getTags());
+        CoreBuildingSpecialties.preserveFacing(List.of(marked),rescanned);
+        assertEquals(37f,rescanned.getInteractionTargetYawDegrees());d.getPois().add(rescanned);
+        var gson=new Gson();var file=dir.resolve("lodge.json");
+        PlotCreatorJsonWriter.writeBuilding(file,d);
+        var def=gson.fromJson(Files.readString(file),ConstructionDefinition.class);
+        assertEquals(37f,HuntArenaLayout.savedFacing(def));
+        PlotCreatorDraftLoader.loadIntoDraft(d,def);
+        BuildingEditorJsonWriter.writeMerged(file,d,gson.fromJson(Files.readString(file),new com.google.gson.reflect.TypeToken<Map<String,Object>>(){}.getType()));
+        var edited=gson.fromJson(Files.readString(file),ConstructionDefinition.class);
+        assertEquals(37f,HuntArenaLayout.savedFacing(edited));
+        for(Rotation turn:List.of(Rotation.None,Rotation.Ninety,Rotation.OneEighty,Rotation.TwoSeventy)) {
+            d.setRotationYaw(turn.name());
+            var block=PlotCreatorLocalCoords.toWorldBlock(d,new int[]{2,1,3});
+            var center=new Vector3d(block.x+.5,block.y+1,block.z+.5);
+            var live=HuntArenaLayout.of(center,turn,HuntArenaLayout.savedFacing(edited));
+            float yaw=com.hexvane.aetherhaven.construction.PrefabYaw.worldFromPrefabLocal(turn,(float)Math.toRadians(37));
+            assertEquals(-Math.sin(yaw)*4,live.portal().x-center.x,1e-6);
+            assertEquals(-Math.cos(yaw)*4,live.portal().z-center.z,1e-6);
+            var portal=PlotCreatorSpotMarkerCollector.collect(d,null,null).stream()
+                .filter(m->m.nameplateText().equals("Hunt portal opens here")).findFirst().orElseThrow();
+            assertEquals((int)Math.floor(live.portal().x),portal.x());
+            assertEquals((int)Math.floor(live.portal().z),portal.z());
+            assertEquals(live.yawTowardBeacon(),portal.facingYawWorldRadians());
+        }
+    }
+
 }

@@ -98,6 +98,11 @@ public final class RuntimeCommonIconBroadcast {
 
     /** Sends assets once, rebuilds the client atlas once, and shows one Common reload toast. */
     public static void broadcast(@Nonnull List<CommonAsset> assets) {
+        broadcast(assets, ignored -> {});
+    }
+
+    /** Reports each completed transfer before asking clients for one final atlas rebuild. */
+    public static void broadcast(@Nonnull List<CommonAsset> assets, @Nonnull java.util.function.IntConsumer sent) {
         if (assets.isEmpty()) {
             return;
         }
@@ -109,7 +114,11 @@ public final class RuntimeCommonIconBroadcast {
         if (Universe.get().getPlayerCount() <= 0) {
             return;
         }
-        module.sendAssets(assets, true);
+        for (int i = 0; i < assets.size(); i++) {
+            module.sendAssets(List.of(assets.get(i)), false);
+            sent.accept(i + 1);
+        }
+        Universe.get().broadcastPacketNoCache(new com.hypixel.hytale.protocol.packets.setup.RequestCommonAssetsRebuild());
         Message primary =
             Message.translation(AssetNotifications.ASSET_RELOADED_MESSAGE_KEY)
                 .color(AssetNotifications.ASSET_RELOADED_COLOR)

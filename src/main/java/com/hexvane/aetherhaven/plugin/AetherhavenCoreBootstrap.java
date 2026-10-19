@@ -89,6 +89,7 @@ public final class AetherhavenCoreBootstrap {
         logHstats(plugin);
         plugin.loadAndMigrateConfig();
         plugin.registerModCommonAssetDelivery();
+        com.hexvane.aetherhaven.ui.AetherhavenLanguage.register(plugin);
         plugin.registerPlotTokenIconPackets();
         plugin.registerPropIconPackets();
         plugin.registerBlockPaletteIconPackets();

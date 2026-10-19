@@ -119,6 +119,9 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
             .add()
             .append(new KeyedCodec<>("HudEnabled", Codec.BOOLEAN), (c, v) -> c.hudEnabled = valueOr(v, true), c -> c.hudEnabled)
             .add()
+            .append(new KeyedCodec<>("UseEnglishTranslations", Codec.BOOLEAN),
+                (c, v) -> c.useEnglishTranslations = valueOr(v, false), c -> c.useEnglishTranslations)
+            .add()
             .append(
                 new KeyedCodec<>("HudBackgroundOpacity", Codec.FLOAT),
                 (c, v) -> c.hudBackgroundOpacity = clampOpacity(v != null ? v : 0f),
@@ -259,6 +262,7 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
 
     private boolean hudShowTime = true;
     private boolean hudEnabled = true;
+    private boolean useEnglishTranslations;
     private float hudBackgroundOpacity;
     private boolean hudShowDate = true;
     private boolean hudShowGold = true;
@@ -335,6 +339,7 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         c.rtsPickAspectOverride = rtsPickAspectOverride;
         c.hudShowTime = hudShowTime;
         c.hudEnabled = hudEnabled;
+        c.useEnglishTranslations = useEnglishTranslations;
         c.hudBackgroundOpacity = hudBackgroundOpacity;
         c.hudShowDate = hudShowDate;
         c.hudShowGold = hudShowGold;
@@ -455,6 +460,9 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     public boolean isHudEnabled() {
         return hudEnabled;
     }
+
+    public boolean isUseEnglishTranslations() { return useEnglishTranslations; }
+    public void setUseEnglishTranslations(boolean enabled) { useEnglishTranslations = enabled; }
 
     public void setHudEnabled(boolean hudEnabled) {
         this.hudEnabled = hudEnabled;
