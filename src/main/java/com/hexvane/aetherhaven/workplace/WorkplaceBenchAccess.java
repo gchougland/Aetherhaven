@@ -53,8 +53,8 @@ public final class WorkplaceBenchAccess {
         var town=AetherhavenWorldRegistries.getOrCreateTownManager(world,plugin).findTownContainingBlock(world.getName(),pos.x,pos.z);
         if(town==null)return null;
         var base=com.hypixel.hytale.builtin.crafting.component.BenchBlock.getBaseBlockType(block);
-        for(var site:town.getApprenticeWorkplaces().sites())
-            if(site.area().contains(pos.x,pos.y,pos.z)&&matches(site.type(),id,base.getId()))return new Target(town,site,pos);
+        var site=town.getApprenticeWorkplaces().ownerAtWork(pos.x,pos.y,pos.z);
+        if(site!=null&&matches(site.type(),id,base.getId()))return new Target(town,site,pos);
         return null;
     }
     public static boolean allowed(Target target,UUID player) {

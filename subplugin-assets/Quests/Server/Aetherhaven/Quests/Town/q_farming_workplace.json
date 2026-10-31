@@ -36,7 +36,7 @@
     {
       "id": "tend",
       "kind": "workplace_food_tended",
-      "text": "Employ a resident, enable Farming in work priorities, and let them plant wheat and finish tending. No seeds are needed. This adds 10 food points for 5 residents, not inventory items.",
+      "text": "Employ a resident, enable Farming in work priorities, and let them plant wheat and finish tending. No seeds are needed. Each edible crop in the tended area adds 1 food point; 2 points support 1 resident. Workers keep planting the remaining clear soil. No inventory items are produced.",
       "workType": "farming"
     },
     {

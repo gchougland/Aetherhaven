@@ -74,7 +74,8 @@ public final class ProductionBootstrap {
                         && pi.containsWorldBlock(targetBlock.x, targetBlock.y, targetBlock.z)) {
                         return new com.hexvane.aetherhaven.warehouse.WarehousePage(playerRef,town.getTownId(),pi.getPlotId());
                     }
-                    if (!ProductionCatalog.isProductionWorkplaceConstruction(gameplayCid)) {
+                    if (p.getConstructionCatalog().resolveGameplayConstructionIds(pi.getConstructionId()).stream()
+                            .noneMatch(ProductionCatalog::isProductionWorkplaceConstruction)) {
                         continue;
                     }
                     if (pi.containsWorldBlock(targetBlock.x, targetBlock.y, targetBlock.z)) {
@@ -93,10 +94,9 @@ public final class ProductionBootstrap {
                 // A farm with a crop plan keeps its stores and its Scarecrow Fields on one screen.
                 if(FarmFields.isPlot(plot))
                     return new com.hexvane.aetherhaven.workplace.FarmerFieldPage(playerRef,town.getTownId(),plot.getPlotId(),null);
-                // A lumbermill that tends Rootstones keeps its stores and its grove on one screen.
-                if(town.playerCanManageConstructions(uc.getUuid())&&town.getOrCreatePlotProduction(plot.getPlotId()).usesPhysicalTimber()
-                    &&p.getConstructionCatalog().matchesGameplayConstruction(plot.getConstructionId(),AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL))
-                    return new com.hexvane.aetherhaven.workplace.GrovePage(playerRef,town.getTownId(),plot.getPlotId(),null);
+                // Every lumbermill opens its grove, including before the first Rootstone is bound.
+                var grove=com.hexvane.aetherhaven.workplace.GrovePage.forMill(p.getConstructionCatalog(),playerRef,town.getTownId(),plot);
+                if(grove!=null)return grove;
                 return new ProductionStoragePage(
                     playerRef,
                     town.getTownId(),
@@ -193,6 +193,7 @@ public final class ProductionBootstrap {
         ProductionCargoDisplays.register(plugin.getEntityStoreRegistry(),core);
         plugin.getEntityStoreRegistry().registerSystem(new BarnDisplayLoadCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new RootstoneGrowingSpaceOverlay());
         plugin.getEntityStoreRegistry().registerSystem(new TimberPlayerEditSystems.Breaking(core));
         plugin.getEntityStoreRegistry().registerSystem(new TimberPlayerEditSystems.Placing(core));
         plugin.getEntityStoreRegistry().registerSystem(new SpiritGardenEditSystems.Breaking(core));

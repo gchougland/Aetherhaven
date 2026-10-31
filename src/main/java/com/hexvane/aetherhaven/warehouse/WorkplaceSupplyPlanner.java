@@ -42,7 +42,7 @@ public final class WorkplaceSupplyPlanner {
             var point=batch.destination();
             if(site==null||order==null||recipe==null||recipe.type()!=site.type()||(recipe.type()==TownsfolkWorkType.SMELTING&&!batch.smelting())
                 ||(recipe.type()==TownsfolkWorkType.CULTIVATION)!=batch.cultivation()||point==null
-                ||!site.area().contains(point.x()+.5,point.y()+.5,point.z()+.5)
+                ||!town.getApprenticeWorkplaces().ownsWorkAt(site.area(),point.x()+.5,point.y()+.5,point.z()+.5)
                 ||batch.cultivation()&&NativeCultivationService.plantMissing(world,batch)) changed|=stock.cancel(batch.id());
         }
         if(!WarehouseAccess.hasManager(town)) {

@@ -40,8 +40,9 @@ public final class FoodSiteService {
     private static boolean nativeFoodCrop(String id) {
         return id.startsWith("Plant_Crop_") && !id.endsWith("_Item") && !id.contains("_Item_");
     }
-    public record Habitat(boolean simulated, String issue, List<WarehouseBatch.Point> targets) {
+    public record Habitat(boolean simulated, String issue, List<WarehouseBatch.Point> targets, int crops, int emptySpaces) {
         public Habitat { targets = List.copyOf(targets); }
+        public Habitat(boolean simulated, String issue, List<WarehouseBatch.Point> targets) { this(simulated,issue,targets,0,0); }
         public boolean ready() { return simulated && issue == null && !targets.isEmpty(); }
     }
     private record Cached(WorkplaceArea area, TownsfolkWorkType type, long until, Habitat habitat) {}
@@ -58,14 +59,19 @@ public final class FoodSiteService {
         Map<UUID, Cached> cached;
         synchronized (CACHE) { cached = CACHE.computeIfAbsent(world, w -> new HashMap<>()); }
         long now = System.currentTimeMillis(); var old = cached.get(site.id());
-        if (old != null && old.until > now && old.area.equals(area) && old.type == site.type()) return old.habitat;
+        if (old != null && old.until > now && old.area.equals(area) && old.type == site.type()) {
+            observe(site,old.habitat);
+            return old.habitat;
+        }
         var result = scan(world, site);
+        observe(site,result);
         cached.values().removeIf(c -> c.until < now - 60_000);
         cached.put(site.id(), new Cached(area, site.type(), now + 1000, result));
         return result;
     }
 
     private static Habitat scan(World world, ApprenticeWorkplace site) {
+        var ownership=WorkplaceOwnership.scope(world,site.area());
         return scan(site, (x,y,z) -> {
             var section = ChunkSectionBlockUtil.blockSectionAt(world,x,y,z);
             if (section == null || section.getFiller(x,y,z) != 0) return null;
@@ -75,11 +81,15 @@ public final class FoodSiteService {
             return new Cell(WorkplaceQuestSteps.isStation(TownsfolkWorkType.FARMING,null,station),
                 WorkplaceQuestSteps.isStation(TownsfolkWorkType.RANCHING,null,station), isFoodCrop(block.getDefaultStateKey(),block.getId()),
                 site.type()==TownsfolkWorkType.FARMING && plantable(world,new WarehouseBatch.Point(x,y,z)));
-        });
+        },ownership);
     }
 
     record Cell(boolean bench, boolean trough, boolean crop, boolean plantable) {}
     @FunctionalInterface interface Blocks { Cell at(int x,int y,int z); }
+
+    static Habitat scan(ApprenticeWorkplace site,Blocks blocks,WorkplaceOwnership.Scope ownership) {
+        return scan(site,(x,y,z)->ownership.available(x,y,z)?blocks.at(x,y,z):null);
+    }
 
     /** Shared by the loaded-world adapter and geometry regression tests. */
     static Habitat scan(ApprenticeWorkplace site, Blocks blocks) {
@@ -88,7 +98,7 @@ public final class FoodSiteService {
         var emptyBeds = new ArrayList<WarehouseBatch.Point>();
         WarehouseBatch.Point feedPoint = null;
         for (int x = area.minX(); x < area.maxX(); x++) for (int z = area.minZ(); z < area.maxZ(); z++)
-            for (int y = area.floorY(); y < area.floorY() + area.height(); y++) {
+            for (int y = area.workFloorY(); y < area.floorY() + area.height(); y++) {
                 var cell = blocks.at(x,y,z); if (cell == null) continue;
                 if (cell.bench()) bench = true;
                 if (cell.trough()) { trough = true; feedPoint = new WarehouseBatch.Point(x,y,z); }
@@ -99,19 +109,31 @@ public final class FoodSiteService {
         if (site.type() == TownsfolkWorkType.FARMING) {
             String issue = farmingIssue(bench, crops.size(), emptyBeds.size(), area);
             if (issue != null) issue += nearbyHeightIssue(area,blocks,!bench,crops.size()+emptyBeds.size()<MIN_GROWING_SPACES);
-            // Establish a small patch before the first tending visit. Existing crops remain usable.
-            return new Habitat(true, issue, crops.size() < MIN_GROWING_SPACES && !emptyBeds.isEmpty() ? emptyBeds : crops);
+            // Establish the minimum patch, tend it, then keep filling soil between regular care visits.
+            boolean planting = !emptyBeds.isEmpty() && (crops.size() < MIN_GROWING_SPACES || !site.food().needsTending());
+            return new Habitat(true, issue, planting ? emptyBeds : crops, crops.size(), emptyBeds.size());
         }
         if (!trough) return new Habitat(true, "Needs a feeding trough inside the workplace.", List.of());
         return new Habitat(true, null, List.of(feedPoint));
     }
 
-    /** Diagnose old selections made by clicking a plant or bench instead of the ground, without expanding ownership. */
+    /** Loaded scans are authoritative; unloaded sites keep their last saved count and care clock. */
+    public static void observe(ApprenticeWorkplace site, Habitat habitat) {
+        if (site.type() == TownsfolkWorkType.FARMING && habitat.simulated())
+            site.food().observeFarm(habitat.crops(),habitat.emptySpaces(),habitat.ready());
+    }
+
+    public static Habitat refresh(World world, ApprenticeWorkplace site) {
+        synchronized (CACHE) { var sites=CACHE.get(world); if(sites!=null)sites.remove(site.id()); }
+        return inspect(world,site);
+    }
+
+    /** Explain obstructions beyond the two-block allowance for selections on raised borders. */
     private static String nearbyHeightIssue(WorkplaceArea area,Blocks blocks,boolean needBench,boolean needSpace) {
         WarehouseBatch.Point bench=null;int crops=0,minY=Integer.MAX_VALUE,maxY=Integer.MIN_VALUE;
         for(int x=area.minX();x<area.maxX();x++)for(int z=area.minZ();z<area.maxZ();z++)
             for(int y=Math.max(0,area.floorY()-3);y<Math.min(320,area.floorY()+area.height()+3);y++) {
-                if(area.contains(x,y,z))continue;
+                if(area.containsWork(x,y,z))continue;
                 var cell=blocks.at(x,y,z);if(cell==null)continue;
                 if(needBench&&cell.bench()&&bench==null)bench=new WarehouseBatch.Point(x,y,z);
                 if(needSpace&&cell.crop()){crops++;minY=Math.min(minY,y);maxY=Math.max(maxY,y);}
@@ -130,7 +152,7 @@ public final class FoodSiteService {
             + " crops, " + emptyBeds + " clear soil spaces). Leave clear dirt, grass or tilled soil with room above for wheat.");
         if (missing.isEmpty()) return null;
         return String.join(" ", missing) + " Included height: Y="
-            + area.floorY() + " to " + (area.floorY() + area.height() - 1) + ". No seeds or planted crops are required.";
+            + area.workFloorY() + " to " + (area.floorY() + area.height() - 1) + ". No seeds or planted crops are required.";
     }
 
     /** Only empty, dry air above soil a native hoe can till. Never replace builds, decorations or other plants. */
@@ -146,7 +168,7 @@ public final class FoodSiteService {
 
     /** Called after attendance, on the world thread. Seeds are part of this food-only workplace's care. */
     public static boolean plantWheat(World world, ApprenticeWorkplace site, WarehouseBatch.Point at) {
-        if (site.type() != TownsfolkWorkType.FARMING || !site.area().contains(at.x(),at.y(),at.z()) || !plantable(world,at)) return false;
+        if (site.type() != TownsfolkWorkType.FARMING || !WorkplaceOwnership.scope(world,site.area()).contains(at.x(),at.y(),at.z()) || !plantable(world,at)) return false;
         boolean planted = FarmFieldWorld.till(world,at)
             && FarmFieldWorld.plant(world,at,NativeFarmCrops.byOutput("Plant_Crop_Wheat_Item"));
         if (planted) {

@@ -7,6 +7,15 @@ public record WorkplaceArea(int minX, int floorY, int minZ, int maxX, int maxZ, 
     public WorkplaceArea {if(height==0)height=5;}
     public static final int HEIGHT = 5;
     public static final int MAX_SIDE = 64;
+    /** Accept benches, crops and livestock below a selection made on a fence or raised border. */
+    public static final int WORK_DEPTH = 2;
+
+    public int workFloorY() { return Math.max(0, floorY - WORK_DEPTH); }
+
+    /** Detection/attendance bounds only. Excavation keeps its exact, explicitly selected volume. */
+    public boolean containsWork(double x, double y, double z) {
+        return x >= minX && x < maxX && z >= minZ && z < maxZ && y >= workFloorY() && y < floorY + height();
+    }
 
     public static WorkplaceArea corners(int x1, int groundY, int z1, int x2, int z2) {
         return new WorkplaceArea(Math.min(x1, x2), Math.addExact(groundY, 1), Math.min(z1, z2),

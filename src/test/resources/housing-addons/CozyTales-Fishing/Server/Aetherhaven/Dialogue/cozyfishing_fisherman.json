@@ -1,0 +1,456 @@
+{
+  "id": "cozyfishing_fisherman",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "bodyMode": "villager_greeting",
+      "introText": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.body",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.main_hub.fallback",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "player_holds_any_item"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "giftDisableWhenNotAllowed": true,
+          "next": "gift_confirm"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.c_house",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_completed",
+                "questId": "q_fisherman_shop"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_house_fisherman"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_house_fisherman"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "reed_house_offer"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.c_house_done",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_fisherman"
+              },
+              {
+                "type": "town_npc_home_resident_house"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_house_fisherman"
+            }
+          ],
+          "next": "reed_house_finish"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.c_house_remind",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_fisherman"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_npc_home_resident_house"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "reed_house_remind"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.c_shop_done",
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_fisherman_shop"
+          },
+          "next": "reed_done"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.c_shop_complete",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_fisherman_shop"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_fishermans_shop"
+              }
+            ]
+          },
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_fisherman_shop"
+            }
+          ],
+          "next": "reed_done"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.c_shop_building",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_fisherman_shop"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_fishermans_shop"
+                }
+              }
+            ]
+          },
+          "next": "reed_building"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.c_shop_offer",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_fisherman_shop"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_fisherman_shop"
+                }
+              }
+            ]
+          },
+          "next": "reed_quest_shop"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.c_water",
+          "next": "talk_water"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.c_tips",
+          "next": "talk_tips"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.c_catch",
+          "next": "talk_catch"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.c_goodbye",
+          "next": null
+        }
+      ]
+    },
+    "reed_quest_shop": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_quest_shop.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_quest_shop.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_fisherman_shop"
+            }
+          ],
+          "next": "reed_shop_accepted"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_quest_shop.c1",
+          "next": null
+        }
+      ]
+    },
+    "reed_shop_accepted": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_shop_accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_shop_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "reed_building": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_building.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_building.c0",
+          "actions": [
+            {
+              "type": "abandon_quest",
+              "id": "q_fisherman_shop"
+            }
+          ],
+          "next": "reed_abandoned"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_building.c1",
+          "next": null
+        }
+      ]
+    },
+    "reed_abandoned": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_abandoned.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_abandoned.c0",
+          "next": null
+        }
+      ]
+    },
+    "reed_done": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_done.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_done.c0",
+          "next": null
+        }
+      ]
+    },
+    "reed_house_offer": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_house_offer.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_house_offer.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_house_fisherman"
+            }
+          ],
+          "next": "reed_house_accepted"
+        },
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_house_offer.c1",
+          "next": null
+        }
+      ]
+    },
+    "reed_house_accepted": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_house_accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_house_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "reed_house_remind": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_house_remind.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_house_remind.c0",
+          "next": null
+        }
+      ]
+    },
+    "reed_house_finish": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_house_finish.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.reed_house_finish.c0",
+          "next": null
+        }
+      ]
+    },
+    "talk_water": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.talk_water.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.talk_water.c0",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "talk_tips": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.talk_tips.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.talk_tips.c0",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "talk_catch": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.talk_catch.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.talk_catch.c0",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_confirm": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
+          "actions": [
+            {
+              "type": "gift_villager",
+              "reactionNodeLove": "gift_love",
+              "reactionNodeLike": "gift_like",
+              "reactionNodeNeutral": "gift_neutral",
+              "reactionNodeDislike": "gift_dislike"
+            }
+          ],
+          "next": "main_hub"
+        },
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_love": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.gift.love",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_like": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.gift.like",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_neutral": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.gift.neutral",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_dislike": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.gift.dislike",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_love_birthday": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.gift.love.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_like_birthday": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.gift.like.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_neutral_birthday": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.gift.neutral.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_dislike_birthday": {
+      "speaker": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.root.speaker",
+      "text": "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.gift.dislike.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    }
+  }
+}

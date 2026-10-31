@@ -11,6 +11,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.protocol.AnimationSlot;
+import com.hypixel.hytale.server.core.modules.entity.component.ActiveAnimationComponent;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import java.io.IOException;
 import java.io.InputStream;
@@ -110,21 +112,69 @@ class FounderStatueAssetsTest {
     }
 
     @Test
-    void aPoseIsBoundAsTheStandingAnimationAndNothingElse() {
+    void posesKeepDistinctIdsWithoutInheritedMovementAnimations() {
         ModelAsset.AnimationSet proud = new ModelAsset.AnimationSet();
         Map<String, ModelAsset.AnimationSet> sets = new HashMap<>();
         sets.put(FounderStatuePose.PROUD.animationSetId(), proud);
         sets.put("Walk", new ModelAsset.AnimationSet());
 
         Map<String, ModelAsset.AnimationSet> posed =
-            FounderMonumentSpawnService.poseAnimations(FounderStatuePose.PROUD, sets);
-        assertEquals(Set.of("Idle"), posed.keySet(), "A statue has no walking, falling or other animations to slip into");
-        assertSame(proud, posed.get("Idle"));
+            FounderMonumentSpawnService.poseAnimations(sets);
+        assertEquals(Set.of("StatueProud"), posed.keySet(), "A statue has no walking, falling or other animations to slip into");
+        assertSame(proud, posed.get("StatueProud"));
 
-        assertTrue(FounderMonumentSpawnService.poseAnimations(FounderStatuePose.STANDING, sets).isEmpty());
-        // A pose whose clip is missing falls back to the plain standing statue instead of failing the spawn.
-        assertTrue(FounderMonumentSpawnService.poseAnimations(FounderStatuePose.SIT, sets).isEmpty());
-        assertTrue(FounderMonumentSpawnService.poseAnimations(FounderStatuePose.SIT, null).isEmpty());
+        assertTrue(FounderMonumentSpawnService.poseAnimations(null).isEmpty());
+    }
+
+    @Test
+    void everyPoseTransitionUpdatesCurrentAndFutureViewersIncludingStandingAndRepeatClicks() throws IOException {
+        Map<String, ModelAsset.AnimationSet> sets = new HashMap<>();
+        JsonObject shipped = json("/Server/Models/Aetherhaven/" + FounderStatuePose.POSES_MODEL_ID + ".json")
+            .getAsJsonObject("AnimationSets");
+        for (FounderStatuePose pose : FounderStatuePose.values()) {
+            if (pose.animationSetId() == null) continue;
+            String id = pose.animationSetId();
+            var definition = shipped.getAsJsonObject(id);
+            String clip = definition.getAsJsonArray("Animations").get(0).getAsJsonObject().get("Animation").getAsString();
+            var path = java.nio.file.Path.of("src/main/resources/Common").resolve(clip);
+            String pack = "FounderPoseRegressionTest";
+            var common = new com.hypixel.hytale.server.core.asset.common.asset.FileCommonAsset(
+                path, clip, java.nio.file.Files.readAllBytes(path));
+            ModelAsset.AnimationSet set;
+            com.hypixel.hytale.server.core.asset.common.CommonAssetRegistry.addCommonAsset(pack, common);
+            try {
+                set = ModelAsset.AnimationSet.CODEC.decode(
+                    org.bson.BsonDocument.parse(definition.toString()), new com.hypixel.hytale.codec.ExtraInfo());
+            } finally {
+                com.hypixel.hytale.server.core.asset.common.CommonAssetRegistry.removeCommonAssetByName(pack, clip);
+            }
+            var packet = set.toPacket(id);
+            assertEquals(id, packet.id);
+            assertEquals(1, packet.animations.length);
+            assertTrue(packet.animations[0].looping);
+            assertEquals(0, packet.animations[0].blendingDuration);
+            assertEquals(clip, packet.animations[0].name);
+            sets.put(id, set);
+        }
+        var available = FounderMonumentSpawnService.poseAnimations(sets);
+        var active = new ActiveAnimationComponent();
+        for (FounderStatuePose before : FounderStatuePose.values()) {
+            for (FounderStatuePose after : FounderStatuePose.values()) {
+                var oldPacket = FounderMonumentSpawnService.applyPose(active, before, available);
+                var update = FounderMonumentSpawnService.applyPose(active, after, available);
+                assertEquals(before.animationSetId(), oldPacket.activeAnimations[AnimationSlot.Status.ordinal()],
+                    "A subsequent click must not mutate an already queued update");
+                assertEquals(after.animationSetId(), update.activeAnimations[AnimationSlot.Status.ordinal()]);
+                assertEquals(after.animationSetId(), active.getActiveAnimations()[AnimationSlot.Status.ordinal()],
+                    "New viewers must receive the same pose as existing viewers");
+                for (AnimationSlot slot : AnimationSlot.VALUES) {
+                    if (slot != AnimationSlot.Status) assertEquals(null, update.activeAnimations[slot.ordinal()]);
+                }
+            }
+        }
+        var missing = FounderMonumentSpawnService.applyPose(active, FounderStatuePose.SIT, Map.of());
+        assertTrue(java.util.Arrays.stream(missing.activeAnimations).allMatch(java.util.Objects::isNull),
+            "Missing clips clear the old pose and fall back to standing");
     }
 
     @Test

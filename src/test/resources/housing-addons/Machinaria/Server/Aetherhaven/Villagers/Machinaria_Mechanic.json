@@ -1,0 +1,71 @@
+{
+  "npcRoleId": "Machinaria_Mechanic",
+  "dialogueVillagerKind": "mechanic",
+  "residentTreeId": "aetherhaven_machinaria_mechanic",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_mechanics_shop",
+  "displayName": "Rivet Cogsworth",
+  "portraitIcon": "Machinaria_Mechanic.png",
+  "speechVoiceId": "RustyRobot",
+  "uiSortOrder": 22,
+  "innPoolEligible": true,
+  "innPoolOrder": 14,
+  "visitorBindingKind": "visitor_mechanic",
+  "innPoolRequires": {
+    "completedQuestIds": [
+      "q_mechanic_rescue"
+    ]
+  },
+  "reputationMilestones": [],
+  "giftLoves": [
+    "Ingredient_Clockwork_Heart",
+    "Ancient_Pocket_Watch",
+    "Rock_Bronze_Metal"
+  ],
+  "giftLikes": [
+    "Rubble_ScrapMetal",
+    "Rock_Rusty_Metal",
+    "Rock_Dark_Rusty_Metal",
+    "Plant_Leaves_Gear",
+    "Wood_Gear_Trunk",
+    "Weapon_Bolt_Gun",
+    "Tool_Pickaxe_Scrap",
+    "Weapon_Mace_Scrap",
+    "Weapon_Club_Scrap",
+    "Weapon_Shield_Scrap_Spiked",
+    "Weapon_Bolt",
+    "Bench_Mechanics",
+    "Food_Candy_Cane",
+    "Deco_Kweebec_Plush",
+    "WinterHoliday_Snowman",
+    "WinterHoliday_WinterRoll",
+    "Furniture_Christmas_Chest_Small",
+    "Furniture_Christmas_Chest_Small_Green",
+    "Furniture_Christmas_Chest_Small_Red"
+  ],
+  "giftDislikes": [
+    "Deco_Trash",
+    "Deco_Trash_Pile_Small",
+    "Deco_Trash_Pile_Large",
+    "Ingredient_Poop",
+    "Deco_Bone_Pile",
+    "Deco_Bone_Skulls"
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic.main_hub.greeting.0",
+    "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic.main_hub.greeting.1",
+    "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic.main_hub.greeting.2",
+    "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic.main_hub.greeting.3"
+  ],
+  "dialogueGiftHintLangKeys": [
+    "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic.main_hub.hint.love.0",
+    "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic.main_hub.hint.love.1",
+    "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic.main_hub.hint.dislike.0",
+    "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic.main_hub.hint.dislike.1"
+  ],
+  "birthdaySeason": "Winter",
+  "birthdayDay": 18,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic.birthday.greeting"
+  ]
+}

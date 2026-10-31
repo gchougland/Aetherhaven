@@ -28,6 +28,7 @@ public final class PlotCreatorBootstrap {
     private static PlotCreatorSelectionBoundsAdapter plotCreatorSelectionBoundsAdapter;
 
     public static void registerAssetCodecs(@Nonnull AetherhavenPlugin core) {
+        core.getCodecRegistry(Interaction.CODEC).register("AetherhavenPlotCreatorRemoveSpot",PlotCreatorRemoveSpotInteraction.class,PlotCreatorRemoveSpotInteraction.CODEC);
         core
             .getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPlotCreatorUse", PlotCreatorUseInteraction.class, PlotCreatorUseInteraction.CODEC);

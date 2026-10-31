@@ -75,6 +75,7 @@ $C.@PageOverlay { LayoutMode: Middle;
     Group { FlexWeight: 1; }
     $C.@SecondaryTextButton #Refresh { Text: ""; Anchor: (Width: 130, Height: 40, Right: 6); }
     $C.@SecondaryTextButton #Seeds { Text: ""; Anchor: (Width: 150, Height: 40, Right: 6); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+    $C.@SecondaryTextButton #Unlocks { Text: ""; Anchor: (Width: 170, Height: 40, Right: 6); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
     $C.@TextButton #Upgrades { Text: ""; Anchor: (Width: 200, Height: 40); }
    }
   }

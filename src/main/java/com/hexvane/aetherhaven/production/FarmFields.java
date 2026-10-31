@@ -101,7 +101,7 @@ public final class FarmFields {
         crops.sort(Comparator.comparingInt(FarmFields::mastery));
         return crops;
     }
-    /** What stops this farm growing a crop: "locked" until it is unlocked in farm storage, "mastery" until she is trained, or null. */
+    /** What stops this farm growing a crop: "locked" until bought through Unlock crops, "mastery" until she is trained, or null. */
     public static String cropIssue(TownRecord town, ProductionCatalog.Entry entry, String crop) {
         if (NativeFarmCrops.byOutput(crop) == null || NativeFarmCrops.seedFor(crop) == null) return "unknown";
         if (entry == null || !entry.containsItemId(crop)) return "locked";

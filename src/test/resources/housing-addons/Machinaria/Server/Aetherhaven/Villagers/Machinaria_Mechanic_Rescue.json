@@ -1,0 +1,8 @@
+{
+  "npcRoleId": "Machinaria_Mechanic_Rescue",
+  "displayName": "Rivet Cogsworth",
+  "portraitIcon": "Machinaria_Mechanic.png",
+  "speechVoiceId": "RustyRobot",
+  "innPoolEligible": false,
+  "befriendable": false
+}

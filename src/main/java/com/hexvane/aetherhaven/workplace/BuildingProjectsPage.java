@@ -43,7 +43,7 @@ public final class BuildingProjectsPage extends AetherhavenInteractiveCustomUIPa
         // The button names the state it asks for, so a press seen late can never flip the yard back.
         e.addEventBinding(CustomUIEventBindingType.Activating,"#Pause",EventData.of("Action",plan.paused()?"Resume":"Pause"),false);
         b.set("#TitleText.Text",c.site().name()+" | PROJECT BOARD");b.set("#Count.Text",plan.list().size()+" / 35 projects");
-        b.set("#Contribution.Text",plan.contributions()+" pieces placed by this yard");
+        b.set("#Contribution.Text",plan.contributions()+" blocks cleared or placed by this yard");
         b.set("#Pause.Text",plan.paused()?"Resume yard":"Pause yard");b.set("#Station.Visible",station!=null);
         // Using this bench opens the project board, so its own crafting screen is offered here.
         String ownScreen=WorkplaceNativeBench.label(world,station);b.set("#Bench.Visible",ownScreen!=null);if(ownScreen!=null)b.set("#Bench.Text",ownScreen);
@@ -53,7 +53,8 @@ public final class BuildingProjectsPage extends AetherhavenInteractiveCustomUIPa
         for(var order:plan.list()) {
             var plot=c.town().findPlotById(order.plot());String path="#Queue["+(queued++)+"]";b.append("#Queue","Aetherhaven/BuildingProjectCard.ui");
             draw(b,path,plot,queued,store);String issue=NativeBuildingWork.issue(world,c.town(),order);
-            b.set(path+" #Status.Text",Objects.requireNonNullElse(issue,"Ready for an Apprentice"));b.set(path+" #Add.Visible",false);
+            String ready=AssemblyWorldRegistry.phase(world,order.plot())==com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPhase.CLEARING?"Ready for Apprentices to clear the site":"Ready for Apprentices to build";
+            b.set(path+" #Status.Text",Objects.requireNonNullElse(issue,ready));b.set(path+" #Add.Visible",false);
             // Each button carries its own project. The board moving under the player never refuses a press and
             // never lets one land on another project.
             bind(e,path+" #Earlier","Earlier",order.id(),()->{if(!plan.move(order.id(),-1))hint=plan.find(order.id())==null?GONE:"That project is already first.";});

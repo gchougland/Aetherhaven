@@ -31,15 +31,34 @@ public final class GrovePage extends AetherhavenInteractiveCustomUIPage<GrovePag
     record Context(TownManager manager,TownRecord town,PlotInstance plot,PlotProductionState production,ProductionCatalog.Entry entry,World world) {}
     private static final int MAX_SAPLINGS=12,MAX_STOCK=10;
     private final UUID townId,plotId;
-    /** The Rootstone the player used, when the page was opened from one. */
-    private final Position block;
-    private int stone=Integer.MIN_VALUE;
+    private final GroveSelection selection;
+    /** Both targets are refreshed together from the selected physical Rootstone. */
+    private Position block;
+    private int stone=-1;
     private boolean appended,confirmUproot;
     private String hint;
+    private TimberPlantingReceipt previewTree;
 
     public GrovePage(PlayerRef player,UUID town,UUID plot,Position block) {
         super(player,CustomPageLifetime.CanDismiss,Data.CODEC);
-        townId=town;plotId=plot;this.block=block;
+        townId=town;plotId=plot;selection=new GroveSelection(block);
+    }
+
+    /** No saved production or bound Rootstone is needed to open a mill's setup screen. */
+    public static GrovePage forMill(com.hexvane.aetherhaven.construction.ConstructionCatalog catalog,
+            PlayerRef player,UUID town,PlotInstance plot) {
+        return plot!=null&&catalog.matchesGameplayConstruction(plot.getConstructionId(),AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL)
+            ?new GrovePage(player,town,plot.getPlotId(),null):null;
+    }
+
+    public static boolean redirectToMill(Ref<EntityStore> ref,Store<EntityStore> store,PlayerRef playerRef,
+            com.hexvane.aetherhaven.construction.ConstructionCatalog catalog,UUID town,PlotInstance plot) {
+        var page=forMill(catalog,playerRef,town,plot);if(page==null)return false;
+        store.getExternalData().getWorld().execute(()->{
+            if(ref.isValid()) {var player=store.getComponent(ref,Player.getComponentType());
+                if(player!=null)player.getPageManager().openCustomPage(ref,store,page);}
+        });
+        return true;
     }
 
     /** The lumbermill that owns this stone, or else the first one with a stone to spare. */
@@ -82,7 +101,21 @@ public final class GrovePage extends AetherhavenInteractiveCustomUIPage<GrovePag
         var entry=ProductionEffectiveCatalog.effective(plugin.getProductionCatalog(),plugin.getWorkplaceUnlockCatalog(),AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL,production);
         return entry==null||entry.catalogSize()<=0?null:new Context(manager,town,plot,production,entry,world);
     }
-    /** True while the stone the player used is still in the world and not yet bound to a tree. */
+    private void syncSelection(Context c) {
+        var positions=new TreeMap<Integer,Position>();
+        c.production().timber().groves().forEach((id,tree)->{
+            var root=tree.root();positions.put(id,new Position(root.x(),root.y()-1,root.z()));
+        });
+        selection.refresh(positions);
+        applySelection();
+    }
+    private void applySelection() {
+        if(!Objects.equals(block,selection.block())||stone!=selection.slot()) {
+            previewTree=null;confirmUproot=false;selection.cancelConfirmation();
+        }
+        block=selection.block();stone=selection.slot();
+    }
+    /** True while the selected stone is still in the world and not yet bound to a tree. */
     private boolean pending(Context c) {
         if(block==null||c.production().timber().stoneAt(block)>=0)return false;
         var type=ChunkSectionBlockUtil.blockType(c.world(),block.x(),block.y(),block.z());
@@ -108,16 +141,18 @@ public final class GrovePage extends AetherhavenInteractiveCustomUIPage<GrovePag
     @Override public void build(Ref<EntityStore> ref,UICommandBuilder b,UIEventBuilder e,Store<EntityStore> store) {
         var c=current(ref,store);if(c==null){close();return;}
         var timber=c.production().timber();int allowed=WorkplaceProductionUpgrades.stoneCount(c.production());
+        syncSelection(c);
         boolean pending=pending(c);int free=timber.freeStone(allowed);
-        if(stone==Integer.MIN_VALUE)stone=block!=null?timber.stoneAt(block):timber.groves().keySet().stream().findFirst().orElse(-1);
-        if(stone>=0&&!timber.groves().containsKey(stone))stone=-1;
+        if(previewTree==null&&pending)previewTree=RootstoneGrowingSpaceOverlay.selected(c.world(),store.getComponent(ref,PlayerRef.getComponentType()).getUuid(),plotId,block);
         if(!appended){b.append("Aetherhaven/GrovePage.ui");appended=true;
             for(int i=0;i<TimberProductionState.MAX_STONES;i++) {
                 b.append("#Stones","Aetherhaven/GroveStone.ui");
                 e.addEventBinding(CustomUIEventBindingType.Activating,"#Stones["+i+"]",EventData.of("Action","Stone").append("Key",Integer.toString(i)),false);
             }
-            for(String action:List.of("Bless","Uproot","Refresh","Collect","Fibre","Char"))e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,EventData.of("Action",action),false);
+            for(String action:List.of("Previous","Next","Bind","Bless","Uproot","Preview","Refresh","Collect","Fibre","Char"))e.addEventBinding(CustomUIEventBindingType.Activating,"#"+action,EventData.of("Action",action),false);
         }
+        b.set("#Previous.Disabled",selection.count()<2);b.set("#Next.Disabled",selection.count()<2);
+        b.set("#Selection.Text",block==null?"No Rootstone selected":"Showing "+selection.number()+" of "+selection.count()+"   |   X: "+block.x()+"  Y: "+block.y()+"  Z: "+block.z());
         b.set("#Summary.Text","ROOTSTONES "+timber.groves().size()+" / "+allowed);
         for(int i=0;i<TimberProductionState.MAX_STONES;i++) {
             String path="#Stones["+i+"]";var bound=timber.groves().get(i);boolean locked=i>=allowed&&bound==null;
@@ -126,7 +161,7 @@ public final class GrovePage extends AetherhavenInteractiveCustomUIPage<GrovePag
             b.set(path+" #LockedShade.Visible",locked);b.set(path+" #Lock.Visible",locked);b.set(path+" #Icon.Visible",!locked&&(bound!=null||fresh));
             b.set(path+" #Icon.ItemId",bound!=null?bound.sapling():Rootstone.BLOCK);
             b.set(path+" #Number.Text","STONE "+(i+1));
-            b.set(path+".TooltipText",locked?"Lumbermill upgrades let Seren tend more Rootstones.":bound==null?(fresh?"The Rootstone you are using.":"Place another Rootstone in town to use this."):"See this Rootstone's tree.");
+            b.set(path+".TooltipText",locked?"Lumbermill upgrades let Seren tend more Rootstones.":bound==null?(fresh?"The selected Rootstone is ready for a sapling.":"Place another Rootstone in town to use this."):"Select this Rootstone to manage its tree from here.");
             b.set(path+" #Status.Text",locked?"Locked":bound==null?(fresh?"New stone":"Empty"):CoreProductionRequirements.issueForKind(c.town(),"logger",bound.output())!=null?"Needs training"
                 :timber.trees().containsKey(i)?(timber.blessed(i)?"Elder tree":"Growing"):"Waiting");
         }
@@ -138,11 +173,12 @@ public final class GrovePage extends AetherhavenInteractiveCustomUIPage<GrovePag
             b.set("#TreeName.TextSpans",name(plan.sapling()));
             b.set("#StoneStatus.Text",stoneStatus(c,stone,b));
         }else {
-            b.set("#TreeIcon.ItemId",Rootstone.BLOCK);
+            b.set("#TreeIcon.ItemId",previewTree!=null?previewTree.sapling():Rootstone.BLOCK);
             b.set("#StoneTitle.Text",pending?"NEW ROOTSTONE":"NO ROOTSTONE CHOSEN");
-            b.set("#TreeName.TextSpans",Message.raw(pending?"Choose its tree":"Place a Rootstone"));
+            b.set("#TreeName.TextSpans",pending&&previewTree!=null?name(previewTree.sapling()):Message.raw(pending?"Choose its tree":"Place a Rootstone"));
             b.set("#StoneStatus.Text",pending?(free<0?"Seren can tend "+allowed+" Rootstones for this lumbermill. Lumbermill upgrades let her tend more."
-                :"Pick one of the saplings you carry. It takes one sapling, and the tree then regrows here for free.")
+                :"Choose a sapling below, check its growing space, then press Bind this tree. It takes one sapling and regrows here for free.")
+                :block!=null?"This Rootstone is missing or its area is not loaded. Move closer and press Refresh, or choose another Rootstone."
                 :"Craft a Rootstone, place it on open ground anywhere in town, then use it to choose a tree.");
         }
         var saplings=pending&&plan==null&&free>=0?carried(ref,store):List.<NativeTimberGrowth.Species>of();
@@ -165,13 +201,18 @@ public final class GrovePage extends AetherhavenInteractiveCustomUIPage<GrovePag
         boolean canBless=plan!=null&&!timber.blessed(stone)&&inv!=null
             &&com.hexvane.aetherhaven.inventory.InventoryMaterials.count(inv,TimberProductionState.BLESSING_ITEM)>=TimberProductionState.BLESSING_COST;
         b.set("#Bless.Visible",plan!=null);b.set("#Bless.Disabled",!canBless);
-        b.set("#Bless.Text",plan!=null&&timber.blessed(stone)?"Blessed. Next harvest gives double wood":"Bless with "+TimberProductionState.BLESSING_COST+" Life Essence");
+        b.set("#Bind.Visible",choosing);b.set("#Bind.Disabled",previewTree==null);
+        b.set("#Bless.Text",plan!=null&&timber.blessed(stone)?"Blessed: double wood":"Bless: "+TimberProductionState.BLESSING_COST+" Life Essence");
         b.set("#Uproot.Visible",plan!=null);b.set("#Uproot.Text",confirmUproot?"Confirm uprooting":"Uproot this tree");
+        var pr=store.getComponent(ref,PlayerRef.getComponentType());
+        b.set("#Preview.Disabled",plan==null&&!pending);
+        b.set("#Preview.Text",RootstoneGrowingSpaceOverlay.enabled(c.world(),pr.getUuid())?"Hide growing space":"Show growing space");
+        b.set("#Preview.TooltipText","Close this window to see the cyan growing-space outline, yellow Rootstone and red blocked spaces. Markers update as you clear blocks. Large obstructions show the nearest 256 blocks first.");
         drawStock(b,e,c);
         b.set("#Fibre.Text","Gather fibre: "+(timber.gathersFibre()?"On":"Off"));
         b.set("#Char.Text","Char spare logs: "+(timber.charWood()==null?"Off":wood(timber.charWood())));
-        b.set("#GroveNote.Text",hint!=null?hint:timber.adopted()?waiting(c)
-            :"This lumbermill still makes wood the old way. That stops for good once its first Rootstone has a tree, and Seren works the grove instead.");
+        b.set("#GroveNote.Text",hint!=null?hint:!timber.groves().isEmpty()?waiting(c)
+            :"Place a Rootstone and bind a sapling to begin. The mill only receives wood from trees Seren chops. No separate wood unlocks are needed.");
     }
     private static String waiting(Context c) {
         var timber=c.production().timber();
@@ -216,14 +257,47 @@ public final class GrovePage extends AetherhavenInteractiveCustomUIPage<GrovePag
 
     @Override public void handleDataEvent(Ref<EntityStore> ref,Store<EntityStore> store,Data data) {
         var c=current(ref,store);if(c==null||data.action==null){close();return;}
-        var timber=c.production().timber();int allowed=WorkplaceProductionUpgrades.stoneCount(c.production());
-        boolean confirming=confirmUproot;confirmUproot=false;hint=null;
+        var timber=c.production().timber();
+        syncSelection(c);
+        var selectedPlan=timber.groves().get(stone);
+        boolean sameTree=selection.takeUprootConfirmation(selectedPlan==null?null:selectedPlan.id());
+        boolean confirming=confirmUproot&&sameTree;confirmUproot=false;hint=null;
         switch(data.action) {
             case "Stone" -> {
-                try{int chosen=Integer.parseInt(data.key);if(timber.groves().containsKey(chosen))stone=chosen;
-                    else if(pending(c)&&chosen==timber.freeStone(allowed))stone=-1;}catch(NumberFormatException ignored){}
+                try{selection.selectSlot(Integer.parseInt(data.key));applySelection();}catch(NumberFormatException ignored){}
+                previewTree=null;refreshPreview(ref,store,c);
             }
-            case "Sapling" -> bind(ref,store,c,data.key);
+            case "Previous", "Next" -> {
+                selection.move("Next".equals(data.action)?1:-1);applySelection();
+                previewTree=null;refreshPreview(ref,store,c);
+            }
+            case "Sapling" -> {
+                if(!pending(c)||NativeTimberGrowth.species(data.key)==null)break;
+                var captured=NativeTimberGrowth.capture(data.key,new Position(block.x(),block.y()+1,block.z()),0,p->true);
+                if(captured.ready()) {
+                    previewTree=captured.receipt();refreshPreview(ref,store,c);
+                    hint="Selected "+wood(data.key)+". Show growing space to check for room, then press Bind this tree to use one sapling.";
+                }else hint=captured.issue();
+            }
+            case "Bind" -> {if(previewTree!=null)bind(ref,store,c,previewTree.output());}
+            case "Preview" -> {
+                var pr=store.getComponent(ref,PlayerRef.getComponentType());
+                if(RootstoneGrowingSpaceOverlay.enabled(c.world(),pr.getUuid()))RootstoneGrowingSpaceOverlay.hide(c.world(),pr.getUuid());
+                else {
+                    var selected=stone>=0?timber.groves().get(stone):previewTree;
+                    if(selected==null&&pending(c)) {
+                        var saplings=carried(ref,store);
+                        if(!saplings.isEmpty()) {
+                            var captured=NativeTimberGrowth.capture(saplings.getFirst().output(),new Position(block.x(),block.y()+1,block.z()),0,p->true);
+                            if(captured.ready())selected=previewTree=captured.receipt();else hint=captured.issue();
+                        }
+                    }
+                    if(selected!=null) {
+                        RootstoneGrowingSpaceOverlay.show(c.world(),pr.getUuid(),townId,plotId,selected);
+                        hint="Close this window to see the space for "+wood(selected.output())+". Cyan: growing space. Yellow: Rootstone. Red: blocked spaces. Choose a sapling to preview another tree.";
+                    }else if(hint==null)hint="Carry a tree sapling, then choose it to see the growing space it needs.";
+                }
+            }
             case "Bless" -> {
                 var inv=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);
                 String issue=timber.blessingIssue(stone);
@@ -236,15 +310,18 @@ public final class GrovePage extends AetherhavenInteractiveCustomUIPage<GrovePag
             case "Uproot" -> {
                 var plan=timber.groves().get(stone);
                 if(plan==null)break;
-                if(!confirming){confirmUproot=true;hint=timber.trees().containsKey(stone)
+                if(!confirming){confirmUproot=true;selection.confirmUproot(plan.id());hint=timber.trees().containsKey(stone)
                     ?"Uprooting frees this Rootstone. The tree standing here stays as it is and becomes yours to chop."
                     :"Uprooting frees this Rootstone and returns its sapling.";break;}
                 boolean planted=timber.trees().containsKey(stone);
-                if(timber.uproot(stone)) {
+                String uprootIssue=NativeTimberUprooting.uproot(c.world(),timber,stone);
+                if(uprootIssue==null) {
                     if(!planted){var inv=InventoryComponent.getCombined(store,ref,InventoryComponent.EVERYTHING);if(inv!=null)inv.addItemStack(new ItemStack(plan.sapling(),1));}
-                    c.manager().updateTown(c.town());stone=Integer.MIN_VALUE;
-                    hint="Rootstone freed. Use it again to choose a new tree, or pick it up and move it.";
-                }
+                    selection.rememberSelected();syncSelection(c);
+                    c.manager().updateTown(c.town());
+                    hint="Rootstone freed. Choose a sapling below to bind a new tree here, or pick up the stone to move it.";
+                    RootstoneGrowingSpaceOverlay.hide(c.world(),store.getComponent(ref,PlayerRef.getComponentType()).getUuid());
+                }else hint=uprootIssue;
             }
             case "Fibre" -> {timber.setGathersFibre(!timber.gathersFibre());c.manager().updateTown(c.town());
                 hint=timber.gathersFibre()?"Seren will gather fibre from the leaves of each tree she fells.":"Seren will leave the fibre behind.";}
@@ -258,7 +335,7 @@ public final class GrovePage extends AetherhavenInteractiveCustomUIPage<GrovePag
                 String need=CoreProductionRequirements.issueForKind(c.town(),"logger",TimberCharring.OUTPUT);
                 hint=timber.charWood()==null?(woods.isEmpty()?"Seren needs some wood in the mill stores before she can char any.":"Seren will keep spare logs as they are.")
                     :need!=null?"Seren needs more training before she can char wood. "+need
-                    :"Seren will char "+TimberCharring.LOG_COST+" spare "+wood(timber.charWood())+" logs into one Burnt log. Keep a lit campfire within two blocks of the mill stores. Press again for another wood.";
+                    :"Seren chars "+TimberCharring.LOG_COST+" "+wood(timber.charWood())+" logs into one Burnt log. Place a Campfire inside the mill, within two blocks of storage. The logs supply the fuel; no lighting needed.";
             }
             case "Collect" -> collect(ref,store,c,null);
             case "Take" -> collect(ref,store,c,data.key);
@@ -274,16 +351,26 @@ public final class GrovePage extends AetherhavenInteractiveCustomUIPage<GrovePag
         if(free<0){hint="Seren cannot tend another Rootstone for this lumbermill yet.";return;}
         if(com.hexvane.aetherhaven.inventory.InventoryMaterials.count(inv,species.sapling())<1){hint="You no longer carry that sapling.";return;}
         var root=new Position(block.x(),block.y()+1,block.z());
-        var captured=NativeTimberGrowth.capture(output,root,0,bounds(c.town()));
+        // Capture the geometry even across the town edge so a refused binding can show exactly what is blocked.
+        var captured=NativeTimberGrowth.capture(output,root,0,p->true);
+        if(captured.ready()){previewTree=captured.receipt();refreshPreview(ref,store,c);}
         String issue=captured.ready()?otherGroveIssue(c,captured.receipt()):captured.issue();
         if(issue==null)issue=timber.plan(free,WorkplaceProductionUpgrades.stoneCount(c.production()),timber.layoutRevision(),captured.receipt(),
             bounds(c.town()),p->NativeTimberPlanting.observe(c.world(),p));
         if(issue!=null){hint=issue;return;}
         if(!inv.removeItemStack(new ItemStack(species.sapling(),1)).succeeded()){timber.uproot(free);hint="The sapling could not be taken from your pack.";return;}
-        c.manager().updateTown(c.town());stone=free;
+        c.manager().updateTown(c.town());syncSelection(c);
+        refreshPreview(ref,store,c);
         String need=CoreProductionRequirements.issueForKind(c.town(),"logger",output);
         hint=need!=null?"The Rootstone accepts the sapling, but Seren needs more training before she can grow it. "+need
             :"The Rootstone accepts the sapling. Seren will plant it on her next round.";
+    }
+    private void refreshPreview(Ref<EntityStore> ref,Store<EntityStore> store,Context c) {
+        var pr=store.getComponent(ref,PlayerRef.getComponentType());
+        if(!RootstoneGrowingSpaceOverlay.enabled(c.world(),pr.getUuid()))return;
+        var selected=stone>=0?c.production().timber().groves().get(stone):previewTree;
+        if(selected!=null)RootstoneGrowingSpaceOverlay.show(c.world(),pr.getUuid(),townId,plotId,selected);
+        else RootstoneGrowingSpaceOverlay.hide(c.world(),pr.getUuid());
     }
     private void collect(Ref<EntityStore> ref,Store<EntityStore> store,Context c,String only) {
         var player=store.getComponent(ref,Player.getComponentType());var pr=store.getComponent(ref,PlayerRef.getComponentType());

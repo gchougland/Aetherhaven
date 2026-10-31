@@ -10,6 +10,33 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("town")
 class TimberCharringTest {
+    @Test void emptyUnlitCampfireIsACharringStationWithoutChangingItsFuelOrActiveState() throws Exception {
+        var fire = new com.hypixel.hytale.builtin.crafting.component.ProcessingBenchBlock();
+        var definition = new Gson().fromJson("{\"id\":\"Campfire\"}",
+            com.hypixel.hytale.server.core.asset.type.blocktype.config.bench.ProcessingBench.class);
+        var field = fire.getClass().getDeclaredField("processingBench");
+        field.setAccessible(true);field.set(fire, definition);
+        assertFalse(fire.isActive());assertEquals(0, fire.getFuelTime());
+        assertTrue(TimberCharring.charringStation(fire));
+        assertFalse(fire.isActive());assertEquals(0, fire.getFuelTime());
+        var p=ready();
+        assertTrue(TimberCharring.process(p,ENTRY,new TownWarehouse(),PLOT,WOOD,SOURCE));
+        assertEquals(0,p.getAmount(WOOD),"The batch's five logs cover its fuel as well as its output");
+        assertEquals(1,p.timber().deliver(p,100,16));
+        assertFalse(fire.isActive());assertEquals(0, fire.getFuelTime());
+    }
+
+    @Test void missingUninitializedAndOtherProcessingBenchesAreNotCharringStations() throws Exception {
+        assertFalse(TimberCharring.charringStation(null));
+        var bench = new com.hypixel.hytale.builtin.crafting.component.ProcessingBenchBlock();
+        assertFalse(TimberCharring.charringStation(bench));
+        var definition = new Gson().fromJson("{\"id\":\"Furnace\"}",
+            com.hypixel.hytale.server.core.asset.type.blocktype.config.bench.ProcessingBench.class);
+        var field = bench.getClass().getDeclaredField("processingBench");
+        field.setAccessible(true);field.set(bench, definition);
+        assertFalse(TimberCharring.charringStation(bench));
+    }
+
     private static final String WOOD = "Wood_Beech_Trunk", RARE = "Wood_Crystal_Trunk";
     private static final UUID PLOT = UUID.randomUUID();
     private static final TimberHarvestPlan.Position SOURCE = new TimberHarvestPlan.Position(3, 100, 4);

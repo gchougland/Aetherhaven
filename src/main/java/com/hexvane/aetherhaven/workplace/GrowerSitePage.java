@@ -77,7 +77,7 @@ public final class GrowerSitePage extends AetherhavenInteractiveCustomUIPage<Gro
                 if (town != null) for (var site : town.getApprenticeWorkplaces().sites()) {
                     var plan = GrowerSiteService.plan(site.type());
                     var block = com.hexvane.aetherhaven.world.ChunkSectionBlockUtil.blockType(world, pos.x, pos.y, pos.z);
-                    if (plan != null && site.area().contains(pos.x, pos.y, pos.z) && plan.isBed(GrowerSiteService.baseId(block))) found = site;
+                    if (plan != null && town.getApprenticeWorkplaces().ownsWorkAt(site.area(), pos.x, pos.y, pos.z) && plan.isBed(GrowerSiteService.baseId(block))) found = site;
                 }
                 if (found == null) { player.sendMessage(t("logOutside")); return null; }
                 if (!town.hasMemberOrOwner(player.getUuid()) || !town.playerCanManageConstructions(player.getUuid())) {

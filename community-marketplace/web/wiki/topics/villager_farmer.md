@@ -38,6 +38,8 @@ Irienne works the town's crops from a **crop plan**. You paint which crop goes w
 
 The farm building has a field of its own. Every Scarecrow claims the ground around it as one more field with its own plan. Cells that cannot be farmed are dark on the map, and hovering over one says why.
 
+**New crops.** Wheat and lettuce are unlocked from the start. In the field planner, choose **Unlock crops**. Hover a crop to see how many crop samples and gold coins you need, then click it to pay and unlock it for this farm. The screen also shows the Farmer Mastery needed to grow it. Return to the planner, pick your new crop and paint its cells. Bring its seeds with **Add seeds**, or keep enough Life Essence in the farm for Irienne to make them.
+
 **Seeds.** A farm starts with a handful of wheat and lettuce seeds. Each cell uses one seed when it is sown, and a harvest gives its seed back about half the time. When the seed store runs out Irienne makes seeds from the Life Essence in the farm's stores, at the price of the game's own Farming Bench. **Add seeds** moves the seeds you carry into the store.
 
 **Soil.** Every cell is Worn, Good or Rich, shown by its colour on the map.

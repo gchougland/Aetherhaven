@@ -7,10 +7,10 @@
     "Material": "Solid",
     "DrawType": "Model",
     "Opacity": "Transparent",
-    "CustomModel": "Items/Halloween_Props/Pumpkin_Carve_01.blockymodel",
+    "CustomModel": "Items/Aetherhaven/Halloween_Pumpkin/Pumpkin_Carve_01.blockymodel",
     "CustomModelTexture": [
       {
-        "Texture": "Items/Halloween_Props/Pumpkin_Carve_Texture_02.png",
+        "Texture": "Items/Aetherhaven/Halloween_Pumpkin/Pumpkin_Carve_Texture_02.png",
         "Weight": 1
       }
     ],

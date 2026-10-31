@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "q_mechanic_shop",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_bronze_mechanics_shop",
+  "title": "Rivet's Mechanics Shop",
+  "description": "Rivet wants a shop where the town can buy metal and gear from the Rusted Expanse.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Take the bronze mechanics shop plot token from Rivet.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_mechanic_shop.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_bronze_mechanics_shop",
+      "text": "Stake and build the bronze mechanics shop prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_mechanic_shop.objective.build"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Find Rivet at the shop and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_mechanic_shop.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Machinaria_Mechanic",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
+    ],
+    "onComplete": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ],
+    "onAbandon": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ]
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_mechanic_shop.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_mechanic_shop.description"
+}

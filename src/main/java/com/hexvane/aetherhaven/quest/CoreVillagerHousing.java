@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.dialogue.data.*;
 import com.hexvane.aetherhaven.inn.InnVisitorShopPromotion;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import java.util.*;
 
@@ -20,6 +21,7 @@ public final class CoreVillagerHousing {
                                       QuestCatalog quests, DialogueCatalog dialogues) {
         var result = new LinkedHashMap<>(quests.all());
         for (var villager : villagers.allByNpcRoleId().values()) {
+            if (!isResident(villager)) continue;
             String role = villager.getNpcRoleId();
             var tree = villager.getResidentTreeId() == null ? null : dialogues.get(villager.getResidentTreeId());
             if (tree == null || tree.getNode(tree.entryOrDefault()) == null)
@@ -60,6 +62,17 @@ public final class CoreVillagerHousing {
                 throw new IllegalStateException("Core villager housing is not playable: " + role);
         }
         return QuestCatalog.of(result);
+    }
+
+    private static boolean isResident(VillagerDefinition villager) {
+        // The shared catalog also contains appearance/voice metadata for temporary quest NPCs, such as
+        // Machinaria's pre-rescue Rivet. They do not join a town and have no resident housing dialogue.
+        // Any resident/recruitment declaration still opts into the invariant, even if its dialogue is broken.
+        // Friendship and Inn eligibility alone must never exclude an otherwise declared resident.
+        return !villager.getDialogueVillagerKind().isEmpty()
+            || (villager.getResidentTreeId() != null && !villager.getResidentTreeId().isBlank())
+            || villager.getWorkConstructionId() != null
+            || villager.isInnPoolEligible();
     }
 
     public static boolean isHousingFor(QuestDefinition quest, String role) {

@@ -36,6 +36,12 @@ public final class PlotCreatorSpotPreviewSync {
 
     private PlotCreatorSpotPreviewSync() {}
 
+    static Ref<EntityStore> visibleRef(World world,UUID owner,long key) {
+        var tracking=TRACKING_PLOT_CREATOR.get(owner);
+        var id=tracking==null?null:tracking.keyToPreviewUuid.get(key);
+        return id==null?null:world.getEntityRef(id);
+    }
+
     @Nonnull
     private static ConcurrentHashMap<UUID, Tracking> trackingMap(boolean poiToolChannel) {
         return poiToolChannel ? TRACKING_POI_TOOL : TRACKING_PLOT_CREATOR;

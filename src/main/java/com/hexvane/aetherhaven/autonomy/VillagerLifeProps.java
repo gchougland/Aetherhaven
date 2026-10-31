@@ -23,7 +23,7 @@ public final class VillagerLifeProps {
             .withMetadata(RESTORE_KEY, Codec.BYTE, previousSlot);
     }
 
-    static boolean isTemporary(ItemStack item) {
+    public static boolean isTemporary(ItemStack item) {
         return !ItemStack.isEmpty(item) && (item.getItemId().startsWith(PREFIX)
             || Boolean.TRUE.equals(item.getFromMetadataOrNull(TEMPORARY_KEY, Codec.BOOLEAN)));
     }

@@ -31,10 +31,23 @@ public final class TownWorkplaces {
 
     public List<ApprenticeWorkplace> sites() { return Collections.unmodifiableList(sites); }
     public ApprenticeWorkplace find(UUID id) { return sites.stream().filter(s -> s.id().equals(id)).findFirst().orElse(null); }
+    /** Exact selected space wins over the allowance below an upstairs workplace. Never share a station or crop. */
+    public ApprenticeWorkplace ownerAtWork(double x, double y, double z) {
+        for (var site : sites) if (site.area().contains(x,y,z)) return site;
+        return sites.stream().filter(site -> site.area().containsWork(x,y,z))
+            .min(Comparator.comparingInt((ApprenticeWorkplace site)->site.area().floorY()).thenComparing(ApprenticeWorkplace::id)).orElse(null);
+    }
+    public boolean ownsWorkAt(WorkplaceArea area,double x,double y,double z) {
+        if(area==null||!area.containsWork(x,y,z))return false;
+        var owner=ownerAtWork(x,y,z);
+        // A draft area may inspect unassigned ground before it is saved.
+        return owner==null||area.equals(owner.area());
+    }
     public ApprenticeWorkplace atGroundOrBlock(int x, int y, int z) {
         // At a shared floor boundary, the clicked ground's top belongs to the upper site.
         for (var site : sites) if (site.area().contains(x + .5, y + 1.01, z + .5)) return site;
         for (var site : sites) if (site.area().contains(x + .5, y + .01, z + .5)) return site;
+        for (var site : sites) if (site.type() != TownsfolkWorkType.MINING && site.area().containsWork(x + .5, y + .01, z + .5)) return site;
         return null;
     }
     public boolean unlocked(TownsfolkWorkType type) { return unlockedTypes.contains(type.id); }

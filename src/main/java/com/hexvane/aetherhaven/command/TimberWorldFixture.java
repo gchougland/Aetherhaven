@@ -50,7 +50,7 @@ final class TimberWorldFixture {
                 }));
             }
             if(charringOnly)chain=chain.thenCompose(ignored->charring(world)).handle((done,error)->{
-                if(error==null){results[0]++;report.accept("Burnt wood: native cold/lit/extinguished campfire, bounded conversion and saved delivery passed.");}
+                if(error==null){results[0]++;report.accept("Burnt wood: unlit empty campfire, log-fueled conversion and saved delivery passed.");}
                 else{results[1]++;Throwable cause=error;while(cause.getCause()!=null)cause=cause.getCause();report.accept("Burnt wood FAILED: "+cause.getMessage());}
                 return null;
             });
@@ -76,17 +76,8 @@ final class TimberWorldFixture {
                 require(ChunkSectionBlockUtil.setBlockByKey(world,16,128,16,com.hexvane.aetherhaven.AetherhavenConstants.BLOCK_PRODUCTION_STORAGE,0),"Charring storage placement failed");
                 require(ChunkSectionBlockUtil.setBlockByKey(world,17,128,16,"Bench_Campfire",0),"Charring campfire placement failed");
             })).thenCompose(ignored->afterNativeQueue(world,()->{
-                require(!TimberCharring.heatAvailable(world,plot,storage,heat),"Cold campfire supplied heat");
-                var ref=ChunkSectionBlockUtil.blockEntityRefAt(world,17,128,16);require(ref!=null&&ref.isValid(),"Campfire block entity missing");
-                var store=world.getChunkStore().getStore();
-                var fire=store.getComponent(ref,com.hypixel.hytale.builtin.crafting.component.ProcessingBenchBlock.getComponentType());
-                require(fire!=null,"Native campfire processor missing");
-                fire.getFuelContainer().setItemStackForSlot((short)0,new com.hypixel.hytale.server.core.inventory.ItemStack("Wood_Beech_Trunk",4),false);
-                require(fire.setActive(true,store.getComponent(ref,com.hypixel.hytale.builtin.crafting.component.BenchBlock.getComponentType()),
-                    store.getComponent(ref,com.hypixel.hytale.server.core.modules.block.BlockModule.BlockStateInfo.getComponentType())),"Campfire did not light");
-                world.getWorldConfig().setGameTimePaused(false);world.getWorldConfig().setBlockTicking(true);
-            })).thenCompose(ignored->awaitHeat(world,plot,storage,heat,0)).thenCompose(ignored->onWorld(world,()->{
-                require(heat.equals(TimberCharring.findHeat(world,plot,storage)),"Nearby lit campfire not found");
+                require(TimberCharring.heatAvailable(world,plot,storage,heat),"Unlit campfire must allow charring using the selected logs as fuel");
+                require(heat.equals(TimberCharring.findHeat(world,plot,storage)),"Nearby unlit campfire not found");
                 var p=new com.google.gson.Gson().fromJson("{\"timber\":{\"adopted\":true}}",PlotProductionState.class);
                 p.timber().setCharWood("Wood_Beech_Trunk");
                 var plugin=com.hexvane.aetherhaven.AetherhavenPlugin.get();
@@ -98,18 +89,9 @@ final class TimberWorldFixture {
                 require(p.timber().deliver(p,100,16)==1&&p.timber().deliver(p,100,16)==0,"Charring saved delivery duplicated or lost output");
                 var ref=ChunkSectionBlockUtil.blockEntityRefAt(world,17,128,16);var store=world.getChunkStore().getStore();
                 var fire=store.getComponent(ref,com.hypixel.hytale.builtin.crafting.component.ProcessingBenchBlock.getComponentType());
-                fire.setActive(false,store.getComponent(ref,com.hypixel.hytale.builtin.crafting.component.BenchBlock.getComponentType()),null);
-                require(!TimberCharring.heatAvailable(world,plot,storage,heat),"Extinguished campfire supplied heat");
+                require(fire!=null&&!fire.isActive()&&fire.getFuelTime()==0&&fire.getFuelContainer().isEmpty(),"Charring must not light or fuel the player campfire");
+                require(TimberCharring.heatAvailable(world,plot,storage,heat),"Empty campfire must remain available after charring");
             }));
-    }
-    private static CompletableFuture<Void> awaitHeat(World world,com.hexvane.aetherhaven.town.PlotInstance plot,
-            com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point storage,com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point heat,int attempt) {
-        return CompletableFuture.supplyAsync(()->TimberCharring.heatAvailable(world,plot,storage,heat),world).thenCompose(ready->{
-            if(ready)return CompletableFuture.completedFuture(null);
-            if(attempt>=25)return CompletableFuture.failedFuture(new IllegalStateException("Native campfire did not consume fuel"));
-            return CompletableFuture.runAsync(()->{},CompletableFuture.delayedExecutor(200,TimeUnit.MILLISECONDS))
-                .thenCompose(ignored->awaitHeat(world,plot,storage,heat,attempt+1));
-        });
     }
     private static CompletableFuture<Void> exercise(World world,String wood,int index) {
         var root=new Position(16+256*index,128,16);var production=new PlotProductionState();

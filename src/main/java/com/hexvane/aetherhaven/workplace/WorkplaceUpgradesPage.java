@@ -131,8 +131,12 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
             && ProductionWorkplaceKinds.residentBindingKindsForPlot(catalog,p.getConstructionId()).contains(supervisor))
             .filter(p -> production(p)||restaurant(p)).toList();
     }
-    private boolean production(PlotInstance p) { return p!=null && AetherhavenPlugin.get().getConstructionCatalog()
-        .resolveGameplayConstructionIds(p.getConstructionId()).stream().anyMatch(ProductionCatalog::isProductionWorkplaceConstruction); }
+    static boolean offersProduction(String supervisor,Collection<String> gameplayIds) {
+        return gameplayIds.stream().anyMatch(id -> ProductionCatalog.isProductionWorkplaceConstruction(id)
+            && supervisor.equals(ProductionWorkplaceKinds.residentBindingKindForGameplayConstruction(id)));
+    }
+    private boolean production(PlotInstance p) { return p!=null && offersProduction(supervisor,AetherhavenPlugin.get().getConstructionCatalog()
+        .resolveGameplayConstructionIds(p.getConstructionId())); }
     private boolean restaurant(PlotInstance p) { return p!=null && AetherhavenPlugin.get().getConstructionCatalog()
         .matchesGameplayConstruction(p.getConstructionId(),AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT); }
     private PlotInstance plot(TownRecord town) {
@@ -312,6 +316,7 @@ public final class WorkplaceUpgradesPage extends AetherhavenInteractiveCustomUIP
         var p=plot(town);var all=nodes(p);
         if("Tab".equals(data.action)) {
             if(!List.of("Workplaces","Production","Restaurant","Alchemy","Storage","Inn").contains(data.type))return;
+            if("Production".equals(data.type)&&!production(p))return;
             tab=data.type;selected="home";
         } else if("Select".equals(data.action)) {
             if(all.stream().noneMatch(n -> n.id().equals(data.type)))return;selected=data.type;

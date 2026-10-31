@@ -1,6 +1,30 @@
 # Changelog
 
-## [4.0.1] - Unreleased]
+## [4.0.3] - 10/22/2026
+
+### Fixed
+
+- **Hytale 0.7.4** Aetherhaven loads again on Hytale 0.7.4, with the pumpkin-headed Hallows Eve villager, the jack-o'-lantern hat and the festival jack-o'-lanterns back in place.
+
+## [4.0.2] - 10/19/2026
+
+### Added
+
+- **Vain** Meet a stoic, wildbound adventurer who excels at mining and building and asks for three Light Hides to move in.
+- **Rootstone controls** Switch between a lumbermill's Rootstones from one screen, and preview each tree's growing space with highlighted obstructions.
+
+### Fixed
+
+- **Addon housing quests** CozyTales Fishing and Machinaria load correctly and keep their existing house quests and progress; temporary rescue NPCs no longer interrupt mod loading.
+- **Guards** Guards recover missing armor, weapons and shields from their saved kit and keep their guard duty when changing profession kits.
+- **Lumbermill** Seren plants and chops Rootstone trees for wood, with no passive production or separate wood unlocks. Storage opens the grove, soft plants no longer block trees, uprooting preserves the Rootstone, and charring needs no extra fuel or lighting.
+- **Raised workplace corners** Stations, crops and ranch animals are detected up to two blocks below the marked floor, including areas selected from fences.
+- **Builders** Townsfolk help clear construction sites and reliably start building when they arrive; the Builder's Hut no longer shows production upgrades.
+- **Farm crops** Unlock new crops from the field planner, with clear costs and Farmer Mastery requirements.
+- **Farming workplaces** Townsfolk fill suitable soil with wheat, and each tended crop adds one point to town food supply.
+- **Removing building spots** Right-click the marker or villager preview you are looking at in Plot Creator and Building Editor, even when it floats above the ground.
+
+## [4.0.1] - 10/19/2026
 
 ### Added
 
@@ -25,6 +49,7 @@
 ### Fixed
 
 - **Homes for every villager** All core villagers offer a house quest after their work-building recruitment, including the new villagers in existing towns.
+- **Founder statue poses** Changing a pose updates the statue directly, and selecting the same pose again refreshes it.
 - **Workplace detection** Selecting crops or benches keeps their bases inside the workplace, and Farming screens identify equipment or crops excluded by the marked height.
 - **Building authoring** The creator and editor require specialty equipment and let you aim the Hunter's portal and fighters by facing a direction when marking the beacon.
 - **Older barns** Community barns without animal markers automatically use clear spaces for pens, keeping owned animals and upgrades.

@@ -107,7 +107,7 @@ public final class ProductionMaterialPickerPage extends AetherhavenInteractiveCu
         String gameplayConstructionId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot != null ? plot.getConstructionId() : "");
         if (plot == null
             || plot.getState() != PlotInstanceState.COMPLETE
-            || !ProductionCatalog.isProductionWorkplaceConstruction(gameplayConstructionId)
+            || plugin.getConstructionCatalog().resolveGameplayConstructionIds(plot.getConstructionId()).stream().noneMatch(ProductionCatalog::isProductionWorkplaceConstruction)
             || !plot.containsWorldBlock(blockX, blockY, blockZ)) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
             commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.plot"));
@@ -115,6 +115,7 @@ public final class ProductionMaterialPickerPage extends AetherhavenInteractiveCu
             return;
         }
 
+        if (com.hexvane.aetherhaven.workplace.GrovePage.redirectToMill(ref,store,playerRef,plugin.getConstructionCatalog(),townId,plot)) return;
         PlotProductionState state = town.getOrCreatePlotProduction(plotId);
         state.migrateIfNeeded();
         ProductionCatalog.Entry entry =
@@ -211,10 +212,11 @@ public final class ProductionMaterialPickerPage extends AetherhavenInteractiveCu
         String gameplayConstructionId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot != null ? plot.getConstructionId() : "");
         if (plot == null
             || plot.getState() != PlotInstanceState.COMPLETE
-            || !ProductionCatalog.isProductionWorkplaceConstruction(gameplayConstructionId)
+            || plugin.getConstructionCatalog().resolveGameplayConstructionIds(plot.getConstructionId()).stream().noneMatch(ProductionCatalog::isProductionWorkplaceConstruction)
             || !plot.containsWorldBlock(blockX, blockY, blockZ)) {
             return;
         }
+        if (com.hexvane.aetherhaven.workplace.GrovePage.redirectToMill(ref,store,playerRef,plugin.getConstructionCatalog(),townId,plot)) return;
         PlotProductionState state = town.getOrCreatePlotProduction(plotId);
         state.migrateIfNeeded();
         ProductionCatalog.Entry entry =

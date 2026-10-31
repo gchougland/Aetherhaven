@@ -74,11 +74,23 @@ class AlchemyBrewTest {
     }
     @Test void theGuideAndThePageNoLongerKnowTheOldGrindStirSimmerOrder() throws Exception {
         String guide=Files.readString(Path.of("src/main/resources/Server/Aetherhaven/GuideTopics/en-US/villager_alchemist.md"));
-        // The guide quotes the rules in words. If the data file changes, this is the reminder to reword it.
-        assertTrue(guide.contains("A brew lasts "+RULES.beats()+" beats"));
-        assertTrue(guide.contains("| "+RULES.greatBeats()+" to "+(RULES.perfectBeats()-1)+" | Great | 25% longer | 10% more |"));
-        assertTrue(guide.contains("| "+RULES.perfectBeats()+" or "+RULES.beats()+" | Perfect | 50% longer | 20% more |"));
-        assertTrue(guide.contains("| "+(RULES.greatBeats()-1)+" or fewer | Good |"));
+        // The tutorials now use sentences instead of a table. Keep both journal pages and their wiki copies
+        // tied to the shipped rules, including every quality threshold and bonus.
+        var words=List.of("zero","one","two","three","four","five","six","seven","eight","nine","ten");
+        java.util.function.IntFunction<String> count=n->n>=0&&n<words.size()?words.get(n):Integer.toString(n);
+        for(String root:List.of("src/main/resources/Server/Aetherhaven/GuideTopics/en-US/","community-marketplace/web/wiki/topics/")) {
+            for(String topic:List.of("villager_alchemist.md","mechanic_alchemy.md")) {
+                String text=Files.readString(Path.of(root+topic)).replace("**","").replaceAll("\\s+"," ");
+                assertTrue(text.contains("A brew lasts "+RULES.beats()+" beats"),root+topic+": brew length");
+                assertTrue(text.contains("Good, "+count.apply(RULES.greatBeats()-1)+" or fewer beats in the band: the listed duration and restoration."),root+topic+": Good");
+                assertTrue(text.contains("Great, "+count.apply(RULES.greatBeats())+" to "+count.apply(RULES.perfectBeats()-1)+" beats: lasting effects run "
+                    +AlchemyBrew.Rules.percent(RULES.duration(Quality.GREAT))+"% longer; Health, Mana and Stamina restoration increases by "
+                    +AlchemyBrew.Rules.percent(RULES.restore(Quality.GREAT))+"%."),root+topic+": Great");
+                assertTrue(text.contains("Perfect, "+count.apply(RULES.perfectBeats())+" or "+count.apply(RULES.beats())+" beats: lasting effects run "
+                    +AlchemyBrew.Rules.percent(RULES.duration(Quality.PERFECT))+"% longer; restoration increases by "
+                    +AlchemyBrew.Rules.percent(RULES.restore(Quality.PERFECT))+"%."),root+topic+": Perfect");
+            }
+        }
         String page=Files.readString(Path.of("src/main/java/com/hexvane/aetherhaven/alchemy/AlchemyCauldronPage.java"));
         String document=Files.readString(Path.of("src/main/resources/Common/UI/Custom/Aetherhaven/AlchemyCauldronPage.ui"));
         String lang=Files.readString(Path.of("src/main/resources/Server/Languages/en-US/aetherhaven_alchemy.lang"));

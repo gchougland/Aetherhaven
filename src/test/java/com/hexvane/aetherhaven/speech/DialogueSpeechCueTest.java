@@ -48,8 +48,11 @@ class DialogueSpeechCueTest {
                         if (!choice.has("actions")) continue;
                         for (var action : choice.getAsJsonArray("actions")) {
                             if (!"start_quest".equals(action.getAsJsonObject().get("type").getAsString())) continue;
-                            assertEquals("Question", node.get("speechClip").getAsString(), file + ":" + entry.getKey());
-                            assertEquals("Agree", choice.get("speechClip").getAsString());
+                            String location = file + ":" + entry.getKey();
+                            assertNotNull(node.get("speechClip"), location + ": quest offer is missing speechClip");
+                            assertNotNull(choice.get("speechClip"), location + ": quest acceptance is missing speechClip");
+                            assertEquals("Question", node.get("speechClip").getAsString(), location);
+                            assertEquals("Agree", choice.get("speechClip").getAsString(), location);
                             offers++;
                         }
                     }

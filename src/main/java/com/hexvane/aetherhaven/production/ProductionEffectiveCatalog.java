@@ -23,6 +23,7 @@ public final class ProductionEffectiveCatalog {
             return null;
         }
         Map<String, WorkplaceUnlockCatalog.UnlockLine> umap = unlockCatalog.byItemId(constructionId);
+        boolean grove = com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(constructionId);
         List<String> ids = new ArrayList<>();
         List<Integer> ticks = new ArrayList<>();
         List<Long> maxS = new ArrayList<>();
@@ -32,7 +33,7 @@ public final class ProductionEffectiveCatalog {
             WorkplaceUnlockCatalog.UnlockLine ul = umap.get(id.toLowerCase(Locale.ROOT));
             if (ul == null) {
                 append(ids, ticks, maxS, id, base.ticksAtCursor(i), base.maxStorageAtCursor(i));
-            } else if (ul.defaultUnlocked() || state.isWorkplaceOutputUnlocked(id)) {
+            } else if (grove || ul.defaultUnlocked() || state.isWorkplaceOutputUnlocked(id)) {
                 append(ids, ticks, maxS, id, base.ticksAtCursor(i), base.maxStorageAtCursor(i));
             }
         }
@@ -40,7 +41,7 @@ public final class ProductionEffectiveCatalog {
             if (base.containsItemId(ul.itemId())) {
                 continue;
             }
-            if (ul.defaultUnlocked() || state.isWorkplaceOutputUnlocked(ul.itemId())) {
+            if (grove || ul.defaultUnlocked() || state.isWorkplaceOutputUnlocked(ul.itemId())) {
                 append(ids, ticks, maxS, ul.itemId(), ul.ticks(), ul.maxStorage());
             }
         }

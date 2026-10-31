@@ -16,7 +16,15 @@ public final class TimberProductionState {
     public static final int BLESSING_COST = 5;
     public static final String BLESSING_ITEM = "Ingredient_Life_Essence";
     public record Ground(boolean loaded, String block, int rotation, int filler,
-            boolean empty, boolean soil, boolean naturalTerrain, boolean protectedCell) {}
+            boolean empty, boolean soil, boolean naturalTerrain, boolean protectedCell, boolean softVegetation, Set<Position> vegetationFootprint) {
+        public Ground {vegetationFootprint=vegetationFootprint==null?Set.of():Set.copyOf(vegetationFootprint);}
+        public Ground(boolean loaded,String block,int rotation,int filler,boolean empty,boolean soil,boolean naturalTerrain,boolean protectedCell) {
+            this(loaded,block,rotation,filler,empty,soil,naturalTerrain,protectedCell,false,Set.of());
+        }
+        public Ground(boolean loaded,String block,int rotation,int filler,boolean empty,boolean soil,boolean naturalTerrain,boolean protectedCell,boolean softVegetation) {
+            this(loaded,block,rotation,filler,empty,soil,naturalTerrain,protectedCell,softVegetation,Set.of());
+        }
+    }
     public record Original(Position position, String block, int rotation) {}
     public record Planting(TimberPlantingReceipt tree, List<Original> originals) {
         public Planting { originals = List.copyOf(originals); }
@@ -244,7 +252,10 @@ public final class TimberProductionState {
             Ground ground = read.apply(point);
             String blocked = groundIssue(point, tree.root(), below, ground);
             if (blocked != null) return rejected(blocked);
-            originals.add(new Original(point, ground.block(), ground.rotation()));
+            String vegetationIssue=TimberVegetation.issue(point,ground,withinGrove,read);
+            if(vegetationIssue!=null)return rejected(vegetationIssue);
+            // Grass and bushes are cleared permanently when planting, not recreated after each harvest.
+            originals.add(new Original(point, ground.softVegetation()?"Empty":ground.block(), ground.softVegetation()?0:ground.rotation()));
         }
         return new Prepared(new Planting(tree, originals), null);
     }
@@ -270,13 +281,13 @@ public final class TimberProductionState {
     private static Position below(Position root) {
         return root.y() == Integer.MIN_VALUE ? null : new Position(root.x(), root.y()-1, root.z());
     }
-    private static String groundIssue(Position point, Position root, Position below, Ground ground) {
+    static String groundIssue(Position point, Position root, Position below, Ground ground) {
         if (ground == null || !ground.loaded()) return "The tree needs its whole growing space nearby and loaded.";
         if (ground.block() == null || ground.block().isBlank() || ground.rotation() < 0
-                || ground.filler() != 0 || ground.protectedCell()) return "Something important is in the way of this tree. Try another spot.";
+                || ground.filler() != 0&&!ground.softVegetation() || ground.protectedCell()) return "Something important is in the way of this tree. Try another spot.";
         if (point.equals(below) && !ground.soil()) return "The tree needs its Rootstone beneath it.";
-        if (point.y() >= root.y() && !ground.empty()) return "This tree needs more room. Clear the space above and around the Rootstone.";
-        if (point.y() < root.y() && !ground.empty() && !ground.naturalTerrain())
+        if (point.y() >= root.y() && !ground.empty() && !ground.softVegetation()) return "This tree needs more room. Clear the space above and around the Rootstone.";
+        if (point.y() < root.y() && !ground.empty() && !ground.softVegetation() && !ground.naturalTerrain())
             return "The tree's roots would reach something you built. Try another spot.";
         return null;
     }

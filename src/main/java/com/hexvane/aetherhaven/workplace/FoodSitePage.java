@@ -19,7 +19,7 @@ public final class FoodSitePage extends AetherhavenInteractiveCustomUIPage<FoodS
     private final org.joml.Vector3i station;
     private boolean appended, refreshing;
     private View rendered;
-    private record View(String name,int points,String state,long remaining,String time,String lastCare,
+    private record View(String name,int points,int capacity,String state,long remaining,String time,String lastCare,
                         String habitat,String worker,boolean readOnly) {}
     public FoodSitePage(PlayerRef player, UUID town, UUID site) {
         this(player,town,site,null);
@@ -62,15 +62,17 @@ public final class FoodSitePage extends AetherhavenInteractiveCustomUIPage<FoodS
         var roster=TownsfolkWorkRoster.list(town,manager,store,plugin);
         long workers=roster.stream()
             .filter(w->w.progress().canPerform(site.type(),w.guard(),town.getPayroll().overdue(w.characterId()),w.alive())).count();
-        var view=new View(site.name(),points,
-            !habitat.simulated()?"Visit the whole workplace":!habitat.ready()?"Setup incomplete":workers==0?"No eligible worker":food.completedVisits()==0?"Preparing first food supply":points==0?"Food support paused":food.needsTending()?"Ready for tending":"Well tended",
+        var view=new View(site.name(),points,food.foodCapacity(),
+            !habitat.simulated()?"Visit the whole workplace":!habitat.ready()?"Setup incomplete":workers==0?"No eligible worker":food.completedVisits()==0?"Preparing first food supply":points==0?"Food support paused":food.needsTending()?"Ready for tending":food.emptyGrowingSpaces()>0?"Planting the growing area":"Well tended",
             remaining,food.completedVisits()==0?"Care begins when an Apprentice works here.":"About "+remaining/60+"h "+remaining%60+"m of care remaining",
-            food.lastCare(),!habitat.ready()?habitat.issue():food.careIssue()!=null?food.careIssue():
-                site.type()==com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.RANCHING?RanchWorkService.herdStatus(world,site):"Setup ready: Farmer's Workbench and at least 4 growing spaces found. Apprentices plant wheat themselves; you do not need seeds or planted crops.",
+            food.lastCare(),!habitat.ready()?habitat.issue():
+                site.type()==com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.RANCHING
+                    ? food.careIssue()!=null?food.careIssue():RanchWorkService.herdStatus(world,site)
+                    : (food.careIssue()==null?"":food.careIssue()+" ")+farmStatus(habitat),
             workerStatus(roster,town,site.type(),workers),
             !town.playerCanManageConstructions(playerRef.getUuid()));
         if(!view.equals(rendered)) {
-            c.set("#FoodTitle.Text",view.name());c.set("#FoodPoints.Text",view.points()+" / 10");
+            c.set("#FoodTitle.Text",view.name());c.set("#FoodPoints.Text",view.points()+" / "+view.capacity());
             c.set("#Residents.Text","Supports "+view.points()/TownPopulation.FOOD_PER_RESIDENT+" residents");
             c.set("#CareState.Text",view.state());c.set("#CareReserve.Value",(float)view.remaining()/WorkplaceFood.NEGLECT_MINUTES);
             c.set("#CareTime.Text",view.time());c.set("#LastCare.Text",view.lastCare());
@@ -79,6 +81,11 @@ public final class FoodSitePage extends AetherhavenInteractiveCustomUIPage<FoodS
         }
         if(!refreshing){refreshing=true;scheduleRefresh(world);}
         return true;
+    }
+    static String farmStatus(FoodSiteService.Habitat habitat) {
+        return "Setup ready: Farmer's Workbench found. " + habitat.crops() + " edible crops growing; "
+            + habitat.emptySpaces() + " clear soil spaces left to plant. Each crop provides 1 food point while tended; 2 food points support 1 resident. "
+            + "Apprentices keep planting wheat across all clear soil spaces. No seeds needed.";
     }
     static String workerStatus(java.util.List<TownsfolkWorkRoster.Worker> roster,TownRecord town,
                                com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType type,long eligible) {

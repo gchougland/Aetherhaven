@@ -1,0 +1,96 @@
+{
+  "npcRoleId": "CozyFishing_Fisherman",
+  "dialogueVillagerKind": "fisherman",
+  "residentTreeId": "cozyfishing_fisherman",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_fishermans_shop",
+  "displayName": "Reed Castwell",
+  "portraitIcon": "CozyFishing_Fisherman.png",
+  "uiSortOrder": 20,
+  "innPoolEligible": true,
+  "innPoolOrder": 12,
+  "visitorBindingKind": "visitor_fisherman",
+  "innPoolRequires": {
+    "completedQuestIds": [
+      "q_merchant_stall"
+    ]
+  },
+  "reputationMilestones": [],
+  "giftLoves": [
+    "Fish_Frostgill_Item",
+    "Fish_Jellyfish_Man_Of_War_Item",
+    "Fish_Piranha_Black_Item",
+    "Fish_Snapjaw_Item",
+    "Fish_Trilobite_Item",
+    "Fish_Trilobite_Black_Item",
+    "Fish_Shark_Hammerhead_Item",
+    "Fish_Shellfish_Lava_Item",
+    "Fish_Whale_Humpback_Item",
+    "CozyFishing_Bobber_Quality",
+    "CozyFishing_Bobber_Decorated_Spinner"
+  ],
+  "giftLikes": [
+    "Fish_Bluegill_Item",
+    "Fish_Clownfish_Item",
+    "Fish_Crab_Item",
+    "Fish_Minnow_Item",
+    "Fish_Trout_Rainbow_Item",
+    "Fish_Catfish_Item",
+    "Fish_Eel_Moray_Item",
+    "Fish_Jellyfish_Blue_Item",
+    "Fish_Jellyfish_Cyan_Item",
+    "Fish_Jellyfish_Green_Item",
+    "Fish_Jellyfish_Red_Item",
+    "Fish_Jellyfish_Yellow_Item",
+    "Fish_Lobster_Item",
+    "Fish_Pike_Item",
+    "Fish_Piranha_Item",
+    "Fish_Pufferfish_Item",
+    "Fish_Salmon_Item",
+    "Fish_Tang_Blue_Item",
+    "Fish_Tang_Chevron_Item",
+    "Fish_Tang_Lemon_Peel_Item",
+    "Fish_Tang_Sailfin_Item",
+    "Deco_Coral_Shell",
+    "Deco_Coral_Shell_Purple",
+    "Deco_Coral_Shell_Sanddollar",
+    "Deco_Coral_Shell_Swirly",
+    "Deco_Coral_Shell_Urchin",
+    "Deco_Starfish",
+    "CozyFishing_Bobber_Spinner",
+    "CozyFishing_Bobber_Treasure",
+    "Food_Fish_Grilled"
+  ],
+  "giftDislikes": [
+    "Deco_Trash",
+    "Deco_Trash_Pile_Small",
+    "Deco_Trash_Pile_Large",
+    "CozyFishing_Leather_Boots",
+    "CozyFishing_Bobber_Trash",
+    "Food_Fish_Raw",
+    "Ingredient_Poop",
+    "Deco_Bone_Pile",
+    "Deco_Bone_Skulls"
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.main_hub.greeting.0",
+    "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.main_hub.greeting.1",
+    "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.main_hub.greeting.2",
+    "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.main_hub.greeting.3"
+  ],
+  "dialogueGiftHintLangKeys": [
+    "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.main_hub.hint.love.0",
+    "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.main_hub.hint.love.1",
+    "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.main_hub.hint.dislike.0",
+    "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.main_hub.hint.dislike.1"
+  ],
+  "speechVoiceId": "WarmMale",
+  "birthdaySeason": "Summer",
+  "birthdayDay": 20,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_cozyfishing_fisherman.aetherhaven.dialogue.cozyfishing_fisherman.birthday.greeting"
+  ],
+  "wintertideGifts": [
+    { "itemId": "CozyFishing_Fish_Scale_Legendary", "count": 5 }
+  ]
+}

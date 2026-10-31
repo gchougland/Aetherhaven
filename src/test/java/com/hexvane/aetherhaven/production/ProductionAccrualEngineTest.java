@@ -73,4 +73,19 @@ class ProductionAccrualEngineTest {
         assertEquals(5, state.getAmount("Ore_Copper"));
         assertEquals(5, CoreVillagerMasteryService.progress(town, "miner").xpInLevel());
     }
+    @Test void lumbermillsNeverCreateTimerWoodBeforeRootstonesOrAfterReload() {
+        var entry=ProductionCatalog.Entry.create(List.of("Wood_Beech_Trunk"),new int[]{1},new long[]{100});
+        for(var json:List.of("{}","{\"s0\":0,\"a0\":200,\"timber\":{}}")) {
+            var state=new Gson().fromJson(json,PlotProductionState.class);
+            state.addAmount("Wood_Beech_Trunk",7,100);state.setCobaltLevel(2);
+            var before=new Gson().toJson(state);
+            assertFalse(ProductionAccrualEngine.applyEntityTicks(state,entry,town,"plot_lumbermill",ConstructionCatalog.empty(),
+                new AetherhavenPluginConfig(),null,0,0,1));
+            assertFalse(ProductionAccrualEngine.applyEntityTicks(state,entry,town,"plot_lumbermill",ConstructionCatalog.empty(),
+                new AetherhavenPluginConfig(),null,0,0,100_000),"Offline catch-up cannot stand in for chopping a tree");
+            assertEquals(before,new Gson().toJson(state),"Old stock, upgrades and pending data remain intact");
+            assertEquals(7,state.getAmount("Wood_Beech_Trunk"));
+            assertFalse(town.getCoreVillagerMastery().containsKey("logger"));
+        }
+    }
 }

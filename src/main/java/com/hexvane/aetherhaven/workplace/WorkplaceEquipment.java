@@ -57,12 +57,14 @@ public final class WorkplaceEquipment {
         var plugin=com.hexvane.aetherhaven.AetherhavenPlugin.get();
         var catalog=plugin==null?null:plugin.getWorkplaceFurnishings();
         var store = world.getChunkStore().getStore();
+        var ownership=WorkplaceOwnership.scope(world,area);
         for (int cx = ChunkUtil.chunkCoordinate(area.minX()); cx <= ChunkUtil.chunkCoordinate(area.maxX()-1); cx++)
             for (int cz = ChunkUtil.chunkCoordinate(area.minZ()); cz <= ChunkUtil.chunkCoordinate(area.maxZ()-1); cz++) {
                 if (ChunkSectionBlockUtil.worldChunkIfTicking(world, ChunkUtil.indexChunk(cx,cz)) == null) { loaded=false; continue; }
                 int x0=Math.max(area.minX(),cx*32), x1=Math.min(area.maxX(),cx*32+32);
                 int z0=Math.max(area.minZ(),cz*32), z1=Math.min(area.maxZ(),cz*32+32);
-                for (int x=x0;x<x1;x++) for (int z=z0;z<z1;z++) for(int y=area.floorY();y<area.floorY()+area.height();y++) {
+                for (int x=x0;x<x1;x++) for (int z=z0;z<z1;z++) for(int y=area.workFloorY();y<area.floorY()+area.height();y++) {
+                    if(!ownership.contains(x,y,z))continue;
                     var section = ChunkSectionBlockUtil.blockSectionAt(world,x,y,z);
                     if (section == null || section.getFiller(x,y,z) != 0) continue;
                     var block = ChunkSectionBlockUtil.blockType(world,x,y,z); if (block == null) continue;

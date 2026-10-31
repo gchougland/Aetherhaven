@@ -32,7 +32,7 @@ Workplaces are areas you mark for employed civilian Townsfolk. Named core villag
 1. Recruit the supervisor and finish their work building. Ask about **Apprentice workplaces** and unlock the desired type. Elder Lyren's **A Place to Work** quest helps you begin.
 2. Craft a **Building Staff** at the Town Planning Desk. Any tier can manage workplaces.
 3. Choose **Create workplace** from the staff's mode menu and mark two opposite ground corners. Choose a name and type, then save.
-4. Place the type's required station inside the marked area. Keep its base within the floor and height, and leave a walking route to it.
+4. Place the type's required station inside the marked area and leave a walking route to it. Stations and growing spaces up to **two blocks below** the marked floor count too, so you can mark corners on a fence or raised border. The workplace screen shows the heights it checks.
 5. Employ a civilian Townsfolk with the required skill. Enable the exact work type on the journal's **Work** page and keep wages paid.
 6. Open the station or use **Manage workplace**. Queue a task, choose a growing plan or prepare a food-support site as its guide describes.
 
@@ -43,12 +43,12 @@ The Blacksmith starts with two shared slots for Smelting, Blacksmithing and Armo
 - **Smelting workplace** — Blacksmith; Furnace. Apprentices load furnaces, supply your selected fuel and collect the finished materials.
 - **Blacksmithing workplace** — Blacksmith; Blacksmith's Anvil. Apprentices forge weapons, tools and unlocked profession equipment.
 - **Armor Crafting workplace** — Blacksmith; Armorer's Workbench. Apprentices make armor and guard kits for the town.
-- **Farming workplace** — Farmer; Farmer's Workbench. A tended Farming workplace adds **10 food points**, enough to support **five residents**. It produces **no inventory items**.
+- **Farming workplace** — Farmer; Farmer's Workbench. Workers fill clear soil with wheat. Each edible crop in a tended Farming workplace adds **1 food point**; two points support one resident. It produces **no inventory items**.
 - **Ranching workplace** — Rancher; Feeding Trough. A tended Ranching workplace adds **10 food points**, supporting **five residents**. It produces **no inventory items**.
 - **Mycologist workplace** — Druid; Mushroom Log. Apprentices seed logs, tend growing mushrooms and harvest ingredients for cooking and Alchemy.
 - **Berry Patch workplace** — Druid; Farmer's Workbench. Apprentices tend berry bushes and collect ripe berries as inventory items.
 - **Mining workplace** — Miner; Workbench. Apprentices excavate real tunnels, stairs and rooms, then carry mined drops back to their base.
-- **Builder's Yard workplace** — Builder; Builder's Workbench. Apprentices travel to your town's construction projects and help build reachable pieces.
+- **Builder's Yard workplace** — Builder; Builder's Workbench. Apprentices travel to your town's construction projects, clear blocks in the way and help build reachable pieces.
 - **Block Workshop workplace** — Builder; Builder's Workbench. Apprentices make planks, bricks, stairs, slabs, roofs and other building blocks to order.
 - **Alchemy workplace** — Alchemist; Alchemist's Workbench. Apprentices brew queued potion recipes from plants, petals, mushrooms and other supplies.
 - **Crafting workplace** — Crafter; Workbench. Apprentices make supplies, repair items, equipment and unlocked seed or sapling recipes.

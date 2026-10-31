@@ -18,7 +18,9 @@ class ApprenticeRanchAnimalsTest {
         assertFalse(ApprenticeRanchAnimals.inside(area, trough, new Vector3d(.5, 100, 5.5), cow));
         assertFalse(ApprenticeRanchAnimals.inside(area, trough, new Vector3d(9.5, 100, 5.5), cow));
         assertFalse(ApprenticeRanchAnimals.inside(area, trough, new Vector3d(5.5, 104, 5.5), cow));
-        assertFalse(ApprenticeRanchAnimals.inside(area, trough, new Vector3d(5.5, 99, 5.5), cow));
+        assertTrue(ApprenticeRanchAnimals.inside(area, trough, new Vector3d(5.5, 99, 5.5), cow));
+        assertTrue(ApprenticeRanchAnimals.inside(area, trough, new Vector3d(5.5, 98, 5.5), cow));
+        assertFalse(ApprenticeRanchAnimals.inside(area, trough, new Vector3d(5.5, 97, 5.5), cow));
         assertFalse(ApprenticeRanchAnimals.inside(new WorkplaceArea(-20, 100, -20, 20, 20), trough,
             new Vector3d(9.5, 100, 5.5), cow), "Even a large workplace keeps animals close to the trough");
     }

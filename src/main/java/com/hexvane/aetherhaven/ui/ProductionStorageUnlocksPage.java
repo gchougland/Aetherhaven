@@ -4,6 +4,11 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.difficulty.BuildingUpgradeCostScaler;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
+import com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService;
+import com.hexvane.aetherhaven.production.FarmFields;
+import com.hexvane.aetherhaven.production.NativeFarmCrops;
+import com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point;
+import com.hexvane.aetherhaven.workplace.FarmerFieldPage;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.PhysicalProductionOutputPolicy;
 import com.hexvane.aetherhaven.production.NativeTimberProducts;
@@ -68,6 +73,8 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
     private final int blockY;
     private final int blockZ;
     private boolean templateAppended;
+    private boolean returnToFields;
+    @Nullable private Point fieldScarecrow;
     /** Last icon clicked; drives the bottom detail panel. */
     @Nullable
     private String detailFocusItemId;
@@ -88,6 +95,26 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         this.blockZ = blockZ;
     }
 
+    /** Crop unlocks remain available from either the home field or a remote Scarecrow. */
+    public static ProductionStorageUnlocksPage farmFields(PlayerRef player, UUID town, PlotInstance plot, @Nullable Point scarecrow) {
+        var footprint = plot.toFootprint();
+        var page = new ProductionStorageUnlocksPage(player, town, plot.getPlotId(), footprint.getMinX(), footprint.getMinY(), footprint.getMinZ());
+        page.returnToFields = true;
+        page.fieldScarecrow = scarecrow;
+        return page;
+    }
+
+    AetherhavenInteractiveCustomUIPage<?> returnPage() {
+        return returnToFields ? new FarmerFieldPage(playerRef, townId, plotId, fieldScarecrow)
+            : new ProductionStoragePage(playerRef, townId, plotId, blockX, blockY, blockZ);
+    }
+
+    String gameplayConstructionId(com.hexvane.aetherhaven.construction.ConstructionCatalog catalog,PlotInstance plot) {
+        if(returnToFields) return plot!=null&&catalog.matchesGameplayConstruction(plot.getConstructionId(),FarmFields.CONSTRUCTION)
+            ?FarmFields.CONSTRUCTION:null;
+        return catalog.resolveGameplayConstructionId(plot==null?"":plot.getConstructionId());
+    }
+
     @Override
     public void build(
         @Nonnull Ref<EntityStore> ref,
@@ -99,6 +126,12 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             commandBuilder.append("Aetherhaven/ProductionStorageUnlocks.ui");
             templateAppended = true;
             AetherhavenUiLocalization.applyProductionStorageUnlocks(commandBuilder);
+            if (returnToFields) {
+                commandBuilder.set("#ProductionUnlocksTitleText.TextSpans", Message.translation(FarmFields.LANG + "ui.unlocks.title"));
+                commandBuilder.set("#Content #UnlockIntro.TextSpans", Message.translation(FarmFields.LANG + "ui.unlocks.intro"));
+                commandBuilder.set(NAV_TO_PRODUCTION + ".TextSpans", Message.translation(FarmFields.LANG + "ui.unlocks.back"));
+                commandBuilder.set(NAV_TO_PRODUCTION + ".TooltipTextSpans", Message.translation(FarmFields.LANG + "ui.unlocks.back"));
+            }
         }
         commandBuilder.set(ERR_MSG + ".Visible", false);
         commandBuilder.set(DETAIL_PANEL + ".Visible", false);
@@ -128,16 +161,19 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             return;
         }
         PlotInstance plot = town.findPlotById(plotId);
-        String gameplayConstructionId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot != null ? plot.getConstructionId() : "");
+        String gameplayConstructionId = gameplayConstructionId(plugin.getConstructionCatalog(),plot);
+        boolean mill = !returnToFields && plot != null && plugin.getConstructionCatalog().matchesGameplayConstruction(
+            plot.getConstructionId(),com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL);
         if (plot == null
             || plot.getState() != PlotInstanceState.COMPLETE
-            || !ProductionCatalog.isProductionWorkplaceConstruction(gameplayConstructionId)
+            || (!ProductionCatalog.isProductionWorkplaceConstruction(gameplayConstructionId) && !mill)
             || !plot.containsWorldBlock(blockX, blockY, blockZ)) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
             commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.plot"));
             commandBuilder.clear(ROWS);
             return;
         }
+        if (!returnToFields && com.hexvane.aetherhaven.workplace.GrovePage.redirectToMill(ref,store,pr,plugin.getConstructionCatalog(),townId,plot)) return;
         String constructionId = gameplayConstructionId;
         ProductionCatalog.Entry base = plugin.getProductionCatalog().get(constructionId);
         if (base == null || base.catalogSize() <= 0) {
@@ -291,8 +327,10 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         @Nonnull CombinedItemContainer inv,
         boolean allowTreasuryGold
     ) {
+        Message mastery = cropMasteryMessage(line, town);
         if (unlocked) {
-            return Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.tooltip.unlockedSub");
+            Message learned = Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.tooltip.unlockedSub");
+            return mastery == null ? learned : Message.join(learned, Message.raw("\n"), mastery);
         }
         int need = BuildingUpgradeCostScaler.scaleProductionUnlockResource(
             line.resourceCost(),
@@ -321,7 +359,14 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
                     .color(goldOk ? TOOLTIP_OK_COLOR : TOOLTIP_BAD_COLOR);
             body = Message.join(body, Message.raw("\n"), goldLine);
         }
-        return body;
+        return mastery == null ? body : Message.join(body, Message.raw("\n"), mastery);
+    }
+
+    @Nullable static Message cropMasteryMessage(WorkplaceUnlockCatalog.UnlockLine line, TownRecord town) {
+        if (!FarmFields.CONSTRUCTION.equals(line.workplace()) || NativeFarmCrops.byOutput(line.itemId()) == null) return null;
+        int have = CoreVillagerMasteryService.level(town, FarmFields.KIND), need = FarmFields.mastery(line.itemId());
+        return Message.translation(FarmFields.LANG + "ui.unlocks.mastery").param("have", have).param("need", need)
+            .color(have >= need ? TOOLTIP_OK_COLOR : TOOLTIP_BAD_COLOR);
     }
 
     @Override
@@ -334,7 +379,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             if (player == null) {
                 return;
             }
-            player.getPageManager().openCustomPage(ref, store, new ProductionStoragePage(playerRef, townId, plotId, blockX, blockY, blockZ));
+            player.getPageManager().openCustomPage(ref, store, returnPage());
             return;
         }
         if (!data.action.equalsIgnoreCase("Pick")) {
@@ -359,13 +404,16 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             return;
         }
         PlotInstance plot = town.findPlotById(plotId);
-        String gameplayConstructionId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot != null ? plot.getConstructionId() : "");
+        String gameplayConstructionId = gameplayConstructionId(plugin.getConstructionCatalog(),plot);
+        boolean mill = !returnToFields && plot != null && plugin.getConstructionCatalog().matchesGameplayConstruction(
+            plot.getConstructionId(),com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL);
         if (plot == null
             || plot.getState() != PlotInstanceState.COMPLETE
-            || !ProductionCatalog.isProductionWorkplaceConstruction(gameplayConstructionId)
+            || (!ProductionCatalog.isProductionWorkplaceConstruction(gameplayConstructionId) && !mill)
             || !plot.containsWorldBlock(blockX, blockY, blockZ)) {
             return;
         }
+        if (!returnToFields && com.hexvane.aetherhaven.workplace.GrovePage.redirectToMill(ref,store,pr,plugin.getConstructionCatalog(),townId,plot)) return;
         String constructionId = gameplayConstructionId;
         WorkplaceUnlockCatalog.UnlockLine line = plugin.getWorkplaceUnlockCatalog().findLine(constructionId, itemId);
         if (line == null) {

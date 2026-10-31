@@ -352,6 +352,29 @@ class WarehousePressTest {
 
     // ------------------------------------------------------------------ kits
 
+    @Test void professionKitChangesPreserveGuardDutyAndGuardEquipment() {
+        var town = new com.hexvane.aetherhaven.town.TownRecord();
+        var uuid = UUID.randomUUID();
+        var guard = new com.hexvane.aetherhaven.town.HiredGuardRecord("guard",uuid,"guard_knight_iron",true);
+        town.getHiredGuardRecords().add(guard);
+        var progress = new TownsfolkProgress();
+        progress.setSkill(com.hexvane.aetherhaven.townsfolk.TownsfolkSkill.BLACKSMITHING,3);
+        progress.setPriority(com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.BLACKSMITHING,1);
+        progress.setGuardKitData(TownsfolkProgress.encodeProfessionKit(stock("ironKit",1)));
+        town.getTownsfolkProgress().put("guard",progress);
+        var inventory = bag(stock("smithKit",1));
+        assertNull(ProfessionKitService.equip(progress,kits(),inventory,(short)0,inventory.getItemStack((short)0)));
+        assertSame(guard,town.getHiredGuardRecords().getFirst());
+        assertEquals("guard_knight_iron",guard.getEquipmentProfileId());
+        assertEquals("ironKit",progress.guardKit().getItemId());
+        assertFalse(progress.canPerform(com.hexvane.aetherhaven.townsfolk.TownsfolkWorkType.BLACKSMITHING,true,false,true));
+        var saved = new com.google.gson.Gson().fromJson(new com.google.gson.Gson().toJson(town),com.hexvane.aetherhaven.town.TownRecord.class);
+        assertNull(ProfessionKitService.unequip(saved.getTownsfolkProgress().get("guard"),inventory));
+        assertEquals(uuid,saved.getHiredGuardRecords().getFirst().getEntityUuid());
+        assertEquals("guard_knight_iron",saved.getHiredGuardRecords().getFirst().getEquipmentProfileId());
+        assertEquals("ironKit",saved.getTownsfolkProgress().get("guard").guardKit().getItemId());
+    }
+
     private static ProfessionKitCatalog kits() {
         return new ProfessionKitCatalog(List.of(new ProfessionKit("courierKit", "Courier satchel", "logistics", 0, 1),
             new ProfessionKit("smithKit", "Smith tools", "blacksmithing", .15, 0)));

@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 import org.joml.Vector3d;
 import static com.hexvane.aetherhaven.production.TimberHarvestPlan.Position;
 
-/** Attended planting, chopping and bounded delivery for explicitly adopted groves. */
+/** Attended planting, chopping and bounded delivery. Every lumbermill works physical trees only. */
 public final class TimberWorkService {
     private TimberWorkService() {}
     private enum Action { PLANT, TEND, CHOP, PICKUP, DELIVER, CHAR }
@@ -52,7 +52,6 @@ public final class TimberWorkService {
             interrupt(ref,store,npc,buffer);return false;
         }
         var production=town.getOrCreatePlotProduction(plot.getPlotId());
-        if(!production.usesPhysicalTimber()){interrupt(ref,store,npc,buffer);return false;}
         if(store.getComponent(ref,DeathComponent.getComponentType())!=null){interrupt(ref,store,npc,buffer);return false;}
         boolean offDuty=needs.getHunger()<20||needs.getEnergy()<20||autonomy.isFillingHunger()||autonomy.isFillingEnergy()
             ||!ProductionLiveWorkDetection.isOnWorkSchedule(store,ref,npc,plugin.getVillagerDefinitionCatalog(),plugin.getVillagerScheduleRegistry())
@@ -61,6 +60,14 @@ public final class TimberWorkService {
         var underway=VISITS.get(ref);
         boolean finishing=production.timber().cargo()!=null||underway!=null&&underway.active&&underway.action==Action.CHOP;
         if(offDuty&&!finishing){interrupt(ref,store,npc,buffer);return false;}
+        // Claim the shift before looking for a tree, even if the grove is empty or blocked. Otherwise the
+        // old work-surface chopping animation remains active forever while every planting attempt is rejected.
+        if(underway==null||!underway.active) {
+            var registry=AetherhavenWorldRegistries.getOrCreatePoiRegistry(store.getExternalData().getWorld(),plugin);
+            if(claimGroveShift(autonomy,()->VillagerAutonomySystem.abortActivePoiUseAndDismount(ref,store,buffer,autonomy,needs,registry,false))) {
+                buffer.putComponent(ref,VillagerAutonomyState.getComponentType(),autonomy);
+            }
+        }
         var transform=store.getComponent(ref,TransformComponent.getComponentType());if(transform==null)return true;
         var world=store.getExternalData().getWorld();var position=transform.getPosition();var timber=production.timber();
         var entry=ProductionEffectiveCatalog.effective(plugin.getProductionCatalog(),plugin.getWorkplaceUnlockCatalog(),AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL,production);
@@ -259,6 +266,12 @@ public final class TimberWorkService {
             v.slot=slot;v.tree=planted.tree().id();v.action=Action.TEND;v.target=point(planted.tree().root());return true;
         }
         return false;
+    }
+    static boolean claimGroveShift(VillagerAutonomyState autonomy,Runnable releasePreviousWork) {
+        if(autonomy.getPhase()==VillagerAutonomyState.PHASE_IDLE && autonomy.getTargetPoiUuid()==null)return false;
+        releasePreviousWork.run();
+        autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);autonomy.clearTravelAndPoiState();
+        return true;
     }
     private static boolean masteryAllows(TownRecord town,PlotProductionState p,Action action,int slot) {
         if(action==Action.CHAR)return com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issueForKind(town,"logger",TimberCharring.OUTPUT)==null;

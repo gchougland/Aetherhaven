@@ -14,7 +14,9 @@ public final class BuildingOrders {
     static final long CREW_IDLE_MS=5_000;
     static final long CREW_FORGET_MS=60_000;
     public record Order(UUID id,UUID plot,UUID author) {}
-    public record Cell(UUID order,int index,int x,int y,int z,String block,int rotation) {}
+    public record Cell(UUID order,int index,int x,int y,int z,String block,int rotation,boolean clearing) {
+        public Cell(UUID order,int index,int x,int y,int z,String block,int rotation) {this(order,index,x,y,z,block,rotation,false);}
+    }
     /** One builder's unfinished effort. {@code seen} is wall time and is not saved: after a load every cell is free. */
     private static final class Effort {Cell cell;double work;transient long seen;}
     private List<Order> orders=new ArrayList<>();private long revision;private boolean paused;
@@ -88,7 +90,7 @@ public final class BuildingOrders {
 
     // Named builders. A null or blank name is the single unnamed slot above.
     private static boolean unnamed(String worker){return worker==null||worker.isBlank();}
-    private static boolean sameSpot(Cell a,Cell b){return a!=null&&b!=null&&a.order().equals(b.order())&&a.index()==b.index();}
+    private static boolean sameSpot(Cell a,Cell b){return a!=null&&b!=null&&a.order().equals(b.order())&&a.index()==b.index()&&a.clearing()==b.clearing();}
     private Effort effort(String worker){return crew==null?null:crew.get(worker);}
     private void dropCrewWithoutOrder(){if(crew!=null)crew.values().removeIf(e->e.cell==null||find(e.cell.order())==null);}
     public Cell cell(String worker){if(unnamed(worker))return cell;var e=effort(worker);return e==null?null:e.cell;}

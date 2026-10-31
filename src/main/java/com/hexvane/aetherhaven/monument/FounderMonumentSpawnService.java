@@ -19,6 +19,8 @@ import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.protocol.ActiveAnimationsUpdate;
+import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.protocol.MovementStates;
 import com.hypixel.hytale.protocol.PlayerSkin;
 import com.hypixel.hytale.server.core.Message;
@@ -40,12 +42,14 @@ import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
+import com.hypixel.hytale.server.core.modules.entity.tracker.EntityTrackerSystems;
 import com.hypixel.hytale.server.core.modules.entity.player.PlayerSkinComponent;
 import com.hypixel.hytale.server.core.modules.interaction.Interactions;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -63,8 +67,8 @@ public final class FounderMonumentSpawnService {
     public static final String STATUE_USE_ROOT_INTERACTION = "Aetherhaven_Founder_Statue_Use";
     /** Key prompt shown on the statue and on its pedestal. */
     public static final String STATUE_USE_HINT = "aetherhaven_monument.aetherhaven.monument.statueHint";
-    /** Animation set the client plays on an entity that stands still. A statue's pose is bound to it. */
-    static final String POSE_ANIMATION_SET = "Idle";
+    /** Explicit full-body pose, also replayed by the tracker for newly arriving viewers. */
+    static final AnimationSlot POSE_SLOT = AnimationSlot.Status;
 
     private FounderMonumentSpawnService() {}
 
@@ -82,37 +86,88 @@ public final class FounderMonumentSpawnService {
     /** Normal Player model for bounds and for the fallback when saved appearance data is missing. */
     @Nullable
     public static Model buildFallbackModel() {
-        return buildStatueModel(FounderStatuePose.STANDING);
+        return buildStatueModel();
     }
 
     /**
-     * Normal Player model that holds one still pose. The pose is the model's only animation set, bound as the
-     * animation of standing still, the same way the game's own posed showcase mannequins are built. The model id
-     * stays {@code Player}.
+     * Normal Player model with stable, distinct animation ids for every still pose. Changing poses changes the
+     * active animation, not the meaning of Idle or the entity's identity. The model id stays {@code Player}.
      */
     @Nullable
-    public static Model buildStatueModel(@Nonnull FounderStatuePose pose) {
+    public static Model buildStatueModel() {
         ModelAsset asset = ModelAsset.getAssetMap().getAsset("Player");
         if (asset == null) {
             return null;
         }
-        ModelAsset poses =
-            pose.animationSetId() != null ? ModelAsset.getAssetMap().getAsset(FounderStatuePose.POSES_MODEL_ID) : null;
+        ModelAsset poses = ModelAsset.getAssetMap().getAsset(FounderStatuePose.POSES_MODEL_ID);
         return toStaticModel(
             Model.createScaledModel(asset, 1.0f, null, null, true),
-            poseAnimations(pose, poses != null ? poses.getAnimationSetMap() : null)
+            poseAnimations(poses != null ? poses.getAnimationSetMap() : null)
         );
     }
 
-    /** The animation sets of a posed statue: the pose's still clip as the standing animation, or none at all. */
+    /** Include only our still clips, never the walking/idle animations inherited from Player. */
     @Nonnull
     static Map<String, ModelAsset.AnimationSet> poseAnimations(
-        @Nonnull FounderStatuePose pose,
         @Nullable Map<String, ModelAsset.AnimationSet> poseSets
     ) {
-        String setId = pose.animationSetId();
-        ModelAsset.AnimationSet set = setId != null && poseSets != null ? poseSets.get(setId) : null;
-        return set != null ? Map.of(POSE_ANIMATION_SET, set) : Collections.emptyMap();
+        Map<String, ModelAsset.AnimationSet> result = new HashMap<>();
+        for (FounderStatuePose pose : FounderStatuePose.values()) {
+            String id = pose.animationSetId();
+            ModelAsset.AnimationSet set = id != null && poseSets != null ? poseSets.get(id) : null;
+            if (set != null) result.put(id, set);
+        }
+        return Map.copyOf(result);
+    }
+
+    /** Clear the previous pose, including when returning to standing; snapshots must not change on later clicks. */
+    static ActiveAnimationsUpdate applyPose(
+        @Nonnull ActiveAnimationComponent active,
+        @Nonnull FounderStatuePose pose,
+        @Nonnull Map<String, ModelAsset.AnimationSet> available
+    ) {
+        java.util.Arrays.fill(active.getActiveAnimations(), null);
+        String id = pose.animationSetId();
+        active.setPlayingAnimation(POSE_SLOT, id != null && available.containsKey(id) ? id : null);
+        return new ActiveAnimationsUpdate(active.getActiveAnimations().clone());
+    }
+
+    /** Update the existing statue and both current and future viewers. A missing statue uses normal recovery. */
+    public static boolean refreshStatuePose(
+        @Nonnull Store<EntityStore> store,
+        @Nullable String statueEntityUuid,
+        @Nonnull FounderStatueLoadout loadout
+    ) {
+        UUID id;
+        try {
+            id = UUID.fromString(statueEntityUuid != null ? statueEntityUuid.trim() : "");
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(id);
+        if (ref == null || !ref.isValid()
+            || store.getComponent(ref, FounderMonumentStatueSkin.getComponentType()) == null) return false;
+        ModelComponent current = store.getComponent(ref, ModelComponent.getComponentType());
+        if (current == null || current.getModel() == null) return false;
+        Model model = current.getModel();
+        ModelAsset poses = ModelAsset.getAssetMap().getAsset(FounderStatuePose.POSES_MODEL_ID);
+        Map<String, ModelAsset.AnimationSet> available = poseAnimations(poses != null ? poses.getAnimationSetMap() : null);
+        // An older statue with only an Idle clip must be rebuilt once. Sending a new pose before the client has
+        // received its new model could lose the animation; normal spawning sends the model and active state together.
+        if (!available.equals(model.getAnimationSetMap())) return false;
+        ActiveAnimationComponent active = store.getComponent(ref, ActiveAnimationComponent.getComponentType());
+        if (active == null) {
+            active = new ActiveAnimationComponent();
+            store.putComponent(ref, ActiveAnimationComponent.getComponentType(), active);
+        }
+        ActiveAnimationsUpdate update = applyPose(active, FounderStatuePose.byId(loadout.getPoseId()), model.getAnimationSetMap());
+        // setPlayingAnimation does not mark network-outdated in Hytale. Explicitly queue the state for current
+        // viewers; the native tracker reads the same component for players who enter range later.
+        var visible = store.getComponent(ref, EntityTrackerSystems.Visible.getComponentType());
+        if (visible != null) {
+            for (var viewer : visible.visibleTo.values()) viewer.queueUpdate(ref, update);
+        }
+        return true;
     }
 
     /**
@@ -188,7 +243,7 @@ public final class FounderMonumentSpawnService {
         @Nonnull Rotation3f rotation,
         @Nullable FounderStatueLoadout loadout
     ) {
-        Model monumentModel = buildStatueModel(FounderStatuePose.byId(loadout != null ? loadout.getPoseId() : null));
+        Model monumentModel = buildStatueModel();
         if (monumentModel == null) {
             return null;
         }
@@ -242,7 +297,7 @@ public final class FounderMonumentSpawnService {
                 return clothed;
             }
         }
-        Model fallback = buildStatueModel(FounderStatuePose.byId(loadout != null ? loadout.getPoseId() : null));
+        Model fallback = buildStatueModel();
         if (fallback == null) {
             return null;
         }
@@ -299,7 +354,9 @@ public final class FounderMonumentSpawnService {
             holder.addComponent(PlayerSkinComponent.getComponentType(), createStatueSkin(skin));
         }
         holder.addComponent(PersistentModel.getComponentType(), toPersistentModel(monumentModel));
-        holder.ensureComponent(ActiveAnimationComponent.getComponentType());
+        ActiveAnimationComponent active = new ActiveAnimationComponent();
+        applyPose(active, FounderStatuePose.byId(loadout != null ? loadout.getPoseId() : null), monumentModel.getAnimationSetMap());
+        holder.addComponent(ActiveAnimationComponent.getComponentType(), active);
         holder.addComponent(FounderMonumentStatueSkin.getComponentType(), storedSkin);
         holder.addComponent(
             PersistentDisplayName.getComponentType(),

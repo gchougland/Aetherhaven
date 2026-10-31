@@ -6,7 +6,7 @@ author: Hexvane
 
 # Builder's Yard
 
-Apprentices travel to your town's construction projects and help build reachable pieces.
+Apprentices travel to your town's construction projects, clear blocks in the way and help build reachable pieces.
 
 ## Set it up
 
@@ -18,7 +18,7 @@ Start a normal town construction project with a plot token. It appears on the ya
 
 ## Work and output
 
-Builders travel from the yard to the project. Several Apprentices can help, and higher Building skill and suitable equipment improve their pace. A finished project leaves the queue.
+Builders travel from the yard to the project. They clear the site first, then place building pieces. Leave room for them to stand beside the work, and add scaffolding for high walls. Several Apprentices can help, and higher Building skill and suitable equipment improve their pace. A finished project leaves the queue.
 
 ## If work is waiting
 

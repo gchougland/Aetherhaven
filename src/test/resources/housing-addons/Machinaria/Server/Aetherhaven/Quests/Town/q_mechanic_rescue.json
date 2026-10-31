@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "q_mechanic_rescue",
+  "category": "town",
+  "title": "Rivet's Return",
+  "description": "You oiled a rusty robot and woke Rivet Cogsworth.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [],
+  "rewards": [],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_mechanic_rescue.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_mechanic_rescue.description"
+}

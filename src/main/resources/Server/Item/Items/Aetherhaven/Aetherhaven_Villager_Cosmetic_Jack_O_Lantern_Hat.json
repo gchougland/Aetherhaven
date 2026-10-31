@@ -10,7 +10,7 @@
   ],
   "PlayerAnimationsId": "Item",
   "Model": "Items/Aetherhaven/VillagerCosmetics/JackOLanternHat/Jack_O_Lantern_Hat.blockymodel",
-  "Texture": "Items/Halloween_Props/Pumpkin_Carve_Texture_02.png",
+  "Texture": "Items/Aetherhaven/Halloween_Pumpkin/Pumpkin_Carve_Texture_02.png",
   "IconProperties": {
     "Scale": 0.6,
     "Rotation": [

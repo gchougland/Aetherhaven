@@ -48,6 +48,24 @@ class WorkplaceQuestObjectivesTest {
             : WorldProof.NO;
     }
 
+    @ParameterizedTest(name = "Raised selection: {0}")
+    @MethodSource("com.hexvane.aetherhaven.quest.WorkplaceQuestFixture#everyType")
+    void stationsTwoBlocksBelowCountForBothSetupAndInteraction(TownsfolkWorkType type) {
+        var town = startedTown(type);
+        assertNull(town.getApprenticeWorkplaces().unlock(town, type));
+        var area = WorkplaceQuestFixture.save(town, type, "Fence selection");
+        town = new Gson().fromJson(new Gson().toJson(town), TownRecord.class);
+        for (int depth = 0; depth <= 3; depth++) {
+            var world = new WorkplaceQuestFixture.World();
+            var ground = new WorkplaceArea(area.minX(), area.floorY()-depth, area.minZ(), area.maxX(), area.maxZ());
+            WorkplaceQuestFixture.placeStation(world, type, ground);
+            assertEquals(depth <= 2 ? WorldProof.YES : WorldProof.NO,
+                WorkplaceQuestSteps.stationProof(world, town, type, GROWERS));
+            assertEquals(depth <= 2, WorkplaceQuestSteps.stationSiteAt(world,town,GROWERS,
+                ground.minX()+1,ground.floorY(),ground.minZ()+1) != null);
+        }
+    }
+
     @ParameterizedTest(name = "{0}")
     @MethodSource("com.hexvane.aetherhaven.quest.WorkplaceQuestFixture#everyType")
     void eachStepIsTickedByDoingItForEveryWorkplaceType(TownsfolkWorkType type) {

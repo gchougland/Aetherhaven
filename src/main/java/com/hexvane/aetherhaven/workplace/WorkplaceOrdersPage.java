@@ -425,7 +425,7 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
         boolean collect=com.hexvane.aetherhaven.warehouse.WarehouseAccess.canBrowse(town,playerRef.getUuid());
         for(var origin:warehouse.smelting().origins()) {
             var at=origin.location();
-            if(at==null||!site.area().contains(at.x()+.5,at.y()+.5,at.z()+.5))continue;
+            if(at==null||!town.getApprenticeWorkplaces().ownsWorkAt(site.area(),at.x()+.5,at.y()+.5,at.z()+.5))continue;
             for(short slot=0;slot<origin.slots()&&shown<STORED_SHOWN;slot++) {
                 var stack=origin.stack(slot);if(com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(stack))continue;
                 int reserved=warehouse.reservedSmelting(origin.id(),slot),free=Math.max(0,stack.getQuantity()-reserved);
@@ -580,7 +580,7 @@ public final class WorkplaceOrdersPage extends AetherhavenInteractiveCustomUIPag
                 short slot=named.length<3?-1:heldSlot(origin==null?(short)0:origin.slots(),Short.parseShort(named[1]),named[2],origin==null?s->null:origin::stack);
                 var stack=slot<0?null:origin.stack(slot);
                 if(inventory==null||!com.hexvane.aetherhaven.warehouse.WarehouseAccess.canBrowse(town,playerRef.getUuid()))hint="You may not take from the town stores.";
-                else if(named.length<3||at==null||!site.area().contains(at.x()+.5,at.y()+.5,at.z()+.5))hint="That furnace no longer belongs to this workplace. Nothing was moved.";
+                else if(named.length<3||at==null||!town.getApprenticeWorkplaces().ownsWorkAt(site.area(),at.x()+.5,at.y()+.5,at.z()+.5))hint="That furnace no longer belongs to this workplace. Nothing was moved.";
                 else if(stack==null)hint="No "+itemName(named[2])+" is left at that furnace. Nothing was moved.";
                 else {
                     int count=Math.max(0,stack.getQuantity()-warehouse.reservedSmelting(origin.id(),slot));

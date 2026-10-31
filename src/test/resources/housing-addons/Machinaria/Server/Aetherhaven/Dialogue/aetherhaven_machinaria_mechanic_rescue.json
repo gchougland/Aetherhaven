@@ -1,0 +1,28 @@
+{
+  "id": "aetherhaven_machinaria_mechanic_rescue",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic_rescue.root.speaker",
+      "text": "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic_rescue.root.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_machinaria_mechanic.aetherhaven.dialogue.machinaria_mechanic_rescue.root.c0",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_mechanic_rescue"
+            },
+            {
+              "type": "despawn_npc"
+            },
+            {
+              "type": "close"
+            }
+          ],
+          "next": null
+        }
+      ]
+    }
+  }
+}

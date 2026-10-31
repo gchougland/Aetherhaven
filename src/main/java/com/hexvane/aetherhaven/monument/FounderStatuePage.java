@@ -373,9 +373,9 @@ public final class FounderStatuePage extends AetherhavenInteractiveCustomUIPage<
                 if (!pose.savedId().equals(loadout.getPoseId())) {
                     loadout.setPoseId(pose.savedId());
                     FounderMonumentSpawnService.markPedestalNeedsSaving(c.blockRef());
-                    // A pose is part of the statue's model, so the statue is rebuilt the same way it is first placed.
-                    FounderMonumentStatueRestoreSystem.respawnStatueAt(c.world(), x, y, z);
                 }
+                // Reapply even the selected pose so another click can repair an out-of-date display.
+                FounderMonumentStatueRestoreSystem.refreshStatuePoseAt(c.world(), x, y, z);
                 hint = Message.translation(LANG + "hint.pose").param("pose", Message.translation(pose.nameKey()));
             }
             case "TakeOff" -> armorChanged = takeOff(c, FounderStatueLoadout.Slot.byKey(data.key));

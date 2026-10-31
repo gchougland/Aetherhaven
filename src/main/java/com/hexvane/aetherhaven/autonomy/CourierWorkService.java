@@ -207,7 +207,7 @@ public final class CourierWorkService {
         if(point==null||!loaded(world,point))return false;
         // Native contents already exist at this furnace. Collect them even if its site was edited.
         if(batch.nativeLoaded())return NativeFurnaceService.available(world,point);
-        if(site==null||recipe==null||recipe.type()!=site.type()||!site.area().contains(point.x()+.5,point.y()+.5,point.z()+.5))return false;
+        if(site==null||recipe==null||recipe.type()!=site.type()||!town.getApprenticeWorkplaces().ownsWorkAt(site.area(),point.x()+.5,point.y()+.5,point.z()+.5))return false;
         if(batch.cultivation())return com.hexvane.aetherhaven.workplace.NativeCultivationService.destinationReady(world,site,recipe,batch);
         var block=ChunkSectionBlockUtil.blockType(world,point.x(),point.y(),point.z());
         if(!recipe.bench().equals(com.hexvane.aetherhaven.workplace.WorkplaceEquipment.benchId(block)))return false;

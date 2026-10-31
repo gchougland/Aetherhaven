@@ -74,7 +74,7 @@
     "Secondary": {
       "Interactions": [
         {
-          "Type": "AetherhavenPlotCreatorBlock"
+          "Type": "AetherhavenPlotCreatorRemoveSpot"
         }
       ],
       "HudInputBindingEntry": "aetherhaven_tool_keys.aetherhaven.toolKeys.plotCreator.secondary"

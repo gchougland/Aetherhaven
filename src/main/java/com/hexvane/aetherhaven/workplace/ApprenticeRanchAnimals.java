@@ -120,7 +120,7 @@ public final class ApprenticeRanchAnimals {
         return Math.abs(position.x - (trough.x() + .5)) <= RADIUS && Math.abs(position.z - (trough.z() + .5)) <= RADIUS
             && position.x + box.min.x >= area.minX() && position.x + box.max.x <= area.maxX()
             && position.z + box.min.z >= area.minZ() && position.z + box.max.z <= area.maxZ()
-            && position.y + box.min.y >= area.floorY() && position.y + box.max.y <= area.floorY() + area.height();
+            && position.y + box.min.y >= area.workFloorY() && position.y + box.max.y <= area.floorY() + area.height();
     }
 
     private static boolean clear(World world, Vector3d position, Box box) {

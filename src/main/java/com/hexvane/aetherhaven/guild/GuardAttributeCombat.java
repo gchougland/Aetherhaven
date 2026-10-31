@@ -86,7 +86,10 @@ public final class GuardAttributeCombat {
                 store.forEachChunk(Query.and(TownVillagerBinding.getComponentType(),NPCEntity.getComponentType(),EntityStatMap.getComponentType()),(chunk,buffer)->{
                     for(int i=0;i<chunk.size();i++)refs.add(chunk.getReferenceTo(i));
                 });
-                for(var ref:refs) refresh(ref,store);
+                for(var ref:refs) {
+                    com.hexvane.aetherhaven.equipment.GuardEquipmentRestore.refresh(ref,store);
+                    refresh(ref,store);
+                }
             });
         }
     }

@@ -76,6 +76,14 @@ public final class FounderMonumentStatueRestoreSystem {
      * same spawn as placing a monument, so a changed statue is built exactly like a new one.
      */
     public static void respawnStatueAt(@Nonnull World world, int x, int y, int z) {
+        updateStatueAt(world, x, y, z, false);
+    }
+
+    public static void refreshStatuePoseAt(@Nonnull World world, int x, int y, int z) {
+        updateStatueAt(world, x, y, z, true);
+    }
+
+    private static void updateStatueAt(@Nonnull World world, int x, int y, int z, boolean poseOnly) {
         world.execute(() -> {
             Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
             if (blockRef == null || !blockRef.isValid()) {
@@ -87,6 +95,11 @@ public final class FounderMonumentStatueRestoreSystem {
                 return;
             }
             try {
+                // Read the current pedestal inside the queued task: rapid clicks and block replacement must use
+                // the latest pose and loadout, not a stale record captured by the screen.
+                if (poseOnly && FounderMonumentSpawnService.refreshStatuePose(
+                    world.getEntityStore().getStore(), block.getStatueEntityUuid(), block.getLoadout()
+                )) return;
                 spawnGroup(world, List.of(Pedestal.from(new Vector3i(x, y, z), block)));
             } catch (RuntimeException e) {
                 LOGGER.atWarning().withCause(e).log("Founder monument: statue refresh failed at %s %s %s", x, y, z);

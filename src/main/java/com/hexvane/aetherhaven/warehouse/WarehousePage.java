@@ -162,7 +162,7 @@ public final class WarehousePage extends AetherhavenInteractiveCustomUIPage<Ware
             }
             for(var origin:warehouse.smelting().origins()) {
                 var point=origin.location();
-                var site=town.getApprenticeWorkplaces().sites().stream().filter(w->w.area().contains(point.x()+.5,point.y()+.5,point.z()+.5)).findFirst().orElse(null);
+                var site=town.getApprenticeWorkplaces().ownerAtWork(point.x()+.5,point.y()+.5,point.z()+.5);
                 String name=site==null?"Smelting output":site.name()+" smelting output";
                 List<Entry> slots=new ArrayList<>();List<Long> capacities=new ArrayList<>();
                 for(short slot=0;slot<origin.slots();slot++) {

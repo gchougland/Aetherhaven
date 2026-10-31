@@ -68,10 +68,10 @@ public final class ApprenticeWorkService {
             }
             if (!state.active) {
                 var food = town.getApprenticeWorkplaces().sites().stream()
-                    .filter(s -> WorkplaceFood.supports(s.type()) && s.food().needsTending() && progress.canPerform(s.type(),false,false,true))
+                    .filter(s -> WorkplaceFood.supports(s.type()) && progress.canPerform(s.type(),false,false,true))
                     .filter(s -> retries.canTry(s.id(),now))
                     .filter(s -> { var claim=claims.get(s.id()); return claim==null || claim.until()<now || id.equals(claim.worker()); })
-                    .filter(s -> FoodSiteService.inspect(world,s).ready())
+                    .filter(s -> FoodSiteService.inspect(world,s).ready() && s.food().needsWork())
                     .filter(s -> !preferSkilledWorker(store,town,s.type(),id,progress,now,s.id()))
                     .min(FoodWorkSelection.order(progress,position.x,position.y,position.z)).orElse(null);
                 int batchPriority = batch==null ? Integer.MAX_VALUE : progress.priority(batch.nativeLoaded()?TownsfolkWorkType.SMELTING:plugin.getApprenticeRecipes().find(batch.recipeId()).type());
@@ -299,7 +299,7 @@ public final class ApprenticeWorkService {
         var site=town.getApprenticeWorkplaces().find(state.foodSite);
         var habitat=site==null?null:FoodSiteService.inspect(world,site);
         var claim=site==null?null:claims.get(site.id());
-        if (site==null || !WorkplaceFood.supports(site.type()) || !site.food().needsTending()
+        if (site==null || !WorkplaceFood.supports(site.type()) || !site.food().needsWork()
             || !progress.canPerform(site.type(),false,false,true) || !habitat.ready()
             || claim!=null && claim.until()>now && !worker.equals(claim.worker())) {
             stop(ref,npc,buffer,state);state.foodSite=null;return false;
@@ -359,7 +359,8 @@ public final class ApprenticeWorkService {
             var area=site.area();
             buffer.run(st->{
                 if(!eligibleAtCommit(ref,st,town,worker,site.type())
-                    || town.getApprenticeWorkplaces().find(site.id())!=site || !area.equals(site.area()))return;
+                    || town.getApprenticeWorkplaces().find(site.id())!=site || !area.equals(site.area())
+                    || !town.getApprenticeWorkplaces().ownsWorkAt(site.area(),target.x(),target.y(),target.z()))return;
                 var actual=st.getComponent(ref,TransformComponent.getComponentType());
                 if(actual==null || actual.getPosition().distanceSquared(target.x()+.5,target.y(),target.z()+.5)>16)return;
                 boolean completed=planting ? site.food().completePlanting(()->FoodSiteService.plantWheat(world,site,target))
@@ -370,6 +371,7 @@ public final class ApprenticeWorkService {
                     return applied;
                 },ranchJob!=null ? ranchJob.slaughter()?"Livestock prepared for town food.":ranchJob.animal()!=null?"Young livestock grew into an adult.":"Workplace animals fed."
                     : harvested?"Ripe crops harvested and replanted for town food.":"Crop soil watered.");
+                if(completed && site.type()==TownsfolkWorkType.FARMING)FoodSiteService.refresh(world,site);
                 var current=st.getComponent(ref,ApprenticeWorkState.getComponentType());
                 if(current!=null) {
                     if(completed)current.routeRetries.succeeded(site.id());
@@ -646,14 +648,9 @@ public final class ApprenticeWorkService {
                 }
                 var pieceBox=NativeBuildingWork.pieceBox(candidate);
                 if(pieceBox!=null&&com.hexvane.aetherhaven.construction.assembly.SiteBodies.blocker(others,candidate.cell().x(),candidate.cell().y(),candidate.cell().z(),pieceBox)!=null){taken=true;continue;}
-                // Search beneath a wall cell as well as beside it, without granting distant or vertical work.
-                for(int down=0;down<=3;down++) {
-                    var point=new WarehouseBatch.Point(candidate.cell().x(),candidate.cell().y()-down,candidate.cell().z());
-                    var stand=CourierWorkService.approach(world,point,position,state.routeRetries.approachAttempt(site.id(),now),
-                        spot->!com.hexvane.aetherhaven.construction.assembly.SiteCells.bodyIn(unbuilt,spot.x,spot.y,spot.z,body)&&NativeBuildingWork.inReach(spot,body,candidate));
-                    if(stand!=null){chosen=candidate;approach=stand;break;}
-                }
-                if(chosen!=null)break;
+                var stand=NativeBuildingWork.findStand(candidate,point->CourierWorkService.approach(world,point,position,state.routeRetries.approachAttempt(site.id(),now),
+                    spot->!com.hexvane.aetherhaven.construction.assembly.SiteCells.bodyIn(unbuilt,spot.x,spot.y,spot.z,body)&&NativeBuildingWork.inReach(spot,body,candidate)));
+                if(stand!=null){chosen=candidate;approach=stand;break;}
             }
             // Pieces that are merely taken are not a blocked route: look again shortly instead of backing off the yard.
             if(chosen==null){if(!taken)state.routeRetries.failed(site.id(),now);stop(ref,npc,buffer,state);state.retryAt=now+1000;return false;}
@@ -671,7 +668,7 @@ public final class ApprenticeWorkService {
             site.building().release(worker);state.routeRetries.failed(site.id(),now);stop(ref,npc,buffer,state);state.retryAt=now+1000;return false;
         }
         if(store.getComponent(ref,com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType())!=null)return true;
-        if(!CourierWorkService.arrived(position,state.approach)) {
+        if(!NativeBuildingWork.readyToWork(position,state.approach,body,state.buildingTarget)) {
             if(state.working)stopVisual(ref,buffer,state);
             // A builder walks to the next piece hammer in hand. The carrying flag is what makes stop() put it away.
             if(state.nextVisual==0){state.nextVisual=BuilderWorkVisuals.CARRIED_STRIKE_DUE;state.excavationCarrying=true;BuilderWorkVisuals.carry(ref,buffer,plugin.getEquipmentProfileCatalog());}
@@ -680,7 +677,6 @@ public final class ApprenticeWorkService {
             VillagerDoorUtil.tryOpenDoorsTowardLeash(world,position,state.approach,null);buffer.putComponent(ref,NPCEntity.getComponentType(),npc);return true;
         }
         var target=state.buildingTarget;int tier=state.furnishingEquipment.tier(WorkplaceEquipment.BUILDERS_BENCH);
-        if(!NativeBuildingWork.inReach(position,body,target)){stop(ref,npc,buffer,state);return false;}
         state.routeRetries.succeeded(site.id());state.working=true;NpcStandStill.hold(ref,store,npc,state.approach,buffer);
         PoiAutonomyVisuals.applyBodyYaw(ref,store,buffer,(float)(Math.atan2(target.cell().x()+.5-position.x,target.cell().z()+.5-position.z)+Math.PI));
         if(now>=state.nextVisual) {
@@ -703,7 +699,8 @@ public final class ApprenticeWorkService {
                     ||!CourierWorkService.arrived(actual.getPosition(),standing)||!CourierWorkService.clearApproach(world,standing)
                     ||!TownEconomyPresence.hasMemberHere(store,town))return;
                 var equipment=WorkplaceEquipment.scan(world,site.area());
-                if(equipment.requirement(WorkplaceEquipment.BUILDERS_BENCH,1)==null&&NativeBuildingWork.place(world,plugin,town,site,target,worker,actual.getPosition(),current.skill(TownsfolkSkill.BUILDING),equipment.tier(WorkplaceEquipment.BUILDERS_BENCH))) {
+                var actualBody=com.hexvane.aetherhaven.construction.assembly.SiteBodies.localBox(st,ref);
+                if(equipment.requirement(WorkplaceEquipment.BUILDERS_BENCH,1)==null&&NativeBuildingWork.place(world,plugin,town,site,target,worker,actual.getPosition(),actualBody,current.skill(TownsfolkSkill.BUILDING),equipment.tier(WorkplaceEquipment.BUILDERS_BENCH))) {
                     TownsfolkMastery.completed(current,TownsfolkMastery.Work.BUILDING_BLOCK,true);
                     manager.updateTown(town);
                 }
@@ -810,8 +807,8 @@ public final class ApprenticeWorkService {
             if(excavationUsable(world,town,site,plugin,progress))best=Math.min(best,progress.priority(TownsfolkWorkType.MINING));
             if(buildingUsable(world,town,site,progress))best=Math.min(best,progress.priority(TownsfolkWorkType.BUILDING));
             if(growerUsable(world,site,progress,null))best=Math.min(best,progress.priority(site.type()));
-            if(WorkplaceFood.supports(site.type())&&site.food().needsTending()&&progress.canPerform(site.type(),false,false,true)
-                &&FoodSiteService.inspect(world,site).ready())best=Math.min(best,progress.priority(site.type()));
+            if(WorkplaceFood.supports(site.type())&&progress.canPerform(site.type(),false,false,true)
+                &&FoodSiteService.inspect(world,site).ready()&&site.food().needsWork())best=Math.min(best,progress.priority(site.type()));
         }
         return best==Integer.MAX_VALUE?0:best;
     }

@@ -1,10 +1,10 @@
 $C = "../Common.ui";
 $T = "TownUiTheme.ui";
-Button { Anchor: (Width: 132, Height: 96, Right: 10); Background: $T.@Card;
+Button { FlexWeight: 1; Anchor: (Height: 96, Right: 6); Background: $T.@Card;
  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
  Group #LockedShade { Background: #343b43; Visible: false; HitTestVisible: false; }
- Group #Selected { Background: $T.@CardPressed; Visible: false; }
- Group { LayoutMode: Top; Padding: (Full: 8);
+ Group #Selected { Background: $T.@CardPressed; Visible: false; HitTestVisible: false; }
+ Group { LayoutMode: Top; Padding: (Full: 8); HitTestVisible: false;
   Label #Number { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, HorizontalAlignment: Center, TextColor: #dec68d); }
   Group { LayoutMode: Center; Anchor: (Height: 40);
    ItemIcon #Icon { Anchor: (Width: 38, Height: 38); }

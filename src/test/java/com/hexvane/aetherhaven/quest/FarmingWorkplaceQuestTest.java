@@ -37,6 +37,8 @@ class FarmingWorkplaceQuestTest {
         assertTrue(q.descriptionOrDefault().contains("not items"));
         var text=Files.readString(Path.of("src/main/resources/Server/Languages/en-US/aetherhaven_food_tutorial.lang"));
         assertTrue(text.contains("10 food points"));assertTrue(text.contains("five residents"));
+        assertTrue(text.contains("each edible crop growing here adds one food point"));
+        assertTrue(text.contains("Workers keep planting every clear soil space"));
         assertTrue(text.contains("No seeds")||text.contains("do not need seeds"));
         assertTrue(text.contains("Inn, core Farm, core Barn and Restaurant"));
         assertTrue(text.contains("Town provisions"));

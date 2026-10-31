@@ -11,7 +11,7 @@ import java.util.HashSet;
 public final class NativeTimberTending {
     private NativeTimberTending() {}
     public static boolean growing(World world,TimberPlantingReceipt tree) { return growth(world,tree)!=null; }
-    private static FarmingBlock growth(World world,TimberPlantingReceipt tree) {
+    static FarmingBlock growth(World world,TimberPlantingReceipt tree) {
         if(!world.isInThread())throw new IllegalStateException("Tree tending requires the world thread");
         var p=tree.root();if(ChunkSectionBlockUtil.worldChunkIfTicking(world,p.x(),p.z())==null)return null;
         var ref=ChunkSectionBlockUtil.blockEntityRefAt(world,p.x(),p.y(),p.z());

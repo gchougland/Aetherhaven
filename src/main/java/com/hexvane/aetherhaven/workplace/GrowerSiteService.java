@@ -69,10 +69,12 @@ public final class GrowerSiteService {
 
     private static Habitat scan(World world, ApprenticeWorkplace site, GrowerPlan plan) {
         var area = site.area();
+        var ownership=WorkplaceOwnership.scope(world,area);
         var beds = new ArrayList<WarehouseBatch.Point>();
         WarehouseBatch.Point bench = null;
-        for (int y = area.floorY(); y < area.floorY() + area.height(); y++)
+        for (int y = area.workFloorY(); y < area.floorY() + area.height(); y++)
             for (int x = area.minX(); x < area.maxX(); x++) for (int z = area.minZ(); z < area.maxZ(); z++) {
+                if(!ownership.contains(x,y,z))continue;
                 var section = ChunkSectionBlockUtil.blockSectionAt(world, x, y, z);
                 if (section == null || section.getFiller(x, y, z) != 0) continue;
                 var block = ChunkSectionBlockUtil.blockType(world, x, y, z);
@@ -139,6 +141,7 @@ public final class GrowerSiteService {
      * @return true when the job was done and saved state moved on
      */
     public static boolean complete(World world, ApprenticeWorkplace site, WarehouseBatch.Point point, GrowerSite.Job job) {
+        if(!WorkplaceOwnership.scope(world,site.area()).contains(point.x(),point.y(),point.z()))return false;
         var plan = plan(site.type());
         if (plan == null || !inspect(world, site).ready()) return false;
         var grower = site.grower();
@@ -168,7 +171,8 @@ public final class GrowerSiteService {
         var plan = plan(site.type());
         if (plan == null || !plan.logBeds() || site.existingGrower() == null) return;
         var crop = site.grower().chosen(plan);
-        for (var bed : site.grower().beds()) show(world, plan, crop, bed, bed.stage());
+        var ownership=WorkplaceOwnership.scope(world,site.area());
+        for (var bed : site.grower().beds()) if(ownership.contains(bed.point().x(),bed.point().y(),bed.point().z())) show(world, plan, crop, bed, bed.stage());
     }
 
     /** Resting time for every simulated grower site of every town with a member online. */

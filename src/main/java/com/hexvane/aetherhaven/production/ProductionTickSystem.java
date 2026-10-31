@@ -189,6 +189,9 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
         }
 
         String gameplayPlotId = ccat.resolveGameplayConstructionId(plot.getConstructionId());
+        // Timber is credited only after a physical tree is felled and its harvest is delivered.
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(expectedConstruction)
+                || ccat.matchesGameplayConstruction(plot.getConstructionId(),AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL)) return;
 
         String roleId = npc.getRoleName();
 

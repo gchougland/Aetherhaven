@@ -569,10 +569,12 @@
     "food_setup": {
       "speaker": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.root.speaker",
       "text": "aetherhaven_food_tutorial.farmer.setup",
+      "speechClip": "Question",
       "choices": [
         {
           "text": "aetherhaven_food_tutorial.accept",
           "next": "food_help",
+          "speechClip": "Agree",
           "condition": {
             "type": "and",
             "conditions": [

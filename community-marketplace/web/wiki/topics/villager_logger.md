@@ -37,24 +37,26 @@ For a dedicated setup guide, open **Lumbermill and Singing Grove** under Product
 Seren grows the town's wood on **Rootstones**. She gives you two when her lumbermill is finished. Craft more at the **Town Planning Desk** from stone, Life Essence and fibre.
 
 1. Place a Rootstone on open ground anywhere inside your town.
-2. Use the Rootstone and pick one of the saplings you carry. It takes one sapling.
+2. Use the Rootstone and choose one of the saplings you carry. Turn on **Show growing space**, then close the window to inspect the tree outline. When you are ready, reopen the stone and press **Bind this tree** to use one sapling.
 3. Seren does the rest during her work hours. She plants the tree, sings it tall, fells it and carries everything back to the lumbermill.
 
-The stone then grows the same tree again for free, for as long as you leave it there. Any of 32 trees works once you own its sapling.
+The stone then grows the same tree again for free, for as long as you leave it there. Bring the sapling for the tree you want; there is no separate wood unlock to buy. Seren needs the Mastery and Hatchet shown on that Rootstone before she can grow it.
 
-A tree needs open space above and around its Rootstone. If there is not enough room, the Rootstone tells you what is in the way. Trees from different Rootstones cannot grow into each other, so give large trees plenty of space.
+A tree needs space for its roots, branches and every growth stage. **Show growing space** draws a cyan outline around that space, a yellow outline around the Rootstone and red highlights outside obstructing blocks. Clear solid red obstructions or move the stone farther from nearby trees. Soft grass and bushes do not block growth; solid grass-covered ground still does. The preview updates while you work; for large obstructions, it highlights the nearest 256 blocks first. Reopen a Rootstone and choose **Hide growing space** to turn it off. Walking far away also hides it.
+
+Open any bound Rootstone or the lumbermill storage, then click a stone card or use **Previous** and **Next** to manage the other stones belonging to that mill. The coordinates show which stone you have selected. You can bless it, check its growing space or uproot it from this window. After uprooting, choose a new sapling without visiting the stone again. If its area is not loaded, move closer and press **Refresh**.
 
 Seren can tend two Rootstones at first. Lumbermill upgrades let her tend up to six, sing faster and store more.
 
-Open the lumbermill's stores, or any Rootstone, to see every stone at a glance. From there you can also:
+Open the lumbermill's storage block to go straight to the grove, even before binding your first Rootstone. Any bound Rootstone also shows your grove. From there you can also:
 
 - **Bless a Rootstone.** Spend 5 Life Essence and its next tree gives double wood.
-- **Uproot a tree.** This frees the Rootstone so you can choose another tree or move the stone. A tree that is already standing stays where it is and becomes yours to chop. A stone that has not been planted yet returns its sapling.
+- **Uproot a tree.** This frees the Rootstone so you can choose another tree or move the stone. A tree that is already standing stops growing and stays where it is for you to chop. Its Rootstone is restored even if the roots had replaced it. A stone that has not been planted yet returns its sapling.
 - **Collect all.** Take everything in the mill stores.
 
 You are free to trim or build around a grove tree. Seren simply harvests what is left of it. Breaking a Rootstone frees it in the same way as uprooting.
 
-A lumbermill that worked the old way keeps doing so until its first Rootstone is given a sapling. From then on Seren works the grove instead, and that cannot be undone.
+The lumbermill only receives wood from trees Seren actually fells and brings home. With no bound Rootstones, it produces no new wood. Anything already stored remains available to collect.
 
 ### Friendship rewards
 
@@ -142,4 +144,4 @@ Press **Char spare logs** on the grove screen to choose one wood from the mill s
 
 At Mastery 4 with an Iron Hatchet or better, Seren chars 5 logs of that wood into 1 Burnt log. Each batch takes fifteen seconds of work beside the mill stores. Production speed upgrades shorten the work.
 
-Place a normal Campfire inside the lumbermill, within two blocks of its stores and no more than one block above or below them. Add fuel and light it. A cold campfire, missing logs or full stores pause charring. Logs set aside for couriers are never used.
+Place a normal Campfire inside the lumbermill, within two blocks of its stores and no more than one block above or below them. The five logs supply the fuel, so you do not need to add fuel or light the Campfire. Missing logs or a full Burnt wood store pause charring. Logs set aside for couriers are never used.

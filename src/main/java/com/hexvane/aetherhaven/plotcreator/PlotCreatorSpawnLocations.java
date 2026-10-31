@@ -60,7 +60,7 @@ public final class PlotCreatorSpawnLocations {
                 locals.remove(i);
                 return true;
             }
-            Vector3d center = standCenterWorld(draft, entry.localArray());
+            Vector3d center = new Vector3d(standBlock.x + 0.5, standBlock.y, standBlock.z + 0.5);
             double dx = center.x - (clickedBlock.x + 0.5);
             double dy = center.y - (clickedBlock.y + 0.5);
             double dz = center.z - (clickedBlock.z + 0.5);

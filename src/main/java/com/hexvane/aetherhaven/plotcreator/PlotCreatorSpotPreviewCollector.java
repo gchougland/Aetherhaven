@@ -129,7 +129,8 @@ public final class PlotCreatorSpotPreviewCollector {
             if (!passesTypeFilter(filter, PlotCreatorSubstepType.ADVENTURER_SPAWN, null)) {
                 continue;
             }
-            Vector3i stand = PlotCreatorLocalCoords.toWorldBlock(draft, entry.localArray());
+            Vector3i stand = PlotCreatorPrefabCoords.standWorldBlockFromPrefabLocal(
+                draft, entry.getLocalX(), entry.getLocalY(), entry.getLocalZ());
             Float worldYaw = worldYawFromPrefabRadians(draft, entry.getYawRadians());
             out.add(
                 preview(

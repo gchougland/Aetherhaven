@@ -55,6 +55,8 @@ Open your **town journal → Guide → Mechanics → Plot creator staff** (this 
 6. Set **build materials** (virtual chest; items return to you when you continue).
 7. Review and save.
 
+To remove an important spot in either the Plot Creator or Building Editor, aim directly at its floating cube or villager hologram and use **Adjust or remove** (right-click by default). Stay within eight blocks with a clear view of the marker. You do not need a block underneath it. This removes the saved spot, leaving your building's blocks in place; you can then mark its new position. Required spots still need to be replaced before you save.
+
 ## Choosing buildings for style quests
 
 In **Building settings**, enter the building's **Style**, then tick **Preferred quest building for this style** if quests should use this design. You can change this setting in the Building Editor too.

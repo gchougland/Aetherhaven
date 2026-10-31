@@ -1,0 +1,48 @@
+{
+  "id": "vain",
+  "displayName": "Vain",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Vain",
+  "portraitIcon": "Vain.png",
+  "personalityIds": [
+    "adventurer",
+    "outlander_wildbound",
+    "stoic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard",
+    "guild_adventurer"
+  ],
+  "befriendable": false,
+  "speechVoiceId": "MellowMaleLower",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Hide_Light",
+      "count": 3
+    }
+  ],
+  "startingAttributes": {
+    "strength": 7,
+    "intelligence": 5,
+    "vitality": 7,
+    "dexterity": 6,
+    "speed": 5
+  },
+  "startingSkills": {
+    "blacksmithing": 3,
+    "ranching": 1,
+    "farming": 1,
+    "mining": 5,
+    "building": 5,
+    "alchemy": 0,
+    "crafting": 3,
+    "leatherworking": 1,
+    "cooking": 1,
+    "logistics": 1,
+    "commerce": 1,
+    "jewelry": 0
+  }
+}

@@ -59,12 +59,12 @@ public final class WorkplaceRules {
             case SMELTING -> "Apprentices load furnaces, replenish your chosen fuel and collect finished materials.";
             case BLACKSMITHING -> "Apprentices forge weapons and tools at a blacksmith's anvil.";
             case ARMOR_CRAFTING -> "Apprentices make armor and guard kits at an armorer's workbench.";
-            case FARMING -> "Place a Farmer's Workbench and leave 4 clear soil spaces. Apprentices plant wheat without seeds and tend it for 10 food points, supporting 5 residents. No item output.";
+            case FARMING -> "Place a Farmer's Workbench and leave at least 4 clear soil spaces. Apprentices fill all clear soil with wheat, without seeds. Each tended edible crop gives 1 food point; 2 points support 1 resident. No item output.";
             case RANCHING -> "Place a feeding trough and leave clear floor space around it. Workplace animals appear automatically and stay nearby. Tending them provides ten food points and no items.";
             case MYCOLOGY -> "Place Mushroom Logs and choose one kind of mushroom to grow. An Apprentice seeds each log, tends it as it grows and picks the mushrooms into the workplace store. Rarer mushrooms need more Farming skill.";
             case BERRIES -> "Plant berry bushes around a Farmer's Workbench. An Apprentice tends the bushes and picks ripe berries into the workplace store. The bushes ripen again by themselves.";
             case MINING -> "Mark a base around a Workbench. Use the bench to plan connected tunnels and stairs on a map, switch floors and manage digging. Workers carry the drops to core mine storage.";
-            case BUILDING -> "Queue started town construction at a Builder's Workbench. Apprentices travel to the project and build reachable pieces. Better Building skill and equipment improve their pace.";
+            case BUILDING -> "Queue started town construction at a Builder's Workbench. Apprentices clear the site, then build reachable pieces. Better Building skill and equipment improve their pace.";
             case BLOCK_WORKSHOP -> "Apprentices cut planks, bricks, stairs, slabs, roofs and other building blocks to order at a Builder's Workbench. Finished blocks go to Crafted Goods.";
             case ALCHEMY -> "Apprentices brew potions from gathered and cultivated ingredients.";
             case CULTIVATION -> "Grow up to six alchemical plants on crystal soil. One Apprentice plants and harvests at a time. Growing plants need no worker and provide no food support.";

@@ -42,7 +42,7 @@ class CoreVillagerHousingTest {
     @Test void futureCoreVillagersGetHousingWithoutAHandWrittenQuest() throws Exception {
         var v=new Gson().fromJson("""
             {"npcRoleId":"Future_Core","dialogueVillagerKind":"future_core","residentTreeId":"aetherhaven_alchemist",
-             "displayName":"Future Resident","workConstructionId":"plot_alchemist"}
+             "displayName":"Future Resident","workConstructionId":"plot_alchemist","innPoolEligible":false,"befriendable":false}
             """,VillagerDefinition.class);
         var dialogues=DialogueCatalog.loadFromAssetPacksOrClasspath(LOADER);
         var quests=CoreVillagerHousing.ensure(VillagerDefinitionCatalog.forTests(Map.of(v.getNpcRoleId(),v)),
@@ -61,9 +61,12 @@ class CoreVillagerHousingTest {
     }
 
     @Test void missingResidentDialogueCannotSilentlyDropHousing() {
-        var v=new Gson().fromJson("{\"npcRoleId\":\"Broken_Core\",\"dialogueVillagerKind\":\"broken\"}",VillagerDefinition.class);
-        assertThrows(IllegalStateException.class,()->CoreVillagerHousing.ensure(VillagerDefinitionCatalog.forTests(Map.of(v.getNpcRoleId(),v)),
-            ConstructionCatalog.empty(),QuestCatalog.empty(),DialogueCatalog.empty()));
+        for (String declaration : List.of("\"dialogueVillagerKind\":\"broken\"", "\"residentTreeId\":\"missing\"",
+            "\"workConstructionId\":\"plot_broken\"", "\"innPoolEligible\":true")) {
+            var v=new Gson().fromJson("{\"npcRoleId\":\"Broken_Core\","+declaration+"}",VillagerDefinition.class);
+            assertThrows(IllegalStateException.class,()->CoreVillagerHousing.ensure(VillagerDefinitionCatalog.forTests(Map.of(v.getNpcRoleId(),v)),
+                ConstructionCatalog.empty(),QuestCatalog.empty(),DialogueCatalog.empty()), declaration);
+        }
     }
 
     @Test void townsfolkAndGuardsKeepTheirIndividualHousingQuests() throws Exception {

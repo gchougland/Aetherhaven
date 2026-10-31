@@ -178,7 +178,7 @@ class FarmerFieldRenderCasesTest {
             field.now = AetherhavenCalendar.EPOCH_DATE.plusDays((season * FarmAlmanac.WEEKS_PER_SEASON + week - 1) * 7L + 7 - daysLeft).atTime(12, 0);
         }
         FarmFieldsState fields() { return production.farm(); }
-        /** Trains the Farmer and unlocks crops in the farm's storage, which is what makes a crop growable. */
+        /** Trains the Farmer and unlocks crops for the farm, which is what makes a crop growable. */
         void grows(int mastery, String... names) {
             var progress = CoreVillagerMasteryService.progress(town, FarmFields.KIND);
             while (progress.level() < mastery) progress.earnXp(progress.xpToNextLevel() - progress.xpInLevel());
@@ -445,6 +445,21 @@ class FarmerFieldRenderCasesTest {
         var readOnly = newFarm();
         readOnly.farm().manage = false;
         assertEquals("{\"0\":true}", data(commands(readOnly), "#Seeds.Disabled"));
+    }
+
+    @Test void cropUnlocksAreAvailableFromHomeAndRemoteFieldsButRequireManagement() {
+        for (var scene : List.of(newFarm(), missingSeeds(), newScarecrow())) {
+            var farm = scene.farm();
+            var page = new FarmerFieldPage(null, farm.town.getTownId(), farm.plot.getPlotId(), scene.scarecrow());
+            var events = new UIEventBuilder();
+            page.draw(new UICommandBuilder(), events, farm.context());
+            assertTrue(java.util.Arrays.stream(events.getEvents()).anyMatch(event -> "#Unlocks".equals(event.selector)
+                && event.data != null && event.data.contains("Unlocks")), scene.name());
+            assertEquals("{\"0\":false}", data(commands(scene), "#Unlocks.Disabled"));
+            assertTrue(String.valueOf(data(commands(scene), "#Unlocks.Text")).contains("Unlock crops"));
+            farm.manage = false;
+            assertEquals("{\"0\":true}", data(commands(scene), "#Unlocks.Disabled"));
+        }
     }
 
     @Test

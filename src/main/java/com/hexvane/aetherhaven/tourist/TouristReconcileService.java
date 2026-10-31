@@ -119,8 +119,8 @@ public final class TouristReconcileService {
                     continue;
                 }
 
-                if (rec.isCitizen()) {
-                    syncPoolCheckout(pool, town, rec, liveByCharacter.get(characterId));
+                if (rec.isCitizen() || hiredGuard(town, characterId) != null) {
+                    changed |= syncPoolCheckout(pool, town, rec, liveByCharacter.get(characterId));
                     continue;
                 }
 
@@ -182,7 +182,7 @@ public final class TouristReconcileService {
                         }
                     }
                     ensureAutonomyAfterBind(ref, store, plugin, town, world, rec);
-                    syncPoolCheckout(pool, town, rec, liveByCharacter.get(characterId));
+                    changed |= syncPoolCheckout(pool, town, rec, liveByCharacter.get(characterId));
                     continue;
                 }
 
@@ -363,6 +363,8 @@ public final class TouristReconcileService {
         if (characterId.isBlank()) {
             return false;
         }
+        // A guard retains a citizen/tourist row for housing and membership. It must never confer tourist behavior.
+        if (hiredGuard(town, characterId) != null) return true;
         TownsfolkCharacterDefinition def = plugin.getTownsfolkCharacterCatalog().byId(characterId);
         if (def == null) {
             return false;
@@ -437,7 +439,7 @@ public final class TouristReconcileService {
         @Nonnull World world,
         @Nonnull TouristRecord rec
     ) {
-        if (ref == null || !ref.isValid()) {
+        if (ref == null || !ref.isValid() || hiredGuard(town, rec.getCharacterId()) != null) {
             return;
         }
         TownsfolkCharacterBinding binding = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
@@ -495,7 +497,7 @@ public final class TouristReconcileService {
             if (!town.getTownId().equals(live.townId())) {
                 continue;
             }
-            if (!TownsfolkAssignmentKinds.isTourist(live.assignmentKind())) {
+            if (!TownsfolkAssignmentKinds.isTourist(live.assignmentKind()) || hiredGuard(town, live.characterId()) != null) {
                 continue;
             }
             String characterId = live.characterId();
@@ -662,7 +664,7 @@ public final class TouristReconcileService {
         return store.getExternalData().getRefFromUUID(recorded);
     }
 
-    private static void syncPoolCheckout(
+    static boolean syncPoolCheckout(
         @Nonnull TownsfolkPoolState pool,
         @Nonnull TownRecord town,
         @Nonnull TouristRecord rec,
@@ -670,11 +672,13 @@ public final class TouristReconcileService {
     ) {
         String characterId = rec.getCharacterId();
         if (characterId.isBlank()) {
-            return;
+            return false;
         }
-        UUID entityUuid = live != null ? live.entityUuid() : rec.getEntityUuid();
+        var guard = hiredGuard(town, characterId);
+        UUID entityUuid = guard != null ? guard.getEntityUuid() : live != null ? live.entityUuid() : rec.getEntityUuid();
+        String assignment = guard != null ? TownsfolkAssignmentKinds.GUARD : TownsfolkAssignmentKinds.TOURIST;
         if (entityUuid == null) {
-            return;
+            return false;
         }
         TownsfolkPoolCheckoutRecord checkout = pool.checkoutForCharacter(town.getTownId(), characterId);
         if (checkout == null) {
@@ -683,11 +687,11 @@ public final class TouristReconcileService {
                     characterId,
                     town.getTownId().toString(),
                     entityUuid.toString(),
-                    TownsfolkAssignmentKinds.TOURIST,
+                    assignment,
                     ""
                 )
             );
-            return;
+            return true;
         }
         if (!town.getTownId().toString().equalsIgnoreCase(checkout.getTownId())) {
             UUID oldTownId = parseTownUuid(checkout.getTownId());
@@ -699,18 +703,26 @@ public final class TouristReconcileService {
                     characterId,
                     town.getTownId().toString(),
                     entityUuid.toString(),
-                    TownsfolkAssignmentKinds.TOURIST,
+                    assignment,
                     ""
                 )
             );
-            return;
+            return true;
         }
+        boolean changed = false;
         if (!entityUuid.toString().equalsIgnoreCase(checkout.getEntityUuid())) {
             checkout.setEntityUuid(entityUuid.toString());
+            changed = true;
         }
-        if (!TownsfolkAssignmentKinds.isTourist(checkout.getAssignmentKind())) {
-            checkout.setAssignmentKind(TownsfolkAssignmentKinds.TOURIST);
+        if (!assignment.equals(checkout.getAssignmentKind())) {
+            checkout.setAssignmentKind(assignment);
+            changed = true;
         }
+        return changed;
+    }
+
+    private static com.hexvane.aetherhaven.town.HiredGuardRecord hiredGuard(TownRecord town, String character) {
+        return town.getHiredGuardRecords().stream().filter(g -> character.equalsIgnoreCase(g.getCharacterId())).findFirst().orElse(null);
     }
 
     @Nullable

@@ -49,7 +49,7 @@ public final class TimberCharring {
             () -> production.withdrawAll(java.util.Map.of(expectedInput, (long) LOG_COST)));
     }
 
-    /** A nearby player-fueled native campfire provides heat without touching its inventories. */
+    /** The consumed logs supply the fuel; the nearby campfire is only the work station. */
     public static WarehouseBatch.Point findHeat(World world, PlotInstance plot, WarehouseBatch.Point storage) {
         if (storage == null) return null;
         for (int y = storage.y() - 1; y <= storage.y() + 1; y++)
@@ -70,6 +70,11 @@ public final class TimberCharring {
         var ref = ChunkSectionBlockUtil.blockEntityRefAt(world, heat.x(), heat.y(), heat.z());
         if (ref == null || !ref.isValid()) return false;
         var bench = world.getChunkStore().getStore().getComponent(ref, ProcessingBenchBlock.getComponentType());
-        return bench != null && bench.isActive() && bench.getFuelTime() > 0 && "Campfire".equals(bench.getProcessingBench().getId());
+        return charringStation(bench);
+    }
+
+    static boolean charringStation(ProcessingBenchBlock bench) {
+        return bench != null && bench.getProcessingBench() != null
+            && "Campfire".equals(bench.getProcessingBench().getId());
     }
 }

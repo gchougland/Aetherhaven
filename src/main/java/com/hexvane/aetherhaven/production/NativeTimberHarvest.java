@@ -68,7 +68,7 @@ public final class NativeTimberHarvest {
         return production.timber().fell(slot,plan.tree(),plan.yield(),products,()->plan.restore(
             p->observe(world,p,cells.get(p)),(p,target)->write(world,p,target)));
     }
-    private static boolean write(World world,Position p,Observed target) {
+    static boolean write(World world,Position p,Observed target) {
         if(!world.isInThread())throw new IllegalStateException("Timber removal requires the world thread");
         if(ChunkSectionBlockUtil.worldChunkIfTicking(world,p.x(),p.z())==null)return false;
         var type=BlockType.getAssetMap().getAsset(target.blockId());if(type==null)return false;

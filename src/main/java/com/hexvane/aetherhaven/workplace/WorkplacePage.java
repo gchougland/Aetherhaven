@@ -59,7 +59,7 @@ public final class WorkplacePage extends AetherhavenInteractiveCustomUIPage<Work
                 new EventData().append("Action", "Search").append("@Search", "#TypeSearch.Value").append("@Name", "#NameField.Value"), false);
             buildFilters(c);
         }
-        c.set("#Area.Text", (area.maxX() - area.minX()) + " by " + (area.maxZ() - area.minZ()) + " blocks | Floor " + area.floorY() + " | Height " + area.height());
+        c.set("#Area.Text", (area.maxX() - area.minX()) + " by " + (area.maxZ() - area.minZ()) + " blocks | Detects Y=" + area.workFloorY() + " to " + (area.floorY() + area.height() - 1) + " (includes 2 blocks below)");
         c.set("#Hint.TextSpans", hint);
         c.set("#DetailTitle.TextSpans", selected == null ? t("choosePrompt") : Message.raw(WorkplaceRules.label(selected)));
         c.set("#MainBench.Text", selected == null ? "" : WorkplaceRules.mainBench(selected));

@@ -34,7 +34,8 @@ public final class ProductionAccrualEngine {
         int plotBlockZ,
         int entityTicksToApply
     ) {
-        if (entityTicksToApply <= 0 || entry.catalogSize() <= 0 || SpiritGarden.CONSTRUCTION.equals(gameplayPlotId)) {
+        if (entityTicksToApply <= 0 || entry.catalogSize() <= 0 || SpiritGarden.CONSTRUCTION.equals(gameplayPlotId)
+                || com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(gameplayPlotId)) {
             return false;
         }
         state.migrateIfNeeded();

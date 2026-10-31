@@ -126,7 +126,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (tb == null || autonomy == null || npc == null || binding == null) {
             return;
         }
-        if (!TownsfolkAssignmentKinds.isTourist(tb.getAssignmentKind())) {
+        if (!TownsfolkAssignmentKinds.isTourist(tb.getAssignmentKind()) || TownVillagerBinding.KIND_GUARD.equals(binding.getKind())) {
             return;
         }
         if (NpcFaceVisuals.isInInteractionDialogue(npc)) {

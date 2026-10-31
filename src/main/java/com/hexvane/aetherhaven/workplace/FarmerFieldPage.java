@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.production.FarmFieldWorld.Spot;
 import com.hexvane.aetherhaven.town.*;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hexvane.aetherhaven.ui.ProductionStoragePage;
+import com.hexvane.aetherhaven.ui.ProductionStorageUnlocksPage;
 import com.hexvane.aetherhaven.warehouse.WarehouseBatch.Point;
 import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.codec.*;
@@ -198,7 +199,7 @@ public final class FarmerFieldPage extends AetherhavenInteractiveCustomUIPage<Fa
         resolveSlot(c);
         if (!appended) {
             b.append("Aetherhaven/FarmerFieldPage.ui"); appended = true;
-            for (String action : List.of("Almanac", "Fill", "Clear", "Rotate", "Adopt", "Copy", "Collect", "Refresh", "Seeds", "Upgrades"))
+            for (String action : List.of("Almanac", "Fill", "Clear", "Rotate", "Adopt", "Copy", "Collect", "Refresh", "Seeds", "Unlocks", "Upgrades"))
                 e.addEventBinding(CustomUIEventBindingType.Activating, "#" + action, EventData.of("Action", action), false);
             for (int i = 0; i < FarmFieldsState.MAX_FIELDS; i++)
                 e.addEventBinding(CustomUIEventBindingType.Activating, "#Tab" + i, EventData.of("Action", "Field").append("Key", Integer.toString(i)), false);
@@ -209,6 +210,7 @@ public final class FarmerFieldPage extends AetherhavenInteractiveCustomUIPage<Fa
             b.set("#Fill.TextSpans", t("ui.fill")); b.set("#Clear.TextSpans", t("ui.clear")); b.set("#Rotate.TextSpans", t("ui.rotate"));
             b.set("#Adopt.TextSpans", t("ui.adopt")); b.set("#Copy.TextSpans", t("ui.copy"));
             b.set("#Refresh.TextSpans", t("ui.refresh")); b.set("#Seeds.TextSpans", t("ui.seeds"));
+            b.set("#Unlocks.TextSpans", t("ui.unlocks")); b.set("#Unlocks.TooltipTextSpans", t("ui.tip.unlocks"));
             b.set("#Upgrades.TextSpans", t("ui.upgrades")); b.set("#FavouredTitle.TextSpans", t("ui.favoured"));
             b.set("#AlmanacTitle.TextSpans", t("ui.almanac.title")); b.set("#AlmanacIntro.TextSpans", t("ui.almanac.intro"));
             b.set("#Tab0.TextSpans", t("ui.tab.home")); b.set("#TabNew.TextSpans", t("ui.tab.new"));
@@ -251,6 +253,7 @@ public final class FarmerFieldPage extends AetherhavenInteractiveCustomUIPage<Fa
         b.set("#Adopt.Visible", found); b.set("#Copy.Visible", others && planned && slot > FarmFieldsState.HOME);
         b.set("#MoreTools.Visible", found || others && planned && slot > FarmFieldsState.HOME);
         for (String tool : List.of("Fill", "Clear", "Rotate", "Adopt", "Copy", "Seeds")) b.set("#" + tool + ".Disabled", !c.manage() || blocked);
+        b.set("#Unlocks.Disabled", !c.manage());
         b.set("#SoilNote.TextSpans", soilNote(c));
         b.set("#SeedsNote.TextSpans", farm.carrying() ? t("ui.basket").param("count", farm.carried()) : Message.raw(""));
         b.set("#Status.TextSpans", status(c, growable, blocked));
@@ -468,6 +471,12 @@ public final class FarmerFieldPage extends AetherhavenInteractiveCustomUIPage<Fa
             case "Seeds" -> addSeeds(ref, store, c);
             case "Collect" -> collect(ref, store, c, null);
             case "Take" -> collect(ref, store, c, data.key);
+            case "Unlocks" -> {
+                var player = store.getComponent(ref, Player.getComponentType());
+                if (c.manage() && player != null) player.getPageManager().openCustomPage(ref, store,
+                    ProductionStorageUnlocksPage.farmFields(playerRef, townId, c.plot(), slot > FarmFieldsState.HOME || slot == PENDING ? anchor : null));
+                return;
+            }
             case "Upgrades" -> {
                 var player = store.getComponent(ref, Player.getComponentType());
                 if (player != null) player.getPageManager().openCustomPage(ref, store, WorkplaceUpgradesPage.farm(playerRef, townId));

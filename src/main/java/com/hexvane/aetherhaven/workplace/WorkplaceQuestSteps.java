@@ -104,6 +104,9 @@ public final class WorkplaceQuestSteps {
 
     /** Looks through one workplace for its station and stops at the first one. */
     public static WorldProof scan(Blocks blocks, WorkplaceArea area, TownsfolkWorkType type, GrowerPlan plan) {
+        return scan(blocks,area,type,plan,new WorkplaceOwnership.Scope(null,area));
+    }
+    private static WorldProof scan(Blocks blocks, WorkplaceArea area, TownsfolkWorkType type, GrowerPlan plan,WorkplaceOwnership.Scope ownership) {
         if (area == null || !area.valid() || type == null) return WorldProof.NO;
         boolean unread = false;
         for (int cx = ChunkUtil.chunkCoordinate(area.minX()); cx <= ChunkUtil.chunkCoordinate(area.maxX() - 1); cx++)
@@ -112,8 +115,8 @@ public final class WorkplaceQuestSteps {
                 int x0 = Math.max(area.minX(), cx * 32), x1 = Math.min(area.maxX(), cx * 32 + 32);
                 int z0 = Math.max(area.minZ(), cz * 32), z1 = Math.min(area.maxZ(), cz * 32 + 32);
                 for (int x = x0; x < x1; x++) for (int z = z0; z < z1; z++)
-                    for (int y = area.floorY(); y < area.floorY() + area.height(); y++)
-                        if (isStation(type, plan, blocks.at(x, y, z))) return WorldProof.YES;
+                    for (int y = area.workFloorY(); y < area.floorY() + area.height(); y++)
+                        if (ownership.contains(x,y,z)&&isStation(type, plan, blocks.at(x, y, z))) return WorldProof.YES;
             }
         return unread ? WorldProof.UNKNOWN : WorldProof.NO;
     }
@@ -125,7 +128,7 @@ public final class WorkplaceQuestSteps {
     public static WorldProof stationProof(Blocks blocks, TownRecord town, TownsfolkWorkType only, GrowerCatalog growers) {
         boolean unknown = false;
         for (var site : markedSites(town, only)) {
-            var proof = scan(blocks, site.area(), site.type(), growers == null ? null : growers.find(site.type()));
+            var proof = scan(blocks, site.area(), site.type(), growers == null ? null : growers.find(site.type()),new WorkplaceOwnership.Scope(town.getApprenticeWorkplaces(),site.area()));
             if (proof == WorldProof.YES) return proof;
             unknown |= proof == WorldProof.UNKNOWN;
         }
@@ -137,7 +140,7 @@ public final class WorkplaceQuestSteps {
         var block = blocks.at(x, y, z);
         if (block == null) return null;
         for (var site : markedSites(town, null))
-            if (site.area().contains(x, y, z) && isStation(site.type(), growers == null ? null : growers.find(site.type()), block)) return site;
+            if (town.getApprenticeWorkplaces().ownsWorkAt(site.area(),x,y,z) && isStation(site.type(), growers == null ? null : growers.find(site.type()), block)) return site;
         return null;
     }
 }

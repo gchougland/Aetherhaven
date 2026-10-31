@@ -39,8 +39,9 @@ public final class NativeTimberPlanting {
         if (!current.ready() || !current.receipt().sameGrowth(tree))
             return "This tree's growth has changed. Prepare its growing space again.";
         return production.timber().plant(slot, WorkplaceProductionUpgrades.stoneCount(production), prepared,
-            withinGrove, p -> observe(world, p), () -> ChunkSectionBlockUtil.setBlockByKey(
-                world, root.x(), root.y(), root.z(), tree.sapling(), 0, 0));
+            withinGrove, p -> observe(world, p), () -> TimberVegetation.clearAndPlant(TimberGrowingSpace.cells(tree),withinGrove,
+                p -> observe(world,p), (p,target) -> NativeTimberHarvest.write(world,p,target),
+                () -> ChunkSectionBlockUtil.setBlockByKey(world, root.x(), root.y(), root.z(), tree.sapling(), 0, 0)));
     }
 
     public static TimberProductionState.Ground observe(World world, Position p) {
@@ -68,8 +69,19 @@ public final class NativeTimberPlanting {
             || (soil || type.getId().startsWith("Rock_") || type.getId().startsWith("Ore_"))
             && ("Cube".equals(draw) || "CubeWithModel".equals(draw))
             && (type.getInteractions() == null || type.getInteractions().isEmpty());
+        boolean candidate=TimberVegetation.replaceable(type.getId(),draw,type.getGathering()!=null&&type.getGathering().getSoft()!=null,
+            type.getFarming()!=null)&&!entity&&!wet;
+        var boxes=candidate?com.hypixel.hytale.server.core.asset.type.blockhitbox.BlockBoundingBoxes.getAssetMap().getAsset(type.getHitboxType()):null;
+        var vegetationCells=new java.util.HashSet<Position>();
+        if(boxes!=null) {
+            var origin=TimberGrowingSpace.fillerAnchor(p,blocks.getFiller(p.x(),p.y(),p.z()));
+            com.hypixel.hytale.server.core.util.FillerBlockUtil.forEachFillerBlock(boxes.get(blocks.getRotationIndex(p.x(),p.y(),p.z())),
+                (x,y,z)->vegetationCells.add(new Position(origin.x()+x,origin.y()+y,origin.z()+z)));
+            vegetationCells.add(origin);
+        }
+        boolean vegetation=candidate&&boxes!=null;
         return new TimberProductionState.Ground(true, type.getId(), blocks.getRotationIndex(p.x(), p.y(), p.z()),
-            blocks.getFiller(p.x(), p.y(), p.z()), empty, soil, natural, entity || wet);
+            blocks.getFiller(p.x(), p.y(), p.z()), empty, soil, natural, entity || wet,vegetation,vegetationCells);
     }
     private static void requireWorldThread(World world) {
         if (!world.isInThread()) throw new IllegalStateException("Timber planting must run on the world thread");

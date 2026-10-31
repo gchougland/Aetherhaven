@@ -35,6 +35,12 @@ public final class PlotCreatorSpotMarkerSync {
 
     private PlotCreatorSpotMarkerSync() {}
 
+    static Ref<EntityStore> visibleRef(World world,UUID owner,long key) {
+        var tracking=TRACKING.get(new Owner(world,owner));
+        var id=tracking==null?null:tracking.keyToMarkerUuid.get(key);
+        return id==null?null:world.getEntityRef(id);
+    }
+
     public static void clearAll(
         @Nonnull World world,
         @Nonnull UUID ownerPlayerEntityUuid,

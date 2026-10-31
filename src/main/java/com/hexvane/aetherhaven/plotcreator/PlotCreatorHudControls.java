@@ -74,6 +74,11 @@ public final class PlotCreatorHudControls {
             );
             case DONE -> List.of();
         });
+        if ((step == PlotCreatorStep.SUBSTEP || step == PlotCreatorStep.REVIEW
+                || step == PlotCreatorStep.IMPORTANT_SPOTS && session.getDraft().isBuildingEditorMode())
+            && rows.stream().noneMatch(r -> r.slot() == ToolKeybindSlot.SECONDARY)) {
+            rows.add(row(ToolKeybindSlot.SECONDARY, "hud.SUBSTEP.secondarySpot"));
+        }
         if (step != PlotCreatorStep.DONE) {
             rows.add(row(ToolKeybindSlot.PICK, "hud.STEP_JUMP.f"));
         }
