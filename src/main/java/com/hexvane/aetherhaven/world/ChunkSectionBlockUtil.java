@@ -150,6 +150,19 @@ public final class ChunkSectionBlockUtil {
         return world.getChunkStore().getStore().getComponent(loaded, WorldChunk.getComponentType());
     }
 
+    /**
+     * Starts one chunk section ticking, which brings its entities back into the entity store. A column can tick while
+     * sections in it do not: once no player is near a section, the game parks its entities in the section and store
+     * queries cannot see them, so anything that clears a site from afar has to wake the section first. World thread
+     * only, and not from a store system.
+     */
+    public static void wakeSection(@Nonnull World world, int sectionX, int sectionY, int sectionZ) {
+        awaitChunkReference(
+            world,
+            world.getChunkStore().getChunkSectionReferenceAsync(sectionX, sectionY, sectionZ, GetChunkFlags.SET_TICKING)
+        );
+    }
+
     @Nullable
     public static BlockChunk blockChunkAt(@Nonnull World world, int blockX, int blockZ) {
         Ref<ChunkStore> ref = chunkRefIfInMemory(world, blockX, blockZ);

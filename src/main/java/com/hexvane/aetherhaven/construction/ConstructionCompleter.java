@@ -111,9 +111,10 @@ public final class ConstructionCompleter {
             return;
         }
 
-        if (def != null && def.isDecorationPlot()) {
+        if (plot.isBuildAsDecoration() || (def != null && def.isDecorationPlot())) {
             // Keep prefab management shelves as inert props (e.g. Jimmy's School). The plot is not registered, so
-            // they are not town-linked; stripping them removed the furniture from decoration builds.
+            // they are not town-linked; stripping them removed the furniture from decoration builds. A building the
+            // player chose to build as a decoration has already had them left out, see DecorationBuild.
             town.removePlotInstance(plotId);
             retireYardProjectAfterPlacement(world, tm, town, plotId);
             tm.updateTown(town);

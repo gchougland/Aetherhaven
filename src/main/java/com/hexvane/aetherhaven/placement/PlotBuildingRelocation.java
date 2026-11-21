@@ -16,6 +16,7 @@ import com.hexvane.aetherhaven.tourist.TouristAutonomySystem;
 import com.hexvane.aetherhaven.tourist.TouristPortalPlotRelocation;
 import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -140,6 +141,9 @@ public final class PlotBuildingRelocation {
         TouristPortalPlotRelocation.beginPlotMove(
             world, plugin, store, touristRegistry, movePlotId, plot, def, town
         );
+
+        // The player may be far from the old site, and its decoration can only be cleared once it is awake.
+        PlotFootprintChunkUtil.ensureFootprintChunksLoaded(world, oldFootprint);
 
         relocateTownNpcsOutOfFootprint(store, town, oldFootprint);
 

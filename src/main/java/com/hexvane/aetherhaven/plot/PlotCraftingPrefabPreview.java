@@ -8,6 +8,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.MathUtil;
 import com.hypixel.hytale.protocol.packets.buildertools.BuilderToolPrefabPreview;
+import com.hypixel.hytale.protocol.packets.buildertools.ClipboardEntityChange;
 import com.hypixel.hytale.protocol.packets.interface_.EditorBlocksChange;
 import com.hypixel.hytale.server.core.asset.type.environment.config.Environment;
 import com.hypixel.hytale.server.core.asset.util.ColorParseUtil;
@@ -68,6 +69,20 @@ public final class PlotCraftingPrefabPreview {
             packet.spinSpeed = 27;
             packet.previewScale = 100;
             EditorBlocksChange editorPacket = selection.toPacket();
+            // Decorations such as potions, mugs and bread are block entities that also carry an item. The world draws them
+            // at block entity size (1/32 block per model unit times their scale). Given a block and an item, the preview
+            // draws them through the block path times the item's own Scale; given only the item, at half that. So send
+            // only the item, with the scale doubled and divided by the item's Scale, and every one matches the world.
+            if (editorPacket.entityChanges != null) {
+                for (ClipboardEntityChange entity : editorPacket.entityChanges) {
+                    if (entity == null || entity.itemId == null || entity.itemId.isEmpty()) continue;
+                    var item = com.hypixel.hytale.server.core.asset.type.item.config.Item.getAssetMap().getAsset(entity.itemId);
+                    float itemScale = item == null || item.getScale() <= 0f ? 1f : item.getScale();
+                    float scale = entity.scale <= 0f ? 1f : entity.scale;
+                    entity.blockId = 0;
+                    entity.scale = scale * 2f / itemScale;
+                }
+            }
             packet.blocksChange = editorPacket.blocksChange;
             packet.fluidsChange = editorPacket.fluidsChange;
             packet.entityChanges = editorPacket.entityChanges;

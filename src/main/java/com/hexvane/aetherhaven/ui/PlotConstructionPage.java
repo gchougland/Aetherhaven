@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.construction.DecorationBuild;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.construction.PlotMaterialDepositService;
 import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
@@ -298,6 +299,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.clear(MATERIALS_GRID);
             commandBuilder.set("#BuildButton.Disabled", true);
             commandBuilder.set("#PickUpPlotButton.Visible", false);
+            commandBuilder.set("#DecorationBuildRow.Visible", false);
             commandBuilder.set("#TabNeedsButton.Disabled", true);
             commandBuilder.set("#TabMoveButton.Disabled", true);
             if (managementUi) {
@@ -443,6 +445,13 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         if (managementUi) {
             commandBuilder.set("#TabPlotButton.Disabled", managementTab == 0);
             commandBuilder.set("#TabPlayersButton.Disabled", managementTab == 1);
+        }
+
+        boolean showDecorationBuild =
+            showPlotActions && blueprintPlot != null && DecorationBuild.canBuildAsDecoration(def);
+        commandBuilder.set("#DecorationBuildRow.Visible", showDecorationBuild);
+        if (showDecorationBuild) {
+            bindDecorationBuildRow(store, commandBuilder, eventBuilder, blueprintPlot, playerUuid);
         }
 
         boolean showHouseResident =
@@ -714,6 +723,62 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 false
             );
         }
+    }
+
+    private void bindDecorationBuildRow(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull PlotInstance plot,
+        @Nullable UUID playerUuid
+    ) {
+        TownRecord town = resolveTownForPlotSign(store);
+        boolean canEdit = town != null && playerUuid != null && town.playerCanManageConstructions(playerUuid);
+        boolean on = plot.isBuildAsDecoration();
+        commandBuilder.set("#DecorationBuildToggle.Value", on);
+        commandBuilder.set("#DecorationBuildToggle.Disabled", !canEdit);
+        commandBuilder.set("#DecorationBuildHint.Visible", on);
+        if (on) {
+            commandBuilder.set(
+                "#DecorationBuildHint.TextSpans",
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.decorationBuildOnHint")
+            );
+        }
+        if (canEdit) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.ValueChanged,
+                "#DecorationBuildToggle",
+                new EventData()
+                    .append("Action", "SetDecorationBuild")
+                    .append("@BuildAsDecoration", "#DecorationBuildToggle.Value"),
+                false
+            );
+        }
+    }
+
+    private void handleSetDecorationBuild(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Boolean decoration
+    ) {
+        if (managementUi || viewOnly || decoration == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        ConstructionDefinition def = resolveDefinition(store, ref);
+        PlotInstance plot = resolveBlueprintPlot(store, ref);
+        TownRecord town = resolveTownForPlotSign(store);
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (plugin == null || def == null || plot == null || town == null || uc == null) {
+            return;
+        }
+        if (plot.getState() == PlotInstanceState.BLUEPRINTING
+            && DecorationBuild.canBuildAsDecoration(def)
+            && town.playerCanManageConstructions(uc.getUuid())) {
+            plot.setBuildAsDecoration(decoration);
+            AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin).updateTown(town);
+        }
+        refreshPage(ref, store);
     }
 
     private void bindManagementTabEvents(@Nonnull UIEventBuilder eventBuilder, boolean needsMoveTabsEnabled) {
@@ -1622,6 +1687,10 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
         if (data.action != null && data.action.equalsIgnoreCase("SetPlayerShopNpcBuy")) {
             handleSetPlayerShopNpcBuy(ref, store, data.allowNpcShopPurchases);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("SetDecorationBuild")) {
+            handleSetDecorationBuild(ref, store, data.buildAsDecoration);
             return;
         }
         if ("ShopStaff".equals(data.action) && managementUi && !viewOnly) {
@@ -3365,7 +3434,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         return catalog.resolveGameplayConstructionId(plotConstructionId);
     }
 
-    private static String workplaceRoleLabelKey(@Nonnull String residentKind) {
+    static String workplaceRoleLabelKey(@Nonnull String residentKind) {
         return switch (residentKind.trim()) {
             case TownVillagerBinding.KIND_GUILD_MASTER ->
                 "aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceGuildMaster";
@@ -3441,6 +3510,12 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 d -> d.allowNpcShopPurchases
             )
             .add()
+            .append(
+                new KeyedCodec<>("@BuildAsDecoration", Codec.BOOLEAN),
+                (d, v) -> d.buildAsDecoration = v,
+                d -> d.buildAsDecoration
+            )
+            .add()
             .append(new KeyedCodec<>("PresetHex", Codec.STRING), (d, v) -> d.presetHex = v, d -> d.presetHex)
             .add()
             .build();
@@ -3472,6 +3547,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         private Boolean visitorPortalMembersOnly;
         @Nullable
         private Boolean allowNpcShopPurchases;
+        @Nullable
+        private Boolean buildAsDecoration;
         @Nullable
         private String presetHex;
     }

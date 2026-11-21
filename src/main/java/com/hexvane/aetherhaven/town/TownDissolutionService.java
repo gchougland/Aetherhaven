@@ -154,6 +154,10 @@ public final class TownDissolutionService {
         @Nullable Ref<EntityStore> actingPlayer,
         boolean rebuildInPlace
     ) {
+        if (p.getState() != PlotInstanceState.BLUEPRINTING) {
+            // With nobody near, the decoration about to be cleared is parked in sections that have stopped ticking.
+            PlotFootprintChunkUtil.ensureFootprintChunksLoaded(world, p.toFootprint());
+        }
         PropPlotTeardown.packageIntersecting(world, plugin, p.toFootprint(), actingPlayer, entityStore);
         if (p.getState() == PlotInstanceState.BLUEPRINTING) {
             ChunkSectionBlockUtil.breakBlock(world, p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);

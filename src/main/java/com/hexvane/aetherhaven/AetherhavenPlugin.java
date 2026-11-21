@@ -178,6 +178,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private PlotTokenIconPacketAdapter plotTokenIconPacketAdapter;
 
     @Nullable
+    private com.hexvane.aetherhaven.entity.BlockEntityItemUpdateFilter blockEntityItemUpdateFilter;
+
+    @Nullable
     private com.hexvane.aetherhaven.prop.PropVirtualItemRegistry propVirtualItemRegistry;
 
     @Nullable
@@ -723,6 +726,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
         return blockPaletteIconPacketAdapter;
     }
 
+    public void registerBlockEntityItemUpdateFilter() {
+        this.blockEntityItemUpdateFilter = new com.hexvane.aetherhaven.entity.BlockEntityItemUpdateFilter();
+        this.blockEntityItemUpdateFilter.register();
+    }
+
     public void registerRtsClientMovementPacketAdapter() {
         this.rtsClientMovementPacketAdapter = new RtsClientMovementPacketAdapter();
         this.rtsClientMovementPacketAdapter.register();
@@ -738,6 +746,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
         com.hexvane.aetherhaven.ui.AetherhavenLanguage.shutdown();
         com.hexvane.aetherhaven.backup.AetherhavenBackupResource.shutdown();
         AetherhavenFeatureBootstrap.shutdownEnabled();
+        if (this.blockEntityItemUpdateFilter != null) {
+            this.blockEntityItemUpdateFilter.deregister();
+            this.blockEntityItemUpdateFilter = null;
+        }
         if (this.shopPriceTooltipPacketAdapter != null) {
             this.shopPriceTooltipPacketAdapter.deregister();
             this.shopPriceTooltipPacketAdapter = null;

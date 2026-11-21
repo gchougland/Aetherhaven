@@ -102,7 +102,8 @@ public final class FestivalPrefabSwapService {
             SwapPlan plan =
                 plan(anchor, yaw, livePlot.toFootprint(), ConstructionPasteOps.buildSequence(targetBuffer, yaw).pendingBlocks());
             PlotFootprintRecord occupied = plan.occupied();
-            // Corner props live in edge chunks that are often unloaded when the swap runs from a game-time tick.
+            // A festival often starts or ends with nobody near, when its decorations are parked in sections that have
+            // stopped ticking. Left asleep they survive the clear and come back when a player returns.
             PlotFootprintChunkUtil.ensureFootprintChunksLoaded(world, occupied);
             PropPlotTeardown.packageIntersecting(world, plugin, occupied, null, store);
             PlotBuildingRelocation.relocateTownNpcsOutOfFootprint(store, live, occupied);

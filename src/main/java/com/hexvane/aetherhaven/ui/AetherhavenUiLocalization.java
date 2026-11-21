@@ -88,6 +88,8 @@ public final class AetherhavenUiLocalization {
         b.set("#VisitorPortalTravelLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelAllowTooltip"));
         b.set("#VisitorPortalMembersOnlyLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalMembersOnly"));
         b.set("#VisitorPortalMembersOnlyLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalMembersOnlyTooltip"));
+        b.set("#DecorationBuildLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.decorationBuild"));
+        b.set("#DecorationBuildLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.decorationBuildTooltip"));
         b.set("#PlayerShopNpcBuyLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.playerShopNpcBuyAllow"));
         b.set("#PlayerShopNpcBuyLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.playerShopNpcBuyAllowTooltip"));
         b.set("#VisitorPortalColorLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalColor"));
@@ -630,6 +632,7 @@ public final class AetherhavenUiLocalization {
         b.set("#BuildingInfoEmptyText.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoEmpty"));
         b.set("#InfoGoldTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoGoldTitle"));
         b.set("#InfoCountsAsTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoCountsAsTitle"));
+        b.set("#InfoVillagersTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoVillagersTitle"));
         b.set("#InfoRequiredModsTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoRequiredModsTitle"));
         b.set("#InfoMaterialsTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoMaterialsTitle"));
         b.set("#VariantSectionTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantSectionTitle"));

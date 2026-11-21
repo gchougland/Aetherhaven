@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
+import com.hexvane.aetherhaven.construction.DecorationBuild;
 import com.hexvane.aetherhaven.construction.PlotMaterialDepositService;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
@@ -331,7 +332,7 @@ public final class PlotAssemblyService {
         TownManager tmPay = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         tmPay.updateTown(town);
 
-        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw, plot.getBlockPaletteSelections());
+        ConstructionPrefabSequence seq = DecorationBuild.sequenceFor(buffer, yaw, plot);
         List<PendingBlock> footprintCells =
             ConstructionPasteOps.withReservedFestivalAirCells(
                 seq.pendingBlocks(),
@@ -588,7 +589,7 @@ public final class PlotAssemblyService {
             return false;
         }
         int prefabId = start.getPrefabId();
-        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw, plot.getBlockPaletteSelections());
+        ConstructionPrefabSequence seq = DecorationBuild.sequenceFor(buffer, yaw, plot);
         List<PendingBlock> footprintCells =
             ConstructionPasteOps.withReservedFestivalAirCells(
                 seq.pendingBlocks(),
@@ -1297,8 +1298,7 @@ public final class PlotAssemblyService {
                 case SOLIDS -> {
                     if (progress.solidCells == null) {
                         ConstructionPrefabSequence seq =
-                            ConstructionPasteOps.buildSequence(
-                                progress.completionBuffer, job.yaw(), plot.getBlockPaletteSelections());
+                            DecorationBuild.sequenceFor(progress.completionBuffer, job.yaw(), plot);
                         progress.solidCells =
                             ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
                     }
@@ -1326,8 +1326,7 @@ public final class PlotAssemblyService {
                 case INTERACTIVE -> {
                     if (progress.interactiveCells == null) {
                         ConstructionPrefabSequence seq =
-                            ConstructionPasteOps.buildSequence(
-                                progress.completionBuffer, job.yaw(), plot.getBlockPaletteSelections());
+                            DecorationBuild.sequenceFor(progress.completionBuffer, job.yaw(), plot);
                         progress.interactiveCells =
                             ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
                     }
@@ -1433,6 +1432,11 @@ public final class PlotAssemblyService {
         @Nonnull PlotInstance plot,
         @Nonnull PlotAssemblyJob job
     ) {
+        if (plot.isBuildAsDecoration()) {
+            // The force paste below rereads the whole prefab and would put the working blocks back.
+            completeAssembly(world, plugin, entityStore, town, plot, job);
+            return;
+        }
         UUID plotId = plot.getPlotId();
         IPrefabBuffer buffer = acquireCompletionPrefabBuffer(plugin, job);
         try {
@@ -1498,7 +1502,10 @@ public final class PlotAssemblyService {
         } else {
             LOGGER.atWarning().log("Assembly complete with no finisher or town owner for plot %s", plotId);
         }
-        verifyPlotBlockLinksAfterComplete(world, plugin, town, plot, job);
+        // The repair places a missing records shelf or storage, which a decoration left out on purpose.
+        if (!plot.isBuildAsDecoration()) {
+            verifyPlotBlockLinksAfterComplete(world, plugin, town, plot, job);
+        }
         AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
     }
 
@@ -2238,7 +2245,8 @@ public final class PlotAssemblyService {
             beginPlacingPhase(world, plugin, entityStore, tm, town, plot, job);
         }
         completeAssemblyInstant(world, plugin, entityStore, town, plot, job);
-        return plot.getState() != PlotInstanceState.ASSEMBLING;
+        // A finished decoration or wall piece is simply gone from the town, with its old state still on it.
+        return plot.getState() != PlotInstanceState.ASSEMBLING || town.findPlotById(plotId) == null;
     }
 
     /**

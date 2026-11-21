@@ -27,7 +27,7 @@ import org.joml.Vector3i;
 /** Real rotated prefab frontiers in a disposable world. Does not claim to exercise the NPC pathfinder. */
 final class AetherhavenBuildingTestCommand extends AbstractCommandCollection {
     private static final java.util.concurrent.atomic.AtomicBoolean RUNNING=new java.util.concurrent.atomic.AtomicBoolean();
-    AetherhavenBuildingTestCommand(){super("building","Check Apprentice building in an isolated world");setPermissionGroups("hytale:WorldEditor");addSubCommand(new Check());addSubCommand(new BuilderMasteryWorldCheck());}
+    AetherhavenBuildingTestCommand(){super("building","Check Apprentice building in an isolated world");setPermissionGroups("hytale:WorldEditor");addSubCommand(new Check());addSubCommand(new BuilderMasteryWorldCheck());addSubCommand(new DecorationBuildWorldCheck());addSubCommand(new PrefabEntityProbeCommand());}
     private static final class Check extends AbstractAsyncCommand {
         Check(){super("worldcheck","Check paid project gates, rotated placement and duplicate prevention");setPermissionGroups("hytale:WorldEditor");}
         @Override protected CompletableFuture<Void> executeAsync(CommandContext ctx) {

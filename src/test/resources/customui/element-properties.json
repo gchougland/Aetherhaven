@@ -1,13 +1,13 @@
 {
   "about": "Which properties each Custom UI element type has. Written by UiTypeTable.generate; do not edit by hand. Run the tests once with AETHERHAVEN_WRITE_UI_TABLE set after a game update.",
   "game": {
-    "version": "0.7.0-pre.5.1",
-    "patchline": "pre-release",
-    "revision": "4371ccdc8822a826b4bbb8a84e180c521d716fd0"
+    "version": "0.7.5",
+    "patchline": "release",
+    "revision": "4f7cd77adb4da3434c247b6d2acb4486c391e976"
   },
   "sources": {
     "docs": "The official Custom UI type documentation (Hypixel Studios), as read through its mirror at hytalemodding.dev/en/docs/official-documentation/custom-ui/type-documentation on 2026-10-10 for game 0.6.8 and recorded, table by table, in the hytale-modding skill (references/research/custom-ui-format.md, sections 2.1 to 2.4). A property marked documented false is one that file measured in the release game's documents but the documentation leaves out. Converted by a script, not retyped. This is the only part of the property table that is not read from the installed game.",
-    "files": "409 documents shipped with the game: 169 in Assets.zip Common/UI/Custom, 199 in Client/Data/Game/Interface, 41 in Client/Data/Editor/Interface. A number is how many elements of that type have the property written on them, templates resolved. The client refuses a document that writes an unknown property, so each is proof.",
+    "files": "403 documents shipped with the game: 166 in Assets.zip Common/UI/Custom, 196 in Client/Data/Game/Interface, 41 in Client/Data/Editor/Interface. A number is how many elements of that type have the property written on them, templates resolved. The client refuses a document that writes an unknown property, so each is proof.",
     "server": "52 classes of Server/HytaleServer.jar that name a game document: each text constant shaped like #Id.Property, counted for the element type #Id has in the documents that class names, when that is one type only.",
     "client": "Client/HytaleClient.exe: true when the program's member names include exactly this name. It says the name exists, not on which type."
   },
@@ -15,8 +15,8 @@
     "Visible": {
       "type": "Boolean",
       "docs": true,
-      "files": 590,
-      "server": 142,
+      "files": 577,
+      "server": 133,
       "client": true
     },
     "HitTestVisible": {
@@ -54,19 +54,19 @@
     "Anchor": {
       "type": "Anchor",
       "docs": true,
-      "files": 5537,
+      "files": 5481,
       "client": true
     },
     "Padding": {
       "type": "Padding",
       "docs": true,
-      "files": 2507,
+      "files": 2478,
       "client": true
     },
     "FlexWeight": {
       "type": "Integer",
       "docs": true,
-      "files": 1114,
+      "files": 1104,
       "client": true
     },
     "ContentWidth": {
@@ -100,14 +100,14 @@
     "Background": {
       "type": "PatchStyle / String",
       "docs": true,
-      "files": 2316,
-      "server": 12,
+      "files": 2273,
+      "server": 11,
       "client": true
     },
     "MaskTexturePath": {
       "type": "UI Path (String)",
       "docs": true,
-      "files": 38,
+      "files": 35,
       "client": true
     },
     "OutlineColor": {
@@ -137,7 +137,7 @@
         "LayoutMode": {
           "type": "LayoutMode",
           "docs": true,
-          "files": 3169,
+          "files": 3135,
           "client": true
         },
         "ScrollbarStyle": {
@@ -173,21 +173,21 @@
         "Text": {
           "type": "String",
           "docs": true,
-          "files": 1734,
-          "server": 106,
+          "files": 1718,
+          "server": 103,
           "client": true
         },
         "TextSpans": {
           "type": "List<LabelSpan>",
           "docs": true,
           "files": 2,
-          "server": 66,
+          "server": 56,
           "client": true
         },
         "Style": {
           "type": "LabelStyle",
           "docs": true,
-          "files": 2132,
+          "files": 2107,
           "server": 9,
           "client": true
         }
@@ -205,7 +205,7 @@
         "Text": {
           "type": "String",
           "docs": true,
-          "files": 410,
+          "files": 407,
           "server": 17,
           "client": true
         },
@@ -224,7 +224,7 @@
         "Style": {
           "type": "TextButtonStyle",
           "docs": true,
-          "files": 440,
+          "files": 437,
           "server": 9,
           "client": true
         }
@@ -245,7 +245,7 @@
         "LayoutMode": {
           "type": "LayoutMode",
           "docs": true,
-          "files": 65,
+          "files": 66,
           "client": true
         },
         "Disabled": {
@@ -258,7 +258,7 @@
         "Style": {
           "type": "ButtonStyle",
           "docs": true,
-          "files": 260,
+          "files": 257,
           "server": 1,
           "client": true
         },
@@ -556,31 +556,31 @@
         "BarTexturePath": {
           "type": "UI Path (String)",
           "docs": true,
-          "files": 55,
+          "files": 57,
           "client": true
         },
         "EffectTexturePath": {
           "type": "UI Path (String)",
           "docs": true,
-          "files": 16,
+          "files": 17,
           "client": true
         },
         "EffectWidth": {
           "type": "Integer",
           "docs": true,
-          "files": 16,
+          "files": 17,
           "client": true
         },
         "EffectHeight": {
           "type": "Integer",
           "docs": true,
-          "files": 16,
+          "files": 17,
           "client": true
         },
         "EffectOffset": {
           "type": "Integer",
           "docs": true,
-          "files": 14,
+          "files": 15,
           "client": true
         },
         "Alignment": {

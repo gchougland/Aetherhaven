@@ -37,12 +37,14 @@ class GaiaStatueAssetsTest {
     void appearancesCoverInstalledVanillaStatuesAndReferenceTheirActualVisuals() throws Exception {
         String appData = System.getenv("APPDATA");
         assumeTrue(appData != null, "Installed Hytale assets needed for integration check");
-        Path assets = Path.of(appData, "Hytale/install/pre-release/package/game/latest/Assets.zip");
+        Path assets = Path.of(appData, "Hytale/install/release/package/game/latest/Assets.zip");
         assumeTrue(Files.isRegularFile(assets), "Installed Hytale assets needed for integration check");
         try (ZipFile zip = new ZipFile(assets.toFile())) {
             // The Ancient Ruler head is a three block wide bust, so it cannot share Gaia's footprint.
+            // The dungeon checkpoint is a working block that looks exactly like the Ancient statue, already a look here.
             var statues = zip.stream().filter(e -> e.getName().matches("Server/Item/Items/.*Statue.*\\.json"))
                 .filter(e -> !e.getName().endsWith("_Statue_Head.json"))
+                .filter(e -> !e.getName().endsWith("/Dungeon_Checkpoint_Statue.json"))
                 .collect(Collectors.toMap(e -> Path.of(e.getName()).getFileName().toString().replace(".json", ""), e -> e));
             assertEquals(statues.keySet(), Arrays.stream(GaiaStatueAppearance.values())
                 .map(GaiaStatueAppearance::vanillaItemId).collect(Collectors.toSet()));

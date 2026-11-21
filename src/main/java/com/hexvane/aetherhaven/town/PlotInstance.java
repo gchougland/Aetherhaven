@@ -212,6 +212,19 @@ public final class PlotInstance {
         this.builderYardOffered = offered ? Boolean.TRUE : null;
     }
 
+    /** Chosen on the plot sign. Assembly reads it to the end, so it must survive saves while the build runs. */
+    @Nullable
+    @SerializedName("buildAsDecoration")
+    private Boolean buildAsDecoration;
+
+    public boolean isBuildAsDecoration() {
+        return Boolean.TRUE.equals(buildAsDecoration);
+    }
+
+    public void setBuildAsDecoration(boolean decoration) {
+        this.buildAsDecoration = decoration ? Boolean.TRUE : null;
+    }
+
     public PlotInstance() {}
 
     public PlotInstance(

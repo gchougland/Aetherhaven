@@ -13,8 +13,10 @@ public final class PlotFootprintChunkUtil {
     private PlotFootprintChunkUtil() {}
 
     /**
-     * Loads every chunk column overlapping {@code footprint}. Must run on the world thread. Needed before festival
-     * prefab entity clears: corner props (statues) live in edge chunks that are often unloaded when the swap runs.
+     * Loads every chunk column overlapping {@code footprint} and wakes every section of it. Must run on the world thread,
+     * and not from a store system. Needed before clearing what a building's prefab placed: with no player near, its
+     * entities are parked in sections that have stopped ticking, where store queries cannot see them, and they would
+     * come back once a player returned.
      */
     public static void ensureFootprintChunksLoaded(@Nonnull World world, @Nonnull PlotFootprintRecord footprint) {
         int minChunkX = Math.floorDiv(footprint.getMinX(), 16);
@@ -26,6 +28,16 @@ public final class PlotFootprintChunkUtil {
                 int bx = cx * 16 + 8;
                 int bz = cz * 16 + 8;
                 ChunkSectionBlockUtil.resolveTickingChunk(world, bx, bz);
+            }
+        }
+        // The clear pads the box by a block or two, so wake one block beyond it as well.
+        for (int sx = ChunkUtil.chunkCoordinate(footprint.getMinX()); sx <= ChunkUtil.chunkCoordinate(footprint.getMaxX()); sx++) {
+            for (int sz = ChunkUtil.chunkCoordinate(footprint.getMinZ()); sz <= ChunkUtil.chunkCoordinate(footprint.getMaxZ()); sz++) {
+                int minSection = ChunkUtil.chunkCoordinate(Math.max(ChunkUtil.MIN_Y, footprint.getMinY() - 2));
+                int maxSection = ChunkUtil.chunkCoordinate(Math.min(319, footprint.getMaxY() + 2));
+                for (int sy = minSection; sy <= maxSection; sy++) {
+                    ChunkSectionBlockUtil.wakeSection(world, sx, sy, sz);
+                }
             }
         }
     }

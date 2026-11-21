@@ -489,6 +489,35 @@ $C.@PageOverlay {
             }
           }
 
+          Group #DecorationBuildRow {
+            LayoutMode: Top;
+            Visible: false;
+            Anchor: (Bottom: 12);
+            Padding: (Horizontal: 8, Vertical: 8);
+            Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+            Group #DecorationBuildAllowRow {
+              LayoutMode: Left;
+
+              $C.@CheckBox #DecorationBuildToggle {}
+
+              Label #DecorationBuildLabel {
+                Text: "";
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8, Wrap: true);
+                Anchor: (Left: 11);
+                FlexWeight: 1;
+              }
+            }
+
+            Label #DecorationBuildHint {
+              Text: "";
+              Visible: false;
+              Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
+              Anchor: (Top: 8);
+            }
+          }
+
           Group #PlotActionRow {
             LayoutMode: Left;
             Visible: false;

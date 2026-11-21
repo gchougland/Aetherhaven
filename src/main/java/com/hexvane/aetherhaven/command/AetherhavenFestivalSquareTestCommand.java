@@ -66,6 +66,7 @@ final class AetherhavenFestivalSquareTestCommand extends AbstractCommandCollecti
         super("festivalsquare", "Check the ground under the festival square in an isolated world");
         setPermissionGroups("hytale:WorldEditor");
         addSubCommand(new Check());
+        addSubCommand(new FestivalEntityWorldCheck());
     }
 
     private static final class Check extends AbstractAsyncCommand {

@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.plot.BuildingVillagerCapacity;
 import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
 import com.hexvane.aetherhaven.plot.PlotBuildingTypes;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
@@ -63,6 +64,7 @@ import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
+import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -3235,6 +3237,15 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             b.set("#InfoCountsAsValue.TextSpans", Message.raw(String.join("\n", countsAsLabels)));
         }
 
+        // A marketplace build that is not downloaded has no definition yet, so its capacity is unknown.
+        b.set("#InfoVillagersSection.Visible", definition != null);
+        if (definition != null) {
+            b.set(
+                "#InfoVillagersValue.TextSpans",
+                Message.raw(villagerCapacityText(BuildingVillagerCapacity.of(catalog, definition), playerRef))
+            );
+        }
+
         String buildCost = constructionGold + " gold to build from the town treasury";
         String goldDetails = moderationTab
             ? buildCost
@@ -3332,6 +3343,44 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             }
         }
         return labels;
+    }
+
+    @Nonnull
+    private static String villagerCapacityText(@Nonnull BuildingVillagerCapacity capacity, @Nullable PlayerRef playerRef) {
+        String lang = AetherhavenLanguage.modLanguage(playerRef);
+        if (capacity.isEmpty()) {
+            return uiText(lang, "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoVillagersNone", "None");
+        }
+        List<String> lines = new ArrayList<>();
+        String workerLine = uiText(lang, "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoVillagersWorker", "1 {role}");
+        for (String kind : capacity.workerKinds()) {
+            lines.add(workerLine.replace("{role}", uiText(lang, PlotConstructionPage.workplaceRoleLabelKey(kind), readableKind(kind))));
+        }
+        if (capacity.shopClerk()) {
+            lines.add(uiText(lang, "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoVillagersClerk", "1 Shop clerk"));
+        }
+        if (capacity.homeResidents() == 1) {
+            lines.add(uiText(lang, "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoVillagersResident", "1 Resident"));
+        } else if (capacity.homeResidents() > 1) {
+            lines.add(
+                uiText(lang, "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoVillagersResidents", "{count} Residents")
+                    .replace("{count}", String.valueOf(capacity.homeResidents()))
+            );
+        }
+        return String.join("\n", lines);
+    }
+
+    @Nonnull
+    private static String uiText(@Nonnull String lang, @Nonnull String key, @Nonnull String fallback) {
+        String text = I18nModule.get().getMessage(lang, key);
+        return text == null || text.isEmpty() ? fallback : text;
+    }
+
+    /** Add-on and newer jobs have no role line in the lang files: {@code crystal_keeper} reads as "Crystal keeper". */
+    @Nonnull
+    private static String readableKind(@Nonnull String kind) {
+        String words = kind.trim().replace('_', ' ');
+        return words.isEmpty() ? words : Character.toUpperCase(words.charAt(0)) + words.substring(1);
     }
 
     @Nonnull

@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.0.4] - 10/31/2026
+
+### Added
+
+- **Villagers supported** The plot crafting bench shows how many villagers each building can house or employ.
+- **Build as decoration** Tick the new option on a plot sign to put up any building as plain blocks, with no special blocks, villagers or plot left behind.
+
+### Fixed
+
+- **Conservatory materials** The Conservatory now needs 5 Crystal Fertilizer Bags instead of Crystal Soil, so it can be built in Adventure mode.
+- **Decoration sizes** Statues, furniture and plants in buildings and festivals keep their size instead of shrinking while you play.
+- **Festival cleanup** Festival decorations are removed when a festival ends, even if nobody is nearby. Moving or removing a building from afar clears its decorations too.
+
 ## [4.0.3] - 10/22/2026
 
 ### Fixed

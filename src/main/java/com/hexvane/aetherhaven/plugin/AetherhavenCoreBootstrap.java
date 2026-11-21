@@ -147,6 +147,7 @@ public final class AetherhavenCoreBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new EntityRotationRepairSystem.OnRefAdded());
         plugin.getEntityStoreRegistry().registerSystem(new NpcRoleActivateOrderSystem());
         plugin.getEntityStoreRegistry().registerSystem(new BlockEntityScaleRepairSystem());
+        plugin.registerBlockEntityItemUpdateFilter();
         plugin.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerLocatePlayerInitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotLocatePlayerInitSystem());
